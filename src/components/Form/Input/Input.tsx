@@ -9,7 +9,7 @@ export const Input = (props: InputProps): JSX.Element => {
     return (
         <div className={'Input'}>
             <div className='InputInfo'>
-                <img src={`${props.name}.png`} alt='' />
+                <img src={`${props.name}.svg`} alt='' />
                 <div className='balanceInfo'>
                     <span className={'coinName'}>{props.name}</span>
                     <div className='maxBalance'>

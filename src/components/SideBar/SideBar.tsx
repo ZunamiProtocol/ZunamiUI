@@ -2,9 +2,13 @@ import React from 'react';
 import {LinkBlock} from '../LinkBlock/LinkBlock';
 import './SideBar.scss';
 
-export const SideBar = (): JSX.Element => {
+interface SideBarProps {
+    isMainPage: boolean;
+}
+
+export const SideBar = (props: SideBarProps): JSX.Element => {
     return (
-        <div className={'SideBar'}>
+        <div className={`SideBar ${props.isMainPage === false ? 'SideBar_hide' : ''}`}>
             <LinkBlock title='Deposit' description='Click for deposit' />
             <LinkBlock title='Withdraw' description='Click for withdraw' />
         </div>
