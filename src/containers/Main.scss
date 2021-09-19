@@ -1,0 +1,44 @@
+$media1920: 1920px;
+$media1600: 1600px;
+$media1440: 1440px;
+$media1024: 1024px;
+
+.MainContainer {
+    margin: 0 auto;
+    width: 1920px;
+
+    @media screen and (max-width: $media1920) {
+        width: 1600px;
+    }
+
+    @media screen and (max-width: $media1600) {
+        width: 1440px;
+    }
+
+    @media screen and (max-width: $media1440) {
+        width: 1400px;
+    }
+    @media screen and (max-width: $media1024) {
+        width: 1000px;
+    }
+
+    .ContentBlock {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        .InfoContainer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding-top: 33px;
+            width: 69%;
+
+            &_long {
+                display: flex;
+                justify-content: space-between;
+                width: 1400px;
+            }
+        }
+    }
+}

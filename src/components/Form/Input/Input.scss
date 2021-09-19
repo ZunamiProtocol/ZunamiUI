@@ -1,0 +1,52 @@
+.Input {
+    align-items: center;
+    background-color: #f5f5f5;
+    border-radius: 27px;
+    display: flex;
+    font-family: 'Anderson Grotesk';
+    justify-content: space-between;
+    padding: 10px 15px;
+    margin-bottom: 33px;
+    width: 90%;
+
+    input {
+        padding: 7px 0;
+        width: 50%;
+    }
+
+    .InputInfo {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+
+        img {
+            margin: 0 20px 0 37px;
+        }
+
+        .balanceInfo {
+            display: flex;
+            flex-direction: column;
+
+            .coinName {
+                font-size: 20px;
+            }
+
+            .max {
+                border-radius: 10px;
+                border: 1px solid #f25817;
+                font-size: 15px;
+                padding: 4px 5px 0 5px;
+                vertical-align: middle;
+            }
+
+            .balance {
+                color: #f25817;
+                display: inline-block;
+                font-size: 20px;
+                margin-left: 10px;
+                margin-top: 3px;
+                vertical-align: middle;
+            }
+        }
+    }
+}

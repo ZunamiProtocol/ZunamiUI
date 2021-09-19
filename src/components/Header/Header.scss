@@ -1,0 +1,41 @@
+$media1440: 1440px;
+$media1024: 1024px;
+
+.header {
+    display: flex;
+    font-family: 'Anderson Grotesk';
+    justify-content: space-between;
+    margin: 40px 0;
+    width: 100%;
+
+    @media screen and (max-width: $media1440) {
+        margin: 40px 0 0 0;
+    }
+    @media screen and (max-width: $media1024) {
+        margin: 40px 0 0 0;
+    }
+
+    .logo {
+        height: 31px;
+        width: 181px;
+    }
+
+    .wallet {
+        align-items: center;
+        background-color: #f64a00;
+        border-radius: 10px;
+        color: #fff;
+        cursor: pointer;
+        display: flex;
+        font-size: 19px;
+        height: 49px;
+        justify-content: space-around;
+
+        width: 200px;
+
+        img {
+            height: 22px;
+            width: 26px;
+        }
+    }
+}

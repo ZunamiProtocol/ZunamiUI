@@ -1,0 +1,24 @@
+.Form {
+    display: flex;
+    justify-content: center;
+    margin-top: 33px;
+    width: 67%;
+
+    form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+
+        input[type='submit'] {
+            background-color: #f74b01;
+            border-radius: 10px;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-family: 'Anderson Grotesk';
+            padding: 14px 0 12px 0;
+            width: 25%;
+        }
+    }
+}
