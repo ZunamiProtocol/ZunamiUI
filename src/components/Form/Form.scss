@@ -1,8 +1,14 @@
+$media375: 375px;
+
 .Form {
     display: flex;
     justify-content: center;
     margin-top: 33px;
     width: 67%;
+
+    @media screen and (max-width: $media375) {
+        width: 100%;
+    }
 
     form {
         display: flex;
@@ -19,6 +25,12 @@
             font-family: 'Anderson Grotesk';
             padding: 14px 0 12px 0;
             width: 25%;
+
+            @media screen and (max-width: $media375) {
+                height: 44px;
+                margin: 30px 0;
+                width: 169px;
+            }
         }
     }
 }

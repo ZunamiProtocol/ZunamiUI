@@ -1,6 +1,7 @@
 $media1600: 1600px;
 $media1440: 1440px;
 $media1024: 1024px;
+$media375: 375px;
 
 .InfoBlock {
     border-radius: 18px;
@@ -20,6 +21,7 @@ $media1024: 1024px;
         margin: 33px 0 35px 33px;
         img {
             margin-right: 25px;
+            width: 21px;
 
             @media screen and (max-width: $media1440) {
                 margin-right: 10px;
@@ -32,6 +34,11 @@ $media1024: 1024px;
 
         @media screen and (max-width: $media1440) {
             font-size: 15px;
+        }
+
+        @media screen and (max-width: $media375) {
+            font-size: 15px;
+            margin: 20px 0 10px 15px;
         }
     }
 
@@ -47,10 +54,23 @@ $media1024: 1024px;
             font-size: 18px;
         }
 
+        @media screen and (max-width: $media375) {
+            font-size: 15px;
+            margin-left: 15px;
+        }
+
         &_color {
             color: #f64a00;
             font-size: 35px;
+
+            @media screen and (max-width: $media375) {
+                font-size: 20px;
+            }
         }
+    }
+
+    &_long {
+        width: 65%;
     }
 
     @media screen and (max-width: $media1600) {
@@ -63,7 +83,12 @@ $media1024: 1024px;
         margin-bottom: 15px;
     }
 
-    &_long {
-        width: 65%;
+    @media screen and (max-width: $media375) {
+        width: 48%;
+        height: 94px;
+
+        &_mobileLong {
+            width: 100%;
+        }
     }
 }

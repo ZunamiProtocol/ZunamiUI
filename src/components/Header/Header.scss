@@ -1,5 +1,6 @@
 $media1440: 1440px;
 $media1024: 1024px;
+$media375: 375px;
 
 .header {
     display: flex;
@@ -18,6 +19,11 @@ $media1024: 1024px;
     .logo {
         height: 31px;
         width: 181px;
+
+        @media screen and (max-width: $media375) {
+            width: 148px;
+            height: 25px;
+        }
     }
 
     .wallet {
@@ -30,12 +36,22 @@ $media1024: 1024px;
         font-size: 19px;
         height: 49px;
         justify-content: space-around;
-
         width: 200px;
 
         img {
             height: 22px;
             width: 26px;
+        }
+
+        @media screen and (max-width: $media375) {
+            font-size: 13px;
+            height: 32px;
+            width: 148px;
+
+            img {
+                height: 12px;
+                width: 18px;
+            }
         }
     }
 }

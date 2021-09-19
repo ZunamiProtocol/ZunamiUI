@@ -14,7 +14,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
         <div className={'DepositContainer'}>
             <Header />
             <div className={'DepositBlock'}>
-                <SideBar />
+                <SideBar isMainPage={false} />
                 <div className={'DepositContent'}>
                     <ClickableHeader name={props.operationName} />
                     <Form operationName={props.operationName} />

@@ -1,3 +1,5 @@
+$media375: 375px;
+
 .ClickableHeader {
     align-items: center;
     background-color: #f2f2f2;
@@ -7,16 +9,31 @@
     justify-content: space-between;
     width: 90%;
 
+    @media screen and (max-width: $media375) {
+        height: 93px;
+        width: 100%;
+    }
+
     img {
         cursor: pointer;
         height: 32px;
         margin-right: 50px;
         width: 32px;
+
+        @media screen and (max-width: $media375) {
+            height: 20px;
+            width: 20px;
+        }
     }
 
     span {
         font-family: 'Anderson Grotesk';
         font-size: 25px;
         margin-left: 50px;
+
+        @media screen and (max-width: $media375) {
+            font-size: 20px;
+            margin-left: 25px;
+        }
     }
 }

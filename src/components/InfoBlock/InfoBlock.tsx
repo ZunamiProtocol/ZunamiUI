@@ -7,13 +7,17 @@ interface InfoBlockProps {
     description: string;
     withColor: boolean;
     isStrategy: boolean;
+    isLong: boolean;
 }
 
 export const InfoBlock = (props: InfoBlockProps): JSX.Element => {
     return (
-        <div className={`InfoBlock ${props.isStrategy === true ? 'InfoBlock_long' : ''}`}>
+        <div
+            className={`InfoBlock ${props.isStrategy === true ? 'InfoBlock_long' : ''} 
+            ${props.isLong === true ? 'InfoBlock_mobileLong' : ''}
+        `}>
             <div className={'InfoBlock__title'}>
-                {props.iconName !== undefined ? <img src={props.iconName + '.png'} alt='' /> : ''}
+                {props.iconName !== undefined ? <img src={props.iconName + '.svg'} alt='' /> : ''}
                 {props.title}
             </div>
             <span

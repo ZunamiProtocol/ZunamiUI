@@ -2,6 +2,7 @@ $media1920: 1920px;
 $media1600: 1600px;
 $media1440: 1440px;
 $media1024: 1024px;
+$media375: 375px;
 
 .MainContainer {
     margin: 0 auto;
@@ -18,8 +19,13 @@ $media1024: 1024px;
     @media screen and (max-width: $media1440) {
         width: 1400px;
     }
+
     @media screen and (max-width: $media1024) {
         width: 1000px;
+    }
+
+    @media screen and (max-width: $media375) {
+        width: 360px;
     }
 
     .ContentBlock {
@@ -27,12 +33,21 @@ $media1024: 1024px;
         justify-content: space-between;
         width: 100%;
 
+        @media screen and (max-width: $media375) {
+            flex-direction: column;
+        }
+
         .InfoContainer {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             padding-top: 33px;
             width: 69%;
+
+            @media screen and (max-width: $media375) {
+                order: -1;
+                width: 100%;
+            }
 
             &_long {
                 display: flex;

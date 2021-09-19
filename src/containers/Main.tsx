@@ -9,7 +9,7 @@ export const Main = (): JSX.Element => {
         <div className={'MainContainer'}>
             <Header />
             <div className={'ContentBlock'}>
-                <SideBar />
+                <SideBar isMainPage={true} />
                 <div className={'InfoContainer'}>
                     <InfoBlock
                         iconName='yes'
@@ -17,6 +17,7 @@ export const Main = (): JSX.Element => {
                         description='$ 0'
                         withColor={true}
                         isStrategy={false}
+                        isLong={false}
                     />
                     <InfoBlock
                         iconName='balance'
@@ -24,6 +25,7 @@ export const Main = (): JSX.Element => {
                         description='$ 100 000'
                         withColor={true}
                         isStrategy={false}
+                        isLong={false}
                     />
                     <InfoBlock
                         iconName='lock'
@@ -31,19 +33,28 @@ export const Main = (): JSX.Element => {
                         description='$ 100 000 000'
                         withColor={true}
                         isStrategy={false}
+                        isLong={true}
                     />
-                    <InfoBlock title='APY' description='25%' withColor={false} isStrategy={false} />
+                    <InfoBlock
+                        title='APY'
+                        description='25%'
+                        withColor={false}
+                        isStrategy={false}
+                        isLong={false}
+                    />
                     <InfoBlock
                         title='Daily Profits'
                         description='68 USD/day'
                         withColor={false}
                         isStrategy={false}
+                        isLong={false}
                     />
                     <InfoBlock
                         title='Monthly Profits'
                         description='2040 USD/month'
                         withColor={false}
                         isStrategy={false}
+                        isLong={true}
                     />
                     <div className={'InfoContainer_long'}>
                         <InfoBlock
@@ -51,6 +62,7 @@ export const Main = (): JSX.Element => {
                             description='Convex finance - USDP pool'
                             withColor={false}
                             isStrategy={true}
+                            isLong={true}
                         />
                     </div>
                 </div>
