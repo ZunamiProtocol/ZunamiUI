@@ -2,7 +2,7 @@ $media1920: 1920px;
 $media1600: 1600px;
 $media1440: 1440px;
 $media1024: 1024px;
-$media375: 375px;
+$media435: 435px;
 
 .DepositContainer {
     margin: 0 auto;
@@ -24,7 +24,7 @@ $media375: 375px;
         width: 1000px;
     }
 
-    @media screen and (max-width: $media375) {
+    @media screen and (max-width: $media435) {
         width: 360px;
     }
 
@@ -43,7 +43,7 @@ $media375: 375px;
             padding-top: 33px;
             width: 73%;
 
-            @media screen and (max-width: $media375) {
+            @media screen and (max-width: $media435) {
                 width: 100%;
             }
         }

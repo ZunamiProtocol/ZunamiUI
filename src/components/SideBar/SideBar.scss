@@ -1,4 +1,4 @@
-$media375: 375px;
+$media435: 435px;
 
 .SideBar {
     align-items: center;
@@ -11,7 +11,7 @@ $media375: 375px;
     padding-top: 33px;
     width: 25%;
 
-    @media screen and (max-width: $media375) {
+    @media screen and (max-width: $media435) {
         height: 270px;
         width: 100%;
 

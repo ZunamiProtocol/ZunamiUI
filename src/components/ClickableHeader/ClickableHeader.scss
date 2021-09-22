@@ -1,4 +1,4 @@
-$media375: 375px;
+$media435: 435px;
 
 .ClickableHeader {
     align-items: center;
@@ -9,7 +9,7 @@ $media375: 375px;
     justify-content: space-between;
     width: 90%;
 
-    @media screen and (max-width: $media375) {
+    @media screen and (max-width: $media435) {
         height: 93px;
         width: 100%;
     }
@@ -20,7 +20,7 @@ $media375: 375px;
         margin-right: 50px;
         width: 32px;
 
-        @media screen and (max-width: $media375) {
+        @media screen and (max-width: $media435) {
             height: 20px;
             width: 20px;
         }
@@ -31,7 +31,7 @@ $media375: 375px;
         font-size: 25px;
         margin-left: 50px;
 
-        @media screen and (max-width: $media375) {
+        @media screen and (max-width: $media435) {
             font-size: 20px;
             margin-left: 25px;
         }

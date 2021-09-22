@@ -1,6 +1,6 @@
 $media1440: 1440px;
 $media1024: 1024px;
-$media375: 375px;
+$media435: 435px;
 
 .header {
     display: flex;
@@ -20,7 +20,7 @@ $media375: 375px;
         height: 31px;
         width: 181px;
 
-        @media screen and (max-width: $media375) {
+        @media screen and (max-width: $media435) {
             width: 148px;
             height: 25px;
         }
@@ -43,7 +43,7 @@ $media375: 375px;
             width: 26px;
         }
 
-        @media screen and (max-width: $media375) {
+        @media screen and (max-width: $media435) {
             font-size: 13px;
             height: 32px;
             width: 148px;

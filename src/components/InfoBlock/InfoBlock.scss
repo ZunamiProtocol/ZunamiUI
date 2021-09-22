@@ -1,7 +1,7 @@
 $media1600: 1600px;
 $media1440: 1440px;
 $media1024: 1024px;
-$media375: 375px;
+$media435: 435px;
 
 .InfoBlock {
     border-radius: 18px;
@@ -36,7 +36,7 @@ $media375: 375px;
             font-size: 15px;
         }
 
-        @media screen and (max-width: $media375) {
+        @media screen and (max-width: $media435) {
             font-size: 15px;
             margin: 20px 0 10px 15px;
         }
@@ -54,7 +54,7 @@ $media375: 375px;
             font-size: 18px;
         }
 
-        @media screen and (max-width: $media375) {
+        @media screen and (max-width: $media435) {
             font-size: 15px;
             margin-left: 15px;
         }
@@ -63,7 +63,7 @@ $media375: 375px;
             color: #f64a00;
             font-size: 35px;
 
-            @media screen and (max-width: $media375) {
+            @media screen and (max-width: $media435) {
                 font-size: 20px;
             }
         }
@@ -83,7 +83,7 @@ $media375: 375px;
         margin-bottom: 15px;
     }
 
-    @media screen and (max-width: $media375) {
+    @media screen and (max-width: $media435) {
         width: 48%;
         height: 94px;
 
