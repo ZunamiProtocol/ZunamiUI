@@ -3,9 +3,15 @@ import './Input.scss';
 
 interface InputProps {
     name: string;
+    value: string;
+    handler(value: string): void;
 }
 
 export const Input = (props: InputProps): JSX.Element => {
+    const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        props.handler(e.target.value);
+    };
+
     return (
         <div className={'Input'}>
             <div className='InputInfo'>
@@ -18,7 +24,7 @@ export const Input = (props: InputProps): JSX.Element => {
                     </div>
                 </div>
             </div>
-            <input type='text' placeholder='0.00' />
+            <input type='text' placeholder='0.00' onChange={changeHandler} />
         </div>
     );
 };
