@@ -1,0 +1,27 @@
+.WalletStatus {
+    align-items: center;
+    background-color: #f64a00;
+    border-radius: 20px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    font-size: 19px;
+    height: 80px;
+    justify-content: center;
+    width: 300px;
+
+    img {
+        height: 22px;
+        width: 26px;
+        margin-right: 10px;
+    }
+
+    &__connected {
+        background-color: #EFEEEE;
+
+        span {
+            font-size: 25px;
+            color: #000;
+        }
+    }
+}
