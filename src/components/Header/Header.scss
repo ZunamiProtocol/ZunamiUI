@@ -25,33 +25,4 @@ $media435: 435px;
             height: 25px;
         }
     }
-
-    .wallet {
-        align-items: center;
-        background-color: #f64a00;
-        border-radius: 10px;
-        color: #fff;
-        cursor: pointer;
-        display: flex;
-        font-size: 19px;
-        height: 49px;
-        justify-content: space-around;
-        width: 200px;
-
-        img {
-            height: 22px;
-            width: 26px;
-        }
-
-        @media screen and (max-width: $media435) {
-            font-size: 13px;
-            height: 32px;
-            width: 148px;
-
-            img {
-                height: 12px;
-                width: 18px;
-            }
-        }
-    }
 }
