@@ -11,6 +11,7 @@ export const connectWallet = async () => {
     }
 
     try {
+
         const address = await ethereum.request({method: 'eth_requestAccounts'});
         return address[0];
     } catch (error) {

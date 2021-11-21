@@ -1,22 +1,48 @@
-$media435: 435px;
+@import "src/variables";
 
-.SideBar {
-    align-items: center;
-    background-color: #fbfbfb;
-    border-radius: 10px;
+.SidebarColumn {
     display: flex;
     flex-direction: column;
-    height: 650px;
-    justify-content: left;
-    padding-top: 33px;
-    width: 25%;
+    justify-content: space-between;
 
-    @media screen and (max-width: $media435) {
-        height: 270px;
-        width: 100%;
-
-        &_hide {
-            display: none;
+    .SideBar {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+    
+        &__logo {
+            justify-self: self-end;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+    
+        @media screen and (max-width: $media1440) {
+            width: 100%;
+    
+            &_hide {
+                display: none;
+            }
+        }
+    }
+
+    @media screen and (min-width: $media1024) {
+        width: 261px !important;
+        padding: 24px 20px;
+        margin-right: 15px;
+    }
+
+    @media screen and (min-width: $media1440) {
+        width: 343px !important;
+        padding: 33px 23px !important;
+        margin-right: 36px;
+    }
+
+    @media screen and (min-width: $media1920) {
+        width: 489px !important;
+        padding: 33px 23px !important;
+        margin-right: 50px;
     }
 }

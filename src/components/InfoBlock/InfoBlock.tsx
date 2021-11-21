@@ -18,13 +18,13 @@ export const InfoBlock = (props: InfoBlockProps): JSX.Element => {
         `}>
             <div className={'InfoBlock__title'}>
                 {props.iconName !== undefined ? <img src={props.iconName + '.svg'} alt='' /> : ''}
-                {props.title}
+                <span>{props.title}</span>
             </div>
             <span
                 className={`InfoBlock__description ${
                     props.withColor === true ? 'InfoBlock__description_color' : ''
                 }`}>
-                {props.description}
+                <div>{props.description}</div>
             </span>
         </div>
     );

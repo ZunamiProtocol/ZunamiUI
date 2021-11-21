@@ -1,4 +1,142 @@
+@import "src/variables";
+
 @font-face {
     font-family: 'Anderson Grotesk';
     src: url('./fonts/AndersonGroteskRegular.ttf');
+}
+
+html, body, #root {
+    height: 100%;
+}
+
+#root > .container {
+    margin: 0 auto;
+    padding: 0;
+}
+
+.zun-shadow {
+    box-shadow: $box-shadow;
+}
+
+.zun-rounded {
+    border-radius: $border-radius !important;
+}
+
+@media (min-width: 992px) {
+    .zun-gap {
+        grid-gap: 13px !important;
+        gap: 13px !important;
+    }
+
+    .container {
+        max-width: 976px !important;
+
+        .main-row {
+            width: 964px;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+    }
+
+    .content-col {
+        width: 674px !important;
+        max-width: 674px !important;
+    }
+}
+
+@media (min-width: $media1440) {
+    .zun-gap {
+        grid-gap: 17px !important;
+        gap: 17px !important;
+    }
+
+    .container {
+        max-width: 1353px !important;
+
+        .main-row {
+            width: 1353px;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+    }
+
+    .content-col {
+        width: 976px !important;
+        max-width: 976px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .zun-rounded {
+        border-radius: 25px !important;
+    }
+}
+
+
+@media (min-width: 1600px) {
+    .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+        max-width: 1920px !important;
+    }
+}
+
+@media (min-width: $media1920) {
+    .zun-gap {
+        grid-gap: 24px !important;
+        gap: 24px !important;
+    }
+
+    .container {
+        width: 1821px !important;
+
+        .main-row {
+            width: 1820px;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+    }
+
+    .content-col {
+        width: 1281px !important;
+        max-width: 1281px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .zun-rounded {
+        border-radius: 25px !important;
+    }
+}
+
+body.dark {
+    background-color: #252525;
+
+    .SidebarColumn,
+    .row.zun-rounded.zun-shadow
+    {
+        background-color: #2F2F2F;
+    }
+
+    .ThemeSwitcher__title,
+    .InfoBlock__title,
+    .InfoBlock__description:not(.InfoBlock__description_color),
+    .LinkBlock__title
+    {
+        color: #ffffff;
+    }
+
+    .Disclaimer,
+    .HowToUse,
+    .ThemeSwitcher__button,
+    .LinkBlock:not(.LinkBlock__selected),
+    .ClickableHeader,
+    form .Input
+    {
+        color: #ffffff;
+        background-color: #5f5f5f;
+        border-color: transparent;
+    }
+
+    .ClickableHeader img {
+        opacity: 0.1;
+    }
 }

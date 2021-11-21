@@ -1,5 +1,3 @@
-import React from 'react';
-import {useHistory} from 'react-router';
 import './ClickableHeader.scss';
 
 interface ClickableHeaderProps {
@@ -7,16 +5,10 @@ interface ClickableHeaderProps {
 }
 
 export const ClickableHeader = (props: ClickableHeaderProps): JSX.Element => {
-    const history = useHistory();
-
-    const clickHandler = () => {
-        history.push('/');
-    };
-
     return (
         <div className={'ClickableHeader'}>
             <span>{props.name}</span>
-            <img onClick={clickHandler} src='exit.svg' alt='' />
+            <img src={'/section-header-bg.svg'} alt={''} className={''} />
         </div>
     );
 };

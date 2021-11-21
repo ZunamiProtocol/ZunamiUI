@@ -40,7 +40,17 @@ export const Form = (props: FormProps): JSX.Element => {
                 <Input name='DAI' value={dai} handler={daiInputHandler} />
                 <Input name='USDC' value={usdc} handler={usdcInputHandler} />
                 <Input name='USDT' value={usdt} handler={usdtInputHandler} />
-                <input type='submit' value={props.operationName} />
+                {
+                    props.operationName.toLowerCase() === 'deposit' &&
+                        <input type='submit' value={'Approve'} />
+                }
+                {
+                    props.operationName.toLowerCase() === 'withdraw' &&
+                        <div>
+                            <input type='submit' value={'Withdraw'} />
+                            <input type='submit' value={'Withdraw all'} className={'ms-3'} />
+                        </div>
+                }
             </form>
         </div>
     );
