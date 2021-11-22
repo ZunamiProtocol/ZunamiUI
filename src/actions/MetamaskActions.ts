@@ -7,14 +7,21 @@ export const isWalletConnected = (): boolean => {
 export const connectWallet = async () => {
     if (!isWalletConnected()) {
         alert('Connect your wallet');
+        return null;
+    }
 
-        try {
-            await ethereum.request({method: 'eth_requestAccounts'});
-        } catch (error) {
-            console.log(error);
-        }
+    try {
+
+        const address = await ethereum.request({method: 'eth_requestAccounts'});
+        return address[0];
+    } catch (error) {
+        console.log(error);
     }
 };
+
+export const getSelectedWalletAddress = (): string|null => {
+    return !isWalletConnected() ? null : ethereum.selectedAddress;
+}
 
 export const getWalletAddrs = async (): Promise<string[] | null> => {
     if (!isWalletConnected()) {

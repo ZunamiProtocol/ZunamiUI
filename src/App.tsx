@@ -4,6 +4,7 @@ import {FinanceOperations} from './containers/FinanceOperations';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 
 import './App.scss';
+import 'bootstrap/dist/css/bootstrap.css';
 
 function App() {
     return (

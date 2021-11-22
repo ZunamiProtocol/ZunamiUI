@@ -1,20 +1,22 @@
+@import "src/variables";
+
 $media1600: 1600px;
 $media1440: 1440px;
 $media1024: 1024px;
 $media435: 435px;
 
 .LinkBlock {
-    background-color: #f64a00;
-    border-radius: 10px;
+    background-color: #FAFAFA;
+    border-radius: $border-radius;
     cursor: pointer;
     display: flex;
     flex-direction: column;
     font-family: 'Anderson Grotesk';
-    height: 198px;
+    height: 152px;
     justify-content: space-around;
-    margin-bottom: 33px;
+    margin-bottom: 20px;
     position: relative;
-    width: 90%;
+    justify-content: flex-start;
 
     @media screen and (max-width: $media1600) {
         height: 150px;
@@ -31,22 +33,72 @@ $media435: 435px;
     }
 
     &__title {
-        color: #fff;
+        color: #000000;
         font-size: 25px;
         margin-left: 36px;
-
-        @media screen and (max-width: $media1024) {
-            font-size: 20px;
-        }
     }
 
     &__description {
         color: #e4e4e4;
         font-size: 20px;
         margin-left: 36px;
+        justify-self: flex-end;
+    }
 
-        @media screen and (max-width: $media1024) {
+    &__icon {
+        position: absolute;
+        right: 0;
+        top: 10px;
+        pointer-events: none;
+        opacity: 0.1;
+    }
+
+    &__selected {
+        background-color: #F64A00;
+
+        .LinkBlock__title {
+            color: #ffffff;
+        }
+
+        &:hover {
+            background-color: #DE4300;
+        }
+    }
+
+    @media screen and (min-width: $media1024) {
+        height: 115px;
+        width: 219px;
+
+        &__title {
+            font-size: 18px;
+            margin: 19px 0 0 14px;
+        }
+
+        &__description {
             font-size: 16px;
+            margin: auto 0 17px 14px;
+            
+        }
+    }
+
+    @media screen and (min-width: $media1440) {
+        // height: 152px;
+        height: 131px; /* Incorrect mockup */
+        width: 100%;
+
+        &__title {
+            font-size: 25px;
+            margin: 30px 0 0 20px;
+        }
+
+        &__description {
+            font-size: 20px;
+            margin: auto 0 17px 20px;
+        }
+
+        &__icon {
+            width: 120px;
+            height: auto;
         }
     }
 }
