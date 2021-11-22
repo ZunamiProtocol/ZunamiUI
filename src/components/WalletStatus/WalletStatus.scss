@@ -1,9 +1,7 @@
-@import "src/variables";
-
 .WalletStatus {
     align-items: center;
     background-color: #f64a00;
-    border-radius: $border-radius;
+    border-radius: 20px;
     color: #fff;
     cursor: pointer;
     display: flex;
@@ -11,10 +9,6 @@
     height: 80px;
     justify-content: center;
     width: 300px;
-
-    &:hover {
-        background-color: #DE4300;
-    }
 
     img {
         height: 22px;
@@ -29,45 +23,5 @@
             font-size: 25px;
             color: #000;
         }
-    }
-
-    @media screen and (min-width: $media1024) {
-        height: 59px;
-        width: 161px;
-        font-size: 16px;
-        border-radius: $border-radius17;
-
-        img {
-            height: auto;
-            width: 18px;
-        }
-    }
-
-    @media screen and (min-width: $media1440),
-    screen and (min-width: $media1200) {
-        height: 78px !important;
-        width: 210px !important;
-        font-size: 20px !important;
-        border-radius: $border-radius !important;
-
-        &__connected {
-            background-color: #EFEEEE;
-
-            span {
-                font-size: 16px;
-            }
-        }
-    }
-
-    @media screen and (min-width: $media1600) {
-        height: 80px !important;
-        width: 300px !important;
-        font-size: 16px !important;
-    }
-
-    @media screen and (min-width: $media1920) {
-        height: 80px !important;
-        width: 300px !important;
-        font-size: 25px !important;
     }
 }
