@@ -1,10 +1,11 @@
+@import "src/variables";
+
 $media435: 435px;
 
 .Form {
     display: flex;
     justify-content: center;
-    margin-top: 33px;
-    width: 67%;
+    margin: 30px 20px 20px 20px;
 
     @media screen and (max-width: $media435) {
         width: 100%;
@@ -18,18 +19,31 @@ $media435: 435px;
 
         input[type='submit'] {
             background-color: #f74b01;
-            border-radius: 10px;
+            border-radius: $border-radius17;
             border: none;
             color: #fff;
             cursor: pointer;
             font-family: 'Anderson Grotesk';
             padding: 14px 0 12px 0;
-            width: 25%;
+            width: 159px;
+            height: 60px;
 
-            @media screen and (max-width: $media435) {
-                height: 44px;
-                margin: 30px 0;
-                width: 169px;
+            &:hover {
+                background-color: #DE4300;
+            }
+
+            @media screen and (min-width: $media1440) {
+                width: 209px;
+                height: 78px;
+                font-size: 20px;
+                padding: 19px 0 12px 0;
+            }
+
+            @media screen and (min-width: $media1920) {
+                width: 299px;
+                height: 78px;
+                font-size: 25px;
+                padding: 19px 0 12px 0;
             }
         }
     }

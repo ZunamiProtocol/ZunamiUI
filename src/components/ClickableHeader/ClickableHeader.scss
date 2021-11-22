@@ -1,39 +1,40 @@
-$media435: 435px;
+@import "src/variables";
 
 .ClickableHeader {
     align-items: center;
-    background-color: #f2f2f2;
-    border-radius: 27px;
+    background-color: #FAFAFA;
+    border-radius: $border-radius;
     display: flex;
-    height: 125px;
+    height: 115px;
     justify-content: space-between;
-    width: 90%;
-
-    @media screen and (max-width: $media435) {
-        height: 93px;
-        width: 100%;
-    }
+    margin: 20px;
+    overflow: hidden;
 
     img {
-        cursor: pointer;
-        height: 32px;
-        margin-right: 50px;
-        width: 32px;
-
-        @media screen and (max-width: $media435) {
-            height: 20px;
-            width: 20px;
-        }
+        width: 252px;
+        height: 193px;
+        pointer-events: none;
     }
 
     span {
         font-family: 'Anderson Grotesk';
         font-size: 25px;
-        margin-left: 50px;
+        margin-left: 35px;
 
-        @media screen and (max-width: $media435) {
-            font-size: 20px;
-            margin-left: 25px;
+        @media screen and (min-width: $media1024) {
+            font-size: 18px;
         }
+
+        @media screen and (min-width: $media1440) {
+            font-size: 25px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            font-size: 35px;
+        }
+    }
+
+    @media screen and (min-width: $media1440) {
+        height: 152px;
     }
 }

@@ -3,26 +3,12 @@ $media1024: 1024px;
 $media435: 435px;
 
 .header {
-    display: flex;
-    font-family: 'Anderson Grotesk';
-    justify-content: space-between;
-    margin: 40px 0;
-    width: 100%;
+    .Logo {
+        width: 261px;
 
-    @media screen and (max-width: $media1440) {
-        margin: 40px 0 0 0;
-    }
-    @media screen and (max-width: $media1024) {
-        margin: 40px 0 0 0;
-    }
-
-    .logo {
-        height: 31px;
-        width: 181px;
-
-        @media screen and (max-width: $media435) {
-            width: 148px;
-            height: 25px;
+        @media screen and (min-width: $media1024) {
+            width: 194px;
+            height: 32px;
         }
     }
 }
