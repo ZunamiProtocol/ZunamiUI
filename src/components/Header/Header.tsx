@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { WalletStatus } from '../WalletStatus/WalletStatus';
 import './Header.scss';
 import { Navbar, Container } from 'react-bootstrap';

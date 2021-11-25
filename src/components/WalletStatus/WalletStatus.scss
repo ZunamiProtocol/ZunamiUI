@@ -1,9 +1,7 @@
-@import "src/variables";
-
 .WalletStatus {
     align-items: center;
     background-color: #f64a00;
-    border-radius: $border-radius;
+    border-radius: 20px;
     color: #fff;
     cursor: pointer;
     display: flex;
@@ -11,10 +9,6 @@
     height: 80px;
     justify-content: center;
     width: 300px;
-
-    &:hover {
-        background-color: #DE4300;
-    }
 
     img {
         height: 22px;
