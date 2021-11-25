@@ -41,6 +41,15 @@
         height: auto !important;
         width: 100% !important;
         box-shadow: none !important;
+
+        .one-row {
+            display: flex;
+            flex-direction: row;
+
+            .LinkBlock {
+                width: 50%;
+            }
+        }
     }
 
     @media screen and (min-width: $media1024) {

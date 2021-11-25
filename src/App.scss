@@ -42,11 +42,13 @@ html, body, #root {
     .content-col {
         width: 100% !important;
         max-width: 100% !important;
+        padding-left: 20px !important;
+        padding-right: 20px !important;
 
         > .row {
             box-shadow: none;
             padding: 0;
-            // margin: 0;
+            margin-top: 0 !important;
         }
     }
 }
@@ -73,6 +75,7 @@ html, body, #root {
 
         > .row {
             box-shadow: $box-shadow;
+            margin-bottom: 1rem !important;
         }
     }
 }

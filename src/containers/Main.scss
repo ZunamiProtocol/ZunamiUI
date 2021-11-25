@@ -1,60 +1,42 @@
 @import "src/variables";
 
-$media1920: 1920px;
-$media1600: 1600px;
-$media1440: 1440px;
-$media1024: 1024px;
-$media435: 435px;
+.content-col {
+    .col {
+        @media (max-width: $media435) {
+            box-shadow: $box-shadow;
+            border-radius: $border-radius;
+            margin-top: 10px;
 
-.MainContainer {
-    margin: 0 auto;
-    width: 1920px;
-
-    @media screen and (max-width: $media1920) {
-        width: 1600px;
-    }
-
-    @media screen and (max-width: $media1600) {
-        width: 1440px;
-    }
-
-    @media screen and (max-width: $media1440) {
-        width: 1400px;
-    }
-
-    @media screen and (max-width: $media1024) {
-        width: 1000px;
-    }
-
-    @media screen and (max-width: $media435) {
-        width: 360px;
-    }
-
-    .ContentBlock {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-
-        @media screen and (max-width: $media435) {
-            flex-direction: column;
-        }
-
-        .InfoContainer {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            padding-top: 33px;
-            width: 69%;
-
-            @media screen and (max-width: $media435) {
-                order: -1;
-                width: 100%;
+            &.BalanceCol,
+            &.DailyProfitCol {
+                margin-left: 5px;
             }
 
-            &_long {
-                display: flex;
-                justify-content: space-between;
-                width: 1400px;
+            &.AlreadyEarnedCol,
+            &.ApyCol {
+                margin-right: 5px;
+            }
+        }
+    }
+
+    .col-12 {
+        @media (max-width: $media435) {
+            box-shadow: $box-shadow;
+            border-radius: $border-radius;
+            margin-top: 10px;
+        }
+    }
+
+    &.dashboard-col {
+        .ClickableHeader {
+            margin: 0;
+
+            @media (min-width: $media1024) {
+                display: none;
+            }
+
+            .close {
+                display: none;
             }
         }
     }

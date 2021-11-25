@@ -25,6 +25,10 @@ $media435: 435px;
             height: 14px;
             width: auto;
 
+            @media (min-width: $media375) {
+                margin-right: 10px;
+            }
+
             @media screen and (min-width: $media1440) {
                 margin-right: 10px;
                 height: 18px;
@@ -33,6 +37,11 @@ $media435: 435px;
             @media screen and (min-width: $media1024) {
                 margin-right: 10px;
             }
+        }
+
+        @media (min-width: $media375) {
+            font-size: 14px;
+            margin: 0 0 10px 10px;
         }
 
         @media screen and (min-width: $media1024) {
@@ -54,6 +63,11 @@ $media435: 435px;
         font-size: 25px;
         margin-left: 33px;
 
+        @media (min-width: $media375) {
+            font-size: 15px;
+            margin: 0 0 0 10px;
+        }
+
         @media screen and (min-width: $media1024) {
             margin: 20px 0 0 0;
             font-size: 18px;
@@ -71,6 +85,11 @@ $media435: 435px;
             color: #f64a00;
             font-size: 35px;
 
+            @media (min-width: $media375) {
+                margin: 0 0 0 10px;
+                font-size: 20px;
+            }
+
             @media screen and (min-width: $media1024) {
                 margin: 13px 0 0 0;
                 font-size: 25px !important;
@@ -84,6 +103,11 @@ $media435: 435px;
 
     &_long {
         width: 65%;
+    }
+
+    @media (min-width: $media375) {
+        margin: 20px 0 10px 0;
+        height: auto;
     }
 
     @media screen and (min-width: $media1600) {

@@ -42,11 +42,11 @@
     }
 
     @media (min-width: $media375) {
-        width: 100%;
+        width: auto;
         height: auto;
-        padding: 10px;
+        padding: 10px 27px 10px 10px;
         font-size: 14px;
-        margin-bottom: 10px !important;
+        margin: 0 5px 10px 5px !important;
     }
 
     @media screen and (min-width: $media1024) {

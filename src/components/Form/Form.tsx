@@ -48,7 +48,7 @@ export const Form = (props: FormProps): JSX.Element => {
                     props.operationName.toLowerCase() === 'withdraw' &&
                         <div>
                             <input type='submit' value={'Withdraw'} />
-                            <input type='submit' value={'Withdraw all'} className={'ms-3'} />
+                            <input type='submit' value={'Withdraw all'} className={'Form__WithdrawAll'} />
                         </div>
                 }
             </form>
