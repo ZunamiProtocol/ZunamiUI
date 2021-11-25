@@ -19,7 +19,6 @@
     img {
         height: 22px;
         width: 26px;
-        margin-right: 10px;
     }
 
     &__connected {
@@ -28,6 +27,16 @@
         span {
             font-size: 25px;
             color: #000;
+        }
+    }
+
+    @media (min-width: $media375) {
+        width: 55px;
+        height: 43px;
+        border-radius: $border-radius17;
+
+        img {
+            margin: 0;
         }
     }
 
@@ -40,6 +49,7 @@
         img {
             height: auto;
             width: 18px;
+            margin-right: 10px;
         }
     }
 

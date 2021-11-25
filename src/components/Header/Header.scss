@@ -1,10 +1,13 @@
-$media1440: 1440px;
-$media1024: 1024px;
-$media435: 435px;
+@import "src/variables";
 
 .header {
     .Logo {
         width: 261px;
+
+        @media (min-width: $media375) {
+            width: 148px;
+            height: 25px;
+        }
 
         @media screen and (min-width: $media1024) {
             width: 194px;
@@ -19,5 +22,21 @@ $media435: 435px;
 
     .container {
         padding: 0;
+
+        .navbar-collapse {
+            @media (min-width: $media375) {
+                flex-basis: auto;
+            }
+        }
+
+        @media (min-width: $media375) {
+            padding: 0 15px;
+            margin-top: 5px !important;
+        }
+
+        @media (min-width: $media1024) {
+            padding: 0;
+            margin-top: 1rem !important;
+        }
     }
 }
