@@ -22,6 +22,35 @@ html, body, #root {
     border-radius: $border-radius !important;
 }
 
+@media (min-width: $media375) {
+    .zun-gap {
+        grid-gap: 5px !important;
+        gap: 5px !important;
+    }
+
+    .container {
+        max-width: 100% !important;
+
+        .main-row {
+            width: 100%;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            flex-direction: row;
+        }
+    }
+
+    .content-col {
+        width: 100% !important;
+        max-width: 100% !important;
+
+        > .row {
+            box-shadow: none;
+            padding: 0;
+            // margin: 0;
+        }
+    }
+}
+
 @media (min-width: 992px) {
     .zun-gap {
         grid-gap: 13px !important;
@@ -41,6 +70,10 @@ html, body, #root {
     .content-col {
         width: 674px !important;
         max-width: 674px !important;
+
+        > .row {
+            box-shadow: $box-shadow;
+        }
     }
 }
 
