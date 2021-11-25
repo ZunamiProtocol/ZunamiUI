@@ -18,6 +18,16 @@ $media435: 435px;
     position: relative;
     justify-content: flex-start;
 
+    @media screen and (max-width: $media375) {
+        height: 113px;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    @media screen and (min-width: $media1024) {
+        margin: 0 auto 10px auto;
+    }
+
     @media screen and (max-width: $media1600) {
         height: 150px;
     }
@@ -25,11 +35,6 @@ $media435: 435px;
     @media screen and (max-width: $media1440) {
         height: 150px;
         margin-bottom: 15px;
-    }
-
-    @media screen and (max-width: $media435) {
-        width: 100%;
-        height: 113px;
     }
 
     &__title {
@@ -65,9 +70,37 @@ $media435: 435px;
         }
     }
 
+    @media (min-width: $media375) {
+        height: 104px;
+        overflow: hidden;
+
+        &:not(.LinkBlock__selected) {
+            height: 69px;
+        }
+
+        &__title {
+            font-size: 16px;
+            margin: 20px 0 0 20px;
+        }
+
+        &__description {
+            font-size: 14px;
+            margin: auto 0 10px 20px;
+        }
+
+        &__icon {
+            height: 130px;
+            margin-top: -5%;
+        }
+    }
+
     @media screen and (min-width: $media1024) {
         height: 115px;
         width: 219px;
+
+        &:not(.LinkBlock__selected) {
+            height: 115px;
+        }
 
         &__title {
             font-size: 18px;

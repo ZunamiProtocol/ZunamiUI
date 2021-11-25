@@ -13,7 +13,6 @@
     img {
         height: 22px;
         width: 26px;
-        margin-right: 10px;
     }
 
     &__connected {
@@ -23,5 +22,56 @@
             font-size: 25px;
             color: #000;
         }
+    }
+
+    @media (min-width: $media375) {
+        width: 55px;
+        height: 43px;
+        border-radius: $border-radius17;
+
+        img {
+            margin: 0;
+        }
+    }
+
+    @media screen and (min-width: $media1024) {
+        height: 59px;
+        width: 161px;
+        font-size: 16px;
+        border-radius: $border-radius17;
+
+        img {
+            height: auto;
+            width: 18px;
+            margin-right: 10px;
+        }
+    }
+
+    @media screen and (min-width: $media1440),
+    screen and (min-width: $media1200) {
+        height: 78px !important;
+        width: 210px !important;
+        font-size: 20px !important;
+        border-radius: $border-radius !important;
+
+        &__connected {
+            background-color: #EFEEEE;
+
+            span {
+                font-size: 16px;
+            }
+        }
+    }
+
+    @media screen and (min-width: $media1600) {
+        height: 80px !important;
+        width: 300px !important;
+        font-size: 16px !important;
+    }
+
+    @media screen and (min-width: $media1920) {
+        height: 80px !important;
+        width: 300px !important;
+        font-size: 25px !important;
     }
 }

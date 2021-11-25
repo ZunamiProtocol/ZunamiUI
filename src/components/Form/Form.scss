@@ -7,8 +7,9 @@ $media435: 435px;
     justify-content: center;
     margin: 30px 20px 20px 20px;
 
-    @media screen and (max-width: $media435) {
-        width: 100%;
+    @media screen and (max-width: $media375) {
+        width: auto;
+        margin-top: 15px;
     }
 
     form {
@@ -32,6 +33,13 @@ $media435: 435px;
                 background-color: #DE4300;
             }
 
+            @media screen and (min-width: $media375) {
+                width: 169px;
+                height: 43px;
+                font-size: 14px;
+                padding-top: 13px;
+            }
+
             @media screen and (min-width: $media1440) {
                 width: 209px;
                 height: 78px;
@@ -45,6 +53,16 @@ $media435: 435px;
                 font-size: 25px;
                 padding: 19px 0 12px 0;
             }
+        }
+    }
+
+    &__WithdrawAll {
+        @media screen and (min-width: $media375) {
+            margin: 10px 0 0 0;
+        }
+
+        @media screen and (min-width: $media1024) {
+            margin-left: 1rem;
         }
     }
 }

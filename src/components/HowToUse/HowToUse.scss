@@ -9,6 +9,11 @@
         background-color: #E6E6E6 !important;
     }
 
+    @media (min-width: $media375) {
+        width: 55px;
+        height: 43px;
+    }
+
     @media screen and (min-width: $media1024) {
         height: 59px;
         width: 159px;

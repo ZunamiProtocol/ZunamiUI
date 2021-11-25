@@ -4,6 +4,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    height: 100%;
 
     .SideBar {
         display: flex;
@@ -17,6 +18,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
+
+            @media (min-width: $media375) {
+                display: none;
+            }
+
+            @media screen and (min-width: $media1024) {
+                display: flex;
+            }
         }
     
         @media screen and (max-width: $media1440) {
@@ -28,10 +37,26 @@
         }
     }
 
+    @media (min-width: $media375) {
+        height: auto !important;
+        width: 100% !important;
+        box-shadow: none !important;
+
+        .one-row {
+            display: flex;
+            flex-direction: row;
+
+            .LinkBlock {
+                width: 50%;
+            }
+        }
+    }
+
     @media screen and (min-width: $media1024) {
         width: 261px !important;
         padding: 24px 20px;
         margin-right: 15px;
+        box-shadow: $box-shadow !important;
     }
 
     @media screen and (min-width: $media1440) {

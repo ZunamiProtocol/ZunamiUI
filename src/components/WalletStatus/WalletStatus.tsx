@@ -25,7 +25,7 @@ export const WalletStatus = (): JSX.Element => {
             }}
         >
             <img src='wallet.svg' alt='' />
-            <span>Connect Wallet</span>
+            <span className={'d-none d-sm-block'}>Connect Wallet</span>
         </div>
     );
 };

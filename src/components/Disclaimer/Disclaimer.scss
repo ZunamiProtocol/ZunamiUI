@@ -13,13 +13,40 @@
     align-items: center;
     justify-content: center;
     text-align: left;
+    border-radius: $border-radius17;
 
     &__icon {
-        margin: 0 20px 0 0;
+        @media (min-width: $media375) {
+            margin-right: 10px;
+        }
 
         @media screen and (min-width: $media1024) {
             margin: 0;
         }
+
+        @media screen and (min-width: $media1440) {
+            margin: 0 20px 0 20px;
+        }
+
+        @media screen and (min-width: $media1600) {
+            &__icon {
+                margin: 0 20px 0 0;
+            }
+        }
+
+        @media screen and (min-width: $media1920) {
+            &__icon {
+                margin: 0 35px 0 5px;
+            }
+        }
+    }
+
+    @media (min-width: $media375) {
+        width: auto;
+        height: auto;
+        padding: 10px 27px 10px 10px;
+        font-size: 14px;
+        margin: 0 5px 10px 5px !important;
     }
 
     @media screen and (min-width: $media1024) {
@@ -29,6 +56,7 @@
         font-size: 12px;
         line-height: 16px;
         border-radius: $border-radius17;
+        margin-bottom: 0 !important;
     }
 
     @media screen and (min-width: $media1440) {
@@ -38,6 +66,10 @@
         width: 520px !important;
         letter-spacing: 0.1px;
         border-radius: $border-radius !important;
+
+        span {
+            padding-right: 20px;
+        }
     }
     
     @media screen and (min-width: $media1600) {
@@ -45,10 +77,6 @@
         height: 80px !important;
         font-size: 16px !important;
         padding: 20px 40px !important;
-
-        &__icon {
-            margin: 0 20px 0 0;
-        }
     }
 
     @media screen and (min-width: $media1920) {
@@ -56,9 +84,5 @@
         height: 80px !important;
         font-size: 20px !important;
         padding: 20px 40px !important;
-
-        &__icon {
-            margin: 0 35px 0 5px;
-        }
     }
 }
