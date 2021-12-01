@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Input.scss';
 
 interface InputProps {
@@ -8,8 +8,14 @@ interface InputProps {
 }
 
 export const Input = (props: InputProps): JSX.Element => {
+    const [value, setValue] = useState('');
+    const regex = /^[0-9]*[.,]?[0-9]*$/;
+
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        props.handler(e.target.value);
+        if (regex.test(e.target.value)) {
+            props.handler(e.target.value);
+            setValue(e.target.value);
+        }
     };
 
     return (
@@ -24,7 +30,19 @@ export const Input = (props: InputProps): JSX.Element => {
                     </div>
                 </div>
             </div>
-            <input type='text' placeholder='0.00' onChange={changeHandler} />
+            <input
+                inputMode={'decimal'}
+                autoComplete={'off'}
+                autoCorrect={'off'}
+                type={'text'}
+                pattern={'^[0-9]*[.,]?[0-9]*$'}
+                placeholder={'0.00'}
+                min={0}
+                minLength={1}
+                maxLength={79}
+                value={value}
+                onChange={changeHandler}
+            />
         </div>
     );
 };
