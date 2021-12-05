@@ -12,6 +12,10 @@
     justify-content: center;
     width: 300px;
 
+    &:hover {
+        background-color: $on-hover-color;
+    }
+
     img {
         height: 22px;
         width: 26px;
