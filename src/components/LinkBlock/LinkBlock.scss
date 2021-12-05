@@ -18,6 +18,10 @@ $media435: 435px;
     position: relative;
     justify-content: flex-start;
 
+    &:hover {
+        background-color: $on-hover-secondary-color;
+    }
+
     @media screen and (max-width: $media375) {
         height: 113px;
         margin-left: 5px;
