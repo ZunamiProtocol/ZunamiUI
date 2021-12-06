@@ -18,23 +18,63 @@ $media435: 435px;
     position: relative;
     justify-content: flex-start;
 
-    @media screen and (max-width: $media375) {
+    &__active {
+        &::after {
+            content: "";
+            position: absolute;
+            width: 4px;
+            height: 116px;
+            display: block;
+            background-color: $primary-color;
+            right: -21px;
+
+            @media screen and (min-width: $media1440) {
+                right: -24px;
+                height: 152px;
+                width: 5px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                width: 6px;
+                height: 152px;
+                right: -41px;
+            }
+        }
+    }
+
+    @media screen and (min-width: $media375) {
         height: 113px;
         margin-left: 5px;
         margin-right: 5px;
+
+        &::after {
+            display: none;
+        }
     }
 
     @media screen and (min-width: $media1024) {
         margin: 0 auto 10px auto;
+
+        &::after {
+            display: block;
+        }
     }
 
     @media screen and (max-width: $media1600) {
         height: 150px;
+
+        &::after {
+            display: block;
+        }
     }
 
     @media screen and (max-width: $media1440) {
         height: 150px;
         margin-bottom: 15px;
+
+        &::after {
+            display: block;
+        }
     }
 
     &__title {
@@ -72,7 +112,7 @@ $media435: 435px;
 
     @media (min-width: $media375) {
         height: 104px;
-        overflow: hidden;
+
 
         &:not(.LinkBlock__selected) {
             height: 69px;
@@ -80,17 +120,30 @@ $media435: 435px;
 
         &__title {
             font-size: 16px;
-            margin: 20px 0 0 20px;
+            margin: 20px 0 0 17px;
         }
 
         &__description {
             font-size: 14px;
-            margin: auto 0 10px 20px;
+            margin: auto 0 10px 17px;
         }
 
-        &__icon {
-            height: 130px;
-            margin-top: -5%;
+        &[data-url="/deposit"] {
+            .LinkBlock__icon {
+                width: 100px;
+                height: 71px;
+                margin-top: -10px;
+                margin-right: -20px;
+            }
+        }
+
+        &[data-url="/withdraw"] {
+            .LinkBlock__icon {
+                width: 89px;
+                height: 68px;
+                margin-top: -10px;
+                margin-right: 0;
+            }
         }
     }
 
@@ -110,13 +163,38 @@ $media435: 435px;
         &__description {
             font-size: 16px;
             margin: auto 0 17px 14px;
-            
+        }
+
+        &[data-url="/"] {
+            .LinkBlock__icon {
+                width: 94px;
+                height: 92px;
+                margin-top: 8px;
+                margin-right: 7px;
+            }
+        }
+
+        &[data-url="/deposit"] {
+            .LinkBlock__icon {
+                width: 111px;
+                height: 77px;
+                margin-top: 0;
+                margin-right: 0;
+            }
+        }
+
+        &[data-url="/withdraw"] {
+            .LinkBlock__icon {
+                width: 110px;
+                height: 82px;
+                margin-top: 0;
+                margin-right: 0;
+            }
         }
     }
 
     @media screen and (min-width: $media1440) {
-        // height: 152px;
-        height: 131px; /* Incorrect mockup */
+        height: 152px !important;
         width: 100%;
 
         &__title {
@@ -132,6 +210,95 @@ $media435: 435px;
         &__icon {
             width: 120px;
             height: auto;
+        }
+
+        &[data-url="/"] {
+            .LinkBlock__icon {
+                width: 123px;
+                height: 120px;
+                margin-top: 8px;
+                margin-right: 7px;
+            }
+        }
+
+        &[data-url="/deposit"] {
+            .LinkBlock__icon {
+                width: 146px;
+                height: 101px;
+                margin-top: 0;
+                margin-right: 0;
+            }
+        }
+
+        &[data-url="/withdraw"] {
+            .LinkBlock__icon {
+                width: 145px;
+                height: 108px;
+                margin-top: 0;
+                margin-right: 0;
+            }
+        }
+    }
+
+    @media screen and (min-width: $media1920) {
+        width: 408px;
+        height: 152px !important;
+
+        &[data-url="/"] {
+            .LinkBlock__icon_wrapper {
+                overflow: hidden;
+                width: 196px;
+                height: 152px;
+                position: absolute;
+                right: 0;
+                margin-top: 0;
+                margin-right: 0;
+
+                .LinkBlock__icon {
+                    width: 196px;
+                    height: 193px;
+                    margin-top: -25px;
+                    margin-right: 0;
+                }
+            }
+        }
+
+        &[data-url="/deposit"] {
+            .LinkBlock__icon_wrapper {
+                overflow: hidden;
+                width: 267px;
+                height: 152px;
+                position: absolute;
+                right: 0;
+                margin-top: 0;
+                margin-right: 0;
+
+                .LinkBlock__icon {
+                    width: 267px;
+                    height: 205px;
+                    margin-top: -25px;
+                    margin-right: 0;
+                }
+            }
+        }
+
+        &[data-url="/withdraw"] {
+            .LinkBlock__icon_wrapper {
+                overflow: hidden;
+                width: 289px;
+                height: 152px;
+                position: absolute;
+                right: 0;
+                margin-top: 0;
+                margin-right: 0;
+
+                .LinkBlock__icon {
+                    width: 289px;
+                    height: 221px;
+                    margin-top: -7px;
+                    margin-right: 10px;
+                }
+            }
         }
     }
 }

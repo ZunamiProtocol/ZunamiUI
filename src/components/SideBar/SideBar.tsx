@@ -17,10 +17,13 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                         text={'Please note. This is a beta version. The contract has not been auditied yet. Use it at your own risk.'}
                     />
                 </div>
-                <div className={'d-flex d-sm-none one-row'}>
-                    <LinkBlock title='Deposit' description='Click for deposit' url={'deposit'} icon='/deposit-icon.svg' vstyle='selected' />
-                    <LinkBlock title='Withdraw' description='Click for withdraw' url={'withdraw'} icon='/withdraw-icon.svg' vstyle='selected' />
-                </div>
+                {
+                    window.location.pathname === '/' &&
+                    <div className={'d-flex d-sm-none one-row'}>
+                        <LinkBlock title='Deposit' description='Click for deposit' url={'deposit'} icon='/deposit-icon.svg' vstyle='selected' />
+                        <LinkBlock title='Withdraw' description='Click for withdraw' url={'withdraw'} icon='/withdraw-icon.svg' vstyle='selected' />
+                    </div>
+                }
                 <div className={'d-none d-sm-block'}>
                     <LinkBlock title='Dashboard' description='' url={''} icon='/dashboard-icon.svg' />
                     <LinkBlock title='Deposit' description='Click for deposit' url={'deposit'} icon='/deposit-icon.svg' vstyle='selected' />

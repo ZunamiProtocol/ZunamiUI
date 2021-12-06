@@ -12,19 +12,33 @@ interface LinkBlockProps {
 
 export const LinkBlock = (prop: LinkBlockProps): JSX.Element => {
     const history = useHistory();
+    const url = `/${prop.url}`;
 
     const clickHandler = () => {
-        history.push(`/${prop.url}`);
+        history.push(url);
     };
+
+    const styles = ['LinkBlock'];
+
+    if (prop.vstyle) {
+        styles.push(`LinkBlock__${prop.vstyle}`)
+    }
+
+    if (window.location.pathname === url) {
+        styles.push('LinkBlock__active');
+    }
 
     return (
         <div
-            className={`LinkBlock ${prop.vstyle ? `LinkBlock__${prop.vstyle}` : ''}`}
+            className={styles.join(' ')}
             onClick={clickHandler}
+            data-url={url}
         >
             <span className={'LinkBlock__title'}>{prop.title}</span>
             <span className={'LinkBlock__description'}>{prop.description}</span>
-            <img src={prop.icon} className={'LinkBlock__icon'} alt={''} />
+            <div className={'LinkBlock__icon_wrapper'}>
+                <img  className={'LinkBlock__icon'} src={prop.icon} alt={''} />
+            </div>
         </div>
     );
 };
