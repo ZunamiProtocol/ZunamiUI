@@ -7,6 +7,8 @@
 
 html, body, #root {
     height: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
 }
 
 #root > .container {
@@ -36,6 +38,7 @@ html, body, #root {
             margin-left: auto !important;
             margin-right: auto !important;
             flex-direction: row;
+            align-content: flex-start;
         }
     }
 

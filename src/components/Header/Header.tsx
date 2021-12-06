@@ -8,15 +8,16 @@ import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 
 export const Header = (): JSX.Element => {
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const logoVariant = document.body.classList.contains('dark') ? 'logo-dark.svg' : 'logo.svg';
 
     return (
         <Navbar expand="lg" className={'header'}>
             <Container className={'mt-3 header-container'}>
                 <Navbar.Brand href="/">
-                    <img className={'Logo'} src='logo.svg' alt='Logo of the Zunami Protocol' />
+                    <img className={'Logo'} src={logoVariant} alt='Logo of the Zunami Protocol' />
                 </Navbar.Brand>
                 <Navbar.Collapse className ="d-flex justify-content-end align-items-center zun-gap">
                     <div className={'d-none d-sm-block'}>
