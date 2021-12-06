@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './ThemeSwitcher.scss';
 
 export const ThemeSwitcher = (): JSX.Element => {
-    const [theme, setTheme] = useState('light');
+    const [theme, setTheme] = useState(document.body.classList.contains('dark') ? 'dark' : 'light');
 
     return (
         <div
