@@ -30,7 +30,7 @@ $media435: 435px;
             height: 60px;
 
             &:hover {
-                background-color: #DE4300;
+                background-color: $on-hover-color;
             }
 
             @media screen and (min-width: $media375) {
