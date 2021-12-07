@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Input} from './Input/Input';
-import {deposit, withdraw} from '../../actions/FinOperation';
+import {deposit, useUserAllowances, useUserBalances, withdraw} from '../../actions/FinOperation';
 import './Form.scss';
 
 interface FormProps {
@@ -34,6 +34,9 @@ export const Form = (props: FormProps): JSX.Element => {
         }
     };
 
+    console.log(useUserBalances())
+    console.log(useUserAllowances())
+
     return (
         <div className={'Form'}>
             <form onSubmit={submitHandler}>
@@ -42,7 +45,7 @@ export const Form = (props: FormProps): JSX.Element => {
                 <Input name='USDT' value={usdt} handler={usdtInputHandler} />
                 {
                     props.operationName.toLowerCase() === 'deposit' &&
-                        <input type='submit' value={'Approve'} />
+                        <input type='submit' value={'Deposit'} />
                 }
                 {
                     props.operationName.toLowerCase() === 'withdraw' &&
