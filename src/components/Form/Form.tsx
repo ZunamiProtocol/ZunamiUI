@@ -1,6 +1,12 @@
 import React, {useState} from 'react';
 import {Input} from './Input/Input';
-import {deposit, useUserAllowances, useUserBalances, withdraw} from '../../actions/FinOperation';
+import {
+    approve,
+    deposit,
+    useUserAllowances,
+    useUserBalances,
+    withdraw
+} from '../../actions/FinOperation';
 import './Form.scss';
 
 interface FormProps {
@@ -33,26 +39,70 @@ export const Form = (props: FormProps): JSX.Element => {
             withdraw(dai, usdc, usdt);
         }
     };
+    const [pendingDAI, setPendingDAI] = useState(false)
+    const [pendingUSDC, setPendingUSDC] = useState(false)
+    const [pendingUSDT, setPendingUSDT] = useState(false)
 
-    console.log(useUserBalances())
-    console.log(useUserAllowances())
+    const userBalanceList = useUserBalances()
+    const approveList = useUserAllowances()
+    const isApprovedTokens = [
+        approveList ? approveList[0] > 0 : false,
+        approveList ? approveList[1] > 0 : false,
+        approveList ? approveList[2] > 0 : false,
+    ]
+    const isApproved = approveList &&
+        (((parseFloat(dai) > 0 && isApprovedTokens[0]) || dai ==='0' || dai ==='')
+            && ((parseFloat(usdc) > 0 && isApprovedTokens[1]) || usdc ==='0' || usdc ==='')
+            && ((parseFloat(usdt) > 0 && isApprovedTokens[2]) || usdt ==='0' || usdt ===''))
 
     return (
         <div className={'Form'}>
             <form onSubmit={submitHandler}>
-                <Input name='DAI' value={dai} handler={daiInputHandler} />
-                <Input name='USDC' value={usdc} handler={usdcInputHandler} />
-                <Input name='USDT' value={usdt} handler={usdtInputHandler} />
+                <Input name='DAI' value={dai} handler={daiInputHandler}/>
+                <Input name='USDC' value={usdc} handler={usdcInputHandler}/>
+                <Input name='USDT' value={usdt} handler={usdtInputHandler}/>
                 {
                     props.operationName.toLowerCase() === 'deposit' &&
-                        <input type='submit' value={'Deposit'} />
+                    <div>
+                        {parseFloat(dai) > 0 &&
+                        <button
+                            disabled={pendingDAI}
+                            onClick={async () => {
+                                setPendingDAI(true)
+                                await approve("DAI")
+                                setPendingDAI(false)
+                            }}>Approve DAI
+                        </button>
+                        }
+                        {parseFloat(usdc) > 0 &&
+                        <button disabled={pendingUSDC}
+                                onClick={async () => {
+                                    setPendingUSDC(true)
+                                    await approve("USDC")
+                                    setPendingUSDC(false)
+                                }}>Approve USDC
+                        </button>
+                        }
+                        {parseFloat(usdt) > 0 &&
+                        <button disabled={pendingUSDT}
+                                onClick={async () => {
+                                    setPendingUSDT(true)
+                                    await approve("USDT")
+                                    setPendingUSDT(false)
+                                }}>Approve USDT
+                        </button>
+                        }
+                        {isApproved && <input type='submit'
+                                              value={'Deposit'}
+                                              disabled={dai==='' && usdc=='' && usdt===''}/>}
+                    </div>
                 }
                 {
                     props.operationName.toLowerCase() === 'withdraw' &&
-                        <div>
-                            <input type='submit' value={'Withdraw'} />
-                            <input type='submit' value={'Withdraw all'} className={'Form__WithdrawAll'} />
-                        </div>
+                    <div>
+                        <input type='submit' value={'Withdraw'}/>
+                        <input type='submit' value={'Withdraw all'} className={'Form__WithdrawAll'}/>
+                    </div>
                 }
             </form>
         </div>

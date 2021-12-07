@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 
 import zunami from './abi/Zunami.json';
 import erc20 from './abi/erc20.abi.json';
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 
 const DAI_TOKEN_DECIMAL = new BigNumber(10).pow(18);
 const USDT_TOKEN_DECIMAL = new BigNumber(10).pow(6);
@@ -33,10 +33,6 @@ export const deposit = async (dai: string, usdc: string, usdt: string): Promise<
         new BigNumber(parseFloat(usdc)).times(USDT_TOKEN_DECIMAL).toString(),
         new BigNumber(parseFloat(usdt)).times(USDT_TOKEN_DECIMAL).toString()
     ];
-    console.log(assets)
-    // await daiContract.approve(zunamiAddress, dai);
-    // await usdcContract.approve(zunamiAddress, usdc);
-    // await usdtContract.approve(zunamiAddress, usdt);
     zunamiContract.deposit(assets, activePoolId);
     return true;
 };
@@ -55,6 +51,16 @@ export const withdraw = async (dai: string, usdc: string, usdt: string): Promise
     return true;
 };
 
+export const approve = async (token: string): Promise<boolean> => {
+    if (!isWalletConnected()) {
+        console.log('Connect your wallet');
+        return false;
+    }
+    token === "DAI" && await daiContract.approve(zunamiAddress, ethers.constants.MaxUint256);
+    token === "USDC" && await usdcContract.approve(zunamiAddress, ethers.constants.MaxUint256);
+    token === "USDT" && await usdtContract.approve(zunamiAddress, ethers.constants.MaxUint256);
+    return true;
+};
 
 
 
@@ -109,7 +115,6 @@ export const useUserBalances = () => {
     useEffect(() => {
         const fetchBalances = async () => {
             await getUserBalances().then(function(result) {
-                console.log(result)
                 setValue(result)
             });
         }
@@ -127,7 +132,6 @@ export const useUserAllowances = () => {
     useEffect(() => {
         const fetchAllowances = async () => {
             await getUserAllowance().then(function(result) {
-                console.log(result)
                 setValue(result)
             });
         }
@@ -137,4 +141,18 @@ export const useUserAllowances = () => {
     }, [])
 
     return value
+}
+
+export const useApprove = (token: string) => {
+
+    const handleApprove = useCallback(async () => {
+        try {
+            const tx = await approve(token)
+            return tx
+        } catch (e) {
+            return false
+        }
+    }, [])
+
+    return { onApprove: handleApprove }
 }
