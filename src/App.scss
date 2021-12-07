@@ -166,7 +166,10 @@ body.dark {
     .ThemeSwitcher__title,
     .InfoBlock__title,
     .InfoBlock__description:not(.InfoBlock__description_color),
-    .LinkBlock__title
+    .LinkBlock__title,
+    .PieChart__Header,
+    .PieChartWrapper__Legend__Label,
+    .PieChart__StratList__Item__Name
     {
         color: #ffffff;
     }
