@@ -32,7 +32,7 @@ export const deposit = async (dai: string, usdc: string, usdt: string): Promise<
         new BigNumber(parseFloat(usdc)).times(USDT_TOKEN_DECIMAL).toString(),
         new BigNumber(parseFloat(usdt)).times(USDT_TOKEN_DECIMAL).toString()
     ];
-    zunamiContract.deposit(assets, activePoolId);
+    zunamiContract.delegateDeposit(assets);
     return true;
 };
 
@@ -42,10 +42,15 @@ export const withdraw = async (dai: string, usdc: string, usdt: string): Promise
         return false;
     }
 
-    const assets = [parseInt(dai), parseInt(usdc), parseInt(usdt)];
+    const assets = [
+        new BigNumber(parseFloat(dai)).times(DAI_TOKEN_DECIMAL).toString(),
+        new BigNumber(parseFloat(usdc)).times(USDT_TOKEN_DECIMAL).toString(),
+        new BigNumber(parseFloat(usdt)).times(USDT_TOKEN_DECIMAL).toString()
+    ];
+    // TODO: lpShares need calculate real lpShares amount
     const lpShares: number = zunamiContract.balanceOf(await signer.getAddress());
 
-    zunamiContract.withdraw(lpShares, assets);
+    zunamiContract.delegateWithdrawal(lpShares, assets);
 
     return true;
 };
