@@ -37,7 +37,7 @@ function screenWidthToChartWidth() {
     }
 
     if (is1920()) {
-        width = 39;
+        width = 34;
     }
 
     return width;
