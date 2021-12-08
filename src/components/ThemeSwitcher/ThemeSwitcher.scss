@@ -46,10 +46,15 @@
 
             @media screen and (min-width: $media1024) {
                 display: inline;
+                font-size: 16px;
             }
 
             @media screen and (min-width: $media1440) {
                 font-size: 20px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                font-size: 25px;
             }
         }
 
