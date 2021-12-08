@@ -15,7 +15,7 @@ const usdcAddress = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';
 const usdtAddress = '0xdac17f958d2ee523a2206206994597c13d831ec7';
 
 const zunamiAddress = '0x63eacf87ff7897b06705cabf56a3c5dad33dfa8c';
-const activePoolId = 0;
+// const activePoolId = 0;
 
 const daiContract = new ethers.Contract(daiAddress, erc20, signer);
 const usdcContract = new ethers.Contract(usdcAddress, erc20, signer);
@@ -156,7 +156,41 @@ export const useApprove = (token: string) => {
         } catch (e) {
             return false
         }
-    }, [])
+    }, [token])
 
     return { onApprove: handleApprove }
+}
+
+// get user lpAmount
+export const getUserLpAmount = async (): Promise<any> => {
+    if (!isWalletConnected()) {
+        console.log('Connect your wallet');
+        return null;
+    }
+    try {
+        const userAddress = await signer.getAddress();
+        const lpShares = await zunamiContract.balanceOf(userAddress);
+        // const lpPrice = await zunamiContract.methods.lpPrice();
+        // TODO: need calculate lp price
+        const balance = new BigNumber(lpShares._hex)
+        return balance
+    } catch (e) {
+        return null
+    }
+}
+
+export const useUserLpAmount = () => {
+    const [value, setValue] = useState(null)
+
+    useEffect(() => {
+        const fetchLPs = async () => {
+            const result = await getUserLpAmount();
+                setValue(result)
+        }
+        fetchLPs()
+        const refreshInterval = setInterval(fetchLPs, 10000)
+        return () => clearInterval(refreshInterval)
+    }, [])
+
+    return value
 }

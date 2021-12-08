@@ -5,6 +5,7 @@ import {
     deposit,
     useUserAllowances,
     useUserBalances,
+    useUserLpAmount,
     withdraw
 } from '../../actions/FinOperation';
 import './Form.scss';
@@ -44,6 +45,7 @@ export const Form = (props: FormProps): JSX.Element => {
     const [pendingUSDC, setPendingUSDC] = useState(false)
     const [pendingUSDT, setPendingUSDT] = useState(false)
 
+    const userLpAmount = useUserLpAmount()
     const userBalanceList = useUserBalances()
     const approveList = useUserAllowances()
     const isApprovedTokens = [
@@ -59,7 +61,6 @@ export const Form = (props: FormProps): JSX.Element => {
     return (
         <div className={'Form'}>
             <form onSubmit={submitHandler}>
-                // TODO: need calculate max amount for withdraw
                 <Input name='DAI' value={dai} handler={daiInputHandler} max={userBalanceList && userBalanceList[0] || BIG_ZERO}/>
                 <Input name='USDC' value={usdc} handler={usdcInputHandler} max={userBalanceList && userBalanceList[1]|| BIG_ZERO}/>
                 <Input name='USDT' value={usdt} handler={usdtInputHandler} max={userBalanceList && userBalanceList[2]|| BIG_ZERO}/>
