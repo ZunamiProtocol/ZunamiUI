@@ -55,11 +55,11 @@ export const Form = (props: FormProps): JSX.Element => {
         (((parseFloat(dai) > 0 && isApprovedTokens[0]) || dai === '0' || dai === '')
             && ((parseFloat(usdc) > 0 && isApprovedTokens[1]) || usdc === '0' || usdc === '')
             && ((parseFloat(usdt) > 0 && isApprovedTokens[2]) || usdt === '0' || usdt === ''))
+    // TODO: need calculate max amount for withdraw
 
     return (
         <div className={'Form'}>
             <form onSubmit={submitHandler}>
-                // TODO: need calculate max amount for withdraw
                 <Input name='DAI' value={dai} handler={daiInputHandler} max={userBalanceList && userBalanceList[0] || BIG_ZERO}/>
                 <Input name='USDC' value={usdc} handler={usdcInputHandler} max={userBalanceList && userBalanceList[1]|| BIG_ZERO}/>
                 <Input name='USDT' value={usdt} handler={usdtInputHandler} max={userBalanceList && userBalanceList[2]|| BIG_ZERO}/>
