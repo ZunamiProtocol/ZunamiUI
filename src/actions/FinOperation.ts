@@ -5,9 +5,8 @@ import BigNumber from 'bignumber.js'
 import zunami from './abi/Zunami.json';
 import erc20 from './abi/erc20.abi.json';
 import {useCallback, useEffect, useState} from "react";
+import {DAI_TOKEN_DECIMAL, USDT_TOKEN_DECIMAL} from "../utils/formatbalance";
 
-const DAI_TOKEN_DECIMAL = new BigNumber(10).pow(18);
-const USDT_TOKEN_DECIMAL = new BigNumber(10).pow(6);
 const provider = new ethers.providers.Web3Provider((window as any).ethereum);
 const signer = provider.getSigner();
 
@@ -77,9 +76,9 @@ export const getUserBalances = async (): Promise<any> => {
         const usdcBalance = await usdcContract.balanceOf(userAddress);
         const usdtBalance = await usdtContract.balanceOf(userAddress);
         const balances = [
-            new BigNumber(daiBalance._hex).toNumber(),
-            new BigNumber(usdcBalance._hex).toNumber(),
-            new BigNumber(usdtBalance._hex).toNumber()
+            new BigNumber(daiBalance._hex),
+            new BigNumber(usdcBalance._hex),
+            new BigNumber(usdtBalance._hex)
         ]
         return balances
     } catch (e) {
