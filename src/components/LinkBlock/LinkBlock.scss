@@ -31,6 +31,7 @@ $media435: 435px;
             display: block;
             background-color: $primary-color;
             right: -21px;
+            border-radius: 3px;
 
             @media screen and (min-width: $media1440) {
                 right: -24px;
