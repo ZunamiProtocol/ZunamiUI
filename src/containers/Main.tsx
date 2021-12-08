@@ -5,8 +5,14 @@ import {SideBar} from '../components/SideBar/SideBar';
 import { ClickableHeader } from '../components/ClickableHeader/ClickableHeader';
 import './Main.scss';
 import { Container, Row, Col } from 'react-bootstrap';
+import { Chart } from '../components/Chart/Chart';
 
 export const Main = (): JSX.Element => {
+    const chartData = [
+        { title: 'Convex finance - OUSD pool', value: 70, color: '#F64A00' },
+        { title: 'Convex finance - USDP pool', value: 30, color: '#B8E654' },
+    ];
+
     return (
         <Container className={'h-100 d-flex justify-content-between flex-column'}>
             <Header />
@@ -77,13 +83,7 @@ export const Main = (): JSX.Element => {
                     </Row>
                     <Row className={'zun-rounded zun-shadow ms-0 me-0 mt-3'}>
                         <Col className={'CurrStrategyCol'}>
-                            <InfoBlock
-                                title='Current strategies'
-                                description='Convex finance - USDP pool'
-                                withColor={false}
-                                isStrategy={true}
-                                isLong={true}
-                            />
+                            <Chart data={chartData} />
                         </Col>
                     </Row>
                 </Col>
