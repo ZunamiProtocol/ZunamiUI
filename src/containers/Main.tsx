@@ -81,7 +81,7 @@ export const Main = (): JSX.Element => {
                             />
                         </Col>
                     </Row>
-                    <Row className={'zun-rounded zun-shadow ms-0 me-0 mt-3'}>
+                    <Row className={'zun-rounded zun-shadow ms-0 me-0'}>
                         <Col className={'CurrStrategyCol'}>
                             <Chart data={chartData} />
                         </Col>
