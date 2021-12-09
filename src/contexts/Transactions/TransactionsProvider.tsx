@@ -18,7 +18,7 @@ const TransactionsProvider: React.FC = ({ children }) => {
   const fetchTransactions = useCallback(async () => {
     try {
     const txsRaw = localStorage.getItem('transactions')
-    const txs = txsRaw && JSON.parse(txsRaw) as TransactionsMap || {}
+    const txs = (txsRaw && JSON.parse(txsRaw) as TransactionsMap) || {}
     dispatch(setTransactions(txs))
     } catch (e) {
     // console.log(e)

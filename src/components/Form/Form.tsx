@@ -131,7 +131,7 @@ export const Form = (props: FormProps): JSX.Element => {
                             await onStake()
                             setPendingTx(false)
                         }}
-                        disabled={(dai === '' && usdc == '' && usdt === '') || !isApproved || pendingTx}
+                        disabled={(dai === '' && usdc === '' && usdt === '') || !isApproved || pendingTx}
                     >
                         Deposit
                     </button>}
@@ -145,7 +145,7 @@ export const Form = (props: FormProps): JSX.Element => {
                             await onUnstake()
                             setPendingWithdraw(false)
                         }}
-                        disabled={(dai === '' && usdc == '' && usdt === '') || pendingWithdraw || fullBalanceLpShare === '0'}
+                        disabled={(dai === '' && usdc === '' && usdt === '') || pendingWithdraw || fullBalanceLpShare === '0'}
                     >
                         Withdraw
                     </button>}

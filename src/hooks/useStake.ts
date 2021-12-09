@@ -20,7 +20,7 @@ const useStake = (dai: string, usdc: string, usdt: string) => {
     )
     console.log(txHash)
     },
-    [account, sushi],
+    [account, dai, usdc, usdt, masterChefContract],
   )
 
   return { onStake: handleStake }

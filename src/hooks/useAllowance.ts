@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js'
 import {useEffect, useState} from 'react'
 import {useWallet} from 'use-wallet'
-import {Contract} from 'web3-eth-contract'
 import {getMasterChefContract} from '../sushi/utils'
 import useSushi from "./useSushi";
 import {getAllowance} from "../utils/erc20";
@@ -30,7 +29,7 @@ const useAllowance = (tokenAddress: string) => {
         }
         let refreshInterval = setInterval(fetchAllowance, 10000)
         return () => clearInterval(refreshInterval)
-    }, [account, masterChefContract])
+    }, [account, ethereum, tokenAddress, masterChefContract])
 
     return allowance
 }
@@ -80,7 +79,7 @@ export const useAllowanceStables = () => {
         }
         let refreshInterval = setInterval(fetchAllowanceStables, 10000)
         return () => clearInterval(refreshInterval)
-    }, [account, masterChefContract])
+    }, [account, ethereum, masterChefContract])
 
     return allowance
 }

@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js'
 import Web3 from 'web3'
 import { provider as Provider } from 'web3-core'
 import { Contract } from 'web3-eth-contract'
@@ -21,7 +20,6 @@ export const getAllowance = async (
     account: string,
 ): Promise<string> => {
     const lpContract = getContract(provider, tokenAddress)
-
     try {
         const allowance: string = await lpContract.methods
             .allowance(account, masterChefContract.options.address)

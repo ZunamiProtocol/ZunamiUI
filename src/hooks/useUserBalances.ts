@@ -42,7 +42,7 @@ export const useUserBalances = () => {
         }
         let refreshInterval = setInterval(fetchbalanceStables, 10000)
         return () => clearInterval(refreshInterval)
-    }, [account])
+    }, [account, ethereum])
 
     return balance
 }

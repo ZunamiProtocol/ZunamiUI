@@ -2,7 +2,6 @@ import { useCallback } from 'react'
 import { useWallet } from 'use-wallet'
 import { approve, getMasterChefContract } from '../sushi/utils'
 import useSushi from './useSushi'
-import {Contract} from "web3-eth-contract";
 
 const useApprove = () => {
     const { account, ethereum } = useWallet()
@@ -19,7 +18,7 @@ const useApprove = () => {
         } catch (e) {
             return false
         }
-    }, [account, masterChefContract])
+    }, [account, masterChefContract, ethereum])
 
     return { onApprove: handleApprove }
 }

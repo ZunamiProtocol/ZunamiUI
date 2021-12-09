@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback} from 'react';
 import './WalletStatus.scss';
 import config from "../../config";
 import {useWallet} from "use-wallet";

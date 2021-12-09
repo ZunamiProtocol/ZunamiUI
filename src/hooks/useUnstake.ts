@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import {useWallet} from "use-wallet";
 import useSushi from "./useSushi";
-import {getMasterChefContract, stake, unstake} from "../sushi/utils";
+import {getMasterChefContract, unstake} from "../sushi/utils";
 
 const useUnstake = (lpShares: string, dai: string, usdc: string, usdt: string) => {
     const { account } = useWallet()
@@ -19,7 +19,7 @@ const useUnstake = (lpShares: string, dai: string, usdc: string, usdt: string) =
             )
             console.log(txHash)
         },
-        [account, sushi],
+        [account, dai, usdc, usdt, lpShares, masterChefContract],
     )
 
     return { onUnstake: handleUnstake }

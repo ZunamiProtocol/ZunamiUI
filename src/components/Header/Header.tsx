@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { WalletStatus } from '../WalletStatus/WalletStatus';
 import './Header.scss';
-import { Navbar, Container, Modal, Button } from 'react-bootstrap';
+import { Navbar, Container, Modal } from 'react-bootstrap';
 import { Disclaimer } from '../Disclaimer/Disclaimer';
 import { HowToUse } from '../HowToUse/HowToUse';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
