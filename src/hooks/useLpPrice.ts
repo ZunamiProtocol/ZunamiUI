@@ -11,7 +11,7 @@ const useLpPrice = () => {
     const masterChefContract = getMasterChefContract(sushi)
 
     useEffect(() => {
-        const fetchAllowance = async () => {
+        const fetchLpPrice = async () => {
             const allowance = await getLpPrice(
                 masterChefContract
             )
@@ -19,9 +19,9 @@ const useLpPrice = () => {
         }
 
         if (masterChefContract) {
-            fetchAllowance()
+            fetchLpPrice()
         }
-        let refreshInterval = setInterval(fetchAllowance, 10000)
+        let refreshInterval = setInterval(fetchLpPrice, 10000)
         return () => clearInterval(refreshInterval)
     }, [masterChefContract])
 

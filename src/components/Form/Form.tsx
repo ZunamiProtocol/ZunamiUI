@@ -10,6 +10,7 @@ import useApprove from "../../hooks/useApprove";
 import useStake from "../../hooks/useStake";
 import useUnstake from "../../hooks/useUnstake";
 import {useWallet} from "use-wallet";
+import {BigNumber} from "bignumber.js";
 
 interface FormProps {
     operationName: string;
@@ -53,8 +54,10 @@ export const Form = (props: FormProps): JSX.Element => {
             && ((parseFloat(usdt) > 0 && isApprovedTokens[2]) || usdt === '0' || usdt === ''))
     // max for withdraw or deposit
     const userMaxWithdraw = lpPrice.multipliedBy(userLpAmount) || BIG_ZERO
+    const userMaxWithdrawMinusInput = userMaxWithdraw.toNumber() <= 0 ? BIG_ZERO
+        : new BigNumber(userMaxWithdraw.toNumber() - (parseFloat(dai) + parseFloat(usdc) + parseFloat(usdt)))
     const userMaxDeposit = userBalanceList && userBalanceList[0] || BIG_ZERO
-    const max = props.operationName.toLowerCase() === 'deposit' ? userMaxDeposit : userMaxWithdraw
+    const max = props.operationName.toLowerCase() === 'deposit' ? userMaxDeposit : userMaxWithdrawMinusInput
 
     // approves
     const {onApprove} = useApprove()
