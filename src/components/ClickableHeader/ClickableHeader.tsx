@@ -16,7 +16,7 @@ export const ClickableHeader = (props: ClickableHeaderProps): JSX.Element => {
     return (
         <div className={'ClickableHeader'}>
             <span>{props.name}</span>
-            <img src={props.icon} alt={''} className={'bg'} />
+            <img src={props.icon.toLowerCase()} alt={''} className={'bg'} />
             <img onClick={clickHandler} src='exit.png' alt='' className={'close'} />
         </div>
     );
