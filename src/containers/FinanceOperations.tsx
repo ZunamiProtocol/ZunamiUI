@@ -21,7 +21,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                         <Col className={'ps-0 pe-0'}>
                             <div className={'DepositBlock'}>
                                 <div className={'DepositContent'}>
-                                    <ClickableHeader name={props.operationName} />
+                                    <ClickableHeader name={props.operationName} icon={`/section-${props.operationName}-bg.svg`} />
                                     <Form operationName={props.operationName} />
                                 </div>
                             </div>
