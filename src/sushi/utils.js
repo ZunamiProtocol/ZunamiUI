@@ -25,6 +25,9 @@ export const getUsdcAddress = (chainId = '0x1') => {
 export const getWethContract = (sushi) => {
   return sushi && sushi.contracts && sushi.contracts.weth
 }
+export const getUsdcContract = (sushi) => {
+    return sushi && sushi.contracts && sushi.contracts.usdc
+}
 
 export const getMasterChefContract = (sushi) => {
   return sushi && sushi.contracts && sushi.contracts.masterChef
@@ -131,6 +134,9 @@ export const approve = async (provider, tokenAddress, masterChefContract, accoun
   return lpContract.methods
       .approve(masterChefContract.options.address, ethers.constants.MaxUint256)
       .send({ from: account })
+      .on('transactionHash', (tx) => {
+          return tx.transactionHash
+      })
 }
 
 export const stake = async (

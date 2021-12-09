@@ -20,6 +20,7 @@ export class Contracts {
 
     this.masterChef = new this.web3.eth.Contract(MasterChefAbi)
     this.weth = new this.web3.eth.Contract(WETHAbi)
+    this.usdc = new this.web3.eth.Contract(WETHAbi)
 
     this.setProvider(provider, networkId)
     this.setDefaultAccount(this.web3.eth.defaultAccount)

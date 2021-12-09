@@ -1,7 +1,7 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import {Input} from './Input/Input';
 import './Form.scss';
-import {BIG_ZERO, daiAddress, getFullDisplayBalance} from "../../utils/formatbalance";
+import {BIG_ZERO, daiAddress, getFullDisplayBalance, usdcAddress, usdtAddress} from "../../utils/formatbalance";
 import {useAllowanceStables} from "../../hooks/useAllowance";
 import {useUserBalances} from "../../hooks/useUserBalances";
 import useLpPrice from "../../hooks/useLpPrice";
@@ -53,22 +53,42 @@ export const Form = (props: FormProps): JSX.Element => {
             && ((parseFloat(usdt) > 0 && isApprovedTokens[2]) || usdt === '0' || usdt === ''))
     // max for withdraw or deposit
     const userMaxWithdraw = lpPrice.multipliedBy(userLpAmount) || BIG_ZERO
-    const userMaxDeposit= userBalanceList && userBalanceList[0] || BIG_ZERO
+    const userMaxDeposit = userBalanceList && userBalanceList[0] || BIG_ZERO
     const max = props.operationName.toLowerCase() === 'deposit' ? userMaxDeposit : userMaxWithdraw
 
     // approves
-    const {onApprove} = useApprove(daiAddress)
-    //TODO: add handlers for all approve buttons
+    const {onApprove} = useApprove()
     const handleApproveDai = useCallback(async () => {
         try {
             setPendingDAI(true)
-            const tx = onApprove()
-            // user rejected tx or didn't go thru
+            const tx = onApprove(daiAddress)
             if (!tx) {
                 setPendingDAI(false)
             }
         } catch (e) {
             setPendingDAI(false)
+        }
+    }, [onApprove])
+    const handleApproveUsdc = useCallback(async () => {
+        try {
+            setPendingUSDC(true)
+            const tx = onApprove(usdcAddress)
+            if (!tx) {
+                setPendingUSDC(false)
+            }
+        } catch (e) {
+            setPendingUSDC(false)
+        }
+    }, [onApprove])
+    const handleApproveUsdt = useCallback(async () => {
+        try {
+            setPendingUSDT(true)
+            const tx = onApprove(usdtAddress)
+            if (!tx) {
+                setPendingUSDT(false)
+            }
+        } catch (e) {
+            setPendingUSDT(false)
         }
     }, [onApprove])
 
@@ -80,10 +100,10 @@ export const Form = (props: FormProps): JSX.Element => {
     const [pendingTx, setPendingTx] = useState(false)
     const [pendingWithdraw, setPendingWithdraw] = useState(false)
     const {onStake} = useStake(dai === '' ? '0' : dai, usdc === '' ? '0' : usdc, usdt === '' ? '0' : usdt)
-    const { onUnstake } = useUnstake(fullBalanceLpShare,dai === '' ? '0' : dai, usdc === '' ? '0' : usdc, usdt === '' ? '0' : usdt)
+    const {onUnstake} = useUnstake(fullBalanceLpShare, dai === '' ? '0' : dai, usdc === '' ? '0' : usdc, usdt === '' ? '0' : usdt)
 
     // user wallet
-    const { account } = useWallet()
+    const {account} = useWallet()
 
     return (
         <div className={'Form'}>
@@ -97,28 +117,13 @@ export const Form = (props: FormProps): JSX.Element => {
                 {props.operationName.toLowerCase() === 'deposit' &&
                 <div>
                     {account && parseFloat(dai) > 0 &&
-                    <button
-                        disabled={pendingDAI}
-                        onClick={handleApproveDai}>Approve DAI
-                    </button>
+                    <button disabled={pendingDAI} onClick={handleApproveDai}>Approve DAI </button>
                     }
-                    {account && parseFloat(usdc) > 0 &&
-                    <button disabled={pendingUSDC}
-                            onClick={async () => {
-                                setPendingUSDC(true)
-                                // await useApprove(usdcAddress)
-                                setPendingUSDC(false)
-                            }}>Approve USDC
-                    </button>
+                    {account && parseFloat(dai) > 0 &&
+                    <button disabled={pendingUSDC} onClick={handleApproveUsdc}>Approve USDC </button>
                     }
-                    {account && parseFloat(usdt) > 0 &&
-                    <button disabled={pendingUSDT}
-                            onClick={async () => {
-                                setPendingUSDT(true)
-                                // await useApprove(usdtAddress)
-                                setPendingUSDT(false)
-                            }}>Approve USDT
-                    </button>
+                    {account && parseFloat(dai) > 0 &&
+                    <button disabled={pendingUSDT} onClick={handleApproveUsdt}>Approve USDT </button>
                     }
                     {account && <button
                         onClick={async () => {
@@ -133,19 +138,19 @@ export const Form = (props: FormProps): JSX.Element => {
                 </div>
                 }
                 {props.operationName.toLowerCase() === 'withdraw' &&
-                    <div>
-                        {account && <button
-                            onClick={async () => {
-                                setPendingWithdraw(true)
-                                await onUnstake()
-                                setPendingWithdraw(false)
-                            }}
-                            disabled={(dai === '' && usdc == '' && usdt === '') || pendingWithdraw || fullBalanceLpShare==='0'}
-                        >
-                            Withdraw
-                        </button>}
-                        {/*<input type='submit' value={'Withdraw all'} className={'Form__WithdrawAll'}/>*/}
-                    </div>
+                <div>
+                    {account && <button
+                        onClick={async () => {
+                            setPendingWithdraw(true)
+                            await onUnstake()
+                            setPendingWithdraw(false)
+                        }}
+                        disabled={(dai === '' && usdc == '' && usdt === '') || pendingWithdraw || fullBalanceLpShare === '0'}
+                    >
+                        Withdraw
+                    </button>}
+                    {/*<input type='submit' value={'Withdraw all'} className={'Form__WithdrawAll'}/>*/}
+                </div>
                 }
             </form>
         </div>
