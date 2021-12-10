@@ -38,6 +38,9 @@ $media435: 435px;
                 height: 43px;
                 font-size: 14px;
                 padding-top: 13px;
+                display: block;
+                margin-top: 10px;
+                margin-bottom: 10px;
             }
 
             @media screen and (min-width: $media1024) {
@@ -45,6 +48,9 @@ $media435: 435px;
                 height: 60px;
                 margin-top: 5px;
                 font-size: 16px;
+                display: inline;
+                margin-top: 0;
+                margin-bottom: 0;
             }
 
             @media screen and (min-width: $media1440) {
