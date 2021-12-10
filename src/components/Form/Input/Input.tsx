@@ -22,7 +22,8 @@ export const Input = (props: InputProps): JSX.Element => {
     };
 
     const fullBalance = useMemo(() => {
-        return getFullDisplayBalance(props.max)
+        const decimals = props.name === 'DAI' ? 18 : 6
+        return getFullDisplayBalance(props.max, decimals)
     }, [props.max])
 
     const handleSelectMax = useCallback(() => {

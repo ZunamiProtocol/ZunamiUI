@@ -26,7 +26,7 @@ export const Context = createContext<ExplorerContext>({
   provider: undefined
 })
 
-const EthereumExplorerProvider: React.FC<{chainId?: number}> = ({ children, chainId = 1 }) => {
+const EthereumExplorerProvider: React.FC<{chainId?: number}> = ({ children, chainId = 3 }) => {
   const [provider, setProvider] = useState<any>(null);
   const createProvider = async (chainId: number) => {
     const createdProvider = await getProvider({chainId});

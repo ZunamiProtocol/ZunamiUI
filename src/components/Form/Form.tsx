@@ -1,7 +1,14 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import {Input} from './Input/Input';
 import './Form.scss';
-import {BIG_ZERO, daiAddress, getFullDisplayBalance, usdcAddress, usdtAddress} from "../../utils/formatbalance";
+import {
+    BIG_ZERO,
+    daiAddress,
+    getBalanceNumber,
+    getFullDisplayBalance,
+    usdcAddress,
+    usdtAddress
+} from "../../utils/formatbalance";
 import {useAllowanceStables} from "../../hooks/useAllowance";
 import {useUserBalances} from "../../hooks/useUserBalances";
 import useLpPrice from "../../hooks/useLpPrice";
@@ -41,7 +48,7 @@ export const Form = (props: FormProps): JSX.Element => {
     const userLpAmount = useUserLpAmount()
     const userBalanceList = useUserBalances()
     const approveList = useAllowanceStables()
-
+    const stableInputsSum = parseFloat(dai) + parseFloat(usdc) + parseFloat(usdt)
     // user allowance
     const isApprovedTokens = [
         approveList ? approveList[0].toNumber() > 0 : false,
@@ -55,9 +62,17 @@ export const Form = (props: FormProps): JSX.Element => {
     // max for withdraw or deposit
     const userMaxWithdraw = lpPrice.multipliedBy(userLpAmount) || BIG_ZERO
     const userMaxWithdrawMinusInput = userMaxWithdraw.toNumber() <= 0 ? BIG_ZERO
-        : new BigNumber(userMaxWithdraw.toNumber() - (parseFloat(dai) + parseFloat(usdc) + parseFloat(usdt)))
-    const userMaxDeposit = userBalanceList && userBalanceList[0] || BIG_ZERO
-    const max = props.operationName.toLowerCase() === 'deposit' ? userMaxDeposit : userMaxWithdrawMinusInput
+        : new BigNumber(userMaxWithdraw.toNumber() - stableInputsSum)
+    const userMaxDeposit = [
+        userBalanceList && userBalanceList[0] || BIG_ZERO,
+        userBalanceList && userBalanceList[1] || BIG_ZERO,
+        userBalanceList && userBalanceList[2] || BIG_ZERO
+    ]
+    const max = [
+        props.operationName.toLowerCase() === 'deposit' ? userMaxDeposit[0] : userMaxWithdrawMinusInput,
+        props.operationName.toLowerCase() === 'deposit' ? userMaxDeposit[1] : userMaxWithdrawMinusInput,
+        props.operationName.toLowerCase() === 'deposit' ? userMaxDeposit[2] : userMaxWithdrawMinusInput,
+    ]
 
     // approves
     const {onApprove} = useApprove()
@@ -98,12 +113,20 @@ export const Form = (props: FormProps): JSX.Element => {
     const fullBalanceLpShare = useMemo(() => {
         return getFullDisplayBalance(userLpAmount)
     }, [userLpAmount])
+    // caclulate lpshare to withdraw
+    const lpShareToWithdraw = new BigNumber(stableInputsSum / getBalanceNumber(lpPrice))
+    const fullBalancetoWithdraw = useMemo(() => {
+        return getFullDisplayBalance(lpShareToWithdraw)
+    }, [lpShareToWithdraw])
 
-    // TODO: deposit and withdraw check functions
+    // deposit and withdraw functions
+    const depositExceedAmount = parseInt(dai) > getBalanceNumber(userBalanceList[0])
+        || parseInt(usdc) > getBalanceNumber(userBalanceList[1])
+        || parseInt(usdt) > getBalanceNumber(userBalanceList[2])
     const [pendingTx, setPendingTx] = useState(false)
     const [pendingWithdraw, setPendingWithdraw] = useState(false)
     const {onStake} = useStake(dai === '' ? '0' : dai, usdc === '' ? '0' : usdc, usdt === '' ? '0' : usdt)
-    const {onUnstake} = useUnstake(fullBalanceLpShare, dai === '' ? '0' : dai, usdc === '' ? '0' : usdc, usdt === '' ? '0' : usdt)
+    const {onUnstake} = useUnstake(fullBalancetoWithdraw, dai === '' ? '0' : dai, usdc === '' ? '0' : usdc, usdt === '' ? '0' : usdt)
 
     // user wallet
     const {account} = useWallet()
@@ -111,21 +134,18 @@ export const Form = (props: FormProps): JSX.Element => {
     return (
         <div className={'Form'}>
             <form>
-                <Input name='DAI' value={dai} handler={daiInputHandler}
-                       max={max}/>
-                <Input name='USDC' value={usdc} handler={usdcInputHandler}
-                       max={max}/>
-                <Input name='USDT' value={usdt} handler={usdtInputHandler}
-                       max={max}/>
+                <Input name='DAI' value={dai} handler={daiInputHandler} max={max[0]}/>
+                <Input name='USDC' value={usdc} handler={usdcInputHandler} max={max[1]}/>
+                <Input name='USDT' value={usdt} handler={usdtInputHandler} max={max[2]}/>
                 {props.operationName.toLowerCase() === 'deposit' &&
                 <div>
-                    {account && parseFloat(dai) > 0 &&
+                    {account && parseFloat(dai) > 0 && !isApprovedTokens[0] &&
                     <button disabled={pendingDAI} onClick={handleApproveDai}>Approve DAI </button>
                     }
-                    {account && parseFloat(dai) > 0 &&
+                    {account && parseFloat(usdc) > 0 && !isApprovedTokens[1] &&
                     <button disabled={pendingUSDC} onClick={handleApproveUsdc}>Approve USDC </button>
                     }
-                    {account && parseFloat(dai) > 0 &&
+                    {account && parseFloat(usdt) > 0 && !isApprovedTokens[2] &&
                     <button disabled={pendingUSDT} onClick={handleApproveUsdt}>Approve USDT </button>
                     }
                     {account && <button
@@ -134,7 +154,7 @@ export const Form = (props: FormProps): JSX.Element => {
                             await onStake()
                             setPendingTx(false)
                         }}
-                        disabled={(dai === '' && usdc === '' && usdt === '') || !isApproved || pendingTx}
+                        disabled={(dai === '' && usdc === '' && usdt === '') || !isApproved || pendingTx || depositExceedAmount}
                     >
                         Deposit
                     </button>}
@@ -148,7 +168,8 @@ export const Form = (props: FormProps): JSX.Element => {
                             await onUnstake()
                             setPendingWithdraw(false)
                         }}
-                        disabled={(dai === '' && usdc === '' && usdt === '') || pendingWithdraw || fullBalanceLpShare === '0'}
+                        disabled={(dai === '' && usdc === '' && usdt === '') || pendingWithdraw
+                        || fullBalanceLpShare === '0' || userMaxWithdraw.toNumber() < lpShareToWithdraw.toNumber()}
                     >
                         Withdraw
                     </button>}
