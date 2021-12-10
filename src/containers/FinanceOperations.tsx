@@ -5,12 +5,18 @@ import {ClickableHeader} from '../components/ClickableHeader/ClickableHeader';
 import {Form} from '../components/Form/Form';
 import './FinanceOperations.scss';
 import {Container, Row, Col} from 'react-bootstrap';
+import {useWallet} from "use-wallet";
+import useEagerConnect from "../hooks/useEagerConnect";
 
 interface FinanceOperationsProps {
     operationName: string;
 }
 
 export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element => {
+
+    const {account, connect, ethereum} = useWallet();
+    useEagerConnect(account ? account : "", connect, ethereum);
+
     return (
         <Container className={'h-100 d-flex justify-content-between flex-column'}>
             <Header/>

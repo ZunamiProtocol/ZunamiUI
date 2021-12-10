@@ -2,7 +2,7 @@ import React from 'react';
 import {Main} from './containers/Main';
 import {FinanceOperations} from './containers/FinanceOperations';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
-import {UseWalletProvider} from 'use-wallet';
+import {useWallet, UseWalletProvider} from 'use-wallet';
 import config from './config';
 
 import './App.scss';
@@ -12,11 +12,13 @@ import EthereumExplorerProvider from "./contexts/EthereumExplorerProvider";
 import SushiProvider from "./contexts/SushiProvider";
 import TransactionProvider from "./contexts/Transactions";
 import ModalsProvider from './contexts/Modals';
+import useEagerConnect from "./hooks/useEagerConnect";
 
 
 const {INFURA_URL, CHAIN_ID} = config;
 
 function App() {
+
     return (
         <Providers>
             <Router>
@@ -35,6 +37,7 @@ function App() {
 }
 
 const Providers: React.FC = ({children}) => {
+
     return (
         <EthereumExplorerProvider
             chainId={CHAIN_ID}>

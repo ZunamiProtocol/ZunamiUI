@@ -22,7 +22,7 @@ export const WalletStatus = (): JSX.Element => {
                 method: 'wallet_switchEthereumChain',
                 params: [{chainId: `0x${CHAIN_ID}`}]
             });
-        }, 3000);
+        }, 1000);
     };
 
     const onConnect = async () => {
@@ -30,7 +30,6 @@ export const WalletStatus = (): JSX.Element => {
 
         // @ts-ignore
         const eth = window.ethereum || ethereum;
-
         if (!eth) {
             console.log('No metamask');
             // onPresentMetamaskModal()
@@ -40,6 +39,7 @@ export const WalletStatus = (): JSX.Element => {
     };
 
     if (account) {
+        window.localStorage.setItem("METAMASK_ACCOUNT", account);
         const shortAddress =
             `${account.substring(0, 6)}...${account.substring(account.length - 4)}`;
 

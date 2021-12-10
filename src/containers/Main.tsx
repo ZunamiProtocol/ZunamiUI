@@ -9,6 +9,8 @@ import {BIG_ZERO, getBalanceNumber} from "../utils/formatbalance";
 import useLpPrice from "../hooks/useLpPrice";
 import useUserLpAmount from "../hooks/useUserLpAmount";
 import {useTotalHoldings} from "../hooks/zunamiMethods";
+import {useWallet} from "use-wallet";
+import useEagerConnect from "../hooks/useEagerConnect";
 
 export const Main = (): JSX.Element => {
 
@@ -17,6 +19,8 @@ export const Main = (): JSX.Element => {
     const totalHoldings = useTotalHoldings();
     const userMaxWithdraw = lpPrice.multipliedBy(userLpAmount) || BIG_ZERO;
     // TODO: check withdraw amount after deposit
+    const {account, connect, ethereum} = useWallet();
+    useEagerConnect(account ? account : "", connect, ethereum);
 
     return (
         <Container className={'h-100 d-flex justify-content-between flex-column'}>
