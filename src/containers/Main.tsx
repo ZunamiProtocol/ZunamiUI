@@ -11,6 +11,23 @@ import useUserLpAmount from "../hooks/useUserLpAmount";
 import {useTotalHoldings} from "../hooks/zunamiMethods";
 import {useWallet} from "use-wallet";
 import useEagerConnect from "../hooks/useEagerConnect";
+import useFetch from "react-fetch-hook";
+import {getPoolStatsUrl, zunamiInfoUrl} from "../api/api";
+
+interface ZunamiInfo {
+    tvl: number;
+}
+
+interface PoolStatsItem {
+    type: string;
+    apr: number;
+    apy: number;
+    pid: number
+}
+
+interface PoolsStats {
+    poolsStats: Array<PoolStatsItem>;
+}
 
 export const Main = (): JSX.Element => {
 
@@ -21,6 +38,14 @@ export const Main = (): JSX.Element => {
     // TODO: check withdraw amount after deposit
     const {account, connect, ethereum} = useWallet();
     useEagerConnect(account ? account : "", connect, ethereum);
+
+    const zunami = useFetch(zunamiInfoUrl);
+    const zunamiInfo = zunami.data as ZunamiInfo;
+    console.log(zunamiInfo);
+
+    const pool = useFetch(getPoolStatsUrl("OUSD,USDP"));
+    const poolStats = pool.data as PoolsStats;
+    console.log(poolStats);
 
     return (
         <Container className={'h-100 d-flex justify-content-between flex-column'}>
