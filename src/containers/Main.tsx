@@ -34,7 +34,7 @@ export const Main = (): JSX.Element => {
     const lpPrice = useLpPrice();
     const userLpAmount = useUserLpAmount();
     const totalHoldings = useTotalHoldings();
-    const userMaxWithdraw = lpPrice.multipliedBy(userLpAmount) || BIG_ZERO;
+    const userMaxWithdraw = (userLpAmount && lpPrice && userLpAmount.toNumber() > 0) ? lpPrice.multipliedBy(userLpAmount) : BIG_ZERO;
     // TODO: check withdraw amount after deposit
     const {account, connect, ethereum} = useWallet();
     useEagerConnect(account ? account : "", connect, ethereum);
