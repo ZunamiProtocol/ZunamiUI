@@ -1,9 +1,9 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 import './HowToUse.scss';
 
 interface HowToUseProps {
-    onClick: any
+    onClick: any;
 }
 
 export const HowToUse = (props: HowToUseProps): JSX.Element => {
