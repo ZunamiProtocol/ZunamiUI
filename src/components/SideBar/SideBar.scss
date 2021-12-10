@@ -55,6 +55,14 @@
                 width: 50%;
             }
         }
+
+        .lg-menu {
+            display: none;
+        }
+
+        .sm-menu {
+            display: flex;
+        }
     }
 
     @media screen and (min-width: $media1024) {
@@ -63,6 +71,14 @@
         margin-right: 6px;
         box-shadow: $box-shadow !important;
         height: 100% !important;
+
+        .lg-menu {
+            display: block !important;
+        }
+
+        .sm-menu {
+            display: none;
+        }
     }
 
     @media screen and (min-width: $media1440) {

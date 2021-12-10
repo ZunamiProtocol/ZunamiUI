@@ -20,7 +20,7 @@ export const Header = (): JSX.Element => {
                     <img className={'Logo'} src={logoVariant} alt='Logo of the Zunami Protocol' />
                 </Navbar.Brand>
                 <Navbar.Collapse className ="d-flex justify-content-end align-items-center zun-gap">
-                    <div className={'d-none d-sm-block'}>
+                    <div className={'d-none d-lg-block'}>
                         <Disclaimer
                             text={'Please note. This is a beta version. The contract has not been auditied yet. Use it at your own risk.'}
                         />
