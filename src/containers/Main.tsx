@@ -22,7 +22,7 @@ interface PoolStatsItem {
     type: string;
     apr: number;
     apy: number;
-    pid: number
+    pid: number;
 }
 
 interface PoolsStats {
