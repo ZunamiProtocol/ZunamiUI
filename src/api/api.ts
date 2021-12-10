@@ -3,5 +3,5 @@ export const poolStatsUrl = `${root}/pool/stats`
 export const zunamiInfoUrl = `${root}/zunami/info`
 
 export const getPoolStatsUrl = (poolTypes: string): string => {
-    return poolStatsUrl + "?types=" + poolTypes
+    return poolStatsUrl + "?types=" + poolTypes;
 }
