@@ -8,11 +8,13 @@ import { Container, Row, Col } from 'react-bootstrap';
 import {BIG_ZERO, getBalanceNumber} from "../utils/formatbalance";
 import useLpPrice from "../hooks/useLpPrice";
 import useUserLpAmount from "../hooks/useUserLpAmount";
+import {useTotalHoldings} from "../hooks/zunamiMethods";
 
 export const Main = (): JSX.Element => {
 
     const lpPrice = useLpPrice()
     const userLpAmount = useUserLpAmount()
+    const totalHoldings = useTotalHoldings()
     const userMaxWithdraw = lpPrice.multipliedBy(userLpAmount) || BIG_ZERO
 
     return (
@@ -47,7 +49,7 @@ export const Main = (): JSX.Element => {
                             <InfoBlock
                                 iconName='lock'
                                 title='Total Value Locked'
-                                description='$ 100 000 000'
+                                description={`$ ${getBalanceNumber(totalHoldings).toLocaleString("en")}`}
                                 withColor={true}
                                 isStrategy={false}
                                 isLong={true}
