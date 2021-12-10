@@ -61,7 +61,7 @@ export const Form = (props: FormProps): JSX.Element => {
             && ((parseFloat(usdt) > 0 && isApprovedTokens[2]) || usdt === '0' || usdt === ''));
     // max for withdraw or deposit
     const userMaxWithdraw = lpPrice.multipliedBy(userLpAmount) || BIG_ZERO;
-    const userMaxWithdrawMinusInput = userMaxWithdraw.toNumber() <= 0 ? BIG_ZERO
+    const userMaxWithdrawMinusInput = (!userMaxWithdraw || userMaxWithdraw.toNumber() <= 0 || !userMaxWithdraw.toNumber()) ? BIG_ZERO
         : new BigNumber(userMaxWithdraw.toNumber() - stableInputsSum);
     const userMaxDeposit = [
         (userBalanceList && userBalanceList[0].toNumber() > 0 && userBalanceList[0]) || BIG_ZERO,
