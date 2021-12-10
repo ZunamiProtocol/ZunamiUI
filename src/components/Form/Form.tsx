@@ -68,7 +68,6 @@ export const Form = (props: FormProps): JSX.Element => {
         (userBalanceList && userBalanceList[1].toNumber() > 0 && userBalanceList[1]) || BIG_ZERO,
         (userBalanceList && userBalanceList[2].toNumber() > 0 && userBalanceList[2]) || BIG_ZERO
     ];
-    console.log(userMaxWithdraw)
     const max = [
         props.operationName.toLowerCase() === 'deposit' ? userMaxDeposit[0] : userMaxWithdrawMinusInput,
         props.operationName.toLowerCase() === 'deposit' ? userMaxDeposit[1] : userMaxWithdrawMinusInput,
