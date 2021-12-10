@@ -4,6 +4,13 @@ $media1440: 1440px;
 $media1024: 1024px;
 $media435: 435px;
 
+.operation-col {
+    @media screen and (min-width: $media1024) {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+}
+
 .DepositContainer {
     margin: 0 auto;
     width: 1920px;

@@ -19,7 +19,7 @@ export const Main = (): JSX.Element => {
             <Row className={'mt-3 h-100 mb-4 main-row'}>
                 <SideBar isMainPage={true} />
                 <Col className={'content-col dashboard-col'}>
-                    <ClickableHeader name={'Dashboard'} />
+                    <ClickableHeader name={'Dashboard'} icon={'/section-withdraw-bg.svg'} />
                     <Row className={'zun-rounded zun-shadow ms-0 me-0'}>
                         <Col className={'AlreadyEarnedCol'}>
                             <InfoBlock
@@ -81,7 +81,7 @@ export const Main = (): JSX.Element => {
                             />
                         </Col>
                     </Row>
-                    <Row className={'zun-rounded zun-shadow ms-0 me-0 mt-3'}>
+                    <Row className={'zun-rounded zun-shadow ms-0 me-0'}>
                         <Col className={'CurrStrategyCol'}>
                             <Chart data={chartData} />
                         </Col>

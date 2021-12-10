@@ -38,6 +38,10 @@
         img {
             margin: 0;
         }
+
+        span {
+            display: none;
+        }
     }
 
     @media screen and (min-width: $media1024) {
@@ -51,10 +55,13 @@
             width: 18px;
             margin-right: 10px;
         }
+
+        span {
+            display: inline;
+        }
     }
 
-    @media screen and (min-width: $media1440),
-    screen and (min-width: $media1200) {
+    @media screen and (min-width: $media1440) {
         height: 78px !important;
         width: 210px !important;
         font-size: 20px !important;

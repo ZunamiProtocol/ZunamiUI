@@ -25,6 +25,11 @@
 
             @media screen and (min-width: $media1024) {
                 display: flex;
+
+                img {
+                    width: 44px;
+                    height: 22px;
+                }
             }
         }
     
@@ -50,13 +55,30 @@
                 width: 50%;
             }
         }
+
+        .lg-menu {
+            display: none;
+        }
+
+        .sm-menu {
+            display: flex;
+        }
     }
 
     @media screen and (min-width: $media1024) {
         width: 261px !important;
-        padding: 24px 20px;
-        margin-right: 15px;
+        padding: 24px 12px;
+        margin-right: 6px;
         box-shadow: $box-shadow !important;
+        height: 100% !important;
+
+        .lg-menu {
+            display: block !important;
+        }
+
+        .sm-menu {
+            display: none;
+        }
     }
 
     @media screen and (min-width: $media1440) {

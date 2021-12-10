@@ -12,19 +12,19 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
     return (
         <Col xs={3} className={'SidebarColumn zun-shadow zun-rounded'}> 
             <div className={`Sidebar ${props.isMainPage === false ? 'SideBar_hide' : ''}`}>
-                <div className={'d-block d-sm-none'}>
+                <div className={'d-block d-lg-none'}>
                     <Disclaimer
                         text={'Please note. This is a beta version. The contract has not been auditied yet. Use it at your own risk.'}
                     />
                 </div>
                 {
                     window.location.pathname === '/' &&
-                    <div className={'d-flex d-sm-none one-row'}>
+                    <div className={'sm-menu one-row'}>
                         <LinkBlock title='Deposit' description='Click for deposit' url={'deposit'} icon='/deposit-icon.svg' vstyle='selected' />
                         <LinkBlock title='Withdraw' description='Click for withdraw' url={'withdraw'} icon='/withdraw-icon.svg' vstyle='selected' />
                     </div>
                 }
-                <div className={'d-none d-sm-block'}>
+                <div className={'d-none lg-menu'}>
                     <LinkBlock title='Dashboard' description='' url={''} icon='/dashboard-icon.svg' />
                     <LinkBlock title='Deposit' description='Click for deposit' url={'deposit'} icon='/deposit-icon.svg' vstyle='selected' />
                     <LinkBlock title='Withdraw' description='Click for withdraw' url={'withdraw'} icon='/withdraw-icon.svg' vstyle='selected' />

@@ -12,11 +12,12 @@
         @media (min-width: $media375) {
             margin: 20px 0 0 10px;
         }
+
         @media (min-width: $media1024) {
             font-size: 18px;
             color: $muted-color;
             width: 100%;
-            margin: 25px 0 20px 15px;
+            margin: 20px ​0 20px 9px;
         }
 
         @media (min-width: $media1440) {
@@ -40,6 +41,7 @@
         @media (min-width: $media1024) {
             width: 166px;
             margin-left: 20px;
+            margin-top: 48px;
         }
 
         @media (min-width: $media1440) {
@@ -120,7 +122,7 @@
         }
 
         @media (min-width: $media1024) {
-            margin-left: 50px;
+            margin-left: 30px;
             margin-bottom: 0;
         }
 
