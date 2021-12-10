@@ -1,15 +1,23 @@
-import React, {useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {Input} from './Input/Input';
-import {
-    approve,
-    deposit,
-    useUserAllowances,
-    useUserBalances,
-    useUserLpAmount,
-    withdraw
-} from '../../actions/FinOperation';
 import './Form.scss';
-import {BIG_ZERO} from "../../utils/formatbalance";
+import {
+    BIG_ZERO,
+    daiAddress,
+    getBalanceNumber,
+    getFullDisplayBalance,
+    usdcAddress,
+    usdtAddress
+} from "../../utils/formatbalance";
+import {useAllowanceStables} from "../../hooks/useAllowance";
+import {useUserBalances} from "../../hooks/useUserBalances";
+import useLpPrice from "../../hooks/useLpPrice";
+import useUserLpAmount from "../../hooks/useUserLpAmount";
+import useApprove from "../../hooks/useApprove";
+import useStake from "../../hooks/useStake";
+import useUnstake from "../../hooks/useUnstake";
+import {useWallet} from "use-wallet";
+import {BigNumber} from "bignumber.js";
 
 interface FormProps {
     operationName: string;
@@ -32,79 +40,145 @@ export const Form = (props: FormProps): JSX.Element => {
         setUsdt(newValue);
     };
 
-    const submitHandler = (e: React.FormEvent) => {
-        e.preventDefault();
+    const [pendingDAI, setPendingDAI] = useState(false);
+    const [pendingUSDC, setPendingUSDC] = useState(false);
+    const [pendingUSDT, setPendingUSDT] = useState(false);
 
-        if (props.operationName.toLowerCase() === 'deposit') {
-            deposit(dai, usdc, usdt);
-        } else if (props.operationName.toLowerCase() === 'withdraw') {
-            withdraw(dai, usdc, usdt);
-        }
-    };
-    const [pendingDAI, setPendingDAI] = useState(false)
-    const [pendingUSDC, setPendingUSDC] = useState(false)
-    const [pendingUSDT, setPendingUSDT] = useState(false)
-
-    const userLpAmount = useUserLpAmount()
-    const userBalanceList = useUserBalances()
-    const approveList = useUserAllowances()
+    const lpPrice = useLpPrice();
+    const userLpAmount = useUserLpAmount();
+    const userBalanceList = useUserBalances();
+    const approveList = useAllowanceStables();
+    const stableInputsSum = parseFloat(dai) + parseFloat(usdc) + parseFloat(usdt);
+    // user allowance
     const isApprovedTokens = [
-        approveList ? approveList[0] > 0 : false,
-        approveList ? approveList[1] > 0 : false,
-        approveList ? approveList[2] > 0 : false,
-    ]
+        approveList ? approveList[0].toNumber() > 0 : false,
+        approveList ? approveList[1].toNumber() > 0 : false,
+        approveList ? approveList[2].toNumber() > 0 : false,
+    ];
     const isApproved = approveList &&
         (((parseFloat(dai) > 0 && isApprovedTokens[0]) || dai === '0' || dai === '')
             && ((parseFloat(usdc) > 0 && isApprovedTokens[1]) || usdc === '0' || usdc === '')
-            && ((parseFloat(usdt) > 0 && isApprovedTokens[2]) || usdt === '0' || usdt === ''))
+            && ((parseFloat(usdt) > 0 && isApprovedTokens[2]) || usdt === '0' || usdt === ''));
+    // max for withdraw or deposit
+    const userMaxWithdraw = lpPrice.multipliedBy(userLpAmount) || BIG_ZERO;
+    const userMaxWithdrawMinusInput = userMaxWithdraw.toNumber() <= 0 ? BIG_ZERO
+        : new BigNumber(userMaxWithdraw.toNumber() - stableInputsSum);
+    const userMaxDeposit = [
+        (userBalanceList && userBalanceList[0]) || BIG_ZERO,
+        (userBalanceList && userBalanceList[1]) || BIG_ZERO,
+        (userBalanceList && userBalanceList[2]) || BIG_ZERO
+    ];
+    const max = [
+        props.operationName.toLowerCase() === 'deposit' ? userMaxDeposit[0] : userMaxWithdrawMinusInput,
+        props.operationName.toLowerCase() === 'deposit' ? userMaxDeposit[1] : userMaxWithdrawMinusInput,
+        props.operationName.toLowerCase() === 'deposit' ? userMaxDeposit[2] : userMaxWithdrawMinusInput,
+    ];
+
+    // approves
+    const {onApprove} = useApprove();
+    const handleApproveDai = useCallback(async () => {
+        try {
+            setPendingDAI(true);
+            const tx = onApprove(daiAddress);
+            if (!tx) {
+                setPendingDAI(false);
+            }
+        } catch (e) {
+            setPendingDAI(false);
+        }
+    }, [onApprove]);
+    const handleApproveUsdc = useCallback(async () => {
+        try {
+            setPendingUSDC(true);
+            const tx = onApprove(usdcAddress);
+            if (!tx) {
+                setPendingUSDC(false);
+            }
+        } catch (e) {
+            setPendingUSDC(false);
+        }
+    }, [onApprove]);
+    const handleApproveUsdt = useCallback(async () => {
+        try {
+            setPendingUSDT(true);
+            const tx = onApprove(usdtAddress);
+            if (!tx) {
+                setPendingUSDT(false);
+            }
+        } catch (e) {
+            setPendingUSDT(false);
+        }
+    }, [onApprove]);
+
+    const fullBalanceLpShare = useMemo(() => {
+        return getFullDisplayBalance(userLpAmount);
+    }, [userLpAmount]);
+    // caclulate lpshare to withdraw
+    const lpShareToWithdraw = useMemo(() => {
+        return new BigNumber(stableInputsSum / getBalanceNumber(lpPrice));
+    }, [stableInputsSum, lpPrice]);
+    const fullBalancetoWithdraw = useMemo(() => {
+        return getFullDisplayBalance(lpShareToWithdraw);
+    }, [lpShareToWithdraw]);
+
+    // deposit and withdraw functions
+    const depositExceedAmount = parseInt(dai) > getBalanceNumber(userBalanceList[0])
+        || parseInt(usdc) > getBalanceNumber(userBalanceList[1], 6)
+        || parseInt(usdt) > getBalanceNumber(userBalanceList[2], 6);
+    const [pendingTx, setPendingTx] = useState(false);
+    const [pendingWithdraw, setPendingWithdraw] = useState(false);
+    const {onStake} = useStake(dai === '' ? '0' : dai, usdc === '' ? '0' : usdc, usdt === '' ? '0' : usdt);
+    const {onUnstake} = useUnstake(fullBalancetoWithdraw, dai === '' ? '0' : dai, usdc === '' ? '0' : usdc, usdt === '' ? '0' : usdt);
+
+    // user wallet
+    const {account} = useWallet();
+
+    // TODO: need detect canceled tx's by user
 
     return (
         <div className={'Form'}>
-            <form onSubmit={submitHandler}>
-                <Input name='DAI' value={dai} handler={daiInputHandler} max={userBalanceList && userBalanceList[0] || BIG_ZERO}/>
-                <Input name='USDC' value={usdc} handler={usdcInputHandler} max={userBalanceList && userBalanceList[1]|| BIG_ZERO}/>
-                <Input name='USDT' value={usdt} handler={usdtInputHandler} max={userBalanceList && userBalanceList[2]|| BIG_ZERO}/>
+            <form>
+                <Input name="DAI" value={dai} handler={daiInputHandler} max={max[0]}/>
+                <Input name="USDC" value={usdc} handler={usdcInputHandler} max={max[1]}/>
+                <Input name="USDT" value={usdt} handler={usdtInputHandler} max={max[2]}/>
                 {props.operationName.toLowerCase() === 'deposit' &&
                 <div>
-                    {parseFloat(dai) > 0 &&
-                    <button
-                        disabled={pendingDAI}
+                    {account && parseFloat(dai) > 0 && !isApprovedTokens[0] &&
+                    <button disabled={pendingDAI} onClick={handleApproveDai}>Approve DAI </button>
+                    }
+                    {account && parseFloat(usdc) > 0 && !isApprovedTokens[1] &&
+                    <button disabled={pendingUSDC} onClick={handleApproveUsdc}>Approve USDC </button>
+                    }
+                    {account && parseFloat(usdt) > 0 && !isApprovedTokens[2] &&
+                    <button disabled={pendingUSDT} onClick={handleApproveUsdt}>Approve USDT </button>
+                    }
+                    {account && <button
                         onClick={async () => {
-                            setPendingDAI(true)
-                            await approve("DAI")
-                            setPendingDAI(false)
-                        }}>Approve DAI
-                    </button>
-                    }
-                    {parseFloat(usdc) > 0 &&
-                    <button disabled={pendingUSDC}
-                            onClick={async () => {
-                                setPendingUSDC(true)
-                                await approve("USDC")
-                                setPendingUSDC(false)
-                            }}>Approve USDC
-                    </button>
-                    }
-                    {parseFloat(usdt) > 0 &&
-                    <button disabled={pendingUSDT}
-                            onClick={async () => {
-                                setPendingUSDT(true)
-                                await approve("USDT")
-                                setPendingUSDT(false)
-                            }}>Approve USDT
-                    </button>
-                    }
-                    {<input type='submit'
-                            value={'Deposit'}
-                            disabled={(dai === '' && usdc == '' && usdt === '') || !isApproved}/>}
+                            setPendingTx(true);
+                            await onStake();
+                            setPendingTx(false);
+                        }}
+                        disabled={(dai === '' && usdc === '' && usdt === '') || !isApproved || pendingTx || depositExceedAmount}
+                    >
+                        Deposit
+                    </button>}
                 </div>
                 }
-                {
-                    props.operationName.toLowerCase() === 'withdraw' &&
-                    <div>
-                        <input type='submit' value={'Withdraw'}/>
-                        <input type='submit' value={'Withdraw all'} className={'Form__WithdrawAll'}/>
-                    </div>
+                {props.operationName.toLowerCase() === 'withdraw' &&
+                <div>
+                    {account && <button
+                        onClick={async () => {
+                            setPendingWithdraw(true);
+                            await onUnstake();
+                            setPendingWithdraw(false);
+                        }}
+                        disabled={(dai === '' && usdc === '' && usdt === '') || pendingWithdraw
+                        || fullBalanceLpShare === '0' || userMaxWithdraw.toNumber() < lpShareToWithdraw.toNumber()}
+                    >
+                        Withdraw
+                    </button>}
+                    {/*<input type='submit' value={'Withdraw all'} className={'Form__WithdrawAll'}/>*/}
+                </div>
                 }
             </form>
         </div>

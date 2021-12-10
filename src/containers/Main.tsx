@@ -2,24 +2,35 @@ import React from 'react';
 import {Header} from '../components/Header/Header';
 import {InfoBlock} from '../components/InfoBlock/InfoBlock';
 import {SideBar} from '../components/SideBar/SideBar';
-import { ClickableHeader } from '../components/ClickableHeader/ClickableHeader';
+import {ClickableHeader} from '../components/ClickableHeader/ClickableHeader';
 import './Main.scss';
-import { Container, Row, Col } from 'react-bootstrap';
+import {Container, Row, Col} from 'react-bootstrap';
+import {BIG_ZERO, getBalanceNumber} from "../utils/formatbalance";
+import useLpPrice from "../hooks/useLpPrice";
+import useUserLpAmount from "../hooks/useUserLpAmount";
+import {useTotalHoldings} from "../hooks/zunamiMethods";
 
 export const Main = (): JSX.Element => {
+
+    const lpPrice = useLpPrice();
+    const userLpAmount = useUserLpAmount();
+    const totalHoldings = useTotalHoldings();
+    const userMaxWithdraw = lpPrice.multipliedBy(userLpAmount) || BIG_ZERO;
+    // TODO: check withdraw amount after deposit
+
     return (
         <Container className={'h-100 d-flex justify-content-between flex-column'}>
-            <Header />
+            <Header/>
             <Row className={'mt-3 h-100 mb-4 main-row'}>
-                <SideBar isMainPage={true} />
+                <SideBar isMainPage={true}/>
                 <Col className={'content-col dashboard-col'}>
-                    <ClickableHeader name={'Dashboard'} />
+                    <ClickableHeader name={'Dashboard'}/>
                     <Row className={'zun-rounded zun-shadow ms-0 me-0'}>
                         <Col className={'AlreadyEarnedCol'}>
                             <InfoBlock
-                                iconName='yes'
-                                title='Already earned'
-                                description='$ 0'
+                                iconName="yes"
+                                title="Already earned"
+                                description="$ 0"
                                 withColor={true}
                                 isStrategy={false}
                                 isLong={false}
@@ -27,9 +38,9 @@ export const Main = (): JSX.Element => {
                         </Col>
                         <Col className={'BalanceCol'}>
                             <InfoBlock
-                                iconName='balance'
-                                title='Balance'
-                                description='$ 100 000'
+                                iconName="balance"
+                                title="Balance"
+                                description={`$ ${getBalanceNumber(userMaxWithdraw).toLocaleString("en")}`}
                                 withColor={true}
                                 isStrategy={false}
                                 isLong={false}
@@ -37,9 +48,9 @@ export const Main = (): JSX.Element => {
                         </Col>
                         <Col xs={12} sm={4} lg={4} className={'TvlCol'}>
                             <InfoBlock
-                                iconName='lock'
-                                title='Total Value Locked'
-                                description='$ 100 000 000'
+                                iconName="lock"
+                                title="Total Value Locked"
+                                description={`$ ${getBalanceNumber(totalHoldings).toLocaleString("en")}`}
                                 withColor={true}
                                 isStrategy={false}
                                 isLong={true}
@@ -49,8 +60,8 @@ export const Main = (): JSX.Element => {
                     <Row className={'zun-rounded zun-shadow ms-0 me-0 mt-3'}>
                         <Col className={'ApyCol'}>
                             <InfoBlock
-                                title='APY'
-                                description='25%'
+                                title="APY"
+                                description="25%"
                                 withColor={false}
                                 isStrategy={false}
                                 isLong={false}
@@ -58,8 +69,8 @@ export const Main = (): JSX.Element => {
                         </Col>
                         <Col className={'DailyProfitCol'}>
                             <InfoBlock
-                                title='Daily Profits'
-                                description='68 USD/day'
+                                title="Daily Profits"
+                                description="68 USD/day"
                                 withColor={false}
                                 isStrategy={false}
                                 isLong={false}
@@ -67,8 +78,8 @@ export const Main = (): JSX.Element => {
                         </Col>
                         <Col xs={12} sm={4} lg={4} className={'MonthlyProfitCol'}>
                             <InfoBlock
-                                title='Monthly Profits'
-                                description='2040 USD/month'
+                                title="Monthly Profits"
+                                description="2040 USD/month"
                                 withColor={false}
                                 isStrategy={false}
                                 isLong={true}
@@ -78,8 +89,8 @@ export const Main = (): JSX.Element => {
                     <Row className={'zun-rounded zun-shadow ms-0 me-0 mt-3'}>
                         <Col className={'CurrStrategyCol'}>
                             <InfoBlock
-                                title='Current strategies'
-                                description='Convex finance - USDP pool'
+                                title="Current strategies"
+                                description="Convex finance - USDP pool"
                                 withColor={false}
                                 isStrategy={true}
                                 isLong={true}
