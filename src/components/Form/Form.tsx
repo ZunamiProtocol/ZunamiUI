@@ -121,8 +121,8 @@ export const Form = (props: FormProps): JSX.Element => {
 
     // deposit and withdraw functions
     const depositExceedAmount = parseInt(dai) > getBalanceNumber(userBalanceList[0])
-        || parseInt(usdc) > getBalanceNumber(userBalanceList[1])
-        || parseInt(usdt) > getBalanceNumber(userBalanceList[2])
+        || parseInt(usdc) > getBalanceNumber(userBalanceList[1],  6)
+        || parseInt(usdt) > getBalanceNumber(userBalanceList[2], 6)
     const [pendingTx, setPendingTx] = useState(false)
     const [pendingWithdraw, setPendingWithdraw] = useState(false)
     const {onStake} = useStake(dai === '' ? '0' : dai, usdc === '' ? '0' : usdc, usdt === '' ? '0' : usdt)
@@ -130,6 +130,8 @@ export const Form = (props: FormProps): JSX.Element => {
 
     // user wallet
     const {account} = useWallet()
+
+    // TODO: need detect canceled tx's by user
 
     return (
         <div className={'Form'}>

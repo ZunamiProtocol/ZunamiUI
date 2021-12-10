@@ -16,6 +16,7 @@ export const Main = (): JSX.Element => {
     const userLpAmount = useUserLpAmount()
     const totalHoldings = useTotalHoldings()
     const userMaxWithdraw = lpPrice.multipliedBy(userLpAmount) || BIG_ZERO
+    // TODO: check withdraw amount after deposit
 
     return (
         <Container className={'h-100 d-flex justify-content-between flex-column'}>
