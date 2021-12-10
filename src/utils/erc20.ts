@@ -51,7 +51,7 @@ export const getLpPrice = async (
     masterChefContract: Contract,
 ): Promise<string> => {
     try {
-        const lpPrice: string = await masterChefContract.methods.lpPrice().call()
+        const lpPrice: string = await masterChefContract.methods.lpPrice.call()
         return lpPrice
     } catch (e) {
         return '0'

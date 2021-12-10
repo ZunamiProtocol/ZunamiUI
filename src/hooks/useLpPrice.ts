@@ -6,7 +6,7 @@ import {getLpPrice} from "../utils/erc20";
 import {BIG_ZERO} from "../utils/formatbalance";
 
 const useLpPrice = () => {
-    const [allowance, setAllowance] = useState(BIG_ZERO)
+    const [price, setPrice] = useState(BIG_ZERO)
     const sushi = useSushi()
     const masterChefContract = getMasterChefContract(sushi)
 
@@ -15,7 +15,7 @@ const useLpPrice = () => {
             const allowance = await getLpPrice(
                 masterChefContract
             )
-            setAllowance(new BigNumber(allowance))
+            setPrice(new BigNumber(allowance))
         }
 
         if (masterChefContract) {
@@ -25,7 +25,7 @@ const useLpPrice = () => {
         return () => clearInterval(refreshInterval)
     }, [masterChefContract])
 
-    return allowance
+    return price
 }
 
 export default useLpPrice
