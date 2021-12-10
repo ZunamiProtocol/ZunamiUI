@@ -5,8 +5,16 @@ import {SideBar} from '../components/SideBar/SideBar';
 import { ClickableHeader } from '../components/ClickableHeader/ClickableHeader';
 import './Main.scss';
 import { Container, Row, Col } from 'react-bootstrap';
+import {BIG_ZERO, getBalanceNumber} from "../utils/formatbalance";
+import useLpPrice from "../hooks/useLpPrice";
+import useUserLpAmount from "../hooks/useUserLpAmount";
 
 export const Main = (): JSX.Element => {
+
+    const lpPrice = useLpPrice()
+    const userLpAmount = useUserLpAmount()
+    const userMaxWithdraw = lpPrice.multipliedBy(userLpAmount) || BIG_ZERO
+
     return (
         <Container className={'h-100 d-flex justify-content-between flex-column'}>
             <Header />
@@ -29,7 +37,7 @@ export const Main = (): JSX.Element => {
                             <InfoBlock
                                 iconName='balance'
                                 title='Balance'
-                                description='$ 100 000'
+                                description={`$ ${getBalanceNumber(userMaxWithdraw).toLocaleString("en")}`}
                                 withColor={true}
                                 isStrategy={false}
                                 isLong={false}
