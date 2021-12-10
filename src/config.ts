@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 dotenv.config()
 
-type NETWORK =  'ropsten'
+type NETWORK =  'mainnet'
 
 
 type Config = {
@@ -12,16 +12,16 @@ type Config = {
 
 let NETWORK = process.env.REACT_APP_NETWORK
 if (!NETWORK) {
-    NETWORK = 'ropsten'
+    NETWORK = 'mainnet'
 }
 
 
 export const getNetworkConfig = (NETWORK: string): Config => {
     let CHAIN_ID
-    if (NETWORK === 'ropsten') {
-        CHAIN_ID = 3
+    if (NETWORK === 'mainnet') {
+        CHAIN_ID = 1
     } else {
-        throw new Error(`Unknown ${NETWORK}, permitted only ropsten or ropsten`)
+        throw new Error(`Unknown ${NETWORK}, permitted only mainnet or mainnet`)
     }
 
     return {

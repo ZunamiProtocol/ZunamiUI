@@ -3,7 +3,7 @@ export const SUBTRACT_GAS_LIMIT = 100000
 
 export const contractAddresses = {
   masterChef: {
-    1: "0xf55D572BE4a3596aD3fE497A4E657c362eEfd214",
+    1: "0x63eacf87ff7897b06705cabf56a3c5dad33dfa8c",
     3: "0x1250f27B9706Bd768668A815e6b580ea551ff2a5",
   },
   weth: {
