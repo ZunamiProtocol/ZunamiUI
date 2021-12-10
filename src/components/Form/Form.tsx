@@ -64,9 +64,9 @@ export const Form = (props: FormProps): JSX.Element => {
     const userMaxWithdrawMinusInput = userMaxWithdraw.toNumber() <= 0 ? BIG_ZERO
         : new BigNumber(userMaxWithdraw.toNumber() - stableInputsSum)
     const userMaxDeposit = [
-        userBalanceList && userBalanceList[0] || BIG_ZERO,
-        userBalanceList && userBalanceList[1] || BIG_ZERO,
-        userBalanceList && userBalanceList[2] || BIG_ZERO
+        (userBalanceList && userBalanceList[0]) || BIG_ZERO,
+        (userBalanceList && userBalanceList[1]) || BIG_ZERO,
+        (userBalanceList && userBalanceList[2]) || BIG_ZERO
     ]
     const max = [
         props.operationName.toLowerCase() === 'deposit' ? userMaxDeposit[0] : userMaxWithdrawMinusInput,
@@ -114,7 +114,9 @@ export const Form = (props: FormProps): JSX.Element => {
         return getFullDisplayBalance(userLpAmount)
     }, [userLpAmount])
     // caclulate lpshare to withdraw
-    const lpShareToWithdraw = new BigNumber(stableInputsSum / getBalanceNumber(lpPrice))
+    const lpShareToWithdraw = useMemo(() => {
+        return new BigNumber(stableInputsSum / getBalanceNumber(lpPrice))
+    }, [stableInputsSum, lpPrice])
     const fullBalancetoWithdraw = useMemo(() => {
         return getFullDisplayBalance(lpShareToWithdraw)
     }, [lpShareToWithdraw])
