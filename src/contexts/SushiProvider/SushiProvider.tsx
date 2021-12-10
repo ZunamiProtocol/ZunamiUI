@@ -1,19 +1,19 @@
-import React, { createContext, useEffect, useState } from 'react'
-import { useWallet } from 'use-wallet'
-import useEthExplorer from '../../hooks/useEthExplorer'
-import { Sushi } from '../../sushi'
+import React, {createContext, useEffect, useState} from 'react';
+import {useWallet} from 'use-wallet';
+import useEthExplorer from '../../hooks/useEthExplorer';
+import {Sushi} from '../../sushi';
 
 export interface SushiContext {
-    sushi?: typeof Sushi
+    sushi?: typeof Sushi;
 }
 
 export const Context = createContext<SushiContext>({
     sushi: undefined,
-})
+});
 
 declare global {
     interface Window {
-        sushisauce: any
+        sushisauce: any;
     }
 }
 
@@ -25,7 +25,7 @@ const sushiConfig: any = {
     defaultGasPrice: '1000000000000',
     accounts: [],
     ethereumNodeTimeout: 10000,
-}
+};
 
 const createSushiLib = (
     provider: any,
@@ -35,8 +35,8 @@ const createSushiLib = (
     return new Sushi(provider, chainId, false, {
         defaultAccount,
         ...sushiConfig,
-    })
-}
+    });
+};
 
 type Config = {
     chainId: number
@@ -44,43 +44,43 @@ type Config = {
     provider: any
 }
 
-const SushiProvider: React.FC = ({ children }) => {
-    const { ethereum } = useWallet()
-    const { provider } = useEthExplorer()
-    const [sushi, setSushi] = useState<any>()
+const SushiProvider: React.FC = ({children}) => {
+    const {ethereum} = useWallet();
+    const {provider} = useEthExplorer();
+    const [sushi, setSushi] = useState<any>();
 
     // @ts-ignore
-    window.sushi = sushi
+    window.sushi = sushi;
     // @ts-ignore
-    window.eth = ethereum
+    window.eth = ethereum;
 
     useEffect(() => {
-        let config: Config | null = null
+        let config: Config | null = null;
         if (ethereum) {
             config = {
                 chainId: Number(ethereum.chainId),
                 defaultAccount: ethereum.selectedAddress,
                 provider: ethereum,
-            }
+            };
         } else if (provider) {
             config = {
                 chainId: Number(provider.chainId),
                 defaultAccount: '0x0000000000000000000000000000000000000000',
                 provider,
-            }
+            };
         }
         if (config) {
             const sushiLib = createSushiLib(
                 config.provider,
                 config.chainId,
                 config.defaultAccount,
-            )
-            setSushi(sushiLib)
-            window.sushisauce = sushiLib
+            );
+            setSushi(sushiLib);
+            window.sushisauce = sushiLib;
         }
-    }, [provider, ethereum])
+    }, [provider, ethereum]);
 
-    return <Context.Provider value={{ sushi }}>{children}</Context.Provider>
-}
+    return <Context.Provider value={{sushi}}>{children}</Context.Provider>;
+};
 
-export default SushiProvider
+export default SushiProvider;

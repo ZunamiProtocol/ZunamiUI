@@ -4,7 +4,7 @@ import {SideBar} from '../components/SideBar/SideBar';
 import {ClickableHeader} from '../components/ClickableHeader/ClickableHeader';
 import {Form} from '../components/Form/Form';
 import './FinanceOperations.scss';
-import { Container, Row, Col } from 'react-bootstrap';
+import {Container, Row, Col} from 'react-bootstrap';
 
 interface FinanceOperationsProps {
     operationName: string;
@@ -13,16 +13,16 @@ interface FinanceOperationsProps {
 export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element => {
     return (
         <Container className={'h-100 d-flex justify-content-between flex-column'}>
-            <Header />
+            <Header/>
             <Row className={'mt-3 h-100 mb-4 main-row'}>
-                <SideBar isMainPage={true} />
+                <SideBar isMainPage={true}/>
                 <Col className={'content-col'}>
                     <Row className={'zun-rounded zun-shadow h-100'}>
                         <Col className={'ps-0 pe-0'}>
                             <div className={'DepositBlock'}>
                                 <div className={'DepositContent'}>
-                                    <ClickableHeader name={props.operationName} />
-                                    <Form operationName={props.operationName} />
+                                    <ClickableHeader name={props.operationName}/>
+                                    <Form operationName={props.operationName}/>
                                 </div>
                             </div>
                         </Col>

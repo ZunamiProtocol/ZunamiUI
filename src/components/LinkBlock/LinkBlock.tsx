@@ -21,7 +21,7 @@ export const LinkBlock = (prop: LinkBlockProps): JSX.Element => {
     const styles = ['LinkBlock'];
 
     if (prop.vstyle) {
-        styles.push(`LinkBlock__${prop.vstyle}`)
+        styles.push(`LinkBlock__${prop.vstyle}`);
     }
 
     if (window.location.pathname === url) {
@@ -37,7 +37,7 @@ export const LinkBlock = (prop: LinkBlockProps): JSX.Element => {
             <span className={'LinkBlock__title'}>{prop.title}</span>
             <span className={'LinkBlock__description'}>{prop.description}</span>
             <div className={'LinkBlock__icon_wrapper'}>
-                <img  className={'LinkBlock__icon'} src={prop.icon} alt={''} />
+                <img className={'LinkBlock__icon'} src={prop.icon} alt={''}/>
             </div>
         </div>
     );

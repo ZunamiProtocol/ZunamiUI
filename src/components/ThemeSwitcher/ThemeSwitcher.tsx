@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import './ThemeSwitcher.scss';
 
 export const ThemeSwitcher = (): JSX.Element => {
@@ -23,7 +23,7 @@ export const ThemeSwitcher = (): JSX.Element => {
                     }
                 }}
             >
-                <img src={`${theme === 'light' ? 'theme-dark' : 'theme-light'}.svg`} alt='' />
+                <img src={`${theme === 'light' ? 'theme-dark' : 'theme-light'}.svg`} alt=""/>
                 <span>{theme === 'light' ? 'Dark' : 'Light'} mode</span>
             </div>
         </div>

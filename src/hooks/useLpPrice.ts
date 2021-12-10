@@ -1,31 +1,31 @@
-import BigNumber from 'bignumber.js'
-import {useEffect, useState} from 'react'
-import {getMasterChefContract} from '../sushi/utils'
+import BigNumber from 'bignumber.js';
+import {useEffect, useState} from 'react';
+import {getMasterChefContract} from '../sushi/utils';
 import useSushi from "./useSushi";
 import {getLpPrice} from "../utils/erc20";
 import {BIG_ZERO} from "../utils/formatbalance";
 
 const useLpPrice = () => {
-    const [price, setPrice] = useState(BIG_ZERO)
-    const sushi = useSushi()
-    const masterChefContract = getMasterChefContract(sushi)
+    const [price, setPrice] = useState(BIG_ZERO);
+    const sushi = useSushi();
+    const masterChefContract = getMasterChefContract(sushi);
 
     useEffect(() => {
         const fetchLpPrice = async () => {
             const allowance = await getLpPrice(
                 masterChefContract
-            )
-            setPrice(new BigNumber(allowance))
-        }
+            );
+            setPrice(new BigNumber(allowance));
+        };
 
         if (masterChefContract) {
-            fetchLpPrice()
+            fetchLpPrice();
         }
-        let refreshInterval = setInterval(fetchLpPrice, 10000)
-        return () => clearInterval(refreshInterval)
-    }, [masterChefContract])
+        let refreshInterval = setInterval(fetchLpPrice, 10000);
+        return () => clearInterval(refreshInterval);
+    }, [masterChefContract]);
 
-    return price
-}
+    return price;
+};
 
-export default useLpPrice
+export default useLpPrice;

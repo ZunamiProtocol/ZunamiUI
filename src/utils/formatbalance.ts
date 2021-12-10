@@ -1,21 +1,21 @@
-import BigNumber from 'bignumber.js'
+import BigNumber from 'bignumber.js';
 
-export const BIG_TWO = new BigNumber(2)
-export const BIG_TEN = new BigNumber(10)
-export const BIG_ZERO = new BigNumber(0)
-export const DEFAULT_TOKEN_DECIMAL = new BigNumber(10).pow(18)
+export const BIG_TWO = new BigNumber(2);
+export const BIG_TEN = new BigNumber(10);
+export const BIG_ZERO = new BigNumber(0);
+export const DEFAULT_TOKEN_DECIMAL = new BigNumber(10).pow(18);
 export const DAI_TOKEN_DECIMAL = new BigNumber(10).pow(18);
 export const USDT_TOKEN_DECIMAL = new BigNumber(10).pow(6);
 
 export const getBalanceNumber = (balance: BigNumber, decimals = 18) => {
-    const displayBalance = new BigNumber(balance).dividedBy(BIG_TEN.pow(decimals))
-    return displayBalance.toNumber()
-}
+    const displayBalance = new BigNumber(balance).dividedBy(BIG_TEN.pow(decimals));
+    return displayBalance.toNumber();
+};
 
 export const getFullDisplayBalance = (balance: BigNumber, decimals = 18) => {
-    const newNumber = new BigNumber(balance)
-    return newNumber.dividedBy(BIG_TEN.pow(decimals)).toFixed()
-}
+    const newNumber = new BigNumber(balance);
+    return newNumber.dividedBy(BIG_TEN.pow(decimals)).toFixed();
+};
 // mainnet
 export const daiAddress = '0x6B175474E89094C44Da98b954EedeAC495271d0F';
 export const usdcAddress = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';
