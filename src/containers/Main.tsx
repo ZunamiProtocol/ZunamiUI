@@ -6,12 +6,22 @@ import { ClickableHeader } from '../components/ClickableHeader/ClickableHeader';
 import './Main.scss';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Chart } from '../components/Chart/Chart';
+import { zunamiInfoUrl } from "../api/api";
+import useFetch from "react-fetch-hook";
+
+interface ZunamiInfo {
+    tvl: number;
+}
 
 export const Main = (): JSX.Element => {
     const chartData = [
         { title: 'Convex finance - OUSD pool', value: 70, color: '#F64A00' },
         { title: 'Convex finance - USDP pool', value: 30, color: '#B8E654' },
     ];
+
+    const { isLoading, data, error } = useFetch(zunamiInfoUrl);
+    const zunamiInfo = data as ZunamiInfo
+    console.log(zunamiInfo)
 
     return (
         <Container className={'h-100 d-flex justify-content-between flex-column'}>
