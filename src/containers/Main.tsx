@@ -38,7 +38,6 @@ export const Main = (): JSX.Element => {
 
     const zunami = useFetch(zunamiInfoUrl);
     const zunamiInfo = zunami.data as ZunamiInfo;
-
     const pool = useFetch(getPoolStatsUrl("OUSD,USDP"));
     const poolStats = pool.data as PoolsStats;
     const poolBestApy = (poolStats && poolStats.poolsStats) ? poolStats.poolsStats[0].apy : 0;

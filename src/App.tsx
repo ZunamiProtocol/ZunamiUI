@@ -17,6 +17,7 @@ import ModalsProvider from './contexts/Modals';
 const {INFURA_URL, CHAIN_ID} = config;
 
 function App() {
+
     return (
         <Providers>
             <Router>
@@ -35,6 +36,7 @@ function App() {
 }
 
 const Providers: React.FC = ({children}) => {
+
     return (
         <EthereumExplorerProvider
             chainId={CHAIN_ID}>
