@@ -8,15 +8,42 @@ import {Container, Row, Col} from 'react-bootstrap';
 import {BIG_ZERO, getBalanceNumber} from "../utils/formatbalance";
 import useLpPrice from "../hooks/useLpPrice";
 import useUserLpAmount from "../hooks/useUserLpAmount";
-import {useTotalHoldings} from "../hooks/zunamiMethods";
+import {useWallet} from "use-wallet";
+import useEagerConnect from "../hooks/useEagerConnect";
+import useFetch from "react-fetch-hook";
+import {getPoolStatsUrl, zunamiInfoUrl} from "../api/api";
+
+interface ZunamiInfo {
+    tvl: number;
+}
+
+interface PoolStatsItem {
+    type: string;
+    apr: number;
+    apy: number;
+    pid: number;
+}
+
+interface PoolsStats {
+    poolsStats: Array<PoolStatsItem>;
+}
 
 export const Main = (): JSX.Element => {
 
     const lpPrice = useLpPrice();
     const userLpAmount = useUserLpAmount();
-    const totalHoldings = useTotalHoldings();
-    const userMaxWithdraw = lpPrice.multipliedBy(userLpAmount) || BIG_ZERO;
-    // TODO: check withdraw amount after deposit
+    const userMaxWithdraw = (userLpAmount && lpPrice && userLpAmount.toNumber() > 0) ? lpPrice.multipliedBy(userLpAmount) : BIG_ZERO;
+    const {account, connect, ethereum} = useWallet();
+    useEagerConnect(account ? account : "", connect, ethereum);
+
+    const zunami = useFetch(zunamiInfoUrl);
+    const zunamiInfo = zunami.data as ZunamiInfo;
+
+    const pool = useFetch(getPoolStatsUrl("OUSD,USDP"));
+    const poolStats = pool.data as PoolsStats;
+    const poolBestApy = (poolStats && poolStats.poolsStats) ? poolStats.poolsStats[0].apy : 0;
+    const poolBestAprDaily = (poolStats && poolStats.poolsStats) ? poolStats.poolsStats[0].apr / 100 / 365 : 0;
+    const poolBestAprMonthly = (poolStats && poolStats.poolsStats) ? poolStats.poolsStats[0].apr / 100 / 365 * 30 : 0;
 
     return (
         <Container className={'h-100 d-flex justify-content-between flex-column'}>
@@ -49,8 +76,8 @@ export const Main = (): JSX.Element => {
                         <Col xs={12} sm={4} lg={4} className={'TvlCol'}>
                             <InfoBlock
                                 iconName="lock"
-                                title="Total Value Locked"
-                                description={`$ ${getBalanceNumber(totalHoldings).toLocaleString("en")}`}
+                                title="§ Value Locked"
+                                description={`$ ${(zunamiInfo ? zunamiInfo.tvl : 0).toLocaleString("en")}`}
                                 withColor={true}
                                 isStrategy={false}
                                 isLong={true}
@@ -61,7 +88,7 @@ export const Main = (): JSX.Element => {
                         <Col className={'ApyCol'}>
                             <InfoBlock
                                 title="APY"
-                                description="25%"
+                                description={`${poolBestApy.toFixed(2)}%`}
                                 withColor={false}
                                 isStrategy={false}
                                 isLong={false}
@@ -70,7 +97,7 @@ export const Main = (): JSX.Element => {
                         <Col className={'DailyProfitCol'}>
                             <InfoBlock
                                 title="Daily Profits"
-                                description="68 USD/day"
+                                description={`${getBalanceNumber(userMaxWithdraw) * poolBestAprDaily} USD/day`}
                                 withColor={false}
                                 isStrategy={false}
                                 isLong={false}
@@ -79,7 +106,7 @@ export const Main = (): JSX.Element => {
                         <Col xs={12} sm={4} lg={4} className={'MonthlyProfitCol'}>
                             <InfoBlock
                                 title="Monthly Profits"
-                                description="2040 USD/month"
+                                description={`${getBalanceNumber(userMaxWithdraw) * poolBestAprMonthly} USD/month`}
                                 withColor={false}
                                 isStrategy={false}
                                 isLong={true}
