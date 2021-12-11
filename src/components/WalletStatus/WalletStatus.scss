@@ -24,6 +24,10 @@
     &__connected {
         background-color: #EFEEEE;
 
+        &:hover {
+            background-color: $on-hover-secondary-color;
+        }
+
         span {
             font-size: 25px;
             color: #000;
