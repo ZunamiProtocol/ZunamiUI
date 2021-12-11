@@ -175,8 +175,7 @@ body.dark {
     background-color: #252525;
 
     .SidebarColumn,
-    .row.zun-rounded.zun-shadow
-    {
+    .row.zun-rounded.zun-shadow {
         background-color: #2F2F2F;
     }
 
@@ -186,8 +185,7 @@ body.dark {
     .LinkBlock__title,
     .PieChart__Header,
     .PieChartWrapper__Legend__Label,
-    .PieChart__StratList__Item__Name
-    {
+    .PieChart__StratList__Item__Name {
         color: #ffffff;
     }
 
@@ -196,8 +194,7 @@ body.dark {
     .ThemeSwitcher__button,
     .LinkBlock:not(.LinkBlock__selected),
     .ClickableHeader,
-    form .Input
-    {
+    form .Input {
         color: #ffffff;
         background-color: #5f5f5f;
         border-color: transparent;
@@ -206,7 +203,6 @@ body.dark {
     .ClickableHeader img {
         opacity: 0.1;
     }
-
     .ThemeSwitcher__button:hover,
     .HowToUse:hover {
         background-color: #494949 !important;

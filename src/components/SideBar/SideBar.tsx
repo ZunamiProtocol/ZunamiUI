@@ -1,7 +1,7 @@
-import { Col } from 'react-bootstrap';
+import {Col} from 'react-bootstrap';
 import {LinkBlock} from '../LinkBlock/LinkBlock';
-import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
-import { Disclaimer } from '../Disclaimer/Disclaimer';
+import {ThemeSwitcher} from '../ThemeSwitcher/ThemeSwitcher';
+import {Disclaimer} from '../Disclaimer/Disclaimer';
 import './SideBar.scss';
 
 interface SideBarProps {
@@ -10,7 +10,7 @@ interface SideBarProps {
 
 export const SideBar = (props: SideBarProps): JSX.Element => {
     return (
-        <Col xs={3} className={'SidebarColumn zun-shadow zun-rounded'}> 
+        <Col xs={3} className={'SidebarColumn zun-shadow zun-rounded'}>
             <div className={`Sidebar ${props.isMainPage === false ? 'SideBar_hide' : ''}`}>
                 <div className={'d-block d-lg-none'}>
                     <Disclaimer
@@ -29,10 +29,10 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                     <LinkBlock title='Deposit' description='Click for deposit' url={'deposit'} icon='/deposit-icon.svg' vstyle='selected' />
                     <LinkBlock title='Withdraw' description='Click for withdraw' url={'withdraw'} icon='/withdraw-icon.svg' vstyle='selected' />
                 </div>
-                <ThemeSwitcher />
+                <ThemeSwitcher/>
             </div>
             <div className={'SideBar__logo'}>
-                <img src='/logo-footer.svg' alt='' />
+                <img src="/logo-footer.svg" alt=""/>
             </div>
         </Col>
     );
