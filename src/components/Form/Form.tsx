@@ -18,6 +18,7 @@ import useStake from "../../hooks/useStake";
 import useUnstake from "../../hooks/useUnstake";
 import {useWallet} from "use-wallet";
 import {BigNumber} from "bignumber.js";
+import {NoWallet} from "../NoWallet/NoWallet"
 
 interface FormProps {
     operationName: string;
@@ -134,6 +135,12 @@ export const Form = (props: FormProps): JSX.Element => {
     const {account} = useWallet();
 
     // TODO: need detect canceled tx's by user
+
+    if (!account) {
+        return (
+            <NoWallet />
+        );
+    }
 
     return (
         <div className={'Form'}>
