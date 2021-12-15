@@ -11,13 +11,14 @@ import {
 } from "../../utils/formatbalance";
 import {useAllowanceStables} from "../../hooks/useAllowance";
 import {useUserBalances} from "../../hooks/useUserBalances";
-import useLpPrice from "../../hooks/useLpPrice";
+// import useLpPrice from "../../hooks/useLpPrice";
 import useUserLpAmount from "../../hooks/useUserLpAmount";
 import useApprove from "../../hooks/useApprove";
 import useStake from "../../hooks/useStake";
 import useUnstake from "../../hooks/useUnstake";
 import {useWallet} from "use-wallet";
 import {BigNumber} from "bignumber.js";
+import {Modal,Button} from "react-bootstrap";
 import {NoWallet} from "../NoWallet/NoWallet"
 
 interface FormProps {
@@ -45,7 +46,10 @@ export const Form = (props: FormProps): JSX.Element => {
     const [pendingUSDC, setPendingUSDC] = useState(false);
     const [pendingUSDT, setPendingUSDT] = useState(false);
 
-    const lpPrice = useLpPrice();
+    // const lpPrice = useLpPrice();
+
+    // wrapped in useMemo to prevent lpShareToWithdraw hook deps change on every render
+    const lpPrice = useMemo(() => new BigNumber(1), []);
     const userLpAmount = useUserLpAmount();
     const userBalanceList = useUserBalances();
     const approveList = useAllowanceStables();
@@ -114,10 +118,12 @@ export const Form = (props: FormProps): JSX.Element => {
     const fullBalanceLpShare = useMemo(() => {
         return getFullDisplayBalance(userLpAmount);
     }, [userLpAmount]);
+
     // caclulate lpshare to withdraw
     const lpShareToWithdraw = useMemo(() => {
         return new BigNumber(stableInputsSum / getBalanceNumber(lpPrice));
     }, [stableInputsSum, lpPrice]);
+
     const fullBalancetoWithdraw = useMemo(() => {
         return getFullDisplayBalance(lpShareToWithdraw);
     }, [lpShareToWithdraw]);
@@ -142,8 +148,35 @@ export const Form = (props: FormProps): JSX.Element => {
         );
     }
 
+    const [showModal, setModalShow] = useState(false);
+    const handleModalClose = () => setModalShow(false);
+
     return (
         <div className={'Form'}>
+            <Modal
+                show={showModal}
+                onHide={handleModalClose}
+                backdrop="static"
+                keyboard={false}
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Warning!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Please note. This is a beta version. The contract has not been auditied yet. Use it at your own risk.
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="primary" onClick={async () => {
+                            setModalShow(false);
+                            setPendingTx(true);
+                            await onStake();
+                            setPendingTx(false);
+                        }}
+                    >Understood</Button>
+                </Modal.Footer>
+            </Modal>
             <form>
                 <Input name="DAI" value={dai} handler={daiInputHandler} max={max[0]}/>
                 <Input name="USDC" value={usdc} handler={usdcInputHandler} max={max[1]}/>
@@ -160,10 +193,9 @@ export const Form = (props: FormProps): JSX.Element => {
                     <button disabled={pendingUSDT} onClick={handleApproveUsdt}>Approve USDT </button>
                     }
                     {account && <button
-                        onClick={async () => {
-                            setPendingTx(true);
-                            await onStake();
-                            setPendingTx(false);
+                        onClick={async (e) => {
+                            e.preventDefault();
+                            setModalShow(true);
                         }}
                         disabled={(dai === '' && usdc === '' && usdt === '') || !isApproved || pendingTx || depositExceedAmount}
                     >
