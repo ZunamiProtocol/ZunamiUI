@@ -18,6 +18,7 @@ import useStake from "../../hooks/useStake";
 import useUnstake from "../../hooks/useUnstake";
 import {useWallet} from "use-wallet";
 import {BigNumber} from "bignumber.js";
+import {Modal,Button} from "react-bootstrap";
 
 interface FormProps {
     operationName: string;
@@ -135,8 +136,35 @@ export const Form = (props: FormProps): JSX.Element => {
 
     // TODO: need detect canceled tx's by user
 
+    const [showModal, setModalShow] = useState(false);
+    const handleModalClose = () => setModalShow(false);
+
     return (
         <div className={'Form'}>
+            <Modal
+                show={showModal}
+                onHide={handleModalClose}
+                backdrop="static"
+                keyboard={false}
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Warning!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Please note. This is a beta version. The contract has not been auditied yet. Use it at your own risk.
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="primary" onClick={async () => {
+                            setModalShow(false);
+                            setPendingTx(true);
+                            await onStake();
+                            setPendingTx(false);
+                        }}
+                    >Understood</Button>
+                </Modal.Footer>
+            </Modal>
             <form>
                 <Input name="DAI" value={dai} handler={daiInputHandler} max={max[0]}/>
                 <Input name="USDC" value={usdc} handler={usdcInputHandler} max={max[1]}/>
@@ -153,10 +181,9 @@ export const Form = (props: FormProps): JSX.Element => {
                     <button disabled={pendingUSDT} onClick={handleApproveUsdt}>Approve USDT </button>
                     }
                     {account && <button
-                        onClick={async () => {
-                            setPendingTx(true);
-                            await onStake();
-                            setPendingTx(false);
+                        onClick={async (e) => {
+                            e.preventDefault();
+                            setModalShow(true);
                         }}
                         disabled={(dai === '' && usdc === '' && usdt === '') || !isApproved || pendingTx || depositExceedAmount}
                     >
