@@ -51,6 +51,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react-router-dom": "^5.1.9"
+    "@types/react-router-dom": "^5.1.9",
+    "eslint-config-google": "^0.14.0"
   }
 }

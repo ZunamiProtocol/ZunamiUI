@@ -4,9 +4,7 @@ import {InfoBlock} from '../components/InfoBlock/InfoBlock';
 import {SideBar} from '../components/SideBar/SideBar';
 import {ClickableHeader} from '../components/ClickableHeader/ClickableHeader';
 import './Main.scss';
-
 import { Chart } from '../components/Chart/Chart';
-
 import {Container, Row, Col} from 'react-bootstrap';
 import {BIG_ZERO, getBalanceNumber} from "../utils/formatbalance";
 import useLpPrice from "../hooks/useLpPrice";
@@ -33,7 +31,6 @@ interface PoolsStats {
 }
 
 export const Main = (): JSX.Element => {
-
     const lpPrice = useLpPrice();
     const userLpAmount = useUserLpAmount();
     const userMaxWithdraw = (userLpAmount && lpPrice && userLpAmount.toNumber() > 0) ? lpPrice.multipliedBy(userLpAmount) : BIG_ZERO;
@@ -49,7 +46,7 @@ export const Main = (): JSX.Element => {
     const poolBestAprMonthly = (poolStats && poolStats.poolsStats) ? poolStats.poolsStats[0].apr / 100 / 365 * 30 : 0;
 
     const chartData = [
-        { title: 'Convex finance - OUSD pool', value: 70, color: '#B8E654' },
+        { title: 'Convex finance - OUSD pool', value: 70, color: '#F64A00' },
         { title: 'Convex finance - USDP pool', value: 30, color: '#B8E654' },
     ];
 
