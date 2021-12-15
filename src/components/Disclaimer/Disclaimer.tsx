@@ -8,7 +8,7 @@ interface DisclaimerProps {
 export const Disclaimer = (props: DisclaimerProps): JSX.Element => {
     return (
         <div className={'Disclaimer'}>
-            <img src='/disclaimer.svg' alt='' className={'Disclaimer__icon'} />
+            <img src="/disclaimer.svg" alt="" className={'Disclaimer__icon'}/>
             <span className={''}>{props.text}</span>
         </div>
     );

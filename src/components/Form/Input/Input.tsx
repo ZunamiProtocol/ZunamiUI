@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import './Input.scss';
+import BigNumber from "bignumber.js";
+import {getFullDisplayBalance} from "../../../utils/formatbalance";
 
 interface InputProps {
     name: string;
     value: string;
+
     handler(value: string): void;
+
+    max: BigNumber;
 }
 
 export const Input = (props: InputProps): JSX.Element => {
@@ -18,15 +23,27 @@ export const Input = (props: InputProps): JSX.Element => {
         }
     };
 
+    const fullBalance = useMemo(() => {
+        const decimals = props.name === 'DAI' ? 18 : 6;
+        return getFullDisplayBalance(props.max, decimals);
+    }, [props.max, props.name]);
+
+    const handleSelectMax = useCallback(() => {
+        setValue(fullBalance);
+    }, [fullBalance, setValue]);
+
+    const isBalanceZero = fullBalance === '0' || !fullBalance;
+    const displayBalance = isBalanceZero ? '0.00' : parseFloat(fullBalance).toFixed(2);
+
     return (
         <div className={'Input'}>
-            <div className='InputInfo'>
-                <img src={`${props.name}.svg`} alt='' />
-                <div className='balanceInfo'>
+            <div className="InputInfo">
+                <img src={`${props.name}.svg`} alt=""/>
+                <div className="balanceInfo">
                     <span className={'coinName'}>{props.name}</span>
-                    <div className='maxBalance'>
-                        <span className='max'>MAX</span>
-                        <span className='balance'>0.00</span>
+                    <div className="maxBalance">
+                        <span className="max" onClick={handleSelectMax}>MAX</span>
+                        <span className="balance">{displayBalance}</span>
                     </div>
                 </div>
             </div>

@@ -11,7 +11,7 @@
         flex-direction: column;
         justify-content: center;
         position: relative;
-    
+
         &__logo {
             justify-self: self-end;
             padding: 20px;
@@ -32,10 +32,10 @@
                 }
             }
         }
-    
+
         @media screen and (max-width: $media1440) {
             width: 100%;
-    
+
             &_hide {
                 display: none;
             }
