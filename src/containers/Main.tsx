@@ -15,9 +15,10 @@ import {useWallet} from "use-wallet";
 import useEagerConnect from "../hooks/useEagerConnect";
 import useFetch from "react-fetch-hook";
 import {getPoolStatsUrl, zunamiInfoUrl} from "../api/api";
+import {BigNumber} from "bignumber.js";
 
 interface ZunamiInfo {
-    tvl: number;
+    tvl: BigNumber;
 }
 
 interface PoolStatsItem {
@@ -82,8 +83,8 @@ export const Main = (): JSX.Element => {
                         <Col xs={12} sm={4} lg={4} className={'TvlCol'}>
                             <InfoBlock
                                 iconName="lock"
-                                title="§ Value Locked"
-                                description={`$ ${(zunamiInfo ? zunamiInfo.tvl : 0).toLocaleString("en")}`}
+                                title="Value Locked"
+                                description={`$ ${(zunamiInfo ? getBalanceNumber(zunamiInfo.tvl) : 0).toLocaleString("en")}`}
                                 withColor={true}
                                 isStrategy={false}
                                 isLong={true}
