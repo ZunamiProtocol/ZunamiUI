@@ -11,7 +11,7 @@ import {
 } from "../../utils/formatbalance";
 import {useAllowanceStables} from "../../hooks/useAllowance";
 import {useUserBalances} from "../../hooks/useUserBalances";
-import useLpPrice from "../../hooks/useLpPrice";
+// import useLpPrice from "../../hooks/useLpPrice";
 import useUserLpAmount from "../../hooks/useUserLpAmount";
 import useApprove from "../../hooks/useApprove";
 import useStake from "../../hooks/useStake";
@@ -45,7 +45,10 @@ export const Form = (props: FormProps): JSX.Element => {
     const [pendingUSDC, setPendingUSDC] = useState(false);
     const [pendingUSDT, setPendingUSDT] = useState(false);
 
-    const lpPrice = useLpPrice();
+    // const lpPrice = useLpPrice();
+
+    // wrapped in useMemo to prevent lpShareToWithdraw hook deps change on every render
+    const lpPrice = useMemo(() => new BigNumber(1), []);
     const userLpAmount = useUserLpAmount();
     const userBalanceList = useUserBalances();
     const approveList = useAllowanceStables();
@@ -114,10 +117,12 @@ export const Form = (props: FormProps): JSX.Element => {
     const fullBalanceLpShare = useMemo(() => {
         return getFullDisplayBalance(userLpAmount);
     }, [userLpAmount]);
+
     // caclulate lpshare to withdraw
     const lpShareToWithdraw = useMemo(() => {
         return new BigNumber(stableInputsSum / getBalanceNumber(lpPrice));
     }, [stableInputsSum, lpPrice]);
+
     const fullBalancetoWithdraw = useMemo(() => {
         return getFullDisplayBalance(lpShareToWithdraw);
     }, [lpShareToWithdraw]);
