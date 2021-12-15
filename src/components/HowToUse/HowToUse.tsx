@@ -9,8 +9,8 @@ interface HowToUseProps {
 export const HowToUse = (props: HowToUseProps): JSX.Element => {
     return (
         <Button variant={'light'} className={'HowToUse'} onClick={props.onClick}>
-            <span className={'d-none d-md-block d-lg-block'}>How to use</span>
-            <span className={'d-block d-sm-none'}>?</span>
+            <span className={'HowToUse__lg'}>How to use</span>
+            <span className={'HowToUse__sm'}>?</span>
         </Button>
     );
 };

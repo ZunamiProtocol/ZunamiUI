@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import './ThemeSwitcher.scss';
+import { getTheme, setTheme as saveTheme } from '../../functions/theme';
 
 export const ThemeSwitcher = (): JSX.Element => {
-    const [theme, setTheme] = useState(document.body.classList.contains('dark') ? 'dark' : 'light');
+    const [theme, setTheme] = useState(getTheme);
 
     return (
         <div
@@ -12,7 +13,11 @@ export const ThemeSwitcher = (): JSX.Element => {
             <div
                 className={'ThemeSwitcher__button'}
                 onClick={async (e) => {
-                    setTheme(theme === 'dark' ? 'light' : 'dark');
+                    const value = theme === 'dark' ? 'default' : 'dark';
+
+                    setTheme(value);
+                    saveTheme(value);
+
                     const logo = document.querySelector('nav .Logo');
                     const logoName = `/logo${theme !== 'dark' ? '-dark' : ''}.svg`;
 
@@ -23,8 +28,8 @@ export const ThemeSwitcher = (): JSX.Element => {
                     }
                 }}
             >
-                <img src={`${theme === 'light' ? 'theme-dark' : 'theme-light'}.svg`} alt=""/>
-                <span>{theme === 'light' ? 'Dark' : 'Light'} mode</span>
+                <img src={`${theme === 'default' ? 'theme-dark' : 'theme-light'}.svg`} alt='' />
+                <span>{theme === 'default' ? 'Dark' : 'Light'} mode</span>
             </div>
         </div>
     );

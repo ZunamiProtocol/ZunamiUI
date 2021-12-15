@@ -24,6 +24,10 @@
     &__connected {
         background-color: #EFEEEE;
 
+        &:hover {
+            background-color: $on-hover-secondary-color;
+        }
+
         span {
             font-size: 25px;
             color: #000;
@@ -38,6 +42,10 @@
         img {
             margin: 0;
         }
+
+        span {
+            display: none;
+        }
     }
 
     @media screen and (min-width: $media1024) {
@@ -51,10 +59,13 @@
             width: 18px;
             margin-right: 10px;
         }
+
+        span {
+            display: inline;
+        }
     }
 
-    @media screen and (min-width: $media1440),
-    screen and (min-width: $media1200) {
+    @media screen and (min-width: $media1440) {
         height: 78px !important;
         width: 210px !important;
         font-size: 20px !important;
@@ -72,12 +83,6 @@
             width: 27px;
             height: auto;
         }
-    }
-
-    @media screen and (min-width: $media1600) {
-        height: 80px !important;
-        width: 300px !important;
-        font-size: 16px !important;
     }
 
     @media screen and (min-width: $media1920) {

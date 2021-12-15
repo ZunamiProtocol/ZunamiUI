@@ -4,7 +4,10 @@ import {InfoBlock} from '../components/InfoBlock/InfoBlock';
 import {SideBar} from '../components/SideBar/SideBar';
 import {ClickableHeader} from '../components/ClickableHeader/ClickableHeader';
 import './Main.scss';
-import {Container, Row, Col} from 'react-bootstrap';
+
+import { Container, Row, Col } from 'react-bootstrap';
+import { Chart } from '../components/Chart/Chart';
+
 import {BIG_ZERO, getBalanceNumber} from "../utils/formatbalance";
 import useLpPrice from "../hooks/useLpPrice";
 import useUserLpAmount from "../hooks/useUserLpAmount";
@@ -30,7 +33,6 @@ interface PoolsStats {
 }
 
 export const Main = (): JSX.Element => {
-
     const lpPrice = useLpPrice();
     const userLpAmount = useUserLpAmount();
     const userMaxWithdraw = (userLpAmount && lpPrice && userLpAmount.toNumber() > 0) ? lpPrice.multipliedBy(userLpAmount) : BIG_ZERO;
@@ -45,13 +47,18 @@ export const Main = (): JSX.Element => {
     const poolBestAprDaily = (poolStats && poolStats.poolsStats) ? poolStats.poolsStats[0].apr / 100 / 365 : 0;
     const poolBestAprMonthly = (poolStats && poolStats.poolsStats) ? poolStats.poolsStats[0].apr / 100 / 365 * 30 : 0;
 
+    const chartData = [
+        { title: 'Convex finance - OUSD pool', value: 70, color: '#F64A00' },
+        { title: 'Convex finance - USDP pool', value: 30, color: '#B8E654' },
+    ];
+
     return (
         <Container className={'h-100 d-flex justify-content-between flex-column'}>
             <Header/>
             <Row className={'mt-3 h-100 mb-4 main-row'}>
                 <SideBar isMainPage={true}/>
                 <Col className={'content-col dashboard-col'}>
-                    <ClickableHeader name={'Dashboard'}/>
+                    <ClickableHeader name={'Dashboard'} icon={'/section-withdraw-bg.svg'} />
                     <Row className={'zun-rounded zun-shadow ms-0 me-0'}>
                         <Col className={'AlreadyEarnedCol'}>
                             <InfoBlock
@@ -113,15 +120,9 @@ export const Main = (): JSX.Element => {
                             />
                         </Col>
                     </Row>
-                    <Row className={'zun-rounded zun-shadow ms-0 me-0 mt-3'}>
+                    <Row className={'zun-rounded zun-shadow ms-0 me-0'}>
                         <Col className={'CurrStrategyCol'}>
-                            <InfoBlock
-                                title="Current strategies"
-                                description="Convex finance - USDP pool"
-                                withColor={false}
-                                isStrategy={true}
-                                isLong={true}
-                            />
+                            <Chart data={chartData} />
                         </Col>
                     </Row>
                 </Col>

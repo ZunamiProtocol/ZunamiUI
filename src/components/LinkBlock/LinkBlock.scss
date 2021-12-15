@@ -30,7 +30,8 @@ $media435: 435px;
             height: 116px;
             display: block;
             background-color: $primary-color;
-            right: -21px;
+            right: -25px;
+            border-radius: 3px;
 
             @media screen and (min-width: $media1440) {
                 right: -24px;
@@ -57,7 +58,7 @@ $media435: 435px;
     }
 
     @media screen and (min-width: $media1024) {
-        margin: 0 auto 10px auto;
+        margin: 0 auto 8px 5px;
 
         &::after {
             display: block;
@@ -72,7 +73,7 @@ $media435: 435px;
         }
     }
 
-    @media screen and (max-width: $media1440) {
+    @media screen and (min-width: $media1440) {
         height: 150px;
         margin-bottom: 15px;
 

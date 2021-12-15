@@ -23,12 +23,12 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
             <Row className={'mt-3 h-100 mb-4 main-row'}>
                 <SideBar isMainPage={true}/>
                 <Col className={'content-col'}>
-                    <Row className={'zun-rounded zun-shadow h-100'}>
+                    <Row className={'zun-rounded zun-shadow h-100 operation-col'}>
                         <Col className={'ps-0 pe-0'}>
                             <div className={'DepositBlock'}>
                                 <div className={'DepositContent'}>
-                                    <ClickableHeader name={props.operationName}/>
-                                    <Form operationName={props.operationName}/>
+                                    <ClickableHeader name={props.operationName} icon={`/section-${props.operationName}-bg.svg`} />
+                                    <Form operationName={props.operationName} />
                                 </div>
                             </div>
                         </Col>

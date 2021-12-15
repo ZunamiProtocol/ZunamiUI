@@ -12,6 +12,14 @@
     @media (min-width: $media375) {
         width: 55px;
         height: 43px;
+
+        &__lg {
+            display: none;
+        }
+
+        &__sm {
+            display: inline;
+        }
     }
 
     @media screen and (min-width: $media1024) {
@@ -19,6 +27,15 @@
         width: 159px;
         font-size: 16px !important;
         border-radius: $border-radius17 !important;
+        font-size: 16px;
+
+        &__lg {
+            display: inline;
+        }
+
+        &__sm {
+            display: none;
+        }
     }
 
     @media screen and (min-width: $media1440) {
@@ -26,11 +43,6 @@
         width: 210px !important;
         border-radius: $border-radius !important;
         font-size: 20px !important;
-    }
-
-    @media screen and (min-width: $media1600) {
-        height: 80px !important;
-        width: 300px !important;
     }
 
     @media screen and (min-width: $media1920) {
