@@ -12,7 +12,7 @@ html, body, #root {
 }
 
 #root > .container {
-    margin: 0 auto;
+    margin: 0 auto; 
     padding: 0;
 }
 
@@ -180,7 +180,7 @@ body.dark {
         .content-col .col,
         .MonthlyProfitCol,
         .TvlCol {
-            background-color: #2F2F2F;
+            background-color: $block-bg-black-color;
             border-radius: $border-radius17;
         }
     }
@@ -188,7 +188,7 @@ body.dark {
     @media screen and (min-width: $media1024) {
         .SidebarColumn,
         .row.zun-rounded.zun-shadow {
-            background-color: #2F2F2F;
+            background-color: $block-bg-black-color;
         }
     }
 
