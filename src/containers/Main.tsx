@@ -4,10 +4,8 @@ import {InfoBlock} from '../components/InfoBlock/InfoBlock';
 import {SideBar} from '../components/SideBar/SideBar';
 import {ClickableHeader} from '../components/ClickableHeader/ClickableHeader';
 import './Main.scss';
-
-import { Container, Row, Col } from 'react-bootstrap';
 import { Chart } from '../components/Chart/Chart';
-
+import {Container, Row, Col} from 'react-bootstrap';
 import {BIG_ZERO, getBalanceNumber} from "../utils/formatbalance";
 // import useLpPrice from "../hooks/useLpPrice";
 import useUserLpAmount from "../hooks/useUserLpAmount";
