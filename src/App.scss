@@ -12,7 +12,7 @@ html, body, #root {
 }
 
 #root > .container {
-    margin: 0 auto;
+    margin: 0 auto; 
     padding: 0;
 }
 
@@ -47,6 +47,7 @@ html, body, #root {
         max-width: 100% !important;
         padding-left: 20px !important;
         padding-right: 20px !important;
+        padding-bottom: 20px;
 
         > .row {
             box-shadow: none;
@@ -83,6 +84,7 @@ html, body, #root {
         align-content: flex-start;
         justify-content: flex-start;
         align-items: stretch;
+        padding-bottom: 0;
 
         > .row {
             box-shadow: $box-shadow;
@@ -174,9 +176,20 @@ html, body, #root {
 body.dark {
     background-color: #252525;
 
-    .SidebarColumn,
-    .row.zun-rounded.zun-shadow {
-        background-color: #2F2F2F;
+    @media screen and (min-width: $media375) {
+        .content-col .col,
+        .MonthlyProfitCol,
+        .TvlCol {
+            background-color: $block-bg-black-color;
+            border-radius: $border-radius17;
+        }
+    }
+
+    @media screen and (min-width: $media1024) {
+        .SidebarColumn,
+        .row.zun-rounded.zun-shadow {
+            background-color: $block-bg-black-color;
+        }
     }
 
     .ThemeSwitcher__title,
