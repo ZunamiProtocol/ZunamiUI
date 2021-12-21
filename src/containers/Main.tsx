@@ -45,6 +45,8 @@ export const Main = (): JSX.Element => {
     const poolBestApy = (poolStats && poolStats.poolsStats) ? poolStats.poolsStats[0].apy : 0;
     const poolBestAprDaily = (poolStats && poolStats.poolsStats) ? poolStats.poolsStats[0].apr / 100 / 365 : 0;
     const poolBestAprMonthly = (poolStats && poolStats.poolsStats) ? poolStats.poolsStats[0].apr / 100 / 365 * 30 : 0;
+    const dailyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprDaily;
+    const monthlyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprMonthly;
 
     const chartData = [
         { title: 'Convex finance - OUSD pool', value: 70, color: '#F64A00' },
@@ -57,7 +59,7 @@ export const Main = (): JSX.Element => {
             <Row className={'mt-3 h-100 mb-4 main-row'}>
                 <SideBar isMainPage={true}/>
                 <Col className={'content-col dashboard-col'}>
-                    <ClickableHeader name={'Dashboard'} icon={'/section-withdraw-bg.svg'} />
+                    <ClickableHeader name={'Dashboard'} icon={'/section-dashboard-mobile.svg'} />
                     <Row className={'zun-rounded zun-shadow ms-0 me-0'}>
                         <Col className={'AlreadyEarnedCol'}>
                             <InfoBlock
@@ -79,7 +81,7 @@ export const Main = (): JSX.Element => {
                                 isLong={false}
                             />
                         </Col>
-                        <Col xs={12} sm={4} lg={4} className={'TvlCol'}>
+                        <Col xs={12} sm={4} lg={4} className={'TvlCol col'}>
                             <InfoBlock
                                 iconName="lock"
                                 title="Value Locked"
@@ -103,16 +105,16 @@ export const Main = (): JSX.Element => {
                         <Col className={'DailyProfitCol'}>
                             <InfoBlock
                                 title="Daily Profits"
-                                description={`${getBalanceNumber(userMaxWithdraw) * poolBestAprDaily} USD/day`}
+                                description={`${dailyProfit.toFixed(2)} USD/day`}
                                 withColor={false}
                                 isStrategy={false}
                                 isLong={false}
                             />
                         </Col>
-                        <Col xs={12} sm={4} lg={4} className={'MonthlyProfitCol'}>
+                        <Col xs={12} sm={4} lg={4} className={'MonthlyProfitCol col'}>
                             <InfoBlock
                                 title="Monthly Profits"
-                                description={`${getBalanceNumber(userMaxWithdraw) * poolBestAprMonthly} USD/month`}
+                                description={`${monthlyProfit.toFixed(2)} USD/month`}
                                 withColor={false}
                                 isStrategy={false}
                                 isLong={true}
