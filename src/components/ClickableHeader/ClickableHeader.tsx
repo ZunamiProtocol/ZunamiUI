@@ -14,10 +14,11 @@ export const ClickableHeader = (props: ClickableHeaderProps): JSX.Element => {
     };
 
     return (
-        <div className={'ClickableHeader'}>
+        <div className={'ClickableHeader'} data-section={props.name}>
             <span>{props.name}</span>
             <img src={props.icon.toLowerCase()} alt={''} className={'bg'} />
-            <img onClick={clickHandler} src='exit.png' alt='' className={'close'} />
+            <img onClick={clickHandler} src='exit.png' alt='' className={'close default'} />
+            <img onClick={clickHandler} src='exit-white.svg' alt='' className={'close dark'} />
         </div>
     );
 };

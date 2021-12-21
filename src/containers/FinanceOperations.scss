@@ -1,13 +1,21 @@
-$media1920: 1920px;
-$media1600: 1600px;
-$media1440: 1440px;
-$media1024: 1024px;
-$media435: 435px;
+@import "src/variables";
 
 .operation-col {
+    @media screen and (min-width: $media375) {
+        > .col {
+            background-color: #fcfcfc;
+            box-shadow: none;
+        }
+    }
+
     @media screen and (min-width: $media1024) {
         margin-left: 0 !important;
         margin-right: 0 !important;
+
+        > .col {
+            background-color: transparent;
+            box-shadow: none;
+        }
     }
 }
 

@@ -46,6 +46,14 @@
         span {
             display: none;
         }
+
+        .mobile {
+            display: inline;
+        }
+
+        .desktop {
+            display: none;
+        }
     }
 
     @media screen and (min-width: $media1024) {
@@ -63,6 +71,14 @@
         span {
             display: inline;
             font-size: 16px;
+        }
+
+        .mobile {
+            display: none;
+        }
+
+        .desktop {
+            display: inline;
         }
     }
 

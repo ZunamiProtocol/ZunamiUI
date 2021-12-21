@@ -5,11 +5,15 @@ $media435: 435px;
 .Form {
     display: flex;
     justify-content: center;
-    margin: 30px 20px 20px 20px;
 
-    @media screen and (max-width: $media375) {
+    @media screen and (min-width: $media375) {
         width: auto;
-        margin-top: 15px;
+        margin: 10px 15px 15px 15px;
+    }
+
+    @media screen and (min-width: $media1024) {
+        width: auto;
+        margin: 30px 20px 20px 20px;
     }
 
     form {
@@ -40,6 +44,13 @@ $media435: 435px;
                 height: 43px;
                 font-size: 14px;
                 padding-top: 13px;
+                border-radius: 15px;
+                margin-top: 10px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                border-radius: 17px;
+                margin-top: 0;
             }
 
             @media screen and (min-width: $media1440) {

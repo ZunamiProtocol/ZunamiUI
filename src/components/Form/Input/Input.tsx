@@ -40,7 +40,7 @@ export const Input = (props: InputProps): JSX.Element => {
             <div className="InputInfo">
                 <img src={`${props.name}.svg`} alt=""/>
                 <div className="balanceInfo">
-                    <span className={'coinName'}>{props.name}</span>
+                    <div className={'coinName'}>{props.name}</div>
                     <div className="maxBalance">
                         <span className="max" onClick={handleSelectMax}>MAX</span>
                         <span className="balance">{displayBalance}</span>

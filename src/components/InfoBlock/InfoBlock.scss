@@ -26,7 +26,7 @@ $media435: 435px;
             width: auto;
 
             @media (min-width: $media375) {
-                margin-right: 10px;
+                margin-right: 7px;
             }
 
             @media screen and (min-width: $media1440) {
@@ -36,12 +36,27 @@ $media435: 435px;
 
             @media screen and (min-width: $media1024) {
                 margin-right: 10px;
+
+                &[src="yes.svg"] {
+                    width: 20.98px;
+                    height: 14.33px;
+                }
+
+                &[src="balance.svg"] {
+                    width: 16.48px;
+                    height: 14.98px;
+                }
+
+                &[src="lock.svg"] {
+                    width: 14.18px;
+                    height: 18.62px;
+                }
             }
         }
 
         @media (min-width: $media375) {
             font-size: 14px;
-            margin: 0 0 10px 10px;
+            margin: 0 0 10px 4px;
         }
 
         @media screen and (min-width: $media1024) {
@@ -65,7 +80,7 @@ $media435: 435px;
 
         @media (min-width: $media375) {
             font-size: 15px;
-            margin: 0 0 0 10px;
+            margin: 0 0 0 5px;
         }
 
         @media screen and (min-width: $media1024) {
@@ -86,7 +101,7 @@ $media435: 435px;
             font-size: 35px;
 
             @media (min-width: $media375) {
-                margin: 0 0 0 10px;
+                margin: 0 0 0 5px;
                 font-size: 20px;
             }
 

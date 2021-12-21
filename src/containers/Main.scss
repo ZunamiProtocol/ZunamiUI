@@ -2,7 +2,7 @@
 
 .content-col {
     .col {
-        @media (max-width: $media435) {
+        @media (min-width: $media375) {
             box-shadow: $box-shadow;
             border-radius: $border-radius;
             margin-top: 10px;
@@ -17,19 +17,37 @@
                 margin-right: 5px;
             }
         }
+
+        @media (min-width: $media1024) {
+            box-shadow: none;
+        }
+    }
+
+    @media (min-width: $media375) and (max-width: $media1024) {
+        .TvlCol {
+            margin-left: 5px;
+        }
     }
 
     .col-12 {
-        @media (max-width: $media435) {
+        @media (min-width: $media435) {
             box-shadow: $box-shadow;
             border-radius: $border-radius;
             margin-top: 10px;
+        }
+
+        @media (min-width: $media375) and (max-width: $media1024) {
+            margin-top: 10px;
+        }
+
+        @media (min-width: $media1024) {
+            box-shadow: none;
         }
     }
 
     &.dashboard-col {
         .ClickableHeader {
-            margin: 0;
+            margin: 0 0 15px 0;
 
             @media (min-width: $media1024) {
                 display: none;
@@ -37,6 +55,37 @@
 
             .close {
                 display: none;
+            }
+        }
+
+        @media (min-width: $media375) {
+            background-color: #FCFCFC;
+            margin-left: 20px;
+            margin-right: 20px;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+
+        @media (min-width: $media1024) {
+            background-color: transparent;
+            margin-left: 0;
+            margin-right: 0;
+            padding-left: 20px !important;
+        }
+
+        @media (min-width: $media1440) {
+            padding-left: 0 !important;
+        }
+
+        > .row {
+            @media (min-width: $media375) {
+                margin-left: 20px !important;
+                margin-right: 20px !important;
+            }
+
+            @media (min-width: $media1024) {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
             }
         }
     }

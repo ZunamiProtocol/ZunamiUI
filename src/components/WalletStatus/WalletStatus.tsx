@@ -58,7 +58,8 @@ export const WalletStatus = (): JSX.Element => {
             className={'WalletStatus'}
             onClick={() => onConnect()}
         >
-            <img src='wallet.svg' alt='' />
+            <img src='wallet-connected-mobile.svg' alt='' className={'mobile'} />
+            <img src='wallet.svg' alt='' className={'desktop'} />
             <span>Connect Wallet</span>
         </div>
     );

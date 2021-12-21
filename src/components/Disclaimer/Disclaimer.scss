@@ -21,11 +21,15 @@
         }
 
         @media screen and (min-width: $media1024) {
-            margin: 0;
+            margin: 0 4px;
+            width: 41.98px;
+            height: 41.98px;
         }
 
         @media screen and (min-width: $media1440) {
             margin: 0 20px 0 20px;
+            width: 55px;
+            height: 55px;
         }
 
         // @media screen and (min-width: $media1600) {

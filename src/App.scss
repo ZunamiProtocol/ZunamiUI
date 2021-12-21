@@ -12,7 +12,7 @@ html, body, #root {
 }
 
 #root > .container {
-    margin: 0 auto; 
+    margin: 0 auto;
     padding: 0;
 }
 
@@ -30,6 +30,10 @@ html, body, #root {
         gap: 5px !important;
     }
 
+    nav {
+        padding-top: 14px !important;
+    }
+
     .container {
         max-width: 100% !important;
 
@@ -39,6 +43,7 @@ html, body, #root {
             margin-right: auto !important;
             flex-direction: row;
             align-content: flex-start;
+            margin-top: 15px !important;
         }
     }
 
@@ -53,14 +58,43 @@ html, body, #root {
             box-shadow: none;
             padding: 0;
             margin-top: 0 !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+        }
+    }
+
+    #how-to-use-video {
+        width: 100%;
+        height: auto;
+    }
+
+    .modal-dialog {
+        .modal-content {
+            border-radius: $border-radius;
         }
     }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
     .zun-gap {
         grid-gap: 13px !important;
         gap: 13px !important;
+    }
+
+    nav {
+        padding-top: 0 !important;
+    }
+
+    .zun-rounded {
+        border-radius: 17px !important;
+    }
+
+    .navbar-brand {
+        margin-left: 5px !important;
+    }
+
+    .header-container {
+        margin-top: 25px;
     }
 
     .container {
@@ -71,6 +105,7 @@ html, body, #root {
             margin-left: auto !important;
             margin-right: auto !important;
             margin-bottom: 20px !important;
+            margin-top: 21px !important;
         }
     }
 
@@ -104,12 +139,21 @@ html, body, #root {
             border-radius: $border-radius;
         }
     }
+
+    #how-to-use-video {
+        width: 560px;
+        height: 315px;
+    }
 }
 
 @media (min-width: $media1440) {
     .zun-gap {
         grid-gap: 17px !important;
         gap: 17px !important;
+    }
+
+    .zun-rounded {
+        border-radius: 25px !important;
     }
 
     .container {
@@ -119,6 +163,7 @@ html, body, #root {
             width: 1353px;
             margin-left: auto !important;
             margin-right: auto !important;
+            margin-top: 15px !important;
         }
     }
 
@@ -180,8 +225,13 @@ body.dark {
         .content-col .col,
         .MonthlyProfitCol,
         .TvlCol {
-            background-color: $block-bg-black-color;
+            background-color: $block-fg-black-color;
             border-radius: $border-radius17;
+        }
+
+        .dashboard-col {
+            background-color: $block-bg-black-color;
+            border-radius: 15px;
         }
     }
 
@@ -189,6 +239,41 @@ body.dark {
         .SidebarColumn,
         .row.zun-rounded.zun-shadow {
             background-color: $block-bg-black-color;
+        }
+
+        .content-col .col,
+        .MonthlyProfitCol,
+        .TvlCol {
+            border-radius: 0;
+        }
+
+        .dashboard-col {
+            background-color: transparent;
+            border-radius: 0;
+        }
+
+        .content-col .col,
+        .MonthlyProfitCol,
+        .TvlCol {
+            background-color: transparent;
+        }
+
+        .content-col,
+        .dashboard-col > .row,
+        .operation-col > .row,
+        .operation-col {
+            border-radius: $border-radius17 !important;
+            overflow: hidden;
+        }
+    }
+
+    @media screen and (min-width: $media1600) {
+        .content-col,
+        .dashboard-col > .row,
+        .operation-col > .row,
+        .operation-col {
+            border-radius: $border-radius !important;
+            overflow: hidden;
         }
     }
 
@@ -198,7 +283,8 @@ body.dark {
     .LinkBlock__title,
     .PieChart__Header,
     .PieChartWrapper__Legend__Label,
-    .PieChart__StratList__Item__Name {
+    .PieChart__StratList__Item__Name,
+    .NoWallet span {
         color: #ffffff;
     }
 
@@ -220,5 +306,14 @@ body.dark {
     .ThemeSwitcher__button:hover,
     .HowToUse:hover {
         background-color: #494949 !important;
+    }
+
+    .ClickableHeader .close.default {
+        display: none;
+    }
+
+    .ClickableHeader .close.dark {
+        display: block;
+        opacity: 1;
     }
 }

@@ -142,14 +142,14 @@ export const Form = (props: FormProps): JSX.Element => {
 
     // TODO: need detect canceled tx's by user
 
+    const [showModal, setModalShow] = useState(false);
+    const handleModalClose = () => setModalShow(false);
+
     if (!account) {
         return (
             <NoWallet />
         );
     }
-
-    const [showModal, setModalShow] = useState(false);
-    const handleModalClose = () => setModalShow(false);
 
     return (
         <div className={'Form'}>

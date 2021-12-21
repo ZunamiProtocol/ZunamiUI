@@ -2,17 +2,36 @@
 
 .ClickableHeader {
     align-items: center;
-    background-color: #FAFAFA;
     border-radius: $border-radius;
     display: flex;
     justify-content: space-between;
     margin: 20px;
     overflow: hidden;
 
+    &[data-section="Dashboard"] {
+        .close {
+            display: none !important;
+        }
+    }
+
     .bg {
         width: 252px;
         height: 193px;
         pointer-events: none;
+
+        @media (min-width: $media375) {
+            margin-right: -40px;
+
+            &[src="/section-dashboard-mobile.svg"] {
+                width: 107px;
+                height: 104px;
+                margin-right: 10px;
+            }
+        }
+
+        @media screen and (min-width: $media1024) {
+            margin-right:0;
+        }
     }
 
     .close {
@@ -26,6 +45,10 @@
         }
 
         @media (min-width: $media1024) {
+            display: none !important;
+        }
+
+        &.dark {
             display: none;
         }
     }
@@ -54,12 +77,15 @@
 
     @media (min-width: $media375) {
         height: 69px;
-        margin-bottom: 10px;
+        margin: 0 0 15px 0;
+        border-radius: 15px;
+        background-color: #f5f5f5;
     }
 
     @media screen and (min-width: $media1024) {
         height: 115px;
-        margin-bottom: 0;
+        margin: 20px 20px 0 20px;
+        background-color: #FAFAFA;
     }
 
     @media screen and (min-width: $media1440) {
