@@ -16,7 +16,7 @@ export const Header = (): JSX.Element => {
     return (
         <Navbar expand="lg" className={'header'}>
             <Container className={'mt-3 header-container'}>
-                <Navbar.Brand href="/">
+                <Navbar.Brand href="https://zunami.io">
                     <img className={'Logo'} src={logoVariant} alt="Logo of the Zunami Protocol"/>
                 </Navbar.Brand>
                 <Navbar.Collapse className ="d-flex justify-content-end align-items-center zun-gap">
