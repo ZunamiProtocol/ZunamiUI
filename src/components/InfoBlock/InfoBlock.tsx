@@ -8,6 +8,7 @@ interface InfoBlockProps {
     withColor: boolean;
     isStrategy: boolean;
     isLong: boolean;
+    isLoading?: boolean;
 }
 
 export const InfoBlock = (props: InfoBlockProps): JSX.Element => {
@@ -20,12 +21,19 @@ export const InfoBlock = (props: InfoBlockProps): JSX.Element => {
                 {props.iconName !== undefined ? <img src={props.iconName + '.svg'} alt=""/> : ''}
                 <span>{props.title}</span>
             </div>
-            <span
-                className={`InfoBlock__description ${
-                    props.withColor === true ? 'InfoBlock__description_color' : ''
-                }`}>
-                <div>{props.description}</div>
-            </span>
+            {
+                props.isLoading &&
+                    <div className={'preloader mt-3'}></div>
+            }
+            {
+                !props.isLoading &&
+                <span
+                    className={`InfoBlock__description ${
+                        props.withColor === true ? 'InfoBlock__description_color' : ''
+                    }`}>
+                    <div>{props.description}</div>
+                </span>
+            }
         </div>
     );
 };

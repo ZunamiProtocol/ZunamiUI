@@ -19,6 +19,12 @@ interface ZunamiInfo {
     tvl: BigNumber;
 }
 
+interface ZunamiInfoFetch {
+    data: any;
+    isLoading: boolean;
+    error: any;
+}
+
 interface PoolStatsItem {
     type: string;
     apr: number;
@@ -38,15 +44,19 @@ export const Main = (): JSX.Element => {
     const {account, connect, ethereum} = useWallet();
     useEagerConnect(account ? account : "", connect, ethereum);
 
-    const zunami = useFetch(zunamiInfoUrl);
-    const zunamiInfo = zunami.data as ZunamiInfo;
+    const {
+        isLoading: isZunLoading,
+        data: zunData,
+        error: zunError
+    } = useFetch(zunamiInfoUrl) as ZunamiInfoFetch;
+
+    const zunamiInfo = zunData as ZunamiInfo;
+
     const pool = useFetch(getPoolStatsUrl("OUSD,USDP"));
     const poolStats = pool.data as PoolsStats;
     const poolBestApy = (poolStats && poolStats.poolsStats) ? poolStats.poolsStats[0].apy : 0;
     const poolBestAprDaily = (poolStats && poolStats.poolsStats) ? poolStats.poolsStats[0].apr / 100 / 365 : 0;
     const poolBestAprMonthly = (poolStats && poolStats.poolsStats) ? poolStats.poolsStats[0].apr / 100 / 365 * 30 : 0;
-    const dailyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprDaily;
-    const monthlyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprMonthly;
 
     const chartData = [
         { title: 'Convex finance - OUSD pool', value: 70, color: '#F64A00' },
@@ -59,7 +69,7 @@ export const Main = (): JSX.Element => {
             <Row className={'mt-3 h-100 mb-4 main-row'}>
                 <SideBar isMainPage={true}/>
                 <Col className={'content-col dashboard-col'}>
-                    <ClickableHeader name={'Dashboard'} icon={'/section-dashboard-mobile.svg'} />
+                    <ClickableHeader name={'Dashboard'} icon={'/section-withdraw-bg.svg'} />
                     <Row className={'zun-rounded zun-shadow ms-0 me-0'}>
                         <Col className={'AlreadyEarnedCol'}>
                             <InfoBlock
@@ -81,11 +91,12 @@ export const Main = (): JSX.Element => {
                                 isLong={false}
                             />
                         </Col>
-                        <Col xs={12} sm={4} lg={4} className={'TvlCol col'}>
+                        <Col xs={12} sm={4} lg={4} className={'TvlCol'}>
                             <InfoBlock
                                 iconName="lock"
                                 title="Value Locked"
-                                description={`$ ${(zunamiInfo ? getBalanceNumber(zunamiInfo.tvl) : 0).toLocaleString("en")}`}
+                                description={`${(zunamiInfo && !zunError ? `$${getBalanceNumber(zunamiInfo.tvl).toLocaleString("en")}` : 'n/a')}`}
+                                isLoading={isZunLoading}
                                 withColor={true}
                                 isStrategy={false}
                                 isLong={true}
@@ -105,16 +116,16 @@ export const Main = (): JSX.Element => {
                         <Col className={'DailyProfitCol'}>
                             <InfoBlock
                                 title="Daily Profits"
-                                description={`${dailyProfit.toFixed(2)} USD/day`}
+                                description={`${getBalanceNumber(userMaxWithdraw) * poolBestAprDaily} USD/day`}
                                 withColor={false}
                                 isStrategy={false}
                                 isLong={false}
                             />
                         </Col>
-                        <Col xs={12} sm={4} lg={4} className={'MonthlyProfitCol col'}>
+                        <Col xs={12} sm={4} lg={4} className={'MonthlyProfitCol'}>
                             <InfoBlock
                                 title="Monthly Profits"
-                                description={`${monthlyProfit.toFixed(2)} USD/month`}
+                                description={`${getBalanceNumber(userMaxWithdraw) * poolBestAprMonthly} USD/month`}
                                 withColor={false}
                                 isStrategy={false}
                                 isLong={true}
