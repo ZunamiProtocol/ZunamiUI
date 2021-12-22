@@ -24,6 +24,25 @@ html, body, #root {
     border-radius: $border-radius !important;
 }
 
+.preloader {
+    width: 25px;
+    height: 25px;
+    display:inline-block;
+    padding: 0;
+    border-radius: 100%;
+    border: 2px solid;
+    border-top-color:$primary-color;
+    border-bottom-color:rgba(0,0,0, 0.15);
+    border-left-color:$primary-color;
+    border-right-color:rgba(0,0,0, 0.15);
+    animation: preloader 0.8s linear infinite;
+}
+
+@keyframes preloader {
+    from {transform: rotate(0deg);}
+    to {transform: rotate(360deg);}
+}
+
 @media (min-width: $media375) {
     .zun-gap {
         grid-gap: 5px !important;
