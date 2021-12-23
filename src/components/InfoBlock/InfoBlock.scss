@@ -77,6 +77,7 @@ $media435: 435px;
     &__description {
         font-size: 25px;
         margin-left: 33px;
+        display: flex;
 
         @media (min-width: $media375) {
             font-size: 15px;
@@ -113,6 +114,38 @@ $media435: 435px;
             @media screen and (min-width: $media1440) {
                 font-size: 35px !important;
             }
+        }
+
+        &__secondary {
+            color: #a9a9a9;
+        }
+    }
+
+    .hint {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: $primary-color;
+        color: #fff;
+        font-size: 14px;
+        border-radius: 100%;
+        padding-top: 3px;
+        cursor: pointer;
+
+        @media (min-width: $media375) {
+            margin: 0 0 0 10px;
+            width: 22px;
+            height: 22px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            margin: 0 0 0 10px;
+            width: 26px;
+            height: 26px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            margin: 6px 0 0 10px;
         }
     }
 
