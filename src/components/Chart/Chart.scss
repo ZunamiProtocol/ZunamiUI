@@ -21,7 +21,7 @@
         }
 
         @media (min-width: $media1440) {
-            font-size: 23px;
+            font-size: 16px;
         }
 
         @media (min-width: $media1920) {
@@ -45,7 +45,7 @@
         }
 
         @media (min-width: $media1440) {
-            width: 216px;
+            width: 180px;
         }
 
         @media (min-width: $media1920) {
@@ -64,8 +64,8 @@
             }
 
             @media (min-width: $media1440) {
-                width: 216px;
-                height: 216px;
+                width: 180px;
+                height: 180px;
             }
 
             @media (min-width: $media1920) {
@@ -86,7 +86,7 @@
                 font-size: 14px;
 
                 @media (min-width: $media1440) {
-                    font-size: 17px;
+                    font-size: 14px;
                 }
 
                 @media (min-width: $media1920) {
@@ -112,8 +112,8 @@
                 }
 
                 @media (min-width: $media1440) {
-                    font-size: 40px;
-                    line-height: 40px;
+                    font-size: 25px;
+                    line-height: 25px;
                     margin-bottom: 5px;
                     margin-top: -5px;
                 }
@@ -149,7 +149,7 @@
             }
 
             @media (min-width: $media1440) {
-                font-size: 18px;
+                font-size: 14px;
             }
 
             &__Circle {

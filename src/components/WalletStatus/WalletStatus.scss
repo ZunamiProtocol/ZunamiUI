@@ -83,10 +83,10 @@
     }
 
     @media screen and (min-width: $media1440) {
-        height: 78px !important;
+        height: 56px !important;
         width: 210px !important;
         font-size: 20px !important;
-        border-radius: $border-radius !important;
+        border-radius: 20px !important;
 
         &__connected {
             background-color: #EFEEEE;
@@ -97,12 +97,12 @@
         }
 
         img {
-            width: 27px;
+            width: 19px;
             height: auto;
         }
 
         span {
-            font-size: 20px;
+            font-size: 14px;
         }
     }
 

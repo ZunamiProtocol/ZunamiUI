@@ -28,8 +28,8 @@
 
         @media screen and (min-width: $media1440) {
             margin: 0 20px 0 20px;
-            width: 55px;
-            height: 55px;
+            width: 37px;
+            height: 37px;
         }
 
         // @media screen and (min-width: $media1600) {
@@ -64,12 +64,11 @@
     }
 
     @media screen and (min-width: $media1440) {
-        height: 78px !important;
-        font-size: 16px !important;
-        line-height: 21px !important;
-        width: 520px !important;
-        letter-spacing: 0.1px;
-        border-radius: $border-radius !important;
+        height: 56px !important;
+        font-size: 12px !important;
+        line-height: 16px !important;
+        width: 381px !important;
+        border-radius: 20px !important;
 
         span {
             padding-right: 20px;
