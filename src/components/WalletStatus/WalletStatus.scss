@@ -111,6 +111,12 @@
         width: 300px !important;
         font-size: 25px !important;
 
+        &__connected {
+            span {
+                font-size: 25px !important;
+            }
+        }
+
         img {
             width: 35px;
             height: auto;

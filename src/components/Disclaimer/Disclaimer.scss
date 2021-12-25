@@ -32,16 +32,10 @@
             height: 37px;
         }
 
-        // @media screen and (min-width: $media1600) {
-        //     &__icon {
-        //         margin: 0 20px 0 0;
-        //     }
-        // }
-
         @media screen and (min-width: $media1920) {
-            &__icon {
-                margin: 0 35px 0 5px;
-            }
+            width: 55px;
+            height: 55px;
+            margin: 0 35px 0 5px;
         }
     }
 
@@ -79,6 +73,7 @@
         width: 634px !important;
         height: 80px !important;
         font-size: 20px !important;
+        line-height: 23px !important;
         padding: 20px 40px !important;
     }
 }
