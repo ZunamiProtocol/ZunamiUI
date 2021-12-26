@@ -57,6 +57,8 @@ export const Main = (): JSX.Element => {
     const poolBestApy = (poolStats && poolStats.poolsStats) ? poolStats.poolsStats[0].apy : 0;
     const poolBestAprDaily = (poolStats && poolStats.poolsStats) ? poolStats.poolsStats[0].apr / 100 / 365 : 0;
     const poolBestAprMonthly = (poolStats && poolStats.poolsStats) ? poolStats.poolsStats[0].apr / 100 / 365 * 30 : 0;
+    const dailyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprDaily;
+    const monthlyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprMonthly;
 
     const chartData = [
         { title: 'Convex finance - OUSD pool', value: 70, color: '#F64A00' },
@@ -116,7 +118,7 @@ export const Main = (): JSX.Element => {
                         <Col className={'DailyProfitCol'}>
                             <InfoBlock
                                 title="Daily Profits"
-                                description={`${getBalanceNumber(userMaxWithdraw) * poolBestAprDaily} USD/day`}
+                                description={`${dailyProfit ? dailyProfit.toFixed(2) : 0} USD/day`}
                                 withColor={false}
                                 isStrategy={false}
                                 isLong={false}
@@ -125,7 +127,7 @@ export const Main = (): JSX.Element => {
                         <Col xs={12} sm={4} lg={4} className={'MonthlyProfitCol'}>
                             <InfoBlock
                                 title="Monthly Profits"
-                                description={`${getBalanceNumber(userMaxWithdraw) * poolBestAprMonthly} USD/month`}
+                                description={`${monthlyProfit ? monthlyProfit.toFixed(2) : 0} USD/month`}
                                 withColor={false}
                                 isStrategy={false}
                                 isLong={true}
