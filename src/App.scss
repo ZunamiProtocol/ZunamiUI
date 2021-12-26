@@ -16,6 +16,19 @@ html, body, #root {
     padding: 0;
 }
 
+.tooltip-inner {
+    background-color: #EFEEEE !important;
+    color: #767676 !important;
+    border-radius: 15px !important;
+    padding: 10px 20px !important;
+    text-align: left !important;
+    font-size: 12px !important;
+}
+
+.tooltip-arrow::before {
+    display: none;
+}
+
 .zun-shadow {
     box-shadow: $box-shadow;
 }
@@ -341,5 +354,14 @@ body.dark {
     .ClickableHeader .close.dark {
         display: block;
         opacity: 1;
+    }
+
+    .tooltip-inner {
+        background-color: #5F5F5F !important;
+        color: #ffffff !important;
+    }
+
+    .PendingBalance__hint {
+        background-color: #5F5F5F;
     }
 }

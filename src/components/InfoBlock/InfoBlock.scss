@@ -194,4 +194,41 @@ $media435: 435px;
             }
         }
     }
+
+    &_secondaryRow {
+        @media screen and (min-width: $media1024) {
+            height: 121px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            height: 142px;
+        }
+
+        @media screen and (min-width: $media1920) {
+
+        }
+    }
+
+    &__hint {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #EFEEEE;
+        color: #fff;
+        font-weight: bold;
+        border-radius: 100%;
+        cursor: pointer;
+
+        img {
+            width: auto !important;
+            height: 9px !important;
+            margin: 0 !important;
+        }
+
+        @media screen and (min-width: $media1920) {
+            margin: -20px 0 0 10px;
+            width: 20px;
+            height: 17px;
+        }
+    }
 }

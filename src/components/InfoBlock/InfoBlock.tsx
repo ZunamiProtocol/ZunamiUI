@@ -10,31 +10,47 @@ interface InfoBlockProps {
     isStrategy: boolean;
     isLong: boolean;
     isLoading?: boolean;
-    secondaryDesc?: string;
-    secondaryHint?: string;
+    secondaryRow?: JSX.Element|undefined;
+    hint?: string;
 }
 
 export const InfoBlock = (props: InfoBlockProps): JSX.Element => {
     const target = useRef(null);
-    const [show, setShow] = useState(false);
+    const [showHint, setShowHint] = useState(false);
 
     return (
         <div
-            className={`InfoBlock ${props.isStrategy === true ? 'InfoBlock_long' : ''}
+            className={
+            `InfoBlock ${props.isStrategy === true ? 'InfoBlock_long' : ''}
             ${props.isLong === true ? 'InfoBlock_mobileLong' : ''}
+            ${props.secondaryRow ? 'InfoBlock_secondaryRow' : ''}
         `}
             data-title={props.title}
         >
             <div className={'InfoBlock__title'}>
-                {props.iconName !== undefined ? <img src={props.iconName + '.svg'} alt=""/> : ''}
+                {props.iconName !== undefined ? <img src={props.iconName} alt=""/> : ''}
                 <span>{props.title}</span>
+                {
+                    props.hint &&
+                        <div
+                            className={'InfoBlock__hint'}
+                            ref={target}
+                            onClick={() => setShowHint(!showHint)}
+                        >
+                            <img src={'/info.svg'} alt={'Pending deposit'} />
+                            <Overlay target={target.current} show={showHint} placement="right">
+                                <Tooltip>{props.hint}</Tooltip>
+                            </Overlay>
+                        </div>
+                }
+
             </div>
             {
                 props.isLoading &&
                     <div className={'preloader mt-3'}></div>
             }
             {
-                !props.isLoading && !props.secondaryDesc &&
+                !props.isLoading &&
                 <span
                     className={`InfoBlock__description ${
                         props.withColor === true ? 'InfoBlock__description_color' : ''
@@ -43,21 +59,8 @@ export const InfoBlock = (props: InfoBlockProps): JSX.Element => {
                 </span>
             }
             {
-                !props.isLoading && props.secondaryDesc &&
-                <span
-                    className={`InfoBlock__description ${
-                        props.withColor === true ? 'InfoBlock__description_color' : ''
-                    }`}>
-                    <span className={'InfoBlock__description__secondary'}>{props.secondaryDesc}</span>
-                    <span
-                        className={'hint'}
-                        ref={target}
-                        onClick={() => setShow(!show)}
-                    >?</span>
-                    <Overlay target={target.current} show={show} placement="right">
-                        <Tooltip>{props.secondaryHint}</Tooltip>
-                    </Overlay>
-                </span>
+                !props.isLoading && props.secondaryRow &&
+                    props.secondaryRow
             }
         </div>
     );
