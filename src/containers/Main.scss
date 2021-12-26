@@ -20,10 +20,31 @@
             &.PendingDepositCol {
                 display: none;
             }
+
+            &.MonthlyProfitCol {
+                box-shadow: 0 0 2px rgba(0, 0, 0, .2);
+                border-radius: 25px;
+            }
+        }
+
+        @media (min-width: 577px) and (max-width: $media1024) {
+            &.DailyProfitCol {
+                margin-right: 10px;
+            }
+        }
+
+        @media (min-width: $media375) and (max-width: $media1024) {
+            &.TvlCol {
+                flex: 0 0 auto;
+            }
         }
 
         @media (min-width: $media1024) {
             box-shadow: none;
+
+            &.MonthlyProfitCol {
+                box-shadow: none;
+            }
         }
 
         @media (min-width: $media1920) {
@@ -34,12 +55,6 @@
                     color: #B8E654;
                 }
             }
-        }
-    }
-
-    @media (min-width: $media375) and (max-width: $media1024) {
-        .TvlCol {
-            margin-left: 5px;
         }
     }
 
