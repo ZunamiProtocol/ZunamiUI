@@ -57,9 +57,9 @@
     }
 
     @media screen and (min-width: $media1024) {
-        height: 59px;
-        width: 161px;
-        font-size: 16px;
+        height: 48px;
+        width: 151px;
+        font-size: 14px;
         border-radius: $border-radius17;
 
         img {
@@ -70,7 +70,7 @@
 
         span {
             display: inline;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .mobile {
@@ -83,10 +83,10 @@
     }
 
     @media screen and (min-width: $media1440) {
-        height: 78px !important;
+        height: 56px !important;
         width: 210px !important;
         font-size: 20px !important;
-        border-radius: $border-radius !important;
+        border-radius: 20px !important;
 
         &__connected {
             background-color: #EFEEEE;
@@ -97,12 +97,12 @@
         }
 
         img {
-            width: 27px;
+            width: 19px;
             height: auto;
         }
 
         span {
-            font-size: 20px;
+            font-size: 14px;
         }
     }
 
@@ -110,6 +110,12 @@
         height: 80px !important;
         width: 300px !important;
         font-size: 25px !important;
+
+        &__connected {
+            span {
+                font-size: 25px !important;
+            }
+        }
 
         img {
             width: 35px;

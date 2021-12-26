@@ -1,0 +1,72 @@
+@import "src/variables";
+
+.PendingBalance {
+    display: flex;
+    margin-bottom: 3px;
+
+    @media screen and (min-width: $media375) {
+        margin-top: -3px;
+    }
+
+    @media screen and (min-width: $media1024) {
+        margin-top: 5px;
+    }
+
+    @media screen and (min-width: $media1440) {
+        margin-top: 5px;
+    }
+
+    @media screen and (min-width: $media1920) {
+        display: none;
+    }
+
+    &__val {
+        color: #A0A0A0;
+
+        @media (min-width: $media375) {
+            font-size: 14px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            font-size: 14px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-size: 16px;
+        }
+
+        &__divider {
+            padding-right: 5px;
+        }
+    }
+
+    &__hint {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #EFEEEE;
+        color: #fff;
+        font-weight: bold;
+        border-radius: 100%;
+        cursor: pointer;
+
+        @media (min-width: $media375) {
+            margin: -2px 0 0 5px;
+            font-size: 10px;
+            width: 20px;
+            height: 20px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            margin: -2px 0 0 5px;
+            width: 20px;
+            height: 18px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            margin: 0 0 0 7px;
+            width: 20px;
+            height: 17px;
+        }
+    }
+}

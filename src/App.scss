@@ -16,6 +16,19 @@ html, body, #root {
     padding: 0;
 }
 
+.tooltip-inner {
+    background-color: #EFEEEE !important;
+    color: #767676 !important;
+    border-radius: 15px !important;
+    padding: 10px 20px !important;
+    text-align: left !important;
+    font-size: 12px !important;
+}
+
+.tooltip-arrow::before {
+    display: none;
+}
+
 .zun-shadow {
     box-shadow: $box-shadow;
 }
@@ -101,8 +114,8 @@ button[disabled] {
 
 @media (min-width: 1024px) {
     .zun-gap {
-        grid-gap: 13px !important;
-        gap: 13px !important;
+        grid-gap: 10px !important;
+        gap: 10px !important;
     }
 
     nav {
@@ -122,10 +135,12 @@ button[disabled] {
     }
 
     .container {
-        max-width: 976px !important;
+        max-width: 936px !important;
+        padding-left: 44px;
+        padding-right: 44px;
 
         .main-row {
-            width: 975px;
+            width: 936px;
             margin-left: auto !important;
             margin-right: auto !important;
             margin-bottom: 20px !important;
@@ -181,10 +196,10 @@ button[disabled] {
     }
 
     .container {
-        max-width: 1353px !important;
+        max-width: 1360px !important;
 
         .main-row {
-            width: 1353px;
+            width: 1360px;
             margin-left: auto !important;
             margin-right: auto !important;
             margin-top: 15px !important;
@@ -192,8 +207,8 @@ button[disabled] {
     }
 
     .content-col {
-        width: 976px !important;
-        max-width: 976px !important;
+        width: 1360px !important;
+        max-width: 1360px !important;
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
@@ -339,5 +354,14 @@ body.dark {
     .ClickableHeader .close.dark {
         display: block;
         opacity: 1;
+    }
+
+    .tooltip-inner {
+        background-color: #5F5F5F !important;
+        color: #ffffff !important;
+    }
+
+    .PendingBalance__hint {
+        background-color: #5F5F5F;
     }
 }

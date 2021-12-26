@@ -21,27 +21,21 @@
         }
 
         @media screen and (min-width: $media1024) {
-            margin: 0 4px;
-            width: 41.98px;
-            height: 41.98px;
+            margin: 0 16px;
+            width: 32px;
+            height: 32px;
         }
 
         @media screen and (min-width: $media1440) {
             margin: 0 20px 0 20px;
-            width: 55px;
-            height: 55px;
+            width: 37px;
+            height: 37px;
         }
 
-        // @media screen and (min-width: $media1600) {
-        //     &__icon {
-        //         margin: 0 20px 0 0;
-        //     }
-        // }
-
         @media screen and (min-width: $media1920) {
-            &__icon {
-                margin: 0 35px 0 5px;
-            }
+            width: 55px;
+            height: 55px;
+            margin: 0 35px 0 5px;
         }
     }
 
@@ -54,32 +48,28 @@
     }
 
     @media screen and (min-width: $media1024) {
-        width: 339px;
-        height: 59px;
-        padding: 20px 10px;
-        font-size: 12px;
-        line-height: 16px;
+        width: 326px;
+        height: 49px;
+        padding: 20px 25px 20px 10px;
+        font-size: 10px;
+        line-height: 14px;
         border-radius: $border-radius17;
         margin-bottom: 0 !important;
     }
 
     @media screen and (min-width: $media1440) {
-        height: 78px !important;
-        font-size: 16px !important;
-        line-height: 21px !important;
-        width: 520px !important;
-        letter-spacing: 0.1px;
-        border-radius: $border-radius !important;
-
-        span {
-            padding-right: 20px;
-        }
+        height: 56px !important;
+        font-size: 12px !important;
+        line-height: 16px !important;
+        width: 381px !important;
+        border-radius: 20px !important;
     }
 
     @media screen and (min-width: $media1920) {
         width: 634px !important;
         height: 80px !important;
         font-size: 20px !important;
-        padding: 20px 40px !important;
+        line-height: 23px !important;
+        padding: 20px 50px 20px 40px !important;
     }
 }

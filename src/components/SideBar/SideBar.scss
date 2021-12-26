@@ -14,7 +14,7 @@
 
         &__logo {
             justify-self: self-end;
-            padding: 20px;
+            padding: 20px 20px 0 20px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -27,8 +27,20 @@
                 display: flex;
 
                 img {
-                    width: 44px;
-                    height: 22px;
+                    width: 28px;
+                    height: auto;
+                }
+            }
+
+            @media screen and (min-width: $media1440) {
+                img {
+                    width: 33px;
+                }
+            }
+
+            @media screen and (min-width: $media1920) {
+                img {
+                    width: 60px;
                 }
             }
         }
@@ -82,8 +94,8 @@
     }
 
     @media screen and (min-width: $media1440) {
-        width: 343px !important;
-        padding: 33px 23px !important;
+        width: 299px !important;
+        padding: 25px 23px !important;
         margin-right: 36px;
     }
 

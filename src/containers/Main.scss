@@ -16,10 +16,24 @@
             &.ApyCol {
                 margin-right: 5px;
             }
+
+            &.PendingDepositCol {
+                display: none;
+            }
         }
 
         @media (min-width: $media1024) {
             box-shadow: none;
+        }
+
+        @media (min-width: $media1920) {
+            &.PendingDepositCol {
+                display: block;
+
+                .InfoBlock__description_color {
+                    color: #B8E654;
+                }
+            }
         }
     }
 

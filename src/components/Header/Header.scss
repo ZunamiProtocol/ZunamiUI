@@ -10,13 +10,18 @@
         }
 
         @media screen and (min-width: $media1024) {
-            width: 194.24px;
-            height: 32.81px;
+            width: 160px;
+            height: 27px;
         }
 
         @media screen and (min-width: $media1440) {
+            width: 159px;
+            height: 27px;
+        }
+
+        @media screen and (min-width: $media1920) {
             width: 254px;
-            height: 43px;
+            height: 42px;
         }
     }
 

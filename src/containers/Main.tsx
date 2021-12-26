@@ -4,7 +4,8 @@ import {InfoBlock} from '../components/InfoBlock/InfoBlock';
 import {SideBar} from '../components/SideBar/SideBar';
 import {ClickableHeader} from '../components/ClickableHeader/ClickableHeader';
 import './Main.scss';
-import { Chart } from '../components/Chart/Chart';
+import {Chart} from '../components/Chart/Chart';
+import {PendingBalance} from '../components/PendingBalance/PendingBalance';
 import {Container, Row, Col} from 'react-bootstrap';
 import {BIG_ZERO, getBalanceNumber} from "../utils/formatbalance";
 // import useLpPrice from "../hooks/useLpPrice";
@@ -65,6 +66,9 @@ export const Main = (): JSX.Element => {
         { title: 'Convex finance - USDP pool', value: 30, color: '#B8E654' },
     ];
 
+    const pendingDepositSum = 0;
+    const pdElement = <PendingBalance val={`PD $${pendingDepositSum}`} hint={`You have $${pendingDepositSum} in pending deposit`} />;
+
     return (
         <Container className={'h-100 d-flex justify-content-between flex-column'}>
             <Header/>
@@ -75,7 +79,7 @@ export const Main = (): JSX.Element => {
                     <Row className={'zun-rounded zun-shadow ms-0 me-0'}>
                         <Col className={'AlreadyEarnedCol'}>
                             <InfoBlock
-                                iconName="yes"
+                                iconName="yes.svg"
                                 title="Already earned"
                                 description="$ 0"
                                 withColor={true}
@@ -85,18 +89,33 @@ export const Main = (): JSX.Element => {
                         </Col>
                         <Col className={'BalanceCol'}>
                             <InfoBlock
-                                iconName="balance"
+                                iconName="balance.svg"
                                 title="Balance"
                                 description={`$ ${getBalanceNumber(userMaxWithdraw).toLocaleString("en")}`}
                                 withColor={true}
                                 isStrategy={false}
                                 isLong={false}
+                                secondaryRow={pendingDepositSum ? pdElement : undefined}
                             />
                         </Col>
-                        <Col xs={12} sm={4} lg={4} className={'TvlCol'}>
+                        {
+                            pendingDepositSum > 0 &&
+                                <Col className={'PendingDepositCol'}>
+                                    <InfoBlock
+                                        iconName="pending_deposit.png"
+                                        title="Pending Deposit"
+                                        description={`$ ${pendingDepositSum}`}
+                                        withColor={true}
+                                        isStrategy={false}
+                                        isLong={false}
+                                        hint={`You have $${pendingDepositSum} in pending deposit`}
+                                    />
+                                </Col>
+                        }
+                        <Col className={'TvlCol'}>
                             <InfoBlock
-                                iconName="lock"
-                                title="Value Locked"
+                                iconName="lock.svg"
+                                title="Total Value Locked"
                                 description={`${(zunamiInfo && !zunError ? `$${getBalanceNumber(zunamiInfo.tvl).toLocaleString("en")}` : 'n/a')}`}
                                 isLoading={isZunLoading}
                                 withColor={true}
