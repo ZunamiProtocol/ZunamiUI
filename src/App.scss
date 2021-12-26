@@ -96,8 +96,8 @@ html, body, #root {
 
 @media (min-width: 1024px) {
     .zun-gap {
-        grid-gap: 13px !important;
-        gap: 13px !important;
+        grid-gap: 10px !important;
+        gap: 10px !important;
     }
 
     nav {
@@ -117,10 +117,12 @@ html, body, #root {
     }
 
     .container {
-        max-width: 976px !important;
+        max-width: 936px !important;
+        padding-left: 44px;
+        padding-right: 44px;
 
         .main-row {
-            width: 975px;
+            width: 936px;
             margin-left: auto !important;
             margin-right: auto !important;
             margin-bottom: 20px !important;

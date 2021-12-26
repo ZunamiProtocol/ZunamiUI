@@ -22,7 +22,9 @@ export const InfoBlock = (props: InfoBlockProps): JSX.Element => {
         <div
             className={`InfoBlock ${props.isStrategy === true ? 'InfoBlock_long' : ''}
             ${props.isLong === true ? 'InfoBlock_mobileLong' : ''}
-        `}>
+        `}
+            data-title={props.title}
+        >
             <div className={'InfoBlock__title'}>
                 {props.iconName !== undefined ? <img src={props.iconName + '.svg'} alt=""/> : ''}
                 <span>{props.title}</span>

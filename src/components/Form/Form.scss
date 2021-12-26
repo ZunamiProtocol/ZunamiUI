@@ -13,7 +13,12 @@ $media435: 435px;
 
     @media screen and (min-width: $media1024) {
         width: auto;
-        margin: 30px 20px 20px 20px;
+        margin: 15px 20px 20px 20px;
+    }
+
+    @media screen and (min-width: $media1440) {
+        width: auto;
+        margin: 15px 20px 20px 20px;
     }
 
     form {
@@ -51,6 +56,9 @@ $media435: 435px;
             @media screen and (min-width: $media1024) {
                 border-radius: 17px;
                 margin-top: 0;
+                width: 151px;
+                height: 48px;
+                margin-top: 15px;
             }
 
             @media screen and (min-width: $media1440) {
@@ -58,6 +66,7 @@ $media435: 435px;
                 height: 56px;
                 font-size: 14px;
                 padding: 19px 0 12px 0;
+                margin-top: 10px;
             }
 
             @media screen and (min-width: $media1920) {
@@ -94,8 +103,8 @@ $media435: 435px;
             }
 
             @media screen and (min-width: $media1024) {
-                width: 159px;
-                height: 60px;
+                width: 151px;
+                height: 48px;
                 margin-top: 5px;
                 font-size: 16px;
                 display: inline;

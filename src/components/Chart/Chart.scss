@@ -14,10 +14,10 @@
         }
 
         @media (min-width: $media1024) {
-            font-size: 18px;
+            font-size: 14px;
             color: $muted-color;
             width: 100%;
-            margin: 20px ​0 20px 9px;
+            margin: 15px 0 20px 9px;
         }
 
         @media (min-width: $media1440) {
@@ -39,9 +39,9 @@
         margin-bottom: 30px;
 
         @media (min-width: $media1024) {
-            width: 166px;
+            width: 155px;
             margin-left: 20px;
-            margin-top: 48px;
+            margin-top: 10px;
         }
 
         @media (min-width: $media1440) {
@@ -85,6 +85,10 @@
                 color: $muted-color;
                 font-size: 14px;
 
+                @media (min-width: $media1024) {
+                    font-size: 12px;
+                }
+
                 @media (min-width: $media1440) {
                     font-size: 14px;
                 }
@@ -105,8 +109,8 @@
                 }
 
                 @media (min-width: $media1024) {
-                    font-size: 25px;
-                    line-height: 25px;
+                    font-size: 18px;
+                    line-height: 18px;
                     margin-bottom: 5px;
                     margin-top: -5px;
                 }
@@ -146,10 +150,15 @@
 
             @media (min-width: $media1024) {
                 margin-bottom: 10px;
+                font-size: 12px;
             }
 
             @media (min-width: $media1440) {
                 font-size: 14px;
+            }
+
+            @media (min-width: $media1920) {
+                font-size: 25px;
             }
 
             &__Circle {

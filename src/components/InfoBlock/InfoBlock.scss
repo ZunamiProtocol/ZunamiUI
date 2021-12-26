@@ -29,11 +29,6 @@ $media435: 435px;
                 margin-right: 7px;
             }
 
-            @media screen and (min-width: $media1440) {
-                margin-right: 10px;
-                height: 18px;
-            }
-
             @media screen and (min-width: $media1024) {
                 margin-right: 10px;
 
@@ -52,6 +47,30 @@ $media435: 435px;
                     height: 18.62px;
                 }
             }
+
+            @media screen and (min-width: $media1440) {
+                margin-right: 10px;
+                height: 18px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                margin-right: 10px;
+
+                &[src="yes.svg"] {
+                    width: 31px;
+                    height: 24px;
+                }
+
+                &[src="balance.svg"] {
+                    width: 24px;
+                    height: 22px;
+                }
+
+                &[src="lock.svg"] {
+                    width: 21px;
+                    height: 27px;
+                }
+            }
         }
 
         @media (min-width: $media375) {
@@ -60,17 +79,22 @@ $media435: 435px;
         }
 
         @media screen and (min-width: $media1024) {
-            font-size: 18px;
-            margin: 22px 0 0 0;
+            font-size: 14px;
+            margin: 15px 0 0 0;
         }
 
         @media screen and (min-width: $media1440) {
-            font-size: 16px !important;
-            margin: 21px 0 0 0 !important;
+            font-size: 18px !important;
+            margin: 15px 0 0 0 !important;
         }
 
         @media screen and (min-width: $media1600) {
             font-size: 20px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            font-size: 25px !important;
+            margin-top: 20px !important;
         }
     }
 
@@ -84,8 +108,8 @@ $media435: 435px;
         }
 
         @media screen and (min-width: $media1024) {
-            margin: 20px 0 0 0;
-            font-size: 18px;
+            margin: 10px 0 0 0;
+            font-size: 12px;
         }
 
         @media screen and (min-width: $media1440) {
@@ -94,6 +118,11 @@ $media435: 435px;
 
         @media screen and (min-width: $media1600) {
             font-size: 22px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            font-size: 25px;
+            margin-top: 20px;
         }
 
         &_color {
@@ -106,12 +135,16 @@ $media435: 435px;
             }
 
             @media screen and (min-width: $media1024) {
-                margin: 13px 0 0 0;
-                font-size: 25px !important;
+                margin: 10px 0 0 0;
+                font-size: 18px !important;
             }
 
             @media screen and (min-width: $media1440) {
                 font-size: 25px !important;
+            }
+
+            @media screen and (min-width: $media1920) {
+                font-size: 35px !important;
             }
         }
     }
@@ -125,18 +158,40 @@ $media435: 435px;
         height: auto;
     }
 
+    @media screen and (min-width: $media1024) {
+        border-radius: $border-radius17;
+        min-height: 100px;
+        margin: -3px 0 0 8px;
+    }
+
+    @media screen and (min-width: $media1440) {
+        height: 80px;
+        margin: 0 0 0 15px;
+
+        &[data-title="Already earned"],
+        &[data-title="Balance"],
+        &[data-title="Total Value Locked"] {
+            .InfoBlock__title {
+                font-size: 16px !important;
+            }
+        }
+    }
+
     @media screen and (min-width: $media1600) {
         height: 150px;
         margin-bottom: 15px;
     }
 
-    @media screen and (min-width: $media1440) {
-        height: 80px;
-    }
+    @media screen and (min-width: $media1920) {
+        height: 150px;
+        margin: 0 0 0 20px;
 
-    @media screen and (min-width: $media1024) {
-        border-radius: $border-radius17;
-        min-height: 113px;
-        margin: -3px 0 0 8px;
+        &[data-title="Already earned"],
+        &[data-title="Balance"],
+        &[data-title="Total Value Locked"] {
+            .InfoBlock__title {
+                font-size: 25px !important;
+            }
+        }
     }
 }

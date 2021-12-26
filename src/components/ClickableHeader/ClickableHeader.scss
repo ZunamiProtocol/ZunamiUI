@@ -63,7 +63,7 @@
         }
 
         @media screen and (min-width: $media1024) {
-            font-size: 18px;
+            font-size: 14px;
         }
 
         @media screen and (min-width: $media1440) {
@@ -83,12 +83,19 @@
     }
 
     @media screen and (min-width: $media1024) {
-        height: 115px;
-        margin: 20px 20px 0 20px;
+        height: 85px;
+        margin: 10px 20px 0 20px;
         background-color: #FAFAFA;
     }
 
     @media screen and (min-width: $media1440) {
         height: 110px;
+        margin: 20px 20px 0 20px;
+    }
+
+    @media screen and (min-width: $media1920) {
+        height: 152px;
+        margin: 20px 20px 0 20px;
+        border-radius: 27px;
     }
 }

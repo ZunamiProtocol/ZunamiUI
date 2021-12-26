@@ -96,7 +96,7 @@ export const Main = (): JSX.Element => {
                         <Col xs={12} sm={4} lg={4} className={'TvlCol'}>
                             <InfoBlock
                                 iconName="lock"
-                                title="Value Locked"
+                                title="Total Value Locked"
                                 description={`${(zunamiInfo && !zunError ? `$${getBalanceNumber(zunamiInfo.tvl).toLocaleString("en")}` : 'n/a')}`}
                                 isLoading={isZunLoading}
                                 withColor={true}
