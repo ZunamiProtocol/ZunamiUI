@@ -143,7 +143,7 @@ export const Main = (): JSX.Element => {
                                 isLong={false}
                             />
                         </Col>
-                        <Col xs={12} sm={4} lg={4} className={'MonthlyProfitCol'}>
+                        <Col xs={12} sm={4} lg={4} className={'col MonthlyProfitCol'}>
                             <InfoBlock
                                 title="Monthly Profits"
                                 description={`${monthlyProfit ? monthlyProfit.toFixed(2) : 0} USD/month`}
