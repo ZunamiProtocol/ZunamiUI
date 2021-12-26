@@ -25,6 +25,29 @@ interface FormProps {
     operationName: string;
 }
 
+const getValidationError = (
+    dai: String,
+    usdc: String,
+    usdt: String,
+    isApproved: Boolean,
+    pendingTx: Boolean,
+    depositExceedAmount: Boolean
+) => {
+    let error = '';
+
+    if (dai === '' && usdc === '' && usdt === '') {
+        error = 'Please, enter the amount of stablecoins to deposit';
+    } else if (depositExceedAmount) {
+        error = 'You\'re trying to deposit more than you have';
+    } else if (!isApproved) {
+        error = 'You have to approve your funds before the deposit';
+    } else if (pendingTx) {
+        error = 'You can\'t deposit because have a pending transaction';
+    }
+
+    return error;
+}
+
 export const Form = (props: FormProps): JSX.Element => {
     const [dai, setDai] = useState('');
     const [usdc, setUsdc] = useState('');
@@ -144,12 +167,15 @@ export const Form = (props: FormProps): JSX.Element => {
 
     const [showModal, setModalShow] = useState(false);
     const handleModalClose = () => setModalShow(false);
+    const canDeposit = (dai === '' && usdc === '' && usdt === '') || !isApproved || pendingTx || depositExceedAmount;
 
     if (!account) {
         return (
             <NoWallet />
         );
     }
+
+    const validationError = getValidationError(dai, usdc, usdt, isApproved, pendingTx, depositExceedAmount);
 
     return (
         <div className={'Form'}>
@@ -181,23 +207,27 @@ export const Form = (props: FormProps): JSX.Element => {
                 <Input name="DAI" value={dai} handler={daiInputHandler} max={max[0]}/>
                 <Input name="USDC" value={usdc} handler={usdcInputHandler} max={max[1]}/>
                 <Input name="USDT" value={usdt} handler={usdtInputHandler} max={max[2]}/>
+                {
+                    validationError &&
+                        <span className={'mb-3 text-danger'}>{validationError}</span>
+                }
                 {props.operationName.toLowerCase() === 'deposit' &&
                 <div>
                     {account && parseFloat(dai) > 0 && !isApprovedTokens[0] &&
-                    <button disabled={pendingDAI} onClick={handleApproveDai}>Approve DAI </button>
+                    <button disabled={pendingDAI || depositExceedAmount} onClick={handleApproveDai}>Approve DAI </button>
                     }
                     {account && parseFloat(usdc) > 0 && !isApprovedTokens[1] &&
-                    <button disabled={pendingUSDC} onClick={handleApproveUsdc}>Approve USDC </button>
+                    <button disabled={pendingUSDC || depositExceedAmount} onClick={handleApproveUsdc}>Approve USDC </button>
                     }
                     {account && parseFloat(usdt) > 0 && !isApprovedTokens[2] &&
-                    <button disabled={pendingUSDT} onClick={handleApproveUsdt}>Approve USDT </button>
+                    <button disabled={pendingUSDT || depositExceedAmount} onClick={handleApproveUsdt}>Approve USDT </button>
                     }
                     {account && <button
                         onClick={async (e) => {
                             e.preventDefault();
                             setModalShow(true);
                         }}
-                        disabled={(dai === '' && usdc === '' && usdt === '') || !isApproved || pendingTx || depositExceedAmount}
+                        disabled={canDeposit}
                     >
                         Deposit
                     </button>}

@@ -24,6 +24,11 @@ html, body, #root {
     border-radius: $border-radius !important;
 }
 
+button[disabled] {
+    opacity: .5;
+    pointer-events: none;
+}
+
 .preloader {
     width: 25px;
     height: 25px;
