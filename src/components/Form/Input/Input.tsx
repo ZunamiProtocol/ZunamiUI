@@ -29,6 +29,7 @@ export const Input = (props: InputProps): JSX.Element => {
     }, [props.max, props.name]);
 
     const handleSelectMax = useCallback(() => {
+        props.handler(fullBalance);
         setValue(fullBalance);
     }, [fullBalance, setValue]);
 
