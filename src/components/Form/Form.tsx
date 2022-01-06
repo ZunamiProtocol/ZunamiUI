@@ -18,7 +18,7 @@ import useStake from "../../hooks/useStake";
 import useUnstake from "../../hooks/useUnstake";
 import {useWallet} from "use-wallet";
 import {BigNumber} from "bignumber.js";
-import {Modal,Button} from "react-bootstrap";
+import {Modal,Button,Tooltip,OverlayTrigger} from "react-bootstrap";
 import {NoWallet} from "../NoWallet/NoWallet"
 
 interface FormProps {
@@ -222,15 +222,21 @@ export const Form = (props: FormProps): JSX.Element => {
                     {account && parseFloat(usdt) > 0 && !isApprovedTokens[2] &&
                     <button disabled={pendingUSDT || depositExceedAmount} onClick={handleApproveUsdt}>Approve USDT </button>
                     }
-                    {account && <button
-                        onClick={async (e) => {
-                            e.preventDefault();
-                            setModalShow(true);
-                        }}
-                        disabled={canDeposit}
-                    >
-                        Deposit
-                    </button>}
+                    {account &&
+                        <OverlayTrigger
+                        placement={'right'}
+                        overlay={
+                            <Tooltip>Deposit temporarily disabled before next update</Tooltip>
+                        }
+                        >
+                            <button
+                                className={'disabled'}
+                                onClick={(e) => e.preventDefault()}
+                            >
+                                Deposit
+                            </button>
+                        </OverlayTrigger>
+                    }
                 </div>
                 }
                 {props.operationName.toLowerCase() === 'withdraw' &&

@@ -75,6 +75,10 @@ $media435: 435px;
                 font-size: 25px;
                 padding: 19px 0 12px 0;
             }
+
+            &.disabled {
+                opacity: .5;
+            }
         }
 
         input[type='submit'] {
