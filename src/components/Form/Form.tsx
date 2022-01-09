@@ -25,7 +25,7 @@ interface FormProps {
     operationName: string;
 }
 
-const getValidationError = (
+const getDepositValidationError = (
     dai: String,
     usdc: String,
     usdt: String,
@@ -43,6 +43,27 @@ const getValidationError = (
         error = 'You have to approve your funds before the deposit';
     } else if (pendingTx) {
         error = 'You can\'t deposit because have a pending transaction';
+    }
+
+    return error;
+}
+
+const getWithdrawValidationError = (
+    dai: String,
+    usdc: String,
+    usdt: String,
+    fullBalanceLpShare: String,
+    userMaxWithdraw: BigNumber,
+    lpShareToWithdraw: BigNumber
+) => {
+    let error = '';
+
+    if (dai === '' && usdc === '' && usdt === '') {
+        error = 'Please, enter the amount to withdraw';
+    } else if (userMaxWithdraw.toNumber() < lpShareToWithdraw.toNumber()) {
+        error = 'You\'re trying to withdraw more than you have';
+    } else if (fullBalanceLpShare === '0') {
+        error = 'You have zero LP shares';
     }
 
     return error;
@@ -76,7 +97,7 @@ export const Form = (props: FormProps): JSX.Element => {
     const userLpAmount = useUserLpAmount();
     const userBalanceList = useUserBalances();
     const approveList = useAllowanceStables();
-    const stableInputsSum = parseFloat(dai) + parseFloat(usdc) + parseFloat(usdt);
+    const stableInputsSum = (parseFloat(dai) || 0) + (parseFloat(usdc) || 0) + (parseFloat(usdt) || 0);
     // user allowance
     const isApprovedTokens = [
         approveList ? approveList[0].toNumber() > 0 : false,
@@ -175,7 +196,9 @@ export const Form = (props: FormProps): JSX.Element => {
         );
     }
 
-    const validationError = getValidationError(dai, usdc, usdt, isApproved, pendingTx, depositExceedAmount);
+    const validationError = props.operationName.toLowerCase() === 'deposit'
+        ? getDepositValidationError(dai, usdc, usdt, isApproved, pendingTx, depositExceedAmount)
+        : getWithdrawValidationError(dai, usdc, usdt, fullBalanceLpShare, userMaxWithdraw, lpShareToWithdraw);
 
     return (
         <div className={'Form'}>
@@ -241,10 +264,23 @@ export const Form = (props: FormProps): JSX.Element => {
                 }
                 {props.operationName.toLowerCase() === 'withdraw' &&
                 <div>
+                    {
+                        pendingWithdraw &&
+                            <div className={'d-flex align-items-center'}>
+                                <div>Please, approve the transaction</div>
+                                <div className={'preloader ms-2'}></div>
+                            </div>
+                    }
                     {account && <button
                         onClick={async () => {
                             setPendingWithdraw(true);
-                            await onUnstake();
+
+                            try {
+                                await onUnstake();
+                            } catch (error) {
+                                setPendingWithdraw(false);
+                            }
+
                             setPendingWithdraw(false);
                         }}
                         disabled={(dai === '' && usdc === '' && usdt === '') || pendingWithdraw
