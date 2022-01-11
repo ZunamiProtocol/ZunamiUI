@@ -18,11 +18,16 @@ import useStake from "../../hooks/useStake";
 import useUnstake from "../../hooks/useUnstake";
 import {useWallet} from "use-wallet";
 import {BigNumber} from "bignumber.js";
-import {Modal,Button,Tooltip,OverlayTrigger} from "react-bootstrap";
+import {Modal,Button,Tooltip,OverlayTrigger,Toast,ToastContainer} from "react-bootstrap";
 import {NoWallet} from "../NoWallet/NoWallet"
 
 interface FormProps {
     operationName: string;
+}
+
+interface TransactionError {
+    code?: Number;
+    message?: String;
 }
 
 const getDepositValidationError = (
@@ -185,6 +190,7 @@ export const Form = (props: FormProps): JSX.Element => {
     const {account} = useWallet();
 
     // TODO: need detect canceled tx's by user
+    const [transactionError, setTransactionError] = useState<TransactionError>();
 
     const [showModal, setModalShow] = useState(false);
     const handleModalClose = () => setModalShow(false);
@@ -226,6 +232,18 @@ export const Form = (props: FormProps): JSX.Element => {
                     >Understood</Button>
                 </Modal.Footer>
             </Modal>
+            {
+                transactionError &&
+                    <ToastContainer position={'top-end'} className={'mt-3 me-3'}>
+                        <Toast onClose={() => setTransactionError(undefined)} delay={5000} autohide>
+                            <Toast.Header>
+                                <strong className="me-auto">Error: {transactionError.code}</strong>
+                                <small>now</small>
+                            </Toast.Header>
+                            <Toast.Body>{transactionError.message}</Toast.Body>
+                        </Toast>
+                    </ToastContainer>
+            }
             <form>
                 <Input name="DAI" value={dai} handler={daiInputHandler} max={max[0]}/>
                 <Input name="USDC" value={usdc} handler={usdcInputHandler} max={max[1]}/>
@@ -277,8 +295,9 @@ export const Form = (props: FormProps): JSX.Element => {
 
                             try {
                                 await onUnstake();
-                            } catch (error) {
+                            } catch (error: any) {
                                 setPendingWithdraw(false);
+                                setTransactionError(error);
                             }
 
                             setPendingWithdraw(false);

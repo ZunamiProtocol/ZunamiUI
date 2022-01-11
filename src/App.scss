@@ -56,6 +56,12 @@ button[disabled] {
     animation: preloader 0.8s linear infinite;
 }
 
+.toast {
+    border-radius: 10px !important;
+    overflow: hidden;
+    background-color: #F8F8F8;
+}
+
 @keyframes preloader {
     from {transform: rotate(0deg);}
     to {transform: rotate(360deg);}
