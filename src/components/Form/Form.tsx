@@ -237,10 +237,10 @@ export const Form = (props: FormProps): JSX.Element => {
                     <ToastContainer position={'top-end'} className={'mt-3 me-3'}>
                         <Toast onClose={() => setTransactionError(undefined)} delay={5000} autohide>
                             <Toast.Header>
-                                <strong className="me-auto">Error: {transactionError.code}</strong>
+                                <strong className="me-auto">Error</strong>
                                 <small>now</small>
                             </Toast.Header>
-                            <Toast.Body>{transactionError.message}</Toast.Body>
+                            <Toast.Body>Sorry, we couldn't complete the transaction</Toast.Body>
                         </Toast>
                     </ToastContainer>
             }
