@@ -7,6 +7,7 @@ interface DataItem {
     color: string;
     value: number;
     title: string;
+    link: string;
 }
 
 interface ChartProps {
@@ -20,7 +21,9 @@ function renderStratList(items: Array<DataItem>) {
                 className={'PieChart__StratList__Item__Circle'}
                 style={{ background: item.color }}
             />
-            <div className={'PieChart__StratList__Item__Name'}>{item.title}</div>
+            <div className={'PieChart__StratList__Item__Name'}>
+                <a target='blank' href={`https://etherscan.io/token/${item.link}`}>{item.title}</a>
+            </div>
         </div>
     )
 }

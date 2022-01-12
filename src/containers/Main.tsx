@@ -62,8 +62,18 @@ export const Main = (): JSX.Element => {
     const monthlyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprMonthly;
 
     const chartData = [
-        { title: 'Convex finance - OUSD pool', value: 70, color: '#F64A00' },
-        { title: 'Convex finance - USDP pool', value: 30, color: '#B8E654' },
+        {
+            title: 'Convex finance - OUSD pool',
+            value: 70,
+            color: '#F64A00',
+            link: '0x2A8e1E676Ec238d8A992307B495b45B3fEAa5e86'
+        },
+        {
+            title: 'Convex finance - USDP pool',
+            value: 30,
+            color: '#B8E654',
+            link: '0x1456688345527bE1f37E9e627DA0837D6f08C925'
+        },
     ];
 
     const pendingDepositSum = 0;
