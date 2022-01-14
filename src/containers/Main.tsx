@@ -15,6 +15,7 @@ import useEagerConnect from "../hooks/useEagerConnect";
 import useFetch from "react-fetch-hook";
 import {getPoolStatsUrl, zunamiInfoUrl} from "../api/api";
 import {BigNumber} from "bignumber.js";
+import usePendingDeposit from "../hooks/usePendingDeposit";
 
 interface ZunamiInfo {
     tvl: BigNumber;
@@ -76,7 +77,7 @@ export const Main = (): JSX.Element => {
         },
     ];
 
-    const pendingDepositSum = 0;
+    const pendingDepositSum = usePendingDeposit();
     const pdElement = <PendingBalance val={`PD $${pendingDepositSum}`} hint={`You have $${pendingDepositSum} in pending deposit`} />;
 
     return (
@@ -105,11 +106,11 @@ export const Main = (): JSX.Element => {
                                 withColor={true}
                                 isStrategy={false}
                                 isLong={false}
-                                secondaryRow={pendingDepositSum ? pdElement : undefined}
+                                secondaryRow={pendingDepositSum.toNumber() > 0 ? pdElement : undefined}
                             />
                         </Col>
                         {
-                            pendingDepositSum > 0 &&
+                            pendingDepositSum.toNumber() > 0 &&
                                 <Col className={'PendingDepositCol'}>
                                     <InfoBlock
                                         iconName="pending_deposit.png"
