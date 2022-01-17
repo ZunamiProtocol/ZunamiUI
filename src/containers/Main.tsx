@@ -15,6 +15,7 @@ import useEagerConnect from "../hooks/useEagerConnect";
 import useFetch from "react-fetch-hook";
 import {getPoolStatsUrl, zunamiInfoUrl} from "../api/api";
 import {BigNumber} from "bignumber.js";
+import {PoolInfo,poolDataToChartData} from '../functions/pools';
 
 interface ZunamiInfo {
     tvl: BigNumber;
@@ -26,15 +27,8 @@ interface ZunamiInfoFetch {
     error: any;
 }
 
-interface PoolStatsItem {
-    type: string;
-    apr: number;
-    apy: number;
-    pid: number;
-}
-
 interface PoolsStats {
-    poolsStats: Array<PoolStatsItem>;
+    poolsStats: Array<PoolInfo>;
 }
 
 export const Main = (): JSX.Element => {
@@ -61,20 +55,9 @@ export const Main = (): JSX.Element => {
     const dailyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprDaily;
     const monthlyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprMonthly;
 
-    const chartData = [
-        {
-            title: 'Convex finance - OUSD pool',
-            value: 70,
-            color: '#F64A00',
-            link: '0x0C597d8e2726AE58db3cA43225CA47fCcC96208B'
-        },
-        {
-            title: 'Convex finance - USDP pool',
-            value: 30,
-            color: '#B8E654',
-            link: '0xb6a2641D9a4e8cfa9cE74784222Fd55f8B328179'
-        },
-    ];
+    const chartData = (poolStats && poolStats.poolsStats && zunamiInfo)
+        ? poolDataToChartData(poolStats.poolsStats, zunamiInfo.tvl)
+        : [];
 
     const pendingDepositSum = 0;
     const pdElement = <PendingBalance val={`PD $${pendingDepositSum}`} hint={`You have $${pendingDepositSum} in pending deposit`} />;
