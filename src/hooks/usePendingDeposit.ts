@@ -1,15 +1,20 @@
-import {useState,useEffect} from 'react';
+import {useState,useEffect,useMemo} from 'react';
 import BigNumber from 'bignumber.js';
 import {BIG_ZERO} from "../utils/formatbalance";
-import useSushi from './useSushi';
 import {useWallet} from 'use-wallet';
-
-import {getMasterChefContract,getPendingDeposit} from '../sushi/utils';
+import { getContract } from '../utils/erc20';
+import { contractAddresses } from '../sushi/lib/constants';
+import {getPendingDeposit} from '../sushi/utils';
+import config from "../config";
 
 const usePendingDeposit = () => {
-    const {account} = useWallet();
-    const sushi = useSushi();
-    const masterChefContract = getMasterChefContract(sushi);
+    const {account,ethereum} = useWallet();
+    const { CHAIN_ID } = config;
+
+    const masterChefContract = useMemo(() => {
+        // @ts-ignore
+        return getContract(ethereum, contractAddresses.masterChef[CHAIN_ID]);
+    }, [ethereum, CHAIN_ID]);
     const [pendingSum, setPendingSum] = useState(BIG_ZERO);
 
     useEffect(() => {
