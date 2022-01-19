@@ -36,7 +36,7 @@ export class Contracts {
             }
         };
 
-        setProvider(this.masterChef, contractAddresses.masterChef[networkId]);
+        setProvider(this.masterChef, contractAddresses.zunami[networkId]);
     }
 
     setDefaultAccount(account) {
