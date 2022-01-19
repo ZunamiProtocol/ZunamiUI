@@ -63,13 +63,13 @@ export const Chart = (props: ChartProps): JSX.Element => {
                     data={props.data}
                     totalValue={100}
                     lineWidth={width}
-                    paddingAngle={5}
+                    paddingAngle={0}
                     labelPosition={0}
                     className={'PieChart__Chart'}
                 />
                 <div className={'PieChartWrapper__Legend'}>
                     <div className={'PieChartWrapper__Legend__Counter'}>{props.data.length}</div>
-                    <div className={'PieChartWrapper__Legend__Label'}>strategies</div>
+                    <div className={'PieChartWrapper__Legend__Label'}>{props.data.length > 1 ? 'strategies' : 'strategy'}</div>
                 </div>
             </div>
             <div className={'PieChart__StratList'}>
