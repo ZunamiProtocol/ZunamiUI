@@ -1,47 +1,37 @@
 @import "src/variables";
 
-.header {
-    .Logo {
-        width: 261px;
+.navbar.header {
+    height: 50px;
+    min-height: 50px;
+    padding: 0;
+    margin: 0;
+    // background: rgba(255, 0, 0, 0.1);
+    align-items: flex-end;
 
-        @media (min-width: $media375) {
-            width: 148px;
-            height: 25px;
-        }
-
-        @media screen and (min-width: $media1024) {
-            width: 160px;
-            height: 27px;
-        }
-
-        @media screen and (min-width: $media1440) {
-            width: 159px;
-            height: 27px;
-        }
-
-        @media screen and (min-width: $media1920) {
-            width: 254px;
-            height: 42px;
-        }
+    .navbar-brand {
+        margin: 0;
+        padding: 0;
     }
 
-    .container {
-        padding: 0;
+    .Logo {
+        // @media (min-width: $media375) {
+        //     width: 148px;
+        //     height: 25px;
+        // }
 
-        .navbar-collapse {
-            @media (min-width: $media375) {
-                flex-basis: auto;
-            }
+        // @media screen and (min-width: $media1024) {
+        //     width: 160px;
+        //     height: 27px;
+        // }
+
+        @media screen and (min-width: $media1440) {
+            width: 130px;
+            height: 19px;
         }
 
-        @media (min-width: $media375) {
-            padding: 0 15px;
-            margin-top: 5px !important;
-        }
-
-        @media (min-width: $media1024) {
-            padding: 0;
-            margin-top: 1rem !important;
-        }
+        // @media screen and (min-width: $media1920) {
+        //     width: 254px;
+        //     height: 42px;
+        // }
     }
 }

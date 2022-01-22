@@ -9,7 +9,6 @@ export const ThemeSwitcher = (): JSX.Element => {
         <div
             className={'ThemeSwitcher'}
         >
-            <span className={'ThemeSwitcher__title'}>Interface settings</span>
             <div
                 className={'ThemeSwitcher__button'}
                 onClick={async (e) => {
@@ -28,7 +27,7 @@ export const ThemeSwitcher = (): JSX.Element => {
                     }
                 }}
             >
-                <img src={`${theme === 'default' ? 'theme-dark' : 'theme-light'}.svg`} alt='' />
+                <img src={`/${theme === 'default' ? 'dark-theme-icon' : 'light-theme-icon'}.svg`} alt='' />
                 <span>{theme === 'default' ? 'Dark' : 'Light'} mode</span>
             </div>
         </div>

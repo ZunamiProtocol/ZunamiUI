@@ -16,6 +16,10 @@ import useFetch from "react-fetch-hook";
 import {getPoolStatsUrl, zunamiInfoUrl} from "../api/api";
 import {BigNumber} from "bignumber.js";
 
+import usePendingDeposit from "../hooks/usePendingDeposit";
+import {PoolInfo,poolDataToChartData} from '../functions/pools';
+import {ApyChart} from '../components/ApyChart/ApyChart';
+
 interface ZunamiInfo {
     tvl: BigNumber;
 }
@@ -26,15 +30,8 @@ interface ZunamiInfoFetch {
     error: any;
 }
 
-interface PoolStatsItem {
-    type: string;
-    apr: number;
-    apy: number;
-    pid: number;
-}
-
 interface PoolsStats {
-    poolsStats: Array<PoolStatsItem>;
+    poolsStats: Array<PoolInfo>;
 }
 
 export const Main = (): JSX.Element => {
@@ -61,105 +58,78 @@ export const Main = (): JSX.Element => {
     const dailyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprDaily;
     const monthlyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprMonthly;
 
-    const chartData = [
-        { title: 'Convex finance - OUSD pool', value: 70, color: '#F64A00' },
-        { title: 'Convex finance - USDP pool', value: 30, color: '#B8E654' },
-    ];
+    const chartData = (poolStats && poolStats.poolsStats && zunamiInfo)
+        ? poolDataToChartData(poolStats.poolsStats, zunamiInfo.tvl)
+        : [];
 
-    const pendingDepositSum = 0;
+    const pendingDepositSum = usePendingDeposit();
     const pdElement = <PendingBalance val={`PD $${pendingDepositSum}`} hint={`You have $${pendingDepositSum} in pending deposit`} />;
 
     return (
         <Container className={'h-100 d-flex justify-content-between flex-column'}>
             <Header/>
-            <Row className={'mt-3 h-100 mb-4 main-row'}>
+            <Row className={'h-100 mb-4 main-row'}>
                 <SideBar isMainPage={true}/>
                 <Col className={'content-col dashboard-col'}>
-                    <ClickableHeader name={'Dashboard'} icon={'/section-withdraw-bg.svg'} />
-                    <Row className={'zun-rounded zun-shadow ms-0 me-0'}>
-                        <Col className={'AlreadyEarnedCol'}>
-                            <InfoBlock
-                                iconName="yes.svg"
-                                title="Already earned"
-                                description="$ 0"
-                                withColor={true}
-                                isStrategy={false}
-                                isLong={false}
-                            />
-                        </Col>
-                        <Col className={'BalanceCol'}>
-                            <InfoBlock
-                                iconName="balance.svg"
-                                title="Balance"
-                                description={`$ ${getBalanceNumber(userMaxWithdraw).toLocaleString("en")}`}
-                                withColor={true}
-                                isStrategy={false}
-                                isLong={false}
-                                secondaryRow={pendingDepositSum ? pdElement : undefined}
-                            />
-                        </Col>
-                        {
-                            pendingDepositSum > 0 &&
-                                <Col className={'PendingDepositCol'}>
-                                    <InfoBlock
-                                        iconName="pending_deposit.png"
-                                        title="Pending Deposit"
-                                        description={`$ ${pendingDepositSum}`}
-                                        withColor={true}
-                                        isStrategy={false}
-                                        isLong={false}
-                                        hint={`You have $${pendingDepositSum} in pending deposit`}
-                                    />
-                                </Col>
-                        }
-                        <Col className={'TvlCol'}>
-                            <InfoBlock
-                                iconName="lock.svg"
-                                title="Total Value Locked"
-                                description={`${(zunamiInfo && !zunError ? `$${getBalanceNumber(zunamiInfo.tvl).toLocaleString("en")}` : 'n/a')}`}
-                                isLoading={isZunLoading}
-                                withColor={true}
-                                isStrategy={false}
-                                isLong={true}
-                            />
-                        </Col>
-                    </Row>
-                    <Row className={'zun-rounded zun-shadow ms-0 me-0 mt-3'}>
-                        <Col className={'ApyCol'}>
-                            <InfoBlock
-                                title="APY"
-                                description={`${poolBestApy.toFixed(2)}%`}
-                                withColor={false}
-                                isStrategy={false}
-                                isLong={false}
-                            />
-                        </Col>
-                        <Col className={'DailyProfitCol'}>
-                            <InfoBlock
-                                title="Daily Profits"
-                                description={`${dailyProfit ? dailyProfit.toFixed(2) : 0} USD/day`}
-                                withColor={false}
-                                isStrategy={false}
-                                isLong={false}
-                            />
-                        </Col>
-                        <Col xs={12} sm={4} lg={4} className={'col MonthlyProfitCol'}>
-                            <InfoBlock
-                                title="Monthly Profits"
-                                description={`${monthlyProfit ? monthlyProfit.toFixed(2) : 0} USD/month`}
-                                withColor={false}
-                                isStrategy={false}
-                                isLong={true}
-                            />
-                        </Col>
-                    </Row>
-                    <Row className={'zun-rounded zun-shadow ms-0 me-0'}>
-                        <Col className={'CurrStrategyCol'}>
+                    <div className={'first-row'}>
+                        <InfoBlock
+                            title="Balance"
+                            description={`$ ${getBalanceNumber(userMaxWithdraw).toLocaleString("en")}`}
+                            withColor={true}
+                            isStrategy={false}
+                            colorfulBg={true}
+                        />
+                        <InfoBlock
+                            title="APY"
+                            description={`${poolBestApy.toFixed(2)}%`}
+                            withColor={true}
+                            isStrategy={false}
+                            colorfulBg={true}
+                            hint="You may deposit your stablecoint and receive a fixed rate of return over a specific period of time."
+                        />
+                        <InfoBlock
+                            title="Total Value Locked"
+                            description={`${(zunamiInfo && !zunError ? `$${getBalanceNumber(zunamiInfo.tvl).toLocaleString("en")}` : 'n/a')}`}
+                            isLoading={isZunLoading}
+                            withColor={true}
+                            isStrategy={false}
+                            colorfulBg={true}
+                        />
+                    </div>
+                    <div className="second-row">
+                        <InfoBlock
+                            title="Already earned"
+                            description="$ 0"
+                            withColor={false}
+                            isStrategy={false}
+                            hint="The number shows how much you have already earned since deposit"
+                        />
+                        <InfoBlock
+                            title="Daily Profits"
+                            description={`${dailyProfit ? dailyProfit.toFixed(2) : 0} USD/day`}
+                            withColor={false}
+                            isStrategy={false}
+                        />
+                        <InfoBlock
+                            title="Monthly Profits"
+                            description={`${monthlyProfit ? monthlyProfit.toFixed(2) : 0} USD/month`}
+                            withColor={false}
+                            isStrategy={false}
+                        />
+                    </div>
+                    <div className="third-row">
+                        <div className="strats-chart-col">
                             <Chart data={chartData} />
-                        </Col>
-                    </Row>
+                        </div>
+                        <div className="hist-apy-col">
+                            <ApyChart />
+                        </div>
+                    </div>
                 </Col>
             </Row>
+            <footer>
+                <span className="copyright">© 2022 Zunami Protocol. Beta version 1.1</span>
+            </footer>
         </Container>
     );
 };

@@ -1,0 +1,39 @@
+@import "src/variables";
+
+.ApyChart {
+    margin: 20px;
+
+    &__Header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        @media (min-width: $media1440) {
+            margin-bottom: 20px;
+        }
+
+        .ApyChart__Title {
+            color: #636363;
+        }
+
+        .ApyChart__Selector {
+            display: flex;
+            flex-direction: row;
+            grid-gap: 30px;
+            gap: 30px;
+
+            span {
+                cursor: pointer;
+                display: block;
+                font-size: 14px;
+                line-height: 19px;
+                text-align: center;
+                color: #636363;
+
+                &.active {
+                    color: $primary-color;
+                }
+            }
+        }
+    }
+}

@@ -1,126 +1,36 @@
 @import "src/variables";
 
 .WalletStatus {
-    align-items: center;
-    background-color: #f64a00;
-    border-radius: 20px;
-    color: #fff;
-    cursor: pointer;
+    background: #fdf1de;
+    background: -moz-linear-gradient(top,  #fdf1de 0%, #ffffff 77%);
+    background: -webkit-linear-gradient(top,  #fdf1de 0%,#ffffff 77%);
+    background: linear-gradient(to bottom,  #fdf1de 0%,#ffffff 77%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdf1de', endColorstr='#ffffff',GradientType=0 );
     display: flex;
-    font-size: 19px;
-    height: 80px;
-    justify-content: center;
-    width: 300px;
+    align-items: flex-start;
 
-    &:hover {
-        background-color: $on-hover-color;
-    }
-
-    img {
-        height: 22px;
-        width: 26px;
+    @media screen and (min-width: $media1440) {
+        height: 136px;
+        padding-left: 20px;
+        padding-top: 37px;
     }
 
     &__connected {
-        background-color: #EFEEEE;
+        justify-content: space-between;
 
-        &:hover {
-            background-color: $on-hover-secondary-color;
+        .state {
+            font-size: 16px;
+            color: #636363;
+            line-height: 21.8px;
         }
 
-        span {
-            font-size: 25px;
-            color: #000;
-        }
-    }
-
-    @media (min-width: $media375) {
-        width: 55px;
-        height: 43px;
-        border-radius: $border-radius17;
-
-        img {
-            margin: 0;
-        }
-
-        span {
-            display: none;
-        }
-
-        .mobile {
-            display: inline;
-        }
-
-        .desktop {
-            display: none;
-        }
-    }
-
-    @media screen and (min-width: $media1024) {
-        height: 48px;
-        width: 151px;
-        font-size: 14px;
-        border-radius: $border-radius17;
-
-        img {
-            height: auto;
-            width: 18px;
-            margin-right: 10px;
-        }
-
-        span {
-            display: inline;
-            font-size: 14px;
-        }
-
-        .mobile {
-            display: none;
-        }
-
-        .desktop {
-            display: inline;
-        }
-    }
-
-    @media screen and (min-width: $media1440) {
-        height: 56px !important;
-        width: 210px !important;
-        font-size: 20px !important;
-        border-radius: 20px !important;
-
-        &__connected {
-            background-color: #EFEEEE;
-
-            span {
-                font-size: 16px;
-            }
+        .address {
+            color: $primary-color;
+            line-height: 21.8px;
         }
 
         img {
-            width: 19px;
-            height: auto;
-        }
-
-        span {
-            font-size: 14px;
-        }
-    }
-
-    @media screen and (min-width: $media1920) {
-        height: 80px !important;
-        width: 300px !important;
-        font-size: 25px !important;
-
-        &__connected {
-            span {
-                font-size: 25px !important;
-            }
-        }
-
-        img {
-            width: 35px;
-            height: auto;
-            margin-right: 25px;
+            margin-right: 20px;
         }
     }
 }

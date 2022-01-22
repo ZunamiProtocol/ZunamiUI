@@ -34,11 +34,8 @@ export const LinkBlock = (prop: LinkBlockProps): JSX.Element => {
             onClick={clickHandler}
             data-url={url}
         >
-            <span className={'LinkBlock__title'}>{prop.title}</span>
-            <span className={'LinkBlock__description'}>{prop.description}</span>
-            <div className={'LinkBlock__icon_wrapper'}>
-                <img className={'LinkBlock__icon'} src={prop.icon} alt={''}/>
-            </div>
+            <img className="LinkBlock__icon" src={prop.icon} alt={prop.title} />
+            <span className="LinkBlock__title">{prop.title}</span>
         </div>
     );
 };

@@ -8,10 +8,10 @@ interface InfoBlockProps {
     description: string;
     withColor: boolean;
     isStrategy: boolean;
-    isLong: boolean;
     isLoading?: boolean;
     secondaryRow?: JSX.Element|undefined;
     hint?: string;
+    colorfulBg?: boolean;
 }
 
 export const InfoBlock = (props: InfoBlockProps): JSX.Element => {
@@ -22,13 +22,12 @@ export const InfoBlock = (props: InfoBlockProps): JSX.Element => {
         <div
             className={
             `InfoBlock ${props.isStrategy === true ? 'InfoBlock_long' : ''}
-            ${props.isLong === true ? 'InfoBlock_mobileLong' : ''}
+            ${props.colorfulBg === true ? 'InfoBlock_colorful' : ''}
             ${props.secondaryRow ? 'InfoBlock_secondaryRow' : ''}
         `}
             data-title={props.title}
         >
-            <div className={'InfoBlock__title'}>
-                {props.iconName !== undefined ? <img src={props.iconName} alt=""/> : ''}
+            <div className={`InfoBlock__title ${props.hint ? 'with_hint' : ''}`}>
                 <span>{props.title}</span>
                 {
                     props.hint &&
@@ -51,12 +50,12 @@ export const InfoBlock = (props: InfoBlockProps): JSX.Element => {
             }
             {
                 !props.isLoading &&
-                <span
+                <div
                     className={`InfoBlock__description ${
                         props.withColor === true ? 'InfoBlock__description_color' : ''
                     }`}>
                     <div>{props.description}</div>
-                </span>
+                </div>
             }
             {
                 !props.isLoading && props.secondaryRow &&
