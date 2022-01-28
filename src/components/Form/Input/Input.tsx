@@ -37,16 +37,12 @@ export const Input = (props: InputProps): JSX.Element => {
 
     return (
         <div className={'Input'}>
-            <div className="InputInfo">
-                <img src={`${props.name}.svg`} alt=""/>
-                <div className="balanceInfo">
-                    <div className={'coinName'}>{props.name}</div>
-                    <div className="maxBalance">
-                        <span className="max" onClick={handleSelectMax}>MAX</span>
-                        <span className="balance">{displayBalance}</span>
-                    </div>
-                </div>
-            </div>
+            <img src={`${props.name}.svg`} alt=""/>
+            <div className={'coinName'}>{props.name}</div>
+            <div className="divider"></div>
+            <span className="max" onClick={handleSelectMax}>MAX</span>
+            <span className="balance">{displayBalance}</span>
+            <div className="divider"></div>
             <input
                 inputMode={'decimal'}
                 autoComplete={'off'}
