@@ -48,7 +48,13 @@ body.dark {
     .ApyChart__Selector span,
     .PieChart__StratList__Item__Name,
     .WalletStatus__connected .state,
-    .PieChart .PieChart__StratList .PieChart__StratList__Item a {
+    .PieChart .PieChart__StratList .PieChart__StratList__Item a,
+    .DepositContent__Title,
+    .Input .coinName,
+    .Input input,
+    .Lockdrop__Title,
+    .DepositStory__Title,
+    .DepositStory__Table thead tr td {
         color: #fff;
     }
 
@@ -59,7 +65,8 @@ body.dark {
     .Sidebar,
     .strats-chart-col,
     .hist-apy-col,
-    .InfoBlock {
+    .InfoBlock,
+    .operation-col {
         background: #1E1E1E;
     }
 
@@ -69,6 +76,102 @@ body.dark {
 
     .WalletStatus {
         background: linear-gradient(0.02deg, #1E1E1E 76.02%, #282828 95.61%);
+    }
+
+    .Form {
+        .divider {
+            background-color: $dark-border-color;
+        }
+
+        .ActionSelector__Action {
+            background-color:  $dark-panel-bg;
+        }
+
+        .Input {
+            background-color: #2B2B2B;
+            border-color: $dark-border-color;
+
+            input {
+                background-color: #272727;
+                border-color: $dark-border-color;
+            }
+        }
+
+        .withdraw-all {
+            background: $dark-panel-bg;
+            color: #878787;
+        }
+
+        .direct-deposit span,
+        .direct-dithdraw span {
+            color: #828282;
+        }
+    }
+
+    .Lockdrop,
+    .Staking {
+        &__Locked,
+        &__Unclaimed {
+            background: $dark-panel-bg;
+
+            &__Title {
+                color: #fff;
+            }
+        }
+
+        &__Title {
+            color: #fff;
+        }
+
+        &__Unclaimed {
+            &__ICON {
+                path {
+                    fill: #494949;
+                }
+            }
+
+            &__USD {
+                color: $dark-muted-text-color;
+            }
+        }
+
+        &__Locked {
+            &__Token {
+                background: $dark-panel-bg;
+                border-color: $dark-border-color;
+
+                .divider {
+                    background-color: $dark-border-color;
+                }
+
+                .token {
+                    color: #fff;
+                }
+
+                input[type="text"] {
+                    border-color: $dark-border-color;
+                    background-color: $dark-panel-bg;
+                    color: #fff;
+                }
+            }
+        }
+
+        .DepositStory__Table thead tr td {
+            border-color: $dark-border-color;
+        }
+
+        .DepositStory__Table tbody tr td {
+            color: $dark-muted-text-color;
+        }
+
+        .DepositStory__Table tbody tr td button {
+            background: #2A2A2A;
+            color: #878787;
+
+            &.disabled {
+                background: #252323;
+            }
+        }
     }
 }
 
