@@ -4,24 +4,50 @@
 .Form {
     .ActionSelector {
         display: flex;
-        margin-bottom: 30px;
+
+        @media screen and (min-width: $media1024) {
+            margin-bottom: 13px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            margin-bottom: 30px;
+        }
 
         &__Action {
-            width: 236px;
-            height: 70px;
             background-color: #FFF7ED;
             border-radius: 5px;
-            margin-right: 10px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             color: #E0B02B;
-            padding: 0 20px;
             cursor: pointer;
+
+            @media screen and (min-width: $media1024) {
+                width: 208px;
+                height: 54px;
+                padding: 0 13px;
+                font-size: 12px;
+                line-height: 16px;
+                margin-right: 10px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                width: 236px;
+                height: 70px;
+                margin-right: 10px;
+                padding: 0 20px;
+            }
 
             &__Active {
                 background: linear-gradient(88.87deg, #F74F02 15.93%, #F9A211 93.44%);
                 color: #fff;
+            }
+
+            svg {
+                @media screen and (min-width: $media1024) {
+                    width: 41px;
+                    height: 28px;
+                }
             }
         }
     }
@@ -35,6 +61,14 @@
         border-radius: 5px;
         border: none;
         color: #fff;
+
+        @media screen and (min-width: $media1024) {
+            width: 109px;
+            height: 28px;
+            font-size: 12px;
+            line-height: 16px;
+            margin-top: 10px;
+        }
 
         @media screen and (min-width: $media1440) {
             width: 120px;
@@ -62,150 +96,37 @@
             margin-left: 20px;
 
             input[type="checkbox"] {
-                width: 21px;
-                height: 21px;
                 background: #FFFAF3;
                 border: 1px solid #F4EFE1;
                 border-radius: 5px;
+
+                @media screen and (min-width: $media1024) {
+                    width: 17px;
+                    height: 17px;
+                    margin: 9px 0 0 4px;
+                }
+
+                @media screen and (min-width: $media1440) {
+                    width: 21px;
+                    height: 21px;
+                }
             }
 
             span {
-                font-size: 12px;
-                line-height: 16px;
                 color: #636363;
-                margin: 0 12px;
+
+                @media screen and (min-width: $media1024) {
+                    margin: 9px 12px 0 12px;
+                    font-size: 12px;
+                    line-height: 16px;
+                }
+
+                @media screen and (min-width: $media1440) {
+                    margin: 0 12px;
+                    font-size: 12px;
+                    line-height: 16px;
+                }
             }
         }
     }
 }
-// $media435: 435px;
-
-// .Form {
-//     display: flex;
-//     justify-content: center;
-
-//     @media screen and (min-width: $media1440) {
-//         width: auto;
-//         margin: 15px 20px 20px 20px;
-//     }
-
-
-//     form {
-//         display: flex;
-//         flex-direction: column;
-//         justify-content: center;
-//         width: 100%;
-
-//         button {
-//             background-color: #f74b01;
-//             border-radius: $border-radius17;
-//             border: none;
-//             color: #fff;
-//             cursor: pointer;
-//             padding: 14px 0 12px 0;
-//             width: 159px;
-//             height: 60px;
-//             margin-right: 10px;
-//             margin-bottom: 10px;
-
-//             &:hover {
-//                 background-color: $on-hover-color;
-//             }
-
-//             @media screen and (min-width: $media375) {
-//                 width: 169px;
-//                 height: 43px;
-//                 font-size: 14px;
-//                 padding-top: 13px;
-//                 border-radius: 15px;
-//                 margin-top: 10px;
-//             }
-
-//             @media screen and (min-width: $media1024) {
-//                 border-radius: 17px;
-//                 margin-top: 0;
-//                 width: 151px;
-//                 height: 48px;
-//                 margin-top: 15px;
-//             }
-
-//             @media screen and (min-width: $media1440) {
-//                 width: 209px;
-//                 height: 56px;
-//                 font-size: 14px;
-//                 padding: 19px 0 12px 0;
-//                 margin-top: 10px;
-//             }
-
-//             @media screen and (min-width: $media1920) {
-//                 width: 299px;
-//                 height: 78px;
-//                 font-size: 25px;
-//                 padding: 19px 0 12px 0;
-//             }
-
-//             &.disabled {
-//                 opacity: .5;
-//             }
-//         }
-
-//         input[type='submit'] {
-//             background-color: #f74b01;
-//             border-radius: $border-radius17;
-//             border: none;
-//             color: #fff;
-//             cursor: pointer;
-//             padding: 14px 0 12px 0;
-//             width: 159px;
-//             height: 60px;
-
-//             &:hover {
-//                 background-color: $on-hover-color;
-//             }
-
-//             @media screen and (min-width: $media375) {
-//                 width: 169px;
-//                 height: 43px;
-//                 font-size: 14px;
-//                 padding-top: 13px;
-//                 display: block;
-//                 margin-top: 10px;
-//                 margin-bottom: 10px;
-//             }
-
-//             @media screen and (min-width: $media1024) {
-//                 width: 151px;
-//                 height: 48px;
-//                 margin-top: 5px;
-//                 font-size: 16px;
-//                 display: inline;
-//                 margin-top: 0;
-//                 margin-bottom: 0;
-//             }
-
-//             @media screen and (min-width: $media1440) {
-//                 width: 209px;
-//                 height: 78px;
-//                 font-size: 20px;
-//                 padding: 19px 0 12px 0;
-//             }
-
-//             @media screen and (min-width: $media1920) {
-//                 width: 299px;
-//                 height: 78px;
-//                 font-size: 25px;
-//                 padding: 19px 0 12px 0;
-//             }
-//         }
-//     }
-
-//     &__WithdrawAll {
-//         @media screen and (min-width: $media375) {
-//             margin: 10px 0 0 0;
-//         }
-
-//         @media screen and (min-width: $media1024) {
-//             margin-left: 1rem;
-//         }
-//     }
-// }

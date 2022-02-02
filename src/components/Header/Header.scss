@@ -19,10 +19,12 @@
         //     height: 25px;
         // }
 
-        // @media screen and (min-width: $media1024) {
-        //     width: 160px;
-        //     height: 27px;
-        // }
+        @media screen and (min-width: $media1024) {
+            width: 130px;
+            height: 19px;
+            margin-top: -11px;
+            margin-left: -1px;
+        }
 
         @media screen and (min-width: $media1440) {
             width: 130px;

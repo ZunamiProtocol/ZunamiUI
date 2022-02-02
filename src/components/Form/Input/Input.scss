@@ -6,51 +6,107 @@
     border-radius: 5px;
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
-    width: 484px;
-    height: 54px;
+
+    @media screen and (min-width: $media1024) {
+        margin-bottom: 11px;
+        width: 423px;
+        height: 41px;
+    }
+
+    @media screen and (min-width: $media1440) {
+        margin-bottom: 15px;
+        width: 484px;
+        height: 54px;
+    }
 
     img {
-        width: 23px;
-        height: 23px;
-        margin-left: 20px;
-        margin-right: 10px;
+        @media screen and (min-width: $media1024) {
+            width: 18px;
+            height: 18px;
+            margin-left: 13.9px;
+            margin-right: 8px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            width: 23px;
+            height: 23px;
+            margin-left: 20px;
+            margin-right: 10px;
+        }
     }
 
     .coinName {
         color: #636363;
-        font-size: 12px;
-        line-height: 16px;
-        width: 80px;
+
+        @media screen and (min-width: $media1024) {
+            font-size: 12px;
+            line-height: 16px;
+            width: 83px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-size: 12px;
+            line-height: 16px;
+            width: 80px;
+        }
     }
 
     .divider {
-        height: 28px;
-        width: 2px;
         background-color: #F4EFE1;
+
+        @media screen and (min-width: $media1024) {
+            height: 21px;
+            width: 1px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            height: 28px;
+            width: 2px;
+        }
     }
 
     .max {
         border-radius: 5px;
-        width: 35px;
-        height: 17px;
         display: flex;
         align-items: center;
         justify-content: center;
         border: 1px solid #F95404;
-        font-size: 10px;
-        line-height: 14px;
         color: #F95404;
-        margin-left: 15px;
         cursor: pointer;
+
+        @media screen and (min-width: $media1024) {
+            margin-left: 20px;
+            font-size: 9px;
+            line-height: 12px;
+            width: 29px;
+            height: 14px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            margin-left: 15px;
+            font-size: 10px;
+            line-height: 14px;
+            width: 35px;
+            height: 17px;
+        }
     }
 
     .balance {
         color: #F95404;
-        font-size: 12px;
-        line-height: 16px;
-        margin-left: 10px;
-        width: 77px;
+
+        @media screen and (min-width: $media1024) {
+            font-size: 12px;
+            line-height: 16px;
+            margin-left: 17px;
+            width: 74px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-size: 12px;
+            line-height: 16px;
+            margin-left: 10px;
+            width: 77px;
+        }
     }
 
     input {
@@ -59,220 +115,23 @@
         box-sizing: border-box;
         border-radius: 5px;
         color: #636363;
-        font-size: 14px;
-        line-height: 19px;
-        padding-left: 15px;
-        width: 173px;
-        height: 29px;
-        margin-left: 20px;
+
+        @media screen and (min-width: $media1024) {
+            font-size: 12px;
+            line-height: 16px;
+            padding-left: 8px;
+            width: 133px;
+            height: 21px;
+            margin-left: 14px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-size: 14px;
+            line-height: 19px;
+            padding-left: 15px;
+            width: 173px;
+            height: 29px;
+            margin-left: 20px;
+        }
     }
 }
-
-// .Input {
-//     align-items: center;
-//     background-color: #f5f5f5;
-//     border-radius: $border-radius;
-//     display: flex;
-//     justify-content: space-between;
-//     padding: 10px 30px 10px 15px;
-//     margin-bottom: 33px;
-//     height: 95px;
-
-//     @media (min-width: $media375) {
-//         width: auto;
-//         margin-bottom: 10px;
-//         padding: 10px 20px 10px 15px;
-//         height: 85px;
-//     }
-
-//     @media (min-width: $media1024) {
-//         line-height: 16px;
-//         height: 71px;
-//         margin-bottom: 13px;
-//         border-radius: 18px;
-//     }
-
-//     @media screen and (min-width: $media1440) {
-//         height: 71px;
-//         margin-bottom: 15px;
-//     }
-
-//     @media screen and (min-width: $media1920) {
-//         height: 125px;
-//         margin-bottom: 20px;
-//     }
-
-//     input {
-//         border: none;
-
-//         @media (min-width: $media375) {
-//             width: 120px;
-//             height: 49px;
-//             border-radius: 15px;
-//             padding: 6px 0 0 15px;
-//         }
-
-//         @media (min-width: $media1024) {
-//             padding: 6px 0 0 17px;
-//             width: 362px;
-//             height: 32px;
-//             border-radius: 5px;
-//             font-size: 16px;
-//         }
-
-//         @media screen and (min-width: $media1440) {
-//             font-size: 16px;
-//             width: 686px;
-//             height: 32px;
-//             margin-right: 30px;
-//         }
-
-//         @media screen and (min-width: $media1920) {
-//             font-size: 25px;
-//             width: 827px;
-//             height: 53px;
-//             margin-right: 30px;
-//         }
-//     }
-
-//     .InputInfo {
-//         align-items: center;
-//         display: flex;
-//         justify-content: space-between;
-//         // align-items: flex-start;
-
-//         img {
-//             margin: 0 20px 0 20px;
-
-//             @media (min-width: $media375) {
-//                 margin: 0 10px 0 0px;
-//             }
-
-//             @media (min-width: $media1024) {
-//                 margin: 0 15px 0 17px;
-//                 width: 30px;
-//                 height: 38px;
-//             }
-
-//             @media (min-width: $media1440) {
-//                 margin-left: 37px;
-//             }
-
-//             @media (min-width: $media1920) {
-//                 margin-left: 37px;
-//                 width: 50px;
-//                 height: 50px;
-//             }
-//         }
-
-//         .balanceInfo {
-//             display: flex;
-//             flex-direction: column;
-//             width: 150px;
-
-//             .coinName {
-//                 font-size: 16px;
-//                 line-height: 16px;
-//                 display: block;
-
-//                 @media (min-width: $media375) {
-//                     font-size: 14px;
-//                     line-height: 14px;
-//                 }
-
-//                 @media (min-width: $media1024) {
-//                     line-height: 14px;
-//                     font-size: 14px;
-//                 }
-
-//                 @media screen and (min-width: $media1440) {
-//                     font-size: 14px;
-//                     line-height: 14px;
-//                 }
-
-//                 @media screen and (min-width: $media1920) {
-//                     font-size: 20px;
-//                     line-height: 20px;
-//                 }
-//             }
-
-//             .maxBalance {
-//                 display: flex;
-//                 align-items: center;
-//                 justify-content: flex-start;
-
-//                 @media (min-width: $media1024) {
-//                     margin-top: 4px;
-//                 }
-
-//                 @media (min-width: $media1440) {
-//                     margin-top: 0;
-//                 }
-//             }
-
-//             .max {
-//                 border-radius: 7px;
-//                 background-color: $primary-color;
-//                 color: #fff;
-//                 font-size: 12px;
-//                 padding: 3px 6px 0px 6px;
-//                 vertical-align: middle;
-//                 text-align: center;
-//                 cursor: pointer;
-
-//                 @media (min-width: $media375) {
-//                     font-size: 10px;
-//                 }
-
-//                 @media (min-width: $media1024) {
-//                     font-size: 8px;
-//                 }
-
-//                 @media screen and (min-width: $media1440) {
-//                     font-size: 10px;
-//                     line-height: 10px;
-//                     width: 30px;
-//                     min-width: 30px;
-//                     height: 15px;
-//                     padding: 4px 0 0 0;
-//                 }
-
-//                 @media screen and (min-width: $media1920) {
-//                     font-size: 15px;
-//                     line-height: 15px;
-//                     width: 51px;
-//                     min-width: 51px;
-//                     height: 24px;
-//                     padding: 7px 0 0 0;
-//                 }
-//             }
-
-//             .balance {
-//                 color: #f25817;
-//                 display: inline-block;
-//                 font-size: 16px;
-//                 margin-left: 10px;
-//                 margin-top: 3px;
-//                 vertical-align: middle;
-
-//                 @media (min-width: $media375) {
-//                     margin-top: 4px;
-//                 }
-
-//                 @media screen and (min-width: $media1024) {
-//                     margin-top: 4px;
-//                     font-size: 14px;
-//                 }
-
-//                 @media screen and (min-width: $media1440) {
-//                     font-size: 16px;
-//                     margin-top: 5px;
-//                 }
-//             }
-
-//             @media (min-width: $media375) {
-//                 width: 110px;
-//             }
-//         }
-//     }
-// }
