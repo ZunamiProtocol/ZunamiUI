@@ -9,6 +9,12 @@
     display: flex;
     align-items: flex-start;
 
+    @media screen and (min-width: $media1024) {
+        height: 123px;
+        padding-left: 20px;
+        padding-top: 30px;
+    }
+
     @media screen and (min-width: $media1440) {
         height: 136px;
         padding-left: 20px;
@@ -19,18 +25,60 @@
         justify-content: space-between;
 
         .state {
-            font-size: 16px;
             color: #636363;
-            line-height: 21.8px;
+
+            @media screen and (min-width: $media1024) {
+                font-size: 14px;
+                line-height: 19.12px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                font-size: 16px;
+                line-height: 21.8px;
+            }
         }
 
         .address {
             color: $primary-color;
-            line-height: 21.8px;
+            cursor: pointer;
         }
 
-        img {
-            margin-right: 20px;
+        .WalletStatus__Icon {
+            @media screen and (min-width: $media1024) {
+                width: 45px;
+                height: 30px;
+                top: 33px;
+                right: 26px;
+            }
         }
+    }
+
+    &__Connect {
+        background: linear-gradient(87.51deg, #F74E02 12.85%, #F9A412 94.75%);
+        border-radius: 5px;
+        color: #fff;
+        border: none;
+        text-align: center;
+        cursor: pointer;
+
+        @media screen and (min-width: $media1024) {
+            width: 126px;
+            height: 29px;
+            font-size: 14px;
+            line-height: 19px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            width: 142px;
+            height: 36px;
+            font-size: 12px;
+            line-height: 16.3px;
+        }
+    }
+
+    &__Icon {
+        position: absolute;
+        top: 32px;
+        right: 20px;
     }
 }

@@ -7,6 +7,15 @@
     height: 100%;
     background-color: #fff;
 
+    @media screen and (min-width: $media1024) {
+        border-radius: 5px;
+        overflow: hidden;
+        width: 259px !important;
+        max-width: 259px !important;
+        min-width: 259px !important;
+        padding: 0 !important;
+    }
+
     @media screen and (min-width: $media1440) {
         border-radius: 5px;
         overflow: hidden;
@@ -24,17 +33,25 @@
         height: 100%;
 
         &__footer {
+            @media screen and (min-width: $media1024) {
+                margin-left: 20px;
+                padding-bottom: 19px;
+            }
+
             @media screen and (min-width: $media1440) {
                 margin-left: 20px;
                 padding-bottom: 30px;
+            }
 
-                a {
-                    display: block;
-                    color: #A1A1A1;
+            a {
+                display: block;
+                color: #A1A1A1;
+                text-decoration: none;
+
+                @media screen and (min-width: $media1024) {
+                    margin-top: 10px;
                     font-size: 12px;
                     line-height: 16.3px;
-                    text-decoration: none;
-                    margin-top: 10px;
                 }
             }
         }

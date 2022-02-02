@@ -20,26 +20,53 @@ body {
 }
 
 #root > .container {
+    margin: 0 auto;
+    padding: 0;
+
+    @media (min-width: $media1024) {
+        max-width: 978px;
+    }
+
     @media (min-width: $media1440) {
         max-width: 1333px;
-        margin: 0 auto;
-        padding: 0;
     }
 }
 
 .copyright {
     font-style: normal;
     font-weight: normal;
-    font-size: 10px;
-    line-height: 14px;
-    letter-spacing: 0.5px;
     color: #DEDEDE;
     display: block;
-    margin-bottom: 25px;
+
+    @media (min-width: $media1024) {
+        margin-bottom: 20px;
+        font-size: 9px;
+        line-height: 12.2px;
+        letter-spacing: 0.5px;
+    }
+
+    @media (min-width: $media1440) {
+        margin-bottom: 25px;
+        font-size: 10px;
+        line-height: 14px;
+        letter-spacing: 0.5px;
+    }
 }
 
 body.dark {
     background-color: #000 !important;
+
+    .WalletStatus__Icon path:nth-child(1) {
+        fill: #3C3C3C;
+    }
+
+    .WalletStatus__Icon path:nth-child(2) {
+        fill: #494949;
+    }
+
+    .WalletStatus__Icon path:nth-child(3) {
+        fill: #646464;
+    }
 
     span,
     .ApyChart__Title,
@@ -174,364 +201,3 @@ body.dark {
         }
     }
 }
-
-// #root > .container {
-//     margin: 0 auto;
-//     padding: 0;
-// }
-
-// .tooltip-inner {
-//     background-color: #EFEEEE !important;
-//     color: #767676 !important;
-//     border-radius: 15px !important;
-//     padding: 10px 20px !important;
-//     text-align: left !important;
-//     font-size: 12px !important;
-// }
-
-// .tooltip-arrow::before {
-//     display: none;
-// }
-
-// .zun-shadow {
-//     box-shadow: $box-shadow;
-// }
-
-// .zun-rounded {
-//     border-radius: $border-radius !important;
-// }
-
-// button[disabled] {
-//     opacity: .5;
-//     pointer-events: none;
-// }
-
-// .preloader {
-//     width: 25px;
-//     height: 25px;
-//     display:inline-block;
-//     padding: 0;
-//     border-radius: 100%;
-//     border: 2px solid;
-//     border-top-color:$primary-color;
-//     border-bottom-color:rgba(0,0,0, 0.15);
-//     border-left-color:$primary-color;
-//     border-right-color:rgba(0,0,0, 0.15);
-//     animation: preloader 0.8s linear infinite;
-// }
-
-// .toast {
-//     border-radius: 10px !important;
-//     overflow: hidden;
-//     background-color: #F8F8F8;
-// }
-
-// @keyframes preloader {
-//     from {transform: rotate(0deg);}
-//     to {transform: rotate(360deg);}
-// }
-
-// @media (min-width: $media375) {
-//     .zun-gap {
-//         grid-gap: 5px !important;
-//         gap: 5px !important;
-//     }
-
-//     nav {
-//         padding-top: 14px !important;
-//     }
-
-//     .container {
-//         max-width: 100% !important;
-
-//         .main-row {
-//             width: 100%;
-//             margin-left: auto !important;
-//             margin-right: auto !important;
-//             flex-direction: row;
-//             align-content: flex-start;
-//             margin-top: 15px !important;
-//         }
-//     }
-
-//     .content-col {
-//         width: 100% !important;
-//         max-width: 100% !important;
-//         padding-left: 20px !important;
-//         padding-right: 20px !important;
-//         padding-bottom: 20px;
-
-//         > .row {
-//             box-shadow: none;
-//             padding: 0;
-//             margin-top: 0 !important;
-//             margin-left: 0 !important;
-//             margin-right: 0 !important;
-//         }
-//     }
-
-//     #how-to-use-video {
-//         width: 100%;
-//         height: auto;
-//     }
-
-//     .modal-dialog {
-//         .modal-content {
-//             border-radius: $border-radius;
-//         }
-//     }
-// }
-
-// @media (min-width: 1024px) {
-//     .zun-gap {
-//         grid-gap: 10px !important;
-//         gap: 10px !important;
-//     }
-
-//     nav {
-//         padding-top: 0 !important;
-//     }
-
-//     .zun-rounded {
-//         border-radius: 17px !important;
-//     }
-
-//     .navbar-brand {
-//         margin-left: 5px !important;
-//     }
-
-//     .header-container {
-//         margin-top: 25px;
-//     }
-
-//     .container {
-//         max-width: 936px !important;
-//         padding-left: 44px;
-//         padding-right: 44px;
-
-//         .main-row {
-//             width: 936px;
-//             margin-left: auto !important;
-//             margin-right: auto !important;
-//             margin-bottom: 20px !important;
-//             margin-top: 21px !important;
-//         }
-//     }
-
-//     .content-col {
-//         width: 720px !important;
-//         max-width: 720px !important;
-//         padding-left: 20px !important;
-//         padding-right: 0 !important;
-//         display: flex;
-//         flex-direction: column;
-//         align-content: flex-start;
-//         justify-content: flex-start;
-//         align-items: stretch;
-//         padding-bottom: 0;
-
-//         > .row {
-//             box-shadow: $box-shadow;
-//             margin-bottom: 15px !important;
-
-//             &:last-child {
-//                 margin-bottom: 0 !important;
-//                 flex-grow: 1;
-//             }
-//         }
-//     }
-
-//     .modal-dialog {
-//         max-width: 600px !important;
-
-//         .modal-content {
-//             border-radius: $border-radius;
-//         }
-//     }
-
-//     #how-to-use-video {
-//         width: 560px;
-//         height: 315px;
-//     }
-// }
-
-// @media (min-width: $media1440) {
-//     .zun-gap {
-//         grid-gap: 17px !important;
-//         gap: 17px !important;
-//     }
-
-//     .zun-rounded {
-//         border-radius: 25px !important;
-//     }
-
-//     .container {
-//         max-width: 1360px !important;
-
-//         .main-row {
-//             width: 1360px;
-//             margin-left: auto !important;
-//             margin-right: auto !important;
-//             margin-top: 15px !important;
-//         }
-//     }
-
-//     .content-col {
-//         width: 1360px !important;
-//         max-width: 1360px !important;
-//         padding-left: 0 !important;
-//         padding-right: 0 !important;
-//     }
-
-//     .zun-rounded {
-//         border-radius: 25px !important;
-//     }
-// }
-
-
-// @media (min-width: 1600px) {
-//     .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
-//         max-width: 1353px !important;
-//     }
-// }
-
-// @media (min-width: $media1920) {
-//     .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
-//         max-width: 1920px !important;
-//     }
-
-//     .zun-gap {
-//         grid-gap: 24px !important;
-//         gap: 24px !important;
-//     }
-
-//     .container {
-//         width: 1821px !important;
-
-//         .main-row {
-//             width: 1820px;
-//             margin-left: auto !important;
-//             margin-right: auto !important;
-//         }
-//     }
-
-//     .content-col {
-//         width: 1281px !important;
-//         max-width: 1281px !important;
-//         padding-left: 0 !important;
-//         padding-right: 0 !important;
-//     }
-
-//     .zun-rounded {
-//         border-radius: 25px !important;
-//     }
-// }
-
-// body.dark {
-//     background-color: #252525;
-
-//     @media screen and (min-width: $media375) {
-//         .content-col .col,
-//         .MonthlyProfitCol,
-//         .TvlCol {
-//             background-color: $block-fg-black-color;
-//             border-radius: $border-radius17;
-//         }
-
-//         .dashboard-col {
-//             background-color: $block-bg-black-color;
-//             border-radius: 15px;
-//         }
-//     }
-
-//     @media screen and (min-width: $media1024) {
-//         .SidebarColumn,
-//         .row.zun-rounded.zun-shadow {
-//             background-color: $block-bg-black-color;
-//         }
-
-//         .content-col .col,
-//         .MonthlyProfitCol,
-//         .TvlCol {
-//             border-radius: 0;
-//         }
-
-//         .dashboard-col {
-//             background-color: transparent;
-//             border-radius: 0;
-//         }
-
-//         .content-col .col,
-//         .MonthlyProfitCol,
-//         .TvlCol {
-//             background-color: transparent;
-//         }
-
-//         .content-col,
-//         .dashboard-col > .row,
-//         .operation-col > .row,
-//         .operation-col {
-//             border-radius: $border-radius17 !important;
-//             overflow: hidden;
-//         }
-//     }
-
-//     @media screen and (min-width: $media1600) {
-//         .content-col,
-//         .dashboard-col > .row,
-//         .operation-col > .row,
-//         .operation-col {
-//             border-radius: $border-radius !important;
-//             overflow: hidden;
-//         }
-//     }
-
-//     .ThemeSwitcher__title,
-//     .InfoBlock__title,
-//     .InfoBlock__description:not(.InfoBlock__description_color),
-//     .LinkBlock__title,
-//     .PieChart__Header,
-//     .PieChartWrapper__Legend__Label,
-//     .PieChart__StratList__Item__Name,
-//     .NoWallet span {
-//         color: #ffffff;
-//     }
-
-//     .Disclaimer,
-//     .HowToUse,
-//     .ThemeSwitcher__button,
-//     .LinkBlock:not(.LinkBlock__selected),
-//     .ClickableHeader,
-//     form .Input {
-//         color: #ffffff;
-//         background-color: #5f5f5f;
-//         border-color: transparent;
-//     }
-
-//     .ClickableHeader img {
-//         opacity: 0.1;
-//     }
-
-//     .ThemeSwitcher__button:hover,
-//     .HowToUse:hover {
-//         background-color: #494949 !important;
-//     }
-
-//     .ClickableHeader .close.default {
-//         display: none;
-//     }
-
-//     .ClickableHeader .close.dark {
-//         display: block;
-//         opacity: 1;
-//     }
-
-//     .tooltip-inner {
-//         background-color: #5F5F5F !important;
-//         color: #ffffff !important;
-//     }
-
-//     .PendingBalance__hint {
-//         background-color: #5F5F5F;
-//     }
-// }
