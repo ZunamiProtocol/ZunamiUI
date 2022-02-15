@@ -1,75 +1,68 @@
 @import "src/variables";
 
 .Disclaimer {
-    background-color: #fafafa;
-    width: 500px;
-    height: 80px;
-    padding: 20px 40px;
+    background: #FFF5E9;
+    border-radius: 5px;
     color: #767676;
-    font-size: 16px;
-    line-height: 20px;
-    font-family: 'Anderson Grotesk';
     display: flex;
     align-items: center;
-    justify-content: center;
-    text-align: left;
-    border-radius: $border-radius17;
+    align-self: flex-start;
 
     &__icon {
         @media (min-width: $media375) {
-            margin-right: 10px;
+
         }
 
         @media screen and (min-width: $media1024) {
-            margin: 0 16px;
-            width: 32px;
-            height: 32px;
+            margin: 0 10px 0 10px;
+            width: 23px;
+            height: 23px;
         }
 
         @media screen and (min-width: $media1440) {
-            margin: 0 20px 0 20px;
-            width: 37px;
-            height: 37px;
+            margin: 0 15px 0 17px;
+            width: 29px;
+            height: 29px;
         }
 
         @media screen and (min-width: $media1920) {
-            width: 55px;
-            height: 55px;
-            margin: 0 35px 0 5px;
+            width: 57px;
+            height: 57px;
+            margin: 0 22px 0 28px;
         }
     }
 
-    @media (min-width: $media375) {
-        width: auto;
-        height: auto;
-        padding: 10px 27px 10px 10px;
-        font-size: 14px;
-        margin: 0 5px 10px 5px !important;
-    }
-
     @media screen and (min-width: $media1024) {
-        width: 326px;
-        height: 49px;
-        padding: 20px 25px 20px 10px;
-        font-size: 10px;
-        line-height: 14px;
-        border-radius: $border-radius17;
-        margin-bottom: 0 !important;
+        font-size: 9px;
+        line-height: 12px;
+        width: 465px;
+        height: 41px;
+        margin-left: 109px;
+        margin-top: 22px;
     }
 
     @media screen and (min-width: $media1440) {
-        height: 56px !important;
-        font-size: 12px !important;
-        line-height: 16px !important;
-        width: 381px !important;
-        border-radius: 20px !important;
+        font-size: 12px;
+        line-height: 16px;
+        width: 670px;
+        height: 42px;
+        margin-left: 170px;
+        margin-top: 26px;
     }
 
     @media screen and (min-width: $media1920) {
-        width: 634px !important;
-        height: 80px !important;
-        font-size: 20px !important;
-        line-height: 23px !important;
-        padding: 20px 50px 20px 40px !important;
+        font-size: 16px;
+        line-height: 22px;
+        width: 922px;
+        height: 69px;
+        margin-left: 193px;
+        margin-top: 39px;
+    }
+
+    &__Content {
+        a {
+            text-decoration: none;
+            color: $primary-color;
+        }
     }
 }
