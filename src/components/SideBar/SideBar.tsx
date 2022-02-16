@@ -1,7 +1,7 @@
 import {Col} from 'react-bootstrap';
 import {LinkBlock} from '../LinkBlock/LinkBlock';
-import {ThemeSwitcher} from '../ThemeSwitcher/ThemeSwitcher';
-import {Disclaimer} from '../Disclaimer/Disclaimer';
+import { WalletStatus } from '../WalletStatus/WalletStatus';
+import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 import './SideBar.scss';
 
 interface SideBarProps {
@@ -10,29 +10,49 @@ interface SideBarProps {
 
 export const SideBar = (props: SideBarProps): JSX.Element => {
     return (
-        <Col xs={3} className={'SidebarColumn zun-shadow zun-rounded'}>
-            <div className={`Sidebar ${props.isMainPage === false ? 'SideBar_hide' : ''}`}>
-                <div className={'d-block d-lg-none'}>
-                    <Disclaimer
-                        text={'Please note. This is a beta version. The contract has not been auditied yet. Use it at your own risk.'}
+        <Col className={'SidebarColumn'}>
+            <div className="Sidebar">
+                <div className={''}>
+                    <WalletStatus />
+                    <LinkBlock
+                        title='Dashboard'
+                        description=''
+                        url={''}
+                        icon='/menu-dashboard.svg'
+                    />
+                    <LinkBlock
+                        title='Deposit & Withdraw'
+                        description='Click for deposit'
+                        url={'deposit-and-withdraw'}
+                        icon='/menu-deposit-and-withdraw.svg'
+                    />
+                    <LinkBlock
+                        title='Lockdrop'
+                        description='Click for withdraw'
+                        url={'lockdrop'}
+                        icon='/menu-lockdrop.svg'
+                        testnet={true}
+                    />
+                    <LinkBlock
+                        title='Staking ZUN'
+                        description='Click for withdraw'
+                        url={'staking'}
+                        icon='/menu-staking.svg'
+                        testnet={true}
+                    />
+                    <LinkBlock
+                        title='DAO'
+                        description='Click for withdraw'
+                        url={'dao'}
+                        icon='/menu-dao.svg'
+                        soon={true}
                     />
                 </div>
-                {
-                    window.location.pathname === '/' &&
-                    <div className={'sm-menu one-row'}>
-                        <LinkBlock title='Deposit' description='Click for deposit' url={'deposit'} icon='/deposit-icon.svg' vstyle='selected' />
-                        <LinkBlock title='Withdraw' description='Click for withdraw' url={'withdraw'} icon='/withdraw-icon.svg' vstyle='selected' />
-                    </div>
-                }
-                <div className={'d-none lg-menu'}>
-                    <LinkBlock title='Dashboard' description='' url={''} icon='/dashboard-icon.svg' />
-                    <LinkBlock title='Deposit' description='Click for deposit' url={'deposit'} icon='/deposit-icon.svg' vstyle='selected' />
-                    <LinkBlock title='Withdraw' description='Click for withdraw' url={'withdraw'} icon='/withdraw-icon.svg' vstyle='selected' />
+                <div className="Sidebar__footer">
+                    <ThemeSwitcher/>
+                    <a href="/how-to-use">How to use?</a>
+                    <a href="/faq">FAQ</a>
                 </div>
-                <ThemeSwitcher/>
-            </div>
-            <div className={'SideBar__logo'}>
-                <img src="/logo-footer.svg" alt=""/>
             </div>
         </Col>
     );

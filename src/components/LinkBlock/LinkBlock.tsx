@@ -1,6 +1,8 @@
 import React from 'react';
 import {useHistory} from 'react-router-dom';
 import './LinkBlock.scss';
+import {ComingSoonPlaceholder} from '../ComingSoonPlaceholder/ComingSoonPlaceholder';
+import {TestnetLabel} from '../TestnetLabel/TestnetLabel';
 
 interface LinkBlockProps {
     title: string;
@@ -8,6 +10,8 @@ interface LinkBlockProps {
     url: string;
     icon: string;
     vstyle?: string;
+    soon?: boolean;
+    testnet?: boolean;
 }
 
 export const LinkBlock = (prop: LinkBlockProps): JSX.Element => {
@@ -28,17 +32,28 @@ export const LinkBlock = (prop: LinkBlockProps): JSX.Element => {
         styles.push('LinkBlock__active');
     }
 
+    if (prop.soon) {
+        styles.push('LinkBlock__soon');
+    }
+
     return (
         <div
             className={styles.join(' ')}
             onClick={clickHandler}
             data-url={url}
         >
-            <span className={'LinkBlock__title'}>{prop.title}</span>
-            <span className={'LinkBlock__description'}>{prop.description}</span>
-            <div className={'LinkBlock__icon_wrapper'}>
-                <img className={'LinkBlock__icon'} src={prop.icon} alt={''}/>
+            <div className="LinkBlock__icon">
+                <img src={prop.icon} alt={prop.title} />
             </div>
+            <span className="LinkBlock__title">{prop.title}</span>
+            {
+                prop.soon &&
+                    <ComingSoonPlaceholder />
+            }
+            {
+                prop.testnet &&
+                    <TestnetLabel />
+            }
         </div>
     );
 };
