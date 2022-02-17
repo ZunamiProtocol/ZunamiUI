@@ -1,144 +1,46 @@
 @import "src/variables";
 
-$media435: 435px;
-
 .Form {
-    display: flex;
-    justify-content: center;
-
-    @media screen and (min-width: $media375) {
-        width: auto;
-        margin: 10px 15px 15px 15px;
-    }
-
-    @media screen and (min-width: $media1024) {
-        width: auto;
-        margin: 15px 20px 20px 20px;
-    }
-
-    @media screen and (min-width: $media1440) {
-        width: auto;
-        margin: 15px 20px 20px 20px;
-    }
-
-    form {
+    .InputInfo {
         display: flex;
-        flex-direction: column;
-        justify-content: center;
-        width: 100%;
-
-        button {
-            background-color: #f74b01;
-            border-radius: $border-radius17;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            font-family: 'Anderson Grotesk';
-            padding: 14px 0 12px 0;
-            width: 159px;
-            height: 60px;
-            margin-right: 10px;
-            margin-bottom: 10px;
-
-            &:hover {
-                background-color: $on-hover-color;
-            }
-
-            @media screen and (min-width: $media375) {
-                width: 169px;
-                height: 43px;
-                font-size: 14px;
-                padding-top: 13px;
-                border-radius: 15px;
-                margin-top: 10px;
-            }
-
-            @media screen and (min-width: $media1024) {
-                border-radius: 17px;
-                margin-top: 0;
-                width: 151px;
-                height: 48px;
-                margin-top: 15px;
-            }
-
-            @media screen and (min-width: $media1440) {
-                width: 209px;
-                height: 56px;
-                font-size: 14px;
-                padding: 19px 0 12px 0;
-                margin-top: 10px;
-            }
-
-            @media screen and (min-width: $media1920) {
-                width: 299px;
-                height: 78px;
-                font-size: 25px;
-                padding: 19px 0 12px 0;
-            }
-
-            &.disabled {
-                opacity: .5;
-            }
-        }
-
-        input[type='submit'] {
-            background-color: #f74b01;
-            border-radius: $border-radius17;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            font-family: 'Anderson Grotesk';
-            padding: 14px 0 12px 0;
-            width: 159px;
-            height: 60px;
-
-            &:hover {
-                background-color: $on-hover-color;
-            }
-
-            @media screen and (min-width: $media375) {
-                width: 169px;
-                height: 43px;
-                font-size: 14px;
-                padding-top: 13px;
-                display: block;
-                margin-top: 10px;
-                margin-bottom: 10px;
-            }
-
-            @media screen and (min-width: $media1024) {
-                width: 151px;
-                height: 48px;
-                margin-top: 5px;
-                font-size: 16px;
-                display: inline;
-                margin-top: 0;
-                margin-bottom: 0;
-            }
-
-            @media screen and (min-width: $media1440) {
-                width: 209px;
-                height: 78px;
-                font-size: 20px;
-                padding: 19px 0 12px 0;
-            }
-
-            @media screen and (min-width: $media1920) {
-                width: 299px;
-                height: 78px;
-                font-size: 25px;
-                padding: 19px 0 12px 0;
-            }
-        }
     }
 
-    &__WithdrawAll {
-        @media screen and (min-width: $media375) {
-            margin: 10px 0 0 0;
-        }
+    .error {
+        flex-basis: 100%;
+    }
+
+    .buttons {
+        gap: 0 10px;
+    }
+
+    button {
+        background: linear-gradient(87.51deg, #F74E02 12.85%, #F9A412 94.75%);
+        border-radius: 5px;
+        border: none;
+        color: #fff;
 
         @media screen and (min-width: $media1024) {
-            margin-left: 1rem;
+            width: 109px;
+            height: 28px;
+            font-size: 12px;
+            line-height: 16px;
+            margin-top: 10px;
         }
+
+        @media screen and (min-width: $media1440) {
+            width: 120px;
+            height: 36px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            width: 124px;
+            height: 40px;
+            font-size: 14px;
+            line-height: 19px;
+        }
+    }
+
+    .deposit-button-wrapper {
+        display: flex;
     }
 }

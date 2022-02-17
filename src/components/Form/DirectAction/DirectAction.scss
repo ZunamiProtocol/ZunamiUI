@@ -1,0 +1,50 @@
+@import "src/variables";
+
+.DirectAction {
+    display: flex;
+    align-items: center;
+
+    @media screen and (min-width: $media1440) {
+        margin-left: 15px;
+    }
+
+    @media screen and (min-width: $media1920) {
+        margin-left: 35px;
+    }
+
+    input[type="checkbox"] {
+        @media screen and (min-width: $media1024) {
+            width: 17px;
+            height: 17px;
+            margin: 9px 0 0 23px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            width: 21px;
+            height: 21px;
+            margin: 9px 0 0 0;
+        }
+    }
+
+    span {
+        color: #636363;
+
+        @media screen and (min-width: $media1024) {
+            margin: 9px 12px 0 12px;
+            font-size: 12px;
+            line-height: 16px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            margin: 10px 12px 0 12px;
+            font-size: 12px;
+            line-height: 16px;
+        }
+    }
+
+    svg {
+        @media screen and (min-width: $media1440) {
+            margin-top: 8px;
+        }
+    }
+}

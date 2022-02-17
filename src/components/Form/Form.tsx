@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import {useCallback, useMemo, useState, useRef} from 'react';
 import {Input} from './Input/Input';
 import './Form.scss';
 import {
@@ -18,8 +18,10 @@ import useStake from "../../hooks/useStake";
 import useUnstake from "../../hooks/useUnstake";
 import {useWallet} from "use-wallet";
 import {BigNumber} from "bignumber.js";
-import {Modal,Button,Tooltip,OverlayTrigger,Toast,ToastContainer} from "react-bootstrap";
+import {Modal,Button,Toast,ToastContainer} from "react-bootstrap";
 import {NoWallet} from "../NoWallet/NoWallet"
+import {ActionSelector} from "./ActionSelector/ActionSelector";
+import {DirectAction} from "./DirectAction/DirectAction";
 
 interface FormProps {
     operationName: string;
@@ -75,6 +77,7 @@ const getWithdrawValidationError = (
 }
 
 export const Form = (props: FormProps): JSX.Element => {
+    const [action, setAction] = useState('deposit');
     const [dai, setDai] = useState('');
     const [usdc, setUsdc] = useState('');
     const [usdt, setUsdt] = useState('');
@@ -123,9 +126,9 @@ export const Form = (props: FormProps): JSX.Element => {
         (userBalanceList && userBalanceList[2].toNumber() > 0 && userBalanceList[2]) || BIG_ZERO
     ];
     const max = [
-        props.operationName.toLowerCase() === 'deposit' ? userMaxDeposit[0] : userMaxWithdrawMinusInput,
-        props.operationName.toLowerCase() === 'deposit' ? userMaxDeposit[1] : userMaxWithdrawMinusInput,
-        props.operationName.toLowerCase() === 'deposit' ? userMaxDeposit[2] : userMaxWithdrawMinusInput,
+        action === 'deposit' ? userMaxDeposit[0] : userMaxWithdrawMinusInput,
+        action === 'deposit' ? userMaxDeposit[1] : userMaxWithdrawMinusInput,
+        action === 'deposit' ? userMaxDeposit[2] : userMaxWithdrawMinusInput,
     ];
 
     // approves
@@ -202,7 +205,7 @@ export const Form = (props: FormProps): JSX.Element => {
         );
     }
 
-    const validationError = props.operationName.toLowerCase() === 'deposit'
+    const validationError = action === 'deposit'
         ? getDepositValidationError(dai, usdc, usdt, isApproved, pendingTx, depositExceedAmount)
         : getWithdrawValidationError(dai, usdc, usdt, fullBalanceLpShare, userMaxWithdraw, lpShareToWithdraw);
 
@@ -245,15 +248,16 @@ export const Form = (props: FormProps): JSX.Element => {
                     </ToastContainer>
             }
             <form>
+                <ActionSelector
+                    onChange={(action: string) => {
+                        setAction(action);
+                    }}
+                />
                 <Input name="DAI" value={dai} handler={daiInputHandler} max={max[0]}/>
                 <Input name="USDC" value={usdc} handler={usdcInputHandler} max={max[1]}/>
                 <Input name="USDT" value={usdt} handler={usdtInputHandler} max={max[2]}/>
-                {
-                    validationError &&
-                        <span className={'mb-3 text-danger'}>{validationError}</span>
-                }
-                {props.operationName.toLowerCase() === 'deposit' &&
-                <div>
+                {action === 'deposit' &&
+                <div className="d-flex flex-row flex-wrap buttons">
                     {account && parseFloat(dai) > 0 && !isApprovedTokens[0] &&
                     <button disabled={pendingDAI || depositExceedAmount} onClick={handleApproveDai}>Approve DAI </button>
                     }
@@ -264,24 +268,54 @@ export const Form = (props: FormProps): JSX.Element => {
                     <button disabled={pendingUSDT || depositExceedAmount} onClick={handleApproveUsdt}>Approve USDT </button>
                     }
                     {account &&
-                        <OverlayTrigger
-                        placement={'right'}
-                        overlay={
-                            <Tooltip>Deposit temporarily disabled before next update</Tooltip>
-                        }
-                        >
+                        <div className="deposit-button-wrapper">
                             <button
                                 className={'disabled'}
                                 onClick={(e) => e.preventDefault()}
                             >
                                 Deposit
                             </button>
-                        </OverlayTrigger>
+                            <DirectAction
+                                actionName="deposit"
+                                hint="When using direct deposit / withdrawal, funds will be credited instantly, but the cost of such a transaction will be many times more expensive"
+                            />
+                        </div>
+                    }
+                    {
+                        validationError &&
+                            <div className={'mt-2 text-danger error'}>{validationError}</div>
                     }
                 </div>
                 }
-                {props.operationName.toLowerCase() === 'withdraw' &&
+                {action === 'withdraw' &&
                 <div>
+                    {account &&
+                        <div className="deposit-button-wrapper">
+                            <button
+                                onClick={async () => {
+                                    setPendingWithdraw(true);
+
+                                    try {
+                                        await onUnstake();
+                                    } catch (error: any) {
+                                        setPendingWithdraw(false);
+                                        setTransactionError(error);
+                                    }
+
+                                    setPendingWithdraw(false);
+                                }}
+                                disabled={(dai === '' && usdc === '' && usdt === '') || pendingWithdraw
+                                || fullBalanceLpShare === '0' || userMaxWithdraw.toNumber() < lpShareToWithdraw.toNumber()}
+                            >
+                                Withdraw
+                            </button>
+                            <DirectAction
+                                actionName="withdraw"
+                                hint="When using direct deposit / withdrawal, funds will be credited instantly, 
+                                but the cost of such a transaction will be many times more expensive"
+                            />
+                        </div>
+                    }
                     {
                         pendingWithdraw &&
                             <div className={'d-flex align-items-center'}>
@@ -289,25 +323,6 @@ export const Form = (props: FormProps): JSX.Element => {
                                 <div className={'preloader ms-2'}></div>
                             </div>
                     }
-                    {account && <button
-                        onClick={async () => {
-                            setPendingWithdraw(true);
-
-                            try {
-                                await onUnstake();
-                            } catch (error: any) {
-                                setPendingWithdraw(false);
-                                setTransactionError(error);
-                            }
-
-                            setPendingWithdraw(false);
-                        }}
-                        disabled={(dai === '' && usdc === '' && usdt === '') || pendingWithdraw
-                        || fullBalanceLpShare === '0' || userMaxWithdraw.toNumber() < lpShareToWithdraw.toNumber()}
-                    >
-                        Withdraw
-                    </button>}
-                    {/*<input type='submit' value={'Withdraw all'} className={'Form__WithdrawAll'}/>*/}
                 </div>
                 }
             </form>
