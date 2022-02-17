@@ -2,10 +2,7 @@ import BigNumber from 'bignumber.js/bignumber';
 
 import MasterChefAbi from '../../actions/abi/Zunami.json';
 import WETHAbi from './abi/weth.json';
-import {
-    contractAddresses,
-    SUBTRACT_GAS_LIMIT,
-} from './constants.js';
+import { contractAddresses, SUBTRACT_GAS_LIMIT } from './constants.js';
 import * as Types from './types.js';
 
 export class Contracts {
@@ -13,8 +10,7 @@ export class Contracts {
         this.web3 = web3;
         this.defaultConfirmations = options.defaultConfirmations;
         this.autoGasMultiplier = options.autoGasMultiplier || 1.5;
-        this.confirmationType =
-            options.confirmationType || Types.ConfirmationType.Confirmed;
+        this.confirmationType = options.confirmationType || Types.ConfirmationType.Confirmed;
         this.defaultGas = options.defaultGas;
         this.defaultGasPrice = options.defaultGasPrice;
 
@@ -44,8 +40,7 @@ export class Contracts {
     }
 
     async callContractFunction(method, options) {
-        const {confirmations, confirmationType, autoGasMultiplier, ...txOptions} =
-            options;
+        const { confirmations, confirmationType, autoGasMultiplier, ...txOptions } = options;
 
         if (!this.blockGasLimit) {
             await this.setGasLimit();
@@ -57,10 +52,7 @@ export class Contracts {
 
         if (confirmationType === Types.ConfirmationType.Simulate || !options.gas) {
             let gasEstimate;
-            if (
-                this.defaultGas &&
-                confirmationType !== Types.ConfirmationType.Simulate
-            ) {
+            if (this.defaultGas && confirmationType !== Types.ConfirmationType.Simulate) {
                 txOptions.gas = this.defaultGas;
             } else {
                 try {
@@ -68,21 +60,20 @@ export class Contracts {
                     gasEstimate = await method.estimateGas(txOptions);
                 } catch (error) {
                     const data = method.encodeABI();
-                    const {from, value} = options;
+                    const { from, value } = options;
                     const to = method._parent._address;
-                    error.transactionData = {from, value, data, to};
+                    error.transactionData = { from, value, data, to };
                     throw error;
                 }
 
                 const multiplier = autoGasMultiplier || this.autoGasMultiplier;
                 const totalGas = Math.floor(gasEstimate * multiplier);
-                txOptions.gas =
-                    totalGas < this.blockGasLimit ? totalGas : this.blockGasLimit;
+                txOptions.gas = totalGas < this.blockGasLimit ? totalGas : this.blockGasLimit;
             }
 
             if (confirmationType === Types.ConfirmationType.Simulate) {
                 let g = txOptions.gas;
-                return {gasEstimate, g};
+                return { gasEstimate, g };
             }
         }
 
@@ -103,8 +94,7 @@ export class Contracts {
         let hashOutcome = OUTCOMES.INITIAL;
         let confirmationOutcome = OUTCOMES.INITIAL;
 
-        const t =
-            confirmationType !== undefined ? confirmationType : this.confirmationType;
+        const t = confirmationType !== undefined ? confirmationType : this.confirmationType;
 
         if (!Object.values(Types.ConfirmationType).includes(t)) {
             throw new Error(`Invalid confirmation type: ${t}`);
@@ -113,10 +103,7 @@ export class Contracts {
         let hashPromise;
         let confirmationPromise;
 
-        if (
-            t === Types.ConfirmationType.Hash ||
-            t === Types.ConfirmationType.Both
-        ) {
+        if (t === Types.ConfirmationType.Hash || t === Types.ConfirmationType.Both) {
             hashPromise = new Promise((resolve, reject) => {
                 promi.on('error', (error) => {
                     if (hashOutcome === OUTCOMES.INITIAL) {
@@ -140,10 +127,7 @@ export class Contracts {
             });
         }
 
-        if (
-            t === Types.ConfirmationType.Confirmed ||
-            t === Types.ConfirmationType.Both
-        ) {
+        if (t === Types.ConfirmationType.Confirmed || t === Types.ConfirmationType.Both) {
             confirmationPromise = new Promise((resolve, reject) => {
                 promi.on('error', (error) => {
                     if (
@@ -186,7 +170,7 @@ export class Contracts {
             if (this.notifier) {
                 this.notifier.hash(transactionHash);
             }
-            return {transactionHash};
+            return { transactionHash };
         }
 
         if (t === Types.ConfirmationType.Confirmed) {
@@ -205,7 +189,7 @@ export class Contracts {
 
     async callConstantContractFunction(method, options) {
         const m2 = method;
-        const {blockNumber, ...txOptions} = options;
+        const { blockNumber, ...txOptions } = options;
         return m2.call(txOptions, blockNumber);
     }
 

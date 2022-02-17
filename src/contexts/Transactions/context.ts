@@ -1,5 +1,5 @@
-import {createContext} from 'react';
-import {Transaction, TransactionsMap} from './types';
+import { createContext } from 'react';
+import { Transaction, TransactionsMap } from './types';
 
 interface TransactionsContext {
     transactions: TransactionsMap;
@@ -8,6 +8,5 @@ interface TransactionsContext {
 
 export default createContext<TransactionsContext>({
     transactions: {},
-    onAddTransaction: (tx: Transaction) => {
-    },
+    onAddTransaction: (tx: Transaction) => {},
 });

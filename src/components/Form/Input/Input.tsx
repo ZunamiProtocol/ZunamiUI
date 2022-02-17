@@ -1,7 +1,7 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import './Input.scss';
-import BigNumber from "bignumber.js";
-import {getFullDisplayBalance} from "../../../utils/formatbalance";
+import BigNumber from 'bignumber.js';
+import { getFullDisplayBalance } from '../../../utils/formatbalance';
 
 interface InputProps {
     name: string;
@@ -37,10 +37,12 @@ export const Input = (props: InputProps): JSX.Element => {
 
     return (
         <div className={'Input'}>
-            <img src={`${props.name}.svg`} alt=""/>
+            <img src={`${props.name}.svg`} alt="" />
             <div className={'coinName'}>{props.name}</div>
             <div className="divider"></div>
-            <span className="max" onClick={handleSelectMax}>MAX</span>
+            <span className="max" onClick={handleSelectMax}>
+                MAX
+            </span>
             <span className="balance">{displayBalance}</span>
             <div className="divider"></div>
             <input

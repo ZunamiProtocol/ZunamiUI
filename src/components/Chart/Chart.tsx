@@ -15,17 +15,19 @@ interface ChartProps {
 }
 
 function renderStratList(items: Array<DataItem>) {
-    return items.map((item, index) => 
+    return items.map((item, index) => (
         <div key={index} className={'PieChart__StratList__Item'}>
             <div
                 className={'PieChart__StratList__Item__Circle'}
                 style={{ background: item.color }}
             />
             <div className={'PieChart__StratList__Item__Name'}>
-                <a target='blank' href={`https://etherscan.io/token/${item.link}`}>{item.title}</a>
+                <a target="blank" href={`https://etherscan.io/token/${item.link}`}>
+                    {item.title}
+                </a>
             </div>
         </div>
-    )
+    ));
 }
 
 function screenWidthToChartWidth() {
@@ -69,14 +71,12 @@ export const Chart = (props: ChartProps): JSX.Element => {
                 />
                 <div className={'PieChartWrapper__Legend'}>
                     <div className={'PieChartWrapper__Legend__Counter'}>{props.data.length}</div>
-                    <div className={'PieChartWrapper__Legend__Label'}>{props.data.length > 1 ? 'strategies' : 'strategy'}</div>
+                    <div className={'PieChartWrapper__Legend__Label'}>
+                        {props.data.length > 1 ? 'strategies' : 'strategy'}
+                    </div>
                 </div>
             </div>
-            <div className={'PieChart__StratList'}>
-                {
-                    renderStratList(props.data)
-                }
-            </div>
+            <div className={'PieChart__StratList'}>{renderStratList(props.data)}</div>
         </div>
     );
 };

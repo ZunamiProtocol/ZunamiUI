@@ -1,5 +1,5 @@
-import {Col} from 'react-bootstrap';
-import {LinkBlock} from '../LinkBlock/LinkBlock';
+import { Col } from 'react-bootstrap';
+import { LinkBlock } from '../LinkBlock/LinkBlock';
 import { WalletStatus } from '../WalletStatus/WalletStatus';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 import './SideBar.scss';
@@ -15,41 +15,41 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                 <div className={''}>
                     <WalletStatus />
                     <LinkBlock
-                        title='Dashboard'
-                        description=''
+                        title="Dashboard"
+                        description=""
                         url={''}
-                        icon='/menu-dashboard.svg'
+                        icon="/menu-dashboard.svg"
                     />
                     <LinkBlock
-                        title='Deposit & Withdraw'
-                        description='Click for deposit'
+                        title="Deposit & Withdraw"
+                        description="Click for deposit"
                         url={'deposit-and-withdraw'}
-                        icon='/menu-deposit-and-withdraw.svg'
+                        icon="/menu-deposit-and-withdraw.svg"
                     />
                     <LinkBlock
-                        title='Lockdrop'
-                        description='Click for withdraw'
+                        title="Lockdrop"
+                        description="Click for withdraw"
                         url={'lockdrop'}
-                        icon='/menu-lockdrop.svg'
+                        icon="/menu-lockdrop.svg"
                         testnet={true}
                     />
                     <LinkBlock
-                        title='Staking ZUN'
-                        description='Click for withdraw'
+                        title="Staking ZUN"
+                        description="Click for withdraw"
                         url={'staking'}
-                        icon='/menu-staking.svg'
+                        icon="/menu-staking.svg"
                         testnet={true}
                     />
                     <LinkBlock
-                        title='DAO'
-                        description='Click for withdraw'
+                        title="DAO"
+                        description="Click for withdraw"
                         url={'dao'}
-                        icon='/menu-dao.svg'
+                        icon="/menu-dao.svg"
                         soon={true}
                     />
                 </div>
                 <div className="Sidebar__footer">
-                    <ThemeSwitcher/>
+                    <ThemeSwitcher />
                     <a href="/how-to-use">How to use?</a>
                     <a href="/faq">FAQ</a>
                 </div>

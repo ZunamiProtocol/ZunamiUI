@@ -9,7 +9,7 @@ interface ClaimItemProps {
 export const ClaimItem = (props: ClaimItemProps): JSX.Element => {
     const usdFormatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'USD'
+        currency: 'USD',
     });
 
     const numberFormatter = new Intl.NumberFormat();
@@ -27,7 +27,9 @@ export const ClaimItem = (props: ClaimItemProps): JSX.Element => {
                             props.onClaim();
                         }
                     }}
-                >Claim</button>
+                >
+                    Claim
+                </button>
             </div>
         </div>
     );

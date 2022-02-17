@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import './Input.scss';
 
 interface InputProps {
@@ -23,7 +23,9 @@ export const Input = (props: InputProps): JSX.Element => {
                         props.onMaxClick();
                     }
                 }}
-            >max</div>
+            >
+                max
+            </div>
             <div className="divider"></div>
             <input
                 inputMode={'decimal'}

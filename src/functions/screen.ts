@@ -10,8 +10,4 @@ function is1920() {
     return document.body.clientWidth >= 1920;
 }
 
-export {
-    is1024,
-    is1440,
-    is1920,
-};
+export { is1024, is1440, is1920 };

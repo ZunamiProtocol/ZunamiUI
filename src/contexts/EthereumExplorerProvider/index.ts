@@ -1,1 +1,1 @@
-export {Context, default} from './EthereumExplorerProvider';
+export { Context, default } from './EthereumExplorerProvider';

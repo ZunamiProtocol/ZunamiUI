@@ -1,14 +1,14 @@
 import BigNumber from 'bignumber.js';
-import {useEffect, useState} from 'react';
-import {useWallet} from 'use-wallet';
-import {getMasterChefContract} from '../sushi/utils';
-import useSushi from "./useSushi";
-import {getAllowance} from "../utils/erc20";
-import {BIG_ZERO, daiAddress, usdcAddress, usdtAddress} from "../utils/formatbalance";
+import { useEffect, useState } from 'react';
+import { useWallet } from 'use-wallet';
+import { getMasterChefContract } from '../sushi/utils';
+import useSushi from './useSushi';
+import { getAllowance } from '../utils/erc20';
+import { BIG_ZERO, daiAddress, usdcAddress, usdtAddress } from '../utils/formatbalance';
 
 const useAllowance = (tokenAddress: string) => {
     const [allowance, setAllowance] = useState(BIG_ZERO);
-    const {account, ethereum} = useWallet();
+    const { account, ethereum } = useWallet();
     const sushi = useSushi();
     const masterChefContract = getMasterChefContract(sushi);
 
@@ -19,7 +19,7 @@ const useAllowance = (tokenAddress: string) => {
                 tokenAddress,
                 masterChefContract,
                 // @ts-ignore
-                account,
+                account
             );
             setAllowance(new BigNumber(allowance));
         };
@@ -36,10 +36,9 @@ const useAllowance = (tokenAddress: string) => {
 
 export default useAllowance;
 
-
 export const useAllowanceStables = () => {
     const [allowance, setAllowance] = useState([BIG_ZERO, BIG_ZERO, BIG_ZERO]);
-    const {account, ethereum} = useWallet();
+    const { account, ethereum } = useWallet();
     const sushi = useSushi();
     const masterChefContract = getMasterChefContract(sushi);
 
@@ -50,26 +49,27 @@ export const useAllowanceStables = () => {
                 daiAddress,
                 masterChefContract,
                 // @ts-ignore
-                account,
+                account
             );
             const allowanceUsdc = await getAllowance(
                 ethereum,
                 usdcAddress,
                 masterChefContract,
                 // @ts-ignore
-                account,
+                account
             );
             const allowanceUsdt = await getAllowance(
                 ethereum,
                 usdtAddress,
                 masterChefContract,
                 // @ts-ignore
-                account,
+                account
             );
-            const data =
-                [new BigNumber(allowanceDai),
-                    new BigNumber(allowanceUsdc),
-                    new BigNumber(allowanceUsdt)];
+            const data = [
+                new BigNumber(allowanceDai),
+                new BigNumber(allowanceUsdc),
+                new BigNumber(allowanceUsdt),
+            ];
             // @ts-ignore
             setAllowance(data);
         };
@@ -83,4 +83,3 @@ export const useAllowanceStables = () => {
 
     return allowance;
 };
-

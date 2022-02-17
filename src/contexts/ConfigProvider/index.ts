@@ -1,1 +1,1 @@
-export {Context, default} from './ConfigProvider';
+export { Context, default } from './ConfigProvider';

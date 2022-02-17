@@ -1,7 +1,7 @@
 @import "src/variables";
 
 .Disclaimer {
-    background: #FFF5E9;
+    background: #fff5e9;
     border-radius: 5px;
     color: #767676;
     display: flex;
@@ -10,7 +10,6 @@
 
     &__icon {
         @media (min-width: $media375) {
-
         }
 
         @media screen and (min-width: $media1024) {

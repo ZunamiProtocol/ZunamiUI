@@ -16,8 +16,8 @@
     thead {
         tr {
             td {
-                border-top: 1px solid #F4EFE1;
-                border-bottom: 1px solid #F4EFE1;
+                border-top: 1px solid #f4efe1;
+                border-bottom: 1px solid #f4efe1;
                 font-size: 12px;
                 line-height: 16px;
                 color: #636363;
@@ -37,16 +37,16 @@
                 button {
                     width: 103px;
                     height: 27px;
-                    background: #FFF7ED;
+                    background: #fff7ed;
                     border-radius: 5px;
                     font-size: 12px;
                     line-height: 16px;
                     text-align: center;
-                    color: #BD7D00;
+                    color: #bd7d00;
 
                     &.disabled {
-                        background: #F9F9F9;
-                        color: #DCDCDC;
+                        background: #f9f9f9;
+                        color: #dcdcdc;
                     }
                 }
             }

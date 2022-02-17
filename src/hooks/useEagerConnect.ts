@@ -1,9 +1,8 @@
-import {useEffect} from "react";
+import { useEffect } from 'react';
 
 const useEagerConnect = (account: string, connect: any, ethereum: any) => {
-
     useEffect(() => {
-        const connectorId = window.localStorage.getItem("METAMASK_ACCOUNT");
+        const connectorId = window.localStorage.getItem('METAMASK_ACCOUNT');
 
         if (!account && connectorId) {
             connect('injected');
@@ -11,7 +10,7 @@ const useEagerConnect = (account: string, connect: any, ethereum: any) => {
             if (!eth) {
                 console.log('No metamask');
             }
-// requestNetworkSwitch();
+            // requestNetworkSwitch();
         }
     }, []);
 };

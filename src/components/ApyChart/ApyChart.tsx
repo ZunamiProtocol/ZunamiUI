@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import './ApyChart.scss';
 import {
     Chart as ChartJS,
@@ -9,19 +9,11 @@ import {
     Title,
     Tooltip,
     Legend,
-  } from 'chart.js';
+} from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { format } from "date-fns";
+import { format } from 'date-fns';
 
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
-);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 interface ChartProps {
     data: Array<any>;
@@ -33,7 +25,7 @@ interface RangeItem {
     title: String;
 }
 
-function onRangeChange(e: any, handler: Function|undefined) {
+function onRangeChange(e: any, handler: Function | undefined) {
     const range = e.target.dataset.range;
 
     if (handler) {
@@ -41,8 +33,12 @@ function onRangeChange(e: any, handler: Function|undefined) {
     }
 }
 
-function renderRanges(items: Array<RangeItem>, currentState: string, onChangeHandler: Function|undefined) {
-    return items.map((item: RangeItem, index: number) =>
+function renderRanges(
+    items: Array<RangeItem>,
+    currentState: string,
+    onChangeHandler: Function | undefined
+) {
+    return items.map((item: RangeItem, index: number) => (
         <span
             key={index}
             className={currentState === item.value ? 'active' : ''}
@@ -50,8 +46,10 @@ function renderRanges(items: Array<RangeItem>, currentState: string, onChangeHan
             onClick={(e) => {
                 onRangeChange(e, onChangeHandler);
             }}
-        >{item.title}</span>
-    );
+        >
+            {item.title}
+        </span>
+    ));
 }
 
 const ranges = [
@@ -70,24 +68,24 @@ const chartOptions = {
     },
     scales: {
         x: {
-          grid: {
-            display: false,
-          }
+            grid: {
+                display: false,
+            },
         },
         y: {
             grid: {
-              display: false,
+                display: false,
             },
             min: 0,
             max: 18,
             ticks: {
                 //@ts-ignore
-                callback: function(val) {
-                  return `${val}%`;
+                callback: function (val) {
+                    return `${val}%`;
                 },
                 stepSize: 3,
-            }
-        }
+            },
+        },
     },
 };
 
@@ -112,15 +110,13 @@ export const ApyChart = (props: ChartProps): JSX.Element => {
             <div className="ApyChart__Header">
                 <div className="ApyChart__Title">Historical Realised APY</div>
                 <div className="ApyChart__Selector">
-                    {
-                        renderRanges(ranges, currentRange, (e: string) => {
-                            setCurrentRange(e);
+                    {renderRanges(ranges, currentRange, (e: string) => {
+                        setCurrentRange(e);
 
-                            if (props.onRangeChange) {
-                                props.onRangeChange(e);
-                            }
-                        })
-                    }
+                        if (props.onRangeChange) {
+                            props.onRangeChange(e);
+                        }
+                    })}
                 </div>
             </div>
             <Line className="ApyChart__Chart" options={chartOptions} data={data} />

@@ -1,22 +1,24 @@
 @import "src/variables";
 
 @font-face {
-    font-family: 'Vela Sans Regular';
-    src: url('./fonts/velasans-regular-webfont.woff2') format('woff2'),
-         url('./fonts/velasans-regular-webfont.woff') format('woff');
+    font-family: "Vela Sans Regular";
+    src: url("./fonts/velasans-regular-webfont.woff2") format("woff2"),
+        url("./fonts/velasans-regular-webfont.woff") format("woff");
     font-weight: normal;
     font-style: normal;
 }
 
-html, body, #root {
+html,
+body,
+#root {
     height: 100%;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
-    font-family: 'Vela Sans Regular';
+    font-family: "Vela Sans Regular";
 }
 
 body {
-    background-color: #FFFCF5 !important;
+    background-color: #fffcf5 !important;
 }
 
 #root > .container {
@@ -56,8 +58,6 @@ body {
     }
 }
 
-
-
 nav {
     .Disclaimer {
         @media (min-width: $media375) {
@@ -83,7 +83,7 @@ nav {
 .copyright {
     font-style: normal;
     font-weight: normal;
-    color: #DEDEDE;
+    color: #dedede;
     display: block;
 
     @media (min-width: $media1024) {
@@ -102,13 +102,13 @@ nav {
 }
 
 .zun-button {
-    background: linear-gradient(87.51deg, #F74E02 12.85%, #F9A412 94.75%);
+    background: linear-gradient(87.51deg, #f74e02 12.85%, #f9a412 94.75%);
     border-radius: 5px;
     text-align: center;
-    color: #FFFFFF;
+    color: #ffffff;
     border: none;
     cursor: pointer;
-    transition: all .3s ease-in-out;
+    transition: all 0.3s ease-in-out;
 
     @media (min-width: $media1024) {
         width: 126px;
@@ -127,14 +127,14 @@ nav {
 
 button:disabled,
 button.disabled {
-    opacity: .5;
+    opacity: 0.5;
     pointer-events: none;
 }
 
 input[type="checkbox"] {
     appearance: none;
-    background: #FFFAF3;
-    border: 1px solid #F4EFE1;
+    background: #fffaf3;
+    border: 1px solid #f4efe1;
     border-radius: 5px;
     position: relative;
 
@@ -153,11 +153,11 @@ input[type="checkbox"] {
 }
 
 .tooltip-arrow::before {
-    border-right-color: #F8F8F8 !important;
+    border-right-color: #f8f8f8 !important;
 }
 
 .tooltip-inner {
-    background: #F8F8F8 !important;
+    background: #f8f8f8 !important;
     border-radius: 5px !important;
     color: #898989 !important;
     padding: 10px 18px !important;
@@ -168,7 +168,7 @@ input[type="checkbox"] {
 
 .Sidebar {
     .TestnetLabel {
-        background: linear-gradient(262.84deg, #FFF3E9 -27.39%, #FEF5E8 71.59%);
+        background: linear-gradient(262.84deg, #fff3e9 -27.39%, #fef5e8 71.59%);
         color: $primary-color;
 
         @media (min-width: $media1024) {
@@ -236,7 +236,7 @@ body.dark {
     background-color: #000 !important;
 
     .WalletStatus__Icon path:nth-child(1) {
-        fill: #3C3C3C;
+        fill: #3c3c3c;
     }
 
     .WalletStatus__Icon path:nth-child(2) {
@@ -274,7 +274,7 @@ body.dark {
     .hist-apy-col,
     .InfoBlock,
     .operation-col {
-        background: #1E1E1E;
+        background: #1e1e1e;
     }
 
     .ComingSoonPlaceholder {
@@ -283,7 +283,7 @@ body.dark {
 
     .Disclaimer,
     .TestnetLabel {
-        background: linear-gradient(262.84deg, #1E1E1E -27.39%, #2C2C2C 71.59%);
+        background: linear-gradient(262.84deg, #1e1e1e -27.39%, #2c2c2c 71.59%);
         color: #fff;
     }
 
@@ -306,7 +306,11 @@ body.dark {
 
     .Sidebar {
         .TestnetLabel {
-            background: linear-gradient(262.84deg, #1E1E1E -27.39%, #2C2C2C 71.59%);
+            background: linear-gradient(
+                262.84deg,
+                #1e1e1e -27.39%,
+                #2c2c2c 71.59%
+            );
 
             span {
                 color: $primary-color;
@@ -315,21 +319,22 @@ body.dark {
     }
 
     .InfoBlock_colorful {
-        background: linear-gradient(262.84deg, #1E1E1E -27.39%, #2C2C2C 71.59%);
+        background: linear-gradient(262.84deg, #1e1e1e -27.39%, #2c2c2c 71.59%);
     }
 
     .WalletStatus {
-        background: linear-gradient(0.02deg, #1E1E1E 76.02%, #282828 95.61%);
+        background: linear-gradient(0.02deg, #1e1e1e 76.02%, #282828 95.61%);
     }
 
     .TestnetPlaceholder {
-        h1, a {
+        h1,
+        a {
             color: #fff;
         }
     }
 
     .WelcomeCarousel {
-        background: linear-gradient(0.02deg, #1E1E1E 76.02%, #282828 95.61%);
+        background: linear-gradient(0.02deg, #1e1e1e 76.02%, #282828 95.61%);
 
         h1 {
             color: #ffffff;
@@ -342,9 +347,14 @@ body.dark {
         }
 
         .carousel-item {
-            background: linear-gradient(262.84deg, #1E1E1E -27.39%, #2C2C2C 71.59%);
+            background: linear-gradient(
+                262.84deg,
+                #1e1e1e -27.39%,
+                #2c2c2c 71.59%
+            );
 
-            h1, span {
+            h1,
+            span {
                 color: #ffffff;
             }
         }
@@ -361,11 +371,11 @@ body.dark {
         }
 
         .ActionSelector__Action {
-            background-color:  $dark-panel-bg;
+            background-color: $dark-panel-bg;
         }
 
         .Input {
-            background-color: #2B2B2B;
+            background-color: #2b2b2b;
             border-color: $dark-border-color;
 
             input {
@@ -442,7 +452,7 @@ body.dark {
         }
 
         .DepositStory__Table tbody tr td button {
-            background: #2A2A2A;
+            background: #2a2a2a;
             color: #878787;
 
             &.disabled {

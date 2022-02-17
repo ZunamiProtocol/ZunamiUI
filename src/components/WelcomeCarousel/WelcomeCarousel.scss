@@ -1,7 +1,7 @@
 @import "src/variables";
 
 .WelcomeCarousel {
-    background: linear-gradient(0.02deg, #FFFFFF 76.02%, #FDF1DE 95.61%);
+    background: linear-gradient(0.02deg, #ffffff 76.02%, #fdf1de 95.61%);
     height: 100%;
 
     @media screen and (min-width: $media1024) {
@@ -65,7 +65,11 @@
             }
 
             .carousel-item {
-                background: linear-gradient(262.84deg, #F9F9F9 -27.39%, #FBFBFB 71.59%);
+                background: linear-gradient(
+                    262.84deg,
+                    #f9f9f9 -27.39%,
+                    #fbfbfb 71.59%
+                );
                 border-radius: 5px;
                 align-items: center;
                 justify-content: flex-start;
@@ -258,14 +262,18 @@
 
             .carousel-control-prev,
             .carousel-control-next {
-                background: #E6E6E6;
+                background: #e6e6e6;
                 border-radius: 100%;
                 opacity: 1;
                 position: absolute;
                 top: 50%;
 
                 &:hover {
-                    background: linear-gradient(66.3deg, #F84F03 13.42%, #FAA413 84.22%);
+                    background: linear-gradient(
+                        66.3deg,
+                        #f84f03 13.42%,
+                        #faa413 84.22%
+                    );
                 }
 
                 @media screen and (min-width: $media1024) {
@@ -305,12 +313,12 @@
                 }
 
                 button {
-                    background: #DBDBDB;
+                    background: #dbdbdb;
                     border: none;
                     border-radius: 100%;
 
-                    &.active{
-                        background: #C4C4C4;
+                    &.active {
+                        background: #c4c4c4;
                     }
 
                     @media screen and (min-width: $media1024) {

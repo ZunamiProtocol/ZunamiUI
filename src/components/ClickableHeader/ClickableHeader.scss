@@ -30,7 +30,7 @@
         }
 
         @media screen and (min-width: $media1024) {
-            margin-right:0;
+            margin-right: 0;
         }
     }
 
@@ -54,7 +54,7 @@
     }
 
     span {
-        font-family: 'Anderson Grotesk';
+        font-family: "Anderson Grotesk";
         font-size: 25px;
         margin-left: 35px;
 
@@ -85,7 +85,7 @@
     @media screen and (min-width: $media1024) {
         height: 85px;
         margin: 10px 20px 0 20px;
-        background-color: #FAFAFA;
+        background-color: #fafafa;
     }
 
     @media screen and (min-width: $media1440) {

@@ -12,12 +12,12 @@
     }
 
     &__Action {
-        background-color: #FFF7ED;
+        background-color: #fff7ed;
         border-radius: 5px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        color: #E0B02B;
+        color: #e0b02b;
         cursor: pointer;
 
         @media screen and (min-width: $media1024) {
@@ -38,7 +38,6 @@
             line-height: 19px;
         }
 
-
         @media screen and (min-width: $media1920) {
             width: 266px;
             height: 79px;
@@ -49,7 +48,11 @@
         }
 
         &__Active {
-            background: linear-gradient(88.87deg, #F74F02 15.93%, #F9A211 93.44%);
+            background: linear-gradient(
+                88.87deg,
+                #f74f02 15.93%,
+                #f9a211 93.44%
+            );
             color: #fff;
         }
 

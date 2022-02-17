@@ -3,8 +3,8 @@
 .Staking__Locked__Token {
     width: 406px;
     height: 54px;
-    background: #FFFAF3;
-    border: 1px solid #F4EFE1;
+    background: #fffaf3;
+    border: 1px solid #f4efe1;
     box-sizing: border-box;
     border-radius: 5px;
     margin-top: 18px;
@@ -57,8 +57,8 @@
     }
 
     input[type="text"] {
-        background: #FFFAF3;
-        border: 1px solid #F4EFE1;
+        background: #fffaf3;
+        border: 1px solid #f4efe1;
         border-radius: 5px;
 
         @media screen and (min-width: $media1024) {
@@ -79,7 +79,7 @@
     }
 
     .divider {
-        background-color: #F4EFE1;
+        background-color: #f4efe1;
 
         @media screen and (min-width: $media1024) {
             height: 22px;
@@ -91,13 +91,12 @@
             height: 28px;
             width: 2px;
         }
-
     }
 
     .max {
-        border: 1px solid #F95404;
+        border: 1px solid #f95404;
         border-radius: 3px;
-        color: #F95404;
+        color: #f95404;
         text-transform: uppercase;
         display: flex;
         align-items: center;

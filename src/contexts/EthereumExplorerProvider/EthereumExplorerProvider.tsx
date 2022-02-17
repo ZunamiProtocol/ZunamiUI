@@ -1,17 +1,16 @@
-import React, {createContext, useEffect, useState} from 'react';
-import {NetworkConnector} from './NetworkConnector';
+import React, { createContext, useEffect, useState } from 'react';
+import { NetworkConnector } from './NetworkConnector';
 
 import config from './../../config';
 
-const {INFURA_URL, CHAIN_ID} = config;
+const { INFURA_URL, CHAIN_ID } = config;
 
-
-const getProvider = async ({chainId}: { chainId: number }) => {
+const getProvider = async ({ chainId }: { chainId: number }) => {
     const connector = new NetworkConnector({
         urls: {
             [chainId]: INFURA_URL,
         },
-        defaultChainId: CHAIN_ID
+        defaultChainId: CHAIN_ID,
     });
     await connector.activate();
     const provider = await connector.getProvider();
@@ -23,26 +22,22 @@ interface ExplorerContext {
 }
 
 export const Context = createContext<ExplorerContext>({
-    provider: undefined
+    provider: undefined,
 });
 
-const EthereumExplorerProvider: React.FC<{ chainId?: number }> = ({children, chainId = 1}) => {
+const EthereumExplorerProvider: React.FC<{ chainId?: number }> = ({ children, chainId = 1 }) => {
     const [provider, setProvider] = useState<any>(null);
     const createProvider = async (chainId: number) => {
-        const createdProvider = await getProvider({chainId});
+        const createdProvider = await getProvider({ chainId });
         setProvider(createdProvider);
     };
     useEffect(() => {
         createProvider(chainId);
     }, [chainId]);
     const context: ExplorerContext = {
-        provider
+        provider,
     };
-    return (
-        <Context.Provider value={context}>
-            {children}
-        </Context.Provider>
-    );
+    return <Context.Provider value={context}>{children}</Context.Provider>;
 };
 
 export default EthereumExplorerProvider;

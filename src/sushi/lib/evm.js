@@ -16,20 +16,15 @@
 
 */
 
-
 const REQUIRE_MSG = 'Returned error: VM Exception while processing transaction: revert';
 const ASSERT_MSG = 'Returned error: VM Exception while processing transaction: invalid opcode';
 
 export class EVM {
-    constructor(
-        provider,
-    ) {
+    constructor(provider) {
         this.provider = provider;
     }
 
-    setProvider(
-        provider,
-    ) {
+    setProvider(provider) {
         this.provider = provider;
     }
 
@@ -104,10 +99,7 @@ export class EVM {
                 }
             };
 
-            this.provider.send(
-                args,
-                callback,
-            );
+            this.provider.send(args, callback);
         });
     }
 
@@ -118,7 +110,10 @@ export class EVM {
         const matchedIndex = message.search(expected_error_msg);
         let matchedString = message;
         if (matchedIndex === 0) {
-            matchedString = message.substring(matchedIndex, matchedIndex + expected_error_msg.length);
+            matchedString = message.substring(
+                matchedIndex,
+                matchedIndex + expected_error_msg.length
+            );
         }
         expect(matchedString).toEqual(expected_error_msg);
     }
@@ -145,6 +140,4 @@ export class EVM {
             this.assertCertainError(e, ASSERT_MSG);
         }
     }
-
-
 }
