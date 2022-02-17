@@ -1,79 +1,6 @@
 @import "src/variables";
 
-
 .Form {
-    .ActionSelector {
-        display: flex;
-
-        @media screen and (min-width: $media1024) {
-            margin-bottom: 13px;
-        }
-
-        @media screen and (min-width: $media1440) {
-            margin-bottom: 22px;
-        }
-
-        &__Action {
-            background-color: #FFF7ED;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: #E0B02B;
-            cursor: pointer;
-
-            @media screen and (min-width: $media1024) {
-                width: 208px;
-                height: 54px;
-                padding: 0 13px;
-                font-size: 12px;
-                line-height: 16px;
-                margin-right: 10px;
-            }
-
-            @media screen and (min-width: $media1440) {
-                width: 236px;
-                height: 70px;
-                margin-right: 10px;
-                padding: 0 20px;
-                font-size: 14px;
-                line-height: 19px;
-            }
-
-
-            @media screen and (min-width: $media1920) {
-                width: 266px;
-                height: 79px;
-                margin-right: 12px;
-                padding: 0 23px;
-                font-size: 16px;
-                line-height: 22px;
-            }
-
-            &__Active {
-                background: linear-gradient(88.87deg, #F74F02 15.93%, #F9A211 93.44%);
-                color: #fff;
-            }
-
-            svg {
-                @media screen and (min-width: $media1024) {
-                    width: 41px;
-                    height: 28px;
-                }
-
-                @media screen and (min-width: $media1024) {
-                    width: 54px;
-                    height: 37px;
-                }
-
-                @media screen and (min-width: $media1920) {
-                    width: 60px;
-                    height: 42px;
-                }
-            }
-        }
-    }
-
     .InputInfo {
         display: flex;
     }
@@ -111,75 +38,9 @@
             font-size: 14px;
             line-height: 19px;
         }
-
-        &.withdraw-all {
-            background: #FFF7ED;
-            color: #BD7D00;
-
-            @media screen and (min-width: $media1440) {
-                width: 120px;
-                height: 36px;
-                margin-left: 15px;
-            }
-
-            @media screen and (min-width: $media1920) {
-                width: 124px;
-                height: 40px;
-                margin-left: 15px;
-            }
-        }
     }
 
     .deposit-button-wrapper {
         display: flex;
-
-        .direct-deposit {
-            display: flex;
-            align-items: center;
-
-            @media screen and (min-width: $media1440) {
-                margin-left: 15px;
-            }
-
-            @media screen and (min-width: $media1920) {
-                margin-left: 35px;
-            }
-
-            input[type="checkbox"] {
-                @media screen and (min-width: $media1024) {
-                    width: 17px;
-                    height: 17px;
-                    margin: 9px 0 0 23px;
-                }
-
-                @media screen and (min-width: $media1440) {
-                    width: 21px;
-                    height: 21px;
-                    margin: 9px 0 0 0;
-                }
-            }
-
-            span {
-                color: #636363;
-
-                @media screen and (min-width: $media1024) {
-                    margin: 9px 12px 0 12px;
-                    font-size: 12px;
-                    line-height: 16px;
-                }
-
-                @media screen and (min-width: $media1440) {
-                    margin: 10px 12px 0 12px;
-                    font-size: 12px;
-                    line-height: 16px;
-                }
-            }
-
-            svg {
-                @media screen and (min-width: $media1440) {
-                    margin-top: 8px;
-                }
-            }
-        }
     }
 }
