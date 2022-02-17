@@ -6,326 +6,169 @@ $media1024: 1024px;
 $media435: 435px;
 
 .LinkBlock {
-    background-color: #FAFAFA;
-    border-radius: $border-radius;
     cursor: pointer;
     display: flex;
-    flex-direction: column;
-    font-family: 'Anderson Grotesk';
-    height: 152px;
-    justify-content: space-around;
-    margin-bottom: 20px;
-    position: relative;
     justify-content: flex-start;
+    align-items: center;
 
-    &:hover {
-        background-color: $on-hover-secondary-color;
+    @media screen and (min-width: $media1024) {
+        height: 22px;
+        margin-bottom: 21px;
+    }
+
+    @media screen and (min-width: $media1920) {
+        height: 30px;
+        margin-bottom: 21px;
     }
 
     &__active {
-        &::after {
-            content: "";
+        &::before {
             position: absolute;
-            width: 4px;
-            height: 116px;
-            display: block;
-            background-color: $primary-color;
-            right: -25px;
-            border-radius: 3px;
+            content: "";
+            background-color: #F95A05;
+        }
 
-            @media screen and (min-width: $media1024) {
-                right: -32px;
-                height: 85px;
-                width: 4px;
-            }
-
-            @media screen and (min-width: $media1440) {
-                right: -28px;
-                height: 99px;
-                width: 4px;
-            }
-
-            @media screen and (min-width: $media1920) {
-                width: 6px;
-                height: 152px;
-                right: -39px;
+        @media screen and (min-width: $media1440) {
+            &::before {
+                width: 2px;
+                height: 22px;
             }
         }
-    }
 
-    @media screen and (min-width: $media375) {
-        height: 113px;
-        margin-left: 5px;
-        margin-right: 5px;
-        overflow: hidden;
+        @media screen and (min-width: $media1920) {
+            &::before {
+                width: 2px;
+                height: 30px;
+            }
+        }
 
-        &::after {
-            display: none;
+        .LinkBlock__title {
+            color: $primary-color;
         }
     }
 
-    @media screen and (min-width: $media1024) {
-        margin: 0 auto 15px 5px;
-        border-radius: 17px;
-        overflow: visible;
+    &__soon {
+        pointer-events: none;
+        cursor: not-allowed;
 
-        &::after {
-            display: block;
+        .LinkBlock__title {
+            color: rgba(173, 173, 173, 0.53);
         }
-    }
 
-    @media screen and (min-width: $media1440) {
-        height: 150px;
-        margin-bottom: 15px;
-        border-radius: 18px;
-        margin-left: 0;
-
-        &::after {
-            display: block;
+        .LinkBlock__icon {
+            opacity: .3;
         }
-    }
-
-    @media screen and (max-width: $media1600) {
-        height: 150px;
-
-        &::after {
-            display: block;
-        }
-    }
-
-    @media screen and (min-width: $media1920) {
-        border-radius: 25px;
     }
 
     &__title {
-        color: #000000;
-        font-size: 25px;
-        margin-left: 36px;
+        color: #636363;
+
+        @media screen and (min-width: $media1024) {
+            font-size: 12px;
+            line-height: 16px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-size: 16px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            font-size: 18px;
+            line-height: 25px;
+        }
     }
 
     &__icon {
-        position: absolute;
-        right: 0;
-        top: 10px;
-        pointer-events: none;
-        opacity: 0.1;
-    }
-
-    &__selected {
-        background-color: #F64A00;
-
-        .LinkBlock__title {
-            color: #ffffff;
-        }
-
-        &:hover {
-            background-color: $on-hover-color;
-        }
-    }
-
-    @media (min-width: $media375) {
-        height: 104px;
-
-
-        &:not(.LinkBlock__selected) {
-            height: 69px;
-        }
-
-        &__title {
-            font-size: 16px;
-            margin: 20px 0 0 17px;
-        }
-
-        &__description {
-            font-size: 14px;
-            color: #e4e4e4;
-            margin: auto 0 10px 17px;
-        }
-
-        &[data-url="/deposit"] {
-            .LinkBlock__icon {
-                width: 100px;
-                height: 71px;
-                margin-top: -10px;
-                margin-right: -20px;
-            }
-        }
-
-        &[data-url="/withdraw"] {
-            .LinkBlock__icon {
-                width: 89px;
-                height: 68px;
-                margin-top: -10px;
-                margin-right: 0;
-            }
-        }
-    }
-
-    @media screen and (min-width: $media1024) {
-        height: 85px;
-        width: 213px;
-
-        &:not(.LinkBlock__selected) {
-            height: 85px;
-        }
-
-        &__title {
-            font-size: 14px;
-            margin: 19px 0 0 14px;
-        }
-
-        &__description {
-            font-size: 12px;
-            margin: auto 0 10px 14px;
-        }
-
-        &[data-url="/"] {
-            .LinkBlock__icon {
-                width: 69px;
-                height: 67px;
-                margin-top: 2px;
-                margin-right: 7px;
-            }
-        }
-
-        &[data-url="/deposit"] {
-            .LinkBlock__icon {
-                width: 81px;
-                height: 56px;
-                margin-top: 0;
-                margin-right: 0;
-            }
-        }
-
-        &[data-url="/withdraw"] {
-            .LinkBlock__icon {
-                width: 75px;
-                height: 56px;
-                margin-top: 0;
-                margin-right: 0;
-            }
-        }
-    }
-
-    @media screen and (min-width: $media1440) {
-        height: 99px !important;
-        width: 249px;
-
-        &__title {
-            font-size: 16px;
-            margin: 20px 0 0 20px;
-        }
-
-        &__description {
-            font-size: 14px;
-            margin: auto 0 10px 20px;
-        }
-
-        &__icon {
-            width: 120px;
+        @media screen and (min-width: $media1024) {
+            width: 16px;
             height: auto;
+            margin-right: 10px;
+            margin-left: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        &[data-url="/"] {
-            .LinkBlock__icon {
-                width: 80px;
-                height: 78px;
-                margin-top: 3px;
-                margin-right: 7px;
+        @media screen and (min-width: $media1920) {
+            width: 20px;
+            height: auto;
+            margin-right: 20px;
+            margin-left: 28px;
+        }
+    }
+
+    &[data-url="/"] {
+        .LinkBlock__icon img {
+            @media screen and (min-width: $media1024) {
+                width: 16px;
+                height: 15px;
             }
-        }
 
-        &[data-url="/deposit"] {
-            .LinkBlock__icon {
-                width: 95px;
-                height: 66px;
-                margin-top: 0;
-                margin-right: 0;
+            @media screen and (min-width: $media1440) {
+                width: 17.8px;
+                height: 17.4px;
             }
-        }
 
-        &[data-url="/withdraw"] {
-            .LinkBlock__icon {
-                width: 88px;
-                height: 65px;
-                margin-top: 0;
-                margin-right: 0;
+            @media screen and (min-width: $media1920) {
+                width: 24.5px;
+                height: 24px;
             }
         }
     }
 
-    @media screen and (min-width: $media1920) {
-        width: 408px;
-        height: 152px !important;
-        margin-left: 20px;
+    &[data-url="/deposit-and-withdraw"] {
+        .LinkBlock__icon img {
+            @media screen and (min-width: $media1024) {
+                width: 14.3px;
+                height: 15.1px;
+            }
 
-        &__title {
-            font-size: 25px;
-            margin-left: 25px;
-        }
+            @media screen and (min-width: $media1440) {
+                width: 16px;
+                height: 16.8px;
+            }
 
-        &__description {
-            font-size: 20px;
-            margin-left: 25px;
-            justify-self: flex-end;
-            margin: auto 0 15px 25px;
-        }
-
-        &[data-url="/"] {
-            .LinkBlock__icon_wrapper {
-                overflow: hidden;
-                width: 196px;
-                height: 152px;
-                position: absolute;
-                right: 0;
-                margin-top: 0;
-                margin-right: 0;
-
-                .LinkBlock__icon {
-                    width: 196px;
-                    height: 193px;
-                    margin-top: -25px;
-                    margin-right: 0;
-                }
+            @media screen and (min-width: $media1920) {
+                width: 22px;
+                height: 23px;
             }
         }
+    }
 
-        &[data-url="/deposit"] {
-            .LinkBlock__icon_wrapper {
-                overflow: hidden;
-                width: 267px;
-                height: 152px;
-                position: absolute;
-                right: 0;
-                margin-top: 0;
-                margin-right: 0;
-                border-radius: $border-radius;
+    &[data-url="/lockdrop"] {
+        .LinkBlock__icon img {
+            @media screen and (min-width: $media1024) {
+                width: 11.1px;
+                height: 14px;
+            }
 
-                .LinkBlock__icon {
-                    width: 267px;
-                    height: 205px;
-                    margin-top: -25px;
-                    margin-right: 0;
-                }
+            @media screen and (min-width: $media1440) {
+                width: 13.7px;
+                height: 17.3px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                width: 18.1px;
+                height: 22.8px;
             }
         }
+    }
 
-        &[data-url="/withdraw"] {
-            .LinkBlock__icon_wrapper {
-                overflow: hidden;
-                width: 289px;
-                height: 152px;
-                position: absolute;
-                right: 0;
-                margin-top: 0;
-                margin-right: 0;
+    &[data-url="/staking"] {
+        .LinkBlock__icon img {
+            @media screen and (min-width: $media1024) {
+                width: 12.8px;
+                height: 12.4px;
+            }
 
-                .LinkBlock__icon {
-                    width: 289px;
-                    height: 221px;
-                    margin-top: -7px;
-                    margin-right: 10px;
-                }
+            @media screen and (min-width: $media1440) {
+                width: 13.9px;
+                height: 13.4px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                width: 19.6px;
+                height: 19.17px;
             }
         }
     }
