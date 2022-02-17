@@ -1,4 +1,4 @@
-@import "src/variables";
+@import 'src/variables';
 
 .WalletStatus {
     display: flex;
@@ -10,7 +10,7 @@
         height: 88px;
         padding-left: 17px;
         padding-top: 22px;
-        background: linear-gradient(262.84deg, #FFF8F1 -27.39%, #FFF8ED 71.59%);
+        background: linear-gradient(262.84deg, #fff8f1 -27.39%, #fff8ed 71.59%);
     }
 
     @media screen and (min-width: $media1024) {
@@ -18,9 +18,9 @@
         padding-left: 20px;
         padding-top: 30px;
         background: #fdf1de;
-        background: -moz-linear-gradient(top,  #fdf1de 0%, #ffffff 77%);
-        background: -webkit-linear-gradient(top,  #fdf1de 0%,#ffffff 77%);
-        background: linear-gradient(to bottom,  #fdf1de 0%,#ffffff 77%);
+        background: -moz-linear-gradient(top, #fdf1de 0%, #ffffff 77%);
+        background: -webkit-linear-gradient(top, #fdf1de 0%, #ffffff 77%);
+        background: linear-gradient(to bottom, #fdf1de 0%, #ffffff 77%);
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdf1de', endColorstr='#ffffff',GradientType=0 );
     }
 
@@ -110,7 +110,7 @@
     }
 
     &__Connect {
-        background: linear-gradient(87.51deg, #F74E02 12.85%, #F9A412 94.75%);
+        background: linear-gradient(87.51deg, #f74e02 12.85%, #f9a412 94.75%);
         border-radius: 5px;
         color: #fff;
         border: none;

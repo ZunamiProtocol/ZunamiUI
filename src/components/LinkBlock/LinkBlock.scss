@@ -1,4 +1,4 @@
-@import "src/variables";
+@import 'src/variables';
 
 $media1600: 1600px;
 $media1440: 1440px;
@@ -24,8 +24,8 @@ $media435: 435px;
     &__active {
         &::before {
             position: absolute;
-            content: "";
-            background-color: #F95A05;
+            content: '';
+            background-color: #f95a05;
         }
 
         @media screen and (min-width: $media1440) {
@@ -56,7 +56,7 @@ $media435: 435px;
         }
 
         .LinkBlock__icon {
-            opacity: .3;
+            opacity: 0.3;
         }
     }
 
@@ -97,7 +97,7 @@ $media435: 435px;
         }
     }
 
-    &[data-url="/"] {
+    &[data-url='/'] {
         .LinkBlock__icon img {
             @media screen and (min-width: $media1024) {
                 width: 16px;
@@ -116,7 +116,7 @@ $media435: 435px;
         }
     }
 
-    &[data-url="/deposit-and-withdraw"] {
+    &[data-url='/deposit-and-withdraw'] {
         .LinkBlock__icon img {
             @media screen and (min-width: $media1024) {
                 width: 14.3px;
@@ -135,7 +135,7 @@ $media435: 435px;
         }
     }
 
-    &[data-url="/lockdrop"] {
+    &[data-url='/lockdrop'] {
         .LinkBlock__icon img {
             @media screen and (min-width: $media1024) {
                 width: 11.1px;
@@ -154,7 +154,7 @@ $media435: 435px;
         }
     }
 
-    &[data-url="/staking"] {
+    &[data-url='/staking'] {
         .LinkBlock__icon img {
             @media screen and (min-width: $media1024) {
                 width: 12.8px;

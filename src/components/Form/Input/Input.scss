@@ -1,8 +1,8 @@
-@import "src/variables";
+@import 'src/variables';
 
 .Input {
-    background: #FFFAF3;
-    border: 1px solid #F4EFE1;
+    background: #fffaf3;
+    border: 1px solid #f4efe1;
     border-radius: 5px;
     display: flex;
     align-items: center;
@@ -71,7 +71,7 @@
     }
 
     .divider {
-        background-color: #F4EFE1;
+        background-color: #f4efe1;
 
         @media screen and (min-width: $media1024) {
             height: 21px;
@@ -89,8 +89,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 1px solid #F95404;
-        color: #F95404;
+        border: 1px solid #f95404;
+        color: #f95404;
         cursor: pointer;
 
         @media screen and (min-width: $media1024) {
@@ -119,7 +119,7 @@
     }
 
     .balance {
-        color: #F95404;
+        color: #f95404;
 
         @media screen and (min-width: $media1024) {
             font-size: 12px;
@@ -144,8 +144,8 @@
     }
 
     input {
-        background: #FFFAF3;
-        border: 1px solid #F4EFE1;
+        background: #fffaf3;
+        border: 1px solid #f4efe1;
         box-sizing: border-box;
         border-radius: 5px;
         color: #636363;

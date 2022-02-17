@@ -11,7 +11,7 @@ if ([null, 'default'].indexOf(theme) === -1) {
 
 ReactDOM.render(
     <React.StrictMode>
-        <App/>
+        <App />
     </React.StrictMode>,
     document.getElementById('root')
 );

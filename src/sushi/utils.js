@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js';
-import {ethers} from 'ethers';
-import {contractAddresses} from './lib/constants';
-import {getContract} from "../utils/erc20";
-import {DEFAULT_TOKEN_DECIMAL, USDT_TOKEN_DECIMAL} from "../utils/formatbalance";
+import { ethers } from 'ethers';
+import { contractAddresses } from './lib/constants';
+import { getContract } from '../utils/erc20';
+import { DEFAULT_TOKEN_DECIMAL, USDT_TOKEN_DECIMAL } from '../utils/formatbalance';
 
 BigNumber.config({
     EXPONENTIAL_AT: 1000,
@@ -39,94 +39,73 @@ export const getSushiContract = (sushi) => {
 export const getFarms = (sushi) => {
     return sushi
         ? sushi.contracts.pools.map(
-            ({
-                 pid,
-                 name,
-                 symbol,
-                 icon,
-                 tokenAddress,
-                 tokenSymbol,
-                 tokenContract,
-                 lpAddress,
-                 lpContract,
-             }) => ({
-                pid,
-                id: symbol,
-                name,
-                lpToken: symbol,
-                lpTokenAddress: lpAddress,
-                lpContract,
-                tokenAddress,
-                tokenSymbol,
-                tokenContract,
-                earnToken: 'SUSHI',
-                earnTokenAddress: sushi.contracts.sushi.options.address,
-                icon,
-            }),
-        )
+              ({
+                  pid,
+                  name,
+                  symbol,
+                  icon,
+                  tokenAddress,
+                  tokenSymbol,
+                  tokenContract,
+                  lpAddress,
+                  lpContract,
+              }) => ({
+                  pid,
+                  id: symbol,
+                  name,
+                  lpToken: symbol,
+                  lpTokenAddress: lpAddress,
+                  lpContract,
+                  tokenAddress,
+                  tokenSymbol,
+                  tokenContract,
+                  earnToken: 'SUSHI',
+                  earnTokenAddress: sushi.contracts.sushi.options.address,
+                  icon,
+              })
+          )
         : [];
 };
-
 
 export const approve = async (provider, tokenAddress, masterChefContract, account) => {
     const lpContract = getContract(provider, tokenAddress);
     return lpContract.methods
         .approve(masterChefContract.options.address, ethers.constants.MaxUint256)
-        .send({from: account})
+        .send({ from: account })
         .on('transactionHash', (tx) => {
             return tx.transactionHash;
         });
 };
 
-export const stake = async (
-    masterChefContract,
-    account,
-    dai,
-    usdc,
-    usdt
-) => {
-    return masterChefContract.methods.delegateDeposit(
-        [
+export const stake = async (masterChefContract, account, dai, usdc, usdt) => {
+    return masterChefContract.methods
+        .delegateDeposit([
             new BigNumber(dai).times(DEFAULT_TOKEN_DECIMAL).toString(),
             new BigNumber(usdc).times(USDT_TOKEN_DECIMAL).toString(),
             new BigNumber(usdt).times(USDT_TOKEN_DECIMAL).toString(),
-        ]
-    )
-        .send({from: account})
+        ])
+        .send({ from: account })
         .on('transactionHash', (tx) => {
             // console.log(tx)
             return tx.transactionHash;
         });
 };
 
-export const unstake = async (
-    masterChefContract,
-    account,
-    lpShares,
-    dai,
-    usdc,
-    usdt
-) => {
-    return masterChefContract.methods.delegateWithdrawal(
-        new BigNumber(lpShares).times(DEFAULT_TOKEN_DECIMAL).toString(),
-        [
+export const unstake = async (masterChefContract, account, lpShares, dai, usdc, usdt) => {
+    return masterChefContract.methods
+        .delegateWithdrawal(new BigNumber(lpShares).times(DEFAULT_TOKEN_DECIMAL).toString(), [
             new BigNumber(dai).times(DEFAULT_TOKEN_DECIMAL).toString(),
             new BigNumber(usdc).times(USDT_TOKEN_DECIMAL).toString(),
             new BigNumber(usdt).times(USDT_TOKEN_DECIMAL).toString(),
-        ]
-    )
-        .send({from: account})
+        ])
+        .send({ from: account })
         .on('transactionHash', (tx) => {
             // console.log(tx)
             return tx.transactionHash;
         });
 };
 
-export const getPendingDeposit = async (
-    masterChefContract,
-    account,
-    index
-) => {
+export const getPendingDeposit = async (masterChefContract, account, index) => {
     try {
         return await masterChefContract.methods.accDepositPending(account, index).call();
     } catch (e) {

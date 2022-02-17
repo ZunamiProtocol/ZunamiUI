@@ -9,13 +9,10 @@ function getTheme() {
 /**
  * Saves theme to the local storage
  * @param {string} theme Theme's name
- * @returns 
+ * @returns
  */
 function setTheme(theme: string) {
     return window.localStorage.setItem('theme', theme);
 }
 
-export {
-    getTheme,
-    setTheme,
-};
+export { getTheme, setTheme };

@@ -1,4 +1,4 @@
-import {useHistory} from 'react-router';
+import { useHistory } from 'react-router';
 import './ClickableHeader.scss';
 
 interface ClickableHeaderProps {
@@ -17,8 +17,8 @@ export const ClickableHeader = (props: ClickableHeaderProps): JSX.Element => {
         <div className={'ClickableHeader'} data-section={props.name}>
             <span>{props.name}</span>
             <img src={props.icon.toLowerCase()} alt={''} className={'bg'} />
-            <img onClick={clickHandler} src='exit.png' alt='' className={'close default'} />
-            <img onClick={clickHandler} src='exit-white.svg' alt='' className={'close dark'} />
+            <img onClick={clickHandler} src="exit.png" alt="" className={'close default'} />
+            <img onClick={clickHandler} src="exit-white.svg" alt="" className={'close dark'} />
         </div>
     );
 };

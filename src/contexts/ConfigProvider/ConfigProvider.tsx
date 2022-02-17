@@ -1,4 +1,4 @@
-import React, {createContext, useState} from 'react';
+import React, { createContext, useState } from 'react';
 
 interface ConfigContext {
     isForceEnabledForMobile?: any;
@@ -7,24 +7,19 @@ interface ConfigContext {
 
 export const Context = createContext<ConfigContext>({
     isForceEnabledForMobile: false,
-    forceEnable: () => {
-    }
+    forceEnable: () => {},
 });
 
-const ConfigProvider: React.FC = ({children}) => {
+const ConfigProvider: React.FC = ({ children }) => {
     const [isForceEnabledForMobile, setForceEnabledForMobile] = useState<boolean>(false);
     const forceEnable = () => {
         setForceEnabledForMobile(true);
     };
     const contextValue = {
         isForceEnabledForMobile,
-        forceEnable
+        forceEnable,
     };
-    return (
-        <Context.Provider value={contextValue}>
-            {children}
-        </Context.Provider>
-    );
+    return <Context.Provider value={contextValue}>{children}</Context.Provider>;
 };
 
 export default ConfigProvider;

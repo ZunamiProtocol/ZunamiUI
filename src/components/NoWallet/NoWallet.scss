@@ -1,4 +1,4 @@
-@import "src/variables";
+@import 'src/variables';
 
 .NoWallet {
     border: solid 2px $primary-color;
@@ -8,7 +8,6 @@
     text-align: center;
     display: flex;
     align-items: center;
-
 
     span {
         margin-right: 10px;

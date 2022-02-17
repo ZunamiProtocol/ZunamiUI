@@ -1,14 +1,14 @@
 import BigNumber from 'bignumber.js';
-import {useEffect, useState} from 'react';
-import {useWallet} from 'use-wallet';
-import {getMasterChefContract} from '../sushi/utils';
-import useSushi from "./useSushi";
-import {getUserLpAmount} from "../utils/erc20";
-import {BIG_ZERO} from "../utils/formatbalance";
+import { useEffect, useState } from 'react';
+import { useWallet } from 'use-wallet';
+import { getMasterChefContract } from '../sushi/utils';
+import useSushi from './useSushi';
+import { getUserLpAmount } from '../utils/erc20';
+import { BIG_ZERO } from '../utils/formatbalance';
 
 const useUserLpAmount = () => {
     const [allowance, setAllowance] = useState(BIG_ZERO);
-    const {account} = useWallet();
+    const { account } = useWallet();
     const sushi = useSushi();
     const masterChefContract = getMasterChefContract(sushi);
 
@@ -17,7 +17,7 @@ const useUserLpAmount = () => {
             const allowance = await getUserLpAmount(
                 masterChefContract,
                 // @ts-ignore
-                account,
+                account
             );
             setAllowance(new BigNumber(allowance));
         };
@@ -33,4 +33,3 @@ const useUserLpAmount = () => {
 };
 
 export default useUserLpAmount;
-

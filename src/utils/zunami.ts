@@ -1,8 +1,6 @@
-import {Contract} from 'web3-eth-contract';
+import { Contract } from 'web3-eth-contract';
 
-export const getTotalHoldings = async (
-    masterChefContract: Contract,
-): Promise<string> => {
+export const getTotalHoldings = async (masterChefContract: Contract): Promise<string> => {
     try {
         const totalHoldings: string = await masterChefContract.methods.totalHoldings().call();
         return totalHoldings;
@@ -10,4 +8,3 @@ export const getTotalHoldings = async (
         return '0';
     }
 };
-
