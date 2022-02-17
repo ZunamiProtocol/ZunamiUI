@@ -1,121 +1,102 @@
 @import "src/variables";
 
-.content-col {
-    .col {
-        @media (min-width: $media375) {
-            box-shadow: $box-shadow;
-            border-radius: $border-radius;
-            margin-top: 10px;
+.row, .col, .row > * {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
 
-            &.BalanceCol,
-            &.DailyProfitCol {
-                margin-left: 5px;
-            }
+.row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
 
-            &.AlreadyEarnedCol,
-            &.ApyCol {
-                margin-right: 5px;
-            }
+.dashboard-col {
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    justify-content: flex-start;
+    align-items: stretch;
 
-            &.PendingDepositCol {
-                display: none;
-            }
+    @media screen and (min-width: $media375) {
+        padding-left: 19px !important;
+        padding-right: 19px !important;
+    }
 
-            &.MonthlyProfitCol {
-                box-shadow: 0 0 2px rgba(0, 0, 0, .2);
-                border-radius: 25px;
-            }
+    @media screen and (min-width: $media1024) {
+        width: 719px !important;
+        max-width: 719px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    @media screen and (min-width: $media1440) {
+        width: 1033px !important;
+        max-width: 1033px !important;
+    }
+
+    @media screen and (min-width: $media1440) {
+        width: 1394px !important;
+        max-width: 1394px !important;
+    }
+
+    .first-row,
+    .second-row,
+    .third-row {
+        display: flex;
+
+        @media screen and (min-width: $media1024) {
+            padding-left: 10px;
         }
 
-        @media (min-width: 577px) and (max-width: $media1024) {
-            &.DailyProfitCol {
-                margin-right: 10px;
-            }
+        @media screen and (min-width: $media1440) {
+            padding-left: 18px;
         }
 
-        @media (min-width: $media375) and (max-width: $media1024) {
-            &.TvlCol {
-                flex: 0 0 auto;
-            }
-        }
-
-        @media (min-width: $media1024) {
-            box-shadow: none;
-
-            &.MonthlyProfitCol {
-                box-shadow: none;
-            }
-        }
-
-        @media (min-width: $media1920) {
-            &.PendingDepositCol {
-                display: block;
-
-                .InfoBlock__description_color {
-                    color: #B8E654;
-                }
-            }
+        @media screen and (min-width: $media1920) {
+            padding-left: 26px;
         }
     }
 
-    .col-12 {
-        @media (min-width: $media435) {
-            box-shadow: $box-shadow;
-            border-radius: $border-radius;
-            margin-top: 10px;
-        }
-
-        @media (min-width: $media375) and (max-width: $media1024) {
-            margin-top: 10px;
-        }
-
-        @media (min-width: $media1024) {
-            box-shadow: none;
-        }
+    .first-row .InfoBlock:first-child,
+    .second-row .InfoBlock:first-child {
+        margin-left: 0;
     }
 
-    &.dashboard-col {
-        .ClickableHeader {
-            margin: 0 0 15px 0;
+    .first-row .InfoBlock:last-child,
+    .second-row .InfoBlock:last-child {
+        margin-right: 0;
+    }
 
-            @media (min-width: $media1024) {
-                display: none;
-            }
+    .third-row {
+        flex-grow: 1;
+    }
+}
 
-            .close {
-                display: none;
-            }
-        }
+.dashboard-col .strats-chart-col,
+.dashboard-col .hist-apy-col {
+    background-color: #fff;
+    width: 50%;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 100%;
+}
 
-        @media (min-width: $media375) {
-            background-color: #FCFCFC;
-            margin-left: 20px;
-            margin-right: 20px;
-            padding-left: 0 !important;
-            padding-right: 0 !important;
-        }
+.dashboard-col .strats-chart-col {
+    @media screen and (min-width: $media1024) {
+        margin-right: 10px;
+    }
 
-        @media (min-width: $media1024) {
-            background-color: transparent;
-            margin-left: 0;
-            margin-right: 0;
-            padding-left: 20px !important;
-        }
+    @media screen and (min-width: $media1440) {
+        margin-right: 20px;
+    }
+}
 
-        @media (min-width: $media1440) {
-            padding-left: 0 !important;
-        }
+.main-row {
+    @media screen and (min-width: $media1024) {
+        margin-top: 10px !important;
+    }
 
-        > .row {
-            @media (min-width: $media375) {
-                margin-left: 20px !important;
-                margin-right: 20px !important;
-            }
-
-            @media (min-width: $media1024) {
-                margin-left: 0 !important;
-                margin-right: 0 !important;
-            }
-        }
+    @media screen and (min-width: $media1440) {
+        margin-top: 17px !important;
     }
 }
