@@ -1,8 +1,8 @@
-import {useContext} from 'react';
-import {Context} from '../contexts/SushiProvider';
+import { useContext } from 'react';
+import { Context } from '../contexts/SushiProvider';
 
 const useSushi = () => {
-    const {sushi} = useContext(Context);
+    const { sushi } = useContext(Context);
     return sushi;
 };
 

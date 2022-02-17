@@ -1,5 +1,5 @@
-import {useRef, useState} from 'react';
-import {Overlay, Tooltip} from 'react-bootstrap';
+import { useRef, useState } from 'react';
+import { Overlay, Tooltip } from 'react-bootstrap';
 import './PendingBalance.scss';
 
 interface PendingBalanceProps {
@@ -16,11 +16,7 @@ export const PendingBalance = (props: PendingBalanceProps): JSX.Element => {
             <span className={'PendingBalance__val'}>
                 <span>{props.val}</span>
             </span>
-            <span
-                className={'PendingBalance__hint'}
-                ref={target}
-                onClick={() => setShow(!show)}
-            >
+            <span className={'PendingBalance__hint'} ref={target} onClick={() => setShow(!show)}>
                 <img src={'/info.svg'} alt={'Pending deposit'} />
             </span>
             <Overlay target={target.current} show={show} placement="right">
@@ -28,4 +24,4 @@ export const PendingBalance = (props: PendingBalanceProps): JSX.Element => {
             </Overlay>
         </div>
     );
-}
+};

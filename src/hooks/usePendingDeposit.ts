@@ -1,14 +1,14 @@
-import {useState,useEffect,useMemo} from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
-import {BIG_ZERO} from "../utils/formatbalance";
-import {useWallet} from 'use-wallet';
+import { BIG_ZERO } from '../utils/formatbalance';
+import { useWallet } from 'use-wallet';
 import { getContract } from '../utils/erc20';
 import { contractAddresses } from '../sushi/lib/constants';
-import {getPendingDeposit} from '../sushi/utils';
-import config from "../config";
+import { getPendingDeposit } from '../sushi/utils';
+import config from '../config';
 
 const usePendingDeposit = () => {
-    const {account,ethereum} = useWallet();
+    const { account, ethereum } = useWallet();
     const { CHAIN_ID } = config;
 
     const zunamiContract = useMemo(() => {
@@ -27,7 +27,7 @@ const usePendingDeposit = () => {
             const result = [
                 new BigNumber(pendingDai),
                 new BigNumber(pendingUsdc),
-                new BigNumber(pendingUsdt)
+                new BigNumber(pendingUsdt),
             ];
 
             setPendingSum(result[0].plus(result[1]).plus(result[2]));

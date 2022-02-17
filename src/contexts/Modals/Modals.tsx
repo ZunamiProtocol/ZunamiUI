@@ -1,4 +1,4 @@
-import React, {createContext, useCallback, useState} from 'react';
+import React, { createContext, useCallback, useState } from 'react';
 
 interface ModalsContext {
     content?: React.ReactNode;
@@ -8,13 +8,11 @@ interface ModalsContext {
 }
 
 export const Context = createContext<ModalsContext>({
-    onPresent: () => {
-    },
-    onDismiss: () => {
-    },
+    onPresent: () => {},
+    onDismiss: () => {},
 });
 
-const Modals: React.FC = ({children}) => {
+const Modals: React.FC = ({ children }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [content, setContent] = useState<React.ReactNode>();
     const [modalKey, setModalKey] = useState<string>();
@@ -25,7 +23,7 @@ const Modals: React.FC = ({children}) => {
             setContent(modalContent);
             setIsOpen(true);
         },
-        [setContent, setIsOpen, setModalKey],
+        [setContent, setIsOpen, setModalKey]
     );
 
     const handleDismiss = useCallback(() => {
@@ -45,16 +43,15 @@ const Modals: React.FC = ({children}) => {
             {children}
             {isOpen && (
                 <div>
-                    <div onClick={handleDismiss}/>
+                    <div onClick={handleDismiss} />
                     {React.isValidElement(content) &&
-                    React.cloneElement(content, {
-                        onDismiss: handleDismiss,
-                    })}
+                        React.cloneElement(content, {
+                            onDismiss: handleDismiss,
+                        })}
                 </div>
             )}
         </Context.Provider>
     );
 };
-
 
 export default Modals;

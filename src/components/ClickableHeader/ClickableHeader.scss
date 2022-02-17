@@ -1,4 +1,4 @@
-@import "src/variables";
+@import 'src/variables';
 
 .ClickableHeader {
     align-items: center;
@@ -8,7 +8,7 @@
     margin: 20px;
     overflow: hidden;
 
-    &[data-section="Dashboard"] {
+    &[data-section='Dashboard'] {
         .close {
             display: none !important;
         }
@@ -22,7 +22,7 @@
         @media (min-width: $media375) {
             margin-right: -40px;
 
-            &[src="/section-dashboard-mobile.svg"] {
+            &[src='/section-dashboard-mobile.svg'] {
                 width: 107px;
                 height: 104px;
                 margin-right: 10px;
@@ -30,7 +30,7 @@
         }
 
         @media screen and (min-width: $media1024) {
-            margin-right:0;
+            margin-right: 0;
         }
     }
 
@@ -85,7 +85,7 @@
     @media screen and (min-width: $media1024) {
         height: 85px;
         margin: 10px 20px 0 20px;
-        background-color: #FAFAFA;
+        background-color: #fafafa;
     }
 
     @media screen and (min-width: $media1440) {

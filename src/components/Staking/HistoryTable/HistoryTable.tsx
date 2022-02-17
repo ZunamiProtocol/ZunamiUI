@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format } from 'date-fns';
 import './HistoryTable.scss';
 
 interface TableItem {
@@ -24,20 +24,18 @@ export const HistoryTable = (props: HistoryTableProps): JSX.Element => {
                 </tr>
             </thead>
             <tbody>
-                {
-                    props.data.map((item, index) => 
-                        <tr key={index}>
-                            <td>{item.value.toLocaleString()} ZUN</td>
-                            <td>{format(item.lockDate * 1000, 'MMM d, yyyy, h:m:aaa')}</td>
-                            <td>{format(item.unlockDate * 1000, 'MMM d, yyyy, h:m:aaa')}</td>
-                            <td>
-                                <button
-                                    className={`unlock ${!item.canUnlock ? 'disabled' : ''}`}
-                                >Unlock</button>
-                            </td>
-                        </tr>
-                    )
-                }
+                {props.data.map((item, index) => (
+                    <tr key={index}>
+                        <td>{item.value.toLocaleString()} ZUN</td>
+                        <td>{format(item.lockDate * 1000, 'MMM d, yyyy, h:m:aaa')}</td>
+                        <td>{format(item.unlockDate * 1000, 'MMM d, yyyy, h:m:aaa')}</td>
+                        <td>
+                            <button className={`unlock ${!item.canUnlock ? 'disabled' : ''}`}>
+                                Unlock
+                            </button>
+                        </td>
+                    </tr>
+                ))}
             </tbody>
         </table>
     );

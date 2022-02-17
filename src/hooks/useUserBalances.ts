@@ -1,13 +1,12 @@
 import BigNumber from 'bignumber.js';
-import {useEffect, useState} from 'react';
-import {useWallet} from 'use-wallet';
-import {getBalance} from "../utils/erc20";
-import {BIG_ZERO, daiAddress, usdcAddress, usdtAddress} from "../utils/formatbalance";
-
+import { useEffect, useState } from 'react';
+import { useWallet } from 'use-wallet';
+import { getBalance } from '../utils/erc20';
+import { BIG_ZERO, daiAddress, usdcAddress, usdtAddress } from '../utils/formatbalance';
 
 export const useUserBalances = () => {
     const [balance, setbalance] = useState([BIG_ZERO, BIG_ZERO, BIG_ZERO]);
-    const {account, ethereum} = useWallet();
+    const { account, ethereum } = useWallet();
 
     useEffect(() => {
         const fetchbalanceStables = async () => {
@@ -15,24 +14,25 @@ export const useUserBalances = () => {
                 ethereum,
                 daiAddress,
                 // @ts-ignore
-                account,
+                account
             );
             const balanceUsdc = await getBalance(
                 ethereum,
                 usdcAddress,
                 // @ts-ignore
-                account,
+                account
             );
             const balanceUsdt = await getBalance(
                 ethereum,
                 usdtAddress,
                 // @ts-ignore
-                account,
+                account
             );
-            const data =
-                [new BigNumber(balanceDai),
-                    new BigNumber(balanceUsdc),
-                    new BigNumber(balanceUsdt)];
+            const data = [
+                new BigNumber(balanceDai),
+                new BigNumber(balanceUsdc),
+                new BigNumber(balanceUsdt),
+            ];
             // @ts-ignore
             setbalance(data);
         };
@@ -46,4 +46,3 @@ export const useUserBalances = () => {
 
     return balance;
 };
-

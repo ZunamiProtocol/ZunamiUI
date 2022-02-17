@@ -1,10 +1,10 @@
 import Web3 from 'web3';
 import BigNumber from 'bignumber.js';
-import {Contracts} from './lib/contracts.js';
-import {Account} from './lib/accounts.js';
-import {EVM} from './lib/evm.js';
+import { Contracts } from './lib/contracts.js';
+import { Account } from './lib/accounts.js';
+import { EVM } from './lib/evm.js';
 
-import {contractAddresses} from './lib/constants';
+import { contractAddresses } from './lib/constants';
 
 export class Sushi {
     constructor(provider, networkId, testing, options) {
@@ -14,12 +14,12 @@ export class Sushi {
             if (provider.includes('wss')) {
                 realProvider = new Web3.providers.WebsocketProvider(
                     provider,
-                    options.ethereumNodeTimeout || 10000,
+                    options.ethereumNodeTimeout || 10000
                 );
             } else {
                 realProvider = new Web3.providers.HttpProvider(
                     provider,
-                    options.ethereumNodeTimeout || 10000,
+                    options.ethereumNodeTimeout || 10000
                 );
             }
         } else {
@@ -69,13 +69,10 @@ export class Sushi {
 
         if (
             !newAccount ||
-            (account.address &&
-                account.address.toLowerCase() !== newAccount.address.toLowerCase())
+            (account.address && account.address.toLowerCase() !== newAccount.address.toLowerCase())
         ) {
             throw new Error(`Loaded account address mismatch.
-        Expected ${account.address}, got ${
-                newAccount ? newAccount.address : null
-            }`);
+        Expected ${account.address}, got ${newAccount ? newAccount.address : null}`);
         }
     }
 

@@ -1,7 +1,7 @@
-import React, {createContext, useEffect, useState} from 'react';
-import {useWallet} from 'use-wallet';
+import React, { createContext, useEffect, useState } from 'react';
+import { useWallet } from 'use-wallet';
 import useEthExplorer from '../../hooks/useEthExplorer';
-import {Sushi} from '../../sushi';
+import { Sushi } from '../../sushi';
 
 export interface SushiContext {
     sushi?: typeof Sushi;
@@ -27,11 +27,7 @@ const sushiConfig: any = {
     ethereumNodeTimeout: 10000,
 };
 
-const createSushiLib = (
-    provider: any,
-    chainId: number,
-    defaultAccount: string,
-) => {
+const createSushiLib = (provider: any, chainId: number, defaultAccount: string) => {
     return new Sushi(provider, chainId, false, {
         defaultAccount,
         ...sushiConfig,
@@ -39,14 +35,14 @@ const createSushiLib = (
 };
 
 type Config = {
-    chainId: number
-    defaultAccount: string
-    provider: any
-}
+    chainId: number;
+    defaultAccount: string;
+    provider: any;
+};
 
-const SushiProvider: React.FC = ({children}) => {
-    const {ethereum} = useWallet();
-    const {provider} = useEthExplorer();
+const SushiProvider: React.FC = ({ children }) => {
+    const { ethereum } = useWallet();
+    const { provider } = useEthExplorer();
     const [sushi, setSushi] = useState<any>();
 
     // @ts-ignore
@@ -70,17 +66,13 @@ const SushiProvider: React.FC = ({children}) => {
             };
         }
         if (config) {
-            const sushiLib = createSushiLib(
-                config.provider,
-                config.chainId,
-                config.defaultAccount,
-            );
+            const sushiLib = createSushiLib(config.provider, config.chainId, config.defaultAccount);
             setSushi(sushiLib);
             window.sushisauce = sushiLib;
         }
     }, [provider, ethereum]);
 
-    return <Context.Provider value={{sushi}}>{children}</Context.Provider>;
+    return <Context.Provider value={{ sushi }}>{children}</Context.Provider>;
 };
 
 export default SushiProvider;

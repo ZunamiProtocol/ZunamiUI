@@ -2,14 +2,13 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-type NETWORK = 'mainnet'
-
+type NETWORK = 'mainnet';
 
 type Config = {
-    INFURA_URL: string
-    CHAIN_ID: number
-    NETWORK: NETWORK
-}
+    INFURA_URL: string;
+    CHAIN_ID: number;
+    NETWORK: NETWORK;
+};
 
 let NETWORK = process.env.REACT_APP_NETWORK;
 if (!NETWORK) {

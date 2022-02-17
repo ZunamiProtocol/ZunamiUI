@@ -1,4 +1,4 @@
-@import "src/variables";
+@import 'src/variables';
 
 .UnclaimedItem {
     margin-bottom: 10px;
@@ -8,7 +8,7 @@
     }
 
     &__ZUN {
-        color: #F64A00;
+        color: #f64a00;
 
         @media screen and (min-width: $media1024) {
             font-size: 16px;
