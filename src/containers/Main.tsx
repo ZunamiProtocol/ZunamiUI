@@ -120,6 +120,7 @@ export const Main = (): JSX.Element => {
                                 withColor={true}
                                 isStrategy={false}
                                 colorfulBg={true}
+                                hint="Profit is accrued at least once a week, after the sale of the accumulated weekly rewards."
                             />
                             <InfoBlock
                                 title="APY"
