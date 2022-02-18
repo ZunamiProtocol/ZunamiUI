@@ -1,0 +1,94 @@
+@import 'src/variables';
+
+.ApyChart {
+    @media (min-width: $media1024) {
+        margin: 20px;
+    }
+
+    @media (min-width: $media1920) {
+        margin: 36px;
+    }
+
+    &__Header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        @media (min-width: $media1024) {
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: $media1440) {
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: $media1920) {
+            margin-bottom: 57px;
+        }
+
+        .ApyChart__Title {
+            color: #636363;
+
+            @media screen and (min-width: $media1024) {
+                font-size: 12px;
+                line-height: 16px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                font-size: 14px;
+                line-height: 19px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                font-size: 18px;
+                line-height: 25px;
+            }
+        }
+
+        .ApyChart__Selector {
+            display: flex;
+            flex-direction: row;
+
+            @media screen and (min-width: $media1024) {
+                grid-gap: 13px;
+                gap: 13px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                grid-gap: 30px;
+                gap: 30px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                grid-gap: 45px;
+                gap: 45px;
+            }
+
+            span {
+                cursor: pointer;
+                display: block;
+                text-align: center;
+                color: #636363;
+
+                @media screen and (min-width: $media1024) {
+                    font-size: 12px;
+                    line-height: 16px;
+                }
+
+                @media screen and (min-width: $media1440) {
+                    font-size: 14px;
+                    line-height: 19px;
+                }
+
+                @media screen and (min-width: $media1920) {
+                    font-size: 16px;
+                    line-height: 22px;
+                }
+
+                &.active {
+                    color: $primary-color;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,55 @@
+@import 'src/variables';
+
+.StakingHistoryTable {
+    width: calc(100% - 30px);
+
+    @media screen and (min-width: $media1024) {
+        margin-top: 10px;
+        margin-left: 13px;
+    }
+
+    @media screen and (min-width: $media1440) {
+        margin-top: 20px;
+        margin-left: 30px;
+    }
+
+    thead {
+        tr {
+            td {
+                border-top: 1px solid #f4efe1;
+                border-bottom: 1px solid #f4efe1;
+                font-size: 12px;
+                line-height: 16px;
+                color: #636363;
+                height: 46px;
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            td {
+                font-size: 12px;
+                line-height: 16px;
+                color: #636363;
+                padding-top: 5px;
+
+                button {
+                    width: 103px;
+                    height: 27px;
+                    background: #fff7ed;
+                    border-radius: 5px;
+                    font-size: 12px;
+                    line-height: 16px;
+                    text-align: center;
+                    color: #bd7d00;
+
+                    &.disabled {
+                        background: #f9f9f9;
+                        color: #dcdcdc;
+                    }
+                }
+            }
+        }
+    }
+}

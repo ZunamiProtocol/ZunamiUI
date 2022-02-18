@@ -1,44 +1,104 @@
-$media1920: 1920px;
-$media1600: 1600px;
-$media1440: 1440px;
-$media1024: 1024px;
+@import 'src/variables';
 
-.MainContainer {
-    margin: 0 auto;
-    width: 1920px;
+.row,
+.col,
+.row > * {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
 
-    @media screen and (max-width: $media1920) {
-        width: 1600px;
+.row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.dashboard-col {
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    justify-content: flex-start;
+    align-items: stretch;
+
+    @media screen and (min-width: $media375) {
+        padding-left: 19px !important;
+        padding-right: 19px !important;
     }
 
-    @media screen and (max-width: $media1600) {
-        width: 1440px;
+    @media screen and (min-width: $media1024) {
+        width: 719px !important;
+        max-width: 719px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
     }
 
-    @media screen and (max-width: $media1440) {
-        width: 1400px;
-    }
-    @media screen and (max-width: $media1024) {
-        width: 1000px;
+    @media screen and (min-width: $media1440) {
+        width: 1033px !important;
+        max-width: 1033px !important;
     }
 
-    .ContentBlock {
+    @media screen and (min-width: $media1440) {
+        width: 1394px !important;
+        max-width: 1394px !important;
+    }
+
+    .first-row,
+    .second-row,
+    .third-row {
         display: flex;
-        justify-content: space-between;
-        width: 100%;
 
-        .InfoContainer {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            padding-top: 33px;
-            width: 69%;
-
-            &_long {
-                display: flex;
-                justify-content: space-between;
-                width: 1400px;
-            }
+        @media screen and (min-width: $media1024) {
+            padding-left: 10px;
         }
+
+        @media screen and (min-width: $media1440) {
+            padding-left: 18px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            padding-left: 26px;
+        }
+    }
+
+    .first-row .InfoBlock:first-child,
+    .second-row .InfoBlock:first-child {
+        margin-left: 0;
+    }
+
+    .first-row .InfoBlock:last-child,
+    .second-row .InfoBlock:last-child {
+        margin-right: 0;
+    }
+
+    .third-row {
+        flex-grow: 1;
+    }
+}
+
+.dashboard-col .strats-chart-col,
+.dashboard-col .hist-apy-col {
+    background-color: #fff;
+    width: 50%;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 100%;
+}
+
+.dashboard-col .strats-chart-col {
+    @media screen and (min-width: $media1024) {
+        margin-right: 10px;
+    }
+
+    @media screen and (min-width: $media1440) {
+        margin-right: 20px;
+    }
+}
+
+.main-row {
+    @media screen and (min-width: $media1024) {
+        margin-top: 10px !important;
+    }
+
+    @media screen and (min-width: $media1440) {
+        margin-top: 17px !important;
     }
 }

@@ -1,0 +1,33 @@
+@import 'src/variables';
+
+.TestnetLabel {
+    background: linear-gradient(262.84deg, #fff3e9 -27.39%, #fef5e8 71.59%);
+    border-radius: 4px;
+    color: $primary-color;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media screen and (min-width: $media1440) {
+        width: 138px;
+        height: 29px;
+    }
+
+    span {
+        @media screen and (min-width: $media1440) {
+            font-size: 12px;
+            line-height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    svg {
+        @media screen and (min-width: $media1440) {
+            width: 13px;
+            height: 13px;
+            margin-right: 10px;
+        }
+    }
+}

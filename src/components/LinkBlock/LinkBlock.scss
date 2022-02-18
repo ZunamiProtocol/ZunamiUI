@@ -1,46 +1,175 @@
+@import 'src/variables';
+
 $media1600: 1600px;
 $media1440: 1440px;
 $media1024: 1024px;
+$media435: 435px;
 
 .LinkBlock {
-    background-color: #f64a00;
-    border-radius: 10px;
     cursor: pointer;
     display: flex;
-    flex-direction: column;
-    font-family: 'Anderson Grotesk';
-    height: 198px;
-    justify-content: space-around;
-    margin-bottom: 33px;
-    position: relative;
-    width: 90%;
+    justify-content: flex-start;
+    align-items: center;
 
-    @media screen and (max-width: $media1600) {
-        height: 150px;
+    @media screen and (min-width: $media1024) {
+        height: 22px;
+        margin-bottom: 21px;
     }
 
-    @media screen and (max-width: $media1440) {
-        height: 150px;
-        margin-bottom: 15px;
+    @media screen and (min-width: $media1920) {
+        height: 30px;
+        margin-bottom: 21px;
     }
 
-    &__title {
-        color: #fff;
-        font-size: 25px;
-        margin-left: 36px;
+    &__active {
+        &::before {
+            position: absolute;
+            content: '';
+            background-color: #f95a05;
+        }
 
-        @media screen and (max-width: $media1024) {
-            font-size: 20px;
+        @media screen and (min-width: $media1440) {
+            &::before {
+                width: 2px;
+                height: 22px;
+            }
+        }
+
+        @media screen and (min-width: $media1920) {
+            &::before {
+                width: 2px;
+                height: 30px;
+            }
+        }
+
+        .LinkBlock__title {
+            color: $primary-color;
         }
     }
 
-    &__description {
-        color: #e4e4e4;
-        font-size: 20px;
-        margin-left: 36px;
+    &__soon {
+        pointer-events: none;
+        cursor: not-allowed;
 
-        @media screen and (max-width: $media1024) {
+        .LinkBlock__title {
+            color: rgba(173, 173, 173, 0.53);
+        }
+
+        .LinkBlock__icon {
+            opacity: 0.3;
+        }
+    }
+
+    &__title {
+        color: #636363;
+
+        @media screen and (min-width: $media1024) {
+            font-size: 12px;
+            line-height: 16px;
+        }
+
+        @media screen and (min-width: $media1440) {
             font-size: 16px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            font-size: 18px;
+            line-height: 25px;
+        }
+    }
+
+    &__icon {
+        @media screen and (min-width: $media1024) {
+            width: 16px;
+            height: auto;
+            margin-right: 10px;
+            margin-left: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media screen and (min-width: $media1920) {
+            width: 20px;
+            height: auto;
+            margin-right: 20px;
+            margin-left: 28px;
+        }
+    }
+
+    &[data-url='/'] {
+        .LinkBlock__icon img {
+            @media screen and (min-width: $media1024) {
+                width: 16px;
+                height: 15px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                width: 17.8px;
+                height: 17.4px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                width: 24.5px;
+                height: 24px;
+            }
+        }
+    }
+
+    &[data-url='/deposit-and-withdraw'] {
+        .LinkBlock__icon img {
+            @media screen and (min-width: $media1024) {
+                width: 14.3px;
+                height: 15.1px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                width: 16px;
+                height: 16.8px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                width: 22px;
+                height: 23px;
+            }
+        }
+    }
+
+    &[data-url='/lockdrop'] {
+        .LinkBlock__icon img {
+            @media screen and (min-width: $media1024) {
+                width: 11.1px;
+                height: 14px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                width: 13.7px;
+                height: 17.3px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                width: 18.1px;
+                height: 22.8px;
+            }
+        }
+    }
+
+    &[data-url='/staking'] {
+        .LinkBlock__icon img {
+            @media screen and (min-width: $media1024) {
+                width: 12.8px;
+                height: 12.4px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                width: 13.9px;
+                height: 13.4px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                width: 19.6px;
+                height: 19.17px;
+            }
         }
     }
 }
