@@ -77,7 +77,8 @@ const getWithdrawValidationError = (
 };
 
 export const Form = (props: FormProps): JSX.Element => {
-    const [action, setAction] = useState('deposit');
+    const [action, setAction] =
+        useState(props.operationName === 'Deposit' ? 'deposit' : 'withdraw');
     const [dai, setDai] = useState('');
     const [usdc, setUsdc] = useState('');
     const [usdt, setUsdt] = useState('');
@@ -274,8 +275,36 @@ export const Form = (props: FormProps): JSX.Element => {
                     </Toast>
                 </ToastContainer>
             )}
-            <form>
+            <form
+                id={action}
+                onSubmit={async (e) => {
+                    e.preventDefault();
+
+                    switch (action) {
+                        case 'withdraw':
+                            // @ts-ignore
+                            window.dataLayer.push({ event: "withdraw" });
+                            setPendingWithdraw(true);
+
+                            try {
+                                await onUnstake();
+                            } catch (error: any) {
+                                setPendingWithdraw(false);
+                                setTransactionError(error);
+                            }
+
+                            setPendingWithdraw(false);
+                            break;
+                        case 'deposit':
+                            // @ts-ignore
+                            window.dataLayer.push({ event: "deposit" });
+                            setModalShow(true);
+                            break;
+                    }
+                }}
+            >
                 <ActionSelector
+                    value={action}
                     onChange={(action: string) => {
                         setAction(action);
                     }}
@@ -311,9 +340,7 @@ export const Form = (props: FormProps): JSX.Element => {
                         )}
                         {account && (
                             <div className="deposit-button-wrapper">
-                                <button className={'disabled'} onClick={(e) => e.preventDefault()}>
-                                    Deposit
-                                </button>
+                                <button type="submit">Deposit</button>
                                 <DirectAction
                                     actionName="deposit"
                                     hint="When using direct deposit / withdrawal, funds will be credited instantly, but the cost of such a transaction will be many times more expensive"
@@ -329,31 +356,10 @@ export const Form = (props: FormProps): JSX.Element => {
                     <div>
                         {account && (
                             <div className="deposit-button-wrapper">
-                                <button
-                                    onClick={async () => {
-                                        setPendingWithdraw(true);
-
-                                        try {
-                                            await onUnstake();
-                                        } catch (error: any) {
-                                            setPendingWithdraw(false);
-                                            setTransactionError(error);
-                                        }
-
-                                        setPendingWithdraw(false);
-                                    }}
-                                    disabled={
-                                        (dai === '' && usdc === '' && usdt === '') ||
-                                        pendingWithdraw ||
-                                        fullBalanceLpShare === '0' ||
-                                        userMaxWithdraw.toNumber() < lpShareToWithdraw.toNumber()
-                                    }
-                                >
-                                    Withdraw
-                                </button>
+                                <button type="submit">Withdraw</button>
                                 <DirectAction
                                     actionName="withdraw"
-                                    hint="When using direct deposit / withdrawal, funds will be credited instantly, 
+                                    hint="When using direct deposit / withdrawal, funds will be credited instantly,
                                 but the cost of such a transaction will be many times more expensive"
                                 />
                             </div>

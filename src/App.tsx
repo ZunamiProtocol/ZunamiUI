@@ -22,7 +22,7 @@ function App() {
             <Router>
                 <Route exact path="/" component={Main} />
                 <Route
-                    path="/deposit-and-withdraw"
+                    path="/deposit"
                     component={() => <FinanceOperations operationName="Deposit" />}
                 />
                 <Route

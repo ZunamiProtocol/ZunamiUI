@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import './ActionSelector.scss';
 
 interface ActionSelectorProps {
+    value?: string;
     onChange: any;
 }
 
@@ -17,7 +19,8 @@ const actions = [
 ];
 
 export const ActionSelector = (props: ActionSelectorProps): JSX.Element => {
-    const [action, setAction] = useState('deposit');
+    const [action, setAction] = useState(props.value || 'deposit');
+    const history = useHistory();
 
     return (
         <div className="ActionSelector">
@@ -28,7 +31,7 @@ export const ActionSelector = (props: ActionSelectorProps): JSX.Element => {
                         action === item.name ? 'ActionSelector__Action__Active' : ''
                     }`}
                     onClick={(e) => {
-                        setAction(item.name);
+                        history.push(`/${item.name}`);
 
                         if (props.onChange) {
                             props.onChange(item.name);
