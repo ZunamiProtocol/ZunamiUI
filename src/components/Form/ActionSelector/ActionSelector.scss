@@ -19,6 +19,11 @@
         justify-content: space-between;
         color: #e0b02b;
         cursor: pointer;
+        text-decoration: none;
+
+        &:hover {
+            color: #e0b02b;
+        }
 
         @media screen and (min-width: $media1024) {
             width: 208px;
@@ -50,6 +55,10 @@
         &__Active {
             background: linear-gradient(88.87deg, #f74f02 15.93%, #f9a211 93.44%);
             color: #fff;
+
+            &:hover {
+                color: #fff;
+            }
         }
 
         svg {

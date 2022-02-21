@@ -23,7 +23,7 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                     <LinkBlock
                         title="Deposit & Withdraw"
                         description="Click for deposit"
-                        url={'deposit-and-withdraw'}
+                        url={'deposit'}
                         icon="/menu-deposit-and-withdraw.svg"
                     />
                     {/* <LinkBlock
