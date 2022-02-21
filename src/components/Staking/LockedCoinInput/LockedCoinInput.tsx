@@ -1,20 +1,22 @@
 import { useState } from 'react';
-import './Input.scss';
+import './LockedCoinInput.scss';
 
 interface InputProps {
     onMaxClick?: Function;
     onChange?: Function;
     value: number;
     max?: number;
+    token: string;
+    icon: string;
 }
 
-export const Input = (props: InputProps): JSX.Element => {
+export const LockedCoinInput = (props: InputProps): JSX.Element => {
     const [value, setValue] = useState(0);
 
     return (
         <div className="Staking__Locked__Token">
-            <img src="/zun-token2.svg" alt="" className="icon" />
-            <span className="token">ZUN</span>
+            <img src={props.icon} alt="" className="icon" />
+            <span className="token">{props.token}</span>
             <div className="divider"></div>
             <div
                 className="max"

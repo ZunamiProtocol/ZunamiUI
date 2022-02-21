@@ -1,14 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Header } from '../components/Header/Header';
 import { SideBar } from '../components/SideBar/SideBar';
-import './Staking.scss';
+import './Lockdrop.scss';
 import { Container, Row, Col } from 'react-bootstrap';
-import { HistoryTable } from '../components/HistoryTable/HistoryTable';
 import { TestnetPlaceholder } from '../components/TestnetPlaceholder/TestnetPlaceholder';
 import { getTestnetStatusUrl } from '../api/api';
 import { useWallet } from 'use-wallet';
+import { HistoryTable } from '../components/HistoryTable/HistoryTable';
 import { LockedCoinInput } from '../components/Staking/LockedCoinInput/LockedCoinInput';
-import { ClaimItem } from '../components/Staking/ClaimItem/ClaimItem';
 import { UnclaimedGiftIcon } from '../components/UnclaimedGiftIcon/UnclaimedGiftIcon';
 
 /* Mock data for table */
@@ -27,7 +26,7 @@ const historyItems = [
     },
 ];
 
-export const Staking = (): JSX.Element => {
+export const Lockdrop = (): JSX.Element => {
     const { account } = useWallet();
     const [testnetStatus, setTestnetStatus] = useState(false);
 
@@ -55,46 +54,52 @@ export const Staking = (): JSX.Element => {
                         <Col className={'ps-0 pe-0'}>
                             {!testnetStatus && (
                                 <TestnetPlaceholder
-                                    headerTitle="Staking"
-                                    title="Staking ZUN are available only for Testnet users for now"
+                                    headerTitle="Lockdrop"
+                                    title="Lockdrop are available only for Testnet users for now"
                                 />
                             )}
                             {testnetStatus && (
-                                <div className="Staking">
-                                    <div className="Staking__Title">Staking ZUN</div>
+                                <div className="Lockdrop">
+                                    <div className="Lockdrop__Title">Lockdrop</div>
                                     <div className="d-flex">
-                                        <div className="Staking__Locked">
-                                            <div className="Staking__Locked__Title">Locked</div>
-                                            <div className="Staking__Locked__Range">
+                                        <div className="Lockdrop__Locked">
+                                            <div className="Lockdrop__Locked__Title">Locked</div>
+                                            <div className="Lockdrop__Locked__Range">
                                                 <input
                                                     type="range"
                                                     min="1"
                                                     max="16"
-                                                    defaultValue="8"
+                                                    value="8"
+                                                    readOnly
                                                 />
                                             </div>
-                                            <div className="Staking__Locked__Period">
+                                            <div className="Lockdrop__Locked__Period">
                                                 <span>Lock for </span>
                                                 <span className="active">8 weeks</span>
                                             </div>
                                             <LockedCoinInput
+                                                token="ZUN LP"
+                                                icon="/zun-token.svg"
                                                 value={0}
-                                                token="ZUN"
-                                                icon="/zun-token2.svg"
                                             />
                                             <button>Lock</button>
                                         </div>
-                                        <div className="Staking__Unclaimed">
-                                            <div className="Staking__Unclaimed__Title">
-                                                Unclaimed Staking Rewards
+                                        <div className="Lockdrop__Unclaimed">
+                                            <div className="Lockdrop__Unclaimed__Title">
+                                                Unclaimed Rewards
                                             </div>
-                                            <ClaimItem zun={1300.54} usd={4504.6} />
-                                            <ClaimItem zun={1300.54} usd={4504.6} />
-                                            <UnclaimedGiftIcon className="Staking__Unclaimed__ICON" />
+                                            <div className="Lockdrop__Unclaimed__ZUN">
+                                                ZUN 1.300,54
+                                            </div>
+                                            <div className="Lockdrop__Unclaimed__USD">
+                                                $4.504,60
+                                            </div>
+                                            <button>Claim</button>
+                                            <UnclaimedGiftIcon className="Lockdrop__Unclaimed__ICON" />
                                         </div>
                                     </div>
                                     <div className="DepositStory">
-                                        <div className="DepositStory__Title">Staking history</div>
+                                        <div className="DepositStory__Title">Deposit story</div>
                                         <HistoryTable data={historyItems} />
                                     </div>
                                 </div>
