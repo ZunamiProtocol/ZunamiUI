@@ -1,7 +1,7 @@
 import { Header } from '../components/Header/Header';
 import { SideBar } from '../components/SideBar/SideBar';
 import { Form } from '../components/Form/Form';
-import './FinanceOperations§.scss';
+import './FinanceOperations.scss';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useWallet } from 'use-wallet';
 import useEagerConnect from '../hooks/useEagerConnect';
