@@ -13,4 +13,4 @@ export const PendingBalance = (props: PendingBalanceProps): JSX.Element => {
             <div className={'PendingBalance__val'}>{props.val}</div>
         </div>
     );
-}
+};

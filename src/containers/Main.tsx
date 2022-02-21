@@ -74,7 +74,6 @@ export const Main = (): JSX.Element => {
     const [histApyData, setHistApyData] = useState([]);
 
     useEffect(() => {
-        console.log(histApyPeriod);
         fetch(getHistoricalApyUrl(histApyPeriod))
             .then((response) => {
                 return response.json();
