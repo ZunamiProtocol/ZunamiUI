@@ -1,20 +1,19 @@
-import {Header} from '../components/Header/Header';
-import {SideBar} from '../components/SideBar/SideBar';
-import {Form} from '../components/Form/Form';
+import { Header } from '../components/Header/Header';
+import { SideBar } from '../components/SideBar/SideBar';
+import { Form } from '../components/Form/Form';
 import './FinanceOperations§.scss';
-import {Container, Row, Col} from 'react-bootstrap';
-import {useWallet} from 'use-wallet';
+import { Container, Row, Col } from 'react-bootstrap';
+import { useWallet } from 'use-wallet';
 import useEagerConnect from '../hooks/useEagerConnect';
-import {WelcomeCarousel} from '../components/WelcomeCarousel/WelcomeCarousel';
+import { WelcomeCarousel } from '../components/WelcomeCarousel/WelcomeCarousel';
 
 interface FinanceOperationsProps {
     operationName: string;
 }
 
 export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element => {
-
-    const {account, connect, ethereum} = useWallet();
-    useEagerConnect(account ? account : "", connect, ethereum);
+    const { account, connect, ethereum } = useWallet();
+    useEagerConnect(account ? account : '', connect, ethereum);
 
     return (
         <Container className={'h-100 d-flex justify-content-between flex-column'}>
@@ -32,7 +31,9 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                             <Col className={'ps-0 pe-0'}>
                                 <div className={'DepositBlock'}>
                                     <div className={'DepositContent'}>
-                                        <h3 className="DepositContent__Title">Deposit & Withdraw</h3>
+                                        <h3 className="DepositContent__Title">
+                                            Deposit & Withdraw
+                                        </h3>
                                         <Form operationName={props.operationName} />
                                     </div>
                                 </div>
