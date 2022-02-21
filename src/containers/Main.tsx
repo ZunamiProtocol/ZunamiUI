@@ -74,7 +74,6 @@ export const Main = (): JSX.Element => {
     const [histApyData, setHistApyData] = useState([]);
 
     useEffect(() => {
-        console.log(histApyPeriod);
         fetch(getHistoricalApyUrl(histApyPeriod))
             .then((response) => {
                 return response.json();
@@ -120,6 +119,7 @@ export const Main = (): JSX.Element => {
                                 withColor={true}
                                 isStrategy={false}
                                 colorfulBg={true}
+                                hint="Profit is accrued at least once a week, after the sale of the accumulated weekly rewards."
                             />
                             <InfoBlock
                                 title="APY"

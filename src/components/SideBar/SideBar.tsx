@@ -26,13 +26,13 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                         url={'deposit'}
                         icon="/menu-deposit-and-withdraw.svg"
                     />
-                    <LinkBlock
+                    {/* <LinkBlock
                         title="Lockdrop"
                         description="Click for withdraw"
                         url={'lockdrop'}
                         icon="/menu-lockdrop.svg"
                         testnet={true}
-                    />
+                    /> */}
                     <LinkBlock
                         title="Staking ZUN"
                         description="Click for withdraw"
