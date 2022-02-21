@@ -2,6 +2,7 @@ import React from 'react';
 import { Main } from './containers/Main';
 import { FinanceOperations } from './containers/FinanceOperations';
 import { Staking } from './containers/Staking';
+import { Lockdrop } from './containers/Lockdrop';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { UseWalletProvider } from 'use-wallet';
 import config from './config';
@@ -30,6 +31,7 @@ function App() {
                     component={() => <FinanceOperations operationName="Withdraw" />}
                 />
                 <Route path="/staking" component={() => <Staking />} />
+                <Route path="/lockdrop" component={() => <Lockdrop />} />
             </Router>
         </Providers>
     );
