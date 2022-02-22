@@ -77,8 +77,9 @@ const getWithdrawValidationError = (
 };
 
 export const Form = (props: FormProps): JSX.Element => {
-    const [action, setAction] =
-        useState(props.operationName === 'Deposit' ? 'deposit' : 'withdraw');
+    const [action, setAction] = useState(
+        props.operationName === 'Deposit' ? 'deposit' : 'withdraw'
+    );
     const [dai, setDai] = useState('');
     const [usdc, setUsdc] = useState('');
     const [usdt, setUsdt] = useState('');
@@ -283,7 +284,7 @@ export const Form = (props: FormProps): JSX.Element => {
                     switch (action) {
                         case 'withdraw':
                             // @ts-ignore
-                            window.dataLayer.push({ event: "withdraw" });
+                            window.dataLayer.push({ event: 'withdraw' });
                             setPendingWithdraw(true);
 
                             try {
@@ -297,7 +298,7 @@ export const Form = (props: FormProps): JSX.Element => {
                             break;
                         case 'deposit':
                             // @ts-ignore
-                            window.dataLayer.push({ event: "deposit" });
+                            window.dataLayer.push({ event: 'deposit' });
                             setModalShow(true);
                             break;
                     }
