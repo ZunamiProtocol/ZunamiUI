@@ -12,7 +12,7 @@ export const getBalanceNumber = (balance: BigNumber, decimals = 18) => {
     return displayBalance.toNumber();
 };
 
-export const getFullDisplayBalance = (balance: BigNumber, decimals = 18) => {
+export const getFullDisplayBalance = (balance: BigNumber, decimals = 6) => {
     const newNumber = new BigNumber(balance);
     return newNumber.dividedBy(BIG_TEN.pow(decimals)).toFixed();
 };
