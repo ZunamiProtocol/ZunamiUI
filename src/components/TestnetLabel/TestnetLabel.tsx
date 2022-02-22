@@ -15,7 +15,7 @@ export const TestnetLabel = (): JSX.Element => {
                     fill="#F64A00"
                 />
             </svg>
-            <span>For Testnet Users</span>
+            <span>For Beta-testing</span>
         </div>
     );
 };

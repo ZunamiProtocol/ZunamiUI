@@ -54,14 +54,15 @@
         line-height: 22px;
         width: 922px;
         height: 69px;
-        margin-left: 193px;
+        margin-left: 200px;
         margin-top: 39px;
     }
 
     &__Content {
         a {
             text-decoration: none;
-            color: $primary-color;
+            color: #767676;
+            border-bottom: dashed 1px #767676;
         }
     }
 }

@@ -91,4 +91,14 @@
             }
         }
     }
+
+    canvas {
+        @media screen and (min-width: $media1440) {
+            margin-top: 35px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            margin-top: 0;
+        }
+    }
 }
