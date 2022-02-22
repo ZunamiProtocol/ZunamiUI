@@ -18,8 +18,6 @@ const usePendingOperations = (): PendingOperations => {
         'function pendingWithdrawals(address) public view returns(tuple(uint256 lpShares, uint256[3] withdraw))',
     ];
     const { account } = useWallet();
-    console.log(`account - ${account}`);
-
     const httpProvider = new ethers.providers.Web3Provider(window.ethereum);
     const contract = new ethers.Contract(zunamiAddr, abi, httpProvider.getSigner());
 
