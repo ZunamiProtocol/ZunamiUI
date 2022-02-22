@@ -76,10 +76,6 @@ export const WalletStatus = (): JSX.Element => {
         );
     }
 
-    const iconVariant = document.body.classList.contains('dark')
-        ? 'connected-wallet-icon-dark.svg'
-        : 'connected-wallet-icon.svg';
-
     return (
         <div className={'WalletStatus'} onClick={() => onConnect()}>
             <input type="button" className="WalletStatus__Connect" value="Connect wallet" />

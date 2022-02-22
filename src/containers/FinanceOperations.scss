@@ -13,6 +13,11 @@
         margin-left: 18px !important;
         padding: 32px 42px !important;
     }
+
+    @media screen and (min-width: $media1920) {
+        margin-left: 25px !important;
+        padding: 32px 42px !important;
+    }
 }
 
 .DepositContent {

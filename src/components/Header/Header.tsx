@@ -13,9 +13,9 @@ export const Header = (): JSX.Element => {
             <Disclaimer
                 text={
                     <div>
-                        Please note. The contract has been{' '}
+                        Please note. The contract{' '}
                         <a target="_blank" rel="noreferrer" href="http://ya.ru">
-                            audited
+                            has been audited
                         </a>
                         , but it steel a beta version. Use it at your own risk
                     </div>

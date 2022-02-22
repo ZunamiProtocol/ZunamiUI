@@ -133,5 +133,12 @@
                 height: 22px;
             }
         }
+
+        &__Placeholder {
+            @media screen and (min-width: $media1024) {
+                width: 315px;
+                height: auto;
+            }
+        }
     }
 }

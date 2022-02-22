@@ -35,8 +35,8 @@
             }
 
             @media screen and (min-width: $media1440) {
-                font-size: 14px;
-                line-height: 19px;
+                font-size: 16px;
+                line-height: 22px;
             }
 
             @media screen and (min-width: $media1920) {
@@ -89,6 +89,16 @@
                     color: $primary-color;
                 }
             }
+        }
+    }
+
+    canvas {
+        @media screen and (min-width: $media1440) {
+            margin-top: 35px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            margin-top: 0;
         }
     }
 }

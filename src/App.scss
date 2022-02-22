@@ -247,6 +247,38 @@ body.dark {
         fill: #646464;
     }
 
+    .copyright {
+        color: #424242;
+    }
+
+    .DirectAction {
+        input[type='checkbox'] {
+            background: #2a2a2a;
+            border: 1px solid #333333;
+
+            ::after {
+                background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOSIgaGVpZ2h0PSI1IiB2aWV3Qm94PSIwIDAgOSA1IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNMSAxTDQuNSA0TDggMSIgc3Ryb2tlPSIjODI4MjgyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==');
+            }
+        }
+
+        span {
+            color: #828282;
+        }
+    }
+
+    .LinkBlock__title {
+        color: rgba(255, 255, 255, 0.53);
+    }
+
+    .LinkBlock__active .LinkBlock__title {
+        color: rgba(249, 84, 4, 0.53);
+    }
+
+    .Disclaimer__Content a {
+        color: #fff;
+        border-bottom: dashed 1px #fff;
+    }
+
     span,
     .ApyChart__Title,
     .PieChart__Header,
