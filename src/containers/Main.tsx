@@ -16,7 +16,7 @@ import useFetch from 'react-fetch-hook';
 import { getPoolStatsUrl, zunamiInfoUrl, getHistoricalApyUrl } from '../api/api';
 import { BigNumber } from 'bignumber.js';
 
-import usePendingDeposit from '../hooks/usePendingDeposit';
+import usePendingOperations from '../hooks/usePendingOperations';
 import { PoolInfo, poolDataToChartData } from '../functions/pools';
 import { ApyChart } from '../components/ApyChart/ApyChart';
 import { WelcomeCarousel } from '../components/WelcomeCarousel/WelcomeCarousel';
@@ -83,16 +83,17 @@ export const Main = (): JSX.Element => {
             });
     }, [histApyPeriod]);
 
-    const pendingDepositSum = new BigNumber(100); //usePendingDeposit();
+    const pendingOperations = usePendingOperations();
+
     const pdElement = (
         <div className="d-flex">
             <PendingBalance
-                val={`PD: $${pendingDepositSum}`}
-                hint={`You have $${pendingDepositSum} in pending deposit`}
+                val={`PD: $${pendingOperations.deposit}`}
+                hint={`You have $${pendingOperations.deposit} in pending deposit`}
             />
             <PendingBalance
-                val={`PW: $${50}`}
-                hint={`You have $${pendingDepositSum} in pending withdraw`}
+                val={`PW: $${pendingOperations.withdraw}`}
+                hint={`You have $${pendingOperations.withdraw} in pending withdraw`}
             />
         </div>
     );
@@ -150,9 +151,7 @@ export const Main = (): JSX.Element => {
                                 withColor={false}
                                 isStrategy={false}
                                 hint="Funds passing through the Transaction Streamlining Mechanism and will be credited within 24 hours"
-                                secondaryRow={
-                                    pendingDepositSum.toNumber() > 0 ? pdElement : undefined
-                                }
+                                secondaryRow={pdElement}
                             />
                             <InfoBlock
                                 title="Daily Profits"
