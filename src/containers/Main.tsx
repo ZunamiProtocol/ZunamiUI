@@ -55,7 +55,7 @@ export const Main = (): JSX.Element => {
 
     const zunamiInfo = zunData as ZunamiInfo;
 
-    const pool = useFetch(getPoolStatsUrl('OUSD,USDP'));
+    const pool = useFetch(getPoolStatsUrl('DUSD,USDN'));
     const poolStats = pool.data as PoolsStats;
     const poolBestApy = poolStats && poolStats.poolsStats ? poolStats.poolsStats[0].apy : 0;
     const poolBestAprDaily =
