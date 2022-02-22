@@ -14,7 +14,11 @@ export const Header = (): JSX.Element => {
                 text={
                     <div>
                         Please note. The contract{' '}
-                        <a target="_blank" rel="noreferrer" href="http://ya.ru">
+                        <a
+                            target="_blank"
+                            rel="noreferrer"
+                            href="https://github.com/ZunamiLab/ZunamiProtocol/tree/main/audit"
+                        >
                             has been audited
                         </a>
                         , but it steel a beta version. Use it at your own risk
