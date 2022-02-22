@@ -28,6 +28,18 @@ const poolsChartdata: { [key: string]: any } = {
         color: '#B8E654',
         value: 0,
     },
+    DUSD: {
+        title: 'Convex finance - DUSD pool',
+        link: 'https://etherscan.io/address/0x63f920108834672619a8720321422dce79724766',
+        color: '#3098F9',
+        value: 0,
+    },
+    USDN: {
+        title: 'Convex finance - USDN pool',
+        link: 'https://etherscan.io/address/0x553f8BD62F2e39064B49CDb814765eC0e6057FFe',
+        color: '#8DDA2C',
+        value: 0,
+    },
 };
 
 export function poolInfoToChartElement(pool: PoolInfo, percent: BigNumber): ChartDataElement {
