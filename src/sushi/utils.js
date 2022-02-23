@@ -94,9 +94,9 @@ export const stake = async (masterChefContract, account, dai, usdc, usdt) => {
 export const unstake = async (masterChefContract, account, lpShares, dai, usdc, usdt) => {
     return masterChefContract.methods
         .delegateWithdrawal(new BigNumber(lpShares).times(DEFAULT_TOKEN_DECIMAL).toString(), [
-            new BigNumber(dai).times(DEFAULT_TOKEN_DECIMAL).toString(),
-            new BigNumber(usdc).times(USDT_TOKEN_DECIMAL).toString(),
-            new BigNumber(usdt).times(USDT_TOKEN_DECIMAL).toString(),
+            new BigNumber(dai).multipliedBy(0.997).times(DEFAULT_TOKEN_DECIMAL).toString(),
+            new BigNumber(usdc).multipliedBy(0.997).times(USDT_TOKEN_DECIMAL).toString(),
+            new BigNumber(usdt).multipliedBy(0.997).times(USDT_TOKEN_DECIMAL).toString(),
         ])
         .send({ from: account })
         .on('transactionHash', (tx) => {
