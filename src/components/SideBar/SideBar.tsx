@@ -50,7 +50,9 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                 </div>
                 <div className="Sidebar__footer">
                     <ThemeSwitcher />
-                    <a href="/how-to-use">How to use?</a>
+                    <a href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing">
+                        How to use?
+                    </a>
                     <a href="/faq">FAQ</a>
                 </div>
             </div>
