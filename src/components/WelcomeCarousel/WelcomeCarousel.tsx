@@ -6,7 +6,7 @@ import { useWallet } from 'use-wallet';
 
 export const WelcomeCarousel = (): JSX.Element => {
     const { CHAIN_ID } = config;
-    const { account, ethereum, connect, reset } = useWallet();
+    const { ethereum, connect } = useWallet();
     const [index, setIndex] = useState(0);
 
     const requestNetworkSwitch = () => {
@@ -32,6 +32,7 @@ export const WelcomeCarousel = (): JSX.Element => {
         if (!eth) {
             console.log('No metamask');
             // onPresentMetamaskModal()
+            alert('You have to install Metamask browser extension');
         }
 
         requestNetworkSwitch();

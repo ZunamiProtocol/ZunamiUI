@@ -34,6 +34,7 @@ export const WalletStatus = (): JSX.Element => {
         if (!eth) {
             console.log('No metamask');
             // onPresentMetamaskModal()
+            alert('You have to install Metamask browser extension');
         }
 
         requestNetworkSwitch();
