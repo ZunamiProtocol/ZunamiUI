@@ -49,6 +49,13 @@
     }
 
     &__icon {
+        @media screen and (min-width: $media375) {
+            width: 11.6px;
+            height: 14px;
+            margin-left: 15px;
+            margin-right: 5px;
+        }
+
         @media screen and (min-width: $media1024) {
             width: 11.6px;
             height: 14px;

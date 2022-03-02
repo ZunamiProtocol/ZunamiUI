@@ -6,7 +6,7 @@
     }
 
     .error {
-        flex-basis: 100%;
+        // flex-basis: 100%;
     }
 
     .buttons {
@@ -42,5 +42,17 @@
 
     .deposit-button-wrapper {
         display: flex;
+    }
+
+    @media screen and (min-width: $media1440) {
+        width: 484px;
+    }
+
+    .direct-withdraw-warning {
+        background: #fff5e9;
+        border-radius: 5px;
+        font-size: 12px;
+        padding: 10px 20px;
+        color: #767676;
     }
 }
