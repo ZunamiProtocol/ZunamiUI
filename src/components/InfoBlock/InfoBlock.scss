@@ -25,6 +25,10 @@
         }
     }
 
+    @media screen and (min-width: $media375) {
+        height: 88px;
+    }
+
     @media screen and (min-width: $media1024) {
         width: 226px;
         max-width: 226px;
@@ -48,6 +52,13 @@
 
     &__title {
         color: #636363;
+
+        @media screen and (min-width: $media375) {
+            margin-left: 12px;
+            margin-top: 17px;
+            font-size: 15px;
+            line-height: 20px;
+        }
 
         @media screen and (min-width: $media1024) {
             margin-left: 15px;
@@ -77,6 +88,13 @@
     }
 
     &__description {
+        @media screen and (min-width: $media375) {
+            margin-left: 16px;
+            margin-top: 10px;
+            font-size: 14px;
+            line-height: 19px;
+        }
+
         @media screen and (min-width: $media1024) {
             margin-left: 16px;
             margin-top: 10px;
@@ -100,6 +118,11 @@
 
         &_color {
             color: $primary-color;
+
+            @media screen and (min-width: $media375) {
+                font-size: 16px;
+                line-height: 22px;
+            }
 
             @media screen and (min-width: $media1024) {
                 font-size: 16px;
