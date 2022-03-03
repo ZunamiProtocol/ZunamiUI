@@ -6,6 +6,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { useWallet } from 'use-wallet';
 import useEagerConnect from '../hooks/useEagerConnect';
 import { WelcomeCarousel } from '../components/WelcomeCarousel/WelcomeCarousel';
+import { WithdrawOptions } from '../components/Form/WithdrawOptions/WithdrawOptions';
 
 interface FinanceOperationsProps {
     operationName: string;
@@ -34,7 +35,12 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                         <h3 className="DepositContent__Title">
                                             Deposit & Withdraw
                                         </h3>
-                                        <Form operationName={props.operationName} />
+                                        <div className="d-flex justify-content-start">
+                                            <Form operationName={props.operationName} />
+                                            {props.operationName === 'Withdraw' && (
+                                                <WithdrawOptions />
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </Col>
