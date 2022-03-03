@@ -1,6 +1,10 @@
 @import 'src/variables';
 
 .ApyChart {
+    @media (min-width: $media375) {
+        margin: 20px;
+    }
+
     @media (min-width: $media1024) {
         margin: 20px;
     }
@@ -14,8 +18,14 @@
         justify-content: space-between;
         align-items: center;
 
+        @media (min-width: $media375) {
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
         @media (min-width: $media1024) {
             margin-bottom: 20px;
+            flex-wrap: nowrap;
         }
 
         @media (min-width: $media1440) {
@@ -29,9 +39,16 @@
         .ApyChart__Title {
             color: #636363;
 
+            @media screen and (min-width: $media375) {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
             @media screen and (min-width: $media1024) {
                 font-size: 12px;
                 line-height: 16px;
+                width: auto;
+                margin-bottom: 0;
             }
 
             @media screen and (min-width: $media1440) {
@@ -48,6 +65,11 @@
         .ApyChart__Selector {
             display: flex;
             flex-direction: row;
+
+            @media screen and (min-width: $media375) {
+                grid-gap: 25px;
+                gap: 25px;
+            }
 
             @media screen and (min-width: $media1024) {
                 grid-gap: 13px;

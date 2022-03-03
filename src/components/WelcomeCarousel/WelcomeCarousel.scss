@@ -20,22 +20,33 @@
         flex-direction: column;
 
         h1 {
+            text-align: center;
+            color: #636363;
+
+            @media screen and (min-width: $media375) {
+                font-size: 16px;
+                line-height: 22px;
+            }
+
             @media screen and (min-width: $media1024) {
                 font-size: 23px;
                 line-height: 31px;
-                color: #636363;
-                text-align: center;
             }
 
             @media screen and (min-width: $media1920) {
                 font-size: 30px;
                 line-height: 41px;
-                color: #636363;
-                text-align: center;
             }
         }
 
         &__Logo {
+            @media screen and (min-width: $media375) {
+                width: 119.5px;
+                height: 17.6px;
+                margin-top: 58px;
+                margin-bottom: 21px;
+            }
+
             @media screen and (min-width: $media1024) {
                 margin-top: 41px;
                 margin-bottom: 25px;
@@ -52,6 +63,12 @@
         }
 
         .carousel {
+            @media screen and (min-width: $media375) {
+                height: 473px;
+                width: 319px;
+                margin-top: 49px;
+            }
+
             @media screen and (min-width: $media1024) {
                 margin-top: 50px;
                 width: 522px;
@@ -81,6 +98,11 @@
                     display: flex;
                 }
 
+                @media screen and (min-width: $media375) {
+                    width: 319px;
+                    height: 473px;
+                }
+
                 @media screen and (min-width: $media1024) {
                     width: 522px;
                     height: 310px;
@@ -94,6 +116,13 @@
                 h1 {
                     text-align: center;
                     color: #404040;
+
+                    @media screen and (min-width: $media375) {
+                        font-size: 16px;
+                        line-height: 22px;
+                        margin-top: 60px;
+                        margin-bottom: 0;
+                    }
 
                     @media screen and (min-width: $media1024) {
                         font-size: 18px;
@@ -114,6 +143,13 @@
                     text-align: center;
                     color: #767676;
 
+                    @media screen and (min-width: $media375) {
+                        font-size: 12px;
+                        line-height: 16px;
+                        margin-top: 22px;
+                        width: 237px;
+                    }
+
                     @media screen and (min-width: $media1024) {
                         font-size: 12px;
                         line-height: 16px;
@@ -131,6 +167,13 @@
 
                 &.first-slide {
                     svg {
+                        @media screen and (min-width: $media375) {
+                            width: 120px;
+                            height: 56px;
+                            margin-top: 52px;
+                            margin-bottom: 68px;
+                        }
+
                         @media screen and (min-width: $media1024) {
                             width: 108px;
                             height: 51px;
@@ -149,6 +192,10 @@
 
                 &.second-slide {
                     span {
+                        @media screen and (min-width: $media375) {
+                            width: 240px;
+                        }
+
                         @media screen and (min-width: $media1024) {
                             width: 420px;
                         }
@@ -159,6 +206,13 @@
                     }
 
                     svg {
+                        @media screen and (min-width: $media375) {
+                            margin-top: 55px;
+                            margin-bottom: 55px;
+                            width: 68px;
+                            height: 68px;
+                        }
+
                         @media screen and (min-width: $media1024) {
                             margin-top: 38px;
                             margin-bottom: 33px;
@@ -183,6 +237,13 @@
                     }
 
                     svg {
+                        @media screen and (min-width: $media375) {
+                            margin-top: 62px;
+                            margin-bottom: 60px;
+                            width: 75px;
+                            height: 56px;
+                        }
+
                         @media screen and (min-width: $media1024) {
                             margin-top: 38px;
                             margin-bottom: 33px;
@@ -211,6 +272,13 @@
                     }
 
                     svg {
+                        @media screen and (min-width: $media375) {
+                            margin-top: 50px;
+                            margin-bottom: 62px;
+                            width: 89px;
+                            height: 47px;
+                        }
+
                         @media screen and (min-width: $media1024) {
                             margin-top: 42px;
                             margin-bottom: 40px;
@@ -239,6 +307,13 @@
                     }
 
                     svg {
+                        @media screen and (min-width: $media375) {
+                            margin-top: 40px;
+                            margin-bottom: 59px;
+                            width: 60px;
+                            height: 60px;
+                        }
+
                         @media screen and (min-width: $media1024) {
                             margin-top: 32px;
                             margin-bottom: 32px;
@@ -268,7 +343,12 @@
                     background: linear-gradient(66.3deg, #f84f03 13.42%, #faa413 84.22%);
                 }
 
+                @media screen and (min-width: $media375) {
+                    display: none;
+                }
+
                 @media screen and (min-width: $media1024) {
+                    display: flex;
                     width: 25px;
                     height: 25px;
                     margin-top: -12.5px;
@@ -300,6 +380,10 @@
             }
 
             .carousel-indicators {
+                @media screen and (min-width: $media375) {
+                    margin-bottom: 47px;
+                }
+
                 @media screen and (min-width: $media1024) {
                     margin-bottom: 25px;
                 }
@@ -311,6 +395,11 @@
 
                     &.active {
                         background: #c4c4c4;
+                    }
+
+                    @media screen and (min-width: $media375) {
+                        width: 5.7px;
+                        height: 5.7px;
                     }
 
                     @media screen and (min-width: $media1024) {
