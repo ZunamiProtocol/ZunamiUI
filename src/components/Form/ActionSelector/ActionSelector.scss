@@ -32,6 +32,10 @@
             font-size: 12px;
             line-height: 16px;
             margin-right: 10px;
+
+            &:last-child {
+                margin-right: 0;
+            }
         }
 
         @media screen and (min-width: $media1440) {

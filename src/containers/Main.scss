@@ -46,8 +46,13 @@
     .third-row {
         display: flex;
 
+        @media screen and (max-width: 1023px) {
+            flex-wrap: wrap;
+        }
+
         @media screen and (min-width: $media1024) {
             padding-left: 10px;
+            flex-wrap: nowrap;
         }
 
         @media screen and (min-width: $media1440) {
@@ -57,11 +62,37 @@
         @media screen and (min-width: $media1920) {
             padding-left: 25px;
         }
+
+        .InfoBlock {
+            @media screen and (max-width: 1023px) {
+                margin-bottom: 11px;
+            }
+        }
     }
 
     .first-row .InfoBlock:first-child,
     .second-row .InfoBlock:first-child {
         margin-left: 0;
+
+        @media screen and (max-width: 1023px) {
+            width: 100%;
+        }
+    }
+
+    .first-row .InfoBlock:nth-child(2),
+    .first-row .InfoBlock:last-child,
+    .second-row .InfoBlock:nth-child(2),
+    .second-row .InfoBlock:last-child {
+        @media screen and (max-width: 1023px) {
+            width: calc(50% - 5px);
+        }
+    }
+
+    .first-row .InfoBlock:last-child,
+    .second-row .InfoBlock:last-child {
+        @media screen and (max-width: 1023px) {
+            margin-left: 10px;
+        }
     }
 
     .first-row .InfoBlock:last-child,
@@ -81,6 +112,12 @@
     border-radius: 5px;
     overflow: hidden;
     height: 100%;
+
+    @media screen and (max-width: 1023px) {
+        width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+    }
 }
 
 .dashboard-col .strats-chart-col {
@@ -93,7 +130,11 @@
     }
 }
 
-.main-row {
+.main-row.row {
+    @media screen and (max-width: 1023px) {
+        height: auto !important;
+    }
+
     @media screen and (min-width: $media1024) {
         margin-top: 10px !important;
     }
