@@ -6,6 +6,7 @@ interface DirectActionProps {
     actionName: string;
     hint: string;
     onChange?: Function;
+    checked: boolean;
 }
 
 export const DirectAction = (props: DirectActionProps): JSX.Element => {
@@ -16,6 +17,7 @@ export const DirectAction = (props: DirectActionProps): JSX.Element => {
         <div className="DirectAction">
             <input
                 type="checkbox"
+                checked={props.checked}
                 onClick={(e) => {
                     if (props.onChange) {
                         props.onChange(e.currentTarget.checked);

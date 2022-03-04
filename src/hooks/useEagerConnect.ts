@@ -12,7 +12,7 @@ const useEagerConnect = (account: string, connect: any, ethereum: any) => {
             }
             // requestNetworkSwitch();
         }
-    }, []);
+    }, [account, connect, ethereum]);
 };
 
 export default useEagerConnect;

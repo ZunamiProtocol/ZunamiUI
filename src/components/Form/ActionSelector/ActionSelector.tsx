@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import './ActionSelector.scss';
 
@@ -19,7 +18,7 @@ const actions = [
 ];
 
 export const ActionSelector = (props: ActionSelectorProps): JSX.Element => {
-    const [action, setAction] = useState(props.value || 'deposit');
+    const action = props.value || 'deposit';
     const history = useHistory();
 
     return (

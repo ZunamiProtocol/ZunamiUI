@@ -22,7 +22,7 @@ function renderStratList(items: Array<DataItem>) {
                 style={{ background: item.color }}
             />
             <div className={'PieChart__StratList__Item__Name'}>
-                <a target="blank" href={`https://etherscan.io/token/${item.link}`}>
+                <a target="blank" href={item.link}>
                     {item.title}
                 </a>
             </div>
