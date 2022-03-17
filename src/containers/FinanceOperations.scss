@@ -21,8 +21,37 @@
 }
 
 .DepositContent {
+    @media screen and (min-width: $media375) {
+        padding: 18px;
+    }
+
+    @media screen and (min-width: $media1024) {
+        padding: 0;
+    }
+
     &__Title {
         color: #636363;
+        display: flex;
+        align-items: center;
+
+        svg {
+            @media screen and (min-width: $media375) {
+                display: block;
+                width: 16px;
+                height: 16px;
+                margin-right: 12px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                display: none;
+            }
+        }
+
+        @media screen and (min-width: $media375) {
+            font-size: 16px;
+            line-height: 21px;
+            margin: 0 0 24px 1px;
+        }
 
         @media screen and (min-width: $media1024) {
             font-size: 12px;

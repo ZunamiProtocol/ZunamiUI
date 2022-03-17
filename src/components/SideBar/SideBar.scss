@@ -7,6 +7,14 @@
     height: 100%;
     background-color: #fff;
 
+    @media (min-width: $media375) {
+        padding-top: 100px;
+
+        .WalletStatus {
+            display: none;
+        }
+    }
+
     @media screen and (min-width: $media1024) {
         border-radius: 5px;
         overflow: hidden;
@@ -14,6 +22,10 @@
         max-width: 259px !important;
         min-width: 259px !important;
         padding: 0 !important;
+
+        .WalletStatus {
+            display: flex;
+        }
     }
 
     @media screen and (min-width: $media1440) {

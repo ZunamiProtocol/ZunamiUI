@@ -25,8 +25,13 @@ body {
     margin: 0 auto;
     padding: 0;
 
+    @media (min-width: $media375) {
+        justify-content: flex-start !important;
+    }
+
     @media (min-width: $media1024) {
         max-width: 978px;
+        justify-content: space-between !important;
     }
 
     @media (min-width: $media1440) {
@@ -73,10 +78,31 @@ nav {
 .SidebarColumn {
     @media (min-width: $media375) {
         display: none;
+        background: linear-gradient(262.84deg, #fff8f1 -27.39%, #fff8ed 71.59%);
+
+        &.active {
+            top: 0;
+            position: fixed;
+            z-index: 2;
+            display: block;
+
+            .Sidebar {
+                height: auto;
+
+                &__footer {
+                    display: flex;
+                    margin-left: 25px;
+                    flex-direction: row;
+                    gap: 20px;
+                    margin-top: 30px;
+                }
+            }
+        }
     }
 
     @media (min-width: $media1024) {
         display: flex;
+        background: #fff;
     }
 }
 
@@ -135,6 +161,15 @@ footer {
     }
 }
 
+#toasts {
+    z-index: 1111;
+    position: fixed !important;
+}
+
+.toast {
+    border-radius: 5px;
+}
+
 .zun-button {
     background: linear-gradient(87.51deg, #f74e02 12.85%, #f9a412 94.75%);
     border-radius: 5px;
@@ -167,7 +202,8 @@ footer {
 }
 
 button:disabled,
-button.disabled {
+button.disabled,
+.disabled {
     opacity: 0.5;
     pointer-events: none;
 }
@@ -207,12 +243,34 @@ input[type='checkbox'] {
     min-width: 250px;
 }
 
+.overflow {
+    overflow: hidden;
+}
+
 .Sidebar {
+    .ComingSoonPlaceholder {
+        @media (min-width: $media375) {
+            width: 104px;
+            height: 29px;
+            font-size: 12px;
+            line-height: 16px;
+            margin-left: 15px;
+        }
+    }
+
     .TestnetLabel {
-        background: linear-gradient(262.84deg, #fff3e9 -27.39%, #fef5e8 71.59%);
         color: $primary-color;
 
+        @media (min-width: $media375) {
+            width: 136px;
+            height: 29px;
+            margin-left: 13px;
+            margin-top: 0;
+            background: #fff;
+        }
+
         @media (min-width: $media1024) {
+            background: linear-gradient(262.84deg, #fff3e9 -27.39%, #fef5e8 71.59%);
             width: 108px;
             height: 24px;
             margin-left: 13px;
@@ -233,6 +291,11 @@ input[type='checkbox'] {
         }
 
         span {
+            @media (min-width: $media375) {
+                font-size: 12px;
+                line-height: 16px;
+            }
+
             @media (min-width: $media1024) {
                 font-size: 9px;
                 line-height: 12px;
@@ -252,6 +315,12 @@ input[type='checkbox'] {
         svg {
             path {
                 fill: rgba(246, 74, 0, 0.53);
+            }
+
+            @media (min-width: $media375) {
+                width: 11.2px;
+                height: 11.2px;
+                margin-right: 10px;
             }
 
             @media (min-width: $media1024) {
@@ -276,6 +345,12 @@ input[type='checkbox'] {
 body.dark {
     background-color: #000 !important;
 
+    .WithdrawOptions {
+        background-color: #2a2a2a;
+        border-color: #333333;
+        color: #fff;
+    }
+
     .WalletStatus__Icon path:nth-child(1) {
         fill: #3c3c3c;
     }
@@ -292,16 +367,32 @@ body.dark {
         color: #424242;
     }
 
-    .DirectAction {
-        input[type='checkbox'] {
-            background: #2a2a2a;
-            border: 1px solid #333333;
+    input[type='text'] {
+        border-color: $dark-border-color;
+        background-color: $dark-panel-bg;
+        color: #fff;
+    }
 
-            ::after {
-                background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOSIgaGVpZ2h0PSI1IiB2aWV3Qm94PSIwIDAgOSA1IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNMSAxTDQuNSA0TDggMSIgc3Ryb2tlPSIjODI4MjgyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==');
-            }
+    .SidebarColumn {
+        @media (min-width: $media375) {
+            background: #1e1e1e;
         }
 
+        @media (min-width: $media1024) {
+            background: #2a2a2a;
+        }
+    }
+
+    input[type='checkbox'] {
+        background: #2a2a2a;
+        border: 1px solid #333333;
+
+        ::after {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOSIgaGVpZ2h0PSI1IiB2aWV3Qm94PSIwIDAgOSA1IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNMSAxTDQuNSA0TDggMSIgc3Ryb2tlPSIjODI4MjgyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==');
+        }
+    }
+
+    .DirectAction {
         span {
             color: #828282;
         }
@@ -497,12 +588,6 @@ body.dark {
                 }
 
                 .token {
-                    color: #fff;
-                }
-
-                input[type='text'] {
-                    border-color: $dark-border-color;
-                    background-color: $dark-panel-bg;
                     color: #fff;
                 }
             }

@@ -8,6 +8,7 @@
     @media screen and (min-width: $media375) {
         height: 75px;
         min-height: 75px;
+        z-index: 1111;
     }
 
     @media screen and (min-width: $media1024) {
@@ -28,6 +29,22 @@
     .navbar-brand {
         margin: 0;
         padding: 0;
+    }
+
+    .nav-menu {
+        @media screen and (min-width: $media375) {
+            display: flex;
+            justify-content: flex-end;
+            position: relative;
+            top: 25px;
+            right: 22px;
+            height: 33px;
+            width: 33px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            display: none;
+        }
     }
 
     .Logo {

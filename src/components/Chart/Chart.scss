@@ -57,8 +57,8 @@
 
         .PieChart__Chart {
             @media (min-width: $media375) {
-                width: 216px;
-                height: 216px;
+                width: 166px;
+                height: 166px;
             }
 
             @media (min-width: $media1024) {
@@ -160,6 +160,12 @@
             flex-direction: row;
             align-items: center;
             justify-content: center;
+
+            @media (min-width: $media375) {
+                margin-bottom: 10px;
+                font-size: 14px;
+                line-height: 19px;
+            }
 
             @media (min-width: $media1024) {
                 margin-bottom: 10px;
