@@ -5,14 +5,14 @@ import { useWallet } from 'use-wallet';
 
 import { stake, getMasterChefContract } from '../sushi/utils';
 
-const useStake = (dai: string, usdc: string, usdt: string) => {
+const useStake = (dai: string, usdc: string, usdt: string, direct: boolean = false) => {
     const { account } = useWallet();
     const sushi = useSushi();
-    const masterChefContract = getMasterChefContract(sushi);
+    const zunamiContract = getMasterChefContract(sushi);
+
     const handleStake = useCallback(async () => {
-        const txHash = await stake(masterChefContract, account, dai, usdc, usdt);
-        console.log(txHash);
-    }, [account, dai, usdc, usdt, masterChefContract]);
+        return await stake(zunamiContract, account, dai, usdc, usdt, direct);
+    }, [account, dai, usdc, usdt, zunamiContract, direct]);
 
     return { onStake: handleStake };
 };
