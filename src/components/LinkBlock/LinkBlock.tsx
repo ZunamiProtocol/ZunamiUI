@@ -20,6 +20,7 @@ export const LinkBlock = (prop: LinkBlockProps): JSX.Element => {
 
     const clickHandler = () => {
         history.push(url);
+        document.body.classList.remove('overflow');
     };
 
     const styles = ['LinkBlock'];
