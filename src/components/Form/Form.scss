@@ -6,7 +6,6 @@
     }
 
     .error {
-        // flex-basis: 100%;
         @media screen and (min-width: $media1024) {
             font-size: 12px;
             line-height: 16px;
@@ -76,6 +75,18 @@
 
     @media screen and (min-width: $media1920) {
         width: 543px;
+    }
+
+    .direct-withdraw-warning {
+        background: #fff5e9;
+        border-radius: 5px;
+        font-size: 12px;
+        padding: 10px 20px;
+        color: #767676;
+    }
+
+    @media screen and (min-width: $media1440) {
+        width: 484px;
     }
 
     .direct-withdraw-warning {
