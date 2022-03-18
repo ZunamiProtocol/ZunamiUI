@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import { useWallet } from 'use-wallet';
 import BigNumber from 'bignumber.js';
-import { getBalanceNumber } from '../utils/formatbalance';
 import { contractAddresses } from '../sushi/lib/constants';
 
 export interface PendingOperations {
@@ -16,13 +15,17 @@ const usePendingOperations = (): PendingOperations => {
     const zunamiAddr = contractAddresses.zunami[1];
     const { account } = useWallet();
 
-    // const depositEventHandler = (addr: number, amounts: number[]) => {
-    //     setPendingDeposit(amounts.reduce((prev: number, curr: number): number => prev + curr));
-    // };
+    const depositEventHandler = (addr: number, amounts: BigNumber[]) => {
+        setPendingDeposit(
+            amounts.reduce((prev: BigNumber, curr: BigNumber): BigNumber => prev.plus(curr))
+        );
+    };
 
-    // const withdrawEventHandler = (addr: number, amounts: number[], lpShares: number) => {
-    //     setPendingWithdraw(amounts.reduce((prev: number, curr: number): number => prev + curr));
-    // };
+    const withdrawEventHandler = (addr: number, amounts: BigNumber[], lpShares: number) => {
+        setPendingWithdraw(
+            amounts.reduce((prev: BigNumber, curr: BigNumber): BigNumber => prev.plus(curr))
+        );
+    };
 
     useEffect(() => {
         if (!window.ethereum) {
@@ -45,41 +48,33 @@ const usePendingOperations = (): PendingOperations => {
         const contract = new ethers.Contract(zunamiAddr, abi, httpProvider.getSigner());
 
         const initPendings = async () => {
-            try {
-                const pendingCoins = await contract.pendingDeposits(account);
+            const pendingCoins = await contract.pendingDeposits(account);
 
-                const result = [
-                    new BigNumber(pendingCoins[0].toString()),
-                    new BigNumber(pendingCoins[1].toString()),
-                    new BigNumber(pendingCoins[2].toString()),
-                ];
+            const result = [
+                new BigNumber(pendingCoins[0].toString()),
+                new BigNumber(pendingCoins[1].toString()),
+                new BigNumber(pendingCoins[2].toString()),
+            ];
 
-                setPendingDeposit(result[0].plus(result[1]).plus(result[2]));
-            } catch (error) {
-                debugger;
-            }
+            setPendingDeposit(result[0].plus(result[1]).plus(result[2]));
 
-            try {
-                const val = await contract.pendingWithdrawals(account);
-                setPendingWithdraw(new BigNumber(val.toString()));
-            } catch (error) {
-                debugger;
-            }
+            const val = await contract.pendingWithdrawals(account);
+            setPendingWithdraw(new BigNumber(val.toString()));
         };
 
         if (contract && account) {
             initPendings();
         }
 
-        // const filterDeposit = contract.filters.CreatedPendingDeposit(account);
-        // const filterWithdraw = contract.filters.CreatedPendingWithdrawal(account);
+        const filterDeposit = contract.filters.CreatedPendingDeposit(account);
+        const filterWithdraw = contract.filters.CreatedPendingWithdrawal(account);
 
-        // contract.on(filterDeposit, depositEventHandler);
-        // contract.on(filterWithdraw, withdrawEventHandler);
+        contract.on(filterDeposit, depositEventHandler);
+        contract.on(filterWithdraw, withdrawEventHandler);
 
         return () => {
-            // contract.off(filterDeposit, depositEventHandler);
-            // contract.off(filterWithdraw, withdrawEventHandler);
+            contract.off(filterDeposit, depositEventHandler);
+            contract.off(filterWithdraw, withdrawEventHandler);
         };
     }, [account, zunamiAddr]);
 
