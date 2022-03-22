@@ -11,6 +11,11 @@ $media435: 435px;
     justify-content: flex-start;
     align-items: center;
 
+    @media screen and (min-width: $media375) {
+        height: 25px;
+        margin-bottom: 21px;
+    }
+
     @media screen and (min-width: $media1024) {
         height: 22px;
         margin-bottom: 21px;
@@ -63,6 +68,11 @@ $media435: 435px;
     &__title {
         color: #636363;
 
+        @media screen and (min-width: $media375) {
+            font-size: 18px;
+            line-height: 24px;
+        }
+
         @media screen and (min-width: $media1024) {
             font-size: 12px;
             line-height: 16px;
@@ -79,6 +89,13 @@ $media435: 435px;
     }
 
     &__icon {
+        @media screen and (min-width: $media375) {
+            width: 20px;
+            height: auto;
+            margin-right: 20px;
+            margin-left: 28px;
+        }
+
         @media screen and (min-width: $media1024) {
             width: 16px;
             height: auto;
@@ -116,7 +133,8 @@ $media435: 435px;
         }
     }
 
-    &[data-url='/deposit-and-withdraw'] {
+    &[data-url='/deposit'],
+    &[data-url='/withdraw'] {
         .LinkBlock__icon img {
             @media screen and (min-width: $media1024) {
                 width: 14.3px;

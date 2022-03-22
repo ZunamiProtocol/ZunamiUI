@@ -6,6 +6,14 @@
     border-radius: 5px;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+    position: relative;
+
+    @media screen and (min-width: $media375) {
+        width: auto;
+        height: 82px;
+        margin-bottom: 11px;
+    }
 
     @media screen and (min-width: $media1024) {
         margin-bottom: 11px;
@@ -26,11 +34,22 @@
     }
 
     img {
+        @media screen and (min-width: $media375) {
+            width: 23px;
+            height: 23px;
+            margin-left: 0;
+            margin-right: 10px;
+            position: absolute;
+            top: 14px;
+            left: 16px;
+        }
+
         @media screen and (min-width: $media1024) {
             width: 18px;
             height: 18px;
             margin-left: 13.9px;
             margin-right: 8px;
+            position: static;
         }
 
         @media screen and (min-width: $media1440) {
@@ -51,10 +70,19 @@
     .coinName {
         color: #636363;
 
+        @media screen and (min-width: $media375) {
+            font-size: 12px;
+            line-height: 16px;
+            position: absolute;
+            top: 19px;
+            left: 48px;
+        }
+
         @media screen and (min-width: $media1024) {
             font-size: 12px;
             line-height: 16px;
             width: 83px;
+            position: static;
         }
 
         @media screen and (min-width: $media1440) {
@@ -73,9 +101,18 @@
     .divider {
         background-color: #f4efe1;
 
+        @media screen and (min-width: $media375) {
+            height: 50px;
+            width: 1px;
+            position: absolute;
+            left: 141px;
+            top: 16px;
+        }
+
         @media screen and (min-width: $media1024) {
             height: 21px;
             width: 1px;
+            position: static;
         }
 
         @media screen and (min-width: $media1440) {
@@ -93,12 +130,23 @@
         color: #f95404;
         cursor: pointer;
 
+        @media screen and (min-width: $media375) {
+            font-size: 9px;
+            line-height: 12px;
+            width: 35px;
+            height: 17px;
+            top: 47px;
+            left: 14px;
+            position: absolute;
+        }
+
         @media screen and (min-width: $media1024) {
             margin-left: 20px;
             font-size: 9px;
             line-height: 12px;
             width: 29px;
             height: 14px;
+            position: static;
         }
 
         @media screen and (min-width: $media1440) {
@@ -121,11 +169,20 @@
     .balance {
         color: #f95404;
 
+        @media screen and (min-width: $media375) {
+            font-size: 12px;
+            line-height: 16px;
+            position: absolute;
+            top: 47px;
+            left: 58px;
+        }
+
         @media screen and (min-width: $media1024) {
             font-size: 12px;
             line-height: 16px;
             margin-left: 17px;
             width: 74px;
+            position: static;
         }
 
         @media screen and (min-width: $media1440) {
@@ -150,6 +207,18 @@
         border-radius: 5px;
         color: #636363;
 
+        @media screen and (min-width: $media375) {
+            font-size: 12px;
+            line-height: 16px;
+            padding-left: 8px;
+            width: auto;
+            height: 28px;
+            position: absolute;
+            left: 165px;
+            top: 27px;
+            right: 15px;
+        }
+
         @media screen and (min-width: $media1024) {
             font-size: 12px;
             line-height: 16px;
@@ -157,6 +226,7 @@
             width: 133px;
             height: 21px;
             margin-left: 14px;
+            position: static;
         }
 
         @media screen and (min-width: $media1440) {

@@ -77,32 +77,84 @@ export const approve = async (provider, tokenAddress, masterChefContract, accoun
         });
 };
 
-export const stake = async (masterChefContract, account, dai, usdc, usdt) => {
-    return masterChefContract.methods
-        .delegateDeposit([
-            new BigNumber(dai).times(DEFAULT_TOKEN_DECIMAL).toString(),
-            new BigNumber(usdc).times(USDT_TOKEN_DECIMAL).toString(),
-            new BigNumber(usdt).times(USDT_TOKEN_DECIMAL).toString(),
-        ])
+/**
+ * Deposit function
+ * @param Contract contract zunamiContract
+ * @param string account Wallet address
+ * @param {*} lpShares
+ * @param {*} dai
+ * @param {*} usdc
+ * @param {*} usdt
+ * @param boolean optimized Whether is should be an optimized deposit (expensive) or not
+ * @returns
+ */
+export const stake = async (contract, account, dai, usdc, usdt, direct = false) => {
+    const coins = [
+        new BigNumber(dai).times(DEFAULT_TOKEN_DECIMAL).toString(),
+        new BigNumber(usdc).times(USDT_TOKEN_DECIMAL).toString(),
+        new BigNumber(usdt).times(USDT_TOKEN_DECIMAL).toString(),
+    ];
+
+    if (!direct) {
+        return contract.methods
+            .deposit(coins)
+            .send({ from: account })
+            .on('transactionHash', (tx) => {
+                return tx.transactionHash;
+            });
+    }
+
+    return contract.methods
+        .delegateDeposit(coins)
         .send({ from: account })
         .on('transactionHash', (tx) => {
-            // console.log(tx)
             return tx.transactionHash;
         });
 };
 
-export const unstake = async (masterChefContract, account, lpShares, dai, usdc, usdt) => {
-    return masterChefContract.methods
-        .delegateWithdrawal(new BigNumber(lpShares).times(DEFAULT_TOKEN_DECIMAL).toString(), [
-            new BigNumber(dai).multipliedBy(0.99).times(DEFAULT_TOKEN_DECIMAL).toString(),
-            new BigNumber(usdc).multipliedBy(0.99).times(USDT_TOKEN_DECIMAL).toString(),
-            new BigNumber(usdt).multipliedBy(0.99).times(USDT_TOKEN_DECIMAL).toString(),
-        ])
-        .send({ from: account })
-        .on('transactionHash', (tx) => {
-            // console.log(tx)
-            return tx.transactionHash;
-        });
+/**
+ * Withdraw function
+ * @param Contract contract zunamiContract
+ * @param string account Wallet address
+ * @param {*} lpShares
+ * @param {*} dai
+ * @param {*} usdc
+ * @param {*} usdt
+ * @param boolean optimized Whether is should be an optimized withdraw (expensive) or not
+ * @param number coinIndex Index of coin (0 - DAI, 1 - USDC, 2 - USDT)
+ * @returns
+ */
+export const unstake = async (
+    zunamiContract,
+    account,
+    lpShares,
+    dai,
+    usdc,
+    usdt,
+    optimized = true,
+    coinIndex
+) => {
+    const coins = [
+        new BigNumber(dai).times(DEFAULT_TOKEN_DECIMAL).toString(),
+        new BigNumber(usdc).times(USDT_TOKEN_DECIMAL).toString(),
+        new BigNumber(usdt).times(USDT_TOKEN_DECIMAL).toString(),
+    ];
+
+    if (optimized) {
+        return zunamiContract.methods
+            .delegateWithdrawal(lpShares, coins)
+            .send({ from: account })
+            .on('transactionHash', (transactionHash) => {
+                return transactionHash;
+            });
+    } else {
+        return zunamiContract.methods
+            .withdraw(lpShares, [0, 0, 0], 1, coinIndex)
+            .send({ from: account })
+            .on('transactionHash', (transactionHash) => {
+                return transactionHash;
+            });
+    }
 };
 
 export const getPendingDeposit = async (masterChefContract, account, index) => {

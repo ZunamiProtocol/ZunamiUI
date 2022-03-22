@@ -21,9 +21,11 @@ import { PoolInfo, poolDataToChartData } from '../functions/pools';
 import { ApyChart } from '../components/ApyChart/ApyChart';
 import { WelcomeCarousel } from '../components/WelcomeCarousel/WelcomeCarousel';
 import { WalletStatus } from '../components/WalletStatus/WalletStatus';
+import { ThemeSwitcher } from '../components/ThemeSwitcher/ThemeSwitcher';
 
 interface ZunamiInfo {
     tvl: BigNumber;
+    apy: number;
 }
 
 interface ZunamiInfoFetch {
@@ -57,7 +59,6 @@ export const Main = (): JSX.Element => {
 
     const pool = useFetch(getPoolStatsUrl('DUSD,USDN'));
     const poolStats = pool.data as PoolsStats;
-    const poolBestApy = poolStats && poolStats.poolsStats ? poolStats.poolsStats[0].apy : 0;
     const poolBestAprDaily =
         poolStats && poolStats.poolsStats ? poolStats.poolsStats[0].apr / 100 / 365 : 0;
     const poolBestAprMonthly =
@@ -88,11 +89,11 @@ export const Main = (): JSX.Element => {
     const pdElement = (
         <div className="d-flex">
             <PendingBalance
-                val={`PD: $${pendingOperations.deposit}`}
+                val={`PD: $${getBalanceNumber(pendingOperations.deposit, 6)}`}
                 hint={`You have $${pendingOperations.deposit} in pending deposit`}
             />
             <PendingBalance
-                val={`PW: $${pendingOperations.withdraw}`}
+                val={`PW: $${getBalanceNumber(pendingOperations.withdraw).toFixed(2)}`}
                 hint={`You have $${pendingOperations.withdraw} in pending withdraw`}
             />
         </div>
@@ -111,6 +112,7 @@ export const Main = (): JSX.Element => {
                 {account && (
                     <Col className={'content-col dashboard-col'}>
                         <WalletStatus />
+                        <ClickableHeader name="Dashboard" icon="dashboard" />
                         <div className={'first-row'}>
                             <InfoBlock
                                 title="Balance"
@@ -124,7 +126,12 @@ export const Main = (): JSX.Element => {
                             />
                             <InfoBlock
                                 title="APY"
-                                description={`${poolBestApy.toFixed(2)}%`}
+                                description={`${
+                                    zunamiInfo && !zunError
+                                        ? `${zunamiInfo.apy.toFixed(2)}%`
+                                        : 'n/a'
+                                }`}
+                                isLoading={isZunLoading}
                                 withColor={true}
                                 isStrategy={false}
                                 colorfulBg={true}
@@ -185,6 +192,13 @@ export const Main = (): JSX.Element => {
                 )}
             </Row>
             <footer>
+                <div className="mobile">
+                    <ThemeSwitcher />
+                    <a href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing">
+                        How to use?
+                    </a>
+                    <a href="/faq">FAQ</a>
+                </div>
                 <span className="copyright">© 2022 Zunami Protocol. Beta version 1.1</span>
             </footer>
         </Container>

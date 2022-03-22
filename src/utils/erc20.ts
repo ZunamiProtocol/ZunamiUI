@@ -27,6 +27,39 @@ export const getAllowance = async (
     }
 };
 
+/**
+ *
+ * @param zunamiContract Contract Primary Zunami contract
+ * @param account string Wallet address
+ * @returns string Current user balance
+ */
+export const getBalanceNew = async (zunamiContract: Contract, account: string): Promise<string> => {
+    try {
+        const balance: string = await zunamiContract.methods.balanceOf(account).call();
+        return balance;
+    } catch (e) {
+        return '0';
+    }
+};
+
+/**
+ * Calculates how many coins user will get in exchange to lp tokens
+ * @param zunamiContract contract
+ * @param lpBalance string Balance in LP tokens
+ * @param coinIndex number Coin index (0 - DAI, 1 - USDC, 2 - USDT)
+ * @returns string
+ */
+export const calcWithdrawOneCoin = async (
+    zunamiContract: Contract,
+    lpBalance: string,
+    coinIndex: number
+): Promise<string> => {
+    const sum: string = await zunamiContract.methods
+        .calcWithdrawOneCoin(lpBalance, coinIndex)
+        .call();
+    return sum;
+};
+
 export const getBalance = async (
     provider: Provider,
     tokenAddress: string,

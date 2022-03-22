@@ -2,8 +2,8 @@ export const SUBTRACT_GAS_LIMIT = 100000;
 
 export const contractAddresses = {
     zunami: {
-        1: '0xf790d57443C2E9aDEc8C42bA92Bff5B7Ec84A895',
-        3: '0x1250f27B9706Bd768668A815e6b580ea551ff2a5',
+        1: '0x2ffCC661011beC72e1A9524E12060983E74D14ce',
+        3: '0x2ffCC661011beC72e1A9524E12060983E74D14ce',
     },
     weth: {
         1: '0xe9e7cea3dedca5984780bafc599bd69add087d56',

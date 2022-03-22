@@ -104,9 +104,7 @@ export const TestnetPlaceholder = (props: TestnetPlaceholderProps): JSX.Element 
                     </defs>
                 </svg>
                 <h1>{props.title}</h1>
-                <a href="http://zunami.io/testnet" target="_blank" rel="noreferrer">
-                    About Zunami Testnet &gt;
-                </a>
+                <span className="soon">To be annonunced soon</span>
                 <img
                     src="/testnet-placeholder.png"
                     className="TestnetPlaceholder__Content__Placeholder"

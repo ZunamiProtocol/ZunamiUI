@@ -143,3 +143,13 @@
         margin-top: 17px !important;
     }
 }
+
+.ClickableHeader {
+    @media (min-width: $media375) {
+        display: flex;
+    }
+
+    @media (min-width: $media1024) {
+        display: none;
+    }
+}

@@ -1,6 +1,14 @@
 @import 'src/variables';
 
 .TestnetPlaceholder {
+    @media screen and (min-width: $media375) {
+        background: #fffcf5;
+    }
+
+    @media screen and (min-width: $media1024) {
+        background: inherit;
+    }
+
     &__Header {
         display: flex;
         align-items: center;
@@ -8,9 +16,16 @@
         span {
             color: #636363;
 
+            @media screen and (min-width: $media375) {
+                font-size: 16px;
+                line-height: 21px;
+                margin-left: 20px;
+            }
+
             @media screen and (min-width: $media1440) {
                 font-size: 16px;
                 line-height: 22px;
+                margin-left: 0;
             }
 
             @media screen and (min-width: $media1920) {
@@ -20,6 +35,12 @@
         }
 
         .TestnetLabel {
+            @media screen and (min-width: $media375) {
+                margin-left: 23px;
+                width: 136px;
+                height: 29px;
+            }
+
             @media screen and (min-width: $media1024) {
                 margin-left: 23px;
                 width: 115px;
@@ -33,6 +54,12 @@
             }
 
             span {
+                @media screen and (min-width: $media375) {
+                    font-size: 12px;
+                    line-height: 16px;
+                    margin-left: 0;
+                }
+
                 @media screen and (min-width: $media1024) {
                     font-size: 10px;
                     line-height: 14px;
@@ -45,6 +72,12 @@
             }
 
             svg {
+                @media screen and (min-width: $media375) {
+                    width: 11.2px;
+                    height: 11.2px;
+                    margin-right: 10px;
+                }
+
                 @media screen and (min-width: $media1024) {
                     width: 9.5px;
                     height: 9.5px;
@@ -66,12 +99,23 @@
         justify-content: center;
         flex-direction: column;
 
+        @media screen and (min-width: $media375) {
+            background: linear-gradient(262.84deg, #fff9f3 -27.39%, #fff8ef 71.59%);
+            margin: 20px 20px 0 20px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            background: inherit;
+            margin: 0;
+        }
+
         h1 {
             color: #636363;
             text-align: center;
 
             @media screen and (min-width: $media375) {
-                font-size: 16px;
+                font-size: 20px;
+                line-height: 27px;
             }
 
             @media screen and (min-width: $media1024) {
@@ -87,7 +131,8 @@
             }
         }
 
-        a {
+        a,
+        .soon {
             text-decoration: none;
             text-align: center;
             color: #636363;
@@ -135,6 +180,11 @@
         }
 
         &__Placeholder {
+            @media screen and (min-width: $media375) {
+                width: 296px;
+                height: auto;
+            }
+
             @media screen and (min-width: $media1024) {
                 width: 315px;
                 height: auto;

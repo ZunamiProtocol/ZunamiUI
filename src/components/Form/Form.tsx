@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, useRef } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Input } from './Input/Input';
 import './Form.scss';
 import {
@@ -18,13 +18,24 @@ import useStake from '../../hooks/useStake';
 import useUnstake from '../../hooks/useUnstake';
 import { useWallet } from 'use-wallet';
 import { BigNumber } from 'bignumber.js';
-import { Modal, Button, Toast, ToastContainer } from 'react-bootstrap';
-import { NoWallet } from '../NoWallet/NoWallet';
+import { Toast, ToastContainer } from 'react-bootstrap';
 import { ActionSelector } from './ActionSelector/ActionSelector';
 import { DirectAction } from './DirectAction/DirectAction';
 
 interface FormProps {
     operationName: string;
+    daiDisabled?: boolean;
+    usdcDisabled?: boolean;
+    usdtDisabled?: boolean;
+    directOperation: boolean;
+    onOperationModeChange?: Function;
+    sharePercent: number;
+    onCoinChange?: Function;
+    dai: string;
+    usdc: string;
+    usdt: string;
+    selectedCoinIndex: number;
+    directOperationDisabled?: boolean;
 }
 
 interface TransactionError {
@@ -77,60 +88,68 @@ const getWithdrawValidationError = (
 };
 
 export const Form = (props: FormProps): JSX.Element => {
+    // user wallet
+    const { account } = useWallet();
+
     const [action, setAction] = useState(
         props.operationName === 'Deposit' ? 'deposit' : 'withdraw'
     );
-    const [dai, setDai] = useState('');
-    const [usdc, setUsdc] = useState('');
-    const [usdt, setUsdt] = useState('');
 
     const daiInputHandler = (newValue: string) => {
-        setDai(newValue);
+        if (props.onCoinChange) {
+            props.onCoinChange('dai', newValue);
+        }
     };
 
     const usdcInputHandler = (newValue: string) => {
-        setUsdc(newValue);
+        if (props.onCoinChange) {
+            props.onCoinChange('usdc', newValue);
+        }
     };
 
     const usdtInputHandler = (newValue: string) => {
-        setUsdt(newValue);
+        if (props.onCoinChange) {
+            props.onCoinChange('usdt', newValue);
+        }
     };
 
     const [pendingDAI, setPendingDAI] = useState(false);
     const [pendingUSDC, setPendingUSDC] = useState(false);
     const [pendingUSDT, setPendingUSDT] = useState(false);
 
-    // const lpPrice = useLpPrice();
-
     // wrapped in useMemo to prevent lpShareToWithdraw hook deps change on every render
     const lpPrice = useMemo(() => new BigNumber(1), []);
     const userLpAmount = useUserLpAmount();
     const userBalanceList = useUserBalances();
     const approveList = useAllowanceStables();
+
     const stableInputsSum =
-        (parseFloat(dai) || 0) + (parseFloat(usdc) || 0) + (parseFloat(usdt) || 0);
+        (parseFloat(props.dai) || 0) +
+        (parseFloat(props.usdc) || 0) +
+        (parseFloat(props.usdt) || 0);
     // user allowance
     const isApprovedTokens = [
         approveList ? approveList[0].toNumber() > 0 : false,
         approveList ? approveList[1].toNumber() > 0 : false,
         approveList ? approveList[2].toNumber() > 0 : false,
     ];
-    const isApproved =
-        approveList &&
-        ((parseFloat(dai) > 0 && isApprovedTokens[0]) || dai === '0' || dai === '') &&
-        ((parseFloat(usdc) > 0 && isApprovedTokens[1]) || usdc === '0' || usdc === '') &&
-        ((parseFloat(usdt) > 0 && isApprovedTokens[2]) || usdt === '0' || usdt === '');
+
     // max for withdraw or deposit
     const userMaxWithdraw = lpPrice.multipliedBy(userLpAmount) || BIG_ZERO;
+
     const userMaxWithdrawMinusInput =
         !userMaxWithdraw || userMaxWithdraw.toNumber() <= 0 || !userMaxWithdraw.toNumber()
             ? BIG_ZERO
             : new BigNumber(userMaxWithdraw.toNumber() - stableInputsSum);
+
+    // max sums for deposit
     const userMaxDeposit = [
         (userBalanceList && userBalanceList[0].toNumber() > 0 && userBalanceList[0]) || BIG_ZERO,
         (userBalanceList && userBalanceList[1].toNumber() > 0 && userBalanceList[1]) || BIG_ZERO,
         (userBalanceList && userBalanceList[2].toNumber() > 0 && userBalanceList[2]) || BIG_ZERO,
     ];
+
+    // final array both for deposit and withdraw
     const max = [
         action === 'deposit' ? userMaxDeposit[0] : userMaxWithdrawMinusInput,
         action === 'deposit' ? userMaxDeposit[1] : userMaxWithdrawMinusInput,
@@ -183,99 +202,95 @@ export const Form = (props: FormProps): JSX.Element => {
     }, [stableInputsSum, lpPrice]);
 
     const fullBalancetoWithdraw = useMemo(() => {
-        return getFullDisplayBalance(lpShareToWithdraw);
+        return getFullDisplayBalance(lpShareToWithdraw, 18);
     }, [lpShareToWithdraw]);
 
     // deposit and withdraw functions
     const depositExceedAmount =
-        parseInt(dai) > getBalanceNumber(userBalanceList[0]) ||
-        parseInt(usdc) > getBalanceNumber(userBalanceList[1], 6) ||
-        parseInt(usdt) > getBalanceNumber(userBalanceList[2], 6);
+        parseInt(props.dai) > getBalanceNumber(userBalanceList[0]) ||
+        parseInt(props.usdc) > getBalanceNumber(userBalanceList[1], 6) ||
+        parseInt(props.usdt) > getBalanceNumber(userBalanceList[2], 6);
     const [pendingTx, setPendingTx] = useState(false);
     const [pendingWithdraw, setPendingWithdraw] = useState(false);
+    const [transactionId, setTransactionId] = useState(undefined);
+
     const { onStake } = useStake(
-        dai === '' ? '0' : dai,
-        usdc === '' ? '0' : usdc,
-        usdt === '' ? '0' : usdt
-    );
-    const { onUnstake } = useUnstake(
-        fullBalancetoWithdraw,
-        dai === '' ? '0' : dai,
-        usdc === '' ? '0' : usdc,
-        usdt === '' ? '0' : usdt
+        props.dai === '' ? '0' : props.dai,
+        props.usdc === '' ? '0' : props.usdc,
+        props.usdt === '' ? '0' : props.usdt,
+        props.directOperation
     );
 
-    // user wallet
-    const { account } = useWallet();
+    const { onUnstake } = useUnstake(
+        props.directOperation ? Number(fullBalancetoWithdraw) * 0.1 : Number(fullBalancetoWithdraw),
+        props.dai === '' ? '0' : props.dai,
+        props.usdc === '' ? '0' : props.usdc,
+        props.usdt === '' ? '0' : props.usdt,
+        props.directOperation,
+        props.sharePercent,
+        props.selectedCoinIndex
+    );
 
     // TODO: need detect canceled tx's by user
     const [transactionError, setTransactionError] = useState<TransactionError>();
+    const emptyFunds = props.dai === '' && props.usdc === '' && props.usdt === '';
 
-    const [showModal, setModalShow] = useState(false);
-    const handleModalClose = () => setModalShow(false);
-    const canDeposit =
-        (dai === '' && usdc === '' && usdt === '') ||
-        !isApproved ||
-        pendingTx ||
-        depositExceedAmount;
-
-    if (!account) {
-        return <NoWallet />;
-    }
+    const isApproved =
+        approveList &&
+        ((parseFloat(props.dai) > 0 && isApprovedTokens[0]) ||
+            props.dai === '0' ||
+            props.dai === '') &&
+        ((parseFloat(props.usdc) > 0 && isApprovedTokens[1]) ||
+            props.usdc === '0' ||
+            props.usdc === '') &&
+        ((parseFloat(props.usdt) > 0 && isApprovedTokens[2]) ||
+            props.usdt === '0' ||
+            props.usdt === '');
 
     const validationError =
         action === 'deposit'
-            ? getDepositValidationError(dai, usdc, usdt, isApproved, pendingTx, depositExceedAmount)
+            ? getDepositValidationError(
+                  props.dai,
+                  props.usdc,
+                  props.usdt,
+                  isApproved,
+                  pendingTx,
+                  depositExceedAmount
+              )
             : getWithdrawValidationError(
-                  dai,
-                  usdc,
-                  usdt,
+                  props.dai,
+                  props.usdc,
+                  props.usdt,
                   fullBalanceLpShare,
                   userMaxWithdraw,
                   lpShareToWithdraw
               );
 
+    const cantDeposit = emptyFunds || !isApproved || pendingTx || depositExceedAmount;
+
     return (
         <div className={'Form'}>
-            <Modal
-                show={showModal}
-                onHide={handleModalClose}
-                backdrop="static"
-                keyboard={false}
-                centered
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Warning!</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    Please note. This is a beta version. The contract has not been auditied yet. Use
-                    it at your own risk.
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        variant="primary"
-                        onClick={async () => {
-                            setModalShow(false);
-                            setPendingTx(true);
-                            await onStake();
-                            setPendingTx(false);
-                        }}
-                    >
-                        Understood
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-            {transactionError && (
-                <ToastContainer position={'top-end'} className={'mt-3 me-3'}>
+            <ToastContainer position={'top-end'} id="toasts" className={'toasts mt-3 me-3'}>
+                {transactionError && (
                     <Toast onClose={() => setTransactionError(undefined)} delay={5000} autohide>
-                        <Toast.Header>
-                            <strong className="me-auto">Error</strong>
-                            <small>now</small>
-                        </Toast.Header>
                         <Toast.Body>Sorry, we couldn't complete the transaction</Toast.Body>
                     </Toast>
-                </ToastContainer>
-            )}
+                )}
+                {transactionId && (
+                    <Toast onClose={() => setTransactionId(undefined)} delay={15000} autohide>
+                        <Toast.Body>
+                            Checkout transaction state on{' '}
+                            <a
+                                target="_blank"
+                                rel="noreferrer"
+                                href={`https://etherscan.io/tx/${transactionId}`}
+                            >
+                                Etherscan
+                            </a>
+                        </Toast.Body>
+                    </Toast>
+                )}
+            </ToastContainer>
             <form
                 id={action}
                 onSubmit={async (e) => {
@@ -286,10 +301,12 @@ export const Form = (props: FormProps): JSX.Element => {
                             // @ts-ignore
                             window.dataLayer.push({ event: 'withdraw' });
                             setPendingWithdraw(true);
+                            setPendingTx(true);
 
                             try {
                                 await onUnstake();
                             } catch (error: any) {
+                                setPendingTx(false);
                                 setPendingWithdraw(false);
                                 setTransactionError(error);
                             }
@@ -299,7 +316,16 @@ export const Form = (props: FormProps): JSX.Element => {
                         case 'deposit':
                             // @ts-ignore
                             window.dataLayer.push({ event: 'deposit' });
-                            setModalShow(true);
+                            setPendingTx(true);
+
+                            try {
+                                const tx = await onStake();
+                                setTransactionId(tx.transactionHash);
+                            } catch (error: any) {
+                                debugger;
+                            }
+
+                            setPendingTx(false);
                             break;
                     }
                 }}
@@ -310,12 +336,34 @@ export const Form = (props: FormProps): JSX.Element => {
                         setAction(action);
                     }}
                 />
-                <Input name="DAI" value={dai} handler={daiInputHandler} max={max[0]} />
-                <Input name="USDC" value={usdc} handler={usdcInputHandler} max={max[1]} />
-                <Input name="USDT" value={usdt} handler={usdtInputHandler} max={max[2]} />
+                <Input
+                    action={action}
+                    name="DAI"
+                    value={props.dai}
+                    handler={daiInputHandler}
+                    max={max[0]}
+                    disabled={action === 'withdraw'}
+                />
+                <Input
+                    action={action}
+                    name="USDC"
+                    value={props.usdc}
+                    handler={usdcInputHandler}
+                    max={max[1]}
+                    disabled={action === 'withdraw'}
+                />
+                <Input
+                    action={action}
+                    name="USDT"
+                    value={props.usdt}
+                    handler={usdtInputHandler}
+                    max={max[2]}
+                    disabled={action === 'withdraw'}
+                />
+                {pendingTx && <div className="mt-2 mb-2">Transaction sent, waiting...</div>}
                 {action === 'deposit' && (
-                    <div className="d-flex flex-row flex-wrap buttons">
-                        {account && parseFloat(dai) > 0 && !isApprovedTokens[0] && (
+                    <div className="deposit-action flex-wrap d-flex flex-row flex-wrap buttons align-items-center">
+                        {account && parseFloat(props.dai) > 0 && !isApprovedTokens[0] && (
                             <button
                                 disabled={pendingDAI || depositExceedAmount}
                                 onClick={handleApproveDai}
@@ -323,7 +371,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                 Approve DAI{' '}
                             </button>
                         )}
-                        {account && parseFloat(usdc) > 0 && !isApprovedTokens[1] && (
+                        {account && parseFloat(props.usdc) > 0 && !isApprovedTokens[1] && (
                             <button
                                 disabled={pendingUSDC || depositExceedAmount}
                                 onClick={handleApproveUsdc}
@@ -331,7 +379,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                 Approve USDC{' '}
                             </button>
                         )}
-                        {account && parseFloat(usdt) > 0 && !isApprovedTokens[2] && (
+                        {account && parseFloat(props.usdt) > 0 && !isApprovedTokens[2] && (
                             <button
                                 disabled={pendingUSDT || depositExceedAmount}
                                 onClick={handleApproveUsdt}
@@ -341,10 +389,19 @@ export const Form = (props: FormProps): JSX.Element => {
                         )}
                         {account && (
                             <div className="deposit-button-wrapper">
-                                <button type="submit">Deposit</button>
+                                <button type="submit" disabled={cantDeposit}>
+                                    Deposit
+                                </button>
                                 <DirectAction
                                     actionName="deposit"
-                                    hint="When using direct deposit / withdrawal, funds will be credited instantly, but the cost of such a transaction will be many times more expensive"
+                                    checked={props.directOperation}
+                                    disabled={false}
+                                    hint="When using optimized deposit funds will be deposited within 24 hours and many times cheaper"
+                                    onChange={(state: boolean) => {
+                                        if (props.onOperationModeChange) {
+                                            props.onOperationModeChange(state);
+                                        }
+                                    }}
                                 />
                             </div>
                         )}
@@ -360,8 +417,14 @@ export const Form = (props: FormProps): JSX.Element => {
                                 <button type="submit">Withdraw</button>
                                 <DirectAction
                                     actionName="withdraw"
-                                    hint="When using direct deposit / withdrawal, funds will be credited instantly,
-                                but the cost of such a transaction will be many times more expensive"
+                                    disabled={props.directOperationDisabled || false}
+                                    checked={props.directOperation}
+                                    hint="When using optimized withdrawal funds will be withdrawn within 24 hours and many times cheaper. Optimized withdraw available only in all coins."
+                                    onChange={(state: boolean) => {
+                                        if (props.onOperationModeChange) {
+                                            props.onOperationModeChange(state);
+                                        }
+                                    }}
                                 />
                             </div>
                         )}

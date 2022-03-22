@@ -4,13 +4,46 @@
     background: #fffaf3;
     border: 1px solid #f4efe1;
     border-radius: 5px;
-    font-size: 14px;
 
-    min-width: 367px;
-    width: 367px;
-    height: 283px;
-    margin-left: 25px;
-    padding: 30px 25px;
+    @media screen and (min-width: $media375) {
+        flex-basis: 100%;
+        padding: 14px 17px;
+        font-size: 14px;
+        line-height: 13.6px;
+        margin-top: 20px;
+    }
+
+    @media screen and (min-width: $media1024) {
+        min-width: 206px;
+        width: 206px;
+        height: 215px;
+        margin-left: 10px;
+        padding: 14px 17px;
+        font-size: 10px;
+        line-height: 13.6px;
+        flex-basis: auto;
+        margin-top: 0;
+    }
+
+    @media screen and (min-width: $media1440) {
+        min-width: 367px;
+        width: 367px;
+        height: 283px;
+        margin-left: 25px;
+        padding: 30px 25px;
+        font-size: 12px;
+        line-height: 16px;
+    }
+
+    @media screen and (min-width: $media1920) {
+        min-width: 412px;
+        width: 412px;
+        height: 317px;
+        margin-left: 25px;
+        padding: 32px 28px;
+        font-size: 14px;
+        line-height: 19px;
+    }
 
     &__BalanceBlock {
         .balance {
@@ -20,22 +53,85 @@
     }
 
     &__LiquidityBlock {
-        margin-top: 30px;
+        @media screen and (min-width: $media375) {
+            margin-top: 12px;
+        }
 
-        input[type='text'] {
+        @media screen and (min-width: $media1024) {
+            margin-top: 12px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            margin-top: 30px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            margin-top: 25px;
+        }
+
+        input[type='text'],
+        input[type='number'] {
             display: block;
-            font-size: 14px;
             background: #fffaf3;
             border: 1px solid #f4efe1;
             border-radius: 5px;
             color: #636363;
-            padding: 6px 12px;
-            margin-top: 10px;
+
+            &:disabled {
+                background: #ededed;
+            }
+
+            @media screen and (min-width: $media375) {
+                padding: 4px 8px;
+                margin-top: 6px;
+                font-size: 14px;
+                line-height: 13px;
+                height: 21px;
+                width: 119px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                padding: 4px 8px;
+                margin-top: 6px;
+                font-size: 10px;
+                line-height: 13px;
+                height: 21px;
+                width: 119px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                padding: 6px 12px;
+                margin-top: 10px;
+                font-size: 14px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                padding: 6px 12px;
+                margin-top: 10px;
+                font-size: 14px;
+                line-height: 19px;
+                height: 34px;
+                width: 193px;
+            }
         }
     }
 
     &__CoinsBlock {
-        margin-top: 25px;
+        @media screen and (min-width: $media375) {
+            margin-top: 20px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            margin-top: 10px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            margin-top: 25px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            margin-top: 25px;
+        }
 
         .coins {
             display: flex;
@@ -44,22 +140,76 @@
         }
 
         .coin {
-            width: 50%;
             display: flex;
             align-items: center;
-            margin-top: 10px;
 
-            input[type='checkbox'],
-            img {
-                width: 25px;
-                height: 25px;
+            @media screen and (min-width: $media375) {
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                width: 100%;
+                margin-top: 6px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                width: 50%;
+                margin-top: 10px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                width: 50%;
+                margin-top: 22px;
+            }
+
+            input[type='radio'] {
                 margin-right: 10px;
+            }
+
+            input[type='checkbox'] input[type='radio'],
+            img {
+                @media screen and (min-width: $media375) {
+                    width: 20px;
+                    height: 20px;
+                    margin-right: 7px;
+                }
+
+                @media screen and (min-width: $media1024) {
+                    width: 17px;
+                    height: 17px;
+                    margin-right: 7px;
+                }
+
+                @media screen and (min-width: $media1440) {
+                    width: 25px;
+                    height: 25px;
+                    margin-right: 10px;
+                }
+
+                @media screen and (min-width: $media1920) {
+                    width: 21px;
+                    height: 21px;
+                    margin-right: 10px;
+                }
             }
 
             &.all-coins {
                 img {
-                    width: auto;
-                    height: 25px;
+                    @media screen and (min-width: $media1024) {
+                        width: auto;
+                        height: 13px;
+                    }
+
+                    @media screen and (min-width: $media1440) {
+                        width: auto;
+                        height: 25px;
+                    }
+
+                    @media screen and (min-width: $media1920) {
+                        width: auto;
+                        height: 21px;
+                    }
                 }
             }
         }

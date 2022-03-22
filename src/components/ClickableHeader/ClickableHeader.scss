@@ -1,14 +1,10 @@
-@import "src/variables";
+@import 'src/variables';
 
 .ClickableHeader {
     align-items: center;
-    border-radius: $border-radius;
     display: flex;
-    justify-content: space-between;
-    margin: 20px;
-    overflow: hidden;
 
-    &[data-section="Dashboard"] {
+    &[data-section='Dashboard'] {
         .close {
             display: none !important;
         }
@@ -22,7 +18,7 @@
         @media (min-width: $media375) {
             margin-right: -40px;
 
-            &[src="/section-dashboard-mobile.svg"] {
+            &[src='/section-dashboard-mobile.svg'] {
                 width: 107px;
                 height: 104px;
                 margin-right: 10px;
@@ -30,7 +26,7 @@
         }
 
         @media screen and (min-width: $media1024) {
-            margin-right:0;
+            margin-right: 0;
         }
     }
 
@@ -54,47 +50,50 @@
     }
 
     span {
-        font-size: 25px;
-        margin-left: 35px;
-
         @media (min-width: $media375) {
-            font-size: 16px;
         }
 
         @media screen and (min-width: $media1024) {
-            font-size: 14px;
         }
 
         @media screen and (min-width: $media1440) {
-            font-size: 16px;
         }
 
         @media screen and (min-width: $media1920) {
-            font-size: 35px;
+        }
+    }
+
+    &__Icon {
+        svg {
+            @media (min-width: $media375) {
+                width: 17.8px;
+                height: 17.4px;
+                margin-right: 10px;
+            }
+        }
+
+        @media screen and (min-width: $media1024) {
+        }
+
+        @media screen and (min-width: $media1440) {
+        }
+
+        @media screen and (min-width: $media1920) {
         }
     }
 
     @media (min-width: $media375) {
-        height: 69px;
-        margin: 0 0 15px 0;
-        border-radius: 15px;
-        background-color: #f5f5f5;
+        height: 30px;
+        padding: 15px 0;
+        margin: 20px;
     }
 
     @media screen and (min-width: $media1024) {
-        height: 85px;
-        margin: 10px 20px 0 20px;
-        background-color: #FAFAFA;
     }
 
     @media screen and (min-width: $media1440) {
-        height: 110px;
-        margin: 20px 20px 0 20px;
     }
 
     @media screen and (min-width: $media1920) {
-        height: 152px;
-        margin: 20px 20px 0 20px;
-        border-radius: 27px;
     }
 }

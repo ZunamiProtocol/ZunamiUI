@@ -6,7 +6,8 @@ interface DirectActionProps {
     actionName: string;
     hint: string;
     onChange?: Function;
-    checked: boolean;
+    checked?: boolean;
+    disabled: boolean;
 }
 
 export const DirectAction = (props: DirectActionProps): JSX.Element => {
@@ -14,17 +15,17 @@ export const DirectAction = (props: DirectActionProps): JSX.Element => {
     const [showHint, setShowHint] = useState(false);
 
     return (
-        <div className="DirectAction">
+        <div className={`DirectAction ${props.disabled ? 'disabled' : ''}`}>
             <input
                 type="checkbox"
                 checked={props.checked}
-                onClick={(e) => {
+                onChange={(e) => {
                     if (props.onChange) {
                         props.onChange(e.currentTarget.checked);
                     }
                 }}
             />
-            <span>Direct {props.actionName}</span>
+            <span>Optimized {props.actionName}</span>
             <div ref={target} onClick={() => setShowHint(!showHint)}>
                 <OverlayTrigger placement="right" overlay={<Tooltip>{props.hint}</Tooltip>}>
                     <svg
