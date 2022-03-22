@@ -132,7 +132,7 @@ export const unstake = async (
     usdc,
     usdt,
     optimized = true,
-    coinIndex = -1
+    coinIndex
 ) => {
     const coins = [
         new BigNumber(dai).times(DEFAULT_TOKEN_DECIMAL).toString(),
