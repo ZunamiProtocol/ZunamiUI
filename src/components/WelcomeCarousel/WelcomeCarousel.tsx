@@ -3,6 +3,7 @@ import './WelcomeCarousel.scss';
 import { Carousel } from 'react-bootstrap';
 import config from '../../config';
 import { useWallet } from 'use-wallet';
+import { NO_METAMASK_WARNING } from '../WalletStatus/WalletStatus';
 
 export const WelcomeCarousel = (): JSX.Element => {
     const { CHAIN_ID } = config;
@@ -30,7 +31,7 @@ export const WelcomeCarousel = (): JSX.Element => {
         // @ts-ignore
         const eth = window.ethereum || ethereum;
         if (!eth) {
-            alert('You have to install Metamask browser extension');
+            alert(NO_METAMASK_WARNING);
         }
 
         requestNetworkSwitch();
