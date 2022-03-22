@@ -181,8 +181,9 @@ export const Form = (props: FormProps): JSX.Element => {
         }
     }, [onApprove]);
     const handleApproveUsdt = useCallback(async () => {
+        setPendingUSDT(true);
+
         try {
-            setPendingUSDT(true);
             const tx = onApprove(usdtAddress);
             if (!tx) {
                 setPendingUSDT(false);
@@ -190,6 +191,8 @@ export const Form = (props: FormProps): JSX.Element => {
         } catch (e) {
             setPendingUSDT(false);
         }
+
+        setPendingUSDT(false);
     }, [onApprove]);
 
     const fullBalanceLpShare = useMemo(() => {
@@ -233,7 +236,7 @@ export const Form = (props: FormProps): JSX.Element => {
 
     // TODO: need detect canceled tx's by user
     const [transactionError, setTransactionError] = useState<TransactionError>();
-    const emptyFunds = props.dai === '' && props.usdc === '' && props.usdt === '';
+    const emptyFunds = !Number(props.dai) && !Number(props.usdc) && !Number(props.usdt);
 
     const isApproved =
         approveList &&
@@ -314,8 +317,13 @@ export const Form = (props: FormProps): JSX.Element => {
                             setPendingWithdraw(false);
                             break;
                         case 'deposit':
+                            const totalSum =
+                                parseInt(props.dai, 10) +
+                                parseInt(props.usdc, 10) +
+                                parseInt(props.usdt, 10);
+
                             // @ts-ignore
-                            window.dataLayer.push({ event: 'deposit' });
+                            window.dataLayer.push({ event: 'deposit', value: totalSum });
                             setPendingTx(true);
 
                             try {
