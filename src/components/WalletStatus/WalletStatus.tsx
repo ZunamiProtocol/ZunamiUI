@@ -3,12 +3,18 @@ import './WalletStatus.scss';
 import config from '../../config';
 import { useWallet } from 'use-wallet';
 
+const LS_ACCOUNT_KEY = 'METAMASK_ACCOUNT';
+
+export const NO_METAMASK_WARNING =
+    'Please, install either Metamask browser extension or Metamask mobile app';
+
 export const WalletStatus = (): JSX.Element => {
     const { CHAIN_ID } = config;
     const { account, ethereum, connect, reset } = useWallet();
 
     const handleSignOutClick = useCallback(() => {
         reset();
+        window.localStorage.removeItem(LS_ACCOUNT_KEY);
     }, [reset]);
 
     const requestNetworkSwitch = () => {
@@ -32,14 +38,14 @@ export const WalletStatus = (): JSX.Element => {
         // @ts-ignore
         const eth = window.ethereum || ethereum;
         if (!eth) {
-            alert('You have to install Metamask browser extension');
+            alert(NO_METAMASK_WARNING);
         }
 
         requestNetworkSwitch();
     };
 
     if (account) {
-        window.localStorage.setItem('METAMASK_ACCOUNT', account);
+        window.localStorage.setItem(LS_ACCOUNT_KEY, account);
         const shortAddress = `${account.substring(0, 6)}...${account.substring(
             account.length - 4
         )}`;
