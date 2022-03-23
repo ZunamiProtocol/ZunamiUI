@@ -36,7 +36,7 @@ const poolsChartdata: { [key: string]: any } = {
     },
     USDN: {
         title: 'Convex finance - USDN pool',
-        link: 'https://etherscan.io/address/0x553f8BD62F2e39064B49CDb814765eC0e6057FFe',
+        link: 'https://etherscan.io/address/0x7eae19161869Adc5F99d3987dA881Fb972B6eED5',
         color: '#8DDA2C',
         value: 0,
     },
