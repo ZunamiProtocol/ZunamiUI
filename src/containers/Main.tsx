@@ -135,7 +135,7 @@ export const Main = (): JSX.Element => {
                                 withColor={true}
                                 isStrategy={false}
                                 colorfulBg={true}
-                                hint="Annual Percentage Yield. Сumulative yield from all strategies used &amp; includes 10% management fee"
+                                hint="Annual Percentage Yield. Сumulative yield from all strategies used &amp; includes 0% management fee"
                             />
                             <InfoBlock
                                 title="Total Value Locked"
