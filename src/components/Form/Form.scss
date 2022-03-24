@@ -89,6 +89,10 @@
         width: 484px;
     }
 
+    @media screen and (min-width: $media1920) {
+        width: 543px;
+    }
+
     .direct-withdraw-warning {
         background: #fff5e9;
         border-radius: 5px;
