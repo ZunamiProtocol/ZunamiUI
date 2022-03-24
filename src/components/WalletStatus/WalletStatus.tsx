@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import './WalletStatus.scss';
 import config from '../../config';
 import { useWallet } from 'use-wallet';
+import { isMobile } from '../../functions/screen';
 
 const LS_ACCOUNT_KEY = 'METAMASK_ACCOUNT';
 
@@ -37,6 +38,12 @@ export const WalletStatus = (): JSX.Element => {
 
         // @ts-ignore
         const eth = window.ethereum || ethereum;
+
+        if (!eth && isMobile()) {
+            window.location.href = 'https://metamask.app.link/dapp/app.zunami.io';
+            return;
+        }
+
         if (!eth) {
             alert(NO_METAMASK_WARNING);
         }

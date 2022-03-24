@@ -10,4 +10,10 @@ function is1920() {
     return document.body.clientWidth >= 1920;
 }
 
-export { is1024, is1440, is1920 };
+function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+    );
+}
+
+export { is1024, is1440, is1920, isMobile };
