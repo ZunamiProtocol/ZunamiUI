@@ -5,7 +5,7 @@ import useSushi from './useSushi';
 import { getLpPrice } from '../utils/erc20';
 import { BIG_ZERO } from '../utils/formatbalance';
 
-const useLpPrice = () => {
+const useLpPrice = (): BigNumber => {
     const [price, setPrice] = useState(BIG_ZERO);
     const sushi = useSushi();
     const masterChefContract = getMasterChefContract(sushi);
@@ -13,7 +13,7 @@ const useLpPrice = () => {
     useEffect(() => {
         const fetchLpPrice = async () => {
             const allowance = await getLpPrice(masterChefContract);
-            setPrice(new BigNumber(allowance));
+            setPrice(new BigNumber(allowance).dividedBy(new BigNumber(10).pow(18)));
         };
 
         if (masterChefContract) {
