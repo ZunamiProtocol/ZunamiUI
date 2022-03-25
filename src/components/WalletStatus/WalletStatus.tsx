@@ -11,6 +11,7 @@ export const NO_METAMASK_WARNING =
 export const WalletStatus = (): JSX.Element => {
     const { CHAIN_ID } = config;
     const { account, ethereum, connect, reset } = useWallet();
+    const eth = window.ethereum || ethereum;
 
     const handleSignOutClick = useCallback(() => {
         reset();
@@ -19,7 +20,6 @@ export const WalletStatus = (): JSX.Element => {
 
     const requestNetworkSwitch = () => {
         // @ts-ignore
-        const eth = window.ethereum || ethereum;
 
         setTimeout(() => {
             // @ts-ignore
@@ -31,6 +31,10 @@ export const WalletStatus = (): JSX.Element => {
                 });
         }, 1000);
     };
+
+    if (eth) {
+        requestNetworkSwitch();
+    }
 
     const onConnect = async () => {
         await connect('injected');
