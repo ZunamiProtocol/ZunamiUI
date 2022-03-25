@@ -120,7 +120,7 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                             checked={props.selectedCoin === 'all'}
                             onChange={() => {}}
                         />
-                        <img src="/all-coins.png" alt="" data-coin="all" />
+                        <img src="/all-coins.svg" alt="" data-coin="all" />
                         <span>All coins</span>
                     </label>
                 </div>
