@@ -301,13 +301,13 @@ export const Form = (props: FormProps): JSX.Element => {
 
                     switch (action) {
                         case 'withdraw':
-                            // @ts-ignore
-                            window.dataLayer.push({ event: 'withdraw' });
                             setPendingWithdraw(true);
                             setPendingTx(true);
 
                             try {
                                 await onUnstake();
+                                // @ts-ignore
+                                window.dataLayer.push({ event: 'withdraw' });
                             } catch (error: any) {
                                 setPendingTx(false);
                                 setPendingWithdraw(false);
@@ -322,13 +322,13 @@ export const Form = (props: FormProps): JSX.Element => {
                                 parseInt(props.usdc, 10) +
                                 parseInt(props.usdt, 10);
 
-                            // @ts-ignore
-                            window.dataLayer.push({ event: 'deposit', value: totalSum });
                             setPendingTx(true);
 
                             try {
                                 const tx = await onStake();
                                 setTransactionId(tx.transactionHash);
+                                // @ts-ignore
+                                window.dataLayer.push({ event: 'deposit', value: totalSum });
                             } catch (error: any) {
                                 debugger;
                             }
