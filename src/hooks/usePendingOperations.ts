@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 import { useWallet } from 'use-wallet';
 import BigNumber from 'bignumber.js';
 import { contractAddresses } from '../sushi/lib/constants';
+import { BIG_TEN, DAI_DECIMALS } from '../utils/formatbalance';
 
 export interface PendingOperations {
     deposit: BigNumber;
@@ -55,6 +56,10 @@ const usePendingOperations = (): PendingOperations => {
                 new BigNumber(pendingCoins[1].toString()),
                 new BigNumber(pendingCoins[2].toString()),
             ];
+
+            if (result[0].toFixed()) {
+                result[0] = result[0].dividedBy(BIG_TEN.pow(DAI_DECIMALS));
+            }
 
             setPendingDeposit(result[0].plus(result[1]).plus(result[2]));
 
