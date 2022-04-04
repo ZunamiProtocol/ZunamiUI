@@ -78,7 +78,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
             const rawBalance = await getBalanceNew(zunamiContract, account);
             setBalance(new BigNumber(rawBalance));
 
-            if (!balance.toFixed()) {
+            if (!balance.toFixed() || selectedCoinIndex === -1) {
                 return;
             }
 
@@ -102,7 +102,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     setUsdc(
                         getBalanceNumber(new BigNumber(stablesToWithdraw), 6).toFixed(2).toString()
                     );
-                } else {
+                } else if (selectedCoinIndex === 2) {
                     setUsdt(
                         getBalanceNumber(new BigNumber(stablesToWithdraw), 6).toFixed(2).toString()
                     );
@@ -215,9 +215,18 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                         setSelectedCoin(coin);
 
                                                         if (coin === 'all') {
-                                                            setDai('0');
-                                                            setUsdc('0');
-                                                            setUsdt('0');
+                                                            const sum =
+                                                                Number(dai) +
+                                                                Number(usdc) +
+                                                                Number(usdt);
+
+                                                            const oneThird = (sum / 3)
+                                                                .toFixed(2)
+                                                                .toString();
+
+                                                            setDai(oneThird);
+                                                            setUsdc(oneThird);
+                                                            setUsdt(oneThird);
                                                             setDirectOperation(true);
                                                         } else {
                                                             setDirectOperation(false);
