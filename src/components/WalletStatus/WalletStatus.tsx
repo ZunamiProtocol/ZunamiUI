@@ -46,6 +46,13 @@ export const WalletStatus = (): JSX.Element => {
         }
 
         requestNetworkSwitch();
+
+        // @ts-ignore
+        window.dataLayer.push({
+            name: 'login',
+            userID: account,
+            type: 'metamask',
+        });
     };
 
     if (account) {

@@ -7,7 +7,7 @@ import { NO_METAMASK_WARNING } from '../WalletStatus/WalletStatus';
 
 export const WelcomeCarousel = (): JSX.Element => {
     const { CHAIN_ID } = config;
-    const { ethereum, connect } = useWallet();
+    const { account, ethereum, connect } = useWallet();
     const [index, setIndex] = useState(0);
 
     const requestNetworkSwitch = () => {
@@ -35,6 +35,13 @@ export const WelcomeCarousel = (): JSX.Element => {
         }
 
         requestNetworkSwitch();
+
+        // @ts-ignore
+        window.dataLayer.push({
+            name: 'login',
+            userID: account,
+            type: 'metamask',
+        });
     };
 
     const handleSelect = (selectedIndex: number) => {

@@ -299,6 +299,11 @@ export const Form = (props: FormProps): JSX.Element => {
                 onSubmit={async (e) => {
                     e.preventDefault();
 
+                    const totalSum =
+                        parseInt(props.dai, 10) +
+                        parseInt(props.usdc, 10) +
+                        parseInt(props.usdt, 10);
+
                     switch (action) {
                         case 'withdraw':
                             setPendingWithdraw(true);
@@ -306,8 +311,14 @@ export const Form = (props: FormProps): JSX.Element => {
 
                             try {
                                 await onUnstake();
+
                                 // @ts-ignore
-                                window.dataLayer.push({ event: 'withdraw' });
+                                window.dataLayer.push({
+                                    name: 'withdrawal',
+                                    userID: account,
+                                    type: 'metamask',
+                                    value: totalSum,
+                                });
                             } catch (error: any) {
                                 setPendingTx(false);
                                 setPendingWithdraw(false);
@@ -317,18 +328,19 @@ export const Form = (props: FormProps): JSX.Element => {
                             setPendingWithdraw(false);
                             break;
                         case 'deposit':
-                            const totalSum =
-                                parseInt(props.dai, 10) +
-                                parseInt(props.usdc, 10) +
-                                parseInt(props.usdt, 10);
-
                             setPendingTx(true);
 
                             try {
                                 const tx = await onStake();
                                 setTransactionId(tx.transactionHash);
+
                                 // @ts-ignore
-                                window.dataLayer.push({ event: 'deposit', value: totalSum });
+                                window.dataLayer.push({
+                                    name: 'deposit',
+                                    userID: account,
+                                    type: 'metamask',
+                                    value: totalSum,
+                                });
                             } catch (error: any) {
                                 debugger;
                             }
