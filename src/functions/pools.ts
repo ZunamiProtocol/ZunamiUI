@@ -43,7 +43,7 @@ const poolsChartdata: { [key: string]: any } = {
     LUSD: {
         title: 'Convex finance - LUSD pool',
         link: 'https://etherscan.io/address/0x9903ABbd0006350115D15e721f2d7e3eb6f13b97',
-        color: '#8DDA2C',
+        color: '#B8E654',
         value: 0,
     },
 };

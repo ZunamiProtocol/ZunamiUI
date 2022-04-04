@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './ApyChart.scss';
 import {
     Chart as ChartJS,
@@ -77,7 +77,7 @@ const chartOptions = {
                 display: false,
             },
             min: 0,
-            max: 18,
+            max: 20,
             ticks: {
                 //@ts-ignore
                 callback: function (val) {
@@ -104,6 +104,10 @@ export const ApyChart = (props: ChartProps): JSX.Element => {
             },
         ],
     };
+
+    useEffect(() => {
+        chartOptions.scales.y.max = Math.max.apply(Math, props.data);
+    }, [props.data]);
 
     return (
         <div className={'ApyChart'}>
