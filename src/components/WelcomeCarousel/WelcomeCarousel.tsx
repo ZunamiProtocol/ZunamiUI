@@ -346,7 +346,7 @@ export const WelcomeCarousel = (): JSX.Element => {
                         <h1>Lockdrop distribution</h1>
                         <span>
                             The ZUN token will be credited through the innovative Lockdrop system to
-                            ensure the proper functioning of the platform in long term.
+                            ensure the proper functioning of the platform in the long term.
                         </span>
                         <svg
                             width="81"

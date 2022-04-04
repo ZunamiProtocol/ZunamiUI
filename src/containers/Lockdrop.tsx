@@ -55,7 +55,7 @@ export const Lockdrop = (): JSX.Element => {
                             {!testnetStatus && (
                                 <TestnetPlaceholder
                                     headerTitle="Lockdrop"
-                                    title="Lockdrop are available only for Testnet users for now"
+                                    title="Lockdrop is available only to Testnet users for now"
                                 />
                             )}
                             {testnetStatus && (
