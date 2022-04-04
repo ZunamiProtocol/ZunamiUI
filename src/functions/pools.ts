@@ -36,7 +36,13 @@ const poolsChartdata: { [key: string]: any } = {
     },
     USDN: {
         title: 'Convex finance - USDN pool',
-        link: 'https://etherscan.io/address/0x553f8BD62F2e39064B49CDb814765eC0e6057FFe',
+        link: 'https://etherscan.io/address/0xc2bbEDcCE9b54a9F8eaAFf40D1965f9b25B74e66',
+        color: '#8DDA2C',
+        value: 0,
+    },
+    LUSD: {
+        title: 'Convex finance - LUSD pool',
+        link: 'https://etherscan.io/address/0x9903ABbd0006350115D15e721f2d7e3eb6f13b97',
         color: '#8DDA2C',
         value: 0,
     },
