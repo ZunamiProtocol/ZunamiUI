@@ -23,7 +23,7 @@ export const Header = (): JSX.Element => {
                         >
                             has been audited
                         </a>
-                        , but it's steel a beta version. Use it at your own risk
+                        , but it's still a beta version. Use it at your own risk
                     </div>
                 }
             />
