@@ -60,7 +60,7 @@ const ranges = [
 
 const chartOptions = {
     responsive: true,
-    radius: 0,
+    // radius: 0,
     plugins: {
         legend: {
             display: false,
@@ -77,7 +77,7 @@ const chartOptions = {
                 display: false,
             },
             min: 0,
-            max: 20,
+            // max: 20,
             ticks: {
                 //@ts-ignore
                 callback: function (val) {
@@ -104,10 +104,6 @@ export const ApyChart = (props: ChartProps): JSX.Element => {
             },
         ],
     };
-
-    useEffect(() => {
-        chartOptions.scales.y.max = Math.max.apply(Math, props.data);
-    }, [props.data]);
 
     return (
         <div className={'ApyChart'}>
