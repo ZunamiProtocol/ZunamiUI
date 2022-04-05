@@ -56,7 +56,7 @@ export const Staking = (): JSX.Element => {
                             {!testnetStatus && (
                                 <TestnetPlaceholder
                                     headerTitle="Staking"
-                                    title="Staking ZUN are available only for Testnet users for now"
+                                    title="Staking ZUN is available only to Testnet users for now"
                                 />
                             )}
                             {testnetStatus && (
