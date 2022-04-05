@@ -8,6 +8,10 @@ const LS_ACCOUNT_KEY = 'METAMASK_ACCOUNT';
 export const NO_METAMASK_WARNING =
     'Please, install either Metamask browser extension or Metamask mobile app';
 
+export function getActiveWalletName() {
+    return 'metamask';
+}
+
 export const WalletStatus = (): JSX.Element => {
     const { CHAIN_ID } = config;
     const { account, ethereum, connect, reset } = useWallet();
@@ -49,9 +53,9 @@ export const WalletStatus = (): JSX.Element => {
 
         // @ts-ignore
         window.dataLayer.push({
-            name: 'login',
-            userID: account,
-            type: 'metamask',
+            event: 'login',
+            userID: window.ethereum.selectedAddress,
+            type: getActiveWalletName(),
         });
     };
 

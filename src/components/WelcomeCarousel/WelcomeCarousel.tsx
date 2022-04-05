@@ -3,11 +3,11 @@ import './WelcomeCarousel.scss';
 import { Carousel } from 'react-bootstrap';
 import config from '../../config';
 import { useWallet } from 'use-wallet';
-import { NO_METAMASK_WARNING } from '../WalletStatus/WalletStatus';
+import { NO_METAMASK_WARNING, getActiveWalletName } from '../WalletStatus/WalletStatus';
 
 export const WelcomeCarousel = (): JSX.Element => {
     const { CHAIN_ID } = config;
-    const { account, ethereum, connect } = useWallet();
+    const { ethereum, connect } = useWallet();
     const [index, setIndex] = useState(0);
 
     const requestNetworkSwitch = () => {
@@ -38,9 +38,9 @@ export const WelcomeCarousel = (): JSX.Element => {
 
         // @ts-ignore
         window.dataLayer.push({
-            name: 'login',
-            userID: account,
-            type: 'metamask',
+            event: 'login',
+            userID: window.ethereum.selectedAddress,
+            type: getActiveWalletName(),
         });
     };
 
