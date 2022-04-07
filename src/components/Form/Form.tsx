@@ -21,6 +21,7 @@ import { BigNumber } from 'bignumber.js';
 import { Toast, ToastContainer } from 'react-bootstrap';
 import { ActionSelector } from './ActionSelector/ActionSelector';
 import { DirectAction } from './DirectAction/DirectAction';
+import { getActiveWalletName } from '../WalletStatus/WalletStatus';
 
 interface FormProps {
     operationName: string;
@@ -299,6 +300,11 @@ export const Form = (props: FormProps): JSX.Element => {
                 onSubmit={async (e) => {
                     e.preventDefault();
 
+                    const totalSum =
+                        parseInt(props.dai, 10) +
+                        parseInt(props.usdc, 10) +
+                        parseInt(props.usdt, 10);
+
                     switch (action) {
                         case 'withdraw':
                             setPendingWithdraw(true);
@@ -306,8 +312,14 @@ export const Form = (props: FormProps): JSX.Element => {
 
                             try {
                                 await onUnstake();
+
                                 // @ts-ignore
-                                window.dataLayer.push({ event: 'withdraw' });
+                                window.dataLayer.push({
+                                    event: 'withdrawal',
+                                    userID: account,
+                                    type: getActiveWalletName(),
+                                    value: totalSum,
+                                });
                             } catch (error: any) {
                                 setPendingTx(false);
                                 setPendingWithdraw(false);
@@ -317,18 +329,19 @@ export const Form = (props: FormProps): JSX.Element => {
                             setPendingWithdraw(false);
                             break;
                         case 'deposit':
-                            const totalSum =
-                                parseInt(props.dai, 10) +
-                                parseInt(props.usdc, 10) +
-                                parseInt(props.usdt, 10);
-
                             setPendingTx(true);
 
                             try {
                                 const tx = await onStake();
                                 setTransactionId(tx.transactionHash);
+
                                 // @ts-ignore
-                                window.dataLayer.push({ event: 'deposit', value: totalSum });
+                                window.dataLayer.push({
+                                    event: 'deposit',
+                                    userID: account,
+                                    type: 'metamask',
+                                    value: totalSum,
+                                });
                             } catch (error: any) {
                                 debugger;
                             }

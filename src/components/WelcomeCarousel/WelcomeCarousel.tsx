@@ -3,7 +3,7 @@ import './WelcomeCarousel.scss';
 import { Carousel } from 'react-bootstrap';
 import config from '../../config';
 import { useWallet } from 'use-wallet';
-import { NO_METAMASK_WARNING } from '../WalletStatus/WalletStatus';
+import { NO_METAMASK_WARNING, getActiveWalletName } from '../WalletStatus/WalletStatus';
 
 export const WelcomeCarousel = (): JSX.Element => {
     const { CHAIN_ID } = config;
@@ -35,6 +35,13 @@ export const WelcomeCarousel = (): JSX.Element => {
         }
 
         requestNetworkSwitch();
+
+        // @ts-ignore
+        window.dataLayer.push({
+            event: 'login',
+            userID: window.ethereum.selectedAddress,
+            type: getActiveWalletName(),
+        });
     };
 
     const handleSelect = (selectedIndex: number) => {
