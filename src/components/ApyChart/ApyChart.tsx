@@ -62,6 +62,13 @@ const chartOptions = {
     responsive: true,
     // radius: 0,
     plugins: {
+        tooltip: {
+            callbacks: {
+                label: function (context: any) {
+                    return `APY: ${context.dataset.data[context.dataIndex].toFixed(2)}%` || '';
+                },
+            },
+        },
         legend: {
             display: false,
         },
@@ -94,11 +101,11 @@ export const ApyChart = (props: ChartProps): JSX.Element => {
 
     const data = {
         labels: props.data.map((item) => {
-            return format(item.timestamp * 1000, 'E d');
+            return format(item.timestamp * 1000, 'dd MMM');
         }),
         datasets: [
             {
-                label: 'Dataset 1',
+                label: 'APY',
                 data: props.data.map((item) => item.apy),
                 borderColor: '#FA5B06',
             },
