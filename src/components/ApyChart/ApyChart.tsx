@@ -68,9 +68,6 @@ const chartOptions = {
                     return `APY: ${context.dataset.data[context.dataIndex].toFixed(2)}%` || '';
                 },
             },
-            //     callback: function (val: any) {
-            //         return `${val}%`;
-            //     },
         },
         legend: {
             display: false,
