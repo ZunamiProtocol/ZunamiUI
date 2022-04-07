@@ -1,0 +1,80 @@
+@import 'src/variables';
+
+.PendingBalance {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3px;
+
+    @media screen and (min-width: $media375) {
+        // margin-top: -3px;
+    }
+
+    @media screen and (min-width: $media1024) {
+        // margin-top: 5px;
+    }
+
+    @media screen and (min-width: $media1440) {
+        margin-top: 1px;
+    }
+
+    @media screen and (min-width: $media1920) {
+        margin-top: 1px;
+    }
+
+    &__val {
+        color: #404040;
+
+        @media (min-width: $media375) {
+            font-size: 14px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            font-size: 12px;
+            line-height: 16px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-size: 14px;
+            line-height: 19px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            font-size: 16px;
+            line-height: 22px;
+        }
+
+        &__divider {
+            padding-right: 5px;
+        }
+    }
+
+    &__icon {
+        @media screen and (min-width: $media375) {
+            width: 11.6px;
+            height: 14px;
+            margin-left: 15px;
+            margin-right: 5px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            width: 11.6px;
+            height: 14px;
+            margin-left: 15px;
+            margin-right: 5px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            width: 11.6px;
+            height: 14px;
+            margin-left: 23px;
+            margin-right: 6px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            width: 11.6px;
+            height: 14px;
+            margin-left: 32px;
+            margin-right: 6px;
+        }
+    }
+}

@@ -1,41 +1,68 @@
-$media1920: 1920px;
-$media1600: 1600px;
-$media1440: 1440px;
-$media1024: 1024px;
+@import 'src/variables';
 
-.DepositContainer {
-    margin: 0 auto;
-    width: 1920px;
+.operation-col {
+    background-color: #fff;
+    border-radius: 5px;
 
-    @media screen and (max-width: $media1920) {
-        width: 1600px;
+    @media screen and (min-width: $media1024) {
+        margin-left: 10px !important;
+        padding: 30px !important;
     }
 
-    @media screen and (max-width: $media1600) {
-        width: 1440px;
+    @media screen and (min-width: $media1440) {
+        margin-left: 18px !important;
+        padding: 32px 42px !important;
     }
 
-    @media screen and (max-width: $media1440) {
-        width: 1400px;
+    @media screen and (min-width: $media1920) {
+        margin-left: 25px !important;
+        padding: 32px 42px !important;
     }
-    @media screen and (max-width: $media1024) {
-        width: 1000px;
+}
+
+.DepositContent {
+    @media screen and (min-width: $media375) {
+        padding: 18px;
     }
 
-    .DepositBlock {
+    @media screen and (min-width: $media1024) {
+        padding: 0;
+    }
+
+    &__Title {
+        color: #636363;
         display: flex;
-        justify-content: space-between;
-        width: 100%;
+        align-items: center;
 
-        .DepositContent {
-            align-items: center;
-            background-color: #fbfbfb;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            padding-top: 33px;
-            width: 73%;
+        svg {
+            @media screen and (min-width: $media375) {
+                display: block;
+                width: 16px;
+                height: 16px;
+                margin-right: 12px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                display: none;
+            }
+        }
+
+        @media screen and (min-width: $media375) {
+            font-size: 16px;
+            line-height: 21px;
+            margin: 0 0 24px 1px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            font-size: 12px;
+            line-height: 16px;
+            margin: 0 0 24px 1px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-size: 16px;
+            line-height: 22px;
+            margin-bottom: 26px;
         }
     }
 }

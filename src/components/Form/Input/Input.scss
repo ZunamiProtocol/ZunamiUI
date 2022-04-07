@@ -1,52 +1,248 @@
-.Input {
-    align-items: center;
-    background-color: #f5f5f5;
-    border-radius: 27px;
-    display: flex;
-    font-family: 'Anderson Grotesk';
-    justify-content: space-between;
-    padding: 10px 15px;
-    margin-bottom: 33px;
-    width: 90%;
+@import 'src/variables';
 
-    input {
-        padding: 7px 0;
-        width: 50%;
+.Input {
+    background: #fffaf3;
+    border: 1px solid #f4efe1;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    position: relative;
+
+    @media screen and (min-width: $media375) {
+        width: auto;
+        height: 82px;
+        margin-bottom: 11px;
     }
 
-    .InputInfo {
-        align-items: center;
-        display: flex;
-        justify-content: space-between;
+    @media screen and (min-width: $media1024) {
+        margin-bottom: 11px;
+        width: 423px;
+        height: 41px;
+    }
 
-        img {
-            margin: 0 20px 0 37px;
+    @media screen and (min-width: $media1440) {
+        margin-bottom: 15px;
+        width: 484px;
+        height: 54px;
+    }
+
+    @media screen and (min-width: $media1920) {
+        margin-bottom: 16px;
+        width: 543px;
+        height: 61px;
+    }
+
+    img {
+        @media screen and (min-width: $media375) {
+            width: 23px;
+            height: 23px;
+            margin-left: 0;
+            margin-right: 10px;
+            position: absolute;
+            top: 14px;
+            left: 16px;
         }
 
-        .balanceInfo {
-            display: flex;
-            flex-direction: column;
+        @media screen and (min-width: $media1024) {
+            width: 18px;
+            height: 18px;
+            margin-left: 13.9px;
+            margin-right: 8px;
+            position: static;
+        }
 
-            .coinName {
-                font-size: 20px;
-            }
+        @media screen and (min-width: $media1440) {
+            width: 23px;
+            height: 23px;
+            margin-left: 16px;
+            margin-right: 10px;
+        }
 
-            .max {
-                border-radius: 10px;
-                border: 1px solid #f25817;
-                font-size: 15px;
-                padding: 4px 5px 0 5px;
-                vertical-align: middle;
-            }
+        @media screen and (min-width: $media1920) {
+            width: 26px;
+            height: 26px;
+            margin-left: 25px;
+            margin-right: 10px;
+        }
+    }
 
-            .balance {
-                color: #f25817;
-                display: inline-block;
-                font-size: 20px;
-                margin-left: 10px;
-                margin-top: 3px;
-                vertical-align: middle;
-            }
+    .coinName {
+        color: #636363;
+
+        @media screen and (min-width: $media375) {
+            font-size: 12px;
+            line-height: 16px;
+            position: absolute;
+            top: 19px;
+            left: 48px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            font-size: 12px;
+            line-height: 16px;
+            width: 83px;
+            position: static;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-size: 12px;
+            line-height: 16px;
+            width: 80px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            font-size: 14px;
+            line-height: 19px;
+            width: 80px;
+        }
+    }
+
+    .divider {
+        background-color: #f4efe1;
+
+        @media screen and (min-width: $media375) {
+            height: 50px;
+            width: 1px;
+            position: absolute;
+            left: 141px;
+            top: 16px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            height: 21px;
+            width: 1px;
+            position: static;
+        }
+
+        @media screen and (min-width: $media1440) {
+            height: 28px;
+            width: 2px;
+        }
+    }
+
+    .max {
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #f95404;
+        color: #f95404;
+        cursor: pointer;
+
+        @media screen and (min-width: $media375) {
+            font-size: 9px;
+            line-height: 12px;
+            width: 35px;
+            height: 17px;
+            top: 47px;
+            left: 14px;
+            position: absolute;
+        }
+
+        @media screen and (min-width: $media1024) {
+            margin-left: 20px;
+            font-size: 9px;
+            line-height: 12px;
+            width: 29px;
+            height: 14px;
+            position: static;
+        }
+
+        @media screen and (min-width: $media1440) {
+            margin-left: 19px;
+            font-size: 10px;
+            line-height: 14px;
+            width: 35px;
+            height: 17px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            margin-left: 19px;
+            font-size: 12px;
+            line-height: 16px;
+            width: 39px;
+            height: 20px;
+        }
+    }
+
+    .balance {
+        color: #f95404;
+
+        @media screen and (min-width: $media375) {
+            font-size: 12px;
+            line-height: 16px;
+            position: absolute;
+            top: 47px;
+            left: 58px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            font-size: 12px;
+            line-height: 16px;
+            margin-left: 17px;
+            width: 74px;
+            position: static;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-size: 12px;
+            line-height: 16px;
+            margin-left: 10px;
+            width: 77px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            font-size: 14px;
+            line-height: 19px;
+            margin-left: 10px;
+            width: 120px;
+        }
+    }
+
+    input {
+        background: #fffaf3;
+        border: 1px solid #f4efe1;
+        box-sizing: border-box;
+        border-radius: 5px;
+        color: #636363;
+
+        @media screen and (min-width: $media375) {
+            font-size: 12px;
+            line-height: 16px;
+            padding-left: 8px;
+            width: auto;
+            height: 28px;
+            position: absolute;
+            left: 165px;
+            top: 27px;
+            right: 15px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            font-size: 12px;
+            line-height: 16px;
+            padding-left: 8px;
+            width: 133px;
+            height: 21px;
+            margin-left: 14px;
+            position: static;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-size: 14px;
+            line-height: 19px;
+            padding-left: 15px;
+            width: 173px;
+            height: 29px;
+            margin-left: 17px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            padding-left: 15px;
+            width: 175px;
+            height: 33px;
+            margin-left: 17px;
         }
     }
 }

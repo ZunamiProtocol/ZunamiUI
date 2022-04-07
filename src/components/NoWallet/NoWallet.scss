@@ -1,0 +1,15 @@
+@import 'src/variables';
+
+.NoWallet {
+    border: solid 2px $primary-color;
+    margin: 20px;
+    padding: 5px;
+    border-radius: $border-radius;
+    text-align: center;
+    display: flex;
+    align-items: center;
+
+    span {
+        margin-right: 10px;
+    }
+}

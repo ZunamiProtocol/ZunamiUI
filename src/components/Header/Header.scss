@@ -1,41 +1,77 @@
-$media1440: 1440px;
-$media1024: 1024px;
+@import 'src/variables';
 
-.header {
-    display: flex;
-    font-family: 'Anderson Grotesk';
-    justify-content: space-between;
-    margin: 40px 0;
-    width: 100%;
+.navbar.header {
+    padding: 0;
+    margin: 0;
+    align-items: flex-start;
 
-    @media screen and (max-width: $media1440) {
-        margin: 40px 0 0 0;
-    }
-    @media screen and (max-width: $media1024) {
-        margin: 40px 0 0 0;
+    @media screen and (min-width: $media375) {
+        height: 75px;
+        min-height: 75px;
+        z-index: 1111;
     }
 
-    .logo {
-        height: 31px;
-        width: 181px;
+    @media screen and (min-width: $media1024) {
+        height: 64px;
+        min-height: 64px;
     }
 
-    .wallet {
-        align-items: center;
-        background-color: #f64a00;
-        border-radius: 10px;
-        color: #fff;
-        cursor: pointer;
-        display: flex;
-        font-size: 19px;
-        height: 49px;
-        justify-content: space-around;
+    @media screen and (min-width: $media1440) {
+        height: 70px;
+        min-height: 70px;
+    }
 
-        width: 200px;
+    @media screen and (min-width: $media1920) {
+        height: 110px;
+        min-height: 110px;
+    }
 
-        img {
-            height: 22px;
-            width: 26px;
+    .navbar-brand {
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-menu {
+        @media screen and (min-width: $media375) {
+            display: flex;
+            justify-content: flex-end;
+            position: relative;
+            top: 25px;
+            right: 22px;
+            height: 33px;
+            width: 33px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            display: none;
+        }
+    }
+
+    .Logo {
+        @media screen and (min-width: $media375) {
+            width: 130px;
+            height: 19px;
+            margin-top: 22px;
+            margin-left: 22px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            width: 155px;
+            height: 23px;
+            margin-top: 31px;
+            margin-left: 5px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            width: 143px;
+            height: 21px;
+            margin-top: 34.7px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            width: 230px;
+            height: 34px;
+            margin-top: 55px;
         }
     }
 }

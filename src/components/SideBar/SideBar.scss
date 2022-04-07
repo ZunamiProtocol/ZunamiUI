@@ -1,11 +1,80 @@
-.SideBar {
-    align-items: center;
-    background-color: #fbfbfb;
-    border-radius: 10px;
+@import 'src/variables';
+
+.SidebarColumn {
     display: flex;
     flex-direction: column;
-    height: 650px;
-    justify-content: left;
-    padding-top: 33px;
-    width: 25%;
+    justify-content: space-between;
+    height: 100%;
+    background-color: #fff;
+
+    @media (min-width: $media375) {
+        padding-top: 100px;
+
+        .WalletStatus {
+            display: none;
+        }
+    }
+
+    @media screen and (min-width: $media1024) {
+        border-radius: 5px;
+        overflow: hidden;
+        width: 259px !important;
+        max-width: 259px !important;
+        min-width: 259px !important;
+        padding: 0 !important;
+
+        .WalletStatus {
+            display: flex;
+        }
+    }
+
+    @media screen and (min-width: $media1440) {
+        border-radius: 5px;
+        overflow: hidden;
+        width: 300px !important;
+        max-width: 300px !important;
+        min-width: 300px !important;
+        padding: 0 !important;
+    }
+
+    @media screen and (min-width: $media1920) {
+        border-radius: 5px;
+        overflow: hidden;
+        width: 411px !important;
+        max-width: 411px !important;
+        min-width: 411px !important;
+        padding: 0 !important;
+    }
+
+    .Sidebar {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        height: 100%;
+
+        &__footer {
+            @media screen and (min-width: $media1024) {
+                margin-left: 20px;
+                padding-bottom: 19px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                margin-left: 20px;
+                padding-bottom: 30px;
+            }
+
+            a {
+                display: block;
+                color: #a1a1a1;
+                text-decoration: none;
+
+                @media screen and (min-width: $media1024) {
+                    margin-top: 10px;
+                    font-size: 12px;
+                    line-height: 16.3px;
+                }
+            }
+        }
+    }
 }
