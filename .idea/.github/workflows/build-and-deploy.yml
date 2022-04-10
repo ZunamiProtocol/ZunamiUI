@@ -1,0 +1,42 @@
+name: "Build and deploy"
+on:
+    workflow_call:
+        inputs:
+            local_folder:
+                description: “Path to local build folder you want to copy”
+                required: true
+                type: string
+            remote_folder:
+                description: “Path to folder to copy the build”
+                required: true
+                type: string
+        secrets:
+            host:
+                required: true
+            username:
+                required: true
+            privatekey:
+                required: true
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        environment: CI/CD
+        steps:
+            -   uses: actions/checkout@v2
+            -   name: Use Node.js
+                uses: actions/setup-node@v1
+                with:
+                    node-version: '12.x'
+            -   run: npm install
+            -   run: npm run build --if-present
+            -   name: Copy folder content recursively
+                uses: garygrossgarten/github-action-scp@release
+                with:
+                    local: ${{ inputs.local_folder }}
+                    remote: ${{ inputs.remote_folder }}
+                    host: ${{ secrets.HOST }}
+                    username: ${{ secrets.USERNAME }}
+                    privateKey: ${{ secrets.PRIVATEKEY }}
+            -   run:
+                    echo "This job's status is ${{ job.status }}."
