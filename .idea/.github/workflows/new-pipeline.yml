@@ -1,4 +1,4 @@
-name: Deployment to my new.zunami.io
+name: Deployment to new.zunami.io
 on: push
 
 jobs:
