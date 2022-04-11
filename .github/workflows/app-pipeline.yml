@@ -1,0 +1,15 @@
+name: Deployment to app.zunami.io
+on:
+    push:
+        branches:
+            - main
+jobs:
+    app-build-deploy:
+        uses: ./.github/workflows/build-and-deploy.yml
+        with:
+            local_folder: build
+            remote_folder: /var/www/html
+        secrets:
+            host: ${{ secrets.HOST }}
+            username: ${{ secrets.USERNAME }}
+            privateKey: ${{ secrets.PRIVATEKEY }}
