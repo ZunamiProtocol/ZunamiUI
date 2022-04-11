@@ -21,7 +21,7 @@ import { BigNumber } from 'bignumber.js';
 import { Toast, ToastContainer } from 'react-bootstrap';
 import { ActionSelector } from './ActionSelector/ActionSelector';
 import { DirectAction } from './DirectAction/DirectAction';
-import { getActiveWalletName } from '../WalletStatus/WalletStatus';
+import { getActiveWalletName, getActiveWalletAddress } from '../WalletsModal/WalletsModal';
 
 interface FormProps {
     operationName: string;
@@ -316,7 +316,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                 // @ts-ignore
                                 window.dataLayer.push({
                                     event: 'withdrawal',
-                                    userID: account,
+                                    userID: getActiveWalletAddress(),
                                     type: getActiveWalletName(),
                                     value: totalSum,
                                 });
@@ -338,8 +338,8 @@ export const Form = (props: FormProps): JSX.Element => {
                                 // @ts-ignore
                                 window.dataLayer.push({
                                     event: 'deposit',
-                                    userID: account,
-                                    type: 'metamask',
+                                    userID: getActiveWalletAddress(),
+                                    type: getActiveWalletName(),
                                     value: totalSum,
                                 });
                             } catch (error: any) {
