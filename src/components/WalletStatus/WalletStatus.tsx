@@ -1,66 +1,22 @@
-import React, { useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import './WalletStatus.scss';
-import config from '../../config';
 import { useWallet } from 'use-wallet';
+import { WalletsModal } from '../WalletsModal/WalletsModal';
 
-const LS_ACCOUNT_KEY = 'METAMASK_ACCOUNT';
-
-export const NO_METAMASK_WARNING =
-    'Please, install either Metamask browser extension or Metamask mobile app';
-
-export function getActiveWalletName() {
-    return 'metamask';
-}
+export const LS_ACCOUNT_KEY = 'METAMASK_ACCOUNT';
+export const LS_WALLET_TYPE_KEY = 'WALLET_TYPE';
 
 export const WalletStatus = (): JSX.Element => {
-    const { CHAIN_ID } = config;
-    const { account, ethereum, connect, reset } = useWallet();
-    const eth = window.ethereum || ethereum;
+    const { account, reset } = useWallet();
 
     const handleSignOutClick = useCallback(() => {
         reset();
-        window.localStorage.removeItem(LS_ACCOUNT_KEY);
+        window.localStorage.clear();
     }, [reset]);
 
-    const requestNetworkSwitch = () => {
-        // @ts-ignore
-
-        setTimeout(() => {
-            // @ts-ignore
-            eth &&
-                eth.request &&
-                eth.request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: `0x${CHAIN_ID}` }],
-                });
-        }, 1000);
-    };
-
-    if (eth) {
-        requestNetworkSwitch();
-    }
-
-    const onConnect = async () => {
-        await connect('injected');
-
-        // @ts-ignore
-        const eth = window.ethereum || ethereum;
-        if (!eth) {
-            alert(NO_METAMASK_WARNING);
-        }
-
-        requestNetworkSwitch();
-
-        // @ts-ignore
-        window.dataLayer.push({
-            event: 'login',
-            userID: window.ethereum.selectedAddress,
-            type: getActiveWalletName(),
-        });
-    };
+    const [show, setShow] = useState(false);
 
     if (account) {
-        window.localStorage.setItem(LS_ACCOUNT_KEY, account);
         const shortAddress = `${account.substring(0, 6)}...${account.substring(
             account.length - 4
         )}`;
@@ -97,7 +53,16 @@ export const WalletStatus = (): JSX.Element => {
     }
 
     return (
-        <div className={'WalletStatus'} onClick={() => onConnect()}>
+        <div className={'WalletStatus'} onClick={() => setShow(true)}>
+            <WalletsModal
+                show={show}
+                onHide={() => {
+                    setShow(false);
+                }}
+                onWalletConnected={(wallet: any) => {
+                    window.localStorage.setItem(LS_ACCOUNT_KEY, wallet.address);
+                }}
+            />
             <input type="button" className="WalletStatus__Connect" value="Connect wallet" />
             <svg
                 className="WalletStatus__Icon"

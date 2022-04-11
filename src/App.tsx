@@ -43,7 +43,16 @@ const Providers: React.FC = ({ children }) => {
             <UseWalletProvider
                 // @ts-ignore
                 chainId={CHAIN_ID}
-                connectors={{ walletconnect: { rpcUrl: INFURA_URL } }}
+                connectors={{
+                    walletconnect: {
+                        rpc: {
+                            1: INFURA_URL,
+                        },
+                    },
+                    injected: {
+                        chainId: [1, 3, 4],
+                    },
+                }}
             >
                 <SushiProvider>
                     <TransactionProvider>
