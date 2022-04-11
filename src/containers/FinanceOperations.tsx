@@ -15,6 +15,7 @@ import { calcWithdrawOneCoin, getBalanceNew } from '../utils/erc20';
 import { Contract } from 'web3-eth-contract';
 import { BIG_ZERO, getBalanceNumber } from '../utils/formatbalance';
 import { ReactComponent as FinIcon } from '../components/Form/deposit-withdraw.svg';
+import useLpPrice from '../hooks/useLpPrice';
 
 interface FinanceOperationsProps {
     operationName: string;
@@ -46,6 +47,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
 
     const sushi = useSushi();
     const zunamiContract = getMasterChefContract(sushi);
+    const lpPrice = useLpPrice();
 
     const calculateStables = async (
         coinIndex: number,
@@ -53,7 +55,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
         sharePercent: number,
         zunamiContract: Contract
     ) => {
-        if (Number(balance) === 0) {
+        if (Number(balance) === 0 || Number(lpPrice) === 0) {
             return '0';
         }
 
@@ -76,7 +78,12 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
 
         const loadBalance = async () => {
             const rawBalance = await getBalanceNew(zunamiContract, account);
-            setBalance(new BigNumber(rawBalance));
+
+            setBalance(
+                Number(lpPrice) > 0
+                    ? lpPrice.multipliedBy(new BigNumber(rawBalance))
+                    : new BigNumber(rawBalance)
+            );
 
             if (!balance.toFixed() || selectedCoinIndex === -1) {
                 return;
@@ -123,6 +130,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
         sharePercent,
         selectedCoinIndex,
         props.operationName,
+        lpPrice,
     ]);
 
     return (
