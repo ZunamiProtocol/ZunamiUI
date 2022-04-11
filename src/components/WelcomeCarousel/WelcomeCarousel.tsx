@@ -1,48 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './WelcomeCarousel.scss';
 import { Carousel } from 'react-bootstrap';
-import config from '../../config';
-import { useWallet } from 'use-wallet';
-import { NO_METAMASK_WARNING, getActiveWalletName } from '../WalletStatus/WalletStatus';
+import { LS_ACCOUNT_KEY } from '../WalletStatus/WalletStatus';
+import { WalletsModal } from '../WalletsModal/WalletsModal';
 
 export const WelcomeCarousel = (): JSX.Element => {
-    const { CHAIN_ID } = config;
-    const { ethereum, connect } = useWallet();
     const [index, setIndex] = useState(0);
-
-    const requestNetworkSwitch = () => {
-        // @ts-ignore
-        const eth = window.ethereum || ethereum;
-
-        setTimeout(() => {
-            // @ts-ignore
-            eth &&
-                eth.request &&
-                eth.request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: `0x${CHAIN_ID}` }],
-                });
-        }, 1000);
-    };
-
-    const onConnect = async () => {
-        await connect('injected');
-
-        // @ts-ignore
-        const eth = window.ethereum || ethereum;
-        if (!eth) {
-            alert(NO_METAMASK_WARNING);
-        }
-
-        requestNetworkSwitch();
-
-        // @ts-ignore
-        window.dataLayer.push({
-            event: 'login',
-            userID: window.ethereum.selectedAddress,
-            type: getActiveWalletName(),
-        });
-    };
+    const [show, setShow] = useState(false);
 
     const handleSelect = (selectedIndex: number) => {
         setIndex(selectedIndex);
@@ -50,6 +14,15 @@ export const WelcomeCarousel = (): JSX.Element => {
 
     return (
         <div className={'WelcomeCarousel'}>
+            <WalletsModal
+                show={show}
+                onHide={() => {
+                    setShow(false);
+                }}
+                onWalletConnected={(wallet: any) => {
+                    window.localStorage.setItem(LS_ACCOUNT_KEY, wallet.address);
+                }}
+            />
             <div className="WelcomeCarousel__Content">
                 <svg
                     className="WelcomeCarousel__Content__Logo"
@@ -249,12 +222,7 @@ export const WelcomeCarousel = (): JSX.Element => {
                             />
                         </svg>
                         <div>
-                            <button
-                                className="zun-button"
-                                onClick={() => {
-                                    onConnect();
-                                }}
-                            >
+                            <button className="zun-button" onClick={() => setShow(true)}>
                                 Connect wallet
                             </button>
                         </div>
@@ -290,12 +258,7 @@ export const WelcomeCarousel = (): JSX.Element => {
                             />
                         </svg>
                         <div>
-                            <button
-                                className="zun-button"
-                                onClick={() => {
-                                    onConnect();
-                                }}
-                            >
+                            <button className="zun-button" onClick={() => setShow(true)}>
                                 Connect wallet
                             </button>
                         </div>
@@ -339,12 +302,7 @@ export const WelcomeCarousel = (): JSX.Element => {
                             />
                         </svg>
                         <div>
-                            <button
-                                className="zun-button"
-                                onClick={() => {
-                                    onConnect();
-                                }}
-                            >
+                            <button className="zun-button" onClick={() => setShow(true)}>
                                 Connect wallet
                             </button>
                         </div>
@@ -380,12 +338,7 @@ export const WelcomeCarousel = (): JSX.Element => {
                             />
                         </svg>
                         <div>
-                            <button
-                                className="zun-button"
-                                onClick={() => {
-                                    onConnect();
-                                }}
-                            >
+                            <button className="zun-button" onClick={() => setShow(true)}>
                                 Connect wallet
                             </button>
                         </div>
@@ -425,12 +378,7 @@ export const WelcomeCarousel = (): JSX.Element => {
                             />
                         </svg>
                         <div>
-                            <button
-                                className="zun-button"
-                                onClick={() => {
-                                    onConnect();
-                                }}
-                            >
+                            <button className="zun-button" onClick={() => setShow(true)}>
                                 Connect wallet
                             </button>
                         </div>
