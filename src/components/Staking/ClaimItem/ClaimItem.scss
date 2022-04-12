@@ -1,0 +1,41 @@
+@import 'src/variables';
+
+.UnclaimedItem {
+    margin-bottom: 10px;
+
+    button {
+        margin-right: 18px;
+    }
+
+    &__ZUN {
+        color: #f64a00;
+
+        @media screen and (min-width: $media1024) {
+            font-size: 16px;
+            line-height: 22px;
+            margin-top: 11px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-size: 23px;
+            line-height: 31px;
+            margin-top: 15px;
+        }
+    }
+
+    &__USD {
+        color: #636363;
+
+        @media screen and (min-width: $media1024) {
+            font-size: 14px;
+            line-height: 19px;
+            margin-top: 6px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-size: 16px;
+            line-height: 22px;
+            margin-top: 12px;
+        }
+    }
+}

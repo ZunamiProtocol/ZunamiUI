@@ -1,0 +1,112 @@
+@import 'src/variables';
+
+.ActionSelector {
+    display: flex;
+
+    @media screen and (min-width: $media375) {
+        width: 100%;
+    }
+
+    @media screen and (min-width: $media1024) {
+        margin-bottom: 13px;
+    }
+
+    @media screen and (min-width: $media1440) {
+        margin-bottom: 22px;
+    }
+
+    &__Action {
+        background-color: #fff7ed;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: #e0b02b;
+        cursor: pointer;
+        text-decoration: none;
+
+        &:hover {
+            color: #e0b02b;
+        }
+
+        @media screen and (min-width: $media375) {
+            width: 50%;
+            height: 88px;
+            padding: 16px;
+            font-size: 14px;
+            line-height: 19px;
+            margin: 0 0 20px 0;
+
+            &:first-child {
+                margin-right: 5.5px;
+            }
+
+            &:last-child {
+                margin-left: 5.5px;
+            }
+        }
+
+        @media screen and (min-width: $media1024) {
+            width: 208px;
+            height: 54px;
+            padding: 0 13px;
+            font-size: 12px;
+            line-height: 16px;
+            margin-right: 10px;
+            margin-bottom: 0;
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+
+        @media screen and (min-width: $media1440) {
+            width: 236px;
+            height: 70px;
+            margin-right: 10px;
+            padding: 0 20px;
+            font-size: 14px;
+            line-height: 19px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            width: 266px;
+            height: 79px;
+            margin-right: 12px;
+            padding: 0 23px;
+            font-size: 16px;
+            line-height: 22px;
+        }
+
+        &__Active {
+            background: linear-gradient(88.87deg, #f74f02 15.93%, #f9a211 93.44%);
+            color: #fff;
+
+            &:hover {
+                color: #fff;
+            }
+        }
+
+        svg {
+            @media screen and (min-width: $media375) {
+                width: 39px;
+                height: 26px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                width: 41px;
+                height: 28px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                width: 54px;
+                height: 37px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                width: 60px;
+                height: 42px;
+            }
+        }
+    }
+}

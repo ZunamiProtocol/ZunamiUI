@@ -1,24 +1,103 @@
+@import 'src/variables';
+
 .Form {
-    display: flex;
-    justify-content: center;
-    margin-top: 33px;
-    width: 67%;
-
-    form {
+    .InputInfo {
         display: flex;
-        flex-direction: column;
-        justify-content: center;
-        width: 100%;
+    }
 
-        input[type='submit'] {
-            background-color: #f74b01;
-            border-radius: 10px;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            font-family: 'Anderson Grotesk';
-            padding: 14px 0 12px 0;
-            width: 25%;
+    .error {
+        @media screen and (min-width: $media1024) {
+            font-size: 12px;
+            line-height: 16px;
         }
+    }
+
+    .buttons {
+        gap: 0 10px;
+    }
+
+    button {
+        background: linear-gradient(87.51deg, #f74e02 12.85%, #f9a412 94.75%);
+        border-radius: 5px;
+        border: none;
+        color: #fff;
+
+        @media screen and (min-width: $media375) {
+            width: 120px;
+            height: 36px;
+            font-size: 14px;
+            line-height: 19px;
+            margin-top: 10px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            width: 109px;
+            height: 28px;
+            font-size: 12px;
+            line-height: 16px;
+            margin-top: 10px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            width: 120px;
+            height: 36px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            width: 124px;
+            height: 40px;
+            font-size: 14px;
+            line-height: 19px;
+        }
+    }
+
+    .deposit-button-wrapper {
+        @media screen and (min-width: $media375) {
+            display: block;
+        }
+
+        @media screen and (min-width: $media1024) {
+            display: flex;
+        }
+    }
+
+    @media screen and (min-width: $media375) {
+        flex-basis: 100%;
+    }
+
+    @media screen and (min-width: $media1024) {
+        flex-basis: auto;
+    }
+
+    @media screen and (min-width: $media1440) {
+        width: 484px;
+    }
+
+    @media screen and (min-width: $media1920) {
+        width: 543px;
+    }
+
+    .direct-withdraw-warning {
+        background: #fff5e9;
+        border-radius: 5px;
+        font-size: 12px;
+        padding: 10px 20px;
+        color: #767676;
+    }
+
+    @media screen and (min-width: $media1440) {
+        width: 484px;
+    }
+
+    @media screen and (min-width: $media1920) {
+        width: 543px;
+    }
+
+    .direct-withdraw-warning {
+        background: #fff5e9;
+        border-radius: 5px;
+        font-size: 12px;
+        padding: 10px 20px;
+        color: #767676;
     }
 }

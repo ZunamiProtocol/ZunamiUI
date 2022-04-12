@@ -1,0 +1,418 @@
+@import 'src/variables';
+
+.WelcomeCarousel {
+    background: linear-gradient(0.02deg, #ffffff 76.02%, #fdf1de 95.61%);
+    height: 100%;
+
+    @media screen and (min-width: $media1024) {
+        margin-left: 10px;
+        border-radius: 5px;
+    }
+
+    @media screen and (min-width: $media1440) {
+        margin-left: 18px;
+    }
+
+    &__Content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        h1 {
+            text-align: center;
+            color: #636363;
+
+            @media screen and (min-width: $media375) {
+                font-size: 16px;
+                line-height: 22px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                font-size: 23px;
+                line-height: 31px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                font-size: 30px;
+                line-height: 41px;
+            }
+        }
+
+        &__Logo {
+            @media screen and (min-width: $media375) {
+                width: 119.5px;
+                height: 17.6px;
+                margin-top: 58px;
+                margin-bottom: 21px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                margin-top: 41px;
+                margin-bottom: 25px;
+                width: 119.5px;
+                height: 17.6px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                margin-top: 93px;
+                margin-bottom: 21px;
+                width: 150px;
+                height: 22px;
+            }
+        }
+
+        .carousel {
+            @media screen and (min-width: $media375) {
+                height: 473px;
+                width: 319px;
+                margin-top: 49px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                margin-top: 50px;
+                width: 522px;
+                height: 310px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                margin-top: 56px;
+                width: 831px;
+                height: 494px;
+            }
+
+            .carousel-item {
+                background: linear-gradient(262.84deg, #f9f9f9 -27.39%, #fbfbfb 71.59%);
+                border-radius: 5px;
+                align-items: center;
+                justify-content: flex-start;
+                flex-direction: column;
+                text-align: center;
+
+                &.active {
+                    display: flex;
+                }
+
+                &.carousel-item-next,
+                &.carousel-item-prev {
+                    display: flex;
+                }
+
+                @media screen and (min-width: $media375) {
+                    width: 319px;
+                    height: 473px;
+                }
+
+                @media screen and (min-width: $media1024) {
+                    width: 522px;
+                    height: 310px;
+                }
+
+                @media screen and (min-width: $media1920) {
+                    width: 831px;
+                    height: 494px;
+                }
+
+                h1 {
+                    text-align: center;
+                    color: #404040;
+
+                    @media screen and (min-width: $media375) {
+                        font-size: 16px;
+                        line-height: 22px;
+                        margin-top: 60px;
+                        margin-bottom: 0;
+                    }
+
+                    @media screen and (min-width: $media1024) {
+                        font-size: 18px;
+                        line-height: 25px;
+                        margin-top: 35px;
+                        margin-bottom: 0;
+                    }
+
+                    @media screen and (min-width: $media1920) {
+                        font-size: 25px;
+                        line-height: 34px;
+                        margin-top: 72px;
+                        margin-bottom: 0;
+                    }
+                }
+
+                span {
+                    text-align: center;
+                    color: #767676;
+
+                    @media screen and (min-width: $media375) {
+                        font-size: 12px;
+                        line-height: 16px;
+                        margin-top: 22px;
+                        width: 237px;
+                    }
+
+                    @media screen and (min-width: $media1024) {
+                        font-size: 12px;
+                        line-height: 16px;
+                        margin-top: 13px;
+                        width: 283px;
+                    }
+
+                    @media screen and (min-width: $media1920) {
+                        font-size: 16px;
+                        line-height: 22px;
+                        margin-top: 22px;
+                        width: 558px;
+                    }
+                }
+
+                &.first-slide {
+                    svg {
+                        @media screen and (min-width: $media375) {
+                            width: 120px;
+                            height: 56px;
+                            margin-top: 52px;
+                            margin-bottom: 68px;
+                        }
+
+                        @media screen and (min-width: $media1024) {
+                            width: 108px;
+                            height: 51px;
+                            margin-top: 40px;
+                            margin-bottom: 33.7px;
+                        }
+
+                        @media screen and (min-width: $media1920) {
+                            width: 172px;
+                            height: 81px;
+                            margin-top: 50px;
+                            margin-bottom: 64px;
+                        }
+                    }
+                }
+
+                &.second-slide {
+                    span {
+                        @media screen and (min-width: $media375) {
+                            width: 240px;
+                        }
+
+                        @media screen and (min-width: $media1024) {
+                            width: 420px;
+                        }
+
+                        @media screen and (min-width: $media1920) {
+                            width: 558px;
+                        }
+                    }
+
+                    svg {
+                        @media screen and (min-width: $media375) {
+                            margin-top: 55px;
+                            margin-bottom: 55px;
+                            width: 68px;
+                            height: 68px;
+                        }
+
+                        @media screen and (min-width: $media1024) {
+                            margin-top: 38px;
+                            margin-bottom: 33px;
+                            width: 53px;
+                            height: 53px;
+                        }
+
+                        @media screen and (min-width: $media1920) {
+                            width: 92px;
+                            height: 92px;
+                            margin-top: 50px;
+                            margin-bottom: 54px;
+                        }
+                    }
+                }
+
+                &.third-slide {
+                    span {
+                        @media screen and (min-width: $media1024) {
+                            width: 420px;
+                        }
+                    }
+
+                    svg {
+                        @media screen and (min-width: $media375) {
+                            margin-top: 62px;
+                            margin-bottom: 60px;
+                            width: 75px;
+                            height: 56px;
+                        }
+
+                        @media screen and (min-width: $media1024) {
+                            margin-top: 38px;
+                            margin-bottom: 33px;
+                            width: 71px;
+                            height: 53px;
+                        }
+
+                        @media screen and (min-width: $media1920) {
+                            margin-top: 50px;
+                            margin-bottom: 50px;
+                            width: 127px;
+                            height: 95px;
+                        }
+                    }
+                }
+
+                &.fourth-slide {
+                    span {
+                        @media screen and (min-width: $media1024) {
+                            width: 420px;
+                        }
+
+                        @media screen and (min-width: $media1920) {
+                            width: 519px;
+                        }
+                    }
+
+                    svg {
+                        @media screen and (min-width: $media375) {
+                            margin-top: 50px;
+                            margin-bottom: 62px;
+                            width: 89px;
+                            height: 47px;
+                        }
+
+                        @media screen and (min-width: $media1024) {
+                            margin-top: 42px;
+                            margin-bottom: 40px;
+                            width: 81px;
+                            height: 42px;
+                        }
+
+                        @media screen and (min-width: $media1920) {
+                            margin-top: 60px;
+                            margin-bottom: 66px;
+                            width: 133px;
+                            height: 70px;
+                        }
+                    }
+                }
+
+                &.fifth-slide {
+                    span {
+                        @media screen and (min-width: $media1024) {
+                            width: 420px;
+                        }
+
+                        @media screen and (min-width: $media1920) {
+                            width: 519px;
+                        }
+                    }
+
+                    svg {
+                        @media screen and (min-width: $media375) {
+                            margin-top: 40px;
+                            margin-bottom: 59px;
+                            width: 60px;
+                            height: 60px;
+                        }
+
+                        @media screen and (min-width: $media1024) {
+                            margin-top: 32px;
+                            margin-bottom: 32px;
+                            width: 60px;
+                            height: 60px;
+                        }
+
+                        @media screen and (min-width: $media1920) {
+                            margin-top: 42px;
+                            margin-bottom: 52px;
+                            width: 102px;
+                            height: 102px;
+                        }
+                    }
+                }
+            }
+
+            .carousel-control-prev,
+            .carousel-control-next {
+                background: #e6e6e6;
+                border-radius: 100%;
+                opacity: 1;
+                position: absolute;
+                top: 50%;
+
+                &:hover {
+                    background: linear-gradient(66.3deg, #f84f03 13.42%, #faa413 84.22%);
+                }
+
+                @media screen and (min-width: $media375) {
+                    display: none;
+                }
+
+                @media screen and (min-width: $media1024) {
+                    display: flex;
+                    width: 25px;
+                    height: 25px;
+                    margin-top: -12.5px;
+                }
+
+                @media screen and (min-width: $media1920) {
+                    width: 40px;
+                    height: 40px;
+                    margin-top: -20px;
+                }
+
+                span {
+                    @media screen and (min-width: $media1024) {
+                        width: 10px;
+                    }
+
+                    @media screen and (min-width: $media1920) {
+                        width: 14px;
+                    }
+                }
+            }
+
+            .carousel-control-prev {
+                margin-left: -56px;
+            }
+
+            .carousel-control-next {
+                margin-right: -56px;
+            }
+
+            .carousel-indicators {
+                @media screen and (min-width: $media375) {
+                    margin-bottom: 47px;
+                }
+
+                @media screen and (min-width: $media1024) {
+                    margin-bottom: 25px;
+                }
+
+                button {
+                    background: #dbdbdb;
+                    border: none;
+                    border-radius: 100%;
+
+                    &.active {
+                        background: #c4c4c4;
+                    }
+
+                    @media screen and (min-width: $media375) {
+                        width: 5.7px;
+                        height: 5.7px;
+                    }
+
+                    @media screen and (min-width: $media1024) {
+                        width: 3.77px;
+                        height: 3.77px;
+                    }
+
+                    @media screen and (min-width: $media1920) {
+                        width: 6px;
+                        height: 6px;
+                    }
+                }
+            }
+        }
+    }
+}

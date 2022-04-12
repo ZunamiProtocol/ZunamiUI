@@ -1,4 +1,638 @@
+@import 'src/variables';
+
 @font-face {
-    font-family: 'Anderson Grotesk';
-    src: url('./fonts/AndersonGroteskRegular.ttf');
+    font-family: 'Vela Sans Regular';
+    src: url('./fonts/velasans-regular-webfont.woff2') format('woff2'),
+        url('./fonts/velasans-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Vela Sans Regular';
+}
+
+body {
+    background-color: #fffcf5 !important;
+}
+
+#root > .container {
+    margin: 0 auto;
+    padding: 0;
+
+    @media (min-width: $media375) {
+        justify-content: flex-start !important;
+    }
+
+    @media (min-width: $media1024) {
+        max-width: 978px;
+        justify-content: space-between !important;
+    }
+
+    @media (min-width: $media1440) {
+        max-width: 1333px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    @media (min-width: $media1920) {
+        max-width: 1830px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.dashboard-col {
+    @media screen and (min-width: $media1024) {
+        .WalletStatus {
+            display: none;
+        }
+    }
+
+    .first-row {
+        .InfoBlock:nth-child(0) {
+            @media screen and (max-width: 1023) {
+                width: 100%;
+            }
+        }
+    }
+}
+
+nav {
+    .Disclaimer {
+        @media (min-width: $media375) {
+            display: none;
+        }
+
+        @media (min-width: $media1024) {
+            display: flex;
+        }
+    }
+}
+
+.SidebarColumn {
+    @media (min-width: $media375) {
+        display: none;
+        background: linear-gradient(262.84deg, #fff8f1 -27.39%, #fff8ed 71.59%);
+
+        &.active {
+            top: 0;
+            position: fixed;
+            z-index: 2;
+            display: block;
+
+            .Sidebar {
+                height: auto;
+
+                &__footer {
+                    display: flex;
+                    margin-left: 25px;
+                    flex-direction: row;
+                    gap: 20px;
+                    margin-top: 30px;
+                }
+            }
+        }
+    }
+
+    @media (min-width: $media1024) {
+        display: flex;
+        background: #fff;
+    }
+}
+
+footer {
+    .mobile {
+        @media (min-width: $media375) {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 20px;
+            margin-left: 40px;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: $media1024) {
+            display: none;
+        }
+
+        a {
+            display: block;
+            text-decoration: none;
+            font-size: 12px;
+            line-height: 16px;
+            color: #a2a2a2;
+        }
+    }
+}
+
+footer {
+    .mobile {
+        @media (min-width: $media375) {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 20px;
+            margin-left: 40px;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: $media1024) {
+            display: none;
+        }
+
+        a {
+            display: block;
+            text-decoration: none;
+            font-size: 12px;
+            line-height: 16px;
+            color: #a2a2a2;
+        }
+    }
+}
+
+.copyright {
+    font-style: normal;
+    font-weight: normal;
+    color: #dedede;
+    display: block;
+
+    @media (min-width: $media375) {
+        margin-bottom: 20px;
+        font-size: 10px;
+        line-height: 14px;
+        letter-spacing: 0.5px;
+        margin-left: 40px;
+    }
+
+    @media (min-width: $media1024) {
+        margin-bottom: 20px;
+        font-size: 9px;
+        line-height: 12.2px;
+        letter-spacing: 0.5px;
+        margin-left: 0;
+    }
+
+    @media (min-width: $media1440) {
+        margin-bottom: 25px;
+        font-size: 10px;
+        line-height: 14px;
+        letter-spacing: 0.5px;
+    }
+}
+
+#toasts {
+    z-index: 1111;
+    position: fixed !important;
+}
+
+.toast {
+    border-radius: 5px;
+}
+
+.zun-button {
+    background: linear-gradient(87.51deg, #f74e02 12.85%, #f9a412 94.75%);
+    border-radius: 5px;
+    text-align: center;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    @media (min-width: $media375) {
+        width: 148px;
+        height: 36px;
+        font-size: 14px;
+        line-height: 19px;
+    }
+
+    @media (min-width: $media1024) {
+        width: 126px;
+        height: 29px;
+        font-size: 12px;
+        line-height: 16px;
+    }
+
+    @media (min-width: $media1920) {
+        width: 170px;
+        height: 43px;
+        font-size: 16px;
+        line-height: 22px;
+    }
+}
+
+button:disabled,
+button.disabled,
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+input[type='checkbox'] {
+    appearance: none;
+    background: #fffaf3;
+    border: 1px solid #f4efe1;
+    border-radius: 5px;
+    position: relative;
+
+    &:checked {
+        &:after {
+            content: '';
+            width: 11px;
+            height: 7px;
+            position: absolute;
+            background-image: url("data:image/svg+xml,%3Csvg width='11' height='7' viewBox='0 0 11 7' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5.5 6L10 1' stroke='%23636363' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+}
+
+.tooltip-arrow::before {
+    border-right-color: #f8f8f8 !important;
+}
+
+.tooltip-inner {
+    background: #f8f8f8 !important;
+    border-radius: 5px !important;
+    color: #898989 !important;
+    padding: 10px 18px !important;
+    font-size: 10px;
+    line-height: 14px;
+    min-width: 250px;
+}
+
+.overflow {
+    overflow: hidden;
+}
+
+.Sidebar {
+    .ComingSoonPlaceholder {
+        @media (min-width: $media375) {
+            width: 104px;
+            height: 29px;
+            font-size: 12px;
+            line-height: 16px;
+            margin-left: 15px;
+        }
+    }
+
+    .TestnetLabel {
+        color: $primary-color;
+
+        @media (min-width: $media375) {
+            width: 136px;
+            height: 29px;
+            margin-left: 13px;
+            margin-top: 0;
+            background: #fff;
+        }
+
+        @media (min-width: $media1024) {
+            background: linear-gradient(262.84deg, #fff3e9 -27.39%, #fef5e8 71.59%);
+            width: 108px;
+            height: 24px;
+            margin-left: 13px;
+            margin-top: 0;
+        }
+
+        @media (min-width: $media1440) {
+            width: 115px;
+            height: 25px;
+            margin-left: 16px;
+        }
+
+        @media (min-width: $media1920) {
+            width: 138px;
+            height: 29px;
+            margin-left: 16px;
+            margin-top: 1px;
+        }
+
+        span {
+            @media (min-width: $media375) {
+                font-size: 12px;
+                line-height: 16px;
+            }
+
+            @media (min-width: $media1024) {
+                font-size: 9px;
+                line-height: 12px;
+            }
+
+            @media (min-width: $media1440) {
+                font-size: 10px;
+                line-height: 14px;
+            }
+
+            @media (min-width: $media1920) {
+                font-size: 12px;
+                line-height: 16px;
+            }
+        }
+
+        svg {
+            path {
+                fill: rgba(246, 74, 0, 0.53);
+            }
+
+            @media (min-width: $media375) {
+                width: 11.2px;
+                height: 11.2px;
+                margin-right: 10px;
+            }
+
+            @media (min-width: $media1024) {
+                width: 9.5px;
+                height: 9.5px;
+                margin-right: 7px;
+            }
+
+            @media (min-width: $media1440) {
+                margin-right: 7px;
+            }
+
+            @media (min-width: $media1920) {
+                margin-right: 9px;
+                width: 13px;
+                height: 13px;
+            }
+        }
+    }
+}
+
+body.dark {
+    background-color: #000 !important;
+
+    .WithdrawOptions {
+        background-color: #2a2a2a;
+        border-color: #333333;
+        color: #fff;
+    }
+
+    .WalletStatus__Icon path:nth-child(1) {
+        fill: #3c3c3c;
+    }
+
+    .WalletStatus__Icon path:nth-child(2) {
+        fill: #494949;
+    }
+
+    .WalletStatus__Icon path:nth-child(3) {
+        fill: #646464;
+    }
+
+    .copyright {
+        color: #424242;
+    }
+
+    input[type='text'] {
+        border-color: $dark-border-color;
+        background-color: $dark-panel-bg;
+        color: #fff;
+    }
+
+    .SidebarColumn {
+        @media (min-width: $media375) {
+            background: #1e1e1e;
+        }
+
+        @media (min-width: $media1024) {
+            background: #2a2a2a;
+        }
+    }
+
+    input[type='checkbox'] {
+        background: #2a2a2a;
+        border: 1px solid #333333;
+
+        ::after {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOSIgaGVpZ2h0PSI1IiB2aWV3Qm94PSIwIDAgOSA1IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNMSAxTDQuNSA0TDggMSIgc3Ryb2tlPSIjODI4MjgyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==');
+        }
+    }
+
+    .DirectAction {
+        span {
+            color: #828282;
+        }
+    }
+
+    .LinkBlock__title {
+        color: rgba(255, 255, 255, 0.53);
+    }
+
+    .LinkBlock__active .LinkBlock__title {
+        color: rgba(249, 84, 4, 0.53);
+    }
+
+    .Disclaimer__Content a {
+        color: #fff;
+        border-bottom: dashed 1px #fff;
+    }
+
+    span,
+    .ApyChart__Title,
+    .PieChart__Header,
+    .InfoBlock__description,
+    .ApyChart__Selector span,
+    .PieChart__StratList__Item__Name,
+    .WalletStatus__connected .state,
+    .PieChart .PieChart__StratList .PieChart__StratList__Item a,
+    .DepositContent__Title,
+    .Input .coinName,
+    .Input input,
+    .Lockdrop__Title,
+    .DepositStory__Title,
+    .DepositStory__Table thead tr td,
+    .PendingBalance__val {
+        color: #fff;
+    }
+
+    .InfoBlock__description_color {
+        color: $primary-color;
+    }
+
+    .Sidebar,
+    .strats-chart-col,
+    .hist-apy-col,
+    .InfoBlock,
+    .operation-col {
+        background: #1e1e1e;
+    }
+
+    .ComingSoonPlaceholder {
+        background: #313131;
+    }
+
+    .Disclaimer,
+    .TestnetLabel {
+        background: linear-gradient(262.84deg, #1e1e1e -27.39%, #2c2c2c 71.59%);
+        color: #fff;
+    }
+
+    .TestnetLabel span {
+        color: $primary-color;
+    }
+
+    .TestnetPlaceholder__Content__Logo {
+        path:nth-child(0),
+        path:nth-child(1),
+        path:nth-child(2),
+        path:nth-child(3),
+        path:nth-child(4),
+        path:nth-child(5),
+        path:nth-child(6),
+        path:nth-child(7) {
+            fill: #fff;
+        }
+    }
+
+    .Sidebar {
+        .TestnetLabel {
+            background: linear-gradient(262.84deg, #1e1e1e -27.39%, #2c2c2c 71.59%);
+
+            span {
+                color: $primary-color;
+            }
+        }
+    }
+
+    .InfoBlock_colorful {
+        background: linear-gradient(262.84deg, #1e1e1e -27.39%, #2c2c2c 71.59%);
+    }
+
+    .WalletStatus {
+        background: linear-gradient(0.02deg, #1e1e1e 76.02%, #282828 95.61%);
+    }
+
+    .TestnetPlaceholder {
+        h1,
+        a {
+            color: #fff;
+        }
+    }
+
+    .WelcomeCarousel {
+        background: linear-gradient(0.02deg, #1e1e1e 76.02%, #282828 95.61%);
+
+        h1 {
+            color: #ffffff;
+        }
+
+        &__Content__Logo {
+            path {
+                fill: #fff;
+            }
+        }
+
+        .carousel-item {
+            background: linear-gradient(262.84deg, #1e1e1e -27.39%, #2c2c2c 71.59%);
+
+            h1,
+            span {
+                color: #ffffff;
+            }
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            background: #646464;
+        }
+    }
+
+    .Form {
+        .divider {
+            background-color: $dark-border-color;
+        }
+
+        .ActionSelector__Action {
+            background-color: $dark-panel-bg;
+        }
+
+        .Input {
+            background-color: #2b2b2b;
+            border-color: $dark-border-color;
+
+            input {
+                background-color: #272727;
+                border-color: $dark-border-color;
+            }
+        }
+
+        .withdraw-all {
+            background: $dark-panel-bg;
+            color: #878787;
+        }
+
+        .direct-deposit span,
+        .direct-dithdraw span {
+            color: #828282;
+        }
+    }
+
+    .Lockdrop,
+    .Staking {
+        &__Locked,
+        &__Unclaimed {
+            background: $dark-panel-bg;
+
+            &__Title {
+                color: #fff;
+            }
+        }
+
+        &__Title {
+            color: #fff;
+        }
+
+        &__Unclaimed {
+            &__ICON {
+                path {
+                    fill: #494949;
+                }
+            }
+
+            &__USD {
+                color: $dark-muted-text-color;
+            }
+        }
+
+        &__Locked {
+            &__Token {
+                background: $dark-panel-bg;
+                border-color: $dark-border-color;
+
+                .divider {
+                    background-color: $dark-border-color;
+                }
+
+                .token {
+                    color: #fff;
+                }
+            }
+        }
+
+        .DepositStory__Table thead tr td {
+            border-color: $dark-border-color;
+        }
+
+        .DepositStory__Table tbody tr td {
+            color: $dark-muted-text-color;
+        }
+
+        .DepositStory__Table tbody tr td button {
+            background: #2a2a2a;
+            color: #878787;
+
+            &.disabled {
+                background: #252323;
+            }
+        }
+    }
 }
