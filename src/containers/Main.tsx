@@ -196,7 +196,9 @@ export const Main = (): JSX.Element => {
                     <a href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing">
                         How to use?
                     </a>
-                    <a href="/faq">FAQ</a>
+                    <a href="https://www.zunami.io/#faq-main" target="_blank" rel="noreferrer">
+                        FAQ
+                    </a>
                 </div>
                 <span className="copyright">© 2022 Zunami Protocol. Beta version 1.1</span>
             </footer>
