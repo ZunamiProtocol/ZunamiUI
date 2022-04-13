@@ -6,7 +6,7 @@ import { getLpPrice } from '../utils/erc20';
 import { BIG_ZERO } from '../utils/formatbalance';
 
 const useLpPrice = (): BigNumber => {
-    const [price, setPrice] = useState(BIG_ZERO);
+    const [price, setPrice] = useState(new BigNumber(-1));
     const sushi = useSushi();
     const masterChefContract = getMasterChefContract(sushi);
 
