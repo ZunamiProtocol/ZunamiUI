@@ -186,7 +186,7 @@ footer {
     }
 }
 
-#toasts {
+.toast-container.toasts {
     z-index: 1111;
     position: fixed !important;
 }
