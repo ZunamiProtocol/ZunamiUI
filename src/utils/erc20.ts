@@ -75,12 +75,7 @@ export const getBalance = async (
 };
 
 export const getLpPrice = async (masterChefContract: Contract): Promise<string> => {
-    try {
-        const lpPrice: string = await masterChefContract.methods.lpPrice().call();
-        return lpPrice;
-    } catch (e) {
-        return '0';
-    }
+    return await masterChefContract.methods.lpPrice().call();
 };
 
 export const getUserLpAmount = async (

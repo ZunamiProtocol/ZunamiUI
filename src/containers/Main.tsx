@@ -42,9 +42,10 @@ export const Main = (): JSX.Element => {
     const lpPrice = useLpPrice();
     const userLpAmount = useUserLpAmount();
     const userMaxWithdraw =
-        userLpAmount && lpPrice && userLpAmount.toNumber() > 0
+        lpPrice.toNumber() !== -1 && userLpAmount.toNumber() !== -1
             ? lpPrice.multipliedBy(userLpAmount)
-            : BIG_ZERO;
+            : new BigNumber(-1);
+
     const { account, connect, ethereum } = useWallet();
     useEagerConnect(account ? account : '', connect, ethereum);
 
@@ -115,9 +116,13 @@ export const Main = (): JSX.Element => {
                         <div className={'first-row'}>
                             <InfoBlock
                                 title="Balance"
-                                description={`$ ${getBalanceNumber(userMaxWithdraw).toLocaleString(
-                                    'en'
-                                )}`}
+                                description={
+                                    userMaxWithdraw.toNumber() !== -1
+                                        ? `$ ${getBalanceNumber(userMaxWithdraw).toLocaleString(
+                                              'en'
+                                          )}`
+                                        : 'n/a'
+                                }
                                 withColor={true}
                                 isStrategy={false}
                                 colorfulBg={true}
