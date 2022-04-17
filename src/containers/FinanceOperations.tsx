@@ -29,7 +29,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     const [usdcDisabled, setUsdcDisabled] = useState(props.operationName === 'Withdraw');
     const [usdtDisabled, setUsdtDisabled] = useState(props.operationName === 'Withdraw');
 
-    const [directOperation, setDirectOperation] = useState(props.operationName === 'Deposit');
+    const [directOperation, setDirectOperation] = useState(false);
 
     const [daiChecked, setDaiChecked] = useState(false);
     const [usdcChecked, setUsdcChecked] = useState(false);
@@ -188,7 +188,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                     }
                                                 }}
                                                 onOperationModeChange={(direct: any) => {
-                                                    setDirectOperation(direct);
+                                                    setDirectOperation(!direct);
 
                                                     if (
                                                         direct &&
