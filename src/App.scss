@@ -26,16 +26,13 @@ body {
     padding: 0;
 
     @media (min-width: $media375) {
-        justify-content: flex-start !important;
     }
 
     @media (min-width: $media1024) {
-        max-width: 978px;
-        justify-content: space-between !important;
     }
 
     @media (min-width: $media1440) {
-        max-width: 1333px;
+        max-width: 1440px;
         margin-left: auto;
         margin-right: auto;
     }
@@ -78,7 +75,6 @@ nav {
 .SidebarColumn {
     @media (min-width: $media375) {
         display: none;
-        background: linear-gradient(262.84deg, #fff8f1 -27.39%, #fff8ed 71.59%);
 
         &.active {
             top: 0;
@@ -102,7 +98,6 @@ nav {
 
     @media (min-width: $media1024) {
         display: flex;
-        background: #fff;
     }
 }
 
@@ -270,6 +265,18 @@ input[type='checkbox'] {
 
 .overflow {
     overflow: hidden;
+}
+
+.block-bg {
+    background: linear-gradient(0.02deg, #fff9f0 60.75%, #fff8ed 87.27%);
+}
+
+.text-primary {
+    --bs-primary-rgb: 246, 74, 0;
+}
+
+.text-secondary {
+    --bs-secondary-rgb: 99, 99, 99;
 }
 
 .Sidebar {

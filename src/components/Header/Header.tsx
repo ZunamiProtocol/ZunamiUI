@@ -4,6 +4,9 @@ import { Navbar } from 'react-bootstrap';
 import { Disclaimer } from '../Disclaimer/Disclaimer';
 import useOnlineState from '../../hooks/useOnlineState';
 import { ErrorToast } from '../ErrorToast/ErrorToast';
+import { WalletStatus } from '../WalletStatus/WalletStatus';
+import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
+import { NavMenu } from './NavMenu/NavMenu';
 
 export const Header = (): JSX.Element => {
     const logoVariant = document.body.classList.contains('dark') ? 'logo-dark.svg' : 'logo.svg';
@@ -11,11 +14,12 @@ export const Header = (): JSX.Element => {
     const isOnline = useOnlineState();
 
     return (
-        <Navbar expand="lg" className={'header'}>
+        <Navbar expand="lg" className={'Header'}>
             <ErrorToast visible={!isOnline} />
             <Navbar.Brand href="https://zunami.io">
                 <img className={'Logo'} src={logoVariant} alt="Logo of the Zunami Protocol" />
             </Navbar.Brand>
+            <NavMenu />
             <Disclaimer
                 text={
                     <div>
@@ -27,10 +31,23 @@ export const Header = (): JSX.Element => {
                         >
                             has been audited
                         </a>
-                        , but it's still a beta version. Use it at your own risk
+                        , <br />
+                        but it's still a beta version. Use it at your own risk
                     </div>
                 }
             />
+            <WalletStatus />
+            <svg
+                width="2"
+                height="41"
+                viewBox="0 0 2 41"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="divider"
+            >
+                <path d="M1 1L1 40" stroke="#F3EBD2" strokeLinecap="round" />
+            </svg>
+            <ThemeSwitcher />
             <div
                 className="nav-menu"
                 onClick={() => {

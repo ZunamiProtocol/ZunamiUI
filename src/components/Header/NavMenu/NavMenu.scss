@@ -1,0 +1,21 @@
+.NavMenu {
+    height: 100%;
+
+    li {
+        display: flex;
+        align-items: center;
+        margin-right: 5px;
+
+        a {
+            padding: 0 15px !important;
+        }
+
+        &.selected {
+            background: linear-gradient(
+                180deg,
+                rgba(247, 193, 144, 0) 0%,
+                rgba(255, 203, 142, 0.14) 100%
+            );
+        }
+    }
+}

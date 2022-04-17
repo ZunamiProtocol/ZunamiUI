@@ -1,9 +1,10 @@
 @import 'src/variables';
 
-.navbar.header {
+.navbar.Header {
     padding: 0;
     margin: 0;
-    align-items: flex-start;
+    align-items: center;
+    background: linear-gradient(180deg, #fff4e4 0%, #fff4e4 7.29%, #fff4e3 100%);
 
     @media screen and (min-width: $media375) {
         height: 75px;
@@ -17,8 +18,8 @@
     }
 
     @media screen and (min-width: $media1440) {
-        height: 70px;
-        min-height: 70px;
+        height: 74px;
+        min-height: 74px;
     }
 
     @media screen and (min-width: $media1920) {
@@ -49,29 +50,39 @@
 
     .Logo {
         @media screen and (min-width: $media375) {
-            width: 130px;
-            height: 19px;
-            margin-top: 22px;
-            margin-left: 22px;
         }
 
         @media screen and (min-width: $media1024) {
-            width: 155px;
-            height: 23px;
-            margin-top: 31px;
-            margin-left: 5px;
         }
 
         @media screen and (min-width: $media1440) {
-            width: 143px;
-            height: 21px;
-            margin-top: 34.7px;
+            width: 133px;
+            height: 19.6px;
+            margin-top: 0;
+            margin-left: 40px;
+            margin-right: 62px;
         }
 
         @media screen and (min-width: $media1920) {
-            width: 230px;
-            height: 34px;
-            margin-top: 55px;
+        }
+    }
+
+    .divider {
+        @media screen and (min-width: $media1440) {
+            margin-left: 21px;
+            margin-right: 23px;
+        }
+    }
+
+    .WalletStatus {
+        @media screen and (min-width: $media1440) {
+            margin-left: 21px;
+        }
+    }
+
+    .Disclaimer {
+        @media screen and (min-width: $media1440) {
+            margin-left: 45px;
         }
     }
 }

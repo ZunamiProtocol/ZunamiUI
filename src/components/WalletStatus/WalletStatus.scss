@@ -3,37 +3,17 @@
 .WalletStatus {
     display: flex;
     align-items: flex-start;
-    position: relative;
 
     @media screen and (min-width: $media375) {
-        width: 100%;
-        height: 88px;
-        padding-left: 17px;
-        padding-top: 22px;
-        background: linear-gradient(262.84deg, #fff8f1 -27.39%, #fff8ed 71.59%);
     }
 
     @media screen and (min-width: $media1024) {
-        height: 123px;
-        padding-left: 20px;
-        padding-top: 30px;
-        background: #fdf1de;
-        background: -moz-linear-gradient(top, #fdf1de 0%, #ffffff 77%);
-        background: -webkit-linear-gradient(top, #fdf1de 0%, #ffffff 77%);
-        background: linear-gradient(to bottom, #fdf1de 0%, #ffffff 77%);
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdf1de', endColorstr='#ffffff',GradientType=0 );
     }
 
     @media screen and (min-width: $media1440) {
-        height: 136px;
-        padding-left: 20px;
-        padding-top: 37px;
     }
 
     @media screen and (min-width: $media1920) {
-        height: 160px;
-        padding-left: 28px;
-        padding-top: 47px;
     }
 
     &__connected {
@@ -77,36 +57,6 @@
                 line-height: 25px;
             }
         }
-
-        .WalletStatus__Icon {
-            @media screen and (min-width: $media375) {
-                width: 42px;
-                height: 33px;
-                top: 24px;
-                right: 16px;
-            }
-
-            @media screen and (min-width: $media1024) {
-                width: 45px;
-                height: 35px;
-                top: 25px;
-                right: 20px;
-            }
-
-            @media screen and (min-width: $media1440) {
-                width: 54.5px;
-                height: 43px;
-                top: 31px;
-                right: 23px;
-            }
-
-            @media screen and (min-width: $media1920) {
-                width: 74.9px;
-                height: 59.15px;
-                top: 38px;
-                right: 29px;
-            }
-        }
     }
 
     &__Connect {
@@ -133,9 +83,9 @@
 
         @media screen and (min-width: $media1440) {
             width: 126px;
-            height: 29px;
+            height: 33px;
             font-size: 12px;
-            line-height: 16.3px;
+            line-height: 16px;
         }
 
         @media screen and (min-width: $media1920) {

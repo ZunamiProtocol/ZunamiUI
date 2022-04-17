@@ -32,13 +32,34 @@
     }
 
     @media screen and (min-width: $media1440) {
-        width: 1033px !important;
-        max-width: 1033px !important;
+        width: 925px !important;
+        max-width: 925px !important;
+        min-width: 925px !important;
     }
 
     @media screen and (min-width: $media1920) {
         width: 1394px !important;
         max-width: 1394px !important;
+    }
+
+    .first-row {
+        @media screen and (min-width: $media1440) {
+            margin-top: 77px;
+        }
+
+        .InfoBlock {
+            @media screen and (min-width: $media1440) {
+                width: 247px;
+                height: 82px;
+            }
+
+            &:nth-child(2) {
+                @media screen and (min-width: $media1440) {
+                    width: 322px;
+                    height: 82px;
+                }
+            }
+        }
     }
 
     .first-row,
@@ -56,7 +77,7 @@
         }
 
         @media screen and (min-width: $media1440) {
-            padding-left: 18px;
+            padding-left: 40px;
         }
 
         @media screen and (min-width: $media1920) {
@@ -132,15 +153,12 @@
 
 .main-row.row {
     @media screen and (max-width: 1023px) {
-        height: auto !important;
     }
 
     @media screen and (min-width: $media1024) {
-        margin-top: 10px !important;
     }
 
     @media screen and (min-width: $media1440) {
-        margin-top: 17px !important;
     }
 }
 

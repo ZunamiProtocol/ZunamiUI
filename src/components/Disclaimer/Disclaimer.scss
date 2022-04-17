@@ -1,12 +1,12 @@
 @import 'src/variables';
 
 .Disclaimer {
-    background: #fff5e9;
+    background: #fbecd9;
     border-radius: 5px;
-    color: #767676;
     display: flex;
     align-items: center;
-    align-self: flex-start;
+    justify-content: center;
+    align-self: center;
 
     &__icon {
         @media (min-width: $media375) {
@@ -19,9 +19,11 @@
         }
 
         @media screen and (min-width: $media1440) {
-            margin: 0 15px 0 17px;
+            margin: 0 10px 0 3px;
             width: 29px;
             height: 29px;
+            min-width: 29px;
+            min-height: 29px;
         }
 
         @media screen and (min-width: $media1920) {
@@ -38,15 +40,16 @@
         height: 41px;
         margin-left: 109px;
         margin-top: 22px;
+        padding: 10px;
     }
 
     @media screen and (min-width: $media1440) {
-        font-size: 12px;
-        line-height: 16px;
-        width: 670px;
-        height: 42px;
-        margin-left: 170px;
-        margin-top: 26px;
+        font-size: 10px;
+        line-height: 14px;
+        width: 308px;
+        height: 46px;
+        margin-left: 0;
+        margin-top: 0;
     }
 
     @media screen and (min-width: $media1920) {

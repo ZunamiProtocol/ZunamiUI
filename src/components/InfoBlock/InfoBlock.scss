@@ -11,42 +11,30 @@
         background: -webkit-linear-gradient(top, #fff3e9 0%, #fef5e8 100%);
         background: linear-gradient(to bottom, #fff3e9 0%, #fef5e8 100%);
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fff3e9', endColorstr='#fef5e8',GradientType=0 );
-
-        @media screen and (min-width: $media1024) {
-            height: 90px !important;
-        }
-
-        @media screen and (min-width: $media1440) {
-            height: 100px !important;
-        }
-
-        @media screen and (min-width: $media1920) {
-            height: 138px !important;
-        }
     }
 
     @media screen and (min-width: $media375) {
-        height: 88px;
+        // height: 88px;
     }
 
     @media screen and (min-width: $media1024) {
-        width: 226px;
-        max-width: 226px;
-        height: 82px;
+        // width: 226px;
+        // max-width: 226px;
+        // height: 82px;
         margin: 0 6.5px 11px 6.5px;
     }
 
     @media screen and (min-width: $media1440) {
-        width: 326px;
-        max-width: 326px;
-        height: 94px;
+        // width: 326px;
+        // max-width: 326px;
+        // height: 94px;
         margin: 0 10px 17px 7px;
     }
 
     @media screen and (min-width: $media1920) {
-        width: 449px;
-        max-width: 449px;
-        height: 130px;
+        // width: 449px;
+        // max-width: 449px;
+        // height: 130px;
         margin: 0 12px 23px 12px;
     }
 
@@ -68,10 +56,10 @@
         }
 
         @media screen and (min-width: $media1440) {
-            margin-left: 22px;
-            margin-top: 15px;
-            font-size: 16px;
-            line-height: 22px;
+            margin-left: 24px;
+            margin-top: 17px;
+            font-size: 12px;
+            line-height: 16px;
         }
 
         @media screen and (min-width: $media1920) {
@@ -104,9 +92,9 @@
 
         @media screen and (min-width: $media1440) {
             margin-left: 24px;
-            margin-top: 13px;
-            font-size: 14px;
-            line-height: 19px;
+            margin-top: 5px;
+            font-size: 16px;
+            line-height: 22px;
         }
 
         @media screen and (min-width: $media1920) {
