@@ -5,6 +5,7 @@ import { InfoBlock } from '../InfoBlock/InfoBlock';
 import { getPoolStatsUrl, zunamiInfoUrl, getHistoricalApyUrl } from '../../api/api';
 import useFetch from 'react-fetch-hook';
 import { BigNumber } from 'bignumber.js';
+import { FastDepositForm } from '../FastDepositForm/FastDepositForm';
 
 interface ZunamiInfo {
     tvl: BigNumber;
@@ -56,7 +57,6 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                         isLoading={isZunLoading}
                         withColor={true}
                         isStrategy={false}
-                        colorfulBg={true}
                     />
                     <InfoBlock
                         title="Base APY"
@@ -75,15 +75,21 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                         withColor={true}
                         isStrategy={false}
                         colorfulBg={true}
-                        hint="Annual Percentage Yield. Сumulative yield from all strategies used &amp; includes 0% management fee"
+                        hint="TEXT"
                     />
                 </div>
-                <div className="FastDeposit border rounded">
-                    <div className="d-flex justify-content-between">
-                        <span>Fast deposit</span>
-                        <span>Tap to Deposit & Withdraw Page</span>
+                <FastDepositForm />
+                <footer>
+                    <div className="mobile">
+                        <a href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing">
+                            How to use?
+                        </a>
+                        <a href="https://www.zunami.io/#faq-main" target="_blank" rel="noreferrer">
+                            FAQ
+                        </a>
                     </div>
-                </div>
+                    <span className="copyright">© 2022 Zunami Protocol. Beta version 1.1</span>
+                </footer>
             </div>
         </Col>
     );

@@ -21,8 +21,8 @@
         }
 
         @media (min-width: $media1440) {
-            font-size: 16px;
-            margin: 17px 0 20px 23px;
+            font-size: 12px;
+            margin: 23px 0 20px 33px;
         }
 
         @media (min-width: $media1920) {
@@ -48,7 +48,8 @@
         }
 
         @media (min-width: $media1440) {
-            width: 166px;
+            width: 94px;
+            margin-left: 33px;
         }
 
         @media (min-width: $media1920) {
@@ -67,8 +68,8 @@
             }
 
             @media (min-width: $media1440) {
-                width: 166px;
-                height: 166px;
+                width: 94px;
+                height: 94px;
             }
 
             @media (min-width: $media1920) {
@@ -94,7 +95,7 @@
                 }
 
                 @media (min-width: $media1440) {
-                    font-size: 14px;
+                    font-size: 8px;
                 }
 
                 @media (min-width: $media1920) {
@@ -121,10 +122,10 @@
                 }
 
                 @media (min-width: $media1440) {
-                    font-size: 25px;
-                    line-height: 25px;
-                    margin-bottom: 5px;
-                    margin-top: -5px;
+                    font-size: 15px;
+                    line-height: 20px;
+                    margin-bottom: 0;
+                    margin-top: 0;
                 }
 
                 @media (min-width: $media1920) {
@@ -148,7 +149,7 @@
         }
 
         @media (min-width: $media1440) {
-            margin-left: 50px;
+            margin-left: 24px;
         }
 
         @media (min-width: $media1920) {

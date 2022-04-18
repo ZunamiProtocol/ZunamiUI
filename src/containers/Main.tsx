@@ -105,111 +105,80 @@ export const Main = (): JSX.Element => {
             <Container className={'h-100 d-flex justify-content-between flex-column'}>
                 <Row className={'h-100 mb-4 main-row'}>
                     <SideBar isMainPage={true} />
-                    {!account && (
-                        <Col className={'content-col dashboard-col'}>
-                            <WelcomeCarousel />
-                        </Col>
-                    )}
-                    {account && (
-                        <Col className={'content-col dashboard-col'}>
-                            <WalletStatus />
-                            <ClickableHeader name="Dashboard" icon="dashboard" />
-                            <div className={'first-row'}>
-                                <InfoBlock
-                                    title="Balance"
-                                    description={
-                                        userMaxWithdraw.toNumber() !== -1
-                                            ? `$ ${getBalanceNumber(userMaxWithdraw).toLocaleString(
-                                                  'en'
-                                              )}`
-                                            : 'n/a'
-                                    }
-                                    withColor={true}
-                                    isStrategy={false}
-                                    colorfulBg={true}
-                                    hint="Profit is accrued at least once a week, after the sale of the accumulated weekly rewards."
-                                />
-                                <InfoBlock
-                                    title="APY"
-                                    description={`${
-                                        zunamiInfo && !zunError
-                                            ? `${zunamiInfo.apy.toFixed(2)}%`
-                                            : 'n/a'
-                                    }`}
-                                    isLoading={isZunLoading}
-                                    withColor={true}
-                                    isStrategy={false}
-                                    colorfulBg={true}
-                                    hint="Annual Percentage Yield. Сumulative yield from all strategies used &amp; includes 0% management fee"
-                                />
-                                <InfoBlock
-                                    title="Total Value Locked"
-                                    description={`${
-                                        zunamiInfo && !zunError
-                                            ? `$${getBalanceNumber(zunamiInfo.tvl).toLocaleString(
-                                                  'en'
-                                              )}`
-                                            : 'n/a'
-                                    }`}
-                                    isLoading={isZunLoading}
-                                    withColor={true}
-                                    isStrategy={false}
-                                    colorfulBg={true}
+
+                    <Col className={'content-col dashboard-col'}>
+                        <WalletStatus />
+                        <ClickableHeader name="Dashboard" icon="dashboard" />
+                        <div className={'first-row'}>
+                            <InfoBlock
+                                title="Balance"
+                                description={
+                                    userMaxWithdraw.toNumber() !== -1
+                                        ? `$ ${getBalanceNumber(userMaxWithdraw).toLocaleString(
+                                              'en'
+                                          )}`
+                                        : 'n/a'
+                                }
+                                withColor={true}
+                                isStrategy={false}
+                                colorfulBg={true}
+                                hint="Profit is accrued at least once a week, after the sale of the accumulated weekly rewards."
+                            />
+                            <InfoBlock
+                                title="Pending Deposits / Withdraws"
+                                isLoading={isZunLoading}
+                                withColor={true}
+                                isStrategy={false}
+                                colorfulBg={true}
+                                secondaryRow={pdElement}
+                            />
+                            <InfoBlock
+                                title="Total Income"
+                                description="$12 000"
+                                isLoading={isZunLoading}
+                                withColor={true}
+                                isStrategy={false}
+                                colorfulBg={true}
+                            />
+                        </div>
+                        <div className="second-row">
+                            <InfoBlock
+                                title="Pending Deposits / Withdraws"
+                                withColor={false}
+                                isStrategy={false}
+                                hint="Funds passing through the Transaction Streamlining Mechanism and will be credited within 24 hours"
+                                secondaryRow={pdElement}
+                            />
+                            <InfoBlock
+                                title="Daily Profits"
+                                description={`${dailyProfit ? dailyProfit.toFixed(2) : 0} USD/day`}
+                                withColor={false}
+                                isStrategy={false}
+                            />
+                            <InfoBlock
+                                title="Monthly Profits"
+                                description={`${
+                                    monthlyProfit ? monthlyProfit.toFixed(2) : 0
+                                } USD/month`}
+                                withColor={false}
+                                isStrategy={false}
+                            />
+                        </div>
+                        <div className="third-row">
+                            <div className="strats-chart-col">
+                                <Chart data={chartData} />
+                            </div>
+                            <div className="hist-apy-col">
+                                <ApyChart
+                                    data={histApyData}
+                                    onRangeChange={(range: string) => {
+                                        setHistApyPeriod(range);
+                                    }}
                                 />
                             </div>
-                            <div className="second-row">
-                                <InfoBlock
-                                    title="Pending Deposits / Withdraws"
-                                    withColor={false}
-                                    isStrategy={false}
-                                    hint="Funds passing through the Transaction Streamlining Mechanism and will be credited within 24 hours"
-                                    secondaryRow={pdElement}
-                                />
-                                <InfoBlock
-                                    title="Daily Profits"
-                                    description={`${
-                                        dailyProfit ? dailyProfit.toFixed(2) : 0
-                                    } USD/day`}
-                                    withColor={false}
-                                    isStrategy={false}
-                                />
-                                <InfoBlock
-                                    title="Monthly Profits"
-                                    description={`${
-                                        monthlyProfit ? monthlyProfit.toFixed(2) : 0
-                                    } USD/month`}
-                                    withColor={false}
-                                    isStrategy={false}
-                                />
-                            </div>
-                            <div className="third-row">
-                                <div className="strats-chart-col">
-                                    <Chart data={chartData} />
-                                </div>
-                                <div className="hist-apy-col">
-                                    <ApyChart
-                                        data={histApyData}
-                                        onRangeChange={(range: string) => {
-                                            setHistApyPeriod(range);
-                                        }}
-                                    />
-                                </div>
-                            </div>
-                        </Col>
-                    )}
+                        </div>
+                    </Col>
                 </Row>
-                <footer>
-                    <div className="mobile">
-                        <ThemeSwitcher />
-                        <a href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing">
-                            How to use?
-                        </a>
-                        <a href="https://www.zunami.io/#faq-main" target="_blank" rel="noreferrer">
-                            FAQ
-                        </a>
-                    </div>
-                    <span className="copyright">© 2022 Zunami Protocol. Beta version 1.1</span>
-                </footer>
             </Container>
         </React.Fragment>
     );

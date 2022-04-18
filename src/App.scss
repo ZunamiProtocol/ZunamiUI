@@ -213,6 +213,13 @@ footer {
         line-height: 16px;
     }
 
+    @media (min-width: $media1440) {
+        font-size: 12px;
+        line-height: 16px;
+        width: 99px;
+        height: 33px;
+    }
+
     @media (min-width: $media1920) {
         width: 170px;
         height: 43px;

@@ -1,0 +1,51 @@
+@import 'src/variables';
+
+.FastDepositForm {
+    background-color: #fffaf3;
+    border: solid 1px #f4efe1;
+    border-radius: 5px;
+
+    @media screen and (min-width: $media1440) {
+        padding: 24px;
+        margin: 14px 40px;
+        max-width: 435px;
+    }
+
+    &__Title {
+        font-size: 12px;
+        line-height: 16px;
+    }
+
+    &__Description {
+        font-size: 10px;
+        line-height: 13.6px;
+    }
+
+    .Input {
+        @media screen and (min-width: $media1440) {
+            margin-top: 30px;
+            margin-bottom: 31px;
+        }
+    }
+
+    &__Slogan {
+        @media screen and (min-width: $media1440) {
+            font-size: 14px;
+            line-height: 19px;
+            margin-left: 24px;
+        }
+    }
+
+    &__Actions {
+        @media screen and (min-width: $media1440) {
+            margin-bottom: 25px;
+            margin-left: 11px;
+        }
+    }
+
+    .DirectAction {
+        @media screen and (min-width: $media1440) {
+            margin-left: 22px;
+        }
+    }
+}
