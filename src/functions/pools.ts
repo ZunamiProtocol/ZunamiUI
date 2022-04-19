@@ -46,6 +46,12 @@ const poolsChartdata: { [key: string]: any } = {
         color: '#FFC129',
         value: 0,
     },
+    ANCHOR: {
+        title: 'Anchor Protocol - UST pool',
+        link: 'https://etherscan.io/address/0x903b0383d8df3ce4d56d4581dc1c2d8bba04fe21',
+        color: '#8DDA2C',
+        value: 0,
+    },
 };
 
 export function poolInfoToChartElement(pool: PoolInfo, percent: BigNumber): ChartDataElement {
