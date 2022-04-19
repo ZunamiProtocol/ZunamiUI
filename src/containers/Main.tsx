@@ -26,6 +26,7 @@ import { ThemeSwitcher } from '../components/ThemeSwitcher/ThemeSwitcher';
 interface ZunamiInfo {
     tvl: BigNumber;
     apy: number;
+    apr: number;
 }
 
 interface ZunamiInfoFetch {
@@ -59,10 +60,8 @@ export const Main = (): JSX.Element => {
 
     const pool = useFetch(getPoolStatsUrl('USDN,LUSD'));
     const poolStats = pool.data as PoolsStats;
-    const poolBestAprDaily =
-        poolStats && poolStats.poolsStats ? poolStats.poolsStats[0].apr / 100 / 365 : 0;
-    const poolBestAprMonthly =
-        poolStats && poolStats.poolsStats ? (poolStats.poolsStats[0].apr / 100 / 365) * 30 : 0;
+    const poolBestAprDaily = zunamiInfo ? zunamiInfo.apr / 100 / 365 : 0;
+    const poolBestAprMonthly = zunamiInfo ? (zunamiInfo.apr / 100 / 365) * 30 : 0;
     const dailyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprDaily;
     const monthlyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprMonthly;
 
