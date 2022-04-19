@@ -26,6 +26,7 @@ import { ThemeSwitcher } from '../components/ThemeSwitcher/ThemeSwitcher';
 interface ZunamiInfo {
     tvl: BigNumber;
     apy: number;
+    apr: number;
 }
 
 interface ZunamiInfoFetch {
@@ -59,10 +60,8 @@ export const Main = (): JSX.Element => {
 
     const pool = useFetch(getPoolStatsUrl('USDN,LUSD'));
     const poolStats = pool.data as PoolsStats;
-    const poolBestAprDaily =
-        poolStats && poolStats.poolsStats ? poolStats.poolsStats[0].apr / 100 / 365 : 0;
-    const poolBestAprMonthly =
-        poolStats && poolStats.poolsStats ? (poolStats.poolsStats[0].apr / 100 / 365) * 30 : 0;
+    const poolBestAprDaily = zunamiInfo ? zunamiInfo.apr / 100 / 365 : 0;
+    const poolBestAprMonthly = zunamiInfo ? (zunamiInfo.apr / 100 / 365) * 30 : 0;
     const dailyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprDaily;
     const monthlyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprMonthly;
 
@@ -139,7 +138,34 @@ export const Main = (): JSX.Element => {
                                 withColor={true}
                                 isStrategy={false}
                                 colorfulBg={true}
-                                hint="Annual Percentage Yield. Сumulative yield from all strategies used &amp; includes 0% management fee"
+                                hint={
+                                    <div>
+                                        <a
+                                            href="https://www.investopedia.com/terms/a/apy.asp"
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            APY
+                                        </a>{' '}
+                                        (Annual Percentage Yeld) takes into account{' '}
+                                        <a
+                                            href="https://www.investopedia.com/terms/c/compoundinterest.asp"
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            compound interest
+                                        </a>{' '}
+                                        (reinvestment of income once a week), but{' '}
+                                        <a
+                                            href="https://www.investopedia.com/terms/a/apr.asp"
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            APR
+                                        </a>{' '}
+                                        (Annual Percentage Rate) does not
+                                    </div>
+                                }
                             />
                             <InfoBlock
                                 title="Total Value Locked"
