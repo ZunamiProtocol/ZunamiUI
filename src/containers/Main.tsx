@@ -7,7 +7,7 @@ import './Main.scss';
 import { Chart } from '../components/Chart/Chart';
 import { PendingBalance } from '../components/PendingBalance/PendingBalance';
 import { Container, Row, Col } from 'react-bootstrap';
-import { BIG_ZERO, getBalanceNumber } from '../utils/formatbalance';
+import { getBalanceNumber } from '../utils/formatbalance';
 import useLpPrice from '../hooks/useLpPrice';
 import useUserLpAmount from '../hooks/useUserLpAmount';
 import { useWallet } from 'use-wallet';
@@ -26,6 +26,7 @@ import { ThemeSwitcher } from '../components/ThemeSwitcher/ThemeSwitcher';
 interface ZunamiInfo {
     tvl: BigNumber;
     apy: number;
+    apr: number;
 }
 
 interface ZunamiInfoFetch {
@@ -42,9 +43,10 @@ export const Main = (): JSX.Element => {
     const lpPrice = useLpPrice();
     const userLpAmount = useUserLpAmount();
     const userMaxWithdraw =
-        userLpAmount && lpPrice && userLpAmount.toNumber() > 0
+        lpPrice.toNumber() !== -1 && userLpAmount.toNumber() !== -1
             ? lpPrice.multipliedBy(userLpAmount)
-            : BIG_ZERO;
+            : new BigNumber(-1);
+
     const { account, connect, ethereum } = useWallet();
     useEagerConnect(account ? account : '', connect, ethereum);
 
@@ -56,12 +58,10 @@ export const Main = (): JSX.Element => {
 
     const zunamiInfo = zunData as ZunamiInfo;
 
-    const pool = useFetch(getPoolStatsUrl('USDN,LUSD'));
+    const pool = useFetch(getPoolStatsUrl('USDN,LUSD,ANCHOR'));
     const poolStats = pool.data as PoolsStats;
-    const poolBestAprDaily =
-        poolStats && poolStats.poolsStats ? poolStats.poolsStats[0].apr / 100 / 365 : 0;
-    const poolBestAprMonthly =
-        poolStats && poolStats.poolsStats ? (poolStats.poolsStats[0].apr / 100 / 365) * 30 : 0;
+    const poolBestAprDaily = zunamiInfo ? zunamiInfo.apr / 100 / 365 : 0;
+    const poolBestAprMonthly = zunamiInfo ? (zunamiInfo.apr / 100 / 365) * 30 : 0;
     const dailyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprDaily;
     const monthlyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprMonthly;
 
@@ -115,9 +115,13 @@ export const Main = (): JSX.Element => {
                         <div className={'first-row'}>
                             <InfoBlock
                                 title="Balance"
-                                description={`$ ${getBalanceNumber(userMaxWithdraw).toLocaleString(
-                                    'en'
-                                )}`}
+                                description={
+                                    userMaxWithdraw.toNumber() !== -1
+                                        ? `$ ${getBalanceNumber(userMaxWithdraw).toLocaleString(
+                                              'en'
+                                          )}`
+                                        : 'n/a'
+                                }
                                 withColor={true}
                                 isStrategy={false}
                                 colorfulBg={true}
@@ -134,7 +138,41 @@ export const Main = (): JSX.Element => {
                                 withColor={true}
                                 isStrategy={false}
                                 colorfulBg={true}
-                                hint="Annual Percentage Yield. Сumulative yield from all strategies used &amp; includes 0% management fee"
+                                hint={
+                                    <div>
+                                        Annual Percentage Yield. Сumulative yield from all
+                                        strategies used &amp; includes 0% management fee.{' '}
+                                        <a
+                                            href="https://www.investopedia.com/terms/a/apy.asp"
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            APY
+                                        </a>{' '}
+                                        takes into account{' '}
+                                        <a
+                                            href="https://www.investopedia.com/terms/c/compoundinterest.asp"
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            compound interest
+                                        </a>{' '}
+                                        (reinvestment of income once a week), but{' '}
+                                        <a
+                                            href="https://www.investopedia.com/terms/a/apr.asp"
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            APR
+                                        </a>{' '}
+                                        (Annual Percentage Rate) does not.{' '}
+                                        {zunamiInfo && (
+                                            <strong>
+                                                Current APR is {Number(zunamiInfo.apr).toFixed(2)}%
+                                            </strong>
+                                        )}
+                                    </div>
+                                }
                             />
                             <InfoBlock
                                 title="Total Value Locked"
@@ -196,7 +234,9 @@ export const Main = (): JSX.Element => {
                     <a href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing">
                         How to use?
                     </a>
-                    <a href="/faq">FAQ</a>
+                    <a href="https://www.zunami.io/#faq-main" target="_blank" rel="noreferrer">
+                        FAQ
+                    </a>
                 </div>
                 <span className="copyright">© 2022 Zunami Protocol. Beta version 1.1</span>
             </footer>

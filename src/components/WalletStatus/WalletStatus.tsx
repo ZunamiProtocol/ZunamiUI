@@ -53,7 +53,7 @@ export const WalletStatus = (): JSX.Element => {
     }
 
     return (
-        <div className={'WalletStatus'} onClick={() => setShow(true)}>
+        <div className={'WalletStatus'}>
             <WalletsModal
                 show={show}
                 onHide={() => {
@@ -63,7 +63,12 @@ export const WalletStatus = (): JSX.Element => {
                     window.localStorage.setItem(LS_ACCOUNT_KEY, wallet.address);
                 }}
             />
-            <input type="button" className="WalletStatus__Connect" value="Connect wallet" />
+            <input
+                type="button"
+                className="WalletStatus__Connect"
+                value="Connect wallet"
+                onClick={() => setShow(true)}
+            />
             <svg
                 className="WalletStatus__Icon"
                 viewBox="0 0 55 43"
