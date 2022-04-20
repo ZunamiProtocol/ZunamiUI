@@ -8,6 +8,7 @@ interface DataItem {
     value: number;
     title: string;
     link: string;
+    icon: string;
 }
 
 interface ChartProps {
@@ -22,6 +23,7 @@ function renderStratList(items: Array<DataItem>) {
                 style={{ background: item.color }}
             />
             <div className={'PieChart__StratList__Item__Name'}>
+                <img src={item.icon} alt={item.title} className="me-2" />
                 <a target="blank" href={item.link}>
                     {item.title}
                 </a>
