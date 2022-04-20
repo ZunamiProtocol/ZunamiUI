@@ -140,6 +140,8 @@ export const Main = (): JSX.Element => {
                                 colorfulBg={true}
                                 hint={
                                     <div>
+                                        Annual Percentage Yield. Сumulative yield from all
+                                        strategies used &amp; includes 0% management fee.{' '}
                                         <a
                                             href="https://www.investopedia.com/terms/a/apy.asp"
                                             target="_blank"
@@ -147,7 +149,7 @@ export const Main = (): JSX.Element => {
                                         >
                                             APY
                                         </a>{' '}
-                                        (Annual Percentage Yeld) takes into account{' '}
+                                        takes into account{' '}
                                         <a
                                             href="https://www.investopedia.com/terms/c/compoundinterest.asp"
                                             target="_blank"
@@ -163,7 +165,12 @@ export const Main = (): JSX.Element => {
                                         >
                                             APR
                                         </a>{' '}
-                                        (Annual Percentage Rate) does not
+                                        (Annual Percentage Rate) does not.{' '}
+                                        {zunamiInfo && (
+                                            <strong>
+                                                Current APR is {Number(zunamiInfo.apr).toFixed(2)}%
+                                            </strong>
+                                        )}
                                     </div>
                                 }
                             />
