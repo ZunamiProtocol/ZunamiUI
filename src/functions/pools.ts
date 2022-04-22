@@ -63,7 +63,7 @@ const poolsChartdata: { [key: string]: any } = {
 export function poolInfoToChartElement(pool: PoolInfo, percent: BigNumber): ChartDataElement {
     return {
         ...poolsChartdata[pool.type],
-        value: Math.round(new BigNumber(pool.tvlInZunami).dividedBy(percent).toNumber() * 100),
+        value: new BigNumber(pool.tvlInZunami).dividedBy(percent).toNumber() * 100,
     };
 }
 
