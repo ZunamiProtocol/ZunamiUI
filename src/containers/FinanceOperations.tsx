@@ -36,10 +36,10 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     const [usdtChecked, setUsdtChecked] = useState(false);
     const [sharePercent, setSharePercent] = useState(100);
 
-    const [selectedCoin, setSelectedCoin] = useState<string>('usdc');
+    const [selectedCoin, setSelectedCoin] = useState<string>('all');
     const [balance, setBalance] = useState(BIG_ZERO);
     const [coins, setCoins] = useState([0, 0, 0]);
-    const [selectedCoinIndex, setSelectedCoinIndex] = useState(1);
+    const [selectedCoinIndex, setSelectedCoinIndex] = useState(-1);
 
     const [dai, setDai] = useState('0');
     const [usdc, setUsdc] = useState('0');
@@ -202,7 +202,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                         setUsdcChecked(false);
                                                         setUsdtChecked(false);
                                                     } else {
-                                                        setSharePercent(0);
+                                                        setSharePercent(100);
                                                     }
                                                 }}
                                             />
@@ -235,9 +235,9 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                             setDai(oneThird);
                                                             setUsdc(oneThird);
                                                             setUsdt(oneThird);
-                                                            setDirectOperation(true);
-                                                        } else {
                                                             setDirectOperation(false);
+                                                        } else {
+                                                            setDirectOperation(true);
                                                         }
 
                                                         const coins = ['dai', 'usdc', 'usdt'];
