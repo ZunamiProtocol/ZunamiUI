@@ -12,9 +12,6 @@ const useApprove = () => {
         async (tokenAddress: string) => {
             try {
                 const tx = await approve(ethereum, tokenAddress, masterChefContract, account);
-                if (tx) {
-                    // gtag('event', 'Approve', {'Account': 'AC_' + account.toString()});
-                }
                 return tx;
             } catch (e) {
                 return false;
