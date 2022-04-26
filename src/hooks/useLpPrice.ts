@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { getMasterChefContract } from '../sushi/utils';
 import useSushi from './useSushi';
 import { getLpPrice } from '../utils/erc20';
-import { BIG_ZERO } from '../utils/formatbalance';
 
 const useLpPrice = (): BigNumber => {
     const [price, setPrice] = useState(new BigNumber(-1));
