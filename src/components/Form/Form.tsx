@@ -230,7 +230,7 @@ export const Form = (props: FormProps): JSX.Element => {
         props.dai === '' ? '0' : props.dai,
         props.usdc === '' ? '0' : props.usdc,
         props.usdt === '' ? '0' : props.usdt,
-        props.directOperation,
+        !props.directOperation,
         props.sharePercent,
         props.selectedCoinIndex
     );
