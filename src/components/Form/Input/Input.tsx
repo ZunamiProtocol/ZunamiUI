@@ -38,8 +38,9 @@ export const Input = (props: InputProps): JSX.Element => {
     }, [props.max, props.name, props.action]);
 
     const handleSelectMax = useCallback(() => {
-        props.handler(fullBalance);
-        setValue(fullBalance);
+        const roundedVal = Number(fullBalance).toFixed(2).toString();
+        props.handler(roundedVal);
+        setValue(roundedVal);
     }, [fullBalance, setValue, props]);
 
     const isBalanceZero = fullBalance === '0' || !fullBalance;
