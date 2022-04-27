@@ -85,7 +85,18 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     : new BigNumber(rawBalance)
             );
 
-            if (!balance.toFixed() || selectedCoinIndex === -1) {
+            if (Number(rawBalance) === 0) {
+                return;
+            }
+
+            if (selectedCoinIndex === -1) {
+                const oneThird = (getBalanceNumber(new BigNumber(rawBalance)) / 3)
+                    .toFixed(2)
+                    .toString();
+
+                setDai(oneThird);
+                setUsdc(oneThird);
+                setUsdt(oneThird);
                 return;
             }
 
