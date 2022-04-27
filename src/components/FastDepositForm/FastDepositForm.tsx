@@ -1,6 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { useWallet } from 'use-wallet';
 import './FastDepositForm.scss';
+import { useState } from 'react';
 import { Input } from './Input/Input';
 import { useUserBalances } from '../../hooks/useUserBalances';
 import { WalletStatus } from '../WalletStatus/WalletStatus';
@@ -9,6 +10,7 @@ import { DirectAction } from '../Form/DirectAction/DirectAction';
 export const FastDepositForm = (): JSX.Element => {
     const userBalanceList = useUserBalances();
     const { account, reset } = useWallet();
+    const [optimized, setOptimized] = useState(true);
 
     return (
         <div className="FastDepositForm">
@@ -18,7 +20,7 @@ export const FastDepositForm = (): JSX.Element => {
             </div>
             <Input
                 action="deposit"
-                name="qwe"
+                name="USDC"
                 value="0"
                 handler={() => {}}
                 max={userBalanceList[2]}
@@ -35,13 +37,11 @@ export const FastDepositForm = (): JSX.Element => {
                         <button className="zun-button">Approve</button>
                         <DirectAction
                             actionName="deposit"
-                            checked={false}
+                            checked={optimized}
                             disabled={false}
                             hint="When using optimized deposit funds will be deposited within 24 hours and many times cheaper"
                             onChange={(state: boolean) => {
-                                // if (props.onOperationModeChange) {
-                                //     props.onOperationModeChange(state);
-                                // }
+                                setOptimized(state);
                             }}
                         />
                     </div>

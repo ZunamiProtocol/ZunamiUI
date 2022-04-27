@@ -12,6 +12,7 @@ interface InfoBlockProps {
     secondaryRow?: JSX.Element | undefined;
     hint?: string;
     colorfulBg?: boolean;
+    icon?: JSX.Element | undefined;
 }
 
 export const InfoBlock = (props: InfoBlockProps): JSX.Element => {
@@ -27,6 +28,7 @@ export const InfoBlock = (props: InfoBlockProps): JSX.Element => {
             data-title={props.title}
         >
             <div className={`InfoBlock__title ${props.hint ? 'with_hint' : ''}`}>
+                {!props.isLoading && props.icon && props.icon}
                 <span>{props.title}</span>
                 {props.hint && (
                     <div

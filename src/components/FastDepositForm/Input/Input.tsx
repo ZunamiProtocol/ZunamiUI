@@ -43,17 +43,27 @@ export const Input = (props: InputProps): JSX.Element => {
     }, [fullBalance, setValue, props]);
 
     const isBalanceZero = fullBalance === '0' || !fullBalance;
-    const displayBalance = isBalanceZero ? '0.00' : parseFloat(fullBalance).toFixed(2);
 
     return (
-        <div className={`Input ${props.disabled ? 'disabled' : ''}`}>
+        <div className={`FastDepositInput ${props.disabled ? 'disabled' : ''}`}>
             <img src={`${props.name}.svg`} alt="" />
             <div className={'coinName'}>{props.name}</div>
-            <div className="divider"></div>
-            <span className="max" onClick={handleSelectMax}>
-                MAX
-            </span>
-            {props.action !== 'withdraw' && <span className="balance">{displayBalance}</span>}
+            <svg
+                width="14"
+                height="5"
+                viewBox="0 0 14 5"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="selector"
+            >
+                <path d="M1 1L7 4L13 1" stroke="#404040" strokeWidth="1.1" strokeLinecap="round" />
+            </svg>
+
+            <select>
+                <option value="dai">DAI</option>
+                <option value="usdc">USDC</option>
+                <option value="usdt">USDT</option>
+            </select>
             <div className="divider"></div>
             <input
                 inputMode={'decimal'}
@@ -68,6 +78,9 @@ export const Input = (props: InputProps): JSX.Element => {
                 value={value}
                 onChange={changeHandler}
             />
+            <span className="max" onClick={handleSelectMax}>
+                MAX
+            </span>
         </div>
     );
 };
