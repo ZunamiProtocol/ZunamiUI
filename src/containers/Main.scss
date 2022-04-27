@@ -63,6 +63,7 @@
     }
 
     .second-row {
+        background-color: #fff;
         @media screen and (min-width: $media1440) {
             margin-bottom: 14px;
             height: 82px;
@@ -148,7 +149,7 @@
         margin-bottom: 10px;
     }
 
-    @media screen and (max-width: $media1440) {
+    @media screen and (min-width: $media1440) {
         height: 229px;
         width: 416px;
     }

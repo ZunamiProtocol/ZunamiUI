@@ -78,6 +78,17 @@
         @media screen and (min-width: $media1440) {
             margin-left: 21px;
         }
+
+        &__connected {
+            .state,
+            .address {
+                @media screen and (min-width: $media1440) {
+                    font-size: 12px;
+                    line-height: 18px;
+                    display: block;
+                }
+            }
+        }
     }
 
     .Disclaimer {

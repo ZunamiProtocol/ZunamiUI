@@ -2,7 +2,7 @@
 
 .WalletStatus {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
 
     @media screen and (min-width: $media375) {
     }
@@ -55,6 +55,12 @@
             @media screen and (min-width: $media1920) {
                 font-size: 18px;
                 line-height: 25px;
+            }
+        }
+
+        .selector {
+            @media screen and (min-width: $media1440) {
+                margin-left: 15px;
             }
         }
     }

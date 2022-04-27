@@ -1,6 +1,8 @@
 @import 'src/variables';
 
 .ThemeSwitcher {
+    cursor: pointer;
+
     @media screen and (min-width: $media1024) {
         padding-bottom: 5px;
     }

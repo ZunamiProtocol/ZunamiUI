@@ -37,6 +37,13 @@
         margin: 0 12px 23px 12px;
     }
 
+    &__Icon {
+        @media screen and (min-width: $media1440) {
+            margin-right: 14px;
+            float: left;
+        }
+    }
+
     &__title {
         color: #636363;
 
@@ -117,8 +124,8 @@
             }
 
             @media screen and (min-width: $media1440) {
-                font-size: 23px;
-                line-height: 31px;
+                font-size: 16px;
+                line-height: 22px;
             }
 
             @media screen and (min-width: $media1920) {

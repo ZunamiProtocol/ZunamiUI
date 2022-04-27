@@ -1,3 +1,5 @@
+@import 'src/variables';
+
 .NavMenu {
     height: 100%;
 
@@ -10,12 +12,37 @@
             padding: 0 15px !important;
         }
 
+        @media screen and (min-width: $media1440) {
+            font-size: 13px;
+            line-height: 18px;
+        }
+
+        svg {
+            rect {
+                stroke: #636363;
+            }
+
+            @media screen and (min-width: $media1440) {
+                margin-right: 5px;
+            }
+        }
+
         &.selected {
             background: linear-gradient(
                 180deg,
                 rgba(247, 193, 144, 0) 0%,
                 rgba(255, 203, 142, 0.14) 100%
             );
+
+            span {
+                color: #f95a05;
+            }
+
+            svg {
+                rect {
+                    stroke: #f95a05;
+                }
+            }
         }
     }
 }

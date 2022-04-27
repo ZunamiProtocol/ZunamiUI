@@ -21,6 +21,10 @@
     &__Description {
         font-size: 10px;
         line-height: 13.6px;
+
+        @media screen and (min-width: $media1440) {
+            margin-right: 10px;
+        }
     }
 
     .Input {
@@ -48,6 +52,22 @@
     .DirectAction {
         @media screen and (min-width: $media1440) {
             margin-left: 22px;
+        }
+
+        input[type='checkbox'],
+        span,
+        svg {
+            @media screen and (min-width: $media1440) {
+                margin-top: 0;
+            }
+        }
+
+        svg {
+            @media screen and (min-width: $media1440) {
+                margin-top: -4px;
+                width: 10px;
+                height: 10px;
+            }
         }
     }
 }

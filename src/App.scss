@@ -295,6 +295,11 @@ input[type='checkbox'] {
 }
 
 .Sidebar {
+    .InfoBlock:first-child {
+        .InfoBlock__title {
+            margin-left: 5px;
+        }
+    }
     .ComingSoonPlaceholder {
         @media (min-width: $media375) {
             width: 104px;
@@ -445,6 +450,10 @@ body.dark {
     .FastDepositForm {
         background: linear-gradient(9.38deg, #222222 3.94%, #111111 89.76%);
         border-color: transparent;
+
+        &__Description {
+            color: #6a6a6a;
+        }
     }
 
     .SidebarColumn {
@@ -454,6 +463,10 @@ body.dark {
 
         @media (min-width: $media1024) {
             background: #2a2a2a;
+        }
+
+        .InfoBlock:first-child {
+            background: none;
         }
     }
 
@@ -568,12 +581,12 @@ body.dark {
     }
 
     .InfoBlock_colorful {
-        background: linear-gradient(262.84deg, #1e1e1e -27.39%, #2c2c2c 71.59%);
+        background: linear-gradient(9.38deg, #1c1c1c 3.94%, #1a1919 89.76%);
     }
 
-    .WalletStatus {
-        background: linear-gradient(0.02deg, #1e1e1e 76.02%, #282828 95.61%);
-    }
+    // .WalletStatus {
+    //     background: linear-gradient(0.02deg, #1e1e1e 76.02%, #282828 95.61%);
+    // }
 
     .TestnetPlaceholder {
         h1,

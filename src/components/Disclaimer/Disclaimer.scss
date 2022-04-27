@@ -2,10 +2,11 @@
 
 .Disclaimer {
     background: #fbecd9;
+    color: #767676;
     border-radius: 5px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     align-self: center;
 
     &__icon {
@@ -19,7 +20,7 @@
         }
 
         @media screen and (min-width: $media1440) {
-            margin: 0 10px 0 3px;
+            margin: 0 10px 0 0;
             width: 29px;
             height: 29px;
             min-width: 29px;
@@ -50,6 +51,7 @@
         height: 46px;
         margin-left: 0;
         margin-top: 0;
+        padding: 10px 15px;
     }
 
     @media screen and (min-width: $media1920) {
@@ -65,7 +67,7 @@
         a {
             text-decoration: none;
             color: #767676;
-            border-bottom: dashed 1px #767676;
+            border-bottom: solid 1px #767676;
         }
     }
 }
