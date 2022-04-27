@@ -1,4 +1,3 @@
-import { BigNumber } from 'bignumber.js';
 import { useWallet } from 'use-wallet';
 import './FastDepositForm.scss';
 import { useState } from 'react';
@@ -9,8 +8,10 @@ import { DirectAction } from '../Form/DirectAction/DirectAction';
 
 export const FastDepositForm = (): JSX.Element => {
     const userBalanceList = useUserBalances();
-    const { account, reset } = useWallet();
+    const { account } = useWallet();
     const [optimized, setOptimized] = useState(true);
+    const [coin, setCoin] = useState('USDC');
+    const coins = ['DAI', 'USDC', 'USDT'];
 
     return (
         <div className="FastDepositForm">
@@ -20,10 +21,13 @@ export const FastDepositForm = (): JSX.Element => {
             </div>
             <Input
                 action="deposit"
-                name="USDC"
+                name={coin}
                 value="0"
                 handler={() => {}}
-                max={userBalanceList[2]}
+                max={userBalanceList[coins.indexOf(coin)]}
+                onCoinChange={(coin: string) => {
+                    setCoin(coin);
+                }}
             />
             <div>
                 {!account && (

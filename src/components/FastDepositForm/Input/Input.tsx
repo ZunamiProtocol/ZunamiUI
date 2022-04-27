@@ -10,6 +10,7 @@ interface InputProps {
     action: string;
     max: BigNumber;
     disabled?: boolean;
+    onCoinChange?: Function;
 }
 
 export const Input = (props: InputProps): JSX.Element => {
@@ -42,8 +43,6 @@ export const Input = (props: InputProps): JSX.Element => {
         setValue(fullBalance);
     }, [fullBalance, setValue, props]);
 
-    const isBalanceZero = fullBalance === '0' || !fullBalance;
-
     return (
         <div className={`FastDepositInput ${props.disabled ? 'disabled' : ''}`}>
             <img src={`${props.name}.svg`} alt="" />
@@ -59,10 +58,17 @@ export const Input = (props: InputProps): JSX.Element => {
                 <path d="M1 1L7 4L13 1" stroke="#404040" strokeWidth="1.1" strokeLinecap="round" />
             </svg>
 
-            <select>
-                <option value="dai">DAI</option>
-                <option value="usdc">USDC</option>
-                <option value="usdt">USDT</option>
+            <select
+                value={props.name}
+                onChange={(val) => {
+                    if (props.onCoinChange) {
+                        props.onCoinChange(val.target.value);
+                    }
+                }}
+            >
+                <option value="DAI">DAI</option>
+                <option value="USDC">USDC</option>
+                <option value="USDT">USDT</option>
             </select>
             <div className="divider"></div>
             <input

@@ -2,7 +2,7 @@ import { Col } from 'react-bootstrap';
 import './SideBar.scss';
 import { getBalanceNumber } from '../../utils/formatbalance';
 import { InfoBlock } from '../InfoBlock/InfoBlock';
-import { getPoolStatsUrl, zunamiInfoUrl, getHistoricalApyUrl } from '../../api/api';
+import { zunamiInfoUrl } from '../../api/api';
 import useFetch from 'react-fetch-hook';
 import { BigNumber } from 'bignumber.js';
 import { FastDepositForm } from '../FastDepositForm/FastDepositForm';
@@ -86,8 +86,8 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                                         y2="36"
                                         gradientUnits="userSpaceOnUse"
                                     >
-                                        <stop stop-color="#F9A312" />
-                                        <stop offset="1" stop-color="#F84C01" />
+                                        <stop stopColor="#F9A312" />
+                                        <stop offset="1" stopColor="#F84C01" />
                                     </linearGradient>
                                 </defs>
                             </svg>
