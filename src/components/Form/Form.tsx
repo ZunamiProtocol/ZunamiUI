@@ -230,7 +230,7 @@ export const Form = (props: FormProps): JSX.Element => {
         props.dai === '' ? '0' : props.dai,
         props.usdc === '' ? '0' : props.usdc,
         props.usdt === '' ? '0' : props.usdt,
-        props.directOperation,
+        !props.directOperation,
         props.sharePercent,
         props.selectedCoinIndex
     );
@@ -308,7 +308,6 @@ export const Form = (props: FormProps): JSX.Element => {
                     switch (action) {
                         case 'withdraw':
                             setPendingWithdraw(true);
-                            setPendingTx(true);
 
                             try {
                                 await onUnstake();
@@ -321,7 +320,6 @@ export const Form = (props: FormProps): JSX.Element => {
                                     value: totalSum,
                                 });
                             } catch (error: any) {
-                                setPendingTx(false);
                                 setPendingWithdraw(false);
                                 setTransactionError(error);
                             }
@@ -329,8 +327,6 @@ export const Form = (props: FormProps): JSX.Element => {
                             setPendingWithdraw(false);
                             break;
                         case 'deposit':
-                            setPendingTx(true);
-
                             try {
                                 const tx = await onStake();
                                 setTransactionId(tx.transactionHash);
@@ -346,7 +342,6 @@ export const Form = (props: FormProps): JSX.Element => {
                                 debugger;
                             }
 
-                            setPendingTx(false);
                             break;
                     }
                 }}
@@ -415,7 +410,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                 </button>
                                 <DirectAction
                                     actionName="deposit"
-                                    checked={props.directOperation}
+                                    checked={!props.directOperation}
                                     disabled={false}
                                     hint="When using optimized deposit funds will be deposited within 24 hours and many times cheaper"
                                     onChange={(state: boolean) => {
@@ -439,7 +434,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                 <DirectAction
                                     actionName="withdraw"
                                     disabled={props.directOperationDisabled || false}
-                                    checked={props.directOperation}
+                                    checked={!props.directOperation}
                                     hint="When using optimized withdrawal funds will be withdrawn within 24 hours and many times cheaper. Optimized withdraw available only in all coins."
                                     onChange={(state: boolean) => {
                                         if (props.onOperationModeChange) {

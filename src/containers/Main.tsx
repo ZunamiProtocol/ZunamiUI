@@ -7,7 +7,7 @@ import './Main.scss';
 import { Chart } from '../components/Chart/Chart';
 import { PendingBalance } from '../components/PendingBalance/PendingBalance';
 import { Container, Row, Col } from 'react-bootstrap';
-import { BIG_ZERO, getBalanceNumber } from '../utils/formatbalance';
+import { getBalanceNumber } from '../utils/formatbalance';
 import useLpPrice from '../hooks/useLpPrice';
 import useUserLpAmount from '../hooks/useUserLpAmount';
 import { useWallet } from 'use-wallet';
@@ -19,13 +19,12 @@ import { BigNumber } from 'bignumber.js';
 import usePendingOperations from '../hooks/usePendingOperations';
 import { PoolInfo, poolDataToChartData } from '../functions/pools';
 import { ApyChart } from '../components/ApyChart/ApyChart';
-import { WelcomeCarousel } from '../components/WelcomeCarousel/WelcomeCarousel';
 import { WalletStatus } from '../components/WalletStatus/WalletStatus';
-import { ThemeSwitcher } from '../components/ThemeSwitcher/ThemeSwitcher';
 
 interface ZunamiInfo {
     tvl: BigNumber;
     apy: number;
+    apr: number;
 }
 
 interface ZunamiInfoFetch {
@@ -57,12 +56,10 @@ export const Main = (): JSX.Element => {
 
     const zunamiInfo = zunData as ZunamiInfo;
 
-    const pool = useFetch(getPoolStatsUrl('USDN,LUSD'));
+    const pool = useFetch(getPoolStatsUrl('USDN,LUSD,ANCHOR'));
     const poolStats = pool.data as PoolsStats;
-    const poolBestAprDaily =
-        poolStats && poolStats.poolsStats ? poolStats.poolsStats[0].apr / 100 / 365 : 0;
-    const poolBestAprMonthly =
-        poolStats && poolStats.poolsStats ? (poolStats.poolsStats[0].apr / 100 / 365) * 30 : 0;
+    const poolBestAprDaily = zunamiInfo ? zunamiInfo.apr / 100 / 365 : 0;
+    const poolBestAprMonthly = zunamiInfo ? (zunamiInfo.apr / 100 / 365) * 30 : 0;
     const dailyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprDaily;
     const monthlyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprMonthly;
 
@@ -122,7 +119,41 @@ export const Main = (): JSX.Element => {
                                 withColor={true}
                                 isStrategy={false}
                                 colorfulBg={true}
-                                hint="Profit is accrued at least once a week, after the sale of the accumulated weekly rewards."
+                                hint={
+                                    <div>
+                                        Annual Percentage Yield. Сumulative yield from all
+                                        strategies used &amp; includes 0% management fee.{' '}
+                                        <a
+                                            href="https://www.investopedia.com/terms/a/apy.asp"
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            APY
+                                        </a>{' '}
+                                        takes into account{' '}
+                                        <a
+                                            href="https://www.investopedia.com/terms/c/compoundinterest.asp"
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            compound interest
+                                        </a>{' '}
+                                        (reinvestment of income once a week), but{' '}
+                                        <a
+                                            href="https://www.investopedia.com/terms/a/apr.asp"
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            APR
+                                        </a>{' '}
+                                        (Annual Percentage Rate) does not.{' '}
+                                        {zunamiInfo && (
+                                            <strong>
+                                                Current APR is {Number(zunamiInfo.apr).toFixed(2)}%
+                                            </strong>
+                                        )}
+                                    </div>
+                                }
                             />
                             <InfoBlock
                                 title="Pending Deposits / Withdraws"

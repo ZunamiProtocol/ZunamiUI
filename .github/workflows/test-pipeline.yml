@@ -1,13 +1,13 @@
-name: Deployment to new.zunami.io
+name: Deployment to test.zunami.io
 on: push
 
 jobs:
-    new-build-deploy:
+    test-build-deploy:
         if: contains(github.event.head_commit.message, 'deploy')
         uses: ./.github/workflows/build-and-deploy.yml
         with:
             local_folder: build
-            remote_folder: /var/www/html/new
+            remote_folder: /var/www/html/test
         secrets:
             host: ${{ secrets.HOST }}
             username: ${{ secrets.USERNAME }}

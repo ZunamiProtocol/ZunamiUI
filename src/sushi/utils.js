@@ -95,7 +95,7 @@ export const stake = async (contract, account, dai, usdc, usdt, direct = false) 
         new BigNumber(usdt).times(USDT_TOKEN_DECIMAL).toString(),
     ];
 
-    if (!direct) {
+    if (direct) {
         return contract.methods
             .deposit(coins)
             .send({ from: account })

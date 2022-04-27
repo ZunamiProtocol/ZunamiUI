@@ -48,6 +48,10 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                             props.onShareSelect(value);
                         }
 
+                        if (value === 0 && props.onShareSelect) {
+                            props.onShareSelect(1);
+                        }
+
                         if (value >= 100) {
                             if (props.onShareSelect) {
                                 props.onShareSelect(100);

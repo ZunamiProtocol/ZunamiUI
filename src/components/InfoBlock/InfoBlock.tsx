@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 import './InfoBlock.scss';
 
 interface InfoBlockProps {
@@ -10,7 +10,7 @@ interface InfoBlockProps {
     isStrategy: boolean;
     isLoading?: boolean;
     secondaryRow?: JSX.Element | undefined;
-    hint?: string;
+    hint?: JSX.Element;
     colorfulBg?: boolean;
     icon?: JSX.Element | undefined;
 }
@@ -18,6 +18,12 @@ interface InfoBlockProps {
 export const InfoBlock = (props: InfoBlockProps): JSX.Element => {
     const target = useRef(null);
     const [showHint, setShowHint] = useState(false);
+
+    const popover = (
+        <Popover onMouseEnter={() => setShowHint(true)} onMouseLeave={() => setShowHint(false)}>
+            <Popover.Body>{props.hint}</Popover.Body>
+        </Popover>
+    );
 
     return (
         <div
@@ -36,8 +42,18 @@ export const InfoBlock = (props: InfoBlockProps): JSX.Element => {
                         ref={target}
                         onClick={() => setShowHint(!showHint)}
                     >
-                        <OverlayTrigger placement="right" overlay={<Tooltip>{props.hint}</Tooltip>}>
-                            <img src={'/info.svg'} alt={'Pending deposit'} />
+                        <OverlayTrigger
+                            trigger={['hover', 'focus']}
+                            placement="right"
+                            overlay={popover}
+                            show={showHint}
+                        >
+                            <img
+                                onMouseEnter={() => setShowHint(true)}
+                                onMouseLeave={() => setShowHint(false)}
+                                src={'/info.svg'}
+                                alt={'Pending deposit'}
+                            />
                         </OverlayTrigger>
                     </div>
                 )}

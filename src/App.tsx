@@ -52,6 +52,10 @@ const Providers: React.FC = ({ children }) => {
                     injected: {
                         chainId: [1, 3, 4],
                     },
+                    walletlink: {
+                        chainId: 1,
+                        url: 'https://mainnet.eth.aragon.network/',
+                    },
                 }}
             >
                 <SushiProvider>

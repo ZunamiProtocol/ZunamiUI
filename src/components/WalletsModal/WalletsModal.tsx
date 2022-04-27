@@ -1,7 +1,7 @@
-import { useState, useCallback } from 'react';
 import { Modal } from 'react-bootstrap';
 import config from '../../config';
 import { useWallet } from 'use-wallet';
+import './WalletsModal.scss';
 
 export const LS_ACCOUNT_KEY = 'METAMASK_ACCOUNT';
 export const LS_WALLET_TYPE_KEY = 'WALLET_TYPE';
@@ -95,7 +95,7 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
             <Modal.Header closeButton>
                 <Modal.Title>Connect a wallet</Modal.Title>
             </Modal.Header>
-            <Modal.Body className="d-flex flex-row justify-content-center align-items-center">
+            <Modal.Body className="d-flex gap-3 flex-row justify-content-center align-items-center WalletsModal">
                 <button
                     onClick={() => onConnect('injected')}
                     className="border-0 d-inline-flex flex-column justify-content-center align-items-center bg-transparent"
@@ -109,6 +109,13 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
                 >
                     <img src="/wallet-connect.svg" alt="" />
                     <span className="mt-1">Wallet Connect</span>
+                </button>
+                <button
+                    onClick={() => onConnect('walletlink')}
+                    className="border-0 d-inline-flex flex-column justify-content-center align-items-center bg-transparent"
+                >
+                    <img src="/wallet-link.svg" alt="" />
+                    <span className="mt-1">Coinbase Wallet</span>
                 </button>
             </Modal.Body>
         </Modal>

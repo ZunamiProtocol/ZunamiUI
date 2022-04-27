@@ -29,17 +29,17 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     const [usdcDisabled, setUsdcDisabled] = useState(props.operationName === 'Withdraw');
     const [usdtDisabled, setUsdtDisabled] = useState(props.operationName === 'Withdraw');
 
-    const [directOperation, setDirectOperation] = useState(props.operationName === 'Deposit');
+    const [directOperation, setDirectOperation] = useState(false);
 
     const [daiChecked, setDaiChecked] = useState(false);
     const [usdcChecked, setUsdcChecked] = useState(false);
     const [usdtChecked, setUsdtChecked] = useState(false);
     const [sharePercent, setSharePercent] = useState(100);
 
-    const [selectedCoin, setSelectedCoin] = useState<string>('usdc');
+    const [selectedCoin, setSelectedCoin] = useState<string>('all');
     const [balance, setBalance] = useState(BIG_ZERO);
     const [coins, setCoins] = useState([0, 0, 0]);
-    const [selectedCoinIndex, setSelectedCoinIndex] = useState(1);
+    const [selectedCoinIndex, setSelectedCoinIndex] = useState(-1);
 
     const [dai, setDai] = useState('0');
     const [usdc, setUsdc] = useState('0');
@@ -85,7 +85,18 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     : new BigNumber(rawBalance)
             );
 
-            if (!balance.toFixed() || selectedCoinIndex === -1) {
+            if (Number(rawBalance) === 0) {
+                return;
+            }
+
+            if (selectedCoinIndex === -1) {
+                const oneThird = (getBalanceNumber(new BigNumber(rawBalance)) / 3)
+                    .toFixed(2)
+                    .toString();
+
+                setDai(oneThird);
+                setUsdc(oneThird);
+                setUsdt(oneThird);
                 return;
             }
 
@@ -188,7 +199,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                     }
                                                 }}
                                                 onOperationModeChange={(direct: any) => {
-                                                    setDirectOperation(direct);
+                                                    setDirectOperation(!direct);
 
                                                     if (
                                                         direct &&
@@ -202,7 +213,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                         setUsdcChecked(false);
                                                         setUsdtChecked(false);
                                                     } else {
-                                                        setSharePercent(0);
+                                                        setSharePercent(100);
                                                     }
                                                 }}
                                             />
@@ -235,9 +246,9 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                             setDai(oneThird);
                                                             setUsdc(oneThird);
                                                             setUsdt(oneThird);
-                                                            setDirectOperation(true);
-                                                        } else {
                                                             setDirectOperation(false);
+                                                        } else {
+                                                            setDirectOperation(true);
                                                         }
 
                                                         const coins = ['dai', 'usdc', 'usdt'];
