@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { OverlayTrigger, Tooltip, Popover } from 'react-bootstrap';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 import './InfoBlock.scss';
 
 interface InfoBlockProps {

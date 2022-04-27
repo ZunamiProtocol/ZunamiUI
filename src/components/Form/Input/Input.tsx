@@ -34,7 +34,9 @@ export const Input = (props: InputProps): JSX.Element => {
             decimals = 18;
         }
 
-        return getFullDisplayBalance(props.max, decimals);
+        return (
+            Math.trunc(Number(getFullDisplayBalance(props.max, decimals)) * 100) / 100
+        ).toString();
     }, [props.max, props.name, props.action]);
 
     const handleSelectMax = useCallback(() => {
@@ -43,7 +45,7 @@ export const Input = (props: InputProps): JSX.Element => {
     }, [fullBalance, setValue, props]);
 
     const isBalanceZero = fullBalance === '0' || !fullBalance;
-    const displayBalance = isBalanceZero ? '0.00' : parseFloat(fullBalance).toFixed(2);
+    const displayBalance = isBalanceZero ? '0.00' : fullBalance;
 
     return (
         <div className={`Input ${props.disabled ? 'disabled' : ''}`}>
