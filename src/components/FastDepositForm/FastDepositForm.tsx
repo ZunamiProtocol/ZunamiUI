@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { useWallet } from 'use-wallet';
 import './FastDepositForm.scss';
-import { Input } from '../Form/Input/Input';
+import { Input } from './Input/Input';
 import { useUserBalances } from '../../hooks/useUserBalances';
 import { WalletStatus } from '../WalletStatus/WalletStatus';
 import { DirectAction } from '../Form/DirectAction/DirectAction';

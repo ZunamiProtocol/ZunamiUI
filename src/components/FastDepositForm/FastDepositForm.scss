@@ -7,8 +7,10 @@
 
     @media screen and (min-width: $media1440) {
         padding: 24px;
-        margin: 14px 40px;
+        margin: 0 40px 14px 40px;
         max-width: 435px;
+        height: 229px;
+        width: 435px;
     }
 
     &__Title {

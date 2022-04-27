@@ -102,8 +102,8 @@ export const Main = (): JSX.Element => {
     return (
         <React.Fragment>
             <Header />
-            <Container className={'h-100 d-flex justify-content-between flex-column'}>
-                <Row className={'h-100 mb-4 main-row'}>
+            <Container className={'d-flex justify-content-between flex-column'}>
+                <Row className={'main-row h-100'}>
                     <SideBar isMainPage={true} />
 
                     <Col className={'content-col dashboard-col'}>

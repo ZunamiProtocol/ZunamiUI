@@ -35,6 +35,7 @@ body {
         max-width: 1440px;
         margin-left: auto;
         margin-right: auto;
+        height: calc(100% - 74px);
     }
 
     @media (min-width: $media1920) {
@@ -127,6 +128,13 @@ footer {
 }
 
 footer {
+    @media (min-width: $media1440) {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        padding: 0 40px;
+    }
+
     .mobile {
         @media (min-width: $media375) {
             display: flex;
@@ -412,6 +420,33 @@ body.dark {
         color: #fff;
     }
 
+    .navbar {
+        background: linear-gradient(180deg, #1b1b1b 0%, #1d1d1d 100%);
+
+        .NavMenu li.selected {
+            background: linear-gradient(
+                180deg,
+                rgba(250, 91, 6, 0) 0%,
+                rgba(250, 91, 6, 0.04) 100%
+            );
+
+            span {
+                color: #f95a05;
+            }
+        }
+
+        .divider {
+            path {
+                stroke: #232323;
+            }
+        }
+    }
+
+    .FastDepositForm {
+        background: linear-gradient(9.38deg, #222222 3.94%, #111111 89.76%);
+        border-color: transparent;
+    }
+
     .SidebarColumn {
         @media (min-width: $media375) {
             background: #1e1e1e;
@@ -450,6 +485,14 @@ body.dark {
         border-bottom: dashed 1px #fff;
     }
 
+    .second-row {
+        background: linear-gradient(9.38deg, #1c1c1c 3.94%, #1a1919 89.76%);
+
+        .InfoBlock {
+            background: none;
+        }
+    }
+
     span,
     .ApyChart__Title,
     .PieChart__Header,
@@ -472,12 +515,19 @@ body.dark {
         color: $primary-color;
     }
 
-    .Sidebar,
     .strats-chart-col,
     .hist-apy-col,
     .InfoBlock,
     .operation-col {
         background: #1e1e1e;
+    }
+
+    .SidebarColumn {
+        background: linear-gradient(
+            0.02deg,
+            rgba(30, 30, 30, 0.45) 76.02%,
+            rgba(40, 40, 40, 0.45) 95.61%
+        );
     }
 
     .ComingSoonPlaceholder {
