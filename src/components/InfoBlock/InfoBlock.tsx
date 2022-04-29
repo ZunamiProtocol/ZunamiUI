@@ -5,7 +5,7 @@ import './InfoBlock.scss';
 interface InfoBlockProps {
     iconName?: string;
     title: string;
-    description?: string;
+    description?: string | JSX.Element;
     withColor: boolean;
     isStrategy: boolean;
     isLoading?: boolean;
