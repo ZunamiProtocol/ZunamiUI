@@ -397,7 +397,8 @@ input[type='checkbox'] {
 body.dark {
     background-color: #000 !important;
 
-    .WithdrawOptions {
+    .WithdrawOptions,
+    .TransactionHistory {
         background-color: #2a2a2a;
         border-color: #333333;
         color: #fff;
@@ -520,7 +521,9 @@ body.dark {
     .Lockdrop__Title,
     .DepositStory__Title,
     .DepositStory__Table thead tr td,
-    .PendingBalance__val {
+    .PendingBalance__val,
+    .TransactionHistory__Title,
+    .TransactionHistory__List th {
         color: #fff;
     }
 
