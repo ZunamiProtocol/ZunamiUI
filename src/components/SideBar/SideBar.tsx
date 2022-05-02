@@ -102,7 +102,41 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                         withColor={true}
                         isStrategy={false}
                         colorfulBg={true}
-                        hint="Annual Percentage Yield. Сumulative yield from all strategies used &amp; includes 0% management fee"
+                        hint={
+                            <div>
+                                Annual Percentage Yield. Сumulative yield from all strategies used
+                                &amp; includes 0% management fee.{' '}
+                                <a
+                                    href="https://www.investopedia.com/terms/a/apy.asp"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    APY
+                                </a>{' '}
+                                takes into account{' '}
+                                <a
+                                    href="https://www.investopedia.com/terms/c/compoundinterest.asp"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    compound interest
+                                </a>{' '}
+                                (reinvestment of income once a week), but{' '}
+                                <a
+                                    href="https://www.investopedia.com/terms/a/apr.asp"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    APR
+                                </a>{' '}
+                                (Annual Percentage Rate) does not.{' '}
+                                {zunamiInfo && (
+                                    <strong>
+                                        Current APR is {Number(zunamiInfo.apr).toFixed(2)}%
+                                    </strong>
+                                )}
+                            </div>
+                        }
                     />
                     <InfoBlock
                         title="Reward APY"

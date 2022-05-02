@@ -62,6 +62,7 @@ export const Main = (): JSX.Element => {
     const poolBestAprMonthly = zunamiInfo ? (zunamiInfo.apr / 100 / 365) * 30 : 0;
     const dailyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprDaily;
     const monthlyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprMonthly;
+    const yearlyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprMonthly * 12;
 
     const chartData =
         poolStats && poolStats.poolsStats && zunamiInfo
@@ -120,39 +121,10 @@ export const Main = (): JSX.Element => {
                                 isStrategy={false}
                                 colorfulBg={true}
                                 hint={
-                                    <div>
-                                        Annual Percentage Yield. Сumulative yield from all
-                                        strategies used &amp; includes 0% management fee.{' '}
-                                        <a
-                                            href="https://www.investopedia.com/terms/a/apy.asp"
-                                            target="_blank"
-                                            rel="noreferrer"
-                                        >
-                                            APY
-                                        </a>{' '}
-                                        takes into account{' '}
-                                        <a
-                                            href="https://www.investopedia.com/terms/c/compoundinterest.asp"
-                                            target="_blank"
-                                            rel="noreferrer"
-                                        >
-                                            compound interest
-                                        </a>{' '}
-                                        (reinvestment of income once a week), but{' '}
-                                        <a
-                                            href="https://www.investopedia.com/terms/a/apr.asp"
-                                            target="_blank"
-                                            rel="noreferrer"
-                                        >
-                                            APR
-                                        </a>{' '}
-                                        (Annual Percentage Rate) does not.{' '}
-                                        {zunamiInfo && (
-                                            <strong>
-                                                Current APR is {Number(zunamiInfo.apr).toFixed(2)}%
-                                            </strong>
-                                        )}
-                                    </div>
+                                    <span>
+                                        'Profit is accrued at least once a week, after the sale of
+                                        the accumulated weekly rewards.'
+                                    </span>
                                 }
                             />
                             <InfoBlock
@@ -174,23 +146,41 @@ export const Main = (): JSX.Element => {
                         </div>
                         <div className="second-row">
                             <InfoBlock
-                                title="Pending Deposits / Withdraws"
+                                title="Profit"
+                                description={
+                                    <div>
+                                        <span className="text-primary">{`${
+                                            dailyProfit ? dailyProfit.toFixed(2) : 0
+                                        } USD`}</span>
+                                        <span> Daily</span>
+                                    </div>
+                                }
                                 withColor={false}
                                 isStrategy={false}
-                                hint="Funds passing through the Transaction Streamlining Mechanism and will be credited within 24 hours"
-                                secondaryRow={pdElement}
                             />
                             <InfoBlock
-                                title="Daily Profits"
-                                description={`${dailyProfit ? dailyProfit.toFixed(2) : 0} USD/day`}
+                                title="&nbsp;"
+                                description={
+                                    <div>
+                                        <span className="text-primary">{`${
+                                            monthlyProfit ? monthlyProfit.toFixed(2) : 0
+                                        } USD`}</span>
+                                        <span> Monthly</span>
+                                    </div>
+                                }
                                 withColor={false}
                                 isStrategy={false}
                             />
                             <InfoBlock
-                                title="Monthly Profits"
-                                description={`${
-                                    monthlyProfit ? monthlyProfit.toFixed(2) : 0
-                                } USD/month`}
+                                title="&nbsp;"
+                                description={
+                                    <div>
+                                        <span className="text-primary">{`${
+                                            yearlyProfit ? yearlyProfit.toFixed(2) : 0
+                                        } USD`}</span>
+                                        <span> Yearly</span>
+                                    </div>
+                                }
                                 withColor={false}
                                 isStrategy={false}
                             />

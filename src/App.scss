@@ -499,6 +499,15 @@ body.dark {
         border-bottom: dashed 1px #fff;
     }
 
+    .FastDepositInput {
+        background: none;
+        border-color: #232323;
+
+        .divider {
+            background-color: #232323;
+        }
+    }
+
     .second-row {
         background: linear-gradient(9.38deg, #1c1c1c 3.94%, #1a1919 89.76%);
 
