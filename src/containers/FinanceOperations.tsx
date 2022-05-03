@@ -16,6 +16,7 @@ import { Contract } from 'web3-eth-contract';
 import { BIG_ZERO, getBalanceNumber } from '../utils/formatbalance';
 import { ReactComponent as FinIcon } from '../components/Form/deposit-withdraw.svg';
 import useLpPrice from '../hooks/useLpPrice';
+import { log } from '../utils/logger';
 
 interface FinanceOperationsProps {
     operationName: string;
@@ -126,7 +127,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     );
                 }
             } catch (error: any) {
-                console.log(
+                log(
                     `Error while getting calcWithdrawOneCoin: ${error.message}. Params: lpShares: ${balance}, coinIndex: ${selectedCoinIndex}`
                 );
             }
