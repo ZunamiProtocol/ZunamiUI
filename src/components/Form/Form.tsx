@@ -11,7 +11,6 @@ import {
 } from '../../utils/formatbalance';
 import { useAllowanceStables } from '../../hooks/useAllowance';
 import { useUserBalances } from '../../hooks/useUserBalances';
-import useLpPrice from '../../hooks/useLpPrice';
 import useUserLpAmount from '../../hooks/useUserLpAmount';
 import useApprove from '../../hooks/useApprove';
 import useStake from '../../hooks/useStake';
@@ -37,6 +36,9 @@ interface FormProps {
     usdt: string;
     selectedCoinIndex: number;
     directOperationDisabled?: boolean;
+    lpPrice: BigNumber;
+    onWithdraw?: Function;
+    onDeposit?: Function;
 }
 
 interface TransactionError {
@@ -89,7 +91,6 @@ const getWithdrawValidationError = (
 };
 
 export const Form = (props: FormProps): JSX.Element => {
-    // user wallet
     const { account } = useWallet();
 
     const [action, setAction] = useState(
@@ -119,7 +120,6 @@ export const Form = (props: FormProps): JSX.Element => {
     const [pendingUSDT, setPendingUSDT] = useState(false);
 
     // wrapped in useMemo to prevent lpShareToWithdraw hook deps change on every render
-    const lpPrice = useLpPrice();
     const userLpAmount = useUserLpAmount();
     const userBalanceList = useUserBalances();
     const approveList = useAllowanceStables();
@@ -136,7 +136,7 @@ export const Form = (props: FormProps): JSX.Element => {
     ];
 
     // max for withdraw or deposit
-    const userMaxWithdraw = lpPrice.multipliedBy(userLpAmount) || BIG_ZERO;
+    const userMaxWithdraw = props.lpPrice.multipliedBy(userLpAmount) || BIG_ZERO;
 
     const userMaxWithdrawMinusInput =
         !userMaxWithdraw || userMaxWithdraw.toNumber() <= 0 || !userMaxWithdraw.toNumber()
@@ -202,8 +202,16 @@ export const Form = (props: FormProps): JSX.Element => {
 
     // caclulate lpshare to withdraw
     const lpShareToWithdraw = useMemo(() => {
-        return new BigNumber(stableInputsSum / getBalanceNumber(lpPrice));
-    }, [stableInputsSum, lpPrice]);
+        if (props.operationName !== 'Withdraw') {
+            return BIG_ZERO;
+        }
+
+        const sharesAmount = new BigNumber(
+            stableInputsSum / getBalanceNumber(props.lpPrice).toNumber()
+        );
+
+        return sharesAmount;
+    }, [stableInputsSum, props.lpPrice, props.operationName]);
 
     const fullBalancetoWithdraw = useMemo(() => {
         return getFullDisplayBalance(lpShareToWithdraw, 18);
@@ -211,9 +219,10 @@ export const Form = (props: FormProps): JSX.Element => {
 
     // deposit and withdraw functions
     const depositExceedAmount =
-        parseInt(props.dai) > getBalanceNumber(userBalanceList[0]) ||
-        parseInt(props.usdc) > getBalanceNumber(userBalanceList[1], 6) ||
-        parseInt(props.usdt) > getBalanceNumber(userBalanceList[2], 6);
+        parseInt(props.dai) > getBalanceNumber(userBalanceList[0]).toNumber() ||
+        parseInt(props.usdc) > getBalanceNumber(userBalanceList[1], 6).toNumber() ||
+        parseInt(props.usdt) > getBalanceNumber(userBalanceList[2], 6).toNumber();
+
     const [pendingTx, setPendingTx] = useState(false);
     const [pendingWithdraw, setPendingWithdraw] = useState(false);
     const [transactionId, setTransactionId] = useState(undefined);
@@ -232,7 +241,7 @@ export const Form = (props: FormProps): JSX.Element => {
         props.usdt === '' ? '0' : props.usdt,
         !props.directOperation,
         props.sharePercent,
-        props.selectedCoinIndex
+        props.directOperation && props.selectedCoinIndex === -1 ? 0 : props.selectedCoinIndex
     );
 
     // TODO: need detect canceled tx's by user
@@ -310,7 +319,8 @@ export const Form = (props: FormProps): JSX.Element => {
                             setPendingWithdraw(true);
 
                             try {
-                                await onUnstake();
+                                const tx = await onUnstake();
+                                setTransactionId(tx.transactionHash);
 
                                 // @ts-ignore
                                 window.dataLayer.push({
@@ -322,6 +332,10 @@ export const Form = (props: FormProps): JSX.Element => {
                             } catch (error: any) {
                                 setPendingWithdraw(false);
                                 setTransactionError(error);
+                            }
+
+                            if (props.onWithdraw) {
+                                props.onWithdraw();
                             }
 
                             setPendingWithdraw(false);
@@ -340,6 +354,10 @@ export const Form = (props: FormProps): JSX.Element => {
                                 });
                             } catch (error: any) {
                                 debugger;
+                            }
+
+                            if (props.onDeposit) {
+                                props.onDeposit();
                             }
 
                             break;
@@ -430,7 +448,14 @@ export const Form = (props: FormProps): JSX.Element => {
                     <div>
                         {account && (
                             <div className="deposit-button-wrapper">
-                                <button type="submit">Withdraw</button>
+                                <button
+                                    type="submit"
+                                    className={`${
+                                        Number(fullBalancetoWithdraw) <= 0 ? 'disabled' : ''
+                                    }`}
+                                >
+                                    Withdraw
+                                </button>
                                 <DirectAction
                                     actionName="withdraw"
                                     disabled={props.directOperationDisabled || false}
