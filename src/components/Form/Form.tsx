@@ -210,6 +210,12 @@ export const Form = (props: FormProps): JSX.Element => {
             stableInputsSum / getBalanceNumber(props.lpPrice).toNumber()
         );
 
+        if (sharesAmount.toNumber() > 0) {
+            console.log(
+                `lpShareToWithdraw: ${sharesAmount} (${stableInputsSum} / ${props.lpPrice})`
+            );
+        }
+
         return sharesAmount;
     }, [stableInputsSum, props.lpPrice, props.operationName]);
 
