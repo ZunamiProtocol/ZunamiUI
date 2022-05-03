@@ -29,6 +29,10 @@ const useUnstake = (
             .toFixed(0)
             .toString();
 
+        console.log(
+            `Withdraw: optimized - ${optimized}, balance to withdraw: ${balanceToWithdraw}, coin index: ${coinIndex}, account: ${account}`
+        );
+
         if (optimized) {
             return await unstake(
                 zunamiContract,
