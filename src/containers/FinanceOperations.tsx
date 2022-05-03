@@ -16,6 +16,7 @@ import { Contract } from 'web3-eth-contract';
 import { BIG_ZERO, getBalanceNumber } from '../utils/formatbalance';
 import { ReactComponent as FinIcon } from '../components/Form/deposit-withdraw.svg';
 import useLpPrice from '../hooks/useLpPrice';
+import { log } from '../utils/logger';
 
 interface FinanceOperationsProps {
     operationName: string;

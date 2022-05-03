@@ -43,7 +43,6 @@ class MiniRpcProvider implements AsyncSendable {
         },
         callback: (error: any, response: any) => void
     ): void => {
-        // console.log('sendAsync', request.method, request.params)
         this.request(request.method, request.params)
             .then((result) => callback(null, { jsonrpc: '2.0', id: request.id, result }))
             .catch((error) => callback(error, null));
