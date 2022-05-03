@@ -22,6 +22,31 @@ interface FinanceOperationsProps {
     operationName: string;
 }
 
+const calculateStables = async (
+    coinIndex: number,
+    balance: BigNumber,
+    sharePercent: number,
+    zunamiContract: Contract
+) => {
+    if (!zunamiContract || coinIndex === -1 || balance.toNumber() === 0) {
+        return '0';
+    }
+
+    let result = '';
+
+    const balanceToWithdraw = balance
+        .multipliedBy(sharePercent / 100)
+        .toFixed(0)
+        .toString();
+
+    console.log(`CalcWithdrawOneCoin execution...(${balanceToWithdraw}, ${coinIndex})`);
+    result = await calcWithdrawOneCoin(zunamiContract, balanceToWithdraw, coinIndex);
+    console.log(
+        `CalcWithdrawOneCoin result: ${result}. Props (balanceToWithdraw: ${balanceToWithdraw}, coinIndex: ${coinIndex})`
+    );
+    return result;
+};
+
 export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element => {
     const { account, connect, ethereum } = useWallet();
     useEagerConnect(account ? account : '', connect, ethereum);
@@ -39,7 +64,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
 
     const [selectedCoin, setSelectedCoin] = useState<string>('all');
     const [balance, setBalance] = useState(BIG_ZERO);
-    const [coins, setCoins] = useState([0, 0, 0]);
+    const [rawBalance, setRawBalance] = useState(BIG_ZERO);
     const [selectedCoinIndex, setSelectedCoinIndex] = useState(-1);
 
     const [dai, setDai] = useState('0');
@@ -50,100 +75,76 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     const zunamiContract = getMasterChefContract(sushi);
     const lpPrice = useLpPrice();
 
-    const calculateStables = async (
-        coinIndex: number,
-        balance: string,
-        sharePercent: number,
-        zunamiContract: Contract
-    ) => {
-        if (Number(balance) === 0 || Number(lpPrice) === 0) {
-            return '0';
-        }
-
-        let result = '';
-
-        const balanceToWithdraw = new BigNumber(balance)
-            .multipliedBy(sharePercent / 100)
-            .toFixed(0)
-            .toString();
-
-        result = await calcWithdrawOneCoin(zunamiContract, balanceToWithdraw, coinIndex);
-
-        return result;
-    };
-
     useEffect(() => {
-        if (!zunamiContract || !account || sharePercent < 1 || props.operationName !== 'Withdraw') {
+        if (
+            !zunamiContract ||
+            !account ||
+            props.operationName !== 'Withdraw' ||
+            lpPrice.toNumber() === 0
+        ) {
             return;
         }
 
         const loadBalance = async () => {
-            const rawBalance = await getBalanceNew(zunamiContract, account);
-
-            setBalance(
-                Number(lpPrice) > 0
-                    ? lpPrice.multipliedBy(new BigNumber(rawBalance))
-                    : new BigNumber(rawBalance)
-            );
-
-            if (Number(rawBalance) === 0) {
-                return;
-            }
-
-            if (selectedCoinIndex === -1) {
-                const oneThird = (getBalanceNumber(new BigNumber(rawBalance)) / 3)
-                    .toFixed(2)
-                    .toString();
-
-                setDai(oneThird);
-                setUsdc(oneThird);
-                setUsdt(oneThird);
-                return;
-            }
-
-            try {
-                const stablesToWithdraw = await calculateStables(
-                    selectedCoinIndex,
-                    rawBalance,
-                    sharePercent,
-                    zunamiContract
-                );
-
-                setDai('0');
-                setUsdc('0');
-                setUsdt('0');
-
-                if (selectedCoinIndex === 0) {
-                    setDai(
-                        getBalanceNumber(new BigNumber(stablesToWithdraw)).toFixed(2).toString()
-                    );
-                } else if (selectedCoinIndex === 1) {
-                    setUsdc(
-                        getBalanceNumber(new BigNumber(stablesToWithdraw), 6).toFixed(2).toString()
-                    );
-                } else if (selectedCoinIndex === 2) {
-                    setUsdt(
-                        getBalanceNumber(new BigNumber(stablesToWithdraw), 6).toFixed(2).toString()
-                    );
-                }
-            } catch (error: any) {
-                log(
-                    `Error while getting calcWithdrawOneCoin: ${error.message}. Params: lpShares: ${balance}, coinIndex: ${selectedCoinIndex}`
-                );
-            }
+            const rBalance = new BigNumber(await getBalanceNew(zunamiContract, account));
+            setRawBalance(rBalance);
+            setBalance(Number(lpPrice) > 0 ? lpPrice.multipliedBy(rBalance) : rBalance);
         };
 
         loadBalance();
-    }, [
-        coins,
-        account,
-        zunamiContract,
-        selectedCoin,
-        sharePercent,
-        selectedCoinIndex,
-        props.operationName,
-        lpPrice,
-    ]);
+    }, [account, zunamiContract, props.operationName, lpPrice]);
+
+    useEffect(() => {
+        if (selectedCoinIndex === -1 && balance !== BIG_ZERO) {
+            const oneThird = getBalanceNumber(balance)
+                .multipliedBy(sharePercent / 100)
+                .dividedBy(3)
+                .toFixed(2, 1)
+                .toString();
+
+            setDai(oneThird);
+            setUsdc(oneThird);
+            setUsdt(oneThird);
+        }
+    }, [balance, sharePercent, selectedCoinIndex]);
+
+    useEffect(() => {
+        const setCalculatedStables = async () => {
+            if (!zunamiContract || balance === BIG_ZERO || selectedCoinIndex === -1) {
+                return false;
+            }
+
+            const stablesToWithdraw = await calculateStables(
+                selectedCoinIndex,
+                rawBalance,
+                sharePercent,
+                zunamiContract
+            );
+
+            setDai('0');
+            setUsdc('0');
+            setUsdt('0');
+
+            if (selectedCoinIndex === 0) {
+                const coinValue = getBalanceNumber(new BigNumber(stablesToWithdraw))
+                    .toFixed(2, 1)
+                    .toString();
+                setDai(coinValue);
+            } else if (selectedCoinIndex === 1) {
+                const coinValue = getBalanceNumber(new BigNumber(stablesToWithdraw), 6)
+                    .toFixed(2, 1)
+                    .toString();
+                setUsdc(coinValue);
+            } else if (selectedCoinIndex === 2) {
+                const coinValue = getBalanceNumber(new BigNumber(stablesToWithdraw), 6)
+                    .toFixed(2, 1)
+                    .toString();
+                setUsdt(coinValue);
+            }
+        };
+
+        setCalculatedStables();
+    }, [balance, selectedCoinIndex, sharePercent, zunamiContract, rawBalance]);
 
     return (
         <Container className={'h-100 d-flex justify-content-between flex-column'}>
@@ -172,25 +173,25 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                 usdcDisabled={usdcDisabled}
                                                 usdtDisabled={usdtDisabled}
                                                 directOperation={directOperation}
-                                                directOperationDisabled={
-                                                    props.operationName === 'Withdraw' &&
-                                                    selectedCoin === 'all'
-                                                }
+                                                onDeposit={() => {
+                                                    setDai('0');
+                                                    setUsdc('0');
+                                                    setUsdt('0');
+                                                }}
+                                                onWithdraw={() => {
+                                                    setSelectedCoin('all');
+                                                    setSelectedCoinIndex(-1);
+                                                }}
                                                 sharePercent={sharePercent}
                                                 selectedCoinIndex={selectedCoinIndex}
                                                 dai={dai}
                                                 usdc={usdc}
                                                 usdt={usdt}
+                                                lpPrice={lpPrice}
                                                 onCoinChange={(
                                                     coinType: string,
                                                     coinValue: number
                                                 ) => {
-                                                    setCoins([
-                                                        coinType === 'dai' ? coinValue : 0,
-                                                        coinType === 'usdc' ? coinValue : 0,
-                                                        coinType === 'usdt' ? coinValue : 0,
-                                                    ]);
-
                                                     if (coinType === 'dai') {
                                                         setDai(Number(coinValue).toString());
                                                     } else if (coinType === 'usdc') {
@@ -207,6 +208,8 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                         props.operationName === 'Withdraw'
                                                     ) {
                                                         setSelectedCoin('all');
+                                                        setSelectedCoinIndex(-1);
+
                                                         setDaiDisabled(true);
                                                         setUsdcDisabled(true);
                                                         setUsdtDisabled(true);
@@ -227,6 +230,8 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                     coinsSelectionEnabled={!directOperation}
                                                     selectedCoin={selectedCoin}
                                                     balance={balance}
+                                                    lpPrice={lpPrice}
+                                                    rawBalance={rawBalance}
                                                     onCoinSelect={(coin: string) => {
                                                         if (!coin) {
                                                             return;
