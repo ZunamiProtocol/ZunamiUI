@@ -62,8 +62,8 @@ export const Main = (): JSX.Element => {
     const poolStats = pool.data as PoolsStats;
     const poolBestAprDaily = zunamiInfo ? zunamiInfo.apr / 100 / 365 : 0;
     const poolBestAprMonthly = zunamiInfo ? (zunamiInfo.apr / 100 / 365) * 30 : 0;
-    const dailyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprDaily;
-    const monthlyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprMonthly;
+    const dailyProfit = getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprDaily;
+    const monthlyProfit = getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprMonthly;
 
     const chartData =
         poolStats && poolStats.poolsStats && zunamiInfo
@@ -88,11 +88,11 @@ export const Main = (): JSX.Element => {
     const pdElement = (
         <div className="d-flex">
             <PendingBalance
-                val={`PD: $${getBalanceNumber(pendingOperations.deposit, 6)}`}
+                val={`PD: $${getBalanceNumber(pendingOperations.deposit, 6).toNumber()}`}
                 hint={`You have $${pendingOperations.deposit} in pending deposit`}
             />
             <PendingBalance
-                val={`PW: $${getBalanceNumber(pendingOperations.withdraw).toFixed(2)}`}
+                val={`PW: $${getBalanceNumber(pendingOperations.withdraw).toNumber().toFixed(2)}`}
                 hint={`You have $${pendingOperations.withdraw} in pending withdraw`}
             />
         </div>
@@ -117,15 +117,20 @@ export const Main = (): JSX.Element => {
                                 title="Balance"
                                 description={
                                     userMaxWithdraw.toNumber() !== -1
-                                        ? `$ ${getBalanceNumber(userMaxWithdraw).toLocaleString(
-                                              'en'
-                                          )}`
+                                        ? `$ ${getBalanceNumber(userMaxWithdraw)
+                                              .toNumber()
+                                              .toLocaleString('en')}`
                                         : 'n/a'
                                 }
                                 withColor={true}
                                 isStrategy={false}
                                 colorfulBg={true}
-                                hint="Profit is accrued at least once a week, after the sale of the accumulated weekly rewards."
+                                hint={
+                                    <span>
+                                        Profit is accrued at least once a week, after the sale of
+                                        the accumulated weekly rewards.
+                                    </span>
+                                }
                             />
                             <InfoBlock
                                 title="APY"
@@ -178,9 +183,9 @@ export const Main = (): JSX.Element => {
                                 title="Total Value Locked"
                                 description={`${
                                     zunamiInfo && !zunError
-                                        ? `$${getBalanceNumber(zunamiInfo.tvl).toLocaleString(
-                                              'en'
-                                          )}`
+                                        ? `$${getBalanceNumber(zunamiInfo.tvl)
+                                              .toNumber()
+                                              .toLocaleString('en')}`
                                         : 'n/a'
                                 }`}
                                 isLoading={isZunLoading}
@@ -194,7 +199,12 @@ export const Main = (): JSX.Element => {
                                 title="Pending Deposits / Withdraws"
                                 withColor={false}
                                 isStrategy={false}
-                                hint="Funds passing through the Transaction Streamlining Mechanism and will be credited within 24 hours"
+                                hint={
+                                    <span>
+                                        Funds passing through the Transaction Streamlining Mechanism
+                                        and will be credited within 24 hours
+                                    </span>
+                                }
                                 secondaryRow={pdElement}
                             />
                             <InfoBlock

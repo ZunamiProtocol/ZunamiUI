@@ -43,9 +43,8 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                     <LinkBlock
                         title="DAO"
                         description="Click for withdraw"
-                        url={'dao'}
+                        url={'https://snapshot.org/#/zunamidao.eth'}
                         icon="/menu-dao.svg"
-                        soon={true}
                     />
                 </div>
                 <div className="Sidebar__footer">
