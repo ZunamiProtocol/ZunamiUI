@@ -20,7 +20,7 @@ export const LinkBlock = (prop: LinkBlockProps): JSX.Element => {
 
     const clickHandler = () => {
         if (prop.url.indexOf('http') !== -1) {
-            window.location.href = prop.url;
+            window.open(prop.url, '_blank');
             return;
         }
 
