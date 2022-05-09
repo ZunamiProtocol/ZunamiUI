@@ -436,6 +436,15 @@ body.dark {
         border-bottom: dashed 1px #fff;
     }
 
+    .popover-body {
+        background-color: #3E3E3E;
+        color: #fff;
+    }
+    
+    .popover-arrow::after {
+        border-right-color:#3E3E3E !important;
+    }
+
     span,
     .ApyChart__Title,
     .PieChart__Header,
