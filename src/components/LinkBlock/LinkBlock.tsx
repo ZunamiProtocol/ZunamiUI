@@ -19,6 +19,11 @@ export const LinkBlock = (prop: LinkBlockProps): JSX.Element => {
     const url = `/${prop.url}`;
 
     const clickHandler = () => {
+        if (prop.url.indexOf('http') !== -1) {
+            window.location.href = prop.url;
+            return;
+        }
+
         history.push(url);
         document.body.classList.remove('overflow');
     };
