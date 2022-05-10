@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from '../components/Header/Header';
 import { SideBar } from '../components/SideBar/SideBar';
 import { Form } from '../components/Form/Form';
@@ -16,6 +16,7 @@ import { Contract } from 'web3-eth-contract';
 import { BIG_ZERO, getBalanceNumber } from '../utils/formatbalance';
 import { ReactComponent as FinIcon } from '../components/Form/deposit-withdraw.svg';
 import useLpPrice from '../hooks/useLpPrice';
+import { TransactionHistory } from '../components/TransactionHistory/TransactionHistory';
 
 interface FinanceOperationsProps {
     operationName: string;
@@ -145,130 +146,140 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     ]);
 
     return (
-        <Container className={'h-100 d-flex justify-content-between flex-column'}>
+        <React.Fragment>
             <Header />
-            <Row className={'h-100 mb-4 main-row'}>
-                <SideBar isMainPage={true} />
-                {!account && (
-                    <Col className={'content-col'}>
-                        <WelcomeCarousel />
-                    </Col>
-                )}
-                {account && (
-                    <Col className={'content-col'}>
-                        <Row className={'zun-rounded zun-shadow h-100 operation-col'}>
-                            <Col className={'ps-0 pe-0'}>
-                                <div className={'DepositBlock'}>
-                                    <div className={'DepositContent'}>
-                                        <h3 className="DepositContent__Title">
-                                            <FinIcon />
-                                            Deposit & Withdraw
-                                        </h3>
-                                        <div className="flex-wrap d-flex justify-content-start">
-                                            <Form
-                                                operationName={props.operationName}
-                                                daiDisabled={daiDisabled}
-                                                usdcDisabled={usdcDisabled}
-                                                usdtDisabled={usdtDisabled}
-                                                directOperation={directOperation}
-                                                directOperationDisabled={
-                                                    props.operationName === 'Withdraw' &&
-                                                    selectedCoin === 'all'
-                                                }
-                                                sharePercent={sharePercent}
-                                                selectedCoinIndex={selectedCoinIndex}
-                                                dai={dai}
-                                                usdc={usdc}
-                                                usdt={usdt}
-                                                onCoinChange={(
-                                                    coinType: string,
-                                                    coinValue: number
-                                                ) => {
-                                                    setCoins([
-                                                        coinType === 'dai' ? coinValue : 0,
-                                                        coinType === 'usdc' ? coinValue : 0,
-                                                        coinType === 'usdt' ? coinValue : 0,
-                                                    ]);
-
-                                                    if (coinType === 'dai') {
-                                                        setDai(Number(coinValue).toString());
-                                                    } else if (coinType === 'usdc') {
-                                                        setUsdc(Number(coinValue).toString());
-                                                    } else {
-                                                        setUsdt(Number(coinValue).toString());
+            <Container className={'h-100 d-flex justify-content-between flex-column'}>
+                <Row className={'h-100 mb-4 main-row'}>
+                    {/* <SideBar isMainPage={true} /> */}
+                    {!account && (
+                        <Col className={'content-col'}>
+                            <WelcomeCarousel />
+                        </Col>
+                    )}
+                    {account && (
+                        <Col className={'content-col'}>
+                            <Row className={'zun-rounded zun-shadow h-100 operation-col'}>
+                                <Col className={'ps-0 pe-0'}>
+                                    <div className={'DepositBlock'}>
+                                        <div className={'DepositContent'}>
+                                            <h3 className="DepositContent__Title">
+                                                <FinIcon />
+                                                Deposit & Withdraw
+                                            </h3>
+                                            <div className="flex-wrap d-flex justify-content-start">
+                                                <Form
+                                                    operationName={props.operationName}
+                                                    daiDisabled={daiDisabled}
+                                                    usdcDisabled={usdcDisabled}
+                                                    usdtDisabled={usdtDisabled}
+                                                    directOperation={directOperation}
+                                                    directOperationDisabled={
+                                                        props.operationName === 'Withdraw' &&
+                                                        selectedCoin === 'all'
                                                     }
-                                                }}
-                                                onOperationModeChange={(direct: any) => {
-                                                    setDirectOperation(!direct);
-
-                                                    if (
-                                                        direct &&
-                                                        props.operationName === 'Withdraw'
-                                                    ) {
-                                                        setSelectedCoin('all');
-                                                        setDaiDisabled(true);
-                                                        setUsdcDisabled(true);
-                                                        setUsdtDisabled(true);
-                                                        setDaiChecked(false);
-                                                        setUsdcChecked(false);
-                                                        setUsdtChecked(false);
-                                                    } else {
-                                                        setSharePercent(100);
-                                                    }
-                                                }}
-                                            />
-                                            {props.operationName === 'Withdraw' && (
-                                                <WithdrawOptions
                                                     sharePercent={sharePercent}
-                                                    daiChecked={daiChecked}
-                                                    usdcChecked={usdcChecked}
-                                                    usdtChecked={usdtChecked}
-                                                    coinsSelectionEnabled={!directOperation}
-                                                    selectedCoin={selectedCoin}
-                                                    balance={balance}
-                                                    onCoinSelect={(coin: string) => {
-                                                        if (!coin) {
-                                                            return;
-                                                        }
+                                                    selectedCoinIndex={selectedCoinIndex}
+                                                    dai={dai}
+                                                    usdc={usdc}
+                                                    usdt={usdt}
+                                                    onCoinChange={(
+                                                        coinType: string,
+                                                        coinValue: number
+                                                    ) => {
+                                                        setCoins([
+                                                            coinType === 'dai' ? coinValue : 0,
+                                                            coinType === 'usdc' ? coinValue : 0,
+                                                            coinType === 'usdt' ? coinValue : 0,
+                                                        ]);
 
-                                                        setSelectedCoin(coin);
-
-                                                        if (coin === 'all') {
-                                                            const sum =
-                                                                Number(dai) +
-                                                                Number(usdc) +
-                                                                Number(usdt);
-
-                                                            const oneThird = (sum / 3)
-                                                                .toFixed(2)
-                                                                .toString();
-
-                                                            setDai(oneThird);
-                                                            setUsdc(oneThird);
-                                                            setUsdt(oneThird);
-                                                            setDirectOperation(false);
+                                                        if (coinType === 'dai') {
+                                                            setDai(Number(coinValue).toString());
+                                                        } else if (coinType === 'usdc') {
+                                                            setUsdc(Number(coinValue).toString());
                                                         } else {
-                                                            setDirectOperation(true);
+                                                            setUsdt(Number(coinValue).toString());
                                                         }
-
-                                                        const coins = ['dai', 'usdc', 'usdt'];
-
-                                                        // -1 for "all"
-                                                        setSelectedCoinIndex(coins.indexOf(coin));
                                                     }}
-                                                    onShareSelect={(percent: any) => {
-                                                        setSharePercent(percent);
+                                                    onOperationModeChange={(direct: any) => {
+                                                        setDirectOperation(!direct);
+
+                                                        if (
+                                                            direct &&
+                                                            props.operationName === 'Withdraw'
+                                                        ) {
+                                                            setSelectedCoin('all');
+                                                            setDaiDisabled(true);
+                                                            setUsdcDisabled(true);
+                                                            setUsdtDisabled(true);
+                                                            setDaiChecked(false);
+                                                            setUsdcChecked(false);
+                                                            setUsdtChecked(false);
+                                                        } else {
+                                                            setSharePercent(100);
+                                                        }
                                                     }}
                                                 />
-                                            )}
+                                                {props.operationName === 'Withdraw' && (
+                                                    <WithdrawOptions
+                                                        sharePercent={sharePercent}
+                                                        daiChecked={daiChecked}
+                                                        usdcChecked={usdcChecked}
+                                                        usdtChecked={usdtChecked}
+                                                        coinsSelectionEnabled={!directOperation}
+                                                        selectedCoin={selectedCoin}
+                                                        balance={balance}
+                                                        onCoinSelect={(coin: string) => {
+                                                            if (!coin) {
+                                                                return;
+                                                            }
+
+                                                            setSelectedCoin(coin);
+
+                                                            if (coin === 'all') {
+                                                                const sum =
+                                                                    Number(dai) +
+                                                                    Number(usdc) +
+                                                                    Number(usdt);
+
+                                                                const oneThird = (sum / 3)
+                                                                    .toFixed(2)
+                                                                    .toString();
+
+                                                                setDai(oneThird);
+                                                                setUsdc(oneThird);
+                                                                setUsdt(oneThird);
+                                                                setDirectOperation(false);
+                                                            } else {
+                                                                setDirectOperation(true);
+                                                            }
+
+                                                            const coins = ['dai', 'usdc', 'usdt'];
+
+                                                            // -1 for "all"
+                                                            setSelectedCoinIndex(
+                                                                coins.indexOf(coin)
+                                                            );
+                                                        }}
+                                                        onShareSelect={(percent: any) => {
+                                                            setSharePercent(percent);
+                                                        }}
+                                                    />
+                                                )}
+                                                {props.operationName === 'Deposit' && (
+                                                    <TransactionHistory title="My deposits history" />
+                                                )}
+                                                {props.operationName === 'Withdraw' && (
+                                                    <TransactionHistory title="My withdrawals history" />
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </Col>
-                        </Row>
-                    </Col>
-                )}
-            </Row>
-        </Container>
+                                </Col>
+                            </Row>
+                        </Col>
+                    )}
+                </Row>
+            </Container>
+        </React.Fragment>
     );
 };

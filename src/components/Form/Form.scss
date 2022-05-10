@@ -27,7 +27,7 @@
             height: 36px;
             font-size: 14px;
             line-height: 19px;
-            margin-top: 10px;
+            margin-top: 0;
         }
 
         @media screen and (min-width: $media1024) {
@@ -35,7 +35,7 @@
             height: 28px;
             font-size: 12px;
             line-height: 16px;
-            margin-top: 10px;
+            margin-top: 0;
         }
 
         @media screen and (min-width: $media1440) {
@@ -44,8 +44,8 @@
         }
 
         @media screen and (min-width: $media1920) {
-            width: 124px;
-            height: 40px;
+            width: 141px;
+            height: 42px;
             font-size: 14px;
             line-height: 19px;
         }
@@ -53,11 +53,17 @@
 
     .deposit-button-wrapper {
         @media screen and (min-width: $media375) {
-            display: block;
+            display: flex;
+            margin-top: 10px;
         }
 
         @media screen and (min-width: $media1024) {
             display: flex;
+            margin-top: 10px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            margin-top: 0;
         }
     }
 
@@ -67,6 +73,7 @@
 
     @media screen and (min-width: $media1024) {
         flex-basis: auto;
+        width: 257px;
     }
 
     @media screen and (min-width: $media1440) {

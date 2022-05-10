@@ -19,10 +19,26 @@
     &__connected {
         justify-content: space-between;
 
+        .mobile-icon {
+            @media screen and (min-width: $media375) {
+                display: inline-block;
+                margin-right: 5px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                display: none;
+            }
+        }
+
         .state {
             color: #636363;
 
+            @media screen and (min-width: $media375) {
+                display: none;
+            }
+
             @media screen and (min-width: $media1024) {
+                display: block;
                 font-size: 12px;
                 line-height: 9px;
             }
@@ -42,6 +58,11 @@
             color: $primary-color;
             cursor: pointer;
 
+            @media screen and (min-width: $media375) {
+                font-size: 13px;
+                line-height: 18px;
+            }
+
             @media screen and (min-width: $media1024) {
                 font-size: 12px;
                 line-height: 9px;
@@ -59,8 +80,13 @@
         }
 
         .selector {
+            @media screen and (min-width: $media375) {
+                display: none;
+            }
+
             @media screen and (min-width: $media1440) {
                 margin-left: 15px;
+                display: inline-block;
             }
         }
     }
@@ -95,10 +121,10 @@
         }
 
         @media screen and (min-width: $media1920) {
-            width: 170px;
-            height: 43px;
-            font-size: 16px;
-            line-height: 22px;
+            width: 148px;
+            height: 38px;
+            font-size: 12px;
+            line-height: 16px;
         }
     }
 

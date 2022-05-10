@@ -56,10 +56,11 @@
         @media screen and (min-width: $media1024) {
             font-size: 12px;
             line-height: 16px;
-            margin: 0 0 24px 1px;
+            margin: 10px 0 24px 1px;
         }
 
         @media screen and (min-width: $media1440) {
+            margin-top: 0;
             font-size: 16px;
             line-height: 22px;
             margin-bottom: 26px;

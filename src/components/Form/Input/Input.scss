@@ -10,15 +10,15 @@
     position: relative;
 
     @media screen and (min-width: $media375) {
-        width: auto;
+        width: 100%;
         height: 82px;
         margin-bottom: 11px;
     }
 
     @media screen and (min-width: $media1024) {
-        margin-bottom: 11px;
-        width: 423px;
-        height: 41px;
+        margin-bottom: 12px;
+        width: 257px;
+        height: 55px;
     }
 
     @media screen and (min-width: $media1440) {
@@ -28,20 +28,18 @@
     }
 
     @media screen and (min-width: $media1920) {
-        margin-bottom: 16px;
+        margin-bottom: 18.7px;
         width: 543px;
-        height: 61px;
+        height: 64px;
     }
 
     img {
         @media screen and (min-width: $media375) {
             width: 23px;
             height: 23px;
-            margin-left: 0;
-            margin-right: 10px;
-            position: absolute;
-            top: 14px;
-            left: 16px;
+            margin-left: 13.9px;
+            margin-right: 8px;
+            position: static;
         }
 
         @media screen and (min-width: $media1024) {
@@ -73,15 +71,14 @@
         @media screen and (min-width: $media375) {
             font-size: 12px;
             line-height: 16px;
-            position: absolute;
-            top: 19px;
-            left: 48px;
+            width: 63px;
+            position: static;
         }
 
         @media screen and (min-width: $media1024) {
-            font-size: 12px;
-            line-height: 16px;
-            width: 83px;
+            font-size: 11px;
+            line-height: 15px;
+            width: 63px;
             position: static;
         }
 
@@ -102,11 +99,9 @@
         background-color: #f4efe1;
 
         @media screen and (min-width: $media375) {
-            height: 50px;
+            height: 21px;
             width: 1px;
-            position: absolute;
-            left: 141px;
-            top: 16px;
+            position: static;
         }
 
         @media screen and (min-width: $media1024) {
@@ -131,13 +126,12 @@
         cursor: pointer;
 
         @media screen and (min-width: $media375) {
-            font-size: 9px;
-            line-height: 12px;
+            margin-left: 20px;
+            font-size: 10px;
+            line-height: 14px;
             width: 35px;
             height: 17px;
-            top: 47px;
-            left: 14px;
-            position: absolute;
+            position: static;
         }
 
         @media screen and (min-width: $media1024) {
@@ -170,22 +164,15 @@
         color: #f95404;
 
         @media screen and (min-width: $media375) {
-            font-size: 12px;
-            line-height: 16px;
-            position: absolute;
-            top: 47px;
-            left: 58px;
+            display: none;
         }
 
         @media screen and (min-width: $media1024) {
-            font-size: 12px;
-            line-height: 16px;
-            margin-left: 17px;
-            width: 74px;
-            position: static;
+            display: none;
         }
 
         @media screen and (min-width: $media1440) {
+            display: block;
             font-size: 12px;
             line-height: 16px;
             margin-left: 10px;
@@ -208,23 +195,21 @@
         color: #636363;
 
         @media screen and (min-width: $media375) {
-            font-size: 12px;
-            line-height: 16px;
+            font-size: 11px;
+            line-height: 15px;
             padding-left: 8px;
-            width: auto;
-            height: 28px;
-            position: absolute;
-            left: 165px;
-            top: 27px;
-            right: 15px;
+            width: calc(100% - 200px);
+            height: 30px;
+            margin-left: 14px;
+            position: static;
         }
 
         @media screen and (min-width: $media1024) {
-            font-size: 12px;
-            line-height: 16px;
+            font-size: 11px;
+            line-height: 15px;
             padding-left: 8px;
-            width: 133px;
-            height: 21px;
+            width: 72px;
+            height: 30px;
             margin-left: 14px;
             position: static;
         }

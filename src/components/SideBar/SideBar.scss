@@ -9,12 +9,21 @@
     }
 
     @media screen and (min-width: $media1024) {
+        width: 371px !important;
+        max-width: 371px !important;
+        min-width: 371px !important;
     }
 
     @media screen and (min-width: $media1440) {
+        width: 515px !important;
+        max-width: 515px !important;
+        min-width: 515px !important;
     }
 
     @media screen and (min-width: $media1920) {
+        width: 605px !important;
+        max-width: 605px !important;
+        min-width: 605px !important;
     }
 
     .Sidebar {
@@ -23,6 +32,20 @@
 
         &__Title {
             color: #636363;
+
+            @media screen and (min-width: $media375) {
+                margin-top: 34px;
+                margin-left: 40px;
+                font-size: 14px;
+                line-height: 19px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                margin-top: 34px;
+                margin-left: 40px;
+                font-size: 11px;
+                line-height: 15px;
+            }
 
             @media screen and (min-width: $media1440) {
                 margin-top: 42px;
@@ -36,6 +59,24 @@
             font-weight: 400;
             color: #8c8c8c;
 
+            @media screen and (min-width: $media375) {
+                margin-left: 40px;
+                margin-top: 11px;
+                margin-bottom: 12px;
+                font-size: 12px;
+                line-height: 138.1%;
+                width: 296px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                margin-left: 40px;
+                margin-top: 11px;
+                margin-bottom: 12px;
+                font-size: 11px;
+                line-height: 16.3px;
+                width: 296px;
+            }
+
             @media screen and (min-width: $media1440) {
                 margin-left: 53px;
                 margin-top: 14px;
@@ -47,20 +88,79 @@
         }
 
         .InfoBlock {
+            @media screen and (min-width: $media375) {
+                height: 70px;
+
+                &:nth-child(1) {
+                    width: calc(100% - 62px);
+                    margin-left: 31px;
+                    margin-bottom: 15px;
+                    background: linear-gradient(262.84deg, #fff3e9 -27.39%, #fef5e8 71.59%);
+                }
+
+                &:nth-child(2) {
+                    width: calc(50% - 38px);
+                    margin-left: 31px;
+                }
+
+                &:nth-child(3) {
+                    width: calc(50% - 38px);
+                }
+            }
+
+            @media screen and (min-width: $media1024) {
+                height: 65px;
+
+                &:nth-child(1) {
+                    width: 100%;
+                    margin-left: 40px;
+                    margin-bottom: 15px;
+                    background: transparent;
+                }
+
+                &:nth-child(2) {
+                    width: 102px;
+                    margin-left: 40px;
+                }
+
+                &:nth-child(3) {
+                    width: 102px;
+                }
+            }
+
             @media screen and (min-width: $media1440) {
                 height: 82px;
 
                 &:nth-child(1) {
                     width: 167px;
                     margin-left: 33px;
+                    margin-bottom: 0;
                 }
 
                 &:nth-child(2) {
                     width: 113px;
+                    margin-left: 0;
                 }
 
                 &:nth-child(3) {
                     width: 129px;
+                }
+            }
+
+            @media screen and (min-width: $media1920) {
+                height: 97px;
+
+                &:nth-child(1) {
+                    width: 180px;
+                    margin-left: 45px;
+                }
+
+                &:nth-child(2) {
+                    width: 133px;
+                }
+
+                &:nth-child(3) {
+                    width: 151px;
                 }
             }
         }

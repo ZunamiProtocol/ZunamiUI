@@ -25,8 +25,8 @@
     }
 
     @media screen and (min-width: $media1024) {
-        width: 719px !important;
-        max-width: 719px !important;
+        width: 652px !important;
+        max-width: 652px !important;
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
@@ -38,25 +38,54 @@
     }
 
     @media screen and (min-width: $media1920) {
-        width: 1394px !important;
-        max-width: 1394px !important;
+        width: 1315px !important;
+        max-width: 1315px !important;
+        min-width: 1315px !important;
     }
 
     .first-row {
+        @media screen and (min-width: $media1024) {
+            margin-top: 27px;
+        }
+
         @media screen and (min-width: $media1440) {
             margin-top: 77px;
         }
 
         .InfoBlock {
+            @media screen and (min-width: $media375) {
+                height: 70px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                width: 142px;
+                height: 82px;
+            }
+
             @media screen and (min-width: $media1440) {
                 width: 247px;
                 height: 82px;
             }
 
+            @media screen and (min-width: $media1920) {
+                width: 290px;
+                height: 97px;
+            }
+
             &:nth-child(2) {
+                @media screen and (min-width: $media1024) {
+                    width: 268px;
+                    height: 82px;
+                }
+
                 @media screen and (min-width: $media1440) {
                     width: 322px;
                     height: 82px;
+                }
+
+                @media screen and (min-width: $media1920) {
+                    width: 378px;
+                    height: 97px;
                 }
             }
         }
@@ -64,6 +93,16 @@
 
     .second-row {
         background-color: #fff;
+
+        @media screen and (min-width: $media375) {
+            flex-wrap: nowrap !important;
+        }
+
+        @media screen and (min-width: $media1024) {
+            margin-bottom: 14px;
+            height: 82px;
+        }
+
         @media screen and (min-width: $media1440) {
             margin-bottom: 14px;
             height: 82px;
@@ -80,8 +119,10 @@
         }
 
         @media screen and (min-width: $media1024) {
-            padding-left: 10px;
+            padding-left: 0;
             flex-wrap: nowrap;
+            margin-left: 30px;
+            margin-right: 40px;
         }
 
         @media screen and (min-width: $media1440) {
@@ -91,7 +132,9 @@
         }
 
         @media screen and (min-width: $media1920) {
-            padding-left: 25px;
+            padding-left: 0;
+            margin-left: 47px;
+            margin-right: 275px;
         }
 
         .InfoBlock {
@@ -106,7 +149,8 @@
         margin-left: 0;
 
         @media screen and (max-width: 1023px) {
-            width: 100%;
+            width: calc(100% - 22px);
+            margin-left: 11px;
         }
     }
 
@@ -115,7 +159,7 @@
     .second-row .InfoBlock:nth-child(2),
     .second-row .InfoBlock:last-child {
         @media screen and (max-width: 1023px) {
-            width: calc(50% - 5px);
+            width: calc(100% - 22px);
         }
     }
 
@@ -146,12 +190,22 @@
     @media screen and (max-width: 1023px) {
         width: 100%;
         height: auto;
-        margin-bottom: 10px;
+        margin-top: 10px;
+    }
+
+    @media screen and (min-width: $media1024) {
+        height: 270px;
+        width: 285px;
     }
 
     @media screen and (min-width: $media1440) {
         height: 229px;
         width: 416px;
+    }
+
+    @media screen and (min-width: $media1920) {
+        height: 269px;
+        width: 489px;
     }
 }
 
@@ -163,6 +217,11 @@
     @media screen and (min-width: $media1440) {
         width: 416px;
         height: 229px;
+    }
+
+    @media screen and (min-width: $media1920) {
+        height: 269px;
+        width: 489px;
     }
 }
 
@@ -179,7 +238,7 @@
 
 .ClickableHeader {
     @media (min-width: $media375) {
-        display: flex;
+        display: none;
     }
 
     @media (min-width: $media1024) {

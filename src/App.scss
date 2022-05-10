@@ -29,6 +29,10 @@ body {
     }
 
     @media (min-width: $media1024) {
+        max-width: 1024px;
+        margin-left: auto;
+        margin-right: auto;
+        height: calc(100% - 74px);
     }
 
     @media (min-width: $media1440) {
@@ -39,13 +43,20 @@ body {
     }
 
     @media (min-width: $media1920) {
-        max-width: 1830px;
+        max-width: 1920px;
         margin-left: auto;
         margin-right: auto;
+        height: calc(100% - 87px);
     }
 }
 
 .dashboard-col {
+    @media screen and (min-width: $media375) {
+        .WalletStatus {
+            display: none;
+        }
+    }
+
     @media screen and (min-width: $media1024) {
         .WalletStatus {
             display: none;
@@ -75,7 +86,7 @@ nav {
 
 .SidebarColumn {
     @media (min-width: $media375) {
-        display: none;
+        // display: none;
 
         &.active {
             top: 0;
@@ -128,6 +139,18 @@ footer {
 }
 
 footer {
+    @media (min-width: $media375) {
+        display: none;
+    }
+
+    @media (min-width: $media1024) {
+        display: block;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        padding: 0 40px;
+    }
+
     @media (min-width: $media1440) {
         position: absolute;
         bottom: 0;
@@ -208,17 +231,17 @@ footer {
     transition: all 0.3s ease-in-out;
 
     @media (min-width: $media375) {
-        width: 148px;
-        height: 36px;
-        font-size: 14px;
-        line-height: 19px;
+        width: 126px;
+        height: 33px;
+        font-size: 12px;
+        line-height: 16px;
     }
 
     @media (min-width: $media1024) {
-        width: 126px;
+        width: 105px;
         height: 29px;
-        font-size: 12px;
-        line-height: 16px;
+        font-size: 11px;
+        line-height: 15px;
     }
 
     @media (min-width: $media1440) {
@@ -506,6 +529,14 @@ body.dark {
         .divider {
             background-color: #232323;
         }
+
+        .coinName {
+            color: #fff;
+        }
+
+        input {
+            background-color: transparent;
+        }
     }
 
     .second-row {
@@ -547,6 +578,11 @@ body.dark {
         background: #1e1e1e;
     }
 
+    #collapsed-nav-menu {
+        background: linear-gradient(180deg, rgba(250, 91, 6, 0) 0%, rgba(250, 91, 6, 0.04) 100%);
+        color: $primary-color;
+    }
+
     .SidebarColumn {
         background: linear-gradient(
             0.02deg,
@@ -557,6 +593,23 @@ body.dark {
 
     .ComingSoonPlaceholder {
         background: #313131;
+    }
+
+    #nav-menu {
+        .dropdown-menu.show {
+            background: #272727;
+            border: 1px solid #333333;
+
+            a {
+                span {
+                    color: #fff;
+                }
+
+                &:hover {
+                    background-color: transparent;
+                }
+            }
+        }
     }
 
     .Disclaimer,

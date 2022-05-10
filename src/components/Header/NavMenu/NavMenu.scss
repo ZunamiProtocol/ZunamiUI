@@ -1,5 +1,9 @@
 @import 'src/variables';
 
+#nav-menu {
+    height: 100%;
+}
+
 .NavMenu {
     height: 100%;
 
@@ -8,8 +12,22 @@
         align-items: center;
         margin-right: 5px;
 
+        @media screen and (min-width: $media1024) {
+            display: none;
+        }
+
+        @media screen and (min-width: $media1440) {
+            display: flex;
+        }
+
         a {
-            padding: 0 15px !important;
+            @media screen and (min-width: $media1440) {
+                padding: 0 15px !important;
+            }
+
+            @media screen and (min-width: $media1920) {
+                padding: 0 20px !important;
+            }
         }
 
         @media screen and (min-width: $media1440) {
@@ -17,9 +35,18 @@
             line-height: 18px;
         }
 
+        @media screen and (min-width: $media1920) {
+            font-size: 14px;
+            line-height: 19px;
+        }
+
         svg {
             rect {
                 stroke: #636363;
+            }
+
+            @media screen and (min-width: $media1024) {
+                margin-right: 5px;
             }
 
             @media screen and (min-width: $media1440) {
@@ -43,6 +70,54 @@
                     stroke: #f95a05;
                 }
             }
+        }
+    }
+
+    .dropdown {
+        @media screen and (min-width: $media1024) {
+            display: block;
+        }
+
+        @media screen and (min-width: $media1440) {
+            display: none;
+        }
+    }
+
+    #collapsed-nav-menu {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #f95a05;
+        background: linear-gradient(
+            180deg,
+            rgba(247, 193, 144, 0) 0%,
+            rgba(255, 203, 142, 0.14) 100%
+        );
+        border-radius: 0px;
+        padding: 0 30px;
+    }
+
+    .dropdown-menu.show {
+        width: 249px;
+        height: 168px;
+        background: #fffaf3;
+        border: 1px solid #f4efe1;
+        border-radius: 5px;
+        padding: 17px 20px;
+
+        svg {
+            margin-right: 10px;
+        }
+
+        span {
+            font-size: 11px;
+            line-height: 15px;
+            color: #636363;
+        }
+
+        a {
+            padding: 4px 12px;
         }
     }
 }

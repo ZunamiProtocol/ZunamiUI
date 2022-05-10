@@ -57,6 +57,7 @@ export const calcWithdrawOneCoin = async (
     const sum: string = await zunamiContract.methods
         .calcWithdrawOneCoin(lpBalance, coinIndex)
         .call();
+    console.log(`calcWithdrawOneCoin(${lpBalance}, ${coinIndex})`);
     return sum;
 };
 

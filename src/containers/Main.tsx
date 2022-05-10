@@ -13,7 +13,7 @@ import useUserLpAmount from '../hooks/useUserLpAmount';
 import { useWallet } from 'use-wallet';
 import useEagerConnect from '../hooks/useEagerConnect';
 import useFetch from 'react-fetch-hook';
-import { getPoolStatsUrl, zunamiInfoUrl, getHistoricalApyUrl } from '../api/api';
+import { getPoolStatsUrl, zunamiInfoUrl, getHistoricalApyUrl, getTotalIncomeUrl } from '../api/api';
 import { BigNumber } from 'bignumber.js';
 
 import usePendingOperations from '../hooks/usePendingOperations';
@@ -63,6 +63,25 @@ export const Main = (): JSX.Element => {
     const dailyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprDaily;
     const monthlyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprMonthly;
     const yearlyProfit = getBalanceNumber(userMaxWithdraw) * poolBestAprMonthly * 12;
+
+    const [totalIncome, setTotalIncome] = useState('n/a');
+
+    useEffect(() => {
+        if (!account || userLpAmount.toNumber() === -1) {
+            return;
+        }
+
+        const getTotalIncome = async () => {
+            const response = await fetch(
+                getTotalIncomeUrl(account, userLpAmount.toNumber().toString())
+            );
+
+            const data = await response.json();
+            setTotalIncome(`$${data.totalIncome}`);
+        };
+
+        getTotalIncome();
+    }, [account, userLpAmount]);
 
     const chartData =
         poolStats && poolStats.poolsStats && zunamiInfo
@@ -137,7 +156,7 @@ export const Main = (): JSX.Element => {
                             />
                             <InfoBlock
                                 title="Total Income"
-                                description="$12 000"
+                                description={totalIncome}
                                 isLoading={isZunLoading}
                                 withColor={true}
                                 isStrategy={false}

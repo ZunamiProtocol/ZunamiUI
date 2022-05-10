@@ -19,6 +19,7 @@ const useUserLpAmount = () => {
                 account
             );
             setAllowance(new BigNumber(allowance));
+            console.log(new BigNumber(allowance));
         };
 
         if (account && masterChefContract) {

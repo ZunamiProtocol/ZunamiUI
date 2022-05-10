@@ -52,7 +52,7 @@ export const Header = (): JSX.Element => {
                 className="nav-menu"
                 onClick={() => {
                     setOpen(!open);
-                    document.getElementsByClassName('SidebarColumn')[0].classList.toggle('active');
+                    document.getElementById('MobileSidebar').classList.toggle('active');
                     document.body.classList.toggle('overflow');
                 }}
             >

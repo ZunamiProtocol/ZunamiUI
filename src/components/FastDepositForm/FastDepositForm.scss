@@ -5,6 +5,22 @@
     border: solid 1px #f4efe1;
     border-radius: 5px;
 
+    @media screen and (min-width: $media375) {
+        background: linear-gradient(262.84deg, #fff3e9 -27.39%, #fef5e8 71.59%);
+        border-radius: 3px;
+        margin: 0 31px 41px 31px;
+    }
+
+    @media screen and (min-width: $media1024) {
+        background: transparent;
+        border-radius: 0;
+        padding: 16px;
+        margin: 0 40px 14px 40px;
+        max-width: 289px;
+        height: 191px;
+        width: 289px;
+    }
+
     @media screen and (min-width: $media1440) {
         padding: 24px;
         margin: 0 40px 14px 40px;
@@ -13,14 +29,38 @@
         width: 435px;
     }
 
+    @media screen and (min-width: $media1920) {
+        padding: 28px;
+        margin: 0 47px 14px 47px;
+        max-width: 511px;
+        height: 269px;
+        width: 511px;
+    }
+
     &__Title {
         font-size: 12px;
         line-height: 16px;
+
+        @media screen and (min-width: $media375) {
+            display: none;
+        }
+
+        @media screen and (min-width: $media1024) {
+            display: block;
+        }
     }
 
     &__Description {
         font-size: 10px;
         line-height: 13.6px;
+
+        @media screen and (min-width: $media375) {
+            display: none;
+        }
+
+        @media screen and (min-width: $media1024) {
+            display: block;
+        }
 
         @media screen and (min-width: $media1440) {
             margin-right: 10px;
@@ -35,6 +75,22 @@
     }
 
     &__Slogan {
+        @media screen and (min-width: $media375) {
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 16px;
+            color: #404040;
+            margin-left: 17px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            font-weight: 500;
+            font-size: 10px;
+            line-height: 15px;
+            color: #404040;
+            margin-left: 17px;
+        }
+
         @media screen and (min-width: $media1440) {
             font-size: 14px;
             line-height: 19px;
@@ -42,8 +98,57 @@
         }
     }
 
+    &__MobileToggle {
+        @media screen and (min-width: $media375) {
+            display: block;
+            background: linear-gradient(263.21deg, #faa212 3.68%, #f85003 92.08%);
+            border-radius: 3px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: stretch;
+            color: #fff;
+            // width: calc(100% - 62px);
+            // margin-left: 31px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            display: none;
+        }
+
+        &__Title {
+            margin-left: 16px;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 19px;
+        }
+
+        &__Icon {
+            width: 35px;
+            height: 24.21px;
+            margin-left: 22px;
+        }
+
+        &__ToggleIcon {
+            width: 18px;
+            height: 6px;
+            margin-left: auto;
+            margin-right: 33px;
+        }
+    }
+
     &__Actions {
+        @media screen and (min-width: $media375) {
+            margin-bottom: 26px;
+            margin-left: 11px;
+        }
+
         @media screen and (min-width: $media1440) {
+            margin-bottom: 25px;
+            margin-left: 11px;
+        }
+
+        @media screen and (min-width: $media1920) {
             margin-bottom: 25px;
             margin-left: 11px;
         }

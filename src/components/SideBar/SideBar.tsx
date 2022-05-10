@@ -6,10 +6,12 @@ import { zunamiInfoUrl } from '../../api/api';
 import useFetch from 'react-fetch-hook';
 import { BigNumber } from 'bignumber.js';
 import { FastDepositForm } from '../FastDepositForm/FastDepositForm';
+import { MobileSidebar } from './MobileSidebar/MobileSidebar';
 
 interface ZunamiInfo {
     tvl: BigNumber;
     apy: number;
+    apr: number;
 }
 
 interface ZunamiInfoFetch {
@@ -33,6 +35,7 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
 
     return (
         <Col className={'SidebarColumn'}>
+            <MobileSidebar />
             <div className="Sidebar">
                 <div className="Sidebar__Title">Yield Aggregator for Best Stablecoin Staking</div>
                 <div className="Sidebar__Description">
@@ -41,7 +44,7 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                     easier and cheaper while increasing profitability by differentiating and
                     rebalancing users’ funds.
                 </div>
-                <div className="d-flex">
+                <div className="d-flex flex-wrap">
                     <InfoBlock
                         title="Total Value Locked"
                         description={`${
@@ -144,7 +147,7 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                         withColor={true}
                         isStrategy={false}
                         colorfulBg={true}
-                        hint="TEXT"
+                        hint={<div>TEXT</div>}
                     />
                 </div>
                 <FastDepositForm />
