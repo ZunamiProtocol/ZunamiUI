@@ -46,12 +46,13 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                     onChange={(e) => {
                         const value = Number(e.currentTarget.value);
 
-                        if (props.onShareSelect) {
-                            props.onShareSelect(value);
+                        if (isNaN(value) && props.onShareSelect) {
+                            props.onShareSelect(props.sharePercent);
+                            return;
                         }
 
-                        if (value === 0 && props.onShareSelect) {
-                            props.onShareSelect(1);
+                        if (props.onShareSelect) {
+                            props.onShareSelect(value);
                         }
 
                         if (value >= 100) {
