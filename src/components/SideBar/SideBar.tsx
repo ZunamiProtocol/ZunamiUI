@@ -147,7 +147,12 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                         withColor={true}
                         isStrategy={false}
                         colorfulBg={true}
-                        hint={<div>TEXT</div>}
+                        hint={
+                            <div>
+                                When using a regular deposit, a mechanical optimization gas is used
+                                and crediting can take up to 24 hours
+                            </div>
+                        }
                     />
                 </div>
                 <FastDepositForm />

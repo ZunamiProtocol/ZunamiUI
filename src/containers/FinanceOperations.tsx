@@ -172,8 +172,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
         <React.Fragment>
             <Header />
             <Container className={'h-100 d-flex justify-content-between flex-column'}>
-                <Row className={'h-100 mb-4 main-row'}>
-                    {/* <SideBar isMainPage={true} /> */}
+                <Row className={'h-100 main-row'}>
                     {!account && (
                         <Col className={'content-col'}>
                             <WelcomeCarousel />

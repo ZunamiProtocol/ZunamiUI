@@ -32,21 +32,21 @@ body {
         max-width: 1024px;
         margin-left: auto;
         margin-right: auto;
-        height: calc(100% - 74px);
+        height: calc(100% - 74px) !important;
     }
 
     @media (min-width: $media1440) {
         max-width: 1440px;
         margin-left: auto;
         margin-right: auto;
-        height: calc(100% - 74px);
+        height: calc(100% - 74px) !important;
     }
 
     @media (min-width: $media1920) {
         max-width: 1920px;
         margin-left: auto;
         margin-right: auto;
-        height: calc(100% - 87px);
+        height: calc(100% - 87px) !important;
     }
 }
 
