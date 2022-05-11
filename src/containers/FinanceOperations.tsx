@@ -68,6 +68,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     const [selectedCoin, setSelectedCoin] = useState<string>('all');
     const [balance, setBalance] = useState(BIG_ZERO);
     const [rawBalance, setRawBalance] = useState(BIG_ZERO);
+    const [coins, setCoins] = useState([0, 0, 0]);
     const [selectedCoinIndex, setSelectedCoinIndex] = useState(-1);
 
     const [dai, setDai] = useState('0');

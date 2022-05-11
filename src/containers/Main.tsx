@@ -141,8 +141,8 @@ export const Main = (): JSX.Element => {
                                 colorfulBg={true}
                                 hint={
                                     <span>
-                                        'Profit is accrued at least once a week, after the sale of
-                                        the accumulated weekly rewards.'
+                                        Profit is accrued at least once a week, after the sale of
+                                        the accumulated weekly rewards.
                                     </span>
                                 }
                             />

@@ -40,8 +40,15 @@ export const NavMenu = (): JSX.Element => {
     ];
 
     const onClick = (e: any) => {
+        const url = e.currentTarget.href;
         e.preventDefault();
-        history.push(new URL(e.currentTarget.href).pathname);
+
+        if (url.indexOf(window.location.hostname) === -1) {
+            window.open(url, '_blank');
+            return;
+        }
+
+        history.push(new URL(url).pathname);
     };
 
     const activeElementTitle = items.filter(
