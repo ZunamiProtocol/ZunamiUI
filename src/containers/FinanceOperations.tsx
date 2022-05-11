@@ -17,6 +17,7 @@ import { BIG_ZERO, getBalanceNumber } from '../utils/formatbalance';
 import { ReactComponent as FinIcon } from '../components/Form/deposit-withdraw.svg';
 import useLpPrice from '../hooks/useLpPrice';
 import { TransactionHistory } from '../components/TransactionHistory/TransactionHistory';
+import { getTransHistoryUrl } from '../api/api';
 
 interface FinanceOperationsProps {
     operationName: string;
@@ -49,6 +50,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     const sushi = useSushi();
     const zunamiContract = getMasterChefContract(sushi);
     const lpPrice = useLpPrice();
+    const [transactionList, setTransactionList] = useState([]);
 
     const calculateStables = async (
         coinIndex: number,
@@ -144,6 +146,23 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
         props.operationName,
         lpPrice,
     ]);
+
+    useEffect(() => {
+        if (!account) {
+            return;
+        }
+
+        const getTransactionHistory = async () => {
+            const response = await fetch(
+                getTransHistoryUrl(account, props.operationName.toUpperCase())
+            );
+
+            const data = await response.json();
+            setTransactionList(data.userTransfers);
+        };
+
+        getTransactionHistory();
+    }, [account, props.operationName]);
 
     return (
         <React.Fragment>
@@ -266,10 +285,16 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                     />
                                                 )}
                                                 {props.operationName === 'Deposit' && (
-                                                    <TransactionHistory title="My deposits history" />
+                                                    <TransactionHistory
+                                                        title="My deposits history"
+                                                        items={transactionList}
+                                                    />
                                                 )}
                                                 {props.operationName === 'Withdraw' && (
-                                                    <TransactionHistory title="My withdrawals history" />
+                                                    <TransactionHistory
+                                                        title="My withdrawals history"
+                                                        items={transactionList}
+                                                    />
                                                 )}
                                             </div>
                                         </div>

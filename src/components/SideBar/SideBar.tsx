@@ -37,7 +37,7 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
         <Col className={'SidebarColumn'}>
             <MobileSidebar />
             <div className="Sidebar">
-                <div className="Sidebar__Title">Yield Aggregator for Best Stablecoin Staking</div>
+                <h1 className="Sidebar__Title">Yield Aggregator for Best Stablecoin Staking</h1>
                 <div className="Sidebar__Description">
                     Zunami is the DAO that works with stablecoins and solves the main issues of
                     current yield-farming protocols by streamlining interaction with DeFi, making it
