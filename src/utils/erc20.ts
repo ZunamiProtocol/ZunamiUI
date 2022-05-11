@@ -3,6 +3,7 @@ import { provider as Provider } from 'web3-core';
 import { Contract } from 'web3-eth-contract';
 import { AbiItem } from 'web3-utils';
 import ERC20 from '../actions/abi/erc20.abi.json';
+import { log } from '../utils/logger';
 
 export const getContract = (provider: Provider, address: string) => {
     const web3 = new Web3(provider);
@@ -57,7 +58,7 @@ export const calcWithdrawOneCoin = async (
     const sum: string = await zunamiContract.methods
         .calcWithdrawOneCoin(lpBalance, coinIndex)
         .call();
-    console.log(`calcWithdrawOneCoin(${lpBalance}, ${coinIndex})`);
+    log(`calcWithdrawOneCoin(${lpBalance}, ${coinIndex}). Result ${sum}`);
     return sum;
 };
 

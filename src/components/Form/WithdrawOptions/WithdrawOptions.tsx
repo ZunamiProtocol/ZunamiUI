@@ -12,7 +12,9 @@ interface WithdrawOptionsProps {
     usdcChecked?: boolean;
     usdtChecked?: boolean;
     selectedCoin: string | undefined;
+    rawBalance?: BigNumber;
     balance: BigNumber;
+    lpPrice?: BigNumber;
 }
 
 export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
@@ -27,7 +29,7 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
         <div className="WithdrawOptions">
             <div className="WithdrawOptions__BalanceBlock">
                 <span>Your balance:</span>
-                <span className="balance">{getBalanceNumber(props.balance).toFixed(3)}</span>
+                <span className="balance">{getBalanceNumber(props.balance).toFixed(3, 1)}</span>
             </div>
             <div className="WithdrawOptions__LiquidityBlock">
                 <span>Share of liquidity, %</span>

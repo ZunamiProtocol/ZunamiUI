@@ -34,9 +34,8 @@ export const NavMenu = (): JSX.Element => {
         },
         {
             title: 'DAO',
-            urls: ['/dao'],
+            urls: ['https://snapshot.org/#/zunamidao.eth'],
             icon: <DaoIcon />,
-            disabled: true,
         },
     ];
 

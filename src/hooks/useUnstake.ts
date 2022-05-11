@@ -4,6 +4,7 @@ import useSushi from './useSushi';
 import { getMasterChefContract, unstake } from '../sushi/utils';
 import { getBalanceNew } from '../utils/erc20';
 import BigNumber from 'bignumber.js';
+import { log } from '../utils/logger';
 
 const useUnstake = (
     lpShares: number,
@@ -28,6 +29,10 @@ const useUnstake = (
             .multipliedBy(sharePercent / 100)
             .toFixed(0)
             .toString();
+
+        log(
+            `Withdraw: optimized - ${optimized}, balance to withdraw: ${balanceToWithdraw}, coin index: ${coinIndex}, account: ${account}`
+        );
 
         if (optimized) {
             return await unstake(

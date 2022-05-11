@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 import { contractAddresses } from './lib/constants';
 import { getContract } from '../utils/erc20';
 import { DEFAULT_TOKEN_DECIMAL, USDT_TOKEN_DECIMAL } from '../utils/formatbalance';
+import { log } from '../utils/logger';
 
 BigNumber.config({
     EXPONENTIAL_AT: 1000,
@@ -95,7 +96,10 @@ export const stake = async (contract, account, dai, usdc, usdt, direct = false) 
         new BigNumber(usdt).times(USDT_TOKEN_DECIMAL).toString(),
     ];
 
+    log(`Deposit: direct - ${direct}, coins: ${coins}, account: ${account}`);
+
     if (direct) {
+        log(`Zunami contract: execution deposit(${coins})`);
         return contract.methods
             .deposit(coins)
             .send({ from: account })
@@ -103,6 +107,8 @@ export const stake = async (contract, account, dai, usdc, usdt, direct = false) 
                 return tx.transactionHash;
             });
     }
+
+    log(`Zunami contract: execution delegateDeposit(${coins})`);
 
     return contract.methods
         .delegateDeposit(coins)
@@ -141,6 +147,7 @@ export const unstake = async (
     ];
 
     if (optimized) {
+        log(`Zunami contract: execution delegateWithdrawal(${lpShares}, ${coins})`);
         return zunamiContract.methods
             .delegateWithdrawal(lpShares, coins)
             .send({ from: account })
@@ -148,6 +155,7 @@ export const unstake = async (
                 return transactionHash;
             });
     } else {
+        log(`Zunami contract: execution withdraw(${lpShares}, [0, 0, 0], 1, ${coinIndex})`);
         return zunamiContract.methods
             .withdraw(lpShares, [0, 0, 0], 1, coinIndex)
             .send({ from: account })
