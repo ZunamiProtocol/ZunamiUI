@@ -60,9 +60,10 @@ export const Main = (): JSX.Element => {
     const poolStats = pool.data as PoolsStats;
     const poolBestAprDaily = zunamiInfo ? zunamiInfo.apr / 100 / 365 : 0;
     const poolBestAprMonthly = zunamiInfo ? (zunamiInfo.apr / 100 / 365) * 30 : 0;
+    const poolBestApyMonthly = zunamiInfo ? (zunamiInfo.apy / 100 / 365) * 30 : 0;
     const dailyProfit = getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprDaily;
     const monthlyProfit = getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprMonthly;
-    const yearlyProfit = getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprMonthly * 12;
+    const yearlyProfit = getBalanceNumber(userMaxWithdraw).toNumber() * poolBestApyMonthly * 12;
 
     const [totalIncome, setTotalIncome] = useState('n/a');
 
