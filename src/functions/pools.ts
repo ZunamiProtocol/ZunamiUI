@@ -58,6 +58,13 @@ const poolsChartdata: { [key: string]: any } = {
         value: 0,
         icon: '/anchor.svg',
     },
+    MIM: {
+        title: 'Convex finance - MIM pool',
+        link: 'https://etherscan.io/address/0x946C3397D917898Be9034fe8206717ab84c4451a',
+        color: '#8DDB2C',
+        value: 0,
+        icon: '/convex.svg',
+    },
 };
 
 export function poolInfoToChartElement(pool: PoolInfo, percent: BigNumber): ChartDataElement {
