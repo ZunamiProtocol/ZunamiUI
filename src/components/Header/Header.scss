@@ -150,6 +150,7 @@
 
         @media screen and (min-width: $media1024) {
             position: static;
+            width: auto;
         }
 
         @media screen and (min-width: $media1440) {
