@@ -26,24 +26,31 @@ body {
     padding: 0;
 
     @media (min-width: $media375) {
-        justify-content: flex-start !important;
     }
 
     @media (min-width: $media1024) {
-        max-width: 978px;
-        justify-content: space-between !important;
+        max-width: 1024px;
+        margin-left: auto;
+        margin-right: auto;
+        height: calc(100% - 74px) !important;
+    }
+
+    @media (min-width: 960px) and (max-width: 1023px) {
+        max-width: 720px !important;
     }
 
     @media (min-width: $media1440) {
-        max-width: 1333px;
+        max-width: 1440px;
         margin-left: auto;
         margin-right: auto;
+        height: calc(100% - 74px) !important;
     }
 
     @media (min-width: $media1920) {
-        max-width: 1830px;
+        max-width: 1920px;
         margin-left: auto;
         margin-right: auto;
+        height: calc(100% - 87px) !important;
     }
 }
 
@@ -54,6 +61,12 @@ body {
 }
 
 .dashboard-col {
+    @media screen and (min-width: $media375) {
+        .WalletStatus {
+            display: none;
+        }
+    }
+
     @media screen and (min-width: $media1024) {
         .WalletStatus {
             display: none;
@@ -83,8 +96,7 @@ nav {
 
 .SidebarColumn {
     @media (min-width: $media375) {
-        display: none;
-        background: linear-gradient(262.84deg, #fff8f1 -27.39%, #fff8ed 71.59%);
+        // display: none;
 
         &.active {
             top: 0;
@@ -108,19 +120,93 @@ nav {
 
     @media (min-width: $media1024) {
         display: flex;
-        background: #fff;
     }
 }
 
 footer {
+    @media (min-width: $media375) {
+        // display: none;
+        padding-bottom: 20px;
+        margin-top: 80px;
+    }
+
+    @media (min-width: $media1024) {
+        display: flex;
+        align-items: center;
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        padding: 0 40px;
+        transform: translateX(-512px);
+        margin-top: 0;
+    }
+
+    @media (min-width: $media1440) {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        padding: 0 40px;
+        transform: translateX(-722px);
+    }
+
+    @media (min-width: $media1920) {
+        position: absolute;
+        bottom: 38px;
+        left: 50%;
+        padding: 0 40px;
+        transform: translateX(-950px);
+    }
+
+    ul {
+        @media (min-width: $media1024) {
+            margin-left: 20px;
+        }
+
+        @media (min-width: $media1440) {
+            margin-left: 30px;
+        }
+
+        @media (min-width: $media1920) {
+            margin-left: 47px;
+        }
+
+        margin-top: -5px;
+
+        li {
+            a {
+                @media (min-width: $media1024) {
+                    font-size: 8px;
+                    line-height: 8px;
+                    margin-left: 5px;
+                }
+
+                @media (min-width: $media1440) {
+                    font-size: 10px;
+                    line-height: 10px;
+                    margin-left: 10px;
+                }
+
+                @media (min-width: $media1920) {
+                    font-size: 10px;
+                    line-height: 10px;
+                    margin-left: 20px;
+                }
+
+                text-decoration: none;
+                color: #d3d3d3;
+            }
+        }
+    }
+
     .mobile {
         @media (min-width: $media375) {
             display: flex;
             flex-direction: row;
             align-items: center;
             gap: 20px;
-            margin-left: 40px;
+            margin-left: 20px;
             margin-bottom: 20px;
+            margin-top: 20px;
         }
 
         @media (min-width: $media1024) {
@@ -135,29 +221,14 @@ footer {
             color: #a2a2a2;
         }
     }
-}
 
-footer {
-    .mobile {
+    .list-inline {
         @media (min-width: $media375) {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 20px;
-            margin-left: 40px;
-            margin-bottom: 20px;
-        }
-
-        @media (min-width: $media1024) {
             display: none;
         }
 
-        a {
+        @media (min-width: $media1024) {
             display: block;
-            text-decoration: none;
-            font-size: 12px;
-            line-height: 16px;
-            color: #a2a2a2;
         }
     }
 }
@@ -169,25 +240,22 @@ footer {
     display: block;
 
     @media (min-width: $media375) {
-        margin-bottom: 20px;
         font-size: 10px;
-        line-height: 14px;
+        line-height: 10px;
         letter-spacing: 0.5px;
-        margin-left: 40px;
+        margin-left: 20px;
     }
 
     @media (min-width: $media1024) {
-        margin-bottom: 20px;
-        font-size: 9px;
-        line-height: 12.2px;
+        font-size: 8px;
+        line-height: 8px;
         letter-spacing: 0.5px;
         margin-left: 0;
     }
 
     @media (min-width: $media1440) {
-        margin-bottom: 25px;
         font-size: 10px;
-        line-height: 14px;
+        line-height: 10px;
         letter-spacing: 0.5px;
     }
 }
@@ -211,17 +279,24 @@ footer {
     transition: all 0.3s ease-in-out;
 
     @media (min-width: $media375) {
-        width: 148px;
-        height: 36px;
-        font-size: 14px;
-        line-height: 19px;
+        width: 126px;
+        height: 33px;
+        font-size: 12px;
+        line-height: 16px;
     }
 
     @media (min-width: $media1024) {
-        width: 126px;
+        width: 105px;
         height: 29px;
+        font-size: 11px;
+        line-height: 15px;
+    }
+
+    @media (min-width: $media1440) {
         font-size: 12px;
         line-height: 16px;
+        width: 99px;
+        height: 33px;
     }
 
     @media (min-width: $media1920) {
@@ -278,7 +353,24 @@ input[type='checkbox'] {
     overflow: hidden;
 }
 
+.block-bg {
+    background: linear-gradient(0.02deg, #fff9f0 60.75%, #fff8ed 87.27%);
+}
+
+.text-primary {
+    --bs-primary-rgb: 246, 74, 0;
+}
+
+.text-secondary {
+    --bs-secondary-rgb: 99, 99, 99;
+}
+
 .Sidebar {
+    .InfoBlock:first-child {
+        .InfoBlock__title {
+            margin-left: 5px;
+        }
+    }
     .ComingSoonPlaceholder {
         @media (min-width: $media375) {
             width: 104px;
@@ -376,32 +468,99 @@ input[type='checkbox'] {
 body.dark {
     background-color: #000 !important;
 
-    .WithdrawOptions {
+    .WithdrawOptions,
+    .TransactionHistory {
         background-color: #2a2a2a;
         border-color: #333333;
         color: #fff;
     }
 
-    .WalletStatus__Icon path:nth-child(1) {
-        fill: #3c3c3c;
+    #MobileSidebar {
+        background-color: #2a2a2a;
+
+        .secondary-menu {
+            li {
+                a {
+                    color: #a1a1a1;
+                }
+            }
+        }
     }
 
-    .WalletStatus__Icon path:nth-child(2) {
-        fill: #494949;
-    }
+    .WalletStatus {
+        svg {
+            path:nth-child(1) {
+                fill: #494949;
+                stroke: transparent;
+            }
 
-    .WalletStatus__Icon path:nth-child(3) {
-        fill: #646464;
+            path:nth-child(3) {
+                fill: #3c3c3c;
+                stroke: transparent;
+            }
+
+            path:nth-child(3) {
+                // fill: red;
+                stroke: transparent;
+            }
+
+            mask {
+                path {
+                    display: none;
+                }
+            }
+        }
     }
 
     .copyright {
         color: #424242;
     }
 
+    footer {
+        ul {
+            li {
+                a {
+                    color: #a1a1a1;
+                }
+            }
+        }
+    }
+
     input[type='text'] {
         border-color: $dark-border-color;
         background-color: $dark-panel-bg;
         color: #fff;
+    }
+
+    .navbar {
+        background: linear-gradient(180deg, #1b1b1b 0%, #1d1d1d 100%);
+
+        .NavMenu li.selected {
+            background: linear-gradient(
+                180deg,
+                rgba(250, 91, 6, 0) 0%,
+                rgba(250, 91, 6, 0.04) 100%
+            );
+
+            span {
+                color: #f95a05;
+            }
+        }
+
+        .divider {
+            path {
+                stroke: #232323;
+            }
+        }
+    }
+
+    .FastDepositForm {
+        background: linear-gradient(9.38deg, #222222 3.94%, #111111 89.76%);
+        border: none;
+
+        &__Description {
+            color: #6a6a6a;
+        }
     }
 
     .SidebarColumn {
@@ -411,6 +570,15 @@ body.dark {
 
         @media (min-width: $media1024) {
             background: #2a2a2a;
+        }
+
+        .InfoBlock:first-child {
+            background: none;
+        }
+
+        .Sidebar__Title,
+        .Sidebar__Description {
+            color: #ffffff;
         }
     }
 
@@ -439,7 +607,32 @@ body.dark {
 
     .Disclaimer__Content a {
         color: #fff;
-        border-bottom: dashed 1px #fff;
+        border-bottom: dashed 1px rgba(255, 255, 255, 0.5);
+    }
+
+    .FastDepositInput {
+        background: none;
+        border-color: #232323;
+
+        .divider {
+            background-color: #232323;
+        }
+
+        .coinName {
+            color: #fff;
+        }
+
+        input {
+            background-color: transparent;
+        }
+    }
+
+    .second-row {
+        background: linear-gradient(9.38deg, #1c1c1c 3.94%, #1a1919 89.76%);
+
+        .InfoBlock {
+            background: none;
+        }
     }
 
     .popover-body {
@@ -449,13 +642,12 @@ body.dark {
 
     .popover-arrow::after {
         border-right-color: #3e3e3e !important;
-
-        background-color: #3E3E3E;
+        background-color: #3e3e3e;
         color: #fff;
     }
-    
+
     .popover-arrow::after {
-        border-right-color:#3E3E3E !important;
+        border-right-color: #3e3e3e !important;
     }
 
     span,
@@ -472,15 +664,22 @@ body.dark {
     .Lockdrop__Title,
     .DepositStory__Title,
     .DepositStory__Table thead tr td,
-    .PendingBalance__val {
+    .PendingBalance__val,
+    .TransactionHistory__Title,
+    .TransactionHistory__List th {
         color: #fff;
+    }
+
+    #trans-story-mobile-btn {
+        span {
+            color: #f64a00 !important;
+        }
     }
 
     .InfoBlock__description_color {
         color: $primary-color;
     }
 
-    .Sidebar,
     .strats-chart-col,
     .hist-apy-col,
     .InfoBlock,
@@ -488,8 +687,38 @@ body.dark {
         background: #1e1e1e;
     }
 
+    #collapsed-nav-menu {
+        background: linear-gradient(180deg, rgba(250, 91, 6, 0) 0%, rgba(250, 91, 6, 0.04) 100%);
+        color: $primary-color;
+    }
+
+    .SidebarColumn {
+        background: linear-gradient(
+            0.02deg,
+            rgba(30, 30, 30, 0.45) 76.02%,
+            rgba(40, 40, 40, 0.45) 95.61%
+        );
+    }
+
     .ComingSoonPlaceholder {
         background: #313131;
+    }
+
+    #nav-menu {
+        .dropdown-menu.show {
+            background: #272727;
+            border: 1px solid #333333;
+
+            a {
+                span {
+                    color: #fff;
+                }
+
+                &:hover {
+                    background-color: transparent;
+                }
+            }
+        }
     }
 
     .Disclaimer,
@@ -526,12 +755,12 @@ body.dark {
     }
 
     .InfoBlock_colorful {
-        background: linear-gradient(262.84deg, #1e1e1e -27.39%, #2c2c2c 71.59%);
+        background: linear-gradient(9.38deg, #1c1c1c 3.94%, #1a1919 89.76%);
     }
 
-    .WalletStatus {
-        background: linear-gradient(0.02deg, #1e1e1e 76.02%, #282828 95.61%);
-    }
+    // .WalletStatus {
+    //     background: linear-gradient(0.02deg, #1e1e1e 76.02%, #282828 95.61%);
+    // }
 
     .TestnetPlaceholder {
         h1,
@@ -568,6 +797,14 @@ body.dark {
         }
     }
 
+    .TransactionHisoryMobile {
+        background: #202020;
+
+        &__Title {
+            color: #ffffff;
+        }
+    }
+
     .Form {
         .divider {
             background-color: $dark-border-color;
@@ -575,6 +812,10 @@ body.dark {
 
         .ActionSelector__Action {
             background-color: $dark-panel-bg;
+        }
+
+        .inner {
+            background: #202020;
         }
 
         .Input {
