@@ -1,0 +1,143 @@
+@import 'src/variables';
+
+.TransactionHistory {
+    background: #fffaf3;
+    border: 1px solid #f4efe1;
+    border-radius: 5px;
+
+    @media screen and (min-width: $media375) {
+        display: none;
+    }
+
+    @media screen and (min-width: $media1024) {
+        display: block;
+        padding: 17px 24px 24px 24px;
+        margin-left: 12px;
+        width: 400px;
+        height: 251px;
+    }
+
+    @media screen and (min-width: $media1440) {
+        padding: 30px 25px 25px 25px;
+        margin-left: 25px;
+        width: 400px;
+        height: 284px;
+    }
+
+    @media screen and (min-width: $media1920) {
+        padding: 34px 30px 30px 30px;
+        margin-left: 25px;
+        width: 471px;
+        height: 334px;
+    }
+
+    &__Title {
+        color: #636363;
+
+        @media screen and (min-width: $media1024) {
+            font-size: 11px;
+            line-height: 15px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-size: 12px;
+            line-height: 16px;
+        }
+    }
+
+    &__List {
+        height: 100%;
+        overflow: hidden;
+        overflow-y: auto;
+
+        table {
+            width: 100%;
+
+            thead {
+                tr {
+                    th {
+                        border-top: 1px solid #f4efe1;
+                        border-bottom: 1px solid #f4efe1;
+                        color: #636363;
+
+                        @media screen and (min-width: $media1024) {
+                            font-size: 11px;
+                            line-height: 15px;
+                            padding-top: 10px;
+                            padding-bottom: 10px;
+                        }
+
+                        @media screen and (min-width: $media1440) {
+                            font-size: 12px;
+                            line-height: 16px;
+                            padding-top: 10px;
+                            padding-bottom: 10px;
+                        }
+                    }
+                }
+            }
+
+            tbody {
+                tr {
+                    td {
+                        @media screen and (min-width: $media1024) {
+                            font-size: 11px;
+                            line-height: 15px;
+                            height: 30px;
+                        }
+
+                        @media screen and (min-width: $media1440) {
+                            font-size: 10px;
+                            line-height: 14px;
+                            height: 30px;
+                        }
+
+                        .icon {
+                            width: 13px;
+                            height: 13px;
+                        }
+
+                        .trans-link {
+                            margin-left: 7px;
+
+                            svg {
+                                width: 10px;
+                                height: 10px;
+                            }
+                        }
+
+                        &.COMPLETED {
+                            color: #9bc17c;
+                        }
+
+                        &.PENDING {
+                            color: #f95404;
+                        }
+
+                        &.REMOVED {
+                            color: #f13308;
+                        }
+
+                        &.status-col {
+                            @media screen and (min-width: $media1024) {
+                                width: 80px;
+                            }
+
+                            @media screen and (min-width: $media1440) {
+                                width: 80px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            @media screen and (min-width: $media1024) {
+                margin-top: 22px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                margin-top: 15px;
+            }
+        }
+    }
+}

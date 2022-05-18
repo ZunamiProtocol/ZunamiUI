@@ -22,7 +22,7 @@ function renderStratList(items: Array<DataItem>) {
                 className={'PieChart__StratList__Item__Circle'}
                 style={{ background: item.color }}
             />
-            <div className={'PieChart__StratList__Item__Name'}>
+            <div className={'PieChart__StratList__Item__Name d-flex align-items-center'}>
                 <img src={item.icon} alt={item.title} className="me-2" />
                 <a target="blank" href={item.link}>
                     {item.title}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './ApyChart.scss';
 import {
     Chart as ChartJS,
@@ -14,6 +14,7 @@ import { Line } from 'react-chartjs-2';
 import { format } from 'date-fns';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.defaults.font.size = 10;
 
 interface ChartProps {
     data: Array<any>;
@@ -58,9 +59,24 @@ const ranges = [
     { value: 'all', title: 'All time' },
 ];
 
+let paddings = {
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+};
+
+if (document.body.clientWidth > 1024) {
+    paddings.top = 20;
+    paddings.bottom = 20;
+}
+
 const chartOptions = {
     responsive: true,
     // radius: 0,
+    layout: {
+        padding: paddings,
+    },
     plugins: {
         tooltip: {
             callbacks: {
@@ -71,6 +87,11 @@ const chartOptions = {
         },
         legend: {
             display: false,
+            labels: {
+                font: {
+                    size: 10,
+                },
+            },
         },
     },
     scales: {
@@ -98,6 +119,19 @@ const chartOptions = {
 
 export const ApyChart = (props: ChartProps): JSX.Element => {
     const [currentRange, setCurrentRange] = useState('week');
+    const [gradient, setGradient] = useState();
+
+    const chartRef = useRef(null);
+
+    useEffect(() => {
+        // if (chartRef.current) {
+        //     console.log(chartRef.current.ctx);
+        //     const grd = chartRef.current.ctx.createLinearGradient(0, 0, 0, 200);
+        //     grd.addColorStop(0, 'rgba(250,174,50,1)');
+        //     grd.addColorStop(1, 'rgba(250,174,50,0)');
+        //     setGradient(grd);
+        // }
+    }, []);
 
     const data = {
         labels: props.data.map((item) => {
@@ -108,6 +142,7 @@ export const ApyChart = (props: ChartProps): JSX.Element => {
                 label: 'APY',
                 data: props.data.map((item) => item.apy),
                 borderColor: '#FA5B06',
+                backgroundColor: gradient,
             },
         ],
     };
@@ -126,7 +161,7 @@ export const ApyChart = (props: ChartProps): JSX.Element => {
                     })}
                 </div>
             </div>
-            <Line className="ApyChart__Chart" options={chartOptions} data={data} />
+            <Line ref={chartRef} className="ApyChart__Chart" options={chartOptions} data={data} />
         </div>
     );
 };
