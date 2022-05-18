@@ -15,6 +15,10 @@
         margin-bottom: 22px;
     }
 
+    @media screen and (min-width: $media1920) {
+        margin-bottom: 22px;
+    }
+
     &__Action {
         background-color: #fff7ed;
         border-radius: 5px;
@@ -31,7 +35,7 @@
 
         @media screen and (min-width: $media375) {
             width: 50%;
-            height: 88px;
+            height: 70px;
             padding: 16px;
             font-size: 14px;
             line-height: 19px;
@@ -47,8 +51,8 @@
         }
 
         @media screen and (min-width: $media1024) {
-            width: 208px;
-            height: 54px;
+            width: 122px;
+            height: 50px;
             padding: 0 13px;
             font-size: 12px;
             line-height: 16px;
@@ -70,8 +74,8 @@
         }
 
         @media screen and (min-width: $media1920) {
-            width: 266px;
-            height: 79px;
+            width: 289px;
+            height: 82px;
             margin-right: 12px;
             padding: 0 23px;
             font-size: 16px;
@@ -94,8 +98,8 @@
             }
 
             @media screen and (min-width: $media1024) {
-                width: 41px;
-                height: 28px;
+                width: 25px;
+                height: 17px;
             }
 
             @media screen and (min-width: $media1440) {

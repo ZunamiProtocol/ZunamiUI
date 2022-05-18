@@ -19,19 +19,19 @@
         @media screen and (min-width: $media375) {
             width: 21px;
             height: 21px;
-            margin: 9px 0 0 23px;
+            margin: 0 0 0 23px;
         }
 
         @media screen and (min-width: $media1024) {
             width: 17px;
             height: 17px;
-            margin: 9px 0 0 23px;
+            margin: 0 0 0 14px;
         }
 
         @media screen and (min-width: $media1440) {
             width: 21px;
             height: 21px;
-            margin: 9px 0 0 0;
+            margin: 0 0 0 10px;
         }
     }
 
@@ -39,27 +39,35 @@
         color: #636363;
 
         @media screen and (min-width: $media375) {
-            margin: 9px 12px 0 12px;
+            margin: 0 12px 0 12px;
             font-size: 12px;
             line-height: 16px;
         }
 
         @media screen and (min-width: $media1024) {
-            margin: 9px 12px 0 12px;
-            font-size: 12px;
-            line-height: 16px;
+            margin: 0 7px 0 7px;
+            font-size: 10px;
+            line-height: 14px;
         }
 
         @media screen and (min-width: $media1440) {
-            margin: 10px 12px 0 12px;
+            margin: 0 12px 0 12px;
             font-size: 12px;
             line-height: 16px;
         }
     }
 
     svg {
+        @media screen and (min-width: $media1024) {
+            margin-top: 0px;
+            width: 8px;
+            height: 8px;
+        }
+
         @media screen and (min-width: $media1440) {
-            margin-top: 8px;
+            margin-top: 0;
+            width: 15px;
+            height: 15px;
         }
     }
 }
