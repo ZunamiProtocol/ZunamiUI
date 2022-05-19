@@ -97,7 +97,7 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                     <InfoBlock
                         title="Base APY"
                         description={`${
-                            zunamiInfo && !zunError ? `${zunamiInfo.apy.toFixed(0)}%` : 'n/a'
+                            zunamiInfo && !zunError ? `${zunamiInfo.apy.toFixed(2)}%` : 'n/a'
                         }`}
                         isLoading={isZunLoading}
                         withColor={true}
