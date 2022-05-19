@@ -1,6 +1,6 @@
 @import 'src/variables';
 
-.Input {
+.FastDepositInput {
     background: #fffaf3;
     border: 1px solid #f4efe1;
     border-radius: 5px;
@@ -10,58 +10,94 @@
     position: relative;
 
     @media screen and (min-width: $media375) {
-        width: 100%;
-        height: 82px;
-        margin-bottom: 11px;
+        width: calc(100% - 34px);
+        height: 55px;
+        margin-top: 19px;
+        margin-bottom: 20px;
+        margin-left: 14px;
     }
 
     @media screen and (min-width: $media1024) {
-        margin-bottom: 12px;
         width: 257px;
         height: 55px;
+        margin-top: 19px;
+        margin-bottom: 20px;
+        margin-left: 0;
     }
 
     @media screen and (min-width: $media1440) {
-        margin-bottom: 15px;
-        width: 484px;
-        height: 54px;
+        width: 377px;
+        height: 55px;
+        margin-top: 31px;
+        margin-bottom: 31px;
     }
 
     @media screen and (min-width: $media1920) {
-        margin-bottom: 18.7px;
-        width: 543px;
-        height: 64px;
+        width: 443px;
+        height: 65px;
+        margin-top: 31px;
+        margin-bottom: 31px;
+    }
+
+    @media screen and (min-width: $media1920) {
     }
 
     img {
         @media screen and (min-width: $media375) {
             width: 23px;
             height: 23px;
-            margin-left: 13.9px;
+            margin-left: 15px;
             margin-right: 8px;
-            position: static;
         }
 
         @media screen and (min-width: $media1024) {
-            width: 18px;
-            height: 18px;
-            margin-left: 13.9px;
+            width: 23px;
+            height: 23px;
+            margin-left: 15px;
             margin-right: 8px;
-            position: static;
         }
 
         @media screen and (min-width: $media1440) {
-            width: 23px;
-            height: 23px;
-            margin-left: 16px;
-            margin-right: 10px;
+            width: 17px;
+            height: 17px;
+            margin-left: 20px;
+            margin-right: 8px;
         }
 
         @media screen and (min-width: $media1920) {
-            width: 26px;
-            height: 26px;
-            margin-left: 25px;
-            margin-right: 10px;
+            width: 20px;
+            height: 20px;
+            margin-left: 23px;
+            margin-right: 8px;
+        }
+    }
+
+    select {
+        position: absolute;
+        top: 0;
+        left: 25px;
+        opacity: 0;
+
+        height: 100%;
+
+        @media screen and (min-width: $media1440) {
+            width: 120px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            width: 150px;
+        }
+    }
+
+    .selector {
+        @media screen and (min-width: $media1440) {
+            margin-left: 10px;
+            margin-right: 20px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            margin-left: 10px;
+            margin-right: 20px;
         }
     }
 
@@ -71,26 +107,24 @@
         @media screen and (min-width: $media375) {
             font-size: 12px;
             line-height: 16px;
-            width: 63px;
-            position: static;
+            width: 45px;
         }
 
         @media screen and (min-width: $media1024) {
             font-size: 11px;
             line-height: 15px;
-            width: 63px;
-            position: static;
+            width: 45px;
         }
 
         @media screen and (min-width: $media1440) {
             font-size: 12px;
             line-height: 16px;
-            width: 80px;
+            width: 50px;
         }
 
         @media screen and (min-width: $media1920) {
-            font-size: 14px;
-            line-height: 19px;
+            font-size: 12px;
+            line-height: 16px;
             width: 80px;
         }
     }
@@ -99,9 +133,6 @@
         background-color: #f4efe1;
 
         @media screen and (min-width: $media375) {
-            height: 21px;
-            width: 1px;
-            position: static;
         }
 
         @media screen and (min-width: $media1024) {
@@ -112,7 +143,7 @@
 
         @media screen and (min-width: $media1440) {
             height: 28px;
-            width: 2px;
+            width: 1px;
         }
     }
 
@@ -126,25 +157,20 @@
         cursor: pointer;
 
         @media screen and (min-width: $media375) {
-            margin-left: 20px;
             font-size: 10px;
-            line-height: 14px;
+            line-height: 13px;
             width: 35px;
             height: 17px;
-            position: static;
         }
 
         @media screen and (min-width: $media1024) {
-            margin-left: 20px;
-            font-size: 9px;
-            line-height: 12px;
-            width: 29px;
-            height: 14px;
-            position: static;
+            font-size: 10px;
+            line-height: 13px;
+            width: 35px;
+            height: 17px;
         }
 
         @media screen and (min-width: $media1440) {
-            margin-left: 19px;
             font-size: 10px;
             line-height: 14px;
             width: 35px;
@@ -152,38 +178,10 @@
         }
 
         @media screen and (min-width: $media1920) {
-            margin-left: 19px;
-            font-size: 12px;
-            line-height: 16px;
-            width: 39px;
+            font-size: 10px;
+            line-height: 14px;
+            width: 41px;
             height: 20px;
-        }
-    }
-
-    .balance {
-        color: #f95404;
-
-        @media screen and (min-width: $media375) {
-            display: none;
-        }
-
-        @media screen and (min-width: $media1024) {
-            display: none;
-        }
-
-        @media screen and (min-width: $media1440) {
-            display: block;
-            font-size: 12px;
-            line-height: 16px;
-            margin-left: 10px;
-            width: 77px;
-        }
-
-        @media screen and (min-width: $media1920) {
-            font-size: 14px;
-            line-height: 19px;
-            margin-left: 10px;
-            width: 120px;
         }
     }
 
@@ -197,37 +195,41 @@
         @media screen and (min-width: $media375) {
             font-size: 11px;
             line-height: 15px;
-            padding-left: 8px;
-            width: calc(100% - 200px);
-            height: 30px;
-            margin-left: 14px;
-            position: static;
+            padding-left: 11px;
+            width: 76px;
+            height: 35px;
+            margin-left: 20px;
+            margin-right: 11px;
         }
 
         @media screen and (min-width: $media1024) {
             font-size: 11px;
             line-height: 15px;
-            padding-left: 8px;
-            width: 72px;
+            padding-left: 11px;
+            width: 61px;
             height: 30px;
-            margin-left: 14px;
-            position: static;
+            margin-left: 20px;
+            margin-right: 11px;
         }
 
         @media screen and (min-width: $media1440) {
             font-size: 14px;
             line-height: 19px;
             padding-left: 15px;
-            width: 173px;
-            height: 29px;
-            margin-left: 17px;
+            width: 146px;
+            height: 23px;
+            margin-left: 20px;
+            margin-right: 13px;
         }
 
         @media screen and (min-width: $media1920) {
+            font-size: 14px;
+            line-height: 19px;
             padding-left: 15px;
-            width: 175px;
-            height: 33px;
-            margin-left: 17px;
+            width: 171px;
+            height: 27px;
+            margin-left: 20px;
+            margin-right: 13px;
         }
     }
 }

@@ -13,15 +13,14 @@ import useUserLpAmount from '../hooks/useUserLpAmount';
 import { useWallet } from 'use-wallet';
 import useEagerConnect from '../hooks/useEagerConnect';
 import useFetch from 'react-fetch-hook';
-import { getPoolStatsUrl, zunamiInfoUrl, getHistoricalApyUrl } from '../api/api';
+import { getPoolStatsUrl, zunamiInfoUrl, getHistoricalApyUrl, getTotalIncomeUrl } from '../api/api';
 import { BigNumber } from 'bignumber.js';
 
 import usePendingOperations from '../hooks/usePendingOperations';
 import { PoolInfo, poolDataToChartData } from '../functions/pools';
 import { ApyChart } from '../components/ApyChart/ApyChart';
-import { WelcomeCarousel } from '../components/WelcomeCarousel/WelcomeCarousel';
 import { WalletStatus } from '../components/WalletStatus/WalletStatus';
-import { ThemeSwitcher } from '../components/ThemeSwitcher/ThemeSwitcher';
+import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar';
 
 interface ZunamiInfo {
     tvl: BigNumber;
@@ -64,6 +63,26 @@ export const Main = (): JSX.Element => {
     const poolBestAprMonthly = zunamiInfo ? (zunamiInfo.apr / 100 / 365) * 30 : 0;
     const dailyProfit = getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprDaily;
     const monthlyProfit = getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprMonthly;
+    const yearlyProfit = getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprMonthly * 12;
+
+    const [totalIncome, setTotalIncome] = useState('n/a');
+
+    useEffect(() => {
+        if (!account || userLpAmount.toNumber() === -1) {
+            return;
+        }
+
+        const getTotalIncome = async () => {
+            const response = await fetch(
+                getTotalIncomeUrl(account, userLpAmount.toNumber().toString())
+            );
+
+            const data = await response.json();
+            setTotalIncome(`$${data.totalIncome}`);
+        };
+
+        getTotalIncome();
+    }, [account, userLpAmount]);
 
     const chartData =
         poolStats && poolStats.poolsStats && zunamiInfo
@@ -88,27 +107,24 @@ export const Main = (): JSX.Element => {
     const pdElement = (
         <div className="d-flex">
             <PendingBalance
-                val={`PD: $${getBalanceNumber(pendingOperations.deposit, 6).toNumber()}`}
+                val={`PD: $${getBalanceNumber(pendingOperations.deposit, 6)}`}
                 hint={`You have $${pendingOperations.deposit} in pending deposit`}
             />
             <PendingBalance
-                val={`PW: $${getBalanceNumber(pendingOperations.withdraw).toNumber().toFixed(2)}`}
+                val={`PW: $${getBalanceNumber(pendingOperations.withdraw).toFixed(2)}`}
                 hint={`You have $${pendingOperations.withdraw} in pending withdraw`}
             />
         </div>
     );
 
     return (
-        <Container className={'h-100 d-flex justify-content-between flex-column'}>
+        <React.Fragment>
             <Header />
-            <Row className={'h-100 mb-4 main-row'}>
-                <SideBar isMainPage={true} />
-                {!account && (
-                    <Col className={'content-col dashboard-col'}>
-                        <WelcomeCarousel />
-                    </Col>
-                )}
-                {account && (
+            <MobileSidebar />
+            <Container className={'d-flex justify-content-between flex-column'}>
+                <Row className={'main-row h-100'}>
+                    <SideBar isMainPage={true} />
+
                     <Col className={'content-col dashboard-col'}>
                         <WalletStatus />
                         <ClickableHeader name="Dashboard" icon="dashboard" />
@@ -133,61 +149,16 @@ export const Main = (): JSX.Element => {
                                 }
                             />
                             <InfoBlock
-                                title="APY"
-                                description={`${
-                                    zunamiInfo && !zunError
-                                        ? `${zunamiInfo.apy.toFixed(2)}%`
-                                        : 'n/a'
-                                }`}
+                                title="Pending Deposits / Withdraws"
                                 isLoading={isZunLoading}
                                 withColor={true}
                                 isStrategy={false}
                                 colorfulBg={true}
-                                hint={
-                                    <div>
-                                        Annual Percentage Yield. Сumulative yield from all
-                                        strategies used &amp; includes 0% management fee.{' '}
-                                        <a
-                                            href="https://www.investopedia.com/terms/a/apy.asp"
-                                            target="_blank"
-                                            rel="noreferrer"
-                                        >
-                                            APY
-                                        </a>{' '}
-                                        takes into account{' '}
-                                        <a
-                                            href="https://www.investopedia.com/terms/c/compoundinterest.asp"
-                                            target="_blank"
-                                            rel="noreferrer"
-                                        >
-                                            compound interest
-                                        </a>{' '}
-                                        (reinvestment of income once a week), but{' '}
-                                        <a
-                                            href="https://www.investopedia.com/terms/a/apr.asp"
-                                            target="_blank"
-                                            rel="noreferrer"
-                                        >
-                                            APR
-                                        </a>{' '}
-                                        (Annual Percentage Rate) does not.{' '}
-                                        {zunamiInfo && (
-                                            <strong>
-                                                Current APR is {Number(zunamiInfo.apr).toFixed(2)}%
-                                            </strong>
-                                        )}
-                                    </div>
-                                }
+                                secondaryRow={pdElement}
                             />
                             <InfoBlock
-                                title="Total Value Locked"
-                                description={`${
-                                    zunamiInfo && !zunError
-                                        ? `$${getBalanceNumber(zunamiInfo.tvl)
-                                              .toNumber()
-                                              .toLocaleString('en')}`
-                                        : 'n/a'
-                                }`}
+                                title="Total Income"
+                                description={totalIncome}
                                 isLoading={isZunLoading}
                                 withColor={true}
                                 isStrategy={false}
@@ -196,28 +167,41 @@ export const Main = (): JSX.Element => {
                         </div>
                         <div className="second-row">
                             <InfoBlock
-                                title="Pending Deposits / Withdraws"
-                                withColor={false}
-                                isStrategy={false}
-                                hint={
-                                    <span>
-                                        Funds passing through the Transaction Streamlining Mechanism
-                                        and will be credited within 24 hours
-                                    </span>
+                                title="Profit"
+                                description={
+                                    <div>
+                                        <span className="text-primary">{`${
+                                            dailyProfit ? dailyProfit.toFixed(2) : 0
+                                        } USD`}</span>
+                                        <span> Daily&nbsp;&nbsp;</span>
+                                    </div>
                                 }
-                                secondaryRow={pdElement}
-                            />
-                            <InfoBlock
-                                title="Daily Profits"
-                                description={`${dailyProfit ? dailyProfit.toFixed(2) : 0} USD/day`}
                                 withColor={false}
                                 isStrategy={false}
                             />
                             <InfoBlock
-                                title="Monthly Profits"
-                                description={`${
-                                    monthlyProfit ? monthlyProfit.toFixed(2) : 0
-                                } USD/month`}
+                                title="&nbsp;"
+                                description={
+                                    <div>
+                                        <span className="text-primary">{`${
+                                            monthlyProfit ? monthlyProfit.toFixed(2) : 0
+                                        } USD`}</span>
+                                        <span> Monthly</span>
+                                    </div>
+                                }
+                                withColor={false}
+                                isStrategy={false}
+                            />
+                            <InfoBlock
+                                title="&nbsp;"
+                                description={
+                                    <div>
+                                        <span className="text-primary">{`${
+                                            yearlyProfit ? yearlyProfit.toFixed(2) : 0
+                                        } USD`}</span>
+                                        <span> Yearly</span>
+                                    </div>
+                                }
                                 withColor={false}
                                 isStrategy={false}
                             />
@@ -236,20 +220,39 @@ export const Main = (): JSX.Element => {
                             </div>
                         </div>
                     </Col>
-                )}
-            </Row>
-            <footer>
-                <div className="mobile">
-                    <ThemeSwitcher />
-                    <a href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing">
-                        How to use?
-                    </a>
-                    <a href="https://www.zunami.io/#faq-main" target="_blank" rel="noreferrer">
-                        FAQ
-                    </a>
-                </div>
-                <span className="copyright">© 2022 Zunami Protocol. Beta version 1.1</span>
-            </footer>
-        </Container>
+                </Row>
+                <footer className="">
+                    <div className="mobile">
+                        <a href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing">
+                            How to use?
+                        </a>
+                        <a href="https://www.zunami.io/#faq-main" target="_blank" rel="noreferrer">
+                            FAQ
+                        </a>
+                    </div>
+                    <span className="copyright">© 2022 Zunami Protocol. Beta version 1.1</span>
+                    <ul className="list-inline mb-0">
+                        <li className="list-inline-item">
+                            <a
+                                href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing"
+                                target="blank"
+                            >
+                                How to use?
+                            </a>
+                        </li>
+                        <li className="list-inline-item">
+                            <a href="https://www.zunami.io/#faq-main" target="blank">
+                                FAQ
+                            </a>
+                        </li>
+                        <li className="list-inline-item">
+                            <a href="https://zunami.io" target="blank">
+                                Website
+                            </a>
+                        </li>
+                    </ul>
+                </footer>
+            </Container>
+        </React.Fragment>
     );
 };

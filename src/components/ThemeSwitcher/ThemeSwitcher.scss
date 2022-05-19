@@ -1,12 +1,24 @@
 @import 'src/variables';
 
 .ThemeSwitcher {
+    cursor: pointer;
+
     @media screen and (min-width: $media1024) {
         padding-bottom: 5px;
     }
 
     @media screen and (min-width: $media1440) {
         padding-bottom: 5px;
+    }
+
+    span {
+        @media screen and (min-width: $media375) {
+            display: inline;
+        }
+
+        @media screen and (min-width: $media1024) {
+            display: none;
+        }
     }
 
     &__button {

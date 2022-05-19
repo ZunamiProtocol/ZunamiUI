@@ -5,13 +5,14 @@ import './InfoBlock.scss';
 interface InfoBlockProps {
     iconName?: string;
     title: string;
-    description?: string;
+    description?: string | JSX.Element;
     withColor: boolean;
     isStrategy: boolean;
     isLoading?: boolean;
     secondaryRow?: JSX.Element | undefined;
     hint?: JSX.Element;
     colorfulBg?: boolean;
+    icon?: JSX.Element | undefined;
 }
 
 export const InfoBlock = (props: InfoBlockProps): JSX.Element => {
@@ -33,6 +34,7 @@ export const InfoBlock = (props: InfoBlockProps): JSX.Element => {
             data-title={props.title}
         >
             <div className={`InfoBlock__title ${props.hint ? 'with_hint' : ''}`}>
+                {!props.isLoading && props.icon && props.icon}
                 <span>{props.title}</span>
                 {props.hint && (
                     <div

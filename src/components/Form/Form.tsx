@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Input } from './Input/Input';
+import { Preloader } from '../Preloader/Preloader';
 import './Form.scss';
 import {
     BIG_ZERO,
@@ -62,8 +63,6 @@ const getDepositValidationError = (
         error = "You're trying to deposit more than you have";
     } else if (!isApproved) {
         error = 'You have to approve your funds before the deposit';
-    } else if (pendingTx) {
-        error = "You can't deposit because have a pending transaction";
     }
 
     return error;
@@ -289,7 +288,7 @@ export const Form = (props: FormProps): JSX.Element => {
 
     return (
         <div className={'Form'}>
-            <ToastContainer position={'top-end'} id="toasts" className={'toasts mt-3 me-3'}>
+            <ToastContainer position={'top-end'} className={'toasts mt-3 me-3'}>
                 {transactionError && (
                     <Toast onClose={() => setTransactionError(undefined)} delay={5000} autohide>
                         <Toast.Body>Sorry, we couldn't complete the transaction</Toast.Body>
@@ -298,13 +297,13 @@ export const Form = (props: FormProps): JSX.Element => {
                 {transactionId && (
                     <Toast onClose={() => setTransactionId(undefined)} delay={15000} autohide>
                         <Toast.Body>
-                            Checkout transaction state on{' '}
+                            Success! Check out the{' '}
                             <a
                                 target="_blank"
                                 rel="noreferrer"
                                 href={`https://etherscan.io/tx/${transactionId}`}
                             >
-                                Etherscan
+                                transaction
                             </a>
                         </Toast.Body>
                     </Toast>
@@ -323,6 +322,7 @@ export const Form = (props: FormProps): JSX.Element => {
                     switch (action) {
                         case 'withdraw':
                             setPendingWithdraw(true);
+                            setPendingTx(true);
 
                             try {
                                 const tx = await onUnstake();
@@ -345,8 +345,11 @@ export const Form = (props: FormProps): JSX.Element => {
                             }
 
                             setPendingWithdraw(false);
+                            setPendingTx(false);
                             break;
                         case 'deposit':
+                            setPendingTx(true);
+
                             try {
                                 const tx = await onStake();
                                 setTransactionId(tx.transactionHash);
@@ -359,13 +362,14 @@ export const Form = (props: FormProps): JSX.Element => {
                                     value: totalSum,
                                 });
                             } catch (error: any) {
-                                debugger;
+                                setTransactionError(error);
                             }
 
                             if (props.onDeposit) {
                                 props.onDeposit();
                             }
 
+                            setPendingTx(false);
                             break;
                     }
                 }}
@@ -376,113 +380,115 @@ export const Form = (props: FormProps): JSX.Element => {
                         setAction(action);
                     }}
                 />
-                <Input
-                    action={action}
-                    name="DAI"
-                    value={props.dai}
-                    handler={daiInputHandler}
-                    max={max[0]}
-                    disabled={action === 'withdraw'}
-                />
-                <Input
-                    action={action}
-                    name="USDC"
-                    value={props.usdc}
-                    handler={usdcInputHandler}
-                    max={max[1]}
-                    disabled={action === 'withdraw'}
-                />
-                <Input
-                    action={action}
-                    name="USDT"
-                    value={props.usdt}
-                    handler={usdtInputHandler}
-                    max={max[2]}
-                    disabled={action === 'withdraw'}
-                />
-                {pendingTx && <div className="mt-2 mb-2">Transaction sent, waiting...</div>}
-                {action === 'deposit' && (
-                    <div className="deposit-action flex-wrap d-flex flex-row flex-wrap buttons align-items-center">
-                        {account && parseFloat(props.dai) > 0 && !isApprovedTokens[0] && (
-                            <button
-                                disabled={pendingDAI || depositExceedAmount}
-                                onClick={handleApproveDai}
-                            >
-                                Approve DAI{' '}
-                            </button>
-                        )}
-                        {account && parseFloat(props.usdc) > 0 && !isApprovedTokens[1] && (
-                            <button
-                                disabled={pendingUSDC || depositExceedAmount}
-                                onClick={handleApproveUsdc}
-                            >
-                                Approve USDC{' '}
-                            </button>
-                        )}
-                        {account && parseFloat(props.usdt) > 0 && !isApprovedTokens[2] && (
-                            <button
-                                disabled={pendingUSDT || depositExceedAmount}
-                                onClick={handleApproveUsdt}
-                            >
-                                Approve USDT{' '}
-                            </button>
-                        )}
-                        {account && (
-                            <div className="deposit-button-wrapper">
-                                <button type="submit" disabled={cantDeposit}>
-                                    Deposit
-                                </button>
-                                <DirectAction
-                                    actionName="deposit"
-                                    checked={!props.directOperation}
-                                    disabled={false}
-                                    hint="When using optimized deposit funds will be deposited within 24 hours and many times cheaper"
-                                    onChange={(state: boolean) => {
-                                        if (props.onOperationModeChange) {
-                                            props.onOperationModeChange(state);
-                                        }
-                                    }}
-                                />
-                            </div>
-                        )}
-                        {validationError && (
-                            <div className={'mt-2 text-danger error'}>{validationError}</div>
-                        )}
-                    </div>
-                )}
-                {action === 'withdraw' && (
-                    <div>
-                        {account && (
-                            <div className="deposit-button-wrapper">
+                <div className="inner">
+                    <Input
+                        action={action}
+                        name="DAI"
+                        value={props.dai}
+                        handler={daiInputHandler}
+                        max={max[0]}
+                        disabled={action === 'withdraw'}
+                    />
+                    <Input
+                        action={action}
+                        name="USDC"
+                        value={props.usdc}
+                        handler={usdcInputHandler}
+                        max={max[1]}
+                        disabled={action === 'withdraw'}
+                    />
+                    <Input
+                        action={action}
+                        name="USDT"
+                        value={props.usdt}
+                        handler={usdtInputHandler}
+                        max={max[2]}
+                        disabled={action === 'withdraw'}
+                    />
+                    {action === 'deposit' && (
+                        <div className="deposit-action flex-wrap d-flex flex-row flex-wrap buttons align-items-center">
+                            {account && parseFloat(props.dai) > 0 && !isApprovedTokens[0] && (
                                 <button
-                                    type="submit"
-                                    className={`${
-                                        Number(fullBalancetoWithdraw) <= 0 ? 'disabled' : ''
-                                    }`}
+                                    disabled={pendingDAI || depositExceedAmount}
+                                    onClick={handleApproveDai}
                                 >
-                                    Withdraw
+                                    Approve DAI{' '}
                                 </button>
-                                <DirectAction
-                                    actionName="withdraw"
-                                    disabled={props.directOperationDisabled || false}
-                                    checked={!props.directOperation}
-                                    hint="When using optimized withdrawal funds will be withdrawn within 24 hours and many times cheaper. Optimized withdraw available only in all coins."
-                                    onChange={(state: boolean) => {
-                                        if (props.onOperationModeChange) {
-                                            props.onOperationModeChange(state);
-                                        }
-                                    }}
-                                />
-                            </div>
-                        )}
-                        {pendingWithdraw && (
-                            <div className={'d-flex align-items-center'}>
-                                <div>Please, approve the transaction</div>
-                                <div className={'preloader ms-2'}></div>
-                            </div>
-                        )}
-                    </div>
-                )}
+                            )}
+                            {account && parseFloat(props.usdc) > 0 && !isApprovedTokens[1] && (
+                                <button
+                                    disabled={pendingUSDC || depositExceedAmount}
+                                    onClick={handleApproveUsdc}
+                                >
+                                    Approve USDC{' '}
+                                </button>
+                            )}
+                            {account && parseFloat(props.usdt) > 0 && !isApprovedTokens[2] && (
+                                <button
+                                    disabled={pendingUSDT || depositExceedAmount}
+                                    onClick={handleApproveUsdt}
+                                >
+                                    Approve USDT{' '}
+                                </button>
+                            )}
+                            {account && (
+                                <div className="deposit-button-wrapper">
+                                    <button type="submit" disabled={cantDeposit}>
+                                        Deposit
+                                    </button>
+                                    {!pendingTx && (
+                                        <DirectAction
+                                            actionName="deposit"
+                                            checked={!props.directOperation}
+                                            disabled={false}
+                                            hint="When using optimized deposit funds will be deposited within 24 hours and many times cheaper"
+                                            onChange={(state: boolean) => {
+                                                if (props.onOperationModeChange) {
+                                                    props.onOperationModeChange(state);
+                                                }
+                                            }}
+                                        />
+                                    )}
+                                    {pendingTx && <Preloader />}
+                                </div>
+                            )}
+                            {validationError && (
+                                <div className={'mt-2 text-danger error'}>{validationError}</div>
+                            )}
+                        </div>
+                    )}
+
+                    {action === 'withdraw' && (
+                        <div>
+                            {account && (
+                                <div className="deposit-button-wrapper">
+                                    <button
+                                        type="submit"
+                                        className={`${
+                                            Number(fullBalancetoWithdraw) <= 0 ? 'disabled' : ''
+                                        }`}
+                                    >
+                                        Withdraw
+                                    </button>
+                                    {!pendingTx && (
+                                        <DirectAction
+                                            actionName="withdraw"
+                                            disabled={props.directOperationDisabled || false}
+                                            checked={!props.directOperation}
+                                            hint="When using optimized withdrawal funds will be withdrawn within 24 hours and many times cheaper. Optimized withdraw available only in all coins."
+                                            onChange={(state: boolean) => {
+                                                if (props.onOperationModeChange) {
+                                                    props.onOperationModeChange(state);
+                                                }
+                                            }}
+                                        />
+                                    )}
+                                    {pendingTx && <Preloader />}
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
             </form>
         </div>
     );

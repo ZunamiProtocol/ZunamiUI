@@ -1,0 +1,80 @@
+#MobileSidebar {
+    display: none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fffcf5;
+    z-index: 3;
+
+    &.active {
+        display: block;
+    }
+
+    .collapse {
+        display: block;
+    }
+
+    .NavMenu {
+        height: auto;
+        margin-top: 150px;
+
+        li {
+            width: 100%;
+
+            &.selected {
+                background: none;
+            }
+
+            a {
+                color: #636363;
+                font-size: 18px;
+                line-height: 25px;
+            }
+
+            svg {
+                margin-left: 38px;
+                width: 18px;
+                height: auto;
+                margin-right: 17px;
+            }
+        }
+
+        .dropdown {
+            display: none;
+        }
+    }
+
+    .secondary-menu {
+        margin-left: 40px;
+        margin-top: 50px;
+
+        li {
+            a {
+                font-size: 12px;
+                line-height: 16px;
+                text-decoration: none;
+                margin-left: 10px;
+                color: #a1a1a1;
+            }
+        }
+    }
+
+    .ThemeSwitcher {
+        width: 109px;
+        height: 30px;
+        border: 1px solid #a1a1a1;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        justify-content: center;
+
+        span {
+            font-size: 12px;
+            line-height: 16px;
+            margin-left: 5px;
+        }
+    }
+}
