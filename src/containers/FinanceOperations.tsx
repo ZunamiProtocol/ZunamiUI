@@ -44,6 +44,8 @@ const calculateStables = async (
         .toFixed(0)
         .toString();
 
+    setError('');
+
     try {
         result = await calcWithdrawOneCoin(zunamiContract, balanceToWithdraw, coinIndex);
     } catch (error: any) {
@@ -158,7 +160,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
         };
 
         setCalculatedStables();
-    }, [balance, selectedCoinIndex, sharePercent, zunamiContract, rawBalance]);
+    }, [balance, selectedCoinIndex, sharePercent, zunamiContract, rawBalance, account]);
 
     useEffect(() => {
         if (!account) {
