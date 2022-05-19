@@ -60,6 +60,12 @@ body {
     }
 }
 
+@media screen and (min-width: 992px) and (max-width: 1023px) {
+    .navbar-expand-lg {
+        justify-content: space-between !important;
+    }
+}
+
 .dashboard-col {
     @media screen and (min-width: $media375) {
         .WalletStatus {
