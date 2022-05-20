@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import './WelcomeCarousel.scss';
 import { Carousel } from 'react-bootstrap';
-import { LS_ACCOUNT_KEY } from '../WalletStatus/WalletStatus';
-import { WalletsModal } from '../WalletsModal/WalletsModal';
+import { WalletsModal, LS_ACCOUNT_KEY } from '../WalletsModal/WalletsModal';
 
 export const WelcomeCarousel = (): JSX.Element => {
     const [index, setIndex] = useState(0);
