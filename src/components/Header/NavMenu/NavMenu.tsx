@@ -25,18 +25,6 @@ export const NavMenu = (props: NavMenuProps): JSX.Element => {
             icon: <DepositIcon />,
         },
         {
-            title: 'Lockdrop',
-            urls: ['/lockdrop'],
-            icon: <LockdropIcon />,
-            disabled: true,
-        },
-        {
-            title: 'Staking ZUN',
-            urls: ['/staking'],
-            icon: <StakingIcon />,
-            disabled: true,
-        },
-        {
             title: 'DAO',
             urls: ['https://snapshot.org/#/zunamidao.eth'],
             icon: <DaoIcon />,
@@ -59,9 +47,11 @@ export const NavMenu = (props: NavMenuProps): JSX.Element => {
         history.push(new URL(url).pathname);
     };
 
-    const activeElementTitle = items.filter(
+    const activeElement = items.filter(
         (el) => el.urls.indexOf(history.location.pathname) !== -1
-    )[0].title;
+    )[0];
+
+    const activeElementTitle = activeElement.title;
 
     return (
         <Navbar.Collapse id="nav-menu">
@@ -84,7 +74,15 @@ export const NavMenu = (props: NavMenuProps): JSX.Element => {
                         </Nav.Link>
                     </Nav.Item>
                 ))}
-                <NavDropdown title={activeElementTitle} id="collapsed-nav-menu">
+                <NavDropdown
+                    title={
+                        <div>
+                            {activeElement.icon}
+                            <span>&nbsp;{activeElement.title}</span>
+                        </div>
+                    }
+                    id="collapsed-nav-menu"
+                >
                     {items
                         .filter((el) => el.title !== activeElementTitle)
                         .map((item) => (
