@@ -122,6 +122,10 @@
     }
 
     canvas {
+        @media screen and (min-width: $media375) {
+            margin-top: 50px;
+        }
+
         @media screen and (min-width: $media1024) {
             margin-top: 50px;
         }
