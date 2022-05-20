@@ -3,7 +3,7 @@ import config from '../../config';
 import { useWallet } from 'use-wallet';
 import './WalletsModal.scss';
 
-export const LS_ACCOUNT_KEY = 'METAMASK_ACCOUNT';
+export const LS_ACCOUNT_KEY = 'LAST_ACTIVE_ACCOUNT';
 export const LS_WALLET_TYPE_KEY = 'WALLET_TYPE';
 
 export const NO_METAMASK_WARNING =
