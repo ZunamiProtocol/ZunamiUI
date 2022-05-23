@@ -53,6 +53,13 @@
                 font-size: 12px;
                 line-height: 16.3px;
             }
+
+            @media screen and (min-width: $media1920) {
+                margin-top: 42px;
+                margin-left: 53px;
+                font-size: 12px;
+                line-height: 16.3px;
+            }
         }
 
         &__Description {
@@ -82,6 +89,15 @@
                 margin-top: 5px;
                 margin-bottom: 45px;
                 font-size: 10px;
+                line-height: 138.1%;
+                width: 327px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                margin-left: 53px;
+                margin-top: 5px;
+                margin-bottom: 45px;
+                font-size: 11px;
                 line-height: 138.1%;
                 width: 327px;
             }
