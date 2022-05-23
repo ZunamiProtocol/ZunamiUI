@@ -2,9 +2,7 @@ import { useState, useCallback } from 'react';
 import './WalletStatus.scss';
 import { useWallet } from 'use-wallet';
 import { WalletsModal } from '../WalletsModal/WalletsModal';
-
-export const LS_ACCOUNT_KEY = 'METAMASK_ACCOUNT';
-export const LS_WALLET_TYPE_KEY = 'WALLET_TYPE';
+import { LS_ACCOUNT_KEY, LS_WALLET_TYPE_KEY } from '../WalletsModal/WalletsModal';
 
 export const WalletStatus = (): JSX.Element => {
     const { account, reset } = useWallet();

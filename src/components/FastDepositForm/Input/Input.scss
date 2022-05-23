@@ -74,11 +74,15 @@
 
     select {
         position: absolute;
-        top: 0;
+        top: 50%;
         left: 25px;
         opacity: 0;
-
         height: 100%;
+        transform: translateY(-50%);
+
+        @media screen and (min-width: $media1024) {
+            width: 90px;
+        }
 
         @media screen and (min-width: $media1440) {
             width: 120px;
@@ -113,7 +117,7 @@
         @media screen and (min-width: $media1024) {
             font-size: 11px;
             line-height: 15px;
-            width: 45px;
+            width: 40px;
         }
 
         @media screen and (min-width: $media1440) {
@@ -139,22 +143,29 @@
             height: 21px;
             width: 1px;
             position: static;
+            margin-left: 15px;
         }
 
         @media screen and (min-width: $media1440) {
             height: 28px;
             width: 1px;
+            margin-left: 0;
         }
     }
 
     .max {
-        border-radius: 5px;
+        border-radius: 3px;
         display: flex;
         align-items: center;
         justify-content: center;
         border: 1px solid #f95404;
         color: #f95404;
         cursor: pointer;
+
+        &:hover {
+            background-color: #f95404;
+            color: #fff;
+        }
 
         @media screen and (min-width: $media375) {
             font-size: 10px;

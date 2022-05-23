@@ -29,6 +29,9 @@ nav #nav-menu {
         }
 
         a {
+            display: flex;
+            align-items: center;
+
             @media screen and (min-width: $media1440) {
                 padding: 0 15px !important;
             }
@@ -73,9 +76,25 @@ nav #nav-menu {
                 color: #f95a05;
             }
 
-            svg {
-                rect {
-                    stroke: #f95a05;
+            a {
+                &[href='/deposit'] {
+                    svg {
+                        rect,
+                        path {
+                            fill: #f95a05;
+                        }
+                    }
+                }
+            }
+
+            a {
+                &[href='/'] {
+                    svg {
+                        rect,
+                        path {
+                            stroke: #f95a05;
+                        }
+                    }
                 }
             }
         }
@@ -104,11 +123,21 @@ nav #nav-menu {
         );
         border-radius: 0px;
         padding: 0 30px;
+        font-size: 12px;
+
+        svg {
+            margin-right: 5px;
+            path,
+            rect {
+                fill: #f95a05;
+                stroke: #f95a05;
+            }
+        }
     }
 
     .dropdown-menu.show {
         width: 249px;
-        height: 168px;
+        height: 110px;
         background: #fffaf3;
         border: 1px solid #f4efe1;
         border-radius: 5px;
