@@ -117,13 +117,18 @@
     }
 
     .max {
-        border-radius: 5px;
+        border-radius: 3px;
         display: flex;
         align-items: center;
         justify-content: center;
         border: 1px solid #f95404;
         color: #f95404;
         cursor: pointer;
+
+        &:hover {
+            background-color: #f95404;
+            color: #fff;
+        }
 
         @media screen and (min-width: $media375) {
             margin-left: 20px;

@@ -13,6 +13,7 @@ import useStake from '../../hooks/useStake';
 import { getActiveWalletName, getActiveWalletAddress } from '../WalletsModal/WalletsModal';
 import { daiAddress, usdcAddress, usdtAddress } from '../../utils/formatbalance';
 import { getFullDisplayBalance } from '../../utils/formatbalance';
+import { Link } from 'react-router-dom';
 
 function coinNameToAddress(coinName: string): string {
     let address = daiAddress;
@@ -94,7 +95,13 @@ export const FastDepositForm = (): JSX.Element => {
             </ToastContainer>
             <div className="d-flex justify-content-between align-items-center">
                 <span className="FastDepositForm__Title">Fast deposit</span>
-                <span className="FastDepositForm__Description">Tap to Deposit & Withdraw Page</span>
+                {/* <Link></Link>
+                <a href="/deposit" className="FastDepositForm__Description">
+                    Tap to Deposit & Withdraw Page
+                </a> */}
+                <Link className="FastDepositForm__Description" to="/deposit">
+                    Tap to Deposit & Withdraw Page
+                </Link>
             </div>
             <div className="FastDepositForm__MobileToggle">
                 <div className="FastDepositForm__MobileToggle__Title">Fast Deposit</div>
