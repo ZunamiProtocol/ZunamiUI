@@ -53,6 +53,8 @@
     &__Description {
         font-size: 10px;
         line-height: 13.6px;
+        text-decoration: none;
+        color: #000;
 
         @media screen and (min-width: $media375) {
             display: none;

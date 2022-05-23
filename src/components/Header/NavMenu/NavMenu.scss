@@ -76,10 +76,25 @@ nav #nav-menu {
                 color: #f95a05;
             }
 
-            svg {
-                rect,
-                path {
-                    stroke: #f95a05;
+            a {
+                &[href='/deposit'] {
+                    svg {
+                        rect,
+                        path {
+                            fill: #f95a05;
+                        }
+                    }
+                }
+            }
+
+            a {
+                &[href='/'] {
+                    svg {
+                        rect,
+                        path {
+                            stroke: #f95a05;
+                        }
+                    }
                 }
             }
         }

@@ -95,10 +95,6 @@ export const FastDepositForm = (): JSX.Element => {
             </ToastContainer>
             <div className="d-flex justify-content-between align-items-center">
                 <span className="FastDepositForm__Title">Fast deposit</span>
-                {/* <Link></Link>
-                <a href="/deposit" className="FastDepositForm__Description">
-                    Tap to Deposit & Withdraw Page
-                </a> */}
                 <Link className="FastDepositForm__Description" to="/deposit">
                     Tap to Deposit & Withdraw Page
                 </Link>
