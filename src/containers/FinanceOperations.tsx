@@ -234,6 +234,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                         setShowMobileTransHistory(
                                                             !showMobileTransHistory
                                                         );
+
                                                         document.body.classList.toggle('overflow');
                                                     }}
                                                 >
