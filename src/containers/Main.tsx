@@ -141,12 +141,6 @@ export const Main = (): JSX.Element => {
                                 withColor={true}
                                 isStrategy={false}
                                 colorfulBg={true}
-                                hint={
-                                    <span>
-                                        Profit is accrued at least once a week, after the sale of
-                                        the accumulated weekly rewards.
-                                    </span>
-                                }
                             />
                             <InfoBlock
                                 title="Pending Deposits / Withdraws"
@@ -155,6 +149,12 @@ export const Main = (): JSX.Element => {
                                 isStrategy={false}
                                 colorfulBg={true}
                                 secondaryRow={pdElement}
+                                hint={
+                                    <span>
+                                        Funds passing through the Transaction Streamlining Mechanism
+                                        and will be credited within 24 hours
+                                    </span>
+                                }
                             />
                             <InfoBlock
                                 title="Total Income"
