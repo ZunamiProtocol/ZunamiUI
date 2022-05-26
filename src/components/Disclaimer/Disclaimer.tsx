@@ -5,7 +5,9 @@ interface DisclaimerProps {
     text: JSX.Element;
 }
 
-export const Disclaimer = (props: DisclaimerProps): JSX.Element => {
+export const Disclaimer = (
+    props: DisclaimerProps & React.HTMLProps<HTMLButtonElement>
+): JSX.Element => {
     return (
         <div className={'Disclaimer'}>
             <Icon className={'Disclaimer__icon'} />
