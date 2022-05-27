@@ -107,6 +107,11 @@
             margin-bottom: 14px;
             height: 82px;
         }
+
+        @media screen and (min-width: $media1920) {
+            margin-bottom: 16.4px;
+            height: 82px;
+        }
     }
 
     .first-row,
@@ -220,6 +225,7 @@
     }
 
     @media screen and (min-width: $media1920) {
+        margin-right: 15.2px;
         height: 269px;
         width: 489px;
     }

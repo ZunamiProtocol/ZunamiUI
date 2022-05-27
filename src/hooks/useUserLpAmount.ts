@@ -4,9 +4,10 @@ import { useWallet } from 'use-wallet';
 import { getMasterChefContract } from '../sushi/utils';
 import useSushi from './useSushi';
 import { getUserLpAmount } from '../utils/erc20';
+import { BIG_ZERO } from '../utils/formatbalance';
 
 const useUserLpAmount = () => {
-    const [allowance, setAllowance] = useState(new BigNumber(-1));
+    const [allowance, setAllowance] = useState(BIG_ZERO);
     const { account } = useWallet();
     const sushi = useSushi();
     const masterChefContract = getMasterChefContract(sushi);
