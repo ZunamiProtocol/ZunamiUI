@@ -16,8 +16,8 @@ import { format } from 'date-fns';
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 ChartJS.defaults.font.size = 10;
 
-interface ChartProps {
-    data: Array<any>;
+interface ChartProps extends React.HTMLProps<HTMLDivElement> {
+    items: Array<any>;
     onRangeChange?: Function;
 }
 
@@ -117,46 +117,33 @@ const chartOptions = {
     },
 };
 
-export const ApyChart = (props: ChartProps): JSX.Element => {
+export const ApyChart: React.FC<ChartProps> = ({ items, onRangeChange, ...props }) => {
     const [currentRange, setCurrentRange] = useState('week');
-    const [gradient, setGradient] = useState();
-
     const chartRef = useRef(null);
 
-    useEffect(() => {
-        // if (chartRef.current) {
-        //     console.log(chartRef.current.ctx);
-        //     const grd = chartRef.current.ctx.createLinearGradient(0, 0, 0, 200);
-        //     grd.addColorStop(0, 'rgba(250,174,50,1)');
-        //     grd.addColorStop(1, 'rgba(250,174,50,0)');
-        //     setGradient(grd);
-        // }
-    }, []);
-
     const data = {
-        labels: props.data.map((item) => {
+        labels: items.map((item) => {
             return format(item.timestamp * 1000, 'dd MMM');
         }),
         datasets: [
             {
                 label: 'APY',
-                data: props.data.map((item) => item.apy),
+                data: items.map((item) => item.apy),
                 borderColor: '#FA5B06',
-                backgroundColor: gradient,
             },
         ],
     };
 
     return (
-        <div className={'ApyChart'}>
+        <div className={'ApyChart'} {...props}>
             <div className="ApyChart__Header">
                 <div className="ApyChart__Title">Historical Realised APY</div>
                 <div className="ApyChart__Selector">
                     {renderRanges(ranges, currentRange, (e: string) => {
                         setCurrentRange(e);
 
-                        if (props.onRangeChange) {
-                            props.onRangeChange(e);
+                        if (onRangeChange) {
+                            onRangeChange(e);
                         }
                     })}
                 </div>
