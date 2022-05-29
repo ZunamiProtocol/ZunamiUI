@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import './InfoBlock.scss';
 
-interface InfoBlockProps {
+interface InfoBlockProps extends React.HTMLProps<HTMLDivElement> {
     iconName?: string;
     title: string;
     description?: string | JSX.Element;
@@ -15,30 +15,41 @@ interface InfoBlockProps {
     icon?: JSX.Element | undefined;
 }
 
-export const InfoBlock = (
-    props: InfoBlockProps & React.HTMLProps<HTMLButtonElement>
-): JSX.Element => {
+export const InfoBlock: React.FC<InfoBlockProps> = ({
+    iconName,
+    title,
+    description,
+    withColor,
+    isStrategy,
+    isLoading,
+    secondaryRow,
+    hint,
+    colorfulBg,
+    icon,
+    ...props
+}) => {
     const target = useRef(null);
     const [showHint, setShowHint] = useState(false);
 
     const popover = (
         <Popover onMouseEnter={() => setShowHint(true)} onMouseLeave={() => setShowHint(false)}>
-            <Popover.Body>{props.hint}</Popover.Body>
+            <Popover.Body>{hint}</Popover.Body>
         </Popover>
     );
 
     return (
         <div
-            className={`InfoBlock ${props.isStrategy === true ? 'InfoBlock_long' : ''}
-            ${props.colorfulBg === true ? 'InfoBlock_colorful' : ''}
-            ${props.secondaryRow ? 'InfoBlock_secondaryRow' : ''}
+            className={`InfoBlock ${isStrategy === true ? 'InfoBlock_long' : ''}
+            ${colorfulBg === true ? 'InfoBlock_colorful' : ''}
+            ${secondaryRow ? 'InfoBlock_secondaryRow' : ''}
         `}
-            data-title={props.title}
+            data-title={title}
+            {...props}
         >
-            <div className={`InfoBlock__title ${props.hint ? 'with_hint' : ''}`}>
-                {!props.isLoading && props.icon && props.icon}
-                <span>{props.title}</span>
-                {props.hint && (
+            <div className={`InfoBlock__title ${hint ? 'with_hint' : ''}`}>
+                {!isLoading && icon && icon}
+                <span>{title}</span>
+                {hint && (
                     <div
                         className={'InfoBlock__hint'}
                         ref={target}
@@ -60,17 +71,17 @@ export const InfoBlock = (
                     </div>
                 )}
             </div>
-            {props.isLoading && <div className={'preloader mt-3'}></div>}
-            {!props.isLoading && (
+            {isLoading && <div className={'preloader mt-3'}></div>}
+            {!isLoading && (
                 <div
                     className={`InfoBlock__description ${
-                        props.withColor === true ? 'InfoBlock__description_color' : ''
+                        withColor === true ? 'InfoBlock__description_color' : ''
                     }`}
                 >
-                    <div>{props.description}</div>
+                    <div>{description}</div>
                 </div>
             )}
-            {!props.isLoading && props.secondaryRow && props.secondaryRow}
+            {!isLoading && secondaryRow && secondaryRow}
         </div>
     );
 };

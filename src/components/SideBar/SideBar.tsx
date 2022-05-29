@@ -19,11 +19,11 @@ interface ZunamiInfoFetch {
     error: any;
 }
 
-interface SideBarProps {
+interface SideBarProps extends React.HTMLProps<HTMLDivElement> {
     isMainPage: boolean;
 }
 
-export const SideBar = (props: SideBarProps): JSX.Element => {
+export const SideBar: React.FC<SideBarProps> = ({ isMainPage, ...props }) => {
     const {
         isLoading: isZunLoading,
         data: zunData,
@@ -33,7 +33,7 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
     const zunamiInfo = zunData as ZunamiInfo;
 
     return (
-        <Col className={'SidebarColumn'}>
+        <Col className={'SidebarColumn'} {...props}>
             <div className="Sidebar">
                 <h1 className="Sidebar__Title">Yield Aggregator for Best Stablecoin Staking</h1>
                 <div className="Sidebar__Description">

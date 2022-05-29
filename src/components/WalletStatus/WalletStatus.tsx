@@ -4,7 +4,7 @@ import { useWallet } from 'use-wallet';
 import { WalletsModal } from '../WalletsModal/WalletsModal';
 import { LS_ACCOUNT_KEY, LS_WALLET_TYPE_KEY } from '../WalletsModal/WalletsModal';
 
-export const WalletStatus = (): JSX.Element => {
+export const WalletStatus = (props: React.HTMLProps<HTMLElement>): JSX.Element => {
     const { account, reset } = useWallet();
 
     const handleSignOutClick = useCallback(() => {
@@ -20,7 +20,7 @@ export const WalletStatus = (): JSX.Element => {
         )}`;
 
         return (
-            <div className={'WalletStatus WalletStatus__connected'}>
+            <div className={'WalletStatus WalletStatus__connected'} {...props}>
                 <div>
                     <div className="state">Connected wallet</div>
                     <svg
@@ -75,7 +75,7 @@ export const WalletStatus = (): JSX.Element => {
     }
 
     return (
-        <div className={'WalletStatus'}>
+        <div className={'WalletStatus'} {...props}>
             <WalletsModal
                 show={show}
                 onHide={() => {

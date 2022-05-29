@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { fireEvent, render } from '@testing-library/react';
-import { InfoBlock } from '../../../src/components/InfoBlock/InfoBlock';
+import { InfoBlock } from '../../../components/InfoBlock/InfoBlock';
+import 'chai';
 
 describe('<InfoBlock>', () => {
     it('Should render with default title and desc', () => {
         const { getByTestId } = render(
             <InfoBlock
-                id="test-infoblock"
+                data-testid="test-infoblock"
                 title="Block title"
                 description="Some desc"
                 withColor={false}
@@ -14,15 +15,17 @@ describe('<InfoBlock>', () => {
             />
         );
 
-        getByTestId('test-infoblock').children.length.should.equal(2);
-        getByTestId('test-infoblock').children[0].children[0].innerHTML.should.equal('Block title');
-        getByTestId('test-infoblock').children[1].children[0].innerHTML.should.equal('Some desc');
+        const component = getByTestId('test-infoblock');
+
+        expect(component.children.length).toBe(2);
+        expect(component.children[0].children[0].innerHTML).toBe('Block title');
+        expect(component.children[1].children[0].innerHTML).toBe('Some desc');
     });
 
     it('Should render with tooltip and icon', () => {
         const { getByTestId } = render(
             <InfoBlock
-                id="test-infoblock"
+                data-testid="test-infoblock"
                 title="Block title"
                 description="Some desc"
                 hint={<div>Some tooltip text</div>}
@@ -31,9 +34,9 @@ describe('<InfoBlock>', () => {
             />
         );
 
-        getByTestId('test-infoblock').children[0].length.should.equal(2);
-        getByTestId('test-infoblock').children[0].children[1].children[0].tagName.should.equal(
-            'img'
-        );
+        const component = getByTestId('test-infoblock');
+
+        expect(component.children[0].children.length).toBe(2);
+        expect(component.children[0].children[1].children[0].tagName).toBe('IMG');
     });
 });
