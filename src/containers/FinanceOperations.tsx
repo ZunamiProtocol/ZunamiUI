@@ -110,7 +110,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     }, [account, zunamiContract, props.operationName, lpPrice]);
 
     useEffect(() => {
-        if (selectedCoinIndex === -1 && balance !== BIG_ZERO) {
+        if (selectedCoinIndex === -1 && balance !== BIG_ZERO && !isNaN(sharePercent)) {
             const oneThird = getBalanceNumber(balance)
                 .multipliedBy(sharePercent / 100)
                 .dividedBy(3)
@@ -125,7 +125,11 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
 
     useEffect(() => {
         const setCalculatedStables = async () => {
-            if (!zunamiContract || balance === BIG_ZERO || selectedCoinIndex === -1) {
+            if (
+                !zunamiContract ||
+                balance === BIG_ZERO ||
+                (selectedCoinIndex === -1 && !isNaN(sharePercent))
+            ) {
                 return false;
             }
 
