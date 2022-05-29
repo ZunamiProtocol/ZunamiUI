@@ -212,7 +212,7 @@ export const Main = (): JSX.Element => {
                             </div>
                             <div className="hist-apy-col">
                                 <ApyChart
-                                    data={histApyData}
+                                    items={histApyData}
                                     onRangeChange={(range: string) => {
                                         setHistApyPeriod(range);
                                     }}
