@@ -81,9 +81,6 @@ export const WalletStatus = (): JSX.Element => {
                 onHide={() => {
                     setShow(false);
                 }}
-                onWalletConnected={(wallet: any) => {
-                    window.localStorage.setItem(LS_ACCOUNT_KEY, wallet.address);
-                }}
             />
             <input
                 type="button"
