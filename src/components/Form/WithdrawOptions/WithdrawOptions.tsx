@@ -36,33 +36,28 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                 <span>Share of liquidity, %</span>
                 <input
                     type="text"
-                    inputMode={'numeric'}
                     autoComplete={'off'}
                     autoCorrect={'off'}
-                    pattern={'^[0-9]*[.,]?[0-9]*$'}
+                    pattern="[0-9]+([\.][0-9]+)?"
                     max="100"
-                    maxLength={3}
+                    maxLength={5}
                     disabled={props.daiChecked || props.usdcChecked || props.usdtChecked}
                     value={props.sharePercent}
                     onChange={(e) => {
-                        const value = Number(e.currentTarget.value);
+                        const value = e.currentTarget.value;
 
                         if (props.onShareSelect) {
                             props.onShareSelect(value);
                         }
 
-                        if (value === 0 && props.onShareSelect) {
-                            props.onShareSelect(1);
-                        }
-
-                        if (value >= 100) {
+                        if (!isNaN(Number(value)) && Number(value) >= 100) {
                             if (props.onShareSelect) {
                                 props.onShareSelect(100);
                             }
                         }
                     }}
                     onKeyUp={(e) => {
-                        const value = Number(e.currentTarget.value);
+                        const value = e.currentTarget.value;
 
                         if (props.onShareSelect) {
                             props.onShareSelect(value);
