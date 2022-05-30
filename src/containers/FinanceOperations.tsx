@@ -20,7 +20,6 @@ import useLpPrice from '../hooks/useLpPrice';
 
 import { TransactionHistory } from '../components/TransactionHistory/TransactionHistory';
 import { getTransHistoryUrl } from '../api/api';
-import { log } from '../utils/logger';
 
 interface FinanceOperationsProps {
     operationName: string;
