@@ -17,6 +17,8 @@ on:
                 required: true
             privatekey:
                 required: true
+            port:
+                required: true
 
 jobs:
     build-and-deploy:
