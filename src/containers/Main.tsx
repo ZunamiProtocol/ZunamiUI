@@ -21,6 +21,7 @@ import { PoolInfo, poolDataToChartData } from '../functions/pools';
 import { ApyChart } from '../components/ApyChart/ApyChart';
 import { WalletStatus } from '../components/WalletStatus/WalletStatus';
 import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar';
+import { Preloader } from '../components/Preloader/Preloader';
 
 interface ZunamiInfo {
     tvl: BigNumber;
@@ -42,7 +43,7 @@ export const Main = (): JSX.Element => {
     const lpPrice = useLpPrice();
     const userLpAmount = useUserLpAmount();
     const userMaxWithdraw =
-        lpPrice.toNumber() !== -1 && userLpAmount.toNumber() !== -1
+        lpPrice.toNumber() !== 0 && userLpAmount.toNumber() !== 0
             ? lpPrice.multipliedBy(userLpAmount)
             : new BigNumber(-1);
 
@@ -61,14 +62,23 @@ export const Main = (): JSX.Element => {
     const poolStats = pool.data as PoolsStats;
     const poolBestAprDaily = zunamiInfo ? zunamiInfo.apr / 100 / 365 : 0;
     const poolBestAprMonthly = zunamiInfo ? (zunamiInfo.apr / 100 / 365) * 30 : 0;
-    const dailyProfit = getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprDaily;
-    const monthlyProfit = getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprMonthly;
-    const yearlyProfit = getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprMonthly * 12;
+    const dailyProfit =
+        userMaxWithdraw.toNumber() === -1
+            ? 0
+            : getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprDaily;
+    const monthlyProfit =
+        userMaxWithdraw.toNumber() === -1
+            ? 0
+            : getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprMonthly;
+    const yearlyProfit =
+        userMaxWithdraw.toNumber() === -1
+            ? 0
+            : getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprMonthly * 12;
 
     const [totalIncome, setTotalIncome] = useState('n/a');
 
     useEffect(() => {
-        if (!account || userLpAmount.toNumber() === -1) {
+        if (!account || userLpAmount.toNumber() === -1 || userLpAmount.toNumber() === 0) {
             return;
         }
 
@@ -132,11 +142,17 @@ export const Main = (): JSX.Element => {
                             <InfoBlock
                                 title="Balance"
                                 description={
-                                    userMaxWithdraw.toNumber() !== -1
-                                        ? `$ ${getBalanceNumber(userMaxWithdraw)
-                                              .toNumber()
-                                              .toLocaleString('en')}`
-                                        : 'n/a'
+                                    <div>
+                                        {account && userMaxWithdraw.toNumber() === -1 && (
+                                            <Preloader onlyIcon={true} />
+                                        )}
+                                        {!account && 'n/a'}
+                                        {account &&
+                                            userMaxWithdraw.toNumber() !== -1 &&
+                                            `$ ${getBalanceNumber(userMaxWithdraw)
+                                                .toNumber()
+                                                .toLocaleString('en')}`}
+                                    </div>
                                 }
                                 withColor={true}
                                 isStrategy={false}
@@ -158,7 +174,15 @@ export const Main = (): JSX.Element => {
                             />
                             <InfoBlock
                                 title="Total Income"
-                                description={totalIncome}
+                                description={
+                                    <div>
+                                        {account && totalIncome === 'n/a' && (
+                                            <Preloader onlyIcon={true} />
+                                        )}
+                                        {!account && 'n/a'}
+                                        {account && totalIncome !== 'n/a' && totalIncome}
+                                    </div>
+                                }
                                 isLoading={isZunLoading}
                                 withColor={true}
                                 isStrategy={false}
