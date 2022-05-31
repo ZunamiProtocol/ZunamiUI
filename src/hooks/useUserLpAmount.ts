@@ -25,7 +25,7 @@ const useUserLpAmount = () => {
         if (account && masterChefContract) {
             fetchAllowance();
         }
-        let refreshInterval = setInterval(fetchAllowance, 10000);
+        let refreshInterval = setInterval(fetchAllowance, 60000);
         return () => clearInterval(refreshInterval);
     }, [account, masterChefContract]);
 
