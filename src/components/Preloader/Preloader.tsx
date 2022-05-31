@@ -1,10 +1,14 @@
 import './Preloader.scss';
 
-export const Preloader = (): JSX.Element => {
+interface PreloaderProps extends React.HTMLProps<HTMLDivElement> {
+    onlyIcon?: boolean;
+}
+
+export const Preloader = (props: PreloaderProps): JSX.Element => {
     return (
         <div className="Preloader">
-            <img src="/preloader.gif" />
-            <span>Please, wait...</span>
+            <img src="/preloader.gif" alt="..." />
+            {!props.onlyIcon && <span>Please, wait...</span>}
         </div>
     );
 };
