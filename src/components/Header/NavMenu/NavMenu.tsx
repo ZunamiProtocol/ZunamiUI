@@ -3,8 +3,6 @@ import { useHistory } from 'react-router-dom';
 import './NavMenu.scss';
 import { ReactComponent as DashboardIcon } from './dashboard-icon.svg';
 import { ReactComponent as DepositIcon } from './deposit-icon.svg';
-import { ReactComponent as LockdropIcon } from './lockdrop-icon.svg';
-import { ReactComponent as StakingIcon } from './staking-icon.svg';
 import { ReactComponent as DaoIcon } from './dao-icon.svg';
 
 interface NavMenuProps {

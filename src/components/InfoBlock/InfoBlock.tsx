@@ -15,7 +15,9 @@ interface InfoBlockProps {
     icon?: JSX.Element | undefined;
 }
 
-export const InfoBlock = (props: InfoBlockProps): JSX.Element => {
+export const InfoBlock = (
+    props: InfoBlockProps & React.HTMLProps<HTMLButtonElement>
+): JSX.Element => {
     const target = useRef(null);
     const [showHint, setShowHint] = useState(false);
 
