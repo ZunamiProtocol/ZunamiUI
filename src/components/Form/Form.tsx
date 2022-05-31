@@ -442,7 +442,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                             }}
                                         />
                                     )}
-                                    {pendingTx && <Preloader />}
+                                    {pendingTx && <Preloader className="ms-2" />}
                                 </div>
                             )}
                             {validationError && (
@@ -476,7 +476,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                             }}
                                         />
                                     )}
-                                    {pendingTx && <Preloader />}
+                                    {pendingTx && <Preloader className="ms-2" />}
                                 </div>
                             )}
                         </div>
