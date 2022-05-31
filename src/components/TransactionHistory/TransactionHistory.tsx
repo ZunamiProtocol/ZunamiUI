@@ -46,6 +46,7 @@ export const TransactionHistory = (props: TransactionHistoryProps): JSX.Element 
                                         <span>{item.status}</span>
                                         <a
                                             href={`https://etherscan.io/tx/${item.transactionHash}`}
+                                            rel="noreferrer"
                                             target="_blank"
                                             className="trans-link"
                                         >

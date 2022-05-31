@@ -27,7 +27,7 @@ interface WalletModalProps {
 
 export const WalletsModal = (props: WalletModalProps): JSX.Element => {
     const { CHAIN_ID } = config;
-    const { account, ethereum, connect } = useWallet();
+    const { ethereum, connect } = useWallet();
     const eth = window.ethereum || ethereum;
 
     const requestNetworkSwitch = () => {
