@@ -74,7 +74,7 @@ export const Main = (): JSX.Element => {
     const [totalIncome, setTotalIncome] = useState('n/a');
 
     useEffect(() => {
-        if (!account || userLpAmount.toNumber() <= 0) {
+        if (!account || userLpAmount.toNumber() === -1) {
             return;
         }
 
