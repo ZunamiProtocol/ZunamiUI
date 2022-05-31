@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from '../components/Header/Header';
-import { SideBar } from '../components/SideBar/SideBar';
 import { Form } from '../components/Form/Form';
 import './FinanceOperations.scss';
 import { Container, Row, Col, ToastContainer, Toast } from 'react-bootstrap';
@@ -61,10 +60,6 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     const { account, connect, ethereum } = useWallet();
     useEagerConnect(account ? account : '', connect, ethereum);
 
-    const [daiDisabled, setDaiDisabled] = useState(props.operationName === 'Withdraw');
-    const [usdcDisabled, setUsdcDisabled] = useState(props.operationName === 'Withdraw');
-    const [usdtDisabled, setUsdtDisabled] = useState(props.operationName === 'Withdraw');
-
     const [directOperation, setDirectOperation] = useState(false);
 
     const [daiChecked, setDaiChecked] = useState(false);
@@ -75,7 +70,6 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     const [selectedCoin, setSelectedCoin] = useState<string>('all');
     const [balance, setBalance] = useState(BIG_ZERO);
     const [rawBalance, setRawBalance] = useState(BIG_ZERO);
-    const [coins, setCoins] = useState([0, 0, 0]);
     const [selectedCoinIndex, setSelectedCoinIndex] = useState(-1);
 
     const [dai, setDai] = useState('0');
@@ -267,9 +261,6 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                 <div className="flex-wrap d-flex justify-content-start">
                                                     <Form
                                                         operationName={props.operationName}
-                                                        daiDisabled={daiDisabled}
-                                                        usdcDisabled={usdcDisabled}
-                                                        usdtDisabled={usdtDisabled}
                                                         directOperation={directOperation}
                                                         directOperationDisabled={false}
                                                         lpPrice={lpPrice}
@@ -282,12 +273,6 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                             coinType: string,
                                                             coinValue: number
                                                         ) => {
-                                                            setCoins([
-                                                                coinType === 'dai' ? coinValue : 0,
-                                                                coinType === 'usdc' ? coinValue : 0,
-                                                                coinType === 'usdt' ? coinValue : 0,
-                                                            ]);
-
                                                             if (coinType === 'dai') {
                                                                 setDai(
                                                                     Number(coinValue).toString()

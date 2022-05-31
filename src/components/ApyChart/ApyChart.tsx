@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import './ApyChart.scss';
 import {
     Chart as ChartJS,
@@ -119,19 +119,7 @@ const chartOptions = {
 
 export const ApyChart = (props: ChartProps): JSX.Element => {
     const [currentRange, setCurrentRange] = useState('week');
-    const [gradient, setGradient] = useState();
-
     const chartRef = useRef(null);
-
-    useEffect(() => {
-        // if (chartRef.current) {
-        //     console.log(chartRef.current.ctx);
-        //     const grd = chartRef.current.ctx.createLinearGradient(0, 0, 0, 200);
-        //     grd.addColorStop(0, 'rgba(250,174,50,1)');
-        //     grd.addColorStop(1, 'rgba(250,174,50,0)');
-        //     setGradient(grd);
-        // }
-    }, []);
 
     const data = {
         labels: props.data.map((item) => {
@@ -142,7 +130,6 @@ export const ApyChart = (props: ChartProps): JSX.Element => {
                 label: 'APY',
                 data: props.data.map((item) => item.apy),
                 borderColor: '#FA5B06',
-                backgroundColor: gradient,
             },
         ],
     };

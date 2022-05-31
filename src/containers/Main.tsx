@@ -43,18 +43,14 @@ export const Main = (): JSX.Element => {
     const lpPrice = useLpPrice();
     const userLpAmount = useUserLpAmount();
     const userMaxWithdraw =
-        lpPrice.toNumber() !== 0 && userLpAmount.toNumber() !== 0
+        lpPrice.toNumber() > 0 && userLpAmount.toNumber() !== -1
             ? lpPrice.multipliedBy(userLpAmount)
             : new BigNumber(-1);
 
     const { account, connect, ethereum } = useWallet();
     useEagerConnect(account ? account : '', connect, ethereum);
 
-    const {
-        isLoading: isZunLoading,
-        data: zunData,
-        error: zunError,
-    } = useFetch(zunamiInfoUrl) as ZunamiInfoFetch;
+    const { isLoading: isZunLoading, data: zunData } = useFetch(zunamiInfoUrl) as ZunamiInfoFetch;
 
     const zunamiInfo = zunData as ZunamiInfo;
 
@@ -78,7 +74,7 @@ export const Main = (): JSX.Element => {
     const [totalIncome, setTotalIncome] = useState('n/a');
 
     useEffect(() => {
-        if (!account || userLpAmount.toNumber() === -1 || userLpAmount.toNumber() === 0) {
+        if (!account || userLpAmount.toNumber() <= 0) {
             return;
         }
 

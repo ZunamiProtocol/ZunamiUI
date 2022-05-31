@@ -25,9 +25,6 @@ import { getActiveWalletName, getActiveWalletAddress } from '../WalletsModal/Wal
 
 interface FormProps {
     operationName: string;
-    daiDisabled?: boolean;
-    usdcDisabled?: boolean;
-    usdtDisabled?: boolean;
     directOperation: boolean;
     onOperationModeChange?: Function;
     sharePercent: number;
@@ -229,7 +226,6 @@ export const Form = (props: FormProps): JSX.Element => {
         parseInt(props.usdt) > getBalanceNumber(userBalanceList[2], 6).toNumber();
 
     const [pendingTx, setPendingTx] = useState(false);
-    const [pendingWithdraw, setPendingWithdraw] = useState(false);
     const [transactionId, setTransactionId] = useState(undefined);
 
     const { onStake } = useStake(
@@ -321,7 +317,6 @@ export const Form = (props: FormProps): JSX.Element => {
 
                     switch (action) {
                         case 'withdraw':
-                            setPendingWithdraw(true);
                             setPendingTx(true);
 
                             try {
@@ -336,7 +331,6 @@ export const Form = (props: FormProps): JSX.Element => {
                                     value: totalSum,
                                 });
                             } catch (error: any) {
-                                setPendingWithdraw(false);
                                 setTransactionError(error);
                             }
 
@@ -344,7 +338,6 @@ export const Form = (props: FormProps): JSX.Element => {
                                 props.onWithdraw();
                             }
 
-                            setPendingWithdraw(false);
                             setPendingTx(false);
                             break;
                         case 'deposit':
