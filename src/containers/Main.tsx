@@ -110,6 +110,11 @@ export const Main = (): JSX.Element => {
 
     const pendingOperations = usePendingOperations();
 
+    const pendingWithdraw =
+    lpPrice.toNumber() > 0 && pendingOperations.withdraw.toNumber() !== -1
+        ? lpPrice.multipliedBy(pendingOperations.withdraw)
+        : new BigNumber(0);
+
     const pdElement = (
         <div className="d-flex">
             <PendingBalance
@@ -117,8 +122,8 @@ export const Main = (): JSX.Element => {
                 hint={`You have $${pendingOperations.deposit} in pending deposit`}
             />
             <PendingBalance
-                val={`PW: $${getBalanceNumber(pendingOperations.withdraw).toFixed(2)}`}
-                hint={`You have $${pendingOperations.withdraw} in pending withdraw`}
+                val={`PW: $${getBalanceNumber(pendingWithdraw).toFixed(2)}`}
+                hint={`You have $${pendingWithdraw} in pending withdraw`}
             />
         </div>
     );
