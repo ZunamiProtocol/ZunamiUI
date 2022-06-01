@@ -11,6 +11,7 @@ type Config = {
 };
 
 let NETWORK = process.env.REACT_APP_NETWORK;
+
 if (!NETWORK) {
     NETWORK = 'mainnet';
 }
