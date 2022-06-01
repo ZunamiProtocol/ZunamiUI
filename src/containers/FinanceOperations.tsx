@@ -42,6 +42,10 @@ const calculateStables = async (
         .toFixed(0)
         .toString();
 
+    if (balanceToWithdraw === '0') {
+        return '0';
+    }
+
     setError('');
 
     try {
