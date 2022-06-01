@@ -11,6 +11,7 @@ type Config = {
 };
 
 let NETWORK = process.env.REACT_APP_NETWORK;
+
 if (!NETWORK) {
     NETWORK = 'mainnet';
 }
@@ -24,7 +25,7 @@ export const getNetworkConfig = (NETWORK: string): Config => {
     }
 
     return {
-        INFURA_URL: `https://${NETWORK}.infura.io/v3/2313ef889bea4d86ac8a997f09186617`,
+        INFURA_URL: `https://eth-${NETWORK}.alchemyapi.io/v2/Yh5zNTgJkqrOIqLtfkZBGIPecNPDQ1ON`,
         CHAIN_ID,
         NETWORK,
     };
