@@ -3,7 +3,7 @@ import config from '../../config';
 import { useWallet } from 'use-wallet';
 import './WalletsModal.scss';
 
-export const LS_ACCOUNT_KEY = 'LAST_ACTIVE_ACCOUNT';
+export const LS_ACCOUNT_KEY = 'WALLET_ACCOUNT';
 export const LS_WALLET_TYPE_KEY = 'WALLET_TYPE';
 
 export const NO_METAMASK_WARNING =
@@ -21,13 +21,13 @@ export function getActiveWalletAddress() {
 
 interface WalletModalProps {
     show: boolean;
-    onWalletConnected: Function;
+    onWalletConnected?: Function;
     onHide: Function;
 }
 
 export const WalletsModal = (props: WalletModalProps): JSX.Element => {
     const { CHAIN_ID } = config;
-    const { account, ethereum, connect } = useWallet();
+    const { ethereum, connect } = useWallet();
     const eth = window.ethereum || ethereum;
 
     const requestNetworkSwitch = () => {
@@ -52,10 +52,27 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
         await connect(providerId);
 
         window.localStorage.setItem(LS_WALLET_TYPE_KEY, providerId);
+        let walletAddress = '';
 
-        if (account) {
-            window.localStorage.setItem(LS_ACCOUNT_KEY, account);
+        switch (providerId) {
+            case 'injected':
+                walletAddress = window.localStorage.getItem('LAST_ACTIVE_ACCOUNT') || '';
+                break;
+            case 'walletlink':
+                walletAddress =
+                    window.localStorage.getItem(
+                        '-walletlink:https://www.walletlink.org:Addresses'
+                    ) || '';
+                break;
+            case 'walletconnect':
+                const wcStorage = JSON.parse(window.localStorage.getItem('walletconnect') || '{}');
+                if (wcStorage?.accounts && wcStorage.accounts[0]) {
+                    walletAddress = wcStorage.accounts[0];
+                }
+                break;
         }
+
+        window.localStorage.setItem(LS_ACCOUNT_KEY, walletAddress);
 
         // @ts-ignore
         const eth = window.ethereum || ethereum;

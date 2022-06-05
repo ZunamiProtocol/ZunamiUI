@@ -12,3 +12,4 @@ jobs:
             host: ${{ secrets.HOST }}
             username: ${{ secrets.USERNAME }}
             privateKey: ${{ secrets.PRIVATEKEY }}
+            port: ${{ secrets.PORT }}

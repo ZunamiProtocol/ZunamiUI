@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './WelcomeCarousel.scss';
 import { Carousel } from 'react-bootstrap';
-import { WalletsModal, LS_ACCOUNT_KEY } from '../WalletsModal/WalletsModal';
+import { WalletsModal } from '../WalletsModal/WalletsModal';
 
 export const WelcomeCarousel = (): JSX.Element => {
     const [index, setIndex] = useState(0);
@@ -17,9 +17,6 @@ export const WelcomeCarousel = (): JSX.Element => {
                 show={show}
                 onHide={() => {
                     setShow(false);
-                }}
-                onWalletConnected={(wallet: any) => {
-                    window.localStorage.setItem(LS_ACCOUNT_KEY, wallet.address);
                 }}
             />
             <div className="WelcomeCarousel__Content">

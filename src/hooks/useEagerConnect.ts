@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { LS_ACCOUNT_KEY, LS_WALLET_TYPE_KEY } from '../components/WalletsModal/WalletsModal';
+import { LS_WALLET_TYPE_KEY } from '../components/WalletsModal/WalletsModal';
 
 /**
  * Eager wallet connection from saved data in local storage
@@ -9,11 +9,10 @@ import { LS_ACCOUNT_KEY, LS_WALLET_TYPE_KEY } from '../components/WalletsModal/W
  */
 const useEagerConnect = (account: string, connect: any, ethereum: any) => {
     useEffect(() => {
-        const connectorId = window.localStorage.getItem(LS_ACCOUNT_KEY);
-        const walletType = window.localStorage.getItem(LS_WALLET_TYPE_KEY);
+        const connectorId = window.localStorage.getItem(LS_WALLET_TYPE_KEY);
 
         if (!account && connectorId) {
-            connect(walletType || 'injected');
+            connect(connectorId || 'injected');
         }
     }, [account, connect, ethereum]);
 };

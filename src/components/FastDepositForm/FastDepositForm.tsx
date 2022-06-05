@@ -210,7 +210,7 @@ export const FastDepositForm = (): JSX.Element => {
                                 }}
                             />
                         )}
-                        {pendingTx && <Preloader />}
+                        {pendingTx && <Preloader className="ms-2" />}
                     </div>
                 )}
             </div>
