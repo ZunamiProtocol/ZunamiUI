@@ -1,6 +1,6 @@
 {
     "name": "zunami-ui",
-    "version": "2.0.3",
+    "version": "2.0.4",
     "private": true,
     "dependencies": {
         "@analytics/google-tag-manager": "^0.5.2",
