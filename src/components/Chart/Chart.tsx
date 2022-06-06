@@ -26,6 +26,7 @@ function renderStratList(items: Array<DataItem>) {
                 <img src={item.icon} alt={item.title} className="me-2" />
                 <a target="blank" href={item.link}>
                     {item.title}
+                    {` (${item.value.toFixed(1)}%)`}
                 </a>
             </div>
         </div>

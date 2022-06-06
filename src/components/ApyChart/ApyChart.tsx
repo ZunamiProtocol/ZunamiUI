@@ -73,7 +73,6 @@ if (document.body.clientWidth > 1024) {
 
 const chartOptions = {
     responsive: true,
-    // radius: 0,
     layout: {
         padding: paddings,
     },
