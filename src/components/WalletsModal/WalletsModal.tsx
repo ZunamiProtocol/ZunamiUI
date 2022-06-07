@@ -9,23 +9,23 @@ export const LS_WALLET_TYPE_KEY = 'WALLET_TYPE';
 export const NO_METAMASK_WARNING =
     'Please, install either Metamask browser extension or Metamask mobile app';
 
-export function getActiveWalletName() {
+export const getActiveWalletName = function () {
     let name = window.localStorage.getItem(LS_WALLET_TYPE_KEY);
 
     return name === 'injected' ? 'metamask' : name;
-}
+};
 
-export function getActiveWalletAddress() {
+export const getActiveWalletAddress = function () {
     return window.localStorage.getItem(LS_ACCOUNT_KEY);
-}
+};
 
-interface WalletModalProps {
+interface WalletModalProps extends React.HTMLProps<HTMLDivElement> {
     show: boolean;
     onWalletConnected?: Function;
     onHide: Function;
 }
 
-export const WalletsModal = (props: WalletModalProps): JSX.Element => {
+export const WalletsModal: React.FC<WalletModalProps> = ({ show, onHide, ...props }) => {
     const { CHAIN_ID } = config;
     const { ethereum, connect } = useWallet();
     const eth = window.ethereum || ethereum;
@@ -102,12 +102,13 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
 
     return (
         <Modal
-            show={props.show}
-            onHide={props.onHide}
+            show={show}
+            onHide={onHide}
             backdrop="static"
             animation={false}
             keyboard={false}
             centered
+            {...props}
         >
             <Modal.Header closeButton>
                 <Modal.Title>Connect a wallet</Modal.Title>

@@ -4,11 +4,7 @@ interface PreloaderProps extends React.HTMLProps<HTMLDivElement> {
     onlyIcon?: boolean;
 }
 
-export const Preloader : React.FC<PreloaderProps> = ({
-    onlyIcon,
-    className,
-    ...props
-}) => {
+export const Preloader: React.FC<PreloaderProps> = ({ onlyIcon, className, ...props }) => {
     let classNames = ['Preloader', className].join(' ');
 
     return (

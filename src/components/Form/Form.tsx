@@ -23,7 +23,7 @@ import { ActionSelector } from './ActionSelector/ActionSelector';
 import { DirectAction } from './DirectAction/DirectAction';
 import { getActiveWalletName, getActiveWalletAddress } from '../WalletsModal/WalletsModal';
 
-interface FormProps {
+interface FormProps extends React.HTMLProps<HTMLDivElement> {
     operationName: string;
     directOperation: boolean;
     onOperationModeChange?: Function;
@@ -44,7 +44,7 @@ interface TransactionError {
     message?: String;
 }
 
-const getDepositValidationError = (
+export const getDepositValidationError = (
     dai: String,
     usdc: String,
     usdt: String,
@@ -65,7 +65,7 @@ const getDepositValidationError = (
     return error;
 };
 
-const getWithdrawValidationError = (
+export const getWithdrawValidationError = (
     dai: String,
     usdc: String,
     usdt: String,
@@ -86,28 +86,41 @@ const getWithdrawValidationError = (
     return error;
 };
 
-export const Form = (props: FormProps): JSX.Element => {
+export const Form: React.FC<FormProps> = ({
+    operationName,
+    onCoinChange,
+    dai,
+    usdc,
+    usdt,
+    lpPrice,
+    directOperation,
+    sharePercent,
+    onOperationModeChange,
+    selectedCoinIndex,
+    onWithdraw,
+    directOperationDisabled,
+    onDeposit,
+    ...props
+}) => {
     const { account } = useWallet();
 
-    const [action, setAction] = useState(
-        props.operationName === 'Deposit' ? 'deposit' : 'withdraw'
-    );
+    const [action, setAction] = useState(operationName === 'Deposit' ? 'deposit' : 'withdraw');
 
     const daiInputHandler = (newValue: string) => {
-        if (props.onCoinChange) {
-            props.onCoinChange('dai', newValue);
+        if (onCoinChange) {
+            onCoinChange('dai', newValue);
         }
     };
 
     const usdcInputHandler = (newValue: string) => {
-        if (props.onCoinChange) {
-            props.onCoinChange('usdc', newValue);
+        if (onCoinChange) {
+            onCoinChange('usdc', newValue);
         }
     };
 
     const usdtInputHandler = (newValue: string) => {
-        if (props.onCoinChange) {
-            props.onCoinChange('usdt', newValue);
+        if (onCoinChange) {
+            onCoinChange('usdt', newValue);
         }
     };
 
@@ -121,9 +134,7 @@ export const Form = (props: FormProps): JSX.Element => {
     const approveList = useAllowanceStables();
 
     const stableInputsSum =
-        (parseFloat(props.dai) || 0) +
-        (parseFloat(props.usdc) || 0) +
-        (parseFloat(props.usdt) || 0);
+        (parseFloat(dai) || 0) + (parseFloat(usdc) || 0) + (parseFloat(usdt) || 0);
     // user allowance
     const isApprovedTokens = [
         approveList ? approveList[0].toNumber() > 0 : false,
@@ -132,7 +143,7 @@ export const Form = (props: FormProps): JSX.Element => {
     ];
 
     // max for withdraw or deposit
-    const userMaxWithdraw = props.lpPrice.multipliedBy(userLpAmount) || BIG_ZERO;
+    const userMaxWithdraw = lpPrice.multipliedBy(userLpAmount) || BIG_ZERO;
 
     const userMaxWithdrawMinusInput =
         !userMaxWithdraw || userMaxWithdraw.toNumber() <= 0 || !userMaxWithdraw.toNumber()
@@ -198,22 +209,18 @@ export const Form = (props: FormProps): JSX.Element => {
 
     // caclulate lpshare to withdraw
     const lpShareToWithdraw = useMemo(() => {
-        if (props.operationName !== 'Withdraw') {
+        if (operationName !== 'Withdraw') {
             return BIG_ZERO;
         }
 
-        const sharesAmount = new BigNumber(
-            stableInputsSum / getBalanceNumber(props.lpPrice).toNumber()
-        );
+        const sharesAmount = new BigNumber(stableInputsSum / getBalanceNumber(lpPrice).toNumber());
 
         if (sharesAmount.toNumber() > 0) {
-            console.log(
-                `lpShareToWithdraw: ${sharesAmount} (${stableInputsSum} / ${props.lpPrice})`
-            );
+            console.log(`lpShareToWithdraw: ${sharesAmount} (${stableInputsSum} / ${lpPrice})`);
         }
 
         return sharesAmount;
-    }, [stableInputsSum, props.lpPrice, props.operationName]);
+    }, [stableInputsSum, lpPrice, operationName]);
 
     const fullBalancetoWithdraw = useMemo(() => {
         return getFullDisplayBalance(lpShareToWithdraw, 18);
@@ -221,69 +228,57 @@ export const Form = (props: FormProps): JSX.Element => {
 
     // deposit and withdraw functions
     const depositExceedAmount =
-        parseInt(props.dai) > getBalanceNumber(userBalanceList[0]).toNumber() ||
-        parseInt(props.usdc) > getBalanceNumber(userBalanceList[1], 6).toNumber() ||
-        parseInt(props.usdt) > getBalanceNumber(userBalanceList[2], 6).toNumber();
+        parseInt(dai) > getBalanceNumber(userBalanceList[0]).toNumber() ||
+        parseInt(usdc) > getBalanceNumber(userBalanceList[1], 6).toNumber() ||
+        parseInt(usdt) > getBalanceNumber(userBalanceList[2], 6).toNumber();
 
     const [pendingTx, setPendingTx] = useState(false);
     const [transactionId, setTransactionId] = useState(undefined);
 
     const { onStake } = useStake(
-        props.dai === '' ? '0' : props.dai,
-        props.usdc === '' ? '0' : props.usdc,
-        props.usdt === '' ? '0' : props.usdt,
-        props.directOperation
+        dai === '' ? '0' : dai,
+        usdc === '' ? '0' : usdc,
+        usdt === '' ? '0' : usdt,
+        directOperation
     );
 
     const { onUnstake } = useUnstake(
-        props.directOperation ? Number(fullBalancetoWithdraw) * 0.1 : Number(fullBalancetoWithdraw),
-        props.dai === '' ? '0' : props.dai,
-        props.usdc === '' ? '0' : props.usdc,
-        props.usdt === '' ? '0' : props.usdt,
-        !props.directOperation,
-        props.sharePercent,
-        props.directOperation && props.selectedCoinIndex === -1 ? 0 : props.selectedCoinIndex
+        directOperation ? Number(fullBalancetoWithdraw) * 0.1 : Number(fullBalancetoWithdraw),
+        dai === '' ? '0' : dai,
+        usdc === '' ? '0' : usdc,
+        usdt === '' ? '0' : usdt,
+        !directOperation,
+        sharePercent,
+        directOperation && selectedCoinIndex === -1 ? 0 : selectedCoinIndex
     );
 
     // TODO: need detect canceled tx's by user
     const [transactionError, setTransactionError] = useState<TransactionError>();
-    const emptyFunds = !Number(props.dai) && !Number(props.usdc) && !Number(props.usdt);
+    const emptyFunds = !Number(dai) && !Number(usdc) && !Number(usdt);
 
     const isApproved =
         approveList &&
-        ((parseFloat(props.dai) > 0 && isApprovedTokens[0]) ||
-            props.dai === '0' ||
-            props.dai === '') &&
-        ((parseFloat(props.usdc) > 0 && isApprovedTokens[1]) ||
-            props.usdc === '0' ||
-            props.usdc === '') &&
-        ((parseFloat(props.usdt) > 0 && isApprovedTokens[2]) ||
-            props.usdt === '0' ||
-            props.usdt === '');
+        ((parseFloat(dai) > 0 && isApprovedTokens[0]) || dai === '0' || dai === '') &&
+        ((parseFloat(usdc) > 0 && isApprovedTokens[1]) || usdc === '0' || usdc === '') &&
+        ((parseFloat(usdt) > 0 && isApprovedTokens[2]) || usdt === '0' || usdt === '');
 
     const validationError =
         action === 'deposit'
-            ? getDepositValidationError(
-                  props.dai,
-                  props.usdc,
-                  props.usdt,
-                  isApproved,
-                  pendingTx,
-                  depositExceedAmount
-              )
+            ? getDepositValidationError(dai, usdc, usdt, isApproved, pendingTx, depositExceedAmount)
             : getWithdrawValidationError(
-                  props.dai,
-                  props.usdc,
-                  props.usdt,
+                  dai,
+                  usdc,
+                  usdt,
                   fullBalanceLpShare,
                   userMaxWithdraw,
                   lpShareToWithdraw
               );
 
     const cantDeposit = emptyFunds || !isApproved || pendingTx || depositExceedAmount;
+    const classNames = ['Form', props.className].join(' ');
 
     return (
-        <div className={'Form'}>
+        <div className={classNames} {...props}>
             <ToastContainer position={'top-end'} className={'toasts mt-3 me-3'}>
                 {transactionError && (
                     <Toast onClose={() => setTransactionError(undefined)} delay={5000} autohide>
@@ -310,10 +305,7 @@ export const Form = (props: FormProps): JSX.Element => {
                 onSubmit={async (e) => {
                     e.preventDefault();
 
-                    const totalSum =
-                        parseInt(props.dai, 10) +
-                        parseInt(props.usdc, 10) +
-                        parseInt(props.usdt, 10);
+                    const totalSum = parseInt(dai, 10) + parseInt(usdc, 10) + parseInt(usdt, 10);
 
                     switch (action) {
                         case 'withdraw':
@@ -334,8 +326,8 @@ export const Form = (props: FormProps): JSX.Element => {
                                 setTransactionError(error);
                             }
 
-                            if (props.onWithdraw) {
-                                props.onWithdraw();
+                            if (onWithdraw) {
+                                onWithdraw();
                             }
 
                             setPendingTx(false);
@@ -358,8 +350,8 @@ export const Form = (props: FormProps): JSX.Element => {
                                 setTransactionError(error);
                             }
 
-                            if (props.onDeposit) {
-                                props.onDeposit();
+                            if (onDeposit) {
+                                onDeposit();
                             }
 
                             setPendingTx(false);
@@ -377,7 +369,7 @@ export const Form = (props: FormProps): JSX.Element => {
                     <Input
                         action={action}
                         name="DAI"
-                        value={props.dai}
+                        value={dai}
                         handler={daiInputHandler}
                         max={max[0]}
                         disabled={action === 'withdraw'}
@@ -385,7 +377,7 @@ export const Form = (props: FormProps): JSX.Element => {
                     <Input
                         action={action}
                         name="USDC"
-                        value={props.usdc}
+                        value={usdc}
                         handler={usdcInputHandler}
                         max={max[1]}
                         disabled={action === 'withdraw'}
@@ -393,14 +385,14 @@ export const Form = (props: FormProps): JSX.Element => {
                     <Input
                         action={action}
                         name="USDT"
-                        value={props.usdt}
+                        value={usdt}
                         handler={usdtInputHandler}
                         max={max[2]}
                         disabled={action === 'withdraw'}
                     />
                     {action === 'deposit' && (
                         <div className="deposit-action flex-wrap d-flex flex-row flex-wrap buttons align-items-center">
-                            {account && parseFloat(props.dai) > 0 && !isApprovedTokens[0] && (
+                            {account && parseFloat(dai) > 0 && !isApprovedTokens[0] && (
                                 <button
                                     disabled={pendingDAI || depositExceedAmount}
                                     onClick={handleApproveDai}
@@ -408,7 +400,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                     Approve DAI{' '}
                                 </button>
                             )}
-                            {account && parseFloat(props.usdc) > 0 && !isApprovedTokens[1] && (
+                            {account && parseFloat(usdc) > 0 && !isApprovedTokens[1] && (
                                 <button
                                     disabled={pendingUSDC || depositExceedAmount}
                                     onClick={handleApproveUsdc}
@@ -416,7 +408,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                     Approve USDC{' '}
                                 </button>
                             )}
-                            {account && parseFloat(props.usdt) > 0 && !isApprovedTokens[2] && (
+                            {account && parseFloat(usdt) > 0 && !isApprovedTokens[2] && (
                                 <button
                                     disabled={pendingUSDT || depositExceedAmount}
                                     onClick={handleApproveUsdt}
@@ -432,12 +424,12 @@ export const Form = (props: FormProps): JSX.Element => {
                                     {!pendingTx && (
                                         <DirectAction
                                             actionName="deposit"
-                                            checked={!props.directOperation}
+                                            checked={!directOperation}
                                             disabled={false}
                                             hint="When using optimized deposit funds will be deposited within 24 hours and many times cheaper"
                                             onChange={(state: boolean) => {
-                                                if (props.onOperationModeChange) {
-                                                    props.onOperationModeChange(state);
+                                                if (onOperationModeChange) {
+                                                    onOperationModeChange(state);
                                                 }
                                             }}
                                         />
@@ -466,12 +458,12 @@ export const Form = (props: FormProps): JSX.Element => {
                                     {!pendingTx && (
                                         <DirectAction
                                             actionName="withdraw"
-                                            disabled={props.directOperationDisabled || false}
-                                            checked={!props.directOperation}
+                                            disabled={directOperationDisabled || false}
+                                            checked={!directOperation}
                                             hint="When using optimized withdrawal funds will be withdrawn within 24 hours and many times cheaper. Optimized withdraw available only in all coins."
                                             onChange={(state: boolean) => {
-                                                if (props.onOperationModeChange) {
-                                                    props.onOperationModeChange(state);
+                                                if (onOperationModeChange) {
+                                                    onOperationModeChange(state);
                                                 }
                                             }}
                                         />

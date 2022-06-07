@@ -1,21 +1,10 @@
-import { BigNumber } from 'bignumber.js';
+import {
+    poolsChartdata,
+    poolDataToChartData,
+    poolInfoToChartElement,
+} from '../../../functions/pools';
 
-export interface PoolInfo {
-    pid: number;
-    apr: number;
-    apy: number;
-    tvlInZunami: string;
-    type: string;
-}
-
-export interface ChartDataElement {
-    title: string;
-    link: string;
-    color: string;
-    value: number;
-}
-
-export const poolsChartdata: { [key: string]: any } = {
+const pools = {
     OUSD: {
         title: 'Convex finance - OUSD pool',
         link: 'https://etherscan.io/address/0x0C597d8e2726AE58db3cA43225CA47fCcC96208B',
@@ -67,13 +56,22 @@ export const poolsChartdata: { [key: string]: any } = {
     },
 };
 
-export function poolInfoToChartElement(pool: PoolInfo, percent: BigNumber): ChartDataElement {
-    return {
-        ...poolsChartdata[pool.type],
-        value: new BigNumber(pool.tvlInZunami).dividedBy(percent).toNumber() * 100,
-    };
-}
+describe('Pools', () => {
+    it('Check pools list is OK', () => {
+        expect(poolsChartdata).toEqual(pools);
+    });
 
-export function poolDataToChartData(poolData: Array<PoolInfo>, TVL: BigNumber) {
-    return poolData.map((pool) => poolInfoToChartElement(pool, TVL)).filter((el) => el.value > 0);
-}
+    it('poolDataToChartData return array', () => {
+        expect(
+            poolDataToChartData([
+                {
+                    pid: 1,
+                    apr: 5,
+                    apy: 15,
+                    tvlInZunami: '50.222222',
+                    type: 'usdc',
+                },
+            ])
+        ).toBeInstanceOf(Array);
+    });
+});

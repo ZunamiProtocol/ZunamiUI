@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import './DirectAction.scss';
 
-interface DirectActionProps {
+interface DirectActionProps extends React.HTMLProps<HTMLDivElement> {
     actionName: string;
     hint: string;
     onChange?: Function;
@@ -10,24 +10,32 @@ interface DirectActionProps {
     disabled: boolean;
 }
 
-export const DirectAction = (props: DirectActionProps): JSX.Element => {
+export const DirectAction: React.FC<DirectActionProps> = ({
+    checked,
+    disabled,
+    onChange,
+    actionName,
+    hint,
+    ...props
+}) => {
     const target = useRef(null);
     const [showHint, setShowHint] = useState(false);
+    const classNames = ['DirectAction', disabled ? 'disabled' : '', props.className].join(' ');
 
     return (
-        <div className={`DirectAction ${props.disabled ? 'disabled' : ''}`}>
+        <div className={classNames} {...props}>
             <input
                 type="checkbox"
-                checked={props.checked}
+                checked={checked}
                 onChange={(e) => {
-                    if (props.onChange) {
-                        props.onChange(e.currentTarget.checked);
+                    if (onChange) {
+                        onChange(e.currentTarget.checked);
                     }
                 }}
             />
-            <span>Optimized {props.actionName}</span>
+            <span>Optimized {actionName}</span>
             <div ref={target} onClick={() => setShowHint(!showHint)}>
-                <OverlayTrigger placement="right" overlay={<Tooltip>{props.hint}</Tooltip>}>
+                <OverlayTrigger placement="right" overlay={<Tooltip>{hint}</Tooltip>}>
                     <svg
                         width="15"
                         height="15"

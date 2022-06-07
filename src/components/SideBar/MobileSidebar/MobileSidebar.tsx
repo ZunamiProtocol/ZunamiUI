@@ -6,7 +6,7 @@ export const MobileSidebar = (): JSX.Element => {
     return (
         <div id="MobileSidebar">
             <NavMenu
-                onSelect={() => {
+                onItemSelect={() => {
                     document.body.classList.remove('overflow');
                 }}
             />

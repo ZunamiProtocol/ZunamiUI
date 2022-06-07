@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import './ThemeSwitcher.scss';
 import { getTheme, setTheme as saveTheme } from '../../functions/theme';
 
-export const ThemeSwitcher = (): JSX.Element => {
+export const ThemeSwitcher = (props: React.HTMLProps<HTMLDivElement>): JSX.Element => {
     const [theme, setTheme] = useState(getTheme);
+    const classNames = ['ThemeSwitcher', props.className].join(' ');
 
     return (
         <div
-            className={'ThemeSwitcher'}
+            className={classNames}
             onClick={async (e) => {
                 const value = theme === 'dark' ? 'default' : 'dark';
 
@@ -23,6 +24,7 @@ export const ThemeSwitcher = (): JSX.Element => {
                     logo.setAttribute('src', logoName);
                 }
             }}
+            {...props}
         >
             <span>{theme === 'dark' ? 'Light theme' : 'Dark theme'}</span>
             {theme !== 'dark' && (

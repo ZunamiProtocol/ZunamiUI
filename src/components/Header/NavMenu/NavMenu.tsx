@@ -5,11 +5,11 @@ import { ReactComponent as DashboardIcon } from './dashboard-icon.svg';
 import { ReactComponent as DepositIcon } from './deposit-icon.svg';
 import { ReactComponent as DaoIcon } from './dao-icon.svg';
 
-interface NavMenuProps {
-    onSelect?: Function;
+interface NavMenuProps extends React.HTMLProps<HTMLDivElement> {
+    onItemSelect?: Function;
 }
 
-export const NavMenu = (props: NavMenuProps): JSX.Element => {
+export const NavMenu: React.FC<NavMenuProps> = ({ onItemSelect, ...props }) => {
     const history = useHistory();
     const items = [
         {
@@ -33,11 +33,11 @@ export const NavMenu = (props: NavMenuProps): JSX.Element => {
         const url = e.currentTarget.href;
         e.preventDefault();
 
-        if (props.onSelect) {
-            props.onSelect();
+        if (onItemSelect) {
+            onItemSelect();
         }
 
-        if (url.indexOf(window.location.hostname) === -1) {
+        if (window.location && url.indexOf(window.location.hostname) === -1) {
             window.open(url, '_blank');
             return;
         }
@@ -46,7 +46,7 @@ export const NavMenu = (props: NavMenuProps): JSX.Element => {
     };
 
     const activeElement = items.filter(
-        (el) => el.urls.indexOf(history.location.pathname) !== -1
+        (el) => el.urls.indexOf(window.history.location.pathname) !== -1
     )[0];
 
     const activeElementTitle = activeElement.title;

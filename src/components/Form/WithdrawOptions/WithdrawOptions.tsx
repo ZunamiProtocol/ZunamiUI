@@ -3,7 +3,7 @@ import './WithdrawOptions.scss';
 import { getBalanceNumber } from '../../../utils/formatbalance';
 import BigNumber from 'bignumber.js';
 
-interface WithdrawOptionsProps {
+interface WithdrawOptionsProps extends React.HTMLProps<HTMLDivElement> {
     onCoinSelect?: Function;
     onShareSelect?: Function;
     coinsSelectionEnabled: boolean;
@@ -17,20 +17,35 @@ interface WithdrawOptionsProps {
     lpPrice?: BigNumber;
 }
 
-export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
+export const coinSelectHandler = async (coin: string, handler: Function | undefined) => {
+    if (handler) {
+        handler(coin);
+    }
+};
+
+export const WithdrawOptions: React.FC<WithdrawOptionsProps> = ({
+    balance,
+    lpPrice,
+    onShareSelect,
+    onCoinSelect,
+    daiChecked,
+    usdcChecked,
+    usdtChecked,
+    sharePercent,
+    selectedCoin,
+    coinsSelectionEnabled,
+    ...props
+}) => {
     const coinsGroup = useRef<HTMLInputElement>(null);
-    const onCoinSelect = async (coin: string, handler: Function | undefined) => {
-        if (handler) {
-            handler(coin);
-        }
-    };
+
+    const classNames = ['WithdrawOptions', props.className].join(' ');
 
     return (
-        <div className="WithdrawOptions">
+        <div className={classNames} {...props}>
             <div className="WithdrawOptions__BalanceBlock">
                 <span>Your balance:</span>
-                <span className="balance">{getBalanceNumber(props.balance).toFixed(3, 1)}</span>
-                {props.lpPrice && <span> (LP price: {props.lpPrice.toFixed(2, 1)})</span>}
+                <span className="balance">{getBalanceNumber(balance).toFixed(3, 1)}</span>
+                {lpPrice && <span> (LP price: {lpPrice.toFixed(2, 1)})</span>}
             </div>
             <div className="WithdrawOptions__LiquidityBlock">
                 <span>Share of liquidity, %</span>
@@ -41,29 +56,29 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                     pattern="[0-9]+([\.][0-9]+)?"
                     max="100"
                     maxLength={5}
-                    disabled={props.daiChecked || props.usdcChecked || props.usdtChecked}
-                    value={props.sharePercent}
+                    disabled={daiChecked || usdcChecked || usdtChecked}
+                    value={sharePercent}
                     onChange={(e) => {
                         const value = e.currentTarget.value;
 
-                        if (props.onShareSelect) {
-                            props.onShareSelect(value);
+                        if (onShareSelect) {
+                            onShareSelect(value);
                         }
 
                         if (!isNaN(Number(value)) && Number(value) >= 100) {
-                            if (props.onShareSelect) {
-                                props.onShareSelect(100);
+                            if (onShareSelect) {
+                                onShareSelect(100);
                             }
                         }
                     }}
                     onKeyUp={(e) => {
                         const value = e.currentTarget.value;
 
-                        if (props.onShareSelect) {
-                            props.onShareSelect(value);
+                        if (onShareSelect) {
+                            onShareSelect(value);
 
-                            if (props.onCoinSelect) {
-                                props.onCoinSelect(undefined);
+                            if (onCoinSelect) {
+                                onCoinSelect(undefined);
                             }
                         }
                     }}
@@ -72,40 +87,34 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
             <div className="WithdrawOptions__CoinsBlock" ref={coinsGroup}>
                 <span>Withdraw in:</span>
                 <div className="coins">
-                    <label
-                        className="coin"
-                        onClick={() => onCoinSelect('usdc', props.onCoinSelect)}
-                    >
+                    <label className="coin" onClick={() => coinSelectHandler('usdc', onCoinSelect)}>
                         <input
                             type="radio"
                             name="active-coin"
                             data-coin="usdc"
-                            checked={props.selectedCoin === 'usdc'}
+                            checked={selectedCoin === 'usdc'}
                             onChange={() => {}}
                         />
                         <img src="/USDC.svg" alt="" />
                         <span>USDC</span>
                     </label>
-                    <label className="coin" onClick={() => onCoinSelect('dai', props.onCoinSelect)}>
+                    <label className="coin" onClick={() => coinSelectHandler('dai', onCoinSelect)}>
                         <input
                             type="radio"
                             name="active-coin"
                             data-coin="dai"
-                            checked={props.selectedCoin === 'dai'}
+                            checked={selectedCoin === 'dai'}
                             onChange={() => {}}
                         />
                         <img src="/DAI.svg" alt="" />
                         <span>DAI</span>
                     </label>
-                    <label
-                        className="coin"
-                        onClick={() => onCoinSelect('usdt', props.onCoinSelect)}
-                    >
+                    <label className="coin" onClick={() => coinSelectHandler('usdt', onCoinSelect)}>
                         <input
                             type="radio"
                             name="active-coin"
                             data-coin="usdt"
-                            checked={props.selectedCoin === 'usdt'}
+                            checked={selectedCoin === 'usdt'}
                             onChange={() => {}}
                         />
                         <img src="/USDT.svg" alt="" />
@@ -113,13 +122,13 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                     </label>
                     <label
                         className="coin all-coins"
-                        onClick={() => onCoinSelect('all', props.onCoinSelect)}
+                        onClick={() => coinSelectHandler('all', onCoinSelect)}
                     >
                         <input
                             type="radio"
                             name="active-coin"
                             data-coin="usdt"
-                            checked={props.selectedCoin === 'all'}
+                            checked={selectedCoin === 'all'}
                             onChange={() => {}}
                         />
                         <img src="/all-coins.svg" alt="" data-coin="all" />

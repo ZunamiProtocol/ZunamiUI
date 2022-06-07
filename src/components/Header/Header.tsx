@@ -8,20 +8,27 @@ import { WalletStatus } from '../WalletStatus/WalletStatus';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 import { NavMenu } from './NavMenu/NavMenu';
 
-export const Header = (): JSX.Element => {
+export const Header = (props: React.HTMLProps<HTMLDivElement>): JSX.Element => {
     const logoVariant = document.body.classList.contains('dark') ? 'logo-dark.svg' : 'logo.svg';
     const [open, setOpen] = useState(false);
     const isOnline = useOnlineState();
+    const classNames = [
+        'Header',
+        'navbar',
+        'navbar-expand-lg',
+        'navbar-light',
+        props.className,
+    ].join(' ');
 
     return (
-        <Navbar expand="lg" className={'Header'}>
+        <nav className={classNames} {...props}>
             <ErrorToast visible={!isOnline} />
             <div className="inner h-100">
                 <Navbar.Brand href="https://zunami.io">
                     <img className={'Logo'} src={logoVariant} alt="Logo of the Zunami Protocol" />
                 </Navbar.Brand>
                 <NavMenu
-                    onSelect={() => {
+                    onItemSelect={() => {
                         document.body.classList.remove('overflow');
                     }}
                 />
@@ -107,6 +114,6 @@ export const Header = (): JSX.Element => {
                     )}
                 </div>
             </div>
-        </Navbar>
+        </nav>
     );
 };

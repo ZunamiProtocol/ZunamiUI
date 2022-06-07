@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router-dom';
 import './ActionSelector.scss';
 
-interface ActionSelectorProps {
+interface ActionSelectorProps extends React.HTMLProps<HTMLDivElement> {
     value?: string;
     onChange: any;
 }
@@ -17,12 +17,13 @@ const actions = [
     },
 ];
 
-export const ActionSelector = (props: ActionSelectorProps): JSX.Element => {
-    const action = props.value || 'deposit';
+export const ActionSelector: React.FC<ActionSelectorProps> = ({ value, ...props }) => {
+    const action = value || 'deposit';
     const history = useHistory();
+    const classNames = ['ActionSelector', props.className].join(' ');
 
     return (
-        <div className="ActionSelector">
+        <div className={classNames} {...props}>
             {actions.map((item) => (
                 <div
                     key={item.name}

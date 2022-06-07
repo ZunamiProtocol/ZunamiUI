@@ -15,7 +15,7 @@ import { daiAddress, usdcAddress, usdtAddress } from '../../utils/formatbalance'
 import { getFullDisplayBalance } from '../../utils/formatbalance';
 import { Link } from 'react-router-dom';
 
-function coinNameToAddress(coinName: string): string {
+export const coinNameToAddress = function (coinName: string): string {
     let address = daiAddress;
 
     switch (coinName) {
@@ -28,9 +28,9 @@ function coinNameToAddress(coinName: string): string {
     }
 
     return address;
-}
+};
 
-export const FastDepositForm = (): JSX.Element => {
+export const FastDepositForm = (props: React.HTMLProps<HTMLDivElement>): JSX.Element => {
     const userBalanceList = useUserBalances();
     const { account } = useWallet();
 
@@ -70,8 +70,10 @@ export const FastDepositForm = (): JSX.Element => {
         !pendingApproval &&
         Number(depositSum) <= Number(fullBalance);
 
+    const classNames = ['FastDepositForm', props.className].join(' ');
+
     return (
-        <div className="FastDepositForm">
+        <div className={classNames} {...props}>
             <ToastContainer position={'top-end'} className={'toasts mt-3 me-3'}>
                 {transactionError && (
                     <Toast onClose={() => setTransactionError(false)} delay={5000} autohide>

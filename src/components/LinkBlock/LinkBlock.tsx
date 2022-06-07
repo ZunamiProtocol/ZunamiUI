@@ -4,7 +4,7 @@ import './LinkBlock.scss';
 import { ComingSoonPlaceholder } from '../ComingSoonPlaceholder/ComingSoonPlaceholder';
 import { TestnetLabel } from '../TestnetLabel/TestnetLabel';
 
-interface LinkBlockProps {
+interface LinkBlockProps extends React.HTMLProps<HTMLDivElement> {
     title: string;
     description: string;
     url: string;
@@ -14,42 +14,51 @@ interface LinkBlockProps {
     testnet?: boolean;
 }
 
-export const LinkBlock = (prop: LinkBlockProps): JSX.Element => {
+export const LinkBlock: React.FC<LinkBlockProps> = ({
+    title,
+    description,
+    url,
+    icon,
+    vstyle,
+    soon,
+    testnet,
+    ...props
+}) => {
     const history = useHistory();
-    const url = `/${prop.url}`;
+    const fullUrl = `/${url}`;
 
     const clickHandler = () => {
-        if (prop.url.indexOf('http') !== -1) {
-            window.open(prop.url, '_blank');
+        if (url.indexOf('http') !== -1) {
+            window.open(url, '_blank');
             return;
         }
 
-        history.push(url);
+        history.push(fullUrl);
         document.body.classList.remove('overflow');
     };
 
     const styles = ['LinkBlock'];
 
-    if (prop.vstyle) {
-        styles.push(`LinkBlock__${prop.vstyle}`);
+    if (vstyle) {
+        styles.push(`LinkBlock__${vstyle}`);
     }
 
     if (window.location.pathname === url) {
         styles.push('LinkBlock__active');
     }
 
-    if (prop.soon) {
+    if (soon) {
         styles.push('LinkBlock__soon');
     }
 
     return (
-        <div className={styles.join(' ')} onClick={clickHandler} data-url={url}>
+        <div className={styles.join(' ')} onClick={clickHandler} data-url={url} {...props}>
             <div className="LinkBlock__icon">
-                <img src={prop.icon} alt={prop.title} />
+                <img src={icon} alt={title} />
             </div>
-            <span className="LinkBlock__title">{prop.title}</span>
-            {prop.soon && <ComingSoonPlaceholder />}
-            {prop.testnet && <TestnetLabel />}
+            <span className="LinkBlock__title">{title}</span>
+            {soon && <ComingSoonPlaceholder />}
+            {testnet && <TestnetLabel />}
         </div>
     );
 };

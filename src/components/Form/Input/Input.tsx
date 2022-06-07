@@ -3,7 +3,7 @@ import './Input.scss';
 import BigNumber from 'bignumber.js';
 import { getFullDisplayBalance } from '../../../utils/formatbalance';
 
-interface InputProps {
+interface InputProps extends React.HTMLProps<HTMLDivElement> {
     name: string;
     value: string;
     handler(value: string): void;
@@ -12,50 +12,58 @@ interface InputProps {
     disabled?: boolean;
 }
 
-export const Input = (props: InputProps): JSX.Element => {
-    const [value, setValue] = useState('');
+export const Input: React.FC<InputProps> = ({
+    name,
+    value,
+    handler,
+    action,
+    max,
+    disabled,
+    className,
+    ...props
+}) => {
+    const [innerValue, setInnerValue] = useState('');
     const regex = /^[0-9]*[.,]?[0-9]*$/;
 
     useEffect(() => {
-        setValue(props.value);
-    }, [props.value]);
+        setInnerValue(value);
+    }, [value]);
 
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (regex.test(e.target.value)) {
-            props.handler(e.target.value);
-            setValue(Number(e.target.value).toString());
+            handler(e.target.value);
+            setInnerValue(Number(e.target.value).toString());
         }
     };
 
     const fullBalance = useMemo(() => {
-        let decimals = props.name === 'DAI' ? 18 : 6;
+        let decimals = name === 'DAI' ? 18 : 6;
 
-        if (props.action === 'withdraw') {
+        if (action === 'withdraw') {
             decimals = 18;
         }
 
-        return (
-            Math.trunc(Number(getFullDisplayBalance(props.max, decimals)) * 100) / 100
-        ).toString();
-    }, [props.max, props.name, props.action]);
+        return (Math.trunc(Number(getFullDisplayBalance(max, decimals)) * 100) / 100).toString();
+    }, [max, name, action]);
 
     const handleSelectMax = useCallback(() => {
-        props.handler(fullBalance);
-        setValue(fullBalance);
-    }, [fullBalance, setValue, props]);
+        handler(fullBalance);
+        setInnerValue(fullBalance);
+    }, [fullBalance, setInnerValue, props]);
 
     const isBalanceZero = fullBalance === '0' || !fullBalance;
     const displayBalance = isBalanceZero ? '0.00' : fullBalance;
+    const classNames = ['Input', disabled ? 'disabled' : '', className].join(' ');
 
     return (
-        <div className={`Input ${props.disabled ? 'disabled' : ''}`}>
-            <img src={`${props.name}.svg`} alt="" />
-            <div className={'coinName'}>{props.name}</div>
+        <div className={classNames} {...props}>
+            <img src={`${name}.svg`} alt="" />
+            <div className={'coinName'}>{name}</div>
             <div className="divider"></div>
             <span className="max" onClick={handleSelectMax}>
                 MAX
             </span>
-            {props.action !== 'withdraw' && <span className="balance">{displayBalance}</span>}
+            {action !== 'withdraw' && <span className="balance">{displayBalance}</span>}
             <div className="divider"></div>
             <input
                 inputMode={'decimal'}
@@ -67,7 +75,7 @@ export const Input = (props: InputProps): JSX.Element => {
                 min={0}
                 minLength={1}
                 maxLength={79}
-                value={value}
+                value={innerValue}
                 onChange={changeHandler}
             />
         </div>
