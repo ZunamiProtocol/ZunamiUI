@@ -54,7 +54,7 @@ export const Main = (): JSX.Element => {
 
     const zunamiInfo = zunData as ZunamiInfo;
 
-    const pool = useFetch(getPoolStatsUrl('USDN,LUSD,ANCHOR,MIM'));
+    const pool = useFetch(getPoolStatsUrl('USDN,LUSD,ANCHOR,MIM,PUSD'));
     const poolStats = pool.data as PoolsStats;
     const poolBestAprDaily = zunamiInfo ? zunamiInfo.apr / 100 / 365 : 0;
     const poolBestAprMonthly = zunamiInfo ? (zunamiInfo.apr / 100 / 365) * 30 : 0;
