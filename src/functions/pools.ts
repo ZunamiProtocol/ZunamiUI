@@ -16,13 +16,6 @@ export interface ChartDataElement {
 }
 
 const poolsChartdata: { [key: string]: any } = {
-    OUSD: {
-        title: 'Convex finance - OUSD pool',
-        link: 'https://etherscan.io/address/0x0C597d8e2726AE58db3cA43225CA47fCcC96208B',
-        color: '#F64A00',
-        value: 0,
-        icon: '/convex.svg',
-    },
     USDP: {
         title: 'Convex finance - USDP pool',
         link: 'https://etherscan.io/address/0xb6a2641D9a4e8cfa9cE74784222Fd55f8B328179',
@@ -62,6 +55,13 @@ const poolsChartdata: { [key: string]: any } = {
         title: 'Convex finance - MIM pool',
         link: 'https://etherscan.io/address/0x946C3397D917898Be9034fe8206717ab84c4451a',
         color: '#8DDB2C',
+        value: 0,
+        icon: '/convex.svg',
+    },
+    PUSD: {
+        title: 'Convex finance - PUSD pool',
+        link: 'https://etherscan.io/address/0x7e3e10ea28affd3fc47c5491fef8351acb530d71',
+        color: '#FFC129',
         value: 0,
         icon: '/convex.svg',
     },

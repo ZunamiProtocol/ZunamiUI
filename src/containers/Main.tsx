@@ -54,10 +54,11 @@ export const Main = (): JSX.Element => {
 
     const zunamiInfo = zunData as ZunamiInfo;
 
-    const pool = useFetch(getPoolStatsUrl('USDN,LUSD,ANCHOR,MIM'));
+    const pool = useFetch(getPoolStatsUrl('USDN,LUSD,ANCHOR,MIM,PUSD'));
     const poolStats = pool.data as PoolsStats;
     const poolBestAprDaily = zunamiInfo ? zunamiInfo.apr / 100 / 365 : 0;
     const poolBestAprMonthly = zunamiInfo ? (zunamiInfo.apr / 100 / 365) * 30 : 0;
+    const poolBestApyYearly = zunamiInfo ? (zunamiInfo.apy / 100 / 365) * 30 * 12 : 0;
     const dailyProfit =
         userMaxWithdraw.toNumber() === -1
             ? 0
@@ -69,7 +70,7 @@ export const Main = (): JSX.Element => {
     const yearlyProfit =
         userMaxWithdraw.toNumber() === -1
             ? 0
-            : getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprMonthly * 12;
+            : getBalanceNumber(userMaxWithdraw).toNumber() * poolBestApyYearly;
 
     const [totalIncome, setTotalIncome] = useState('n/a');
 
@@ -111,9 +112,9 @@ export const Main = (): JSX.Element => {
     const pendingOperations = usePendingOperations();
 
     const pendingWithdraw =
-    lpPrice.toNumber() > 0 && pendingOperations.withdraw.toNumber() !== -1
-        ? lpPrice.multipliedBy(pendingOperations.withdraw)
-        : new BigNumber(0);
+        lpPrice.toNumber() > 0 && pendingOperations.withdraw.toNumber() !== -1
+            ? lpPrice.multipliedBy(pendingOperations.withdraw)
+            : new BigNumber(0);
 
     const pdElement = (
         <div className="d-flex">
