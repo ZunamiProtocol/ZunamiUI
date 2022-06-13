@@ -1,5 +1,4 @@
 import React, { useEffect, useState, Suspense, lazy } from 'react';
-// import { Header } from '../components/Header/Header';
 import { InfoBlock } from '../components/InfoBlock/InfoBlock';
 import { ClickableHeader } from '../components/ClickableHeader/ClickableHeader';
 import './Main.scss';
