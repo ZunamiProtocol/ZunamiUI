@@ -10,7 +10,6 @@ import useEagerConnect from '../hooks/useEagerConnect';
 import useFetch from 'react-fetch-hook';
 import { getPoolStatsUrl, zunamiInfoUrl, getHistoricalApyUrl, getTotalIncomeUrl } from '../api/api';
 import { BigNumber } from 'bignumber.js';
-
 import usePendingOperations from '../hooks/usePendingOperations';
 import { PoolInfo, poolDataToChartData } from '../functions/pools';
 import { Preloader } from '../components/Preloader/Preloader';
