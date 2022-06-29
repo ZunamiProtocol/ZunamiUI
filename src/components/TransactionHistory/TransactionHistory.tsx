@@ -6,6 +6,32 @@ interface TransactionHistoryProps {
     items?: Array<any>;
 }
 
+interface TransactionItem {
+    dai: Number;
+    usdc: Number;
+    usdt: Number;
+    dateTime: String;
+    transactionHash: String;
+    status: String;
+}
+
+/**
+ * Returns an icon for transaction
+ * @param transaction 
+ * @returns 
+ */
+function getIconFromTransaction(transaction: TransactionItem) {
+    let icon = 'USDT';
+
+    if (transaction.dai > 0) {
+        icon = 'DAI';
+    } else if (transaction.usdc > 0) {
+        icon = 'USDC';
+    }
+
+    return icon;
+}
+
 export const TransactionHistory = (props: TransactionHistoryProps): JSX.Element => {
     return (
         <div className={'TransactionHistory'}>
@@ -25,18 +51,8 @@ export const TransactionHistory = (props: TransactionHistoryProps): JSX.Element 
                             props.items.map((item) => (
                                 <tr key={item.dateTime}>
                                     <td>
-                                        <svg
-                                            className="icon"
-                                            viewBox="0 0 1024 1024"
-                                            version="1.1"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                fill="#50AF95"
-                                                d="M469.333333 384h170.666667a42.666667 42.666667 0 0 0 0-85.333333h-85.333333V256a42.666667 42.666667 0 0 0-85.333334 0v42.666667a128 128 0 0 0 0 256h85.333334a42.666667 42.666667 0 0 1 0 85.333333H384a42.666667 42.666667 0 0 0 0 85.333333h85.333333v42.666667a42.666667 42.666667 0 0 0 85.333334 0v-42.666667a128 128 0 0 0 0-256h-85.333334a42.666667 42.666667 0 0 1 0-85.333333z m42.666667-341.333333a469.333333 469.333333 0 1 0 469.333333 469.333333A469.333333 469.333333 0 0 0 512 42.666667z m0 853.333333a384 384 0 1 1 384-384 384 384 0 0 1-384 384z"
-                                            />
-                                        </svg>
-                                        <span className="ms-1">Stable</span>
+                                        <img src={`${getIconFromTransaction(item)}.svg`} className="icon" alt="" />
+                                        <span className="ms-1">{getIconFromTransaction(item)}</span>
                                     </td>
                                     <td>${item.value.toFixed(2)}</td>
                                     <td>{format(new Date(item.dateTime), 'd MMM, yyyy, h:m a')}</td>
