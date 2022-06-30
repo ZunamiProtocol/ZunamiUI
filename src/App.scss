@@ -493,6 +493,20 @@ body.dark {
         }
     }
 
+    .NetworkSelector {
+        background: #252525;
+
+        span {
+            color: #fff;
+        }
+
+        &__Toggler {
+            path {
+                stroke: #fff;
+            }
+        }
+    }
+
     .WalletStatus {
         svg {
             path:nth-child(1) {
