@@ -22,6 +22,7 @@ import { ApyChart } from '../components/ApyChart/ApyChart';
 import { WalletStatus } from '../components/WalletStatus/WalletStatus';
 import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar';
 import { Preloader } from '../components/Preloader/Preloader';
+import { BalanceInfoBlock } from '../components/BalanceInfoBlock/BalanceInfoBlock';
 
 interface ZunamiInfo {
     tvl: BigNumber;
@@ -141,7 +142,7 @@ export const Main = (): JSX.Element => {
                         <WalletStatus />
                         <ClickableHeader name="Dashboard" icon="dashboard" />
                         <div className={'first-row'}>
-                            <InfoBlock
+                            <BalanceInfoBlock
                                 title="Balance"
                                 description={
                                     <div>
