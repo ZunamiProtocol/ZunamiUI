@@ -4,7 +4,7 @@ export interface PoolInfo {
     pid: number;
     apr: number;
     apy: number;
-    tvlInZunami: string;
+    tvlInZunami: number;
     type: string;
 }
 
@@ -13,6 +13,7 @@ export interface ChartDataElement {
     link: string;
     color: string;
     value: number;
+    tvlInZunami: number;
 }
 
 const poolsChartdata: { [key: string]: any } = {
@@ -70,10 +71,14 @@ const poolsChartdata: { [key: string]: any } = {
 export function poolInfoToChartElement(pool: PoolInfo, percent: BigNumber): ChartDataElement {
     return {
         ...poolsChartdata[pool.type],
+        tvlInZunami: pool.tvlInZunami,
         value: new BigNumber(pool.tvlInZunami).dividedBy(percent).toNumber() * 100,
     };
 }
 
 export function poolDataToChartData(poolData: Array<PoolInfo>, TVL: BigNumber) {
-    return poolData.map((pool) => poolInfoToChartElement(pool, TVL)).filter((el) => el.value > 0);
+    return poolData
+        .map((pool) => poolInfoToChartElement(pool, TVL))
+        .filter((el) => el.value > 0)
+        .sort((a, b) => a.tvlInZunami > b.tvlInZunami ? -1 : 1);
 }
