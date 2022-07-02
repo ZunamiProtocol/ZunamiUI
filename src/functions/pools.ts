@@ -17,13 +17,6 @@ export interface ChartDataElement {
 }
 
 const poolsChartdata: { [key: string]: any } = {
-    USDP: {
-        title: 'Convex finance - USDP pool',
-        link: 'https://etherscan.io/address/0xb6a2641D9a4e8cfa9cE74784222Fd55f8B328179',
-        color: '#B8E654',
-        value: 0,
-        icon: '/convex.svg',
-    },
     DUSD: {
         title: 'Convex finance - DUSD pool',
         link: 'https://etherscan.io/address/0x63f920108834672619a8720321422dce79724766',
