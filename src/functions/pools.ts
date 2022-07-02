@@ -66,6 +66,13 @@ const poolsChartdata: { [key: string]: any } = {
         value: 0,
         icon: '/convex.svg',
     },
+    USDD: {
+        title: 'Convex finance - USDD pool',
+        link: 'https://etherscan.io/address/0x0C10bF8FcB7Bf5412187A595ab97a3609160b5c6',
+        color: '#B8E654',
+        value: 0,
+        icon: '/convex.svg',
+    },
 };
 
 export function poolInfoToChartElement(pool: PoolInfo, percent: BigNumber): ChartDataElement {
