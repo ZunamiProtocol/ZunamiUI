@@ -13,7 +13,6 @@ import { BigNumber } from 'bignumber.js';
 import usePendingOperations from '../hooks/usePendingOperations';
 import { PoolInfo, poolDataToChartData } from '../functions/pools';
 import { Preloader } from '../components/Preloader/Preloader';
-import { BalanceInfoBlock } from '../components/BalanceInfoBlock/BalanceInfoBlock';
 
 const Header = lazy(
     () => import('../components/Header/Header').then(module => ({ default: module.Header }))
@@ -163,7 +162,7 @@ export const Main = (): JSX.Element => {
                         <WalletStatus />
                         <ClickableHeader name="Dashboard" icon="dashboard" />
                         <div className={'first-row'}>
-                            <BalanceInfoBlock
+                            <InfoBlock
                                 title="Balance"
                                 description={
                                     <div>
