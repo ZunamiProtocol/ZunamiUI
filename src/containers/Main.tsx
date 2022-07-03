@@ -76,6 +76,7 @@ export const Main = (): JSX.Element => {
 
     const { data: activeStratsStat } = useFetch(getActiveStratsUrl());
     const poolStats = activeStratsStat as PoolsStats;
+
     const poolBestAprDaily = zunamiInfo ? zunamiInfo.apr / 100 / 365 : 0;
     const poolBestAprMonthly = zunamiInfo ? (zunamiInfo.apr / 100 / 365) * 30 : 0;
     const poolBestApyYearly = zunamiInfo ? (zunamiInfo.apy / 100 / 365) * 30 * 12 : 0;
