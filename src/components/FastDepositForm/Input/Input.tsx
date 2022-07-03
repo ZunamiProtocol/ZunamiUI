@@ -17,17 +17,6 @@ export const Input = (props: InputProps): JSX.Element => {
     const [value, setValue] = useState('');
     const regex = /^[0-9]*[.,]?[0-9]*$/;
 
-    useEffect(() => {
-        setValue(props.value);
-    }, [props.value]);
-
-    const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (regex.test(e.target.value)) {
-            props.handler(e.target.value);
-            setValue(Number(e.target.value).toString());
-        }
-    };
-
     const fullBalance = useMemo(() => {
         let decimals = props.name === 'DAI' ? 18 : 6;
 
@@ -37,6 +26,17 @@ export const Input = (props: InputProps): JSX.Element => {
 
         return getFullDisplayBalance(props.max, decimals);
     }, [props.max, props.name, props.action]);
+
+    useEffect(() => {
+        setValue(props.max ? fullBalance : props.value);
+    }, [props.value, props.max, fullBalance]);
+
+    const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (regex.test(e.target.value)) {
+            props.handler(e.target.value);
+            setValue(Number(e.target.value).toString());
+        }
+    };
 
     const handleSelectMax = useCallback(() => {
         props.handler(fullBalance);

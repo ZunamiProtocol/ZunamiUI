@@ -37,7 +37,7 @@ export const FastDepositForm = (): JSX.Element => {
     const [optimized, setOptimized] = useState(true);
     const [pendingApproval, setPendingApproval] = useState(false);
     const [coin, setCoin] = useState('USDC');
-    const [depositSum, setDepositSum] = useState('0');
+    const [depositSum, setDepositSum] = useState(userBalanceList[1].toFixed(2).toString());
     const [transactionId, setTransactionId] = useState(undefined);
     const [pendingTx, setPendingTx] = useState(false);
     const [transactionError, setTransactionError] = useState(false);
