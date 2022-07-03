@@ -7,6 +7,7 @@ import { ErrorToast } from '../ErrorToast/ErrorToast';
 import { WalletStatus } from '../WalletStatus/WalletStatus';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 import { NavMenu } from './NavMenu/NavMenu';
+import { NetworkSelector } from '../NetworkSelector/NetworkSelector';
 
 export const Header = (): JSX.Element => {
     const logoVariant = document.body.classList.contains('dark') ? 'logo-dark.svg' : 'logo.svg';
@@ -41,6 +42,7 @@ export const Header = (): JSX.Element => {
                         </div>
                     }
                 />
+                <NetworkSelector />
                 <WalletStatus />
                 <svg
                     width="2"

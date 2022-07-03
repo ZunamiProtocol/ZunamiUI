@@ -1,11 +1,16 @@
 const root = 'https://zunami-reward-api.herokuapp.com/api';
 export const poolStatsUrl = `${root}/pool/stats`;
+export const activeStratsUrl = `${root}/pool/active-pools-stats`;
 export const zunamiInfoUrl = `${root}/zunami/info`;
 
 export const historicalApyUrl = `${root}/zunami/apy-chart`;
 export const testnetUrl = `${root}/feature`;
 export const totalIncomeUrl = `${root}/transfers/total-income`;
 export const transHistoryUrl = `${root}/transfers/history`;
+
+export const getActiveStratsUrl = (): string => {
+    return activeStratsUrl;
+};
 
 export const getPoolStatsUrl = (poolTypes: string): string => {
     return poolStatsUrl + '?types=' + poolTypes;

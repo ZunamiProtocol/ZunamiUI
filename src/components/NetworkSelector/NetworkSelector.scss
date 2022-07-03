@@ -1,0 +1,71 @@
+@import 'src/variables';
+
+.NetworkSelector {
+    background: #FBECD9;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+
+    @media screen and (min-width: $media1024) {
+        width: 55px;
+        height: 45px;
+        margin-left: 0;
+        margin-right: 13px;
+    }
+
+    @media screen and (min-width: $media1440) {
+        width: 126px;
+        height: 33px;
+        margin-left: 20px;
+        margin-right: 0;
+    }
+
+    @media screen and (min-width: $media1920) {
+    }
+
+    span {
+        @media screen and (min-width: $media1024) {
+            font-size: 12px;
+            line-height: 16px;
+            display: none;
+        }
+
+        @media screen and (min-width: $media1440) {
+            margin: 0 10px;
+            display: block;
+        }
+
+        @media screen and (min-width: $media1920) {
+        }
+    }
+
+    svg {
+        @media screen and (min-width: $media1440) {
+            width: 11px;
+            height: 18px;
+        }
+    }
+
+    &__Toggler {
+        @media screen and (min-width: $media1024) {
+            display: none;
+        }
+
+        @media screen and (min-width: $media1440) {
+            display: block;
+        }
+    }
+
+    select {
+        opacity: 0;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        cursor: pointer;
+    }
+}

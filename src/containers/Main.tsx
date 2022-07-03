@@ -1,27 +1,47 @@
-import React, { useEffect, useState } from 'react';
-import { Header } from '../components/Header/Header';
+import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { InfoBlock } from '../components/InfoBlock/InfoBlock';
-import { SideBar } from '../components/SideBar/SideBar';
 import { ClickableHeader } from '../components/ClickableHeader/ClickableHeader';
 import './Main.scss';
-import { Chart } from '../components/Chart/Chart';
-import { PendingBalance } from '../components/PendingBalance/PendingBalance';
-import { Container, Row, Col } from 'react-bootstrap';
 import { getBalanceNumber } from '../utils/formatbalance';
 import useLpPrice from '../hooks/useLpPrice';
 import useUserLpAmount from '../hooks/useUserLpAmount';
 import { useWallet } from 'use-wallet';
 import useEagerConnect from '../hooks/useEagerConnect';
 import useFetch from 'react-fetch-hook';
-import { getPoolStatsUrl, zunamiInfoUrl, getHistoricalApyUrl, getTotalIncomeUrl } from '../api/api';
+import { zunamiInfoUrl, getHistoricalApyUrl, getTotalIncomeUrl, getActiveStratsUrl } from '../api/api';
 import { BigNumber } from 'bignumber.js';
-
 import usePendingOperations from '../hooks/usePendingOperations';
 import { PoolInfo, poolDataToChartData } from '../functions/pools';
-import { ApyChart } from '../components/ApyChart/ApyChart';
-import { WalletStatus } from '../components/WalletStatus/WalletStatus';
-import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar';
 import { Preloader } from '../components/Preloader/Preloader';
+import { BalanceInfoBlock } from '../components/BalanceInfoBlock/BalanceInfoBlock';
+
+const Header = lazy(
+    () => import('../components/Header/Header').then(module => ({ default: module.Header }))
+  );
+
+const MobileSidebar = lazy(
+    () => import('../components/SideBar/MobileSidebar/MobileSidebar').then(module => ({ default: module.MobileSidebar }))
+  );
+
+const PendingBalance = lazy(
+    () => import('../components/PendingBalance/PendingBalance').then(module => ({ default: module.PendingBalance }))
+  );
+
+const SideBar = lazy(
+    () => import('../components/SideBar/SideBar').then(module => ({ default: module.SideBar }))
+  );
+
+const WalletStatus = lazy(
+    () => import('../components/WalletStatus/WalletStatus').then(module => ({ default: module.WalletStatus }))
+  );
+
+const ApyChart = lazy(
+    () => import('../components/ApyChart/ApyChart').then(module => ({ default: module.ApyChart }))
+  );
+
+  const Chart = lazy(
+    () => import('../components/Chart/Chart').then(module => ({ default: module.Chart }))
+  );
 
 interface ZunamiInfo {
     tvl: BigNumber;
@@ -36,7 +56,7 @@ interface ZunamiInfoFetch {
 }
 
 interface PoolsStats {
-    poolsStats: Array<PoolInfo>;
+    pools: Array<PoolInfo>;
 }
 
 export const Main = (): JSX.Element => {
@@ -54,8 +74,9 @@ export const Main = (): JSX.Element => {
 
     const zunamiInfo = zunData as ZunamiInfo;
 
-    const pool = useFetch(getPoolStatsUrl('USDN,LUSD,ANCHOR,MIM,PUSD'));
-    const poolStats = pool.data as PoolsStats;
+    const { data: activeStratsStat } = useFetch(getActiveStratsUrl());
+    const poolStats = activeStratsStat as PoolsStats;
+
     const poolBestAprDaily = zunamiInfo ? zunamiInfo.apr / 100 / 365 : 0;
     const poolBestAprMonthly = zunamiInfo ? (zunamiInfo.apr / 100 / 365) * 30 : 0;
     const poolBestApyYearly = zunamiInfo ? (zunamiInfo.apy / 100 / 365) * 30 * 12 : 0;
@@ -92,8 +113,8 @@ export const Main = (): JSX.Element => {
     }, [account, userLpAmount]);
 
     const chartData =
-        poolStats && poolStats.poolsStats && zunamiInfo
-            ? poolDataToChartData(poolStats.poolsStats, zunamiInfo.tvl)
+        poolStats && poolStats.pools && zunamiInfo
+            ? poolDataToChartData(poolStats.pools, zunamiInfo.tvl)
             : [];
 
     const [histApyPeriod, setHistApyPeriod] = useState('week');
@@ -130,18 +151,19 @@ export const Main = (): JSX.Element => {
     );
 
     return (
+        <Suspense fallback={<Preloader onlyIcon={true} />}>
         <React.Fragment>
             <Header />
             <MobileSidebar />
-            <Container className={'d-flex justify-content-between flex-column'}>
-                <Row className={'main-row h-100'}>
+            <div className="container">
+                <div className="row main-row h-100">
                     <SideBar isMainPage={true} />
 
-                    <Col className={'content-col dashboard-col'}>
+                    <div className="col content-col dashboard-col">
                         <WalletStatus />
                         <ClickableHeader name="Dashboard" icon="dashboard" />
                         <div className={'first-row'}>
-                            <InfoBlock
+                            <BalanceInfoBlock
                                 title="Balance"
                                 description={
                                     <div>
@@ -245,8 +267,8 @@ export const Main = (): JSX.Element => {
                                 />
                             </div>
                         </div>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
                 <footer className="">
                     <div className="mobile">
                         <a href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing">
@@ -278,7 +300,8 @@ export const Main = (): JSX.Element => {
                         </li>
                     </ul>
                 </footer>
-            </Container>
+            </div>
         </React.Fragment>
+        </Suspense>
     );
 };
