@@ -13,6 +13,63 @@ import { BigNumber } from 'bignumber.js';
 import usePendingOperations from '../hooks/usePendingOperations';
 import { PoolInfo, poolDataToChartData } from '../functions/pools';
 import { Preloader } from '../components/Preloader/Preloader';
+import { BalanceInfoBlock } from '../components/BalanceInfoBlock/BalanceInfoBlock';
+
+const Header = lazy(
+    () => import('../components/Header/Header').then(module => ({ default: module.Header }))
+  );
+
+const MobileSidebar = lazy(
+    () => import('../components/SideBar/MobileSidebar/MobileSidebar').then(module => ({ default: module.MobileSidebar }))
+  );
+
+const PendingBalance = lazy(
+    () => import('../components/PendingBalance/PendingBalance').then(module => ({ default: module.PendingBalance }))
+  );
+
+const SideBar = lazy(
+    () => import('../components/SideBar/SideBar').then(module => ({ default: module.SideBar }))
+  );
+
+const WalletStatus = lazy(
+    () => import('../components/WalletStatus/WalletStatus').then(module => ({ default: module.WalletStatus }))
+  );
+
+const ApyChart = lazy(
+    () => import('../components/ApyChart/ApyChart').then(module => ({ default: module.ApyChart }))
+  );
+
+  const Chart = lazy(
+    () => import('../components/Chart/Chart').then(module => ({ default: module.Chart }))
+  );
+
+const Header = lazy(
+    () => import('../components/Header/Header').then(module => ({ default: module.Header }))
+  );
+
+const MobileSidebar = lazy(
+    () => import('../components/SideBar/MobileSidebar/MobileSidebar').then(module => ({ default: module.MobileSidebar }))
+  );
+
+const PendingBalance = lazy(
+    () => import('../components/PendingBalance/PendingBalance').then(module => ({ default: module.PendingBalance }))
+  );
+
+const SideBar = lazy(
+    () => import('../components/SideBar/SideBar').then(module => ({ default: module.SideBar }))
+  );
+
+const WalletStatus = lazy(
+    () => import('../components/WalletStatus/WalletStatus').then(module => ({ default: module.WalletStatus }))
+  );
+
+const ApyChart = lazy(
+    () => import('../components/ApyChart/ApyChart').then(module => ({ default: module.ApyChart }))
+  );
+
+  const Chart = lazy(
+    () => import('../components/Chart/Chart').then(module => ({ default: module.Chart }))
+  );
 
 const Header = lazy(
     () => import('../components/Header/Header').then(module => ({ default: module.Header }))
@@ -162,7 +219,7 @@ export const Main = (): JSX.Element => {
                         <WalletStatus />
                         <ClickableHeader name="Dashboard" icon="dashboard" />
                         <div className={'first-row'}>
-                            <InfoBlock
+                            <BalanceInfoBlock
                                 title="Balance"
                                 description={
                                     <div>
