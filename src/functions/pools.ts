@@ -4,7 +4,7 @@ export interface PoolInfo {
     pid: number;
     apr: number;
     apy: number;
-    tvlInZunami: string;
+    tvlInZunami: number;
     type: string;
 }
 
@@ -13,16 +13,10 @@ export interface ChartDataElement {
     link: string;
     color: string;
     value: number;
+    tvlInZunami: number;
 }
 
 const poolsChartdata: { [key: string]: any } = {
-    USDP: {
-        title: 'Convex finance - USDP pool',
-        link: 'https://etherscan.io/address/0xb6a2641D9a4e8cfa9cE74784222Fd55f8B328179',
-        color: '#B8E654',
-        value: 0,
-        icon: '/convex.svg',
-    },
     DUSD: {
         title: 'Convex finance - DUSD pool',
         link: 'https://etherscan.io/address/0x63f920108834672619a8720321422dce79724766',
@@ -65,15 +59,26 @@ const poolsChartdata: { [key: string]: any } = {
         value: 0,
         icon: '/convex.svg',
     },
+    USDD: {
+        title: 'Convex finance - USDD pool',
+        link: 'https://etherscan.io/address/0x0C10bF8FcB7Bf5412187A595ab97a3609160b5c6',
+        color: '#B8E654',
+        value: 0,
+        icon: '/convex.svg',
+    },
 };
 
 export function poolInfoToChartElement(pool: PoolInfo, percent: BigNumber): ChartDataElement {
     return {
         ...poolsChartdata[pool.type],
+        tvlInZunami: pool.tvlInZunami,
         value: new BigNumber(pool.tvlInZunami).dividedBy(percent).toNumber() * 100,
     };
 }
 
 export function poolDataToChartData(poolData: Array<PoolInfo>, TVL: BigNumber) {
-    return poolData.map((pool) => poolInfoToChartElement(pool, TVL)).filter((el) => el.value > 0);
+    return poolData
+        .map((pool) => poolInfoToChartElement(pool, TVL))
+        .filter((el) => el.value > 0)
+        .sort((a, b) => a.tvlInZunami > b.tvlInZunami ? -1 : 1);
 }

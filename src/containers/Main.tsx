@@ -8,7 +8,7 @@ import useUserLpAmount from '../hooks/useUserLpAmount';
 import { useWallet } from 'use-wallet';
 import useEagerConnect from '../hooks/useEagerConnect';
 import useFetch from 'react-fetch-hook';
-import { getPoolStatsUrl, zunamiInfoUrl, getHistoricalApyUrl, getTotalIncomeUrl } from '../api/api';
+import { zunamiInfoUrl, getHistoricalApyUrl, getTotalIncomeUrl, getActiveStratsUrl } from '../api/api';
 import { BigNumber } from 'bignumber.js';
 import usePendingOperations from '../hooks/usePendingOperations';
 import { PoolInfo, poolDataToChartData } from '../functions/pools';
@@ -56,7 +56,7 @@ interface ZunamiInfoFetch {
 }
 
 interface PoolsStats {
-    poolsStats: Array<PoolInfo>;
+    pools: Array<PoolInfo>;
 }
 
 export const Main = (): JSX.Element => {
@@ -74,8 +74,8 @@ export const Main = (): JSX.Element => {
 
     const zunamiInfo = zunData as ZunamiInfo;
 
-    const pool = useFetch(getPoolStatsUrl('USDN,LUSD,ANCHOR,MIM,PUSD'));
-    const poolStats = pool.data as PoolsStats;
+    const { data: activeStratsStat } = useFetch(getActiveStratsUrl());
+    const poolStats = activeStratsStat as PoolsStats;
     const poolBestAprDaily = zunamiInfo ? zunamiInfo.apr / 100 / 365 : 0;
     const poolBestAprMonthly = zunamiInfo ? (zunamiInfo.apr / 100 / 365) * 30 : 0;
     const poolBestApyYearly = zunamiInfo ? (zunamiInfo.apy / 100 / 365) * 30 * 12 : 0;
@@ -112,8 +112,8 @@ export const Main = (): JSX.Element => {
     }, [account, userLpAmount]);
 
     const chartData =
-        poolStats && poolStats.poolsStats && zunamiInfo
-            ? poolDataToChartData(poolStats.poolsStats, zunamiInfo.tvl)
+        poolStats && poolStats.pools && zunamiInfo
+            ? poolDataToChartData(poolStats.pools, zunamiInfo.tvl)
             : [];
 
     const [histApyPeriod, setHistApyPeriod] = useState('week');
