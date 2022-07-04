@@ -23,6 +23,8 @@ interface SideBarProps {
     isMainPage: boolean;
 }
 
+const managementFee = 15;
+
 export const SideBar = (props: SideBarProps): JSX.Element => {
     const {
         isLoading: isZunLoading,
@@ -106,7 +108,7 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                         hint={
                             <div>
                                 Annual Percentage Yield. Сumulative yield from all strategies used
-                                &amp; includes 0% management fee.{' '}
+                                &amp; includes {managementFee}% management fee.{' '}
                                 <a
                                     href="https://www.investopedia.com/terms/a/apy.asp"
                                     target="_blank"
@@ -133,7 +135,7 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                                 (Annual Percentage Rate) does not.{' '}
                                 {zunamiInfo && (
                                     <strong>
-                                        Current APR is {Number(zunamiInfo.apr).toFixed(2)}%
+                                        Current APR is {Number(zunamiInfo.apr - managementFee).toFixed(2)}%
                                     </strong>
                                 )}
                             </div>
