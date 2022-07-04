@@ -14,7 +14,6 @@ interface InputProps {
 }
 
 export const Input = (props: InputProps): JSX.Element => {
-    const [value, setValue] = useState('');
     const regex = /^[0-9]*[.,]?[0-9]*$/;
 
     const fullBalance = useMemo(() => {
@@ -27,21 +26,15 @@ export const Input = (props: InputProps): JSX.Element => {
         return getFullDisplayBalance(props.max, decimals);
     }, [props.max, props.name, props.action]);
 
-    useEffect(() => {
-        setValue(props.max ? fullBalance : props.value);
-    }, [props.value, props.max, fullBalance]);
-
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (regex.test(e.target.value)) {
             props.handler(e.target.value);
-            setValue(Number(e.target.value).toString());
         }
     };
 
     const handleSelectMax = useCallback(() => {
         props.handler(fullBalance);
-        setValue(fullBalance);
-    }, [fullBalance, setValue, props]);
+    }, [fullBalance, props]);
 
     return (
         <div className={`FastDepositInput ${props.disabled ? 'disabled' : ''}`}>
@@ -81,7 +74,7 @@ export const Input = (props: InputProps): JSX.Element => {
                 min={0}
                 minLength={1}
                 maxLength={79}
-                value={value}
+                value={props.value}
                 onChange={changeHandler}
             />
             <span className="max" onClick={handleSelectMax}>
