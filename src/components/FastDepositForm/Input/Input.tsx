@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import './Input.scss';
 import BigNumber from 'bignumber.js';
 import { getFullDisplayBalance } from '../../../utils/formatbalance';
