@@ -135,7 +135,7 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                                 (Annual Percentage Rate) does not.{' '}
                                 {zunamiInfo && (
                                     <strong>
-                                        Current APR is {Number(zunamiInfo.apr - performanceFee).toFixed(2)}%
+                                        Current APR is {Number(zunamiInfo.apr).toFixed(2)}%
                                     </strong>
                                 )}
                             </div>
