@@ -1,6 +1,6 @@
 import { useWallet } from 'use-wallet';
 import './FastDepositForm.scss';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { ToastContainer, Toast } from 'react-bootstrap';
 import { Input } from './Input/Input';
 import { Preloader } from '../Preloader/Preloader';
@@ -37,7 +37,7 @@ export const FastDepositForm = (): JSX.Element => {
     const [optimized, setOptimized] = useState(true);
     const [pendingApproval, setPendingApproval] = useState(false);
     const [coin, setCoin] = useState('USDC');
-    const [depositSum, setDepositSum] = useState(userBalanceList[1].toFixed(2).toString());
+    const [depositSum, setDepositSum] = useState('');
     const [transactionId, setTransactionId] = useState(undefined);
     const [pendingTx, setPendingTx] = useState(false);
     const [transactionError, setTransactionError] = useState(false);
@@ -69,6 +69,10 @@ export const FastDepositForm = (): JSX.Element => {
         Number(depositSum) > 0 &&
         !pendingApproval &&
         Number(depositSum) <= Number(fullBalance);
+
+    useEffect(() => {
+        setDepositSum(fullBalance.toString());
+    }, [fullBalance]);
 
     return (
         <div className="FastDepositForm">
