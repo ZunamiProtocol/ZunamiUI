@@ -390,6 +390,11 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                         <TransactionHistory
                                                             title="My withdrawals history"
                                                             items={transactionList}
+                                                            onPageEnd={() => {
+                                                                if (transHistoryPage !== -1) {
+                                                                    setTransHistoryPage(transHistoryPage + 1);
+                                                                }
+                                                            }}
                                                         />
                                                     )}
                                                 </div>
