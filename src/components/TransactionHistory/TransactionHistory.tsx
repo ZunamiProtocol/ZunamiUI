@@ -4,6 +4,7 @@ import './TransactionHistory.scss';
 interface TransactionHistoryProps {
     title: any;
     items?: Array<any>;
+    onPageEnd?: Function;
 }
 
 interface TransactionItem {
@@ -33,10 +34,22 @@ function getIconFromTransaction(transaction: TransactionItem) {
 }
 
 export const TransactionHistory = (props: TransactionHistoryProps): JSX.Element => {
+    const onScroll = (e: any) => {
+        const areaHeight = e.target.offsetHeight - 15;
+        const totalScroll = e.target.scrollTop + areaHeight;
+        const fullHeight = e.target.children[0].offsetHeight;
+
+        if (totalScroll >= fullHeight) {
+            if (props.onPageEnd) {
+                props.onPageEnd();
+            }
+        }
+    };
+
     return (
         <div className={'TransactionHistory'}>
             <div className="TransactionHistory__Title">{props.title}</div>
-            <div className="TransactionHistory__List">
+            <div className="TransactionHistory__List" onScroll={onScroll}>
                 <table className="">
                     <thead>
                         <tr>

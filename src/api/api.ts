@@ -32,7 +32,7 @@ export const getTransHistoryUrl = (
     address: string,
     type: string,
     page: number = 0,
-    size: number = 5
+    size: number = 10
 ): string => {
     return `${transHistoryUrl}?address=${address.toLowerCase()}&type=${type}&page=${page}&size=${size}`;
 };
