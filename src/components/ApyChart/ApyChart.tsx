@@ -104,7 +104,6 @@ const chartOptions = {
                 display: false,
             },
             min: 0,
-            // max: 20,
             ticks: {
                 //@ts-ignore
                 callback: function (val) {
