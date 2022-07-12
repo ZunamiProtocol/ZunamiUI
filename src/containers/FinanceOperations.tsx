@@ -86,6 +86,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     const [calcError, setCalcError] = useState('');
     const [transactionList, setTransactionList] = useState([]);
     const [showMobileTransHistory, setShowMobileTransHistory] = useState(false);
+    const [transHistoryPage, setTransHistoryPage] = useState(0);
 
     useEffect(() => {
         if (
@@ -164,21 +165,32 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     }, [balance, selectedCoinIndex, sharePercent, zunamiContract, rawBalance, account]);
 
     useEffect(() => {
-        if (!account) {
+        if (!account || transHistoryPage === -1) {
             return;
         }
 
         const getTransactionHistory = async () => {
             const response = await fetch(
-                getTransHistoryUrl(account, props.operationName.toUpperCase())
+                getTransHistoryUrl(
+                    account,
+                    props.operationName.toUpperCase(),
+                    transHistoryPage,
+                    6
+                )
             );
 
             const data = await response.json();
-            setTransactionList(data.userTransfers);
+
+            if (!data.userTransfers.length) {
+                setTransHistoryPage(-1);
+                return;
+            }
+
+            setTransactionList(transactionList.concat(data.userTransfers));
         };
 
         getTransactionHistory();
-    }, [account, props.operationName]);
+    }, [account, props.operationName, transHistoryPage]);
 
     return (
         <React.Fragment>
@@ -257,6 +269,11 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                     <TransactionHistory
                                                         title=""
                                                         items={transactionList}
+                                                        onPageEnd={() => {
+                                                            if (transHistoryPage !== -1) {
+                                                                setTransHistoryPage(transHistoryPage + 1);
+                                                            }
+                                                        }}
                                                     />
                                                 </div>
                                             </div>
@@ -362,6 +379,11 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                         <TransactionHistory
                                                             title="My deposits history"
                                                             items={transactionList}
+                                                            onPageEnd={() => {
+                                                                if (transHistoryPage !== -1) {
+                                                                    setTransHistoryPage(transHistoryPage + 1);
+                                                                }
+                                                            }}
                                                         />
                                                     )}
                                                     {props.operationName === 'Withdraw' && (
