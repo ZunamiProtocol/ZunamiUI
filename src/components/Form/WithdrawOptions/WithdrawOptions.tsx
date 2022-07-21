@@ -15,6 +15,7 @@ interface WithdrawOptionsProps {
     rawBalance?: BigNumber;
     balance: BigNumber;
     lpPrice?: BigNumber;
+    disabled?: boolean;
 }
 
 export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
@@ -69,7 +70,7 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                     }}
                 />
             </div>
-            <div className="WithdrawOptions__CoinsBlock" ref={coinsGroup}>
+            <div className={`WithdrawOptions__CoinsBlock ${props.disabled ? 'disabled' : ''}`} ref={coinsGroup}>
                 <span>Withdraw in:</span>
                 <div className="coins">
                     <label

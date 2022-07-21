@@ -1,4 +1,3 @@
-import { useWallet } from 'use-wallet';
 import './FastDepositForm.scss';
 import { useState, useMemo, useEffect } from 'react';
 import { ToastContainer, Toast } from 'react-bootstrap';
@@ -10,12 +9,18 @@ import { DirectAction } from '../Form/DirectAction/DirectAction';
 import { useAllowanceStables } from '../../hooks/useAllowance';
 import useApprove from '../../hooks/useApprove';
 import useStake from '../../hooks/useStake';
-import { getActiveWalletName, getActiveWalletAddress } from '../WalletsModal/WalletsModal';
-import { daiAddress, usdcAddress, usdtAddress } from '../../utils/formatbalance';
+import { getActiveWalletName } from '../WalletsModal/WalletsModal';
+import { daiAddress, usdcAddress, usdtAddress, bscUsdtAddress } from '../../utils/formatbalance';
 import { getFullDisplayBalance } from '../../utils/formatbalance';
 import { Link } from 'react-router-dom';
+import { useWallet } from 'use-wallet';
+import useSushi from './../../hooks/useSushi';
 
-function coinNameToAddress(coinName: string): string {
+function coinNameToAddress(coinName: string, chainId: string): string {
+    if (chainId === 'bnb') {
+        return bscUsdtAddress;
+    }
+
     let address = daiAddress;
 
     switch (coinName) {
@@ -32,37 +37,45 @@ function coinNameToAddress(coinName: string): string {
 
 export const FastDepositForm = (): JSX.Element => {
     const userBalanceList = useUserBalances();
-    const { account } = useWallet();
-
+    const { chainId, account } = useWallet();
+    const sushi = useSushi();
     const [optimized, setOptimized] = useState(true);
     const [pendingApproval, setPendingApproval] = useState(false);
     const [coin, setCoin] = useState('USDC');
     const [depositSum, setDepositSum] = useState('');
-    const [transactionId, setTransactionId] = useState(undefined);
+    const [transactionId, setTransactionId] = useState<string | undefined>(undefined);
     const [pendingTx, setPendingTx] = useState(false);
     const [transactionError, setTransactionError] = useState(false);
-
     const coins = ['DAI', 'USDC', 'USDT'];
-    const coinIndex = coins.indexOf(coin);
-
+    const [coinIndex, setCoinIndex] = useState(-1);
     const approveList = useAllowanceStables();
     const approvedTokens = [
         approveList ? approveList[0].toNumber() > 0 : false,
         approveList ? approveList[1].toNumber() > 0 : false,
         approveList ? approveList[2].toNumber() > 0 : false,
     ];
-
     const { onApprove } = useApprove();
     const { onStake } = useStake(
         coin === 'DAI' ? depositSum : '0',
         coin === 'USDC' ? depositSum : '0',
         coin === 'USDT' ? depositSum : '0',
-        !optimized
+        !optimized,
+        chainId
     );
 
+    useEffect(() => {
+        setCoinIndex(coins.indexOf(coin));
+        setCoin(chainId !== 1 ? 'USDT' : 'USDC');
+    }, [chainId, coins, coin]);
+
+    // get user max balance
     const fullBalance = useMemo(() => {
-        return getFullDisplayBalance(userBalanceList[coinIndex], coin === 'DAI' ? 18 : 6);
-    }, [userBalanceList, coin, coinIndex]);
+        if (chainId !== 1) {
+            return getFullDisplayBalance(userBalanceList[coinIndex], 18);
+        } else {
+            return getFullDisplayBalance(userBalanceList[coinIndex], coin === 'DAI' ? 18 : 6);
+        }
+    }, [userBalanceList, coin, coinIndex, chainId]);
 
     const depositEnabled =
         approvedTokens[coinIndex] &&
@@ -70,6 +83,7 @@ export const FastDepositForm = (): JSX.Element => {
         !pendingApproval &&
         Number(depositSum) <= Number(fullBalance);
 
+    // set default input to max
     useEffect(() => {
         setDepositSum(fullBalance.toString());
     }, [fullBalance]);
@@ -89,7 +103,9 @@ export const FastDepositForm = (): JSX.Element => {
                             <a
                                 target="_blank"
                                 rel="noreferrer"
-                                href={`https://etherscan.io/tx/${transactionId}`}
+                                href={`https://${
+                                    chainId === 1 ? 'etherscan.io' : 'bscscan.com'
+                                }/tx/${transactionId}`}
                             >
                                 transaction
                             </a>
@@ -138,7 +154,7 @@ export const FastDepositForm = (): JSX.Element => {
             </div>
             <Input
                 action="deposit"
-                name={coin}
+                name={chainId && chainId === 1 ? 'USDC' : 'USDT'}
                 value={depositSum}
                 handler={(sum) => {
                     setDepositSum(sum);
@@ -147,6 +163,7 @@ export const FastDepositForm = (): JSX.Element => {
                 onCoinChange={(coin: string) => {
                     setCoin(coin);
                 }}
+                chainId={chainId}
             />
             <div>
                 {!account && (
@@ -160,16 +177,23 @@ export const FastDepositForm = (): JSX.Element => {
                         {!approvedTokens[coinIndex] && (
                             <button
                                 className="zun-button"
-                                onClick={() => {
+                                onClick={async () => {
                                     setPendingApproval(true);
+                                    setPendingTx(true);
+
+                                    if (!chainId) {
+                                        return;
+                                    }
 
                                     try {
-                                        onApprove(coinNameToAddress(coin));
+                                        await onApprove(coinNameToAddress(coin, chainId));
                                     } catch (e) {
                                         setPendingApproval(false);
+                                        setPendingTx(false);
                                     }
 
                                     setPendingApproval(false);
+                                    setPendingTx(false);
                                 }}
                             >
                                 Approve
@@ -183,17 +207,21 @@ export const FastDepositForm = (): JSX.Element => {
 
                                     try {
                                         const tx = await onStake();
-                                        setTransactionId(tx.transactionHash);
+                                        setTransactionId(tx.hash);
                                         setDepositSum('0');
 
                                         // @ts-ignore
-                                        window.dataLayer.push({
-                                            event: 'deposit',
-                                            userID: getActiveWalletAddress(),
-                                            type: getActiveWalletName(),
-                                            value: depositSum,
-                                        });
+                                        if (window.dataLayer) {
+                                            // @ts-ignore
+                                            window.dataLayer.push({
+                                                event: 'deposit',
+                                                userID: account,
+                                                type: getActiveWalletName(),
+                                                value: depositSum,
+                                            });
+                                        }
                                     } catch (error: any) {
+                                        debugger;
                                         setTransactionError(true);
                                     }
 
@@ -207,8 +235,12 @@ export const FastDepositForm = (): JSX.Element => {
                             <DirectAction
                                 actionName="deposit"
                                 checked={optimized}
-                                disabled={false}
-                                hint="When using optimized deposit funds will be deposited within 24 hours and many times cheaper"
+                                disabled={chainId !== 1 || false}
+                                hint={`${
+                                    chainId === 1
+                                        ? 'When using optimized deposit funds will be deposited within 24 hours and many times cheaper'
+                                        : 'When using deposit funds will be deposited within 24 hours, because users’ funds accumulate in one batch and distribute to the ETH network in Zunami App.'
+                                }`}
                                 onChange={(state: boolean) => {
                                     setOptimized(state);
                                 }}

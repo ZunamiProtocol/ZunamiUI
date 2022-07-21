@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { useWallet } from 'use-wallet';
 import './TransactionHistory.scss';
 
 interface TransactionHistoryProps {
@@ -18,8 +19,8 @@ interface TransactionItem {
 
 /**
  * Returns an icon for transaction
- * @param transaction 
- * @returns 
+ * @param transaction
+ * @returns
  */
 function getIconFromTransaction(transaction: TransactionItem) {
     let icon = 'USDT';
@@ -34,6 +35,8 @@ function getIconFromTransaction(transaction: TransactionItem) {
 }
 
 export const TransactionHistory = (props: TransactionHistoryProps): JSX.Element => {
+    const { chainId } = useWallet();
+
     const onScroll = (e: any) => {
         const areaHeight = e.target.offsetHeight - 15;
         const totalScroll = e.target.scrollTop + areaHeight;
@@ -64,7 +67,11 @@ export const TransactionHistory = (props: TransactionHistoryProps): JSX.Element 
                             props.items.map((item) => (
                                 <tr key={item.dateTime}>
                                     <td>
-                                        <img src={`${getIconFromTransaction(item)}.svg`} className="icon" alt="" />
+                                        <img
+                                            src={`${getIconFromTransaction(item)}.svg`}
+                                            className="icon"
+                                            alt=""
+                                        />
                                         <span className="ms-1">{getIconFromTransaction(item)}</span>
                                     </td>
                                     <td>${item.value.toFixed(2)}</td>
@@ -74,7 +81,9 @@ export const TransactionHistory = (props: TransactionHistoryProps): JSX.Element 
                                     >
                                         <span>{item.status}</span>
                                         <a
-                                            href={`https://etherscan.io/tx/${item.transactionHash}`}
+                                            href={`https://${
+                                                chainId === 1 ? 'etherscan.io' : 'bscscan.com'
+                                            }/tx/${item.transactionHash}`}
                                             rel="noreferrer"
                                             target="_blank"
                                             className="trans-link"

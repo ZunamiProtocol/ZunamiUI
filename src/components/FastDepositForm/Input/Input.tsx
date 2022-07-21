@@ -11,6 +11,7 @@ interface InputProps {
     max: BigNumber;
     disabled?: boolean;
     onCoinChange?: Function;
+    chainId: number | null;
 }
 
 export const Input = (props: InputProps): JSX.Element => {
@@ -23,8 +24,12 @@ export const Input = (props: InputProps): JSX.Element => {
             decimals = 18;
         }
 
+        if (props.chainId !== 1) {
+            decimals = 18;
+        }
+
         return getFullDisplayBalance(props.max, decimals);
-    }, [props.max, props.name, props.action]);
+    }, [props.max, props.name, props.action, props.chainId]);
 
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (regex.test(e.target.value)) {
@@ -59,8 +64,8 @@ export const Input = (props: InputProps): JSX.Element => {
                     }
                 }}
             >
-                <option value="DAI">DAI</option>
-                <option value="USDC">USDC</option>
+                {props.chainId === 1 && <option value="DAI">DAI</option>}
+                {props.chainId === 1 && <option value="USDC">USDC</option>}
                 <option value="USDT">USDT</option>
             </select>
             <div className="divider"></div>

@@ -10,6 +10,7 @@ interface InputProps {
     action: string;
     max: BigNumber;
     disabled?: boolean;
+    chainId: number | null;
 }
 
 export const Input = (props: InputProps): JSX.Element => {
@@ -34,10 +35,14 @@ export const Input = (props: InputProps): JSX.Element => {
             decimals = 18;
         }
 
+        if (props.chainId !== 1) {
+            decimals = 18;
+        }
+
         return (
             Math.trunc(Number(getFullDisplayBalance(props.max, decimals)) * 100) / 100
         ).toString();
-    }, [props.max, props.name, props.action]);
+    }, [props.max, props.name, props.action, props.chainId]);
 
     const handleSelectMax = useCallback(() => {
         props.handler(fullBalance);
