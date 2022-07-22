@@ -61,11 +61,13 @@
             @media screen and (min-width: $media375) {
                 font-size: 13px;
                 line-height: 18px;
+                display: none;
             }
 
             @media screen and (min-width: $media1024) {
                 font-size: 12px;
                 line-height: 9px;
+                display: block;
             }
 
             @media screen and (min-width: $media1440) {

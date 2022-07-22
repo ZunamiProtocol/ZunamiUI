@@ -7,11 +7,42 @@ import { ErrorToast } from '../ErrorToast/ErrorToast';
 import { WalletStatus } from '../WalletStatus/WalletStatus';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 import { NavMenu } from './NavMenu/NavMenu';
+import { NetworkSelector } from '../NetworkSelector/NetworkSelector';
+import { useWallet } from 'use-wallet';
+import useSushi from '../../hooks/useSushi';
+import { getMasterChefContract } from '../../sushi/utils';
+
+function chainNameToTooltip(chainId: number) {
+    if (chainId === 1 || !chainId) {
+        return (
+            <div>
+                Please note. The contract{' '}
+                <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://github.com/ZunamiLab/ZunamiProtocol/tree/main/audit"
+                >
+                    has been audited
+                </a>
+                , <br />
+                but it's still a beta version. Use it at your own risk
+            </div>
+        );
+    } else {
+        return (
+            <div>
+                Please note. This is the alpha version of the BSC cross-chain gateway. Use it at
+                your own risk!
+            </div>
+        );
+    }
+}
 
 export const Header = (): JSX.Element => {
     const logoVariant = document.body.classList.contains('dark') ? 'logo-dark.svg' : 'logo.svg';
     const [open, setOpen] = useState(false);
     const isOnline = useOnlineState();
+    const { chainId } = useWallet();
 
     return (
         <Navbar expand="lg" className={'Header'}>
@@ -25,22 +56,8 @@ export const Header = (): JSX.Element => {
                         document.body.classList.remove('overflow');
                     }}
                 />
-                <Disclaimer
-                    text={
-                        <div>
-                            Please note. The contract{' '}
-                            <a
-                                target="_blank"
-                                rel="noreferrer"
-                                href="https://github.com/ZunamiLab/ZunamiProtocol/tree/main/audit"
-                            >
-                                has been audited
-                            </a>
-                            , <br />
-                            but it's still a beta version. Use it at your own risk
-                        </div>
-                    }
-                />
+                <Disclaimer text={chainNameToTooltip(chainId)} />
+                <NetworkSelector />
                 <WalletStatus />
                 <svg
                     width="2"

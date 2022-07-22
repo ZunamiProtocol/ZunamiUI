@@ -26,28 +26,9 @@ interface WalletModalProps {
 }
 
 export const WalletsModal = (props: WalletModalProps): JSX.Element => {
-    const { CHAIN_ID } = config;
     const { ethereum, connect } = useWallet();
     const eth = window.ethereum || ethereum;
-
-    const requestNetworkSwitch = () => {
-        // @ts-ignore
-
-        setTimeout(() => {
-            // @ts-ignore
-            eth &&
-                eth.request &&
-                eth.request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: `0x${CHAIN_ID}` }],
-                });
-        }, 1000);
-    };
-
-    if (eth) {
-        requestNetworkSwitch();
-    }
-
+    const isEth = eth && eth.chainId !== '0x1';
     const onConnect = async (providerId = 'injected') => {
         await connect(providerId);
 
@@ -81,16 +62,14 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
             alert(NO_METAMASK_WARNING);
         }
 
-        if (eth) {
-            requestNetworkSwitch();
-        }
-
         // @ts-ignore
-        window.dataLayer.push({
-            event: 'login',
-            userID: getActiveWalletAddress(),
-            type: getActiveWalletName(),
-        });
+        if (window.dataLayer) {
+            window.dataLayer.push({
+                event: 'login',
+                userID: getActiveWalletAddress(),
+                type: getActiveWalletName(),
+            });
+        }
 
         if (props.onWalletConnected) {
             props.onWalletConnected({
@@ -112,7 +91,7 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
             <Modal.Header closeButton>
                 <Modal.Title>Connect a wallet</Modal.Title>
             </Modal.Header>
-            <Modal.Body className="d-flex gap-3 flex-row justify-content-center align-items-center WalletsModal">
+            <Modal.Body className="d-flex gap-3 flex-row justify-content-center align-items-start WalletsModal">
                 <button
                     onClick={() => onConnect('injected')}
                     className="border-0 d-inline-flex flex-column justify-content-center align-items-center bg-transparent"
@@ -129,10 +108,13 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
                 </button>
                 <button
                     onClick={() => onConnect('walletlink')}
-                    className="border-0 d-inline-flex flex-column justify-content-center align-items-center bg-transparent"
+                    className={`border-0 d-inline-flex flex-column justify-content-center align-items-center bg-transparent ${
+                        isEth ? 'disabled' : ''
+                    }`}
                 >
                     <img src="/wallet-link.svg" alt="" />
                     <span className="mt-1">Coinbase Wallet</span>
+                    {isEth && <span className="badge bg-secondary">only Ethereum</span>}
                 </button>
             </Modal.Body>
         </Modal>

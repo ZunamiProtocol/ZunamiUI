@@ -1,20 +1,20 @@
 import React, { Suspense } from 'react';
 import { Main } from './containers/Main';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { UseWalletProvider } from 'use-wallet';
-import config from './config';
-
 import './App.scss';
 import 'bootstrap/dist/css/bootstrap.css';
-
+import { Preloader } from './components/Preloader/Preloader';
+import { UseWalletProvider } from 'use-wallet';
 import EthereumExplorerProvider from './contexts/EthereumExplorerProvider';
 import SushiProvider from './contexts/SushiProvider';
 import TransactionProvider from './contexts/Transactions';
 import ModalsProvider from './contexts/Modals';
-import {Preloader} from './components/Preloader/Preloader';
+import config from './config';
 
-const FinanceOperations = React.lazy(
-    () => import('./containers/FinanceOperations').then(module => ({ default: module.FinanceOperations }))
+const FinanceOperations = React.lazy(() =>
+    import('./containers/FinanceOperations').then((module) => ({
+        default: module.FinanceOperations,
+    }))
 );
 
 const { INFURA_URL, CHAIN_ID } = config;
@@ -31,7 +31,7 @@ function App() {
                     />
                     <Route
                         path="/withdraw"
-                        component={() => <FinanceOperations operationName="Withdraw" />}
+                        component={() => <FinanceOperations operationName="withdraw" />}
                     />
                 </Router>
             </Providers>
@@ -52,7 +52,7 @@ const Providers: React.FC = ({ children }) => {
                         },
                     },
                     injected: {
-                        chainId: [1, 3, 4],
+                        chainId: [1, 3, 4, 56],
                     },
                     walletlink: {
                         chainId: 1,
