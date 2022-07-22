@@ -34,7 +34,7 @@ const useCrossChainBalances = (lpPrice: BigNumber) => {
             setBalances([
                 {
                     chainId: 'eth',
-                    value: new BigNumber(ethBalance).multipliedBy(lpPrice),
+                    value: new BigNumber(ethBalance),
                 },
                 {
                     chainId: 'bsc',

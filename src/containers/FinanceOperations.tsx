@@ -338,6 +338,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                             coinsSelectionEnabled={!directOperation}
                                                             selectedCoin={selectedCoin}
                                                             balance={balance}
+                                                            lpPrice={lpPrice}
                                                             onCoinSelect={(coin: string) => {
                                                                 if (!coin) {
                                                                     return;
