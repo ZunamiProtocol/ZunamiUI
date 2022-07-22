@@ -33,7 +33,6 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                 <span className="balance">
                     {getBalanceNumber(props.balance.multipliedBy(props.lpPrice)).toFixed(3, 1)}
                 </span>
-                {props.lpPrice && <span> (LP price: {props.lpPrice.toFixed(2, 1)})</span>}
             </div>
             <div className="WithdrawOptions__LiquidityBlock">
                 <span>Share of liquidity, %</span>
