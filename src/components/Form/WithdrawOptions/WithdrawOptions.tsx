@@ -14,7 +14,7 @@ interface WithdrawOptionsProps {
     selectedCoin: string | undefined;
     rawBalance?: BigNumber;
     balance: BigNumber;
-    lpPrice?: BigNumber;
+    lpPrice: BigNumber;
     disabled?: boolean;
 }
 
@@ -30,7 +30,9 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
         <div className="WithdrawOptions">
             <div className="WithdrawOptions__BalanceBlock">
                 <span>Your balance:</span>
-                <span className="balance">{getBalanceNumber(props.balance).toFixed(3, 1)}</span>
+                <span className="balance">
+                    {getBalanceNumber(props.balance.multipliedBy(props.lpPrice)).toFixed(3, 1)}
+                </span>
                 {props.lpPrice && <span> (LP price: {props.lpPrice.toFixed(2, 1)})</span>}
             </div>
             <div className="WithdrawOptions__LiquidityBlock">
@@ -70,7 +72,10 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                     }}
                 />
             </div>
-            <div className={`WithdrawOptions__CoinsBlock ${props.disabled ? 'disabled' : ''}`} ref={coinsGroup}>
+            <div
+                className={`WithdrawOptions__CoinsBlock ${props.disabled ? 'disabled' : ''}`}
+                ref={coinsGroup}
+            >
                 <span>Withdraw in:</span>
                 <div className="coins">
                     <label
