@@ -80,20 +80,43 @@ export const NetworkSelector = (props: NetworkSelectorProps): JSX.Element => {
             </svg>
             <select
                 value={activeNetwork.key}
-                onChange={(e) => {
+                onChange={async (e) => {
                     const selectedValue = e?.nativeEvent?.target?.value;
                     setActiveNetwork(
                         networks.filter((network) => network.key === selectedValue)[0]
                     );
 
                     console.log(`Network switch to ${selectedValue}`);
-                    // switchNetwork(selectedValue);
 
                     if (eth && eth.request) {
-                        eth.request({
-                            method: 'wallet_switchEthereumChain',
-                            params: [{ chainId: selectedValue }],
-                        });
+                        try {
+                            await eth.request({
+                                method: 'wallet_switchEthereumChain',
+                                params: [{ chainId: selectedValue }],
+                            });
+                            debugger;
+                        } catch (e) {
+                            window.ethereum
+                                .request({
+                                    method: 'wallet_addEthereumChain',
+                                    params: [
+                                        {
+                                            chainId: '0x38',
+                                            chainName: 'Binance Smart Chain',
+                                            nativeCurrency: {
+                                                name: 'Binance Coin',
+                                                symbol: 'BNB',
+                                                decimals: 18,
+                                            },
+                                            rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                                            blockExplorerUrls: ['https://bscscan.com'],
+                                        },
+                                    ],
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                        }
                     }
 
                     if (props.onChange) {
