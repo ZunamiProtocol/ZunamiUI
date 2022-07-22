@@ -29,6 +29,7 @@ interface FinanceOperationsProps {
 const calculateStables = async (
     coinIndex: number,
     balance: BigNumber,
+    lpPrice: BigNumber,
     sharePercent: number,
     zunamiContract: Contract,
     setError: Function
@@ -40,6 +41,7 @@ const calculateStables = async (
     let result = '';
 
     const balanceToWithdraw = balance
+        .dividedBy(lpPrice)
         .multipliedBy(sharePercent / 100)
         .toFixed(0)
         .toString();
@@ -51,6 +53,10 @@ const calculateStables = async (
     setError('');
 
     try {
+        console.log(
+            `calcWithdrawOneCoin exec (balanceToWithdraw, coinIndex) - ${balanceToWithdraw}, ${coinIndex}`
+        );
+
         result = await calcWithdrawOneCoin(zunamiContract, balanceToWithdraw, coinIndex);
     } catch (error: any) {
         setError(
@@ -67,7 +73,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     useEagerConnect(account ? account : '', connect, ethereum);
 
     const lpPrice = useLpPrice();
-    const balance = useBalanceOf();
+    const balance = useBalanceOf().multipliedBy(lpPrice);
     const sushi = useSushi();
     const zunamiContract = getMasterChefContract(sushi);
 
@@ -132,6 +138,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
             const stablesToWithdraw = await calculateStables(
                 selectedCoinIndex,
                 balance,
+                lpPrice,
                 sharePercent,
                 zunamiContract,
                 setCalcError
@@ -162,7 +169,15 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
         };
 
         setCalculatedStables();
-    }, [balance, selectedCoinIndex, sharePercent, account, props.operationName, chainId]);
+    }, [
+        // balance,
+        selectedCoinIndex,
+        sharePercent,
+        account,
+        props.operationName,
+        chainId,
+        zunamiContract,
+    ]);
 
     // load transaction list
     useEffect(() => {
