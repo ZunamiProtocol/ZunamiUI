@@ -12,44 +12,24 @@ import {
 } from '../../utils/formatbalance';
 import { useAllowanceStables } from '../../hooks/useAllowance';
 import { useUserBalances } from '../../hooks/useUserBalances';
-import useUserLpAmount from '../../hooks/useUserLpAmount';
+import useBalanceOf from '../../hooks/useBalanceOf';
 import useApprove from '../../hooks/useApprove';
 import useStake from '../../hooks/useStake';
 import useUnstake from '../../hooks/useUnstake';
-import { useWallet } from 'use-wallet';
 import { BigNumber } from 'bignumber.js';
 import { Toast, ToastContainer } from 'react-bootstrap';
 import { ActionSelector } from './ActionSelector/ActionSelector';
 import { DirectAction } from './DirectAction/DirectAction';
 import { getActiveWalletName, getActiveWalletAddress } from '../WalletsModal/WalletsModal';
-
-interface FormProps {
-    operationName: string;
-    directOperation: boolean;
-    onOperationModeChange?: Function;
-    sharePercent: number;
-    onCoinChange?: Function;
-    dai: string;
-    usdc: string;
-    usdt: string;
-    selectedCoinIndex: number;
-    directOperationDisabled?: boolean;
-    lpPrice: BigNumber;
-    onWithdraw?: Function;
-    onDeposit?: Function;
-}
-
-interface TransactionError {
-    code?: Number;
-    message?: String;
-}
+import { useGzlpAllowance } from '../../hooks/useGzlpAllowance';
+import { FormProps, TransactionError } from './Form.types';
+import { useWallet } from 'use-wallet';
 
 const getDepositValidationError = (
     dai: String,
     usdc: String,
     usdt: String,
     isApproved: Boolean,
-    pendingTx: Boolean,
     depositExceedAmount: Boolean
 ) => {
     let error = '';
@@ -87,7 +67,7 @@ const getWithdrawValidationError = (
 };
 
 export const Form = (props: FormProps): JSX.Element => {
-    const { account } = useWallet();
+    const { account, chainId } = useWallet();
 
     const [action, setAction] = useState(
         props.operationName === 'Deposit' ? 'deposit' : 'withdraw'
@@ -114,11 +94,13 @@ export const Form = (props: FormProps): JSX.Element => {
     const [pendingDAI, setPendingDAI] = useState(false);
     const [pendingUSDC, setPendingUSDC] = useState(false);
     const [pendingUSDT, setPendingUSDT] = useState(false);
+    const [pendingGZLP, setPendingGZLP] = useState(false);
 
     // wrapped in useMemo to prevent lpShareToWithdraw hook deps change on every render
-    const userLpAmount = useUserLpAmount();
+    const userLpAmount = useBalanceOf();
     const userBalanceList = useUserBalances();
     const approveList = useAllowanceStables();
+    const gzlpAllowance = useGzlpAllowance();
 
     const stableInputsSum =
         (parseFloat(props.dai) || 0) +
@@ -154,7 +136,7 @@ export const Form = (props: FormProps): JSX.Element => {
     ];
 
     // approves
-    const { onApprove } = useApprove();
+    const { onApprove, onGZLPApprove } = useApprove();
     const handleApproveDai = useCallback(async () => {
         try {
             setPendingDAI(true);
@@ -191,6 +173,17 @@ export const Form = (props: FormProps): JSX.Element => {
 
         setPendingUSDT(false);
     }, [onApprove]);
+    const handleApproveGzlp = useCallback(async () => {
+        try {
+            setPendingGZLP(true);
+            const tx = onGZLPApprove();
+            if (!tx) {
+                setPendingGZLP(false);
+            }
+        } catch (e) {
+            setPendingGZLP(false);
+        }
+    }, [onGZLPApprove]);
 
     const fullBalanceLpShare = useMemo(() => {
         return getFullDisplayBalance(userLpAmount);
@@ -198,7 +191,7 @@ export const Form = (props: FormProps): JSX.Element => {
 
     // caclulate lpshare to withdraw
     const lpShareToWithdraw = useMemo(() => {
-        if (props.operationName !== 'Withdraw') {
+        if (props.operationName !== 'withdraw') {
             return BIG_ZERO;
         }
 
@@ -206,24 +199,34 @@ export const Form = (props: FormProps): JSX.Element => {
             stableInputsSum / getBalanceNumber(props.lpPrice).toNumber()
         );
 
-        if (sharesAmount.toNumber() > 0) {
-            console.log(
-                `lpShareToWithdraw: ${sharesAmount} (${stableInputsSum} / ${props.lpPrice})`
-            );
+        if (
+            sharesAmount.toNumber() === 0 ||
+            sharesAmount.toNumber() === Infinity ||
+            props.lpPrice.toNumber() === 0
+        ) {
+            return BIG_ZERO;
         }
+
+        console.log(
+            `lpShareToWithdraw: ${sharesAmount} (${stableInputsSum} (user input) / ${props.lpPrice} (lpPrice))`
+        );
 
         return sharesAmount;
     }, [stableInputsSum, props.lpPrice, props.operationName]);
 
     const fullBalancetoWithdraw = useMemo(() => {
-        return getFullDisplayBalance(lpShareToWithdraw, 18);
-    }, [lpShareToWithdraw]);
+        const balance = getFullDisplayBalance(lpShareToWithdraw, 18);
+        console.log(`Full balance to withdraw: ${balance}`);
+        return balance;
+    }, [lpShareToWithdraw, chainId]);
 
     // deposit and withdraw functions
     const depositExceedAmount =
         parseInt(props.dai) > getBalanceNumber(userBalanceList[0]).toNumber() ||
         parseInt(props.usdc) > getBalanceNumber(userBalanceList[1], 6).toNumber() ||
         parseInt(props.usdt) > getBalanceNumber(userBalanceList[2], 6).toNumber();
+
+    // const withdrawExceedBalance = Number(fullBalancetoWithdraw)
 
     const [pendingTx, setPendingTx] = useState(false);
     const [transactionId, setTransactionId] = useState(undefined);
@@ -249,17 +252,27 @@ export const Form = (props: FormProps): JSX.Element => {
     const [transactionError, setTransactionError] = useState<TransactionError>();
     const emptyFunds = !Number(props.dai) && !Number(props.usdc) && !Number(props.usdt);
 
-    const isApproved =
-        approveList &&
-        ((parseFloat(props.dai) > 0 && isApprovedTokens[0]) ||
-            props.dai === '0' ||
-            props.dai === '') &&
-        ((parseFloat(props.usdc) > 0 && isApprovedTokens[1]) ||
-            props.usdc === '0' ||
-            props.usdc === '') &&
-        ((parseFloat(props.usdt) > 0 && isApprovedTokens[2]) ||
-            props.usdt === '0' ||
-            props.usdt === '');
+    let isApproved = false;
+
+    if (chainId === 1) {
+        isApproved =
+            approveList &&
+            ((parseFloat(props.dai) > 0 && isApprovedTokens[0]) ||
+                props.dai === '0' ||
+                props.dai === '') &&
+            ((parseFloat(props.usdc) > 0 && isApprovedTokens[1]) ||
+                props.usdc === '0' ||
+                props.usdc === '') &&
+            ((parseFloat(props.usdt) > 0 && isApprovedTokens[2]) ||
+                props.usdt === '0' ||
+                props.usdt === '');
+    } else {
+        // console.log(isApprovedTokens[2]);
+        isApproved =
+            props.operationName === 'withdraw'
+                ? gzlpAllowance.toNumber() > parseFloat(props.usdt)
+                : isApprovedTokens[2];
+    }
 
     const validationError =
         action === 'deposit'
@@ -268,7 +281,6 @@ export const Form = (props: FormProps): JSX.Element => {
                   props.usdc,
                   props.usdt,
                   isApproved,
-                  pendingTx,
                   depositExceedAmount
               )
             : getWithdrawValidationError(
@@ -281,6 +293,12 @@ export const Form = (props: FormProps): JSX.Element => {
               );
 
     const cantDeposit = emptyFunds || !isApproved || pendingTx || depositExceedAmount;
+    // console.log(
+    //     `Can deposit: emptyFunds: ${emptyFunds}, isApproved: ${isApproved}, pendingTx: ${pendingTx}, depositExceedAmount: ${depositExceedAmount}`
+    // );
+    const canWithdraw = isApproved && Number(fullBalancetoWithdraw) > 0;
+
+    // console.log(canWithdraw, isApproved, Number(fullBalancetoWithdraw));
 
     return (
         <div className={'Form'}>
@@ -297,7 +315,9 @@ export const Form = (props: FormProps): JSX.Element => {
                             <a
                                 target="_blank"
                                 rel="noreferrer"
-                                href={`https://etherscan.io/tx/${transactionId}`}
+                                href={`https://${
+                                    chain?.shortName === 'eth' ? 'etherscan.io' : 'bscscan.com'
+                                }/tx/${transactionId}`}
                             >
                                 transaction
                             </a>
@@ -321,7 +341,7 @@ export const Form = (props: FormProps): JSX.Element => {
 
                             try {
                                 const tx = await onUnstake();
-                                setTransactionId(tx.transactionHash);
+                                setTransactionId(tx.hash);
 
                                 // @ts-ignore
                                 window.dataLayer.push({
@@ -331,6 +351,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                     value: totalSum,
                                 });
                             } catch (error: any) {
+                                debugger;
                                 setTransactionError(error);
                             }
 
@@ -345,15 +366,16 @@ export const Form = (props: FormProps): JSX.Element => {
 
                             try {
                                 const tx = await onStake();
-                                setTransactionId(tx.transactionHash);
-
+                                setTransactionId(tx.hash);
                                 // @ts-ignore
-                                window.dataLayer.push({
-                                    event: 'deposit',
-                                    userID: getActiveWalletAddress(),
-                                    type: getActiveWalletName(),
-                                    value: totalSum,
-                                });
+                                if (window.dataLayer) {
+                                    window.dataLayer.push({
+                                        event: 'deposit',
+                                        userID: getActiveWalletAddress(),
+                                        type: getActiveWalletName(),
+                                        value: totalSum,
+                                    });
+                                }
                             } catch (error: any) {
                                 setTransactionError(error);
                             }
@@ -374,22 +396,28 @@ export const Form = (props: FormProps): JSX.Element => {
                     }}
                 />
                 <div className="inner">
-                    <Input
-                        action={action}
-                        name="DAI"
-                        value={props.dai}
-                        handler={daiInputHandler}
-                        max={max[0]}
-                        disabled={action === 'withdraw'}
-                    />
-                    <Input
-                        action={action}
-                        name="USDC"
-                        value={props.usdc}
-                        handler={usdcInputHandler}
-                        max={max[1]}
-                        disabled={action === 'withdraw'}
-                    />
+                    {chainId === 1 && (
+                        <Input
+                            action={action}
+                            name="DAI"
+                            value={props.dai}
+                            handler={daiInputHandler}
+                            max={max[0]}
+                            disabled={action === 'withdraw'}
+                            chainId={chainId}
+                        />
+                    )}
+                    {chainId === 1 && (
+                        <Input
+                            action={action}
+                            name="USDC"
+                            value={props.usdc}
+                            handler={usdcInputHandler}
+                            max={max[1]}
+                            disabled={action === 'withdraw'}
+                            chainId={chainId}
+                        />
+                    )}
                     <Input
                         action={action}
                         name="USDT"
@@ -397,25 +425,32 @@ export const Form = (props: FormProps): JSX.Element => {
                         handler={usdtInputHandler}
                         max={max[2]}
                         disabled={action === 'withdraw'}
+                        chainId={chainId}
                     />
                     {action === 'deposit' && (
                         <div className="deposit-action flex-wrap d-flex flex-row flex-wrap buttons align-items-center">
-                            {account && parseFloat(props.dai) > 0 && !isApprovedTokens[0] && (
-                                <button
-                                    disabled={pendingDAI || depositExceedAmount}
-                                    onClick={handleApproveDai}
-                                >
-                                    Approve DAI{' '}
-                                </button>
-                            )}
-                            {account && parseFloat(props.usdc) > 0 && !isApprovedTokens[1] && (
-                                <button
-                                    disabled={pendingUSDC || depositExceedAmount}
-                                    onClick={handleApproveUsdc}
-                                >
-                                    Approve USDC{' '}
-                                </button>
-                            )}
+                            {account &&
+                                parseFloat(props.dai) > 0 &&
+                                !isApprovedTokens[0] &&
+                                chainId === 1 && (
+                                    <button
+                                        disabled={pendingDAI || depositExceedAmount}
+                                        onClick={handleApproveDai}
+                                    >
+                                        Approve DAI{' '}
+                                    </button>
+                                )}
+                            {account &&
+                                parseFloat(props.usdc) > 0 &&
+                                !isApprovedTokens[1] &&
+                                chainId === 1 && (
+                                    <button
+                                        disabled={pendingUSDC || depositExceedAmount}
+                                        onClick={handleApproveUsdc}
+                                    >
+                                        Approve USDC{' '}
+                                    </button>
+                                )}
                             {account && parseFloat(props.usdt) > 0 && !isApprovedTokens[2] && (
                                 <button
                                     disabled={pendingUSDT || depositExceedAmount}
@@ -433,8 +468,12 @@ export const Form = (props: FormProps): JSX.Element => {
                                         <DirectAction
                                             actionName="deposit"
                                             checked={!props.directOperation}
-                                            disabled={false}
-                                            hint="When using optimized deposit funds will be deposited within 24 hours and many times cheaper"
+                                            disabled={chainId !== 1}
+                                            hint={`${
+                                                chainId === 1
+                                                    ? 'When using optimized deposit funds will be deposited within 24 hours and many times cheaper'
+                                                    : 'When using deposit funds will be deposited within 24 hours, because users’ funds accumulate in one batch and distribute to the ETH network in Zunami App.'
+                                            }`}
                                             onChange={(state: boolean) => {
                                                 if (props.onOperationModeChange) {
                                                     props.onOperationModeChange(state);
@@ -455,18 +494,27 @@ export const Form = (props: FormProps): JSX.Element => {
                         <div>
                             {account && (
                                 <div className="deposit-button-wrapper">
+                                    {/* {account && !isApproved && chainId !== 1 && (
+                                        <button
+                                            disabled={pendingGZLP}
+                                            onClick={handleApproveGzlp}
+                                            className="me-2"
+                                        >
+                                            Approve GZLP
+                                        </button>
+                                    )} */}
                                     <button
                                         type="submit"
-                                        className={`${
-                                            Number(fullBalancetoWithdraw) <= 0 ? 'disabled' : ''
-                                        }`}
+                                        className={`${!canWithdraw ? 'disabled' : ''}`}
                                     >
                                         Withdraw
                                     </button>
                                     {!pendingTx && (
                                         <DirectAction
                                             actionName="withdraw"
-                                            disabled={props.directOperationDisabled || false}
+                                            disabled={
+                                                props.directOperationDisabled || chainId !== 1
+                                            }
                                             checked={!props.directOperation}
                                             hint="When using optimized withdrawal funds will be withdrawn within 24 hours and many times cheaper. Optimized withdraw available only in all coins."
                                             onChange={(state: boolean) => {

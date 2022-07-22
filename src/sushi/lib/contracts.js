@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js/bignumber';
 
-import MasterChefAbi from '../../actions/abi/Zunami.json';
+import ethAbi from '../../actions/abi/Zunami.json';
+import bscAbi from '../../actions/abi/zunami_bsc.json';
 import WETHAbi from './abi/weth.json';
 import { contractAddresses, SUBTRACT_GAS_LIMIT } from './constants.js';
 import * as Types from './types.js';
@@ -14,29 +15,39 @@ export class Contracts {
         this.defaultGas = options.defaultGas;
         this.defaultGasPrice = options.defaultGasPrice;
 
-        this.masterChef = new this.web3.eth.Contract(MasterChefAbi);
+        this.masterChef = new this.web3.eth.Contract(ethAbi);
+
+        this.ethMasterChef = new this.web3.eth.Contract(ethAbi);
+        this.bscMasterChef = new this.web3.eth.Contract(bscAbi);
+
         this.weth = new this.web3.eth.Contract(WETHAbi);
         this.usdc = new this.web3.eth.Contract(WETHAbi);
-
         this.setProvider(provider, networkId);
         this.setDefaultAccount(this.web3.eth.defaultAccount);
-    }
-
-    setProvider(provider, networkId) {
-        const setProvider = (contract, address) => {
-            contract.setProvider(provider);
-            if (address) {
-                contract.options.address = address;
-            } else {
-                console.warn('Contract address not found in network', networkId);
-            }
-        };
-
-        setProvider(this.masterChef, contractAddresses.zunami[networkId]);
+        this.masterChef.options.from = this.web3.eth.defaultAccount;
+        this.bscMasterChef.options.from = this.web3.eth.defaultAccount;
+        this.ethMasterChef.options.from = this.web3.eth.defaultAccount;
     }
 
     setDefaultAccount(account) {
         this.masterChef.options.from = account;
+    }
+
+    setProvider(provider, networkId) {
+        const setProviderParams = (contract, address) => {
+            contract.setProvider(provider);
+            contract.options.address = address;
+        };
+
+        if (networkId === 1) {
+            setProviderParams(this.masterChef, contractAddresses.zunami[1]);
+        }
+
+        setProviderParams(this.ethMasterChef, contractAddresses.zunami[1]);
+
+        if (networkId === 56) {
+            setProviderParams(this.bscMasterChef, contractAddresses.zunami[56]);
+        }
     }
 
     async callContractFunction(method, options) {

@@ -18,14 +18,23 @@ if (!NETWORK) {
 
 export const getNetworkConfig = (NETWORK: string): Config => {
     let CHAIN_ID;
+
     if (NETWORK === 'mainnet') {
         CHAIN_ID = 1;
     } else {
         throw new Error(`Unknown ${NETWORK}, permitted only mainnet or mainnet`);
     }
 
+    if (window.ethereum && window.ethereum.chainId === '0x38') {
+        return {
+            INFURA_URL: `https://bscrpc.com`,
+            CHAIN_ID: 56,
+            NETWORK: 'mainnet',
+        };
+    }
+
     return {
-        INFURA_URL: `https://eth-${NETWORK}.alchemyapi.io/v2/Yh5zNTgJkqrOIqLtfkZBGIPecNPDQ1ON`,
+        INFURA_URL: `https://eth-mainnet.alchemyapi.io/v2/Yh5zNTgJkqrOIqLtfkZBGIPecNPDQ1ON`,
         CHAIN_ID,
         NETWORK,
     };

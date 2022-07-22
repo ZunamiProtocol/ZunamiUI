@@ -8,6 +8,16 @@ export const testnetUrl = `${root}/feature`;
 export const totalIncomeUrl = `${root}/transfers/total-income`;
 export const transHistoryUrl = `${root}/transfers/history`;
 
+function chainShortNameToApiName(chainName: string) {
+    let result = 'ETH';
+
+    if (chainName !== 'eth') {
+        result = 'BSC';
+    }
+
+    return result.toUpperCase();
+}
+
 export const getActiveStratsUrl = (): string => {
     return activeStratsUrl;
 };
@@ -24,15 +34,22 @@ export const getTestnetStatusUrl = (address: string): string => {
     return `${testnetUrl}?address=${address}`;
 };
 
-export const getTotalIncomeUrl = (address: string, lpTokens: string): string => {
-    return `${totalIncomeUrl}?address=${address.toLowerCase()}&lpTokens=${lpTokens}`;
+export const getTotalIncomeUrl = (
+    address: string,
+    lpTokens: string,
+    chainId: number = 1
+): string => {
+    const chain = chainId === 1 ? 'ETH' : 'BSC';
+    return `${totalIncomeUrl}?address=${address.toLowerCase()}&lpTokens=${lpTokens}&chain=${chain}`;
 };
 
 export const getTransHistoryUrl = (
     address: string,
     type: string,
     page: number = 0,
-    size: number = 10
+    size: number = 10,
+    chainId: number = 1
 ): string => {
-    return `${transHistoryUrl}?address=${address.toLowerCase()}&type=${type}&page=${page}&size=${size}`;
+    const chain = chainId === 1 ? 'ETH' : 'BSC';
+    return `${transHistoryUrl}?address=${address.toLowerCase()}&type=${type}&page=${page}&size=${size}&chain=${chain}`;
 };

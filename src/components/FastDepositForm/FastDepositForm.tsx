@@ -14,10 +14,9 @@ import { daiAddress, usdcAddress, usdtAddress, bscUsdtAddress } from '../../util
 import { getFullDisplayBalance } from '../../utils/formatbalance';
 import { Link } from 'react-router-dom';
 import { useWallet } from 'use-wallet';
-import useSushi from './../../hooks/useSushi';
 
-function coinNameToAddress(coinName: string, chainId: string): string {
-    if (chainId === 'bnb') {
+function coinNameToAddress(coinName: string, chainId: number): string {
+    if (chainId === 56) {
         return bscUsdtAddress;
     }
 
@@ -38,7 +37,6 @@ function coinNameToAddress(coinName: string, chainId: string): string {
 export const FastDepositForm = (): JSX.Element => {
     const userBalanceList = useUserBalances();
     const { chainId, account } = useWallet();
-    const sushi = useSushi();
     const [optimized, setOptimized] = useState(true);
     const [pendingApproval, setPendingApproval] = useState(false);
     const [coin, setCoin] = useState('USDC');
@@ -46,7 +44,6 @@ export const FastDepositForm = (): JSX.Element => {
     const [transactionId, setTransactionId] = useState<string | undefined>(undefined);
     const [pendingTx, setPendingTx] = useState(false);
     const [transactionError, setTransactionError] = useState(false);
-    const coins = ['DAI', 'USDC', 'USDT'];
     const [coinIndex, setCoinIndex] = useState(-1);
     const approveList = useAllowanceStables();
     const approvedTokens = [
@@ -59,14 +56,21 @@ export const FastDepositForm = (): JSX.Element => {
         coin === 'DAI' ? depositSum : '0',
         coin === 'USDC' ? depositSum : '0',
         coin === 'USDT' ? depositSum : '0',
-        !optimized,
-        chainId
+        !optimized
     );
 
     useEffect(() => {
-        setCoinIndex(coins.indexOf(coin));
-        setCoin(chainId !== 1 ? 'USDT' : 'USDC');
-    }, [chainId, coins, coin]);
+        const coins = ['DAI', 'USDC', 'USDT'];
+        if (coinIndex === -1) {
+            setCoin(chainId !== 1 ? 'USDT' : 'USDC');
+            setCoinIndex(coins.indexOf(coin));
+        }
+
+        if (chainId !== 1) {
+            setCoin('USDT');
+            setCoinIndex(coins.indexOf(coin));
+        }
+    }, [chainId, coin, coinIndex]);
 
     // get user max balance
     const fullBalance = useMemo(() => {
@@ -154,7 +158,7 @@ export const FastDepositForm = (): JSX.Element => {
             </div>
             <Input
                 action="deposit"
-                name={chainId && chainId === 1 ? 'USDC' : 'USDT'}
+                name={coin}
                 value={depositSum}
                 handler={(sum) => {
                     setDepositSum(sum);
@@ -162,6 +166,7 @@ export const FastDepositForm = (): JSX.Element => {
                 max={userBalanceList[coinIndex]}
                 onCoinChange={(coin: string) => {
                     setCoin(coin);
+                    setCoinIndex(['DAI', 'USDC', 'USDT'].indexOf(coin));
                 }}
                 chainId={chainId}
             />
@@ -207,7 +212,7 @@ export const FastDepositForm = (): JSX.Element => {
 
                                     try {
                                         const tx = await onStake();
-                                        setTransactionId(tx.hash);
+                                        setTransactionId(tx.transactionHash);
                                         setDepositSum('0');
 
                                         // @ts-ignore
