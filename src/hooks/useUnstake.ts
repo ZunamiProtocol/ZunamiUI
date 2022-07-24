@@ -5,6 +5,7 @@ import { getMasterChefContract, unstake } from '../sushi/utils';
 import { getBalanceNew } from '../utils/erc20';
 import BigNumber from 'bignumber.js';
 import { log } from '../utils/logger';
+import { getZunamiAddress } from '../utils/zunami';
 
 const useUnstake = (
     lpShares: number,
@@ -15,9 +16,9 @@ const useUnstake = (
     sharePercent: number,
     coinIndex: number
 ) => {
-    const { account } = useWallet();
+    const { account, chainId } = useWallet();
     const sushi = useSushi();
-    const zunamiContract = getMasterChefContract(sushi);
+    const zunamiContract = getMasterChefContract(sushi, chainId);
 
     const handleUnstake = useCallback(async () => {
         if (!account) {
@@ -43,7 +44,8 @@ const useUnstake = (
                 0,
                 0,
                 true,
-                coinIndex
+                coinIndex,
+                chainId
             );
         } else {
             return await unstake(
