@@ -118,7 +118,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
             setUsdt(oneThird);
 
             if (chainId !== 1) {
-                setUsdt(getFullDisplayBalance(userBalanceList[2], 18));
+                setUsdt(getFullDisplayBalance(balance.multipliedBy(sharePercent / 100), 18));
             }
         }
     }, [balance, sharePercent, selectedCoinIndex, chainId, userBalanceList, props.operationName]);
@@ -171,6 +171,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
         setCalculatedStables();
     }, [
         // balance,
+        lpPrice,
         selectedCoinIndex,
         sharePercent,
         account,
@@ -439,7 +440,9 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                             FAQ
                         </a>
                     </div>
-                    <span className="copyright">© 2022 Zunami Protocol. Beta version 2.0</span>
+                    <span className="copyright">
+                        © 2022 Zunami Protocol. {`Version: ${process.env.REACT_APP_VERSION}`}
+                    </span>
                 </footer>
             </Container>
         </React.Fragment>

@@ -2,36 +2,31 @@ import { useCallback } from 'react';
 import { useWallet } from 'use-wallet';
 import useSushi from './useSushi';
 import { getMasterChefContract, unstake } from '../sushi/utils';
-import { getBalanceNew } from '../utils/erc20';
 import BigNumber from 'bignumber.js';
 import { log } from '../utils/logger';
 
 const useUnstake = (
-    lpShares: number,
-    dai: string,
-    usdc: string,
-    usdt: string,
+    balance: BigNumber,
     optimized: boolean,
     sharePercent: number,
     coinIndex: number
 ) => {
-    const { account } = useWallet();
+    const { account, chainId } = useWallet();
     const sushi = useSushi();
-    const zunamiContract = getMasterChefContract(sushi);
+    const zunamiContract = getMasterChefContract(sushi, chainId);
 
     const handleUnstake = useCallback(async () => {
         if (!account) {
             return;
         }
 
-        const balance = await getBalanceNew(zunamiContract, account);
-        const balanceToWithdraw = new BigNumber(balance)
+        const balanceToWithdraw = balance
             .multipliedBy(sharePercent / 100)
             .toFixed(0)
             .toString();
 
-        log(
-            `Withdraw: optimized - ${optimized}, balance to withdraw: ${balanceToWithdraw}, coin index: ${coinIndex}, account: ${account}`
+        console.log(
+            `Raw balance: ${balance.toString()}, percent (${sharePercent}) - ${balanceToWithdraw.toString()}`
         );
 
         if (optimized) {
@@ -43,7 +38,8 @@ const useUnstake = (
                 0,
                 0,
                 true,
-                coinIndex
+                coinIndex,
+                chainId
             );
         } else {
             return await unstake(
@@ -57,7 +53,7 @@ const useUnstake = (
                 coinIndex
             );
         }
-    }, [account, zunamiContract, optimized, sharePercent, coinIndex]);
+    }, [account, zunamiContract, optimized, sharePercent, coinIndex, balance, chainId]);
 
     return { onUnstake: handleUnstake };
 };

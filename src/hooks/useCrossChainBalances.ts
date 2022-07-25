@@ -27,9 +27,11 @@ const useCrossChainBalances = (lpPrice: BigNumber) => {
         const getBalances = async () => {
             const ethContract = sushi.getEthContract(account);
             const ethBalance = await ethContract.methods.balanceOf(account).call();
+            console.log(`Raw ETH balance is: ${ethBalance}`);
             const bscBalance = await sushi.bscContracts.bscMasterChef.methods
                 .balanceOf(account)
                 .call();
+            console.log(`Raw BSC balance is: ${bscBalance}`);
 
             setBalances([
                 {

@@ -46,7 +46,8 @@ export class Sushi {
             options.ethereumNodeTimeout || 10000
         );
 
-        this.web3 = new Web3(ethProvider);
+        // this.web3 = new Web3(ethProvider);
+        this.web3 = networkId === 1 ? new Web3(ethProvider) : new Web3(bscProvider);
         this.bscWeb3 = new Web3(bscProvider);
 
         if (options.defaultAccount) {

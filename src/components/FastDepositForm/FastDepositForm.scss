@@ -157,7 +157,7 @@
     }
 
     .DirectAction {
-        @media screen and (min-width: $media1440) {
+        @media screen and (min-width: $media1024) {
             margin-left: 22px;
         }
 
@@ -170,7 +170,7 @@
         }
 
         svg {
-            @media screen and (min-width: $media1440) {
+            @media screen and (min-width: $media1024) {
                 margin-top: -4px;
                 width: 10px;
                 height: 10px;

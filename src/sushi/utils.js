@@ -86,11 +86,21 @@ export const getFarms = (sushi) => {
         : [];
 };
 
-export const approve = async (provider, tokenAddress, masterChefContract, account) => {
+export const approve = async (
+    provider,
+    tokenAddress,
+    masterChefContract,
+    account,
+    apprSum = ethers.constants.MaxUint256
+) => {
     const lpContract = getContract(provider, tokenAddress);
-    let sum = ethers.constants.MaxUint256;
+    let sum = apprSum;
 
     if (tokenAddress === bscUsdtAddress) {
+        sum = '10000000000000000000000000';
+    }
+
+    if (tokenAddress === getZunamiAddress(56)) {
         sum = '10000000000000000000000000';
     }
 
@@ -170,16 +180,30 @@ export const unstake = async (
     usdc,
     usdt,
     optimized = true,
-    coinIndex
+    coinIndex,
+    chainId = 1
 ) => {
+    const usdtVal = new BigNumber(usdt).times(USDT_TOKEN_DECIMAL).toString();
     const coins = [
         new BigNumber(dai).times(DEFAULT_TOKEN_DECIMAL).toString(),
         new BigNumber(usdc).times(USDT_TOKEN_DECIMAL).toString(),
-        new BigNumber(usdt).times(USDT_TOKEN_DECIMAL).toString(),
+        usdtVal,
     ];
 
     if (optimized) {
+        if (chainId !== 1) {
+            log(`Zunami contract (BNB): execution delegateWithdrawal(${lpShares})`);
+
+            return zunamiContract.methods
+                .delegateWithdrawal(lpShares)
+                .send({ from: account })
+                .on('transactionHash', (transactionHash) => {
+                    return transactionHash;
+                });
+        }
+
         log(`Zunami contract: execution delegateWithdrawal(${lpShares}, ${coins})`);
+
         return zunamiContract.methods
             .delegateWithdrawal(lpShares, coins)
             .send({ from: account })
