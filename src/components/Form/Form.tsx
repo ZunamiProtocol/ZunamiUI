@@ -207,16 +207,11 @@ export const Form = (props: FormProps): JSX.Element => {
             return BIG_ZERO;
         }
 
-        console.log(
-            `lpShareToWithdraw: ${sharesAmount} (${stableInputsSum} (user input) / ${props.lpPrice} (lpPrice))`
-        );
-
         return sharesAmount;
     }, [stableInputsSum, props.lpPrice, props.operationName]);
 
     const fullBalancetoWithdraw = useMemo(() => {
         const balance = getFullDisplayBalance(lpShareToWithdraw, 18);
-        console.log(`Full balance to withdraw: ${balance}`);
         return balance;
     }, [lpShareToWithdraw, chainId]);
 
@@ -239,10 +234,7 @@ export const Form = (props: FormProps): JSX.Element => {
     );
 
     const { onUnstake } = useUnstake(
-        props.directOperation ? Number(fullBalancetoWithdraw) * 0.1 : Number(fullBalancetoWithdraw),
-        props.dai === '' ? '0' : props.dai,
-        props.usdc === '' ? '0' : props.usdc,
-        props.usdt === '' ? '0' : props.usdt,
+        userLpAmount,
         !props.directOperation,
         props.sharePercent,
         props.directOperation && props.selectedCoinIndex === -1 ? 0 : props.selectedCoinIndex
@@ -269,11 +261,20 @@ export const Form = (props: FormProps): JSX.Element => {
                         props.usdt === '')
             );
         } else {
-            setIsApproved(
+            const approveVal =
                 props.operationName === 'withdraw'
-                    ? gzlpAllowance.toNumber() > parseFloat(props.usdt)
-                    : isApprovedTokens[2]
+                    ? gzlpAllowance.isGreaterThanOrEqualTo(
+                          new BigNumber('10000000000000000000000000')
+                      )
+                    : isApprovedTokens[2];
+
+            console.log(
+                `Approved: ${approveVal}, GZLP allowance: ${gzlpAllowance.toNumber()}, USDT: ${parseFloat(
+                    props.usdt
+                )}`
             );
+
+            setIsApproved(approveVal);
         }
     }, [
         gzlpAllowance,

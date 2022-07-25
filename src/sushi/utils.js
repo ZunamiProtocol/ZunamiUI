@@ -191,10 +191,8 @@ export const unstake = async (
     ];
 
     if (optimized) {
-        log(`Zunami contract: execution delegateWithdrawal(${lpShares}, ${coins})`);
-
         if (chainId !== 1) {
-            console.log(zunamiContract);
+            log(`Zunami contract (BNB): execution delegateWithdrawal(${lpShares})`);
 
             return zunamiContract.methods
                 .delegateWithdrawal(lpShares)
@@ -203,6 +201,8 @@ export const unstake = async (
                     return transactionHash;
                 });
         }
+
+        log(`Zunami contract: execution delegateWithdrawal(${lpShares}, ${coins})`);
 
         return zunamiContract.methods
             .delegateWithdrawal(lpShares, coins)

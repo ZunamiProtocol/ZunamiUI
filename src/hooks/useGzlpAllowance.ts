@@ -30,16 +30,16 @@ export const useGzlpAllowance = () => {
                 )
             );
 
-            console.log(`Allowance (GZLP): ${allowance.toNumber().toFixed(2)}`);
+            console.log(`Allowance (GZLP): ${allowance.toString()}`);
             setAllowance(allowance);
         };
-        if (!refreshInterval) {
+
+        if (account && masterChefContract) {
             fetchAllowance();
         }
-        refreshInterval = setInterval(() => {
-            fetchAllowance();
-            clearInterval(refreshInterval);
-        }, 10000);
+
+        refreshInterval = setInterval(fetchAllowance, 10000);
+        return () => clearInterval(refreshInterval);
     }, [chainId, account, ethereum, masterChefContract]);
 
     return allowance;
