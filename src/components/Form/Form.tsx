@@ -309,8 +309,7 @@ export const Form = (props: FormProps): JSX.Element => {
     // console.log(
     //     `Can deposit: emptyFunds: ${emptyFunds}, isApproved: ${isApproved}, pendingTx: ${pendingTx}, depositExceedAmount: ${depositExceedAmount}`
     // );
-
-    const canWithdraw = chainId === 1 ? isApproved : false;
+    const canWithdraw = isApproved;
 
     // console.log(canWithdraw, isApproved, Number(fullBalancetoWithdraw));
 

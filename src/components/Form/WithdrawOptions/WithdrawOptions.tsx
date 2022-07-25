@@ -16,6 +16,7 @@ interface WithdrawOptionsProps {
     balance: BigNumber;
     lpPrice: BigNumber;
     disabled?: boolean;
+    chainId?: number;
 }
 
 export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
@@ -75,31 +76,38 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
             >
                 <span>Withdraw in:</span>
                 <div className="coins">
-                    <label
-                        className="coin"
-                        onClick={() => onCoinSelect('usdc', props.onCoinSelect)}
-                    >
-                        <input
-                            type="radio"
-                            name="active-coin"
-                            data-coin="usdc"
-                            checked={props.selectedCoin === 'usdc'}
-                            onChange={() => {}}
-                        />
-                        <img src="/USDC.svg" alt="" />
-                        <span>USDC</span>
-                    </label>
-                    <label className="coin" onClick={() => onCoinSelect('dai', props.onCoinSelect)}>
-                        <input
-                            type="radio"
-                            name="active-coin"
-                            data-coin="dai"
-                            checked={props.selectedCoin === 'dai'}
-                            onChange={() => {}}
-                        />
-                        <img src="/DAI.svg" alt="" />
-                        <span>DAI</span>
-                    </label>
+                    {props.chainId === 1 && (
+                        <label
+                            className="coin"
+                            onClick={() => onCoinSelect('usdc', props.onCoinSelect)}
+                        >
+                            <input
+                                type="radio"
+                                name="active-coin"
+                                data-coin="usdc"
+                                checked={props.selectedCoin === 'usdc'}
+                                onChange={() => {}}
+                            />
+                            <img src="/USDC.svg" alt="" />
+                            <span>USDC</span>
+                        </label>
+                    )}
+                    {props.chainId === 1 && (
+                        <label
+                            className="coin"
+                            onClick={() => onCoinSelect('dai', props.onCoinSelect)}
+                        >
+                            <input
+                                type="radio"
+                                name="active-coin"
+                                data-coin="dai"
+                                checked={props.selectedCoin === 'dai'}
+                                onChange={() => {}}
+                            />
+                            <img src="/DAI.svg" alt="" />
+                            <span>DAI</span>
+                        </label>
+                    )}
                     <label
                         className="coin"
                         onClick={() => onCoinSelect('usdt', props.onCoinSelect)}
@@ -114,20 +122,22 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                         <img src="/USDT.svg" alt="" />
                         <span>USDT</span>
                     </label>
-                    <label
-                        className="coin all-coins"
-                        onClick={() => onCoinSelect('all', props.onCoinSelect)}
-                    >
-                        <input
-                            type="radio"
-                            name="active-coin"
-                            data-coin="usdt"
-                            checked={props.selectedCoin === 'all'}
-                            onChange={() => {}}
-                        />
-                        <img src="/all-coins.svg" alt="" data-coin="all" />
-                        <span>All coins</span>
-                    </label>
+                    {props.chainId === 1 && (
+                        <label
+                            className="coin all-coins"
+                            onClick={() => onCoinSelect('all', props.onCoinSelect)}
+                        >
+                            <input
+                                type="radio"
+                                name="active-coin"
+                                data-coin="usdt"
+                                checked={props.selectedCoin === 'all'}
+                                onChange={() => {}}
+                            />
+                            <img src="/all-coins.svg" alt="" data-coin="all" />
+                            <span>All coins</span>
+                        </label>
+                    )}
                 </div>
             </div>
         </div>
