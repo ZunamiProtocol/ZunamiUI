@@ -2,8 +2,14 @@ import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import { contractAddresses } from './lib/constants';
 import { getContract } from '../utils/erc20';
-import { DEFAULT_TOKEN_DECIMAL, USDT_TOKEN_DECIMAL } from '../utils/formatbalance';
+import {
+    DEFAULT_TOKEN_DECIMAL,
+    USDT_TOKEN_DECIMAL,
+    USDT_BSC_TOKEN_DECIMAL,
+    bscUsdtAddress,
+} from '../utils/formatbalance';
 import { log } from '../utils/logger';
+import { getZunamiAddress } from '../utils/zunami';
 
 BigNumber.config({
     EXPONENTIAL_AT: 1000,
@@ -29,9 +35,21 @@ export const getWethContract = (sushi) => {
 export const getUsdcContract = (sushi) => {
     return sushi && sushi.contracts && sushi.contracts.usdc;
 };
+export const getMasterChefContract = (sushi, chain = 1) => {
+    const chainId = chain ? chain : window?.ethereum?.chainId;
+    let result = undefined;
 
-export const getMasterChefContract = (sushi) => {
-    return sushi && sushi.contracts && sushi.contracts.masterChef;
+    if (sushi && sushi.contracts) {
+        if (chain === 1 || chainId === '0x1') {
+            // sushi.contracts.masterChef.options.address = getZunamiAddress(chainId);
+            result = sushi.contracts.masterChef;
+        } else {
+            sushi.contracts.bscMasterChef.options.address = getZunamiAddress(chainId);
+            result = sushi.contracts.bscMasterChef;
+        }
+    }
+
+    return result;
 };
 export const getSushiContract = (sushi) => {
     return sushi && sushi.contracts && sushi.contracts.sushi;
@@ -70,8 +88,14 @@ export const getFarms = (sushi) => {
 
 export const approve = async (provider, tokenAddress, masterChefContract, account) => {
     const lpContract = getContract(provider, tokenAddress);
+    let sum = ethers.constants.MaxUint256;
+
+    if (tokenAddress === bscUsdtAddress) {
+        sum = '10000000000000000000000000';
+    }
+
     return lpContract.methods
-        .approve(masterChefContract.options.address, ethers.constants.MaxUint256)
+        .approve(masterChefContract.options.address, sum)
         .send({ from: account })
         .on('transactionHash', (tx) => {
             return tx.transactionHash;
@@ -89,12 +113,20 @@ export const approve = async (provider, tokenAddress, masterChefContract, accoun
  * @param boolean optimized Whether is should be an optimized deposit (expensive) or not
  * @returns
  */
-export const stake = async (contract, account, dai, usdc, usdt, direct = false) => {
+export const stake = async (contract, account, dai, usdc, usdt, direct = false, chainId = 1) => {
     const coins = [
         new BigNumber(dai).times(DEFAULT_TOKEN_DECIMAL).toString(),
         new BigNumber(usdc).times(USDT_TOKEN_DECIMAL).toString(),
         new BigNumber(usdt).times(USDT_TOKEN_DECIMAL).toString(),
     ];
+    if (chainId !== 1) {
+        return contract.methods
+            .delegateDeposit(new BigNumber(usdt).times(USDT_BSC_TOKEN_DECIMAL).toString())
+            .send({ from: account })
+            .on('transactionHash', (tx) => {
+                return tx.transactionHash;
+            });
+    }
 
     log(`Deposit: direct - ${direct}, coins: ${coins}, account: ${account}`);
 

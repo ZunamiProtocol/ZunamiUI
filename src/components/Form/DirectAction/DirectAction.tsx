@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import './DirectAction.scss';
+import { useWallet } from 'use-wallet';
 
 interface DirectActionProps {
     actionName: string;
@@ -10,24 +11,50 @@ interface DirectActionProps {
     disabled: boolean;
 }
 
+function getHintByProps(actionName: string, chainId: number) {
+    let hint =
+        'When using optimized withdrawal funds will be withdrawn within 24 hours and many times cheaper. Optimized withdraw available only in all coins.';
+
+    if (actionName === 'withdraw') {
+        if (chainId !== 1) {
+            hint = 'When using cross chain withdrawal funds will be withdrawn within 24 hours.';
+        }
+    } else {
+        hint =
+            'When using optimized deposit funds will be deposited within 24 hours and many times cheaper';
+
+        if (chainId !== 1) {
+            hint =
+                'When using deposit funds will be deposited within 24 hours, because users’ funds accumulate in one batch and distribute to the ETH network in Zunami App.';
+        }
+    }
+
+    return hint;
+}
+
 export const DirectAction = (props: DirectActionProps): JSX.Element => {
     const target = useRef(null);
     const [showHint, setShowHint] = useState(false);
+    const { chainId } = useWallet();
+    const hint = getHintByProps(props.actionName, chainId);
 
     return (
-        <div className={`DirectAction ${props.disabled ? 'disabled' : ''}`}>
-            <input
-                type="checkbox"
-                checked={props.checked}
-                onChange={(e) => {
-                    if (props.onChange) {
-                        props.onChange(e.currentTarget.checked);
-                    }
-                }}
-            />
-            <span>Optimized {props.actionName}</span>
+        <div className={'DirectAction'}>
+            {chainId === 1 && (
+                <input
+                    type="checkbox"
+                    checked={props.checked}
+                    className={`${props.disabled ? 'disabled' : ''}`}
+                    onChange={(e) => {
+                        if (props.onChange) {
+                            props.onChange(e.currentTarget.checked);
+                        }
+                    }}
+                />
+            )}
+            {chainId === 1 && <span>Optimized {props.actionName}</span>}
             <div ref={target} onClick={() => setShowHint(!showHint)}>
-                <OverlayTrigger placement="right" overlay={<Tooltip>{props.hint}</Tooltip>}>
+                <OverlayTrigger placement="right" overlay={<Tooltip>{hint}</Tooltip>}>
                     <svg
                         width="15"
                         height="15"

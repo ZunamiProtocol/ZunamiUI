@@ -1,0 +1,52 @@
+import BigNumber from 'bignumber.js';
+import { useEffect, useState } from 'react';
+import { BIG_ZERO } from '../utils/formatbalance';
+import { useWallet } from 'use-wallet';
+import useSushi from './useSushi';
+
+const useCrossChainBalances = (lpPrice: BigNumber) => {
+    const { account } = useWallet();
+    const sushi = useSushi();
+
+    const [balances, setBalances] = useState([
+        {
+            chainId: 'eth',
+            value: new BigNumber(BIG_ZERO),
+        },
+        {
+            chainId: 'bsc',
+            value: new BigNumber(BIG_ZERO),
+        },
+    ]);
+
+    useEffect(() => {
+        if (!account || lpPrice.toNumber() === 0 || !sushi) {
+            return;
+        }
+
+        const getBalances = async () => {
+            const ethContract = sushi.getEthContract(account);
+            const ethBalance = await ethContract.methods.balanceOf(account).call();
+            const bscBalance = await sushi.bscContracts.bscMasterChef.methods
+                .balanceOf(account)
+                .call();
+
+            setBalances([
+                {
+                    chainId: 'eth',
+                    value: new BigNumber(ethBalance),
+                },
+                {
+                    chainId: 'bsc',
+                    value: new BigNumber(bscBalance),
+                },
+            ]);
+        };
+
+        getBalances();
+    }, [account, lpPrice, sushi]);
+
+    return balances;
+};
+
+export default useCrossChainBalances;

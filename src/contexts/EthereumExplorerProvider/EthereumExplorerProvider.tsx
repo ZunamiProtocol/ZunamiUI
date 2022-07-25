@@ -8,7 +8,8 @@ const { INFURA_URL, CHAIN_ID } = config;
 const getProvider = async ({ chainId }: { chainId: number }) => {
     const connector = new NetworkConnector({
         urls: {
-            [chainId]: INFURA_URL,
+            [1]: 'https://eth-mainnet.alchemyapi.io/v2/Yh5zNTgJkqrOIqLtfkZBGIPecNPDQ1ON',
+            [56]: 'https://bscrpc.com',
         },
         defaultChainId: CHAIN_ID,
     });

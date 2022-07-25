@@ -9,6 +9,13 @@
     cursor: pointer;
     position: relative;
 
+    @media screen and (min-width: $media375) {
+        width: 55px;
+        height: 45px;
+        margin-left: 10px;
+        margin-right: 13px;
+    }
+
     @media screen and (min-width: $media1024) {
         width: 55px;
         height: 45px;
@@ -27,6 +34,10 @@
     }
 
     span {
+        @media screen and (min-width: $media375) {
+            display: none;
+        }
+
         @media screen and (min-width: $media1024) {
             font-size: 12px;
             line-height: 16px;
@@ -43,6 +54,11 @@
     }
 
     svg {
+        @media screen and (min-width: $media375) {
+            width: 16px;
+            height: 23px;
+        }
+
         @media screen and (min-width: $media1440) {
             width: 11px;
             height: 18px;
@@ -50,7 +66,7 @@
     }
 
     &__Toggler {
-        @media screen and (min-width: $media1024) {
+        @media screen and (min-width: $media375) {
             display: none;
         }
 

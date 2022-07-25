@@ -3,22 +3,24 @@ import { Header } from '../components/Header/Header';
 import { Form } from '../components/Form/Form';
 import './FinanceOperations.scss';
 import { Container, Row, Col, ToastContainer, Toast } from 'react-bootstrap';
-import { useWallet } from 'use-wallet';
-import useEagerConnect from '../hooks/useEagerConnect';
 import { WelcomeCarousel } from '../components/WelcomeCarousel/WelcomeCarousel';
 import { WithdrawOptions } from '../components/Form/WithdrawOptions/WithdrawOptions';
 import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar';
 import { BigNumber } from 'bignumber.js';
-import { getMasterChefContract } from '../sushi/utils';
-import useSushi from '../hooks/useSushi';
-import { calcWithdrawOneCoin, getBalanceNew } from '../utils/erc20';
-import { Contract } from 'web3-eth-contract';
-import { BIG_ZERO, getBalanceNumber } from '../utils/formatbalance';
+import { BIG_TEN, BIG_ZERO, getBalanceNumber, getFullDisplayBalance } from '../utils/formatbalance';
 import { ReactComponent as FinIcon } from '../components/Form/deposit-withdraw.svg';
 import useLpPrice from '../hooks/useLpPrice';
-
+import { useUserBalances } from '../hooks/useUserBalances';
 import { TransactionHistory } from '../components/TransactionHistory/TransactionHistory';
 import { getTransHistoryUrl } from '../api/api';
+import useBalanceOf from '../hooks/useBalanceOf';
+import { useWallet } from 'use-wallet';
+import useEagerConnect from '../hooks/useEagerConnect';
+import { getZunamiAddress } from '../utils/zunami';
+import { Contract } from 'web3-eth-contract';
+import { calcWithdrawOneCoin } from '../utils/erc20';
+import useSushi from '../hooks/useSushi';
+import { getMasterChefContract } from '../sushi/utils';
 
 interface FinanceOperationsProps {
     operationName: string;
@@ -27,6 +29,7 @@ interface FinanceOperationsProps {
 const calculateStables = async (
     coinIndex: number,
     balance: BigNumber,
+    lpPrice: BigNumber,
     sharePercent: number,
     zunamiContract: Contract,
     setError: Function
@@ -38,6 +41,7 @@ const calculateStables = async (
     let result = '';
 
     const balanceToWithdraw = balance
+        .dividedBy(lpPrice)
         .multipliedBy(sharePercent / 100)
         .toFixed(0)
         .toString();
@@ -49,6 +53,10 @@ const calculateStables = async (
     setError('');
 
     try {
+        console.log(
+            `calcWithdrawOneCoin exec (balanceToWithdraw, coinIndex) - ${balanceToWithdraw}, ${coinIndex}`
+        );
+
         result = await calcWithdrawOneCoin(zunamiContract, balanceToWithdraw, coinIndex);
     } catch (error: any) {
         setError(
@@ -61,54 +69,44 @@ const calculateStables = async (
 };
 
 export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element => {
-    const { account, connect, ethereum } = useWallet();
+    const { account, connect, ethereum, chainId } = useWallet();
     useEagerConnect(account ? account : '', connect, ethereum);
 
-    const [directOperation, setDirectOperation] = useState(false);
+    const lpPrice = useLpPrice();
+    const balance = useBalanceOf().multipliedBy(lpPrice);
+    const sushi = useSushi();
+    const zunamiContract = getMasterChefContract(sushi);
 
+    const [directOperation, setDirectOperation] = useState(false);
     const [daiChecked, setDaiChecked] = useState(false);
     const [usdcChecked, setUsdcChecked] = useState(false);
     const [usdtChecked, setUsdtChecked] = useState(false);
     const [sharePercent, setSharePercent] = useState(100);
-
     const [selectedCoin, setSelectedCoin] = useState<string>('all');
-    const [balance, setBalance] = useState(BIG_ZERO);
-    const [rawBalance, setRawBalance] = useState(BIG_ZERO);
+    const userBalanceList = useUserBalances();
     const [selectedCoinIndex, setSelectedCoinIndex] = useState(-1);
-
     const [dai, setDai] = useState('0');
     const [usdc, setUsdc] = useState('0');
     const [usdt, setUsdt] = useState('0');
-
-    const sushi = useSushi();
-    const zunamiContract = getMasterChefContract(sushi);
-    const lpPrice = useLpPrice();
     const [calcError, setCalcError] = useState('');
     const [transactionList, setTransactionList] = useState([]);
     const [showMobileTransHistory, setShowMobileTransHistory] = useState(false);
     const [transHistoryPage, setTransHistoryPage] = useState(0);
 
+    // refetch transaction history if account/chain changes
+    useEffect(() => {
+        setTransHistoryPage(0);
+        setTransactionList([]);
+    }, [account, chainId]);
+
+    // withdraw max balance default set
     useEffect(() => {
         if (
-            !zunamiContract ||
-            !account ||
-            props.operationName !== 'Withdraw' ||
-            lpPrice.toNumber() === 0
+            selectedCoinIndex === -1 &&
+            balance !== BIG_ZERO &&
+            !isNaN(sharePercent) &&
+            props.operationName === 'withdraw'
         ) {
-            return;
-        }
-
-        const loadBalance = async () => {
-            const rBalance = new BigNumber(await getBalanceNew(zunamiContract, account));
-            setRawBalance(rBalance);
-            setBalance(Number(lpPrice) > 0 ? lpPrice.multipliedBy(rBalance) : rBalance);
-        };
-
-        loadBalance();
-    }, [account, zunamiContract, props.operationName, lpPrice]);
-
-    useEffect(() => {
-        if (selectedCoinIndex === -1 && balance !== BIG_ZERO && !isNaN(sharePercent)) {
             const oneThird = getBalanceNumber(balance)
                 .multipliedBy(sharePercent / 100)
                 .dividedBy(3)
@@ -118,26 +116,35 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
             setDai(oneThird);
             setUsdc(oneThird);
             setUsdt(oneThird);
-        }
-    }, [balance, sharePercent, selectedCoinIndex]);
 
+            if (chainId !== 1) {
+                setUsdt(getFullDisplayBalance(userBalanceList[2], 18));
+            }
+        }
+    }, [balance, sharePercent, selectedCoinIndex, chainId, userBalanceList, props.operationName]);
+
+    // calculate stables to withdraw
     useEffect(() => {
         const setCalculatedStables = async () => {
             if (
-                !zunamiContract ||
                 balance === BIG_ZERO ||
-                (selectedCoinIndex === -1 && !isNaN(sharePercent))
+                (selectedCoinIndex === -1 && !isNaN(sharePercent)) ||
+                props.operationName !== 'withdraw' ||
+                !chainId
             ) {
                 return false;
             }
 
             const stablesToWithdraw = await calculateStables(
                 selectedCoinIndex,
-                rawBalance,
+                balance,
+                lpPrice,
                 sharePercent,
                 zunamiContract,
                 setCalcError
             );
+
+            // const stablesToWithdraw = balance.dividedBy(BIG_TEN.pow(6));
 
             setDai('0');
             setUsdc('0');
@@ -162,8 +169,17 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
         };
 
         setCalculatedStables();
-    }, [balance, selectedCoinIndex, sharePercent, zunamiContract, rawBalance, account]);
+    }, [
+        // balance,
+        selectedCoinIndex,
+        sharePercent,
+        account,
+        props.operationName,
+        chainId,
+        zunamiContract,
+    ]);
 
+    // load transaction list
     useEffect(() => {
         if (!account || transHistoryPage === -1) {
             return;
@@ -175,7 +191,8 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     account,
                     props.operationName.toUpperCase(),
                     transHistoryPage,
-                    6
+                    6,
+                    chainId
                 )
             );
 
@@ -190,7 +207,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
         };
 
         getTransactionHistory();
-    }, [account, props.operationName, transHistoryPage]);
+    }, [account, props.operationName, transHistoryPage, chainId]);
 
     return (
         <React.Fragment>
@@ -261,7 +278,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                 }`}
                                             >
                                                 <div className="TransactionHisoryMobile__Title">
-                                                    {props.operationName === 'Withdraw'
+                                                    {props.operationName === 'withdraw'
                                                         ? 'My withdrawals'
                                                         : 'My deposits'}
                                                 </div>
@@ -271,13 +288,14 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                         items={transactionList}
                                                         onPageEnd={() => {
                                                             if (transHistoryPage !== -1) {
-                                                                setTransHistoryPage(transHistoryPage + 1);
+                                                                setTransHistoryPage(
+                                                                    transHistoryPage + 1
+                                                                );
                                                             }
                                                         }}
                                                     />
                                                 </div>
                                             </div>
-
                                             {!showMobileTransHistory && (
                                                 <div className="flex-wrap d-flex justify-content-start">
                                                     <Form
@@ -313,7 +331,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
 
                                                             if (
                                                                 direct &&
-                                                                props.operationName === 'Withdraw'
+                                                                props.operationName === 'withdraw'
                                                             ) {
                                                                 setSelectedCoin('all');
                                                                 setSelectedCoinIndex(-1);
@@ -325,8 +343,9 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                             }
                                                         }}
                                                     />
-                                                    {props.operationName === 'Withdraw' && (
+                                                    {props.operationName === 'withdraw' && (
                                                         <WithdrawOptions
+                                                            disabled={chainId === 56}
                                                             sharePercent={sharePercent}
                                                             daiChecked={daiChecked}
                                                             usdcChecked={usdcChecked}
@@ -334,6 +353,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                             coinsSelectionEnabled={!directOperation}
                                                             selectedCoin={selectedCoin}
                                                             balance={balance}
+                                                            lpPrice={lpPrice}
                                                             onCoinSelect={(coin: string) => {
                                                                 if (!coin) {
                                                                     return;
@@ -381,18 +401,22 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                             items={transactionList}
                                                             onPageEnd={() => {
                                                                 if (transHistoryPage !== -1) {
-                                                                    setTransHistoryPage(transHistoryPage + 1);
+                                                                    setTransHistoryPage(
+                                                                        transHistoryPage + 1
+                                                                    );
                                                                 }
                                                             }}
                                                         />
                                                     )}
-                                                    {props.operationName === 'Withdraw' && (
+                                                    {props.operationName === 'withdraw' && (
                                                         <TransactionHistory
                                                             title="My withdrawals history"
                                                             items={transactionList}
                                                             onPageEnd={() => {
                                                                 if (transHistoryPage !== -1) {
-                                                                    setTransHistoryPage(transHistoryPage + 1);
+                                                                    setTransHistoryPage(
+                                                                        transHistoryPage + 1
+                                                                    );
                                                                 }
                                                             }}
                                                         />
@@ -415,7 +439,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                             FAQ
                         </a>
                     </div>
-                    <span className="copyright">© 2022 Zunami Protocol. Beta version 1.1</span>
+                    <span className="copyright">© 2022 Zunami Protocol. Beta version 2.0</span>
                 </footer>
             </Container>
         </React.Fragment>

@@ -3,8 +3,14 @@ import { useEffect, useState } from 'react';
 import { useWallet } from 'use-wallet';
 import { getMasterChefContract } from '../sushi/utils';
 import useSushi from './useSushi';
-import { getAllowance } from '../utils/erc20';
-import { BIG_ZERO, daiAddress, usdcAddress, usdtAddress } from '../utils/formatbalance';
+import { getAllowance, getContract } from '../utils/erc20';
+import {
+    BIG_ZERO,
+    daiAddress,
+    usdcAddress,
+    usdtAddress,
+    bscUsdtAddress,
+} from '../utils/formatbalance';
 
 const useAllowance = (tokenAddress: string) => {
     const [allowance, setAllowance] = useState(BIG_ZERO);
@@ -38,40 +44,52 @@ export default useAllowance;
 
 export const useAllowanceStables = () => {
     const [allowance, setAllowance] = useState([BIG_ZERO, BIG_ZERO, BIG_ZERO]);
-    const { account, ethereum } = useWallet();
+    const { account, ethereum, chainId } = useWallet();
     const sushi = useSushi();
     const masterChefContract = getMasterChefContract(sushi);
 
     useEffect(() => {
         const fetchAllowanceStables = async () => {
-            const allowanceDai = await getAllowance(
-                ethereum,
-                daiAddress,
-                masterChefContract,
+            if (chainId === 1) {
+                const allowanceDai = await getAllowance(
+                    ethereum,
+                    daiAddress,
+                    masterChefContract,
+                    // @ts-ignore
+                    account
+                );
+                const allowanceUsdc = await getAllowance(
+                    ethereum,
+                    usdcAddress,
+                    masterChefContract,
+                    // @ts-ignore
+                    account
+                );
+                const allowanceUsdt = await getAllowance(
+                    ethereum,
+                    usdtAddress,
+                    masterChefContract,
+                    // @ts-ignore
+                    account
+                );
+                const data = [
+                    new BigNumber(allowanceDai),
+                    new BigNumber(allowanceUsdc),
+                    new BigNumber(allowanceUsdt),
+                ];
                 // @ts-ignore
-                account
-            );
-            const allowanceUsdc = await getAllowance(
-                ethereum,
-                usdcAddress,
-                masterChefContract,
-                // @ts-ignore
-                account
-            );
-            const allowanceUsdt = await getAllowance(
-                ethereum,
-                usdtAddress,
-                masterChefContract,
-                // @ts-ignore
-                account
-            );
-            const data = [
-                new BigNumber(allowanceDai),
-                new BigNumber(allowanceUsdc),
-                new BigNumber(allowanceUsdt),
-            ];
-            // @ts-ignore
-            setAllowance(data);
+                // console.log([data[0].toNumber(), data[1].toNumber(), data[2].toNumber()]);
+                setAllowance(data);
+            } else {
+                const lpContract = getContract(
+                    sushi.bscContracts.bscMasterChef.currentProvider,
+                    bscUsdtAddress
+                );
+                const allowanceUsdt = await lpContract.methods
+                    .allowance(account, sushi.bscMasterChefAddress)
+                    .call();
+                setAllowance([BIG_ZERO, BIG_ZERO, new BigNumber(allowanceUsdt)]);
+            }
         };
 
         if (account && masterChefContract) {
@@ -79,7 +97,22 @@ export const useAllowanceStables = () => {
         }
         let refreshInterval = setInterval(fetchAllowanceStables, 10000);
         return () => clearInterval(refreshInterval);
-    }, [account, ethereum, masterChefContract]);
+    }, [account, ethereum, masterChefContract, chainId, sushi]);
 
     return allowance;
+};
+
+export const getAllowanceForToken = async (
+    account: string,
+    tokenAddress: string,
+    chainName: string = 'eth'
+) => {
+    // const options = {
+    //     chain: chainName,
+    //     owner_address: account,
+    //     spender_address: getZunamiAddress(chainName),
+    //     address: tokenAddress,
+    // };
+    // const allowance = await Moralis.Web3API.token.getTokenAllowance(options);
+    // return allowance ? allowance.allowance : '0';
 };
