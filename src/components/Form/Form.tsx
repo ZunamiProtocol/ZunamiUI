@@ -309,7 +309,7 @@ export const Form = (props: FormProps): JSX.Element => {
     // console.log(
     //     `Can deposit: emptyFunds: ${emptyFunds}, isApproved: ${isApproved}, pendingTx: ${pendingTx}, depositExceedAmount: ${depositExceedAmount}`
     // );
-    const canWithdraw = isApproved && Number(fullBalancetoWithdraw) > 0;
+    const canWithdraw = isApproved;
 
     // console.log(canWithdraw, isApproved, Number(fullBalancetoWithdraw));
 
@@ -510,15 +510,18 @@ export const Form = (props: FormProps): JSX.Element => {
                         <div>
                             {account && (
                                 <div className="deposit-button-wrapper">
-                                    {account && !isApproved && chainId !== 1 && (
-                                        <button
-                                            disabled={pendingGZLP}
-                                            onClick={handleApproveGzlp}
-                                            className="me-2"
-                                        >
-                                            Approve GZLP
-                                        </button>
-                                    )}
+                                    {account &&
+                                        !isApproved &&
+                                        Number(fullBalancetoWithdraw) > 0 &&
+                                        chainId !== 1 && (
+                                            <button
+                                                disabled={pendingGZLP}
+                                                onClick={handleApproveGzlp}
+                                                className="me-2"
+                                            >
+                                                Approve GZLP
+                                            </button>
+                                        )}
                                     <button
                                         type="submit"
                                         className={`${!canWithdraw ? 'disabled' : ''}`}
