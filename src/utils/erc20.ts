@@ -29,21 +29,6 @@ export const getAllowance = async (
 };
 
 /**
- *
- * @param zunamiContract Contract Primary Zunami contract
- * @param account string Wallet address
- * @returns string Current user balance
- */
-export const getBalanceNew = async (zunamiContract: Contract, account: string): Promise<string> => {
-    try {
-        const balance: string = await zunamiContract.methods.balanceOf(account).call();
-        return balance;
-    } catch (e) {
-        return '0';
-    }
-};
-
-/**
  * Calculates how many coins user will get in exchange to lp tokens
  * @param zunamiContract contract
  * @param lpBalance string Balance in LP tokens

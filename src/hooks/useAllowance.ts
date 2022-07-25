@@ -101,18 +101,3 @@ export const useAllowanceStables = () => {
 
     return allowance;
 };
-
-export const getAllowanceForToken = async (
-    account: string,
-    tokenAddress: string,
-    chainName: string = 'eth'
-) => {
-    // const options = {
-    //     chain: chainName,
-    //     owner_address: account,
-    //     spender_address: getZunamiAddress(chainName),
-    //     address: tokenAddress,
-    // };
-    // const allowance = await Moralis.Web3API.token.getTokenAllowance(options);
-    // return allowance ? allowance.allowance : '0';
-};

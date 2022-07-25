@@ -304,7 +304,9 @@ export const Main = (): JSX.Element => {
                                 FAQ
                             </a>
                         </div>
-                        <span className="copyright">© 2022 Zunami Protocol. Beta version 2.0</span>
+                        <span className="copyright">
+                            © 2022 Zunami Protocol. {`Version: ${process.env.REACT_APP_VERSION}`}
+                        </span>
                         <ul className="list-inline mb-0">
                             <li className="list-inline-item">
                                 <a
