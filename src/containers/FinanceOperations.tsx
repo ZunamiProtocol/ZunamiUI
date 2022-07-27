@@ -7,7 +7,7 @@ import { WelcomeCarousel } from '../components/WelcomeCarousel/WelcomeCarousel';
 import { WithdrawOptions } from '../components/Form/WithdrawOptions/WithdrawOptions';
 import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar';
 import { BigNumber } from 'bignumber.js';
-import { BIG_TEN, BIG_ZERO, getBalanceNumber, getFullDisplayBalance } from '../utils/formatbalance';
+import { BIG_ZERO, getBalanceNumber, getFullDisplayBalance } from '../utils/formatbalance';
 import { ReactComponent as FinIcon } from '../components/Form/deposit-withdraw.svg';
 import useLpPrice from '../hooks/useLpPrice';
 import { useUserBalances } from '../hooks/useUserBalances';
