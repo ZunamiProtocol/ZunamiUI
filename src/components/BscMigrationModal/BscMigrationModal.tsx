@@ -81,7 +81,7 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
                 />
                 {!isGZLPapproved && (
                     <button
-                        className={`${pendingGZLP ? 'disabled' : ''}`}
+                        className={`zun-button ${pendingGZLP ? 'disabled' : ''}`}
                         onClick={handleApproveGzlp}
                     >
                         Approve GZLP
