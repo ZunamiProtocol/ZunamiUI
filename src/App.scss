@@ -275,6 +275,10 @@ footer {
     border-radius: 5px;
 }
 
+.hide {
+    display: none !important;
+}
+
 .zun-button {
     background: linear-gradient(87.51deg, #f74e02 12.85%, #f9a412 94.75%);
     border-radius: 5px;
@@ -550,6 +554,22 @@ body.dark {
         border-color: $dark-border-color;
         background-color: $dark-panel-bg;
         color: #fff;
+    }
+
+    .BscMigrationModal,
+    .modal-content,
+    .modal-header {
+        background: linear-gradient(180deg, #1b1b1b 0%, #1d1d1d 100%) !important;
+    }
+
+    .BscMigrationModal h3,
+    .BscMigrationModal p,
+    .modal-header .btn-close {
+        color: #fff;
+    }
+
+    .modal-header .btn-close {
+        filter: invert(1);
     }
 
     .navbar {
