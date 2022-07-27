@@ -1,0 +1,62 @@
+@import 'src/variables';
+
+.modal-content,
+.modal-header {
+    background: #fffaf3 !important;
+}
+
+.modal-header {
+    border-bottom: none !important;
+    padding: 0 !important;
+
+    .btn-close {
+        transform: translate(-15px, 15px);
+    }
+}
+
+.BscMigrationModal {
+    background: #fffaf3;
+    border-radius: 5px;
+    margin-left: auto;
+    margin-right: auto;
+
+    @media screen and (min-width: $media375) {
+        width: 337px;
+        // height: 468px;
+    }
+
+    @media screen and (min-width: $media1024) {
+        width: 435px;
+        // height: 334px;
+    }
+
+    @media screen and (min-width: $media1440) {
+        width: 435px;
+        // height: 361px;
+    }
+
+    h3 {
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 23px;
+        text-align: center;
+        color: #636363;
+    }
+
+    p {
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 138.1%;
+        text-align: center;
+        color: #8c8c8c;
+    }
+
+    .InfoBlock {
+        width: 247px;
+        height: 82px;
+    }
+
+    .alert {
+        font-size: 14px;
+    }
+}

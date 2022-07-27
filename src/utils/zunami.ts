@@ -14,5 +14,5 @@ export const getZunamiAddress = (chainId: number | undefined): string => {
     return chainId === 1 || !chainId ? contractAddresses.zunami[1] : contractAddresses.zunami[56];
 };
 
-export const isBsc = (chainId: number | undefined) => chainId === 56;
-export const isEth = (chainId: number | undefined) => chainId === 1;
+export const isBSC = (chainId: number | undefined) => chainId === 56;
+export const isETH = (chainId: number | undefined) => chainId === 1;

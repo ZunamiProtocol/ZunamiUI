@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import './WithdrawOptions.scss';
 import { getBalanceNumber } from '../../../utils/formatbalance';
 import BigNumber from 'bignumber.js';
-import { isEth } from '../../../utils/zunami';
+import { isETH } from '../../../utils/zunami';
 
 interface WithdrawOptionsProps {
     onCoinSelect?: Function;
@@ -77,7 +77,7 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
             >
                 <span>Withdraw in:</span>
                 <div className="coins">
-                    {isEth(props.chainId) && (
+                    {isETH(props.chainId) && (
                         <label
                             className="coin"
                             onClick={() => onCoinSelect('usdc', props.onCoinSelect)}
@@ -93,7 +93,7 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                             <span>USDC</span>
                         </label>
                     )}
-                    {isEth(props.chainId) && (
+                    {isETH(props.chainId) && (
                         <label
                             className="coin"
                             onClick={() => onCoinSelect('dai', props.onCoinSelect)}
@@ -123,7 +123,7 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                         <img src="/USDT.svg" alt="" />
                         <span>USDT</span>
                     </label>
-                    {isEth(props.chainId) && (
+                    {isETH(props.chainId) && (
                         <label
                             className="coin all-coins"
                             onClick={() => onCoinSelect('all', props.onCoinSelect)}
