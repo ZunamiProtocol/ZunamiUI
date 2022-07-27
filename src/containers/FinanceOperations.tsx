@@ -346,6 +346,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                     />
                                                     {props.operationName === 'withdraw' && (
                                                         <WithdrawOptions
+                                                            chainId={chainId}
                                                             disabled={chainId === 56}
                                                             sharePercent={sharePercent}
                                                             daiChecked={daiChecked}
