@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Modal } from 'react-bootstrap';
 import './BscMigrationModal.scss';
 import { InfoBlock } from '../InfoBlock/InfoBlock';
@@ -7,8 +7,7 @@ import { getBalanceNumber } from '../../utils/formatbalance';
 import { getMasterChefContract } from '../../sushi/utils';
 import { useWallet } from 'use-wallet';
 import useSushi from './../../hooks/useSushi';
-import { useGzlpAllowance } from '../../hooks/useGzlpAllowance';
-import useApprove from '../../hooks/useApprove';
+import { BIG_ZERO } from '../../utils/formatbalance';
 
 interface BscMigrationModalProps {
     balance: BigNumber;
@@ -18,6 +17,9 @@ interface BscMigrationModalProps {
     onHide?: Function;
 }
 
+const ALLOWANCE_SUM = '10000000000000000000000000';
+const OLD_BSC_GATE_ADDRESS = '0x02a228D826Cbb1C0E8765A6DB6E7AB64EAA80BFD';
+
 export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element => {
     const [result, setResult] = useState('');
     const [pending, setPending] = useState(false);
@@ -25,24 +27,52 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
     const sushi = useSushi();
     const zunamiContract = getMasterChefContract(sushi, chainId);
     const [pendingGZLP, setPendingGZLP] = useState(false);
-    const gzlpAllowance = useGzlpAllowance();
-    const { onGZLPApprove } = useApprove();
+    const [allowance, setAllowance] = useState(BIG_ZERO);
+    const [isGZLPapproved, setGZLPapproved] = useState(false);
 
-    const isGZLPapproved = gzlpAllowance.isGreaterThanOrEqualTo(
-        new BigNumber('10000000000000000000000000')
-    );
+    useEffect(() => {
+        if (!zunamiContract || !account) {
+            return;
+        }
+
+        zunamiContract.options.address = OLD_BSC_GATE_ADDRESS;
+        const getAllowance = async () => {
+            const allowanceValue = await zunamiContract.methods
+                .allowance(account, zunamiContract.options.address)
+                .call();
+            const allowanceBig = new BigNumber(allowanceValue);
+
+            setAllowance(allowanceBig);
+            setGZLPapproved(
+                allowanceBig.isGreaterThanOrEqualTo(new BigNumber('1000000000000000000000000'))
+            );
+        };
+
+        getAllowance();
+        let refreshInterval = setInterval(getAllowance, 10000);
+        return () => clearInterval(refreshInterval);
+    }, [chainId, zunamiContract, account]);
 
     const handleApproveGzlp = useCallback(async () => {
+        if (!zunamiContract) {
+            return;
+        }
+
         try {
             setPendingGZLP(true);
-            const tx = onGZLPApprove();
+            const tx = zunamiContract.methods
+                .approve(OLD_BSC_GATE_ADDRESS, ALLOWANCE_SUM)
+                .send({ from: account })
+                .on('transactionHash', (tx) => {
+                    return tx.transactionHash;
+                });
             if (!tx) {
                 setPendingGZLP(false);
             }
         } catch (e) {
             setPendingGZLP(false);
         }
-    }, [onGZLPApprove]);
+    }, [account, zunamiContract]);
 
     return (
         <Modal
@@ -81,7 +111,7 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
                 />
                 {!isGZLPapproved && (
                     <button
-                        className={`${pendingGZLP ? 'disabled' : ''}`}
+                        className={`zun-button ${pendingGZLP ? 'disabled' : ''}`}
                         onClick={handleApproveGzlp}
                     >
                         Approve GZLP
@@ -95,8 +125,7 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
                         try {
                             setPending(true);
                             // OLD DEPRECATED BSC GATEWAY. DO NOT USE
-                            zunamiContract.options.address =
-                                '0x02a228D826Cbb1C0E8765A6DB6E7AB64EAA80BFD';
+                            zunamiContract.options.address = OLD_BSC_GATE_ADDRESS;
 
                             await zunamiContract.methods
                                 .delegateWithdrawal(props.balance.toFixed(0).toString())

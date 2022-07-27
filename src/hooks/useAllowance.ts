@@ -78,7 +78,6 @@ export const useAllowanceStables = () => {
                     new BigNumber(allowanceUsdt),
                 ];
                 // @ts-ignore
-                // console.log([data[0].toNumber(), data[1].toNumber(), data[2].toNumber()]);
                 setAllowance(data);
             } else {
                 const lpContract = getContract(
