@@ -16,11 +16,11 @@ import { getTransHistoryUrl } from '../api/api';
 import useBalanceOf from '../hooks/useBalanceOf';
 import { useWallet } from 'use-wallet';
 import useEagerConnect from '../hooks/useEagerConnect';
-import { getZunamiAddress } from '../utils/zunami';
 import { Contract } from 'web3-eth-contract';
 import { calcWithdrawOneCoin } from '../utils/erc20';
 import useSushi from '../hooks/useSushi';
 import { getMasterChefContract } from '../sushi/utils';
+import { isBSC } from '../utils/zunami';
 
 interface FinanceOperationsProps {
     operationName: string;
@@ -133,6 +133,12 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                 !chainId
             ) {
                 return false;
+            }
+
+            if (isBSC(chainId)) {
+                const coinValue = getBalanceNumber(balance, 6).toFixed(2, 1).toString();
+                setUsdt(coinValue);
+                return;
             }
 
             const stablesToWithdraw = await calculateStables(

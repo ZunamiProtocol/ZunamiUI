@@ -20,6 +20,9 @@ import { PoolInfo, poolDataToChartData } from '../functions/pools';
 import { Preloader } from '../components/Preloader/Preloader';
 import { useWallet } from 'use-wallet';
 import useEagerConnect from '../hooks/useEagerConnect';
+import { BscMigrationModal } from '../components/BscMigrationModal/BscMigrationModal';
+import useOldBscBalance from '../hooks/useOldBscBalance';
+import { isBSC } from '../utils/zunami';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -77,6 +80,7 @@ export const Main = (): JSX.Element => {
 
     const lpPrice = useLpPrice();
     const balance = useBalanceOf();
+    const oldBscBalance = useOldBscBalance();
     const balances = useCrossChainBalances(lpPrice);
     const userMaxWithdraw =
         lpPrice.toNumber() > 0 && balance.toNumber() !== -1
@@ -168,12 +172,32 @@ export const Main = (): JSX.Element => {
         </div>
     );
 
+    const [showMigrationModal, setShowMigrationModal] = useState(false);
+
+    useEffect(() => {
+        if (!isBSC(chainId)) {
+            return;
+        }
+
+        if (oldBscBalance.toNumber() > 0) {
+            setShowMigrationModal(true);
+        }
+    }, [oldBscBalance, chainId]);
+
     return (
         <Suspense fallback={<Preloader onlyIcon={true} />}>
             <React.Fragment>
                 <Header />
                 <MobileSidebar />
                 <div className="container">
+                    <BscMigrationModal
+                        show={showMigrationModal}
+                        balance={oldBscBalance}
+                        lpPrice={lpPrice}
+                        onHide={() => {
+                            setShowMigrationModal(false);
+                        }}
+                    />
                     <div className="row main-row h-100">
                         <SideBar isMainPage={true} />
                         <div className="col content-col dashboard-col">

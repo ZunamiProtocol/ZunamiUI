@@ -556,6 +556,22 @@ body.dark {
         color: #fff;
     }
 
+    .BscMigrationModal,
+    .modal-content,
+    .modal-header {
+        background: linear-gradient(180deg, #1b1b1b 0%, #1d1d1d 100%) !important;
+    }
+
+    .BscMigrationModal h3,
+    .BscMigrationModal p,
+    .modal-header .btn-close {
+        color: #fff;
+    }
+
+    .modal-header .btn-close {
+        filter: invert(1);
+    }
+
     .navbar {
         background: linear-gradient(180deg, #1b1b1b 0%, #1d1d1d 100%);
 

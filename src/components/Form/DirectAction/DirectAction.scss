@@ -58,16 +58,18 @@
     }
 
     svg {
-        @media screen and (min-width: $media1024) {
-            margin-top: 0px;
-            width: 8px;
-            height: 8px;
+        @media screen and (min-width: $media375) {
+            margin-top: -2px;
+            width: 15px;
+            height: 15px;
+            margin-left: 10px;
         }
 
         @media screen and (min-width: $media1440) {
             margin-top: 0;
             width: 15px;
             height: 15px;
+            margin-left: 0;
         }
     }
 }
