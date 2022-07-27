@@ -123,7 +123,7 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                         <img src="/USDT.svg" alt="" />
                         <span>USDT</span>
                     </label>
-                    {isETH(props.chainId) && (
+                    {isETH(props.chainId) && 
                         <label
                             className="coin all-coins"
                             onClick={() => onCoinSelect('all', props.onCoinSelect)}
