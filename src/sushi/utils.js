@@ -220,11 +220,3 @@ export const unstake = async (
             });
     }
 };
-
-export const getPendingDeposit = async (masterChefContract, account, index) => {
-    try {
-        return await masterChefContract.methods.accDepositPending(account, index).call();
-    } catch (e) {
-        return '0';
-    }
-};
