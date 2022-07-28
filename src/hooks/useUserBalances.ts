@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { useWallet } from 'use-wallet';
-import { getMasterChefContract } from '../sushi/utils';
-import useSushi from './useSushi';
-import { getAllowance } from '../utils/erc20';
 import { getBalance } from '../utils/erc20';
 import {
     BIG_ZERO,
