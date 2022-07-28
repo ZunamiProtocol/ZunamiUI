@@ -38,7 +38,7 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
         zunamiContract.options.address = OLD_BSC_GATE_ADDRESS;
         const getAllowance = async () => {
             const allowanceValue = await zunamiContract.methods
-                .allowance(account, zunamiContract.options.address)
+                .allowance(account, OLD_BSC_GATE_ADDRESS)
                 .call();
             const allowanceBig = new BigNumber(allowanceValue);
 
@@ -60,6 +60,8 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
 
         try {
             setPendingGZLP(true);
+            zunamiContract.options.address = OLD_BSC_GATE_ADDRESS;
+
             const tx = zunamiContract.methods
                 .approve(OLD_BSC_GATE_ADDRESS, ALLOWANCE_SUM)
                 .send({ from: account })
