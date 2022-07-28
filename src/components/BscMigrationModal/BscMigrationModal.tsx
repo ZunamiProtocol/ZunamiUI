@@ -60,6 +60,7 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
 
         try {
             setPendingGZLP(true);
+
             zunamiContract.options.address = OLD_BSC_GATE_ADDRESS;
 
             const tx = zunamiContract.methods
