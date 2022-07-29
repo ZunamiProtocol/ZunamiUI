@@ -96,7 +96,6 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
             zunamiContract.options.address = OLD_BSC_GATE_ADDRESS;
             zunamiContract.options.from = account;
             zunamiContract.defaultAccount = account;
-            // zunamiContract.setProvider(sushi.getBscProvider());
 
             await zunamiContract.methods
                 .delegateWithdrawal(props.balance.toFixed(0).toString())
