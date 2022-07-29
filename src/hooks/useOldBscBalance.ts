@@ -16,7 +16,7 @@ const useOldBscBalance = () => {
     const masterChefContract = getMasterChefContract(sushi);
 
     useEffect(() => {
-        if (!account || !chainId || !isBSC(chainId) || !masterChefContract) {
+        if (!account || !chainId || !masterChefContract) {
             setBalance(BIG_ZERO);
             return;
         }
@@ -28,7 +28,7 @@ const useOldBscBalance = () => {
             contract.options.address = '0x02a228D826Cbb1C0E8765A6DB6E7AB64EAA80BFD';
 
             const value = await contract.methods.balanceOf(account).call();
-            console.log(`OLD BSC balance execution (${chainId}). Result: ${value}`);
+            console.log(`OLD BSC balance execution (chain ${chainId}). Result: ${value}`);
 
             if (value) {
                 setBalance(new BigNumber(value));

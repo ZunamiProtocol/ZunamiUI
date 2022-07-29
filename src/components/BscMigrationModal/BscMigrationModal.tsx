@@ -31,18 +31,23 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
     const [isGZLPapproved, setGZLPapproved] = useState(false);
 
     useEffect(() => {
-        if (!zunamiContract || !account || chainId !== 56) {
+        if (!zunamiContract || !account) {
             return;
         }
 
-        zunamiContract.options.address = OLD_BSC_GATE_ADDRESS;
         const getAllowance = async () => {
-            const allowanceValue = await zunamiContract.methods
+            const oldBscContract = sushi.getBscContract(account);
+            oldBscContract.options.address = OLD_BSC_GATE_ADDRESS;
+
+            const allowanceValue = await oldBscContract.methods
                 .allowance(account, OLD_BSC_GATE_ADDRESS)
                 .call();
-            const allowanceBig = new BigNumber(allowanceValue);
 
+            console.log(`Allowance for OLD BSC gateway: ${allowanceValue}`);
+
+            const allowanceBig = new BigNumber(allowanceValue);
             setAllowance(allowanceBig);
+
             setGZLPapproved(
                 allowanceBig.isGreaterThanOrEqualTo(new BigNumber('1000000000000000000000000'))
             );
@@ -51,7 +56,7 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
         getAllowance();
         let refreshInterval = setInterval(getAllowance, 10000);
         return () => clearInterval(refreshInterval);
-    }, [chainId, zunamiContract, account]);
+    }, [chainId, zunamiContract, account, sushi]);
 
     const handleApproveGzlp = useCallback(async () => {
         if (!zunamiContract) {
