@@ -29,6 +29,7 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
     const [pendingGZLP, setPendingGZLP] = useState(false);
     const [allowance, setAllowance] = useState(BIG_ZERO);
     const [isGZLPapproved, setGZLPapproved] = useState(false);
+    const eth = window.ethereum;
 
     useEffect(() => {
         if (!account) {
@@ -154,7 +155,7 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
                     isStrategy={false}
                     colorfulBg={true}
                 />
-                {!isGZLPapproved && (
+                {!isGZLPapproved && isBSC(chainId) && (
                     <button
                         className={`zun-button ${pendingGZLP ? 'disabled' : ''}`}
                         onClick={handleApproveGzlp}
@@ -171,8 +172,20 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
                     Withdraw all
                 </button>
                 {!isBSC(chainId) && (
-                    <div className="alert alert-warning">
-                        Please, switch to Binance Smart Chain network
+                    <div className="alert alert-warning text-center">
+                        Please, switch to Binance Smart Chain network.
+                        <button
+                            className="zun-button mt-2"
+                            onClick={async () => {
+                                await eth.request({
+                                    method: 'wallet_switchEthereumChain',
+                                    params: [{ chainId: '0x38' }],
+                                });
+                                window.location.reload();
+                            }}
+                        >
+                            Switch to BSC
+                        </button>
                     </div>
                 )}
                 {result && <div className="alert alert-info">{result}</div>}
