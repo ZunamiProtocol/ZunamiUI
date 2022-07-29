@@ -6,7 +6,7 @@ import useSushi from './useSushi';
 import { getMasterChefContract } from '../sushi/utils';
 import Web3 from 'web3';
 import bscAbi from '../actions/abi/zunami_bsc.json';
-import { isBSC, isETH } from '../utils/zunami';
+import { isETH } from '../utils/zunami';
 
 const useOldBscBalance = () => {
     const [balance, setBalance] = useState(new BigNumber(BIG_ZERO));
