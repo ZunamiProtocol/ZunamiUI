@@ -57,6 +57,7 @@ export const Header = (): JSX.Element => {
                     }}
                 />
                 <Disclaimer text={chainNameToTooltip(chainId)} />
+                {chainId !== 1 && <Disclaimer text={chainNameToTooltip(chainId)} />}
                 <NetworkSelector />
                 <WalletStatus />
                 <svg
