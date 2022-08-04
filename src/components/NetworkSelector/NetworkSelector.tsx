@@ -168,11 +168,13 @@ export const NetworkSelector = (props: NetworkSelectorProps): JSX.Element => {
                     }
                 }}
             >
-                {networks.map((network) => (
-                    <option key={network.key} value={network.key}>
-                        {network.value}
-                    </option>
-                ))}
+                {networks
+                    .filter((item) => [1, 56].indexOf(item.id) !== -1)
+                    .map((network) => (
+                        <option key={network.key} value={network.key}>
+                            {network.value}
+                        </option>
+                    ))}
             </select>
         </div>
     );
