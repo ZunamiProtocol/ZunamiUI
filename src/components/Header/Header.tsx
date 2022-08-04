@@ -11,6 +11,7 @@ import { NetworkSelector } from '../NetworkSelector/NetworkSelector';
 import { useWallet } from 'use-wallet';
 import useSushi from '../../hooks/useSushi';
 import { getMasterChefContract } from '../../sushi/utils';
+import { isETH } from '../../utils/zunami';
 
 function chainNameToTooltip(chainId: number) {
     if (chainId === 1 || !chainId) {
@@ -56,7 +57,7 @@ export const Header = (): JSX.Element => {
                         document.body.classList.remove('overflow');
                     }}
                 />
-                <Disclaimer text={chainNameToTooltip(chainId)} />
+                {!isETH(chainId) && <Disclaimer text={chainNameToTooltip(chainId)} />}
                 <NetworkSelector />
                 <WalletStatus />
                 <svg
