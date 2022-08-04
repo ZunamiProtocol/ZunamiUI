@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import './WalletStatus.scss';
 import { useWallet } from 'use-wallet';
 import { WalletsModal } from '../WalletsModal/WalletsModal';
+import { log } from '../../utils/logger';
 
 export const WalletStatus = (): JSX.Element => {
     const { account, reset } = useWallet();
@@ -17,6 +18,8 @@ export const WalletStatus = (): JSX.Element => {
         const shortAddress = `${account.substring(0, 6)}...${account.substring(
             account.length - 4
         )}`;
+
+        log(`Active wallet: ${account}`);
 
         return (
             <div className={'WalletStatus WalletStatus__connected'}>
