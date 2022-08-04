@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useWallet } from 'use-wallet';
 import useSushi from './useSushi';
 import { BIG_TEN, DAI_DECIMALS } from '../utils/formatbalance';
+import { log } from '../utils/logger';
 
 export interface PendingOperations {
     deposit: BigNumber;
@@ -36,13 +37,17 @@ const usePendingOperations = () => {
                     result[0] = result[0].dividedBy(BIG_TEN.pow(DAI_DECIMALS));
                 }
 
-                setPendingDeposit(result[0].plus(result[1]).plus(result[2]));
+                const totalPendingDepositSum = result[0].plus(result[1]).plus(result[2]);
+                log(`ETH pending deposits: ${totalPendingDepositSum.toString()}`);
+
+                setPendingDeposit(totalPendingDepositSum);
 
                 const ethPendingWithdrawals = await sushi.contracts.masterChef.methods
                     .pendingWithdrawals(account)
                     .call();
 
                 setPendingWithdraw(new BigNumber(ethPendingWithdrawals[0].toString()));
+                log(`ETH pending withdrawals: ${ethPendingWithdrawals[0].toString()}`);
             } else {
                 const bscPendingDeposits = await sushi.bscContracts.bscMasterChef.methods
                     .pendingDeposits(account)
@@ -53,6 +58,9 @@ const usePendingOperations = () => {
 
                 setPendingDeposit(new BigNumber(bscPendingDeposits.toString()));
                 setPendingWithdraw(new BigNumber(bscPendingWithdrawals.toString()));
+
+                log(`BSC pending deposits: ${bscPendingDeposits.toString()}`);
+                log(`BSC pending withdrawals: ${bscPendingWithdrawals.toString()}`);
             }
         };
 
