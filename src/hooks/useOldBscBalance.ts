@@ -17,7 +17,7 @@ const useOldBscBalance = () => {
     const masterChefContract = getMasterChefContract(sushi);
 
     useEffect(() => {
-        if (!account || !chainId || !isBSC(chainId) || !masterChefContract) {
+        if (!account || !chainId || !masterChefContract) {
             setBalance(BIG_ZERO);
             return;
         }

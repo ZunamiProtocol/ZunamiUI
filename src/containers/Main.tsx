@@ -175,10 +175,6 @@ export const Main = (): JSX.Element => {
     const [showMigrationModal, setShowMigrationModal] = useState(false);
 
     useEffect(() => {
-        if (!isBSC(chainId)) {
-            return;
-        }
-
         if (oldBscBalance.toNumber() > 0) {
             setShowMigrationModal(true);
         }

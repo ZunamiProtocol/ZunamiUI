@@ -8,6 +8,7 @@ import { getMasterChefContract } from '../../sushi/utils';
 import { useWallet } from 'use-wallet';
 import useSushi from './../../hooks/useSushi';
 import { BIG_ZERO } from '../../utils/formatbalance';
+import { isBSC } from '../../utils/zunami';
 
 interface BscMigrationModalProps {
     balance: BigNumber;
@@ -25,24 +26,29 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
     const [pending, setPending] = useState(false);
     const { account, chainId } = useWallet();
     const sushi = useSushi();
-    const zunamiContract = getMasterChefContract(sushi, chainId);
     const [pendingGZLP, setPendingGZLP] = useState(false);
     const [allowance, setAllowance] = useState(BIG_ZERO);
     const [isGZLPapproved, setGZLPapproved] = useState(false);
+    const eth = window.ethereum;
 
     useEffect(() => {
         if (!zunamiContract || !account || chainId !== 56 || !props.show) {
             return;
         }
 
-        zunamiContract.options.address = OLD_BSC_GATE_ADDRESS;
         const getAllowance = async () => {
-            const allowanceValue = await zunamiContract.methods
+            const oldBscContract = sushi.getBscContract(account);
+            oldBscContract.options.address = OLD_BSC_GATE_ADDRESS;
+
+            const allowanceValue = await oldBscContract.methods
                 .allowance(account, OLD_BSC_GATE_ADDRESS)
                 .call();
-            const allowanceBig = new BigNumber(allowanceValue);
 
+            console.log(`Allowance for OLD BSC gateway: ${allowanceValue}`);
+
+            const allowanceBig = new BigNumber(allowanceValue);
             setAllowance(allowanceBig);
+
             setGZLPapproved(
                 allowanceBig.isGreaterThanOrEqualTo(new BigNumber('1000000000000000000000000'))
             );
@@ -51,16 +57,12 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
         getAllowance();
         let refreshInterval = setInterval(getAllowance, 10000);
         return () => clearInterval(refreshInterval);
-    }, [chainId, zunamiContract, account]);
+    }, [chainId, account, sushi]);
 
     const handleApproveGzlp = useCallback(async () => {
-        if (!zunamiContract) {
-            return;
-        }
-
         try {
             setPendingGZLP(true);
-
+            const zunamiContract = getMasterChefContract(sushi, chainId);
             zunamiContract.options.address = OLD_BSC_GATE_ADDRESS;
 
             const tx = zunamiContract.methods
@@ -75,7 +77,48 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
         } catch (e) {
             setPendingGZLP(false);
         }
-    }, [account, zunamiContract]);
+    }, [account, chainId, sushi]);
+
+    const withdrawAll = useCallback(async () => {
+        if (!account || !chainId) {
+            return;
+        }
+
+        try {
+            if (!isBSC(chainId)) {
+                alert('Switch to BSC network to continue');
+                return;
+            }
+
+            setPending(true);
+            // OLD DEPRECATED BSC GATEWAY. DO NOT USE
+
+            const zunamiContract = getMasterChefContract(sushi, chainId);
+            zunamiContract.options.address = OLD_BSC_GATE_ADDRESS;
+            zunamiContract.options.from = account;
+            zunamiContract.defaultAccount = account;
+
+            await zunamiContract.methods
+                .delegateWithdrawal(props.balance.toFixed(0).toString())
+                .send({ from: account })
+                .on('transactionHash', (transactionHash) => {
+                    return transactionHash;
+                });
+
+            setResult(
+                `Success! Funds will be withdrawn within 24 hours. Page will be reloaded in 7 seconds...`
+            );
+
+            setTimeout(() => {
+                window.location.reload();
+            }, 7000);
+        } catch (error: any) {
+            debugger;
+            setResult(`Error while withdraw: ${error.message}`);
+        }
+
+        setPending(false);
+    }, [account, chainId, props.balance, sushi]);
 
     return (
         <Modal
@@ -112,7 +155,7 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
                     isStrategy={false}
                     colorfulBg={true}
                 />
-                {!isGZLPapproved && (
+                {!isGZLPapproved && isBSC(chainId) && (
                     <button
                         className={`zun-button ${pendingGZLP ? 'disabled' : ''}`}
                         onClick={handleApproveGzlp}
@@ -122,37 +165,29 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
                 )}
                 <button
                     className={`zun-button ${pending ? 'disabled' : ''} ${
-                        !isGZLPapproved ? 'hide' : ''
+                        !isGZLPapproved || !isBSC(chainId) ? 'hide' : ''
                     }`}
-                    onClick={async () => {
-                        try {
-                            setPending(true);
-                            // OLD DEPRECATED BSC GATEWAY. DO NOT USE
-                            zunamiContract.options.address = OLD_BSC_GATE_ADDRESS;
-
-                            await zunamiContract.methods
-                                .delegateWithdrawal(props.balance.toFixed(0).toString())
-                                .send({ from: account })
-                                .on('transactionHash', (transactionHash) => {
-                                    return transactionHash;
-                                });
-
-                            setResult(
-                                `Success! Funds will be withdrawn within 24 hours. Page will be reloaded in 7 seconds...`
-                            );
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, 7000);
-                        } catch (error: any) {
-                            debugger;
-                            setResult(`Error while withdraw: ${error.message}`);
-                        }
-
-                        setPending(false);
-                    }}
+                    onClick={withdrawAll}
                 >
                     Withdraw all
                 </button>
+                {!isBSC(chainId) && (
+                    <div className="alert alert-warning text-center">
+                        Please, switch to Binance Smart Chain network.
+                        <button
+                            className="zun-button mt-2"
+                            onClick={async () => {
+                                await eth.request({
+                                    method: 'wallet_switchEthereumChain',
+                                    params: [{ chainId: '0x38' }],
+                                });
+                                window.location.reload();
+                            }}
+                        >
+                            Switch to BSC
+                        </button>
+                    </div>
+                )}
                 {result && <div className="alert alert-info">{result}</div>}
             </Modal.Body>
         </Modal>
