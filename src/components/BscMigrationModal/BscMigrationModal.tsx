@@ -32,7 +32,7 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
     const eth = window.ethereum;
 
     useEffect(() => {
-        if (!zunamiContract || !account || chainId !== 56 || !props.show) {
+        if (!account || chainId !== 56 || !props.show) {
             return;
         }
 
