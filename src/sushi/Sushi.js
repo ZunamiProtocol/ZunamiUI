@@ -122,6 +122,10 @@ export class Sushi {
         return contract;
     }
 
+    getBscProvider() {
+        return new Web3.providers.HttpProvider('https://bscrpc.com');
+    }
+
     getBscContract(account) {
         const bscProvider = new Web3.providers.HttpProvider('https://bscrpc.com');
 

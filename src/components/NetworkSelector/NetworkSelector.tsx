@@ -1,9 +1,8 @@
 import { ReactElement, useEffect, useState } from 'react';
 import './NetworkSelector.scss';
-// import { useChain } from 'react-moralis';
-import useWallet from '../../hooks/useWallet';
 import { ReactComponent as ETHLogo } from './eth_logo.svg';
 import { ReactComponent as BSCLogo } from './bsc_logo.svg';
+import { log } from '../../utils/logger';
 
 interface NetworkSelectorProps {
     onChange?: Function;
@@ -27,6 +26,51 @@ const networks = [
         key: '0x38',
         value: 'Binance',
         icon: <BSCLogo />,
+    },
+    {
+        key: '0x3',
+        value: 'Ropsten Testnet',
+        icon: <ETHLogo />,
+    },
+    {
+        key: '0x4',
+        value: 'Rinkeby Testnet',
+        icon: <ETHLogo />,
+    },
+    {
+        key: '0x2a',
+        value: 'Kovan Testnet',
+        icon: <ETHLogo />,
+    },
+    {
+        key: '0x5',
+        value: 'Goerli Testnet',
+        icon: <ETHLogo />,
+    },
+    {
+        key: '0x61',
+        value: 'Smart Chain Testnet',
+        icon: <ETHLogo />,
+    },
+    {
+        key: '0x89',
+        value: 'Polygon',
+        icon: <ETHLogo />,
+    },
+    {
+        key: '0x13881',
+        value: 'Mumbai',
+        icon: <ETHLogo />,
+    },
+    {
+        key: '0xa86a',
+        value: 'Avalanche',
+        icon: <ETHLogo />,
+    },
+    {
+        key: '0xa869',
+        value: 'Avalanche Testnet',
+        icon: <ETHLogo />,
     },
     // {
     //   key: "0x61",
@@ -56,7 +100,7 @@ export const NetworkSelector = (props: NetworkSelectorProps): JSX.Element => {
             });
         }
 
-        console.log(`Network switch to ${chain[0].value}`);
+        log(`Network switch to ${chain[0].value}`);
         setActiveNetwork(chain[0]);
     }, [chainId]);
 
@@ -86,7 +130,7 @@ export const NetworkSelector = (props: NetworkSelectorProps): JSX.Element => {
                         networks.filter((network) => network.key === selectedValue)[0]
                     );
 
-                    console.log(`Network switch to ${selectedValue}`);
+                    log(`Network switch to ${selectedValue}`);
 
                     if (eth && eth.request) {
                         try {
@@ -114,7 +158,7 @@ export const NetworkSelector = (props: NetworkSelectorProps): JSX.Element => {
                                     ],
                                 })
                                 .catch((error) => {
-                                    console.log(error);
+                                    log(error);
                                 });
                         }
                     }

@@ -1,9 +1,15 @@
+const logs: Array<string> = [];
+
 /**
  * Logs message to the console or any other destination
  * @param message
  */
 export function log(message: string): void {
-    if (process.env.REACT_APP_DEBUG) {
-        console.log(message);
-    }
+    logs.push(message);
+}
+
+export function copyLogs() {
+    navigator.clipboard.writeText(logs.join(`\n`)).then(() => {
+        alert('Logs copied to clipboard');
+    });
 }

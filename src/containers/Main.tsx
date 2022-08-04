@@ -22,7 +22,8 @@ import { useWallet } from 'use-wallet';
 import useEagerConnect from '../hooks/useEagerConnect';
 import { BscMigrationModal } from '../components/BscMigrationModal/BscMigrationModal';
 import useOldBscBalance from '../hooks/useOldBscBalance';
-import { isBSC } from '../utils/zunami';
+import { isBSC, isETH } from '../utils/zunami';
+import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -175,14 +176,14 @@ export const Main = (): JSX.Element => {
     const [showMigrationModal, setShowMigrationModal] = useState(false);
 
     useEffect(() => {
-        if (!isBSC(chainId)) {
-            return;
-        }
-
         if (oldBscBalance.toNumber() > 0) {
             setShowMigrationModal(true);
         }
     }, [oldBscBalance, chainId]);
+
+    if (!isBSC(chainId) && !isETH(chainId)) {
+        return <UnsupportedChain />;
+    }
 
     return (
         <Suspense fallback={<Preloader onlyIcon={true} />}>

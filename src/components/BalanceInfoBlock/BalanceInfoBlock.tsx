@@ -4,6 +4,7 @@ import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { getBalanceNumber } from '../../utils/formatbalance';
 import '../InfoBlock/InfoBlock.scss';
 import './BalanceInfoBlock.scss';
+import { copyLogs } from '../../utils/logger';
 
 interface Balance {
     chainId: String;
@@ -47,6 +48,7 @@ export const BalanceInfoBlock = (
 ): JSX.Element => {
     const target = useRef(null);
     const [showHint, setShowHint] = useState(false);
+    const [clickCounter, setClickCounter] = useState(0);
 
     const popover = (
         <Popover onMouseEnter={() => setShowHint(true)} onMouseLeave={() => setShowHint(false)}>
@@ -63,6 +65,14 @@ export const BalanceInfoBlock = (
             ${props.secondaryRow ? 'InfoBlock_secondaryRow' : ''}
         `}
             data-title={props.title}
+            onClick={() => {
+                setClickCounter(clickCounter + 1);
+
+                if (clickCounter === 4) {
+                    copyLogs();
+                    setClickCounter(0);
+                }
+            }}
         >
             <div className={`InfoBlock__title ${props.hint ? 'with_hint' : ''}`}>
                 {!props.isLoading && props.icon && props.icon}

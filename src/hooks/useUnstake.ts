@@ -25,7 +25,7 @@ const useUnstake = (
             .toFixed(0)
             .toString();
 
-        console.log(
+        log(
             `Raw balance: ${balance.toString()}, percent (${sharePercent}) - ${balanceToWithdraw.toString()}`
         );
 
