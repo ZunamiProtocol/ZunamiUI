@@ -1,9 +1,8 @@
 import { ReactElement, useEffect, useState } from 'react';
 import './NetworkSelector.scss';
-// import { useChain } from 'react-moralis';
-import useWallet from '../../hooks/useWallet';
 import { ReactComponent as ETHLogo } from './eth_logo.svg';
 import { ReactComponent as BSCLogo } from './bsc_logo.svg';
+import { log } from '../../utils/logger';
 
 interface NetworkSelectorProps {
     onChange?: Function;
@@ -56,7 +55,7 @@ export const NetworkSelector = (props: NetworkSelectorProps): JSX.Element => {
             });
         }
 
-        console.log(`Network switch to ${chain[0].value}`);
+        log(`Network switch to ${chain[0].value}`);
         setActiveNetwork(chain[0]);
     }, [chainId]);
 
@@ -86,7 +85,7 @@ export const NetworkSelector = (props: NetworkSelectorProps): JSX.Element => {
                         networks.filter((network) => network.key === selectedValue)[0]
                     );
 
-                    console.log(`Network switch to ${selectedValue}`);
+                    log(`Network switch to ${selectedValue}`);
 
                     if (eth && eth.request) {
                         try {
@@ -114,7 +113,7 @@ export const NetworkSelector = (props: NetworkSelectorProps): JSX.Element => {
                                     ],
                                 })
                                 .catch((error) => {
-                                    console.log(error);
+                                    log(error);
                                 });
                         }
                     }

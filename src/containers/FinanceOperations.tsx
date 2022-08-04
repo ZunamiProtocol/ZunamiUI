@@ -21,6 +21,7 @@ import { calcWithdrawOneCoin } from '../utils/erc20';
 import useSushi from '../hooks/useSushi';
 import { getMasterChefContract } from '../sushi/utils';
 import { isBSC } from '../utils/zunami';
+import { log } from '../utils/logger';
 
 interface FinanceOperationsProps {
     operationName: string;
@@ -53,7 +54,7 @@ const calculateStables = async (
     setError('');
 
     try {
-        console.log(
+        log(
             `calcWithdrawOneCoin exec (balanceToWithdraw, coinIndex) - ${balanceToWithdraw}, ${coinIndex}`
         );
 

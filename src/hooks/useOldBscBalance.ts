@@ -7,6 +7,7 @@ import { getMasterChefContract } from '../sushi/utils';
 import Web3 from 'web3';
 import bscAbi from '../actions/abi/zunami_bsc.json';
 import { isBSC, isETH } from '../utils/zunami';
+import { log } from '../utils/logger';
 
 const useOldBscBalance = () => {
     const [balance, setBalance] = useState(new BigNumber(BIG_ZERO));
@@ -28,7 +29,7 @@ const useOldBscBalance = () => {
             contract.options.address = '0x02a228D826Cbb1C0E8765A6DB6E7AB64EAA80BFD';
 
             const value = await contract.methods.balanceOf(account).call();
-            console.log(`OLD BSC balance execution (${chainId}). Result: ${value}`);
+            log(`OLD BSC balance execution (${chainId}). Result: ${value}`);
 
             if (value) {
                 setBalance(new BigNumber(value));

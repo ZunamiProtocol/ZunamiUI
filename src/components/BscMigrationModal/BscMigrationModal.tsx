@@ -31,7 +31,7 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
     const [isGZLPapproved, setGZLPapproved] = useState(false);
 
     useEffect(() => {
-        if (!zunamiContract || !account || chainId !== 56) {
+        if (!zunamiContract || !account || chainId !== 56 || !props.show) {
             return;
         }
 

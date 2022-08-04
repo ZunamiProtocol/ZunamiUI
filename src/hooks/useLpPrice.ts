@@ -1,13 +1,12 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 import { BIG_ZERO } from '../utils/formatbalance';
-// import { getZunamiAddress } from '../utils/zunami';
 import { useWallet } from 'use-wallet';
 import useSushi from './useSushi';
 import { getMasterChefContract } from '../sushi/utils';
-import { getContract } from '../utils/erc20';
 import Web3 from 'web3';
 import ethAbi from '../actions/abi/Zunami.json';
+import { log } from '../utils/logger';
 
 const useLpPrice = () => {
     const { chainId, account } = useWallet();
@@ -22,15 +21,6 @@ const useLpPrice = () => {
         }
 
         const getLpPrice = async () => {
-            // console.log(sushi);
-
-            // const lpContract = getContract(
-            //     sushi.ethContracts.ethMasterChef.currentProvider,
-            //     sushi.masterChefAddress
-            // );
-            // console.log(lpContract.methods);
-            // const value = await lpContract.methods.lpPrice().call();
-
             const ethProvider = new Web3.providers.HttpProvider(
                 'https://eth-mainnet.alchemyapi.io/v2/Yh5zNTgJkqrOIqLtfkZBGIPecNPDQ1ON',
                 {
@@ -50,7 +40,7 @@ const useLpPrice = () => {
             contract.options.address = '0x2ffCC661011beC72e1A9524E12060983E74D14ce';
 
             const value = await contract.methods.lpPrice().call();
-            console.log(`lpPrice execution (${chainId}). Result: ${value}`);
+            log(`lpPrice execution (${chainId}). Result: ${value}`);
 
             if (value) {
                 setPrice(new BigNumber(value).dividedBy(new BigNumber(10).pow(18)));

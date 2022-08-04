@@ -24,6 +24,7 @@ import { getActiveWalletName, getActiveWalletAddress } from '../WalletsModal/Wal
 import { useGzlpAllowance } from '../../hooks/useGzlpAllowance';
 import { FormProps, TransactionError } from './Form.types';
 import { useWallet } from 'use-wallet';
+import { log } from '../../utils/logger';
 
 const getDepositValidationError = (
     dai: String,
@@ -268,7 +269,7 @@ export const Form = (props: FormProps): JSX.Element => {
                       )
                     : isApprovedTokens[2];
 
-            console.log(
+            log(
                 `Approved: ${approveVal}, GZLP allowance: ${gzlpAllowance.toNumber()}, USDT: ${parseFloat(
                     props.usdt
                 )}`
@@ -306,12 +307,10 @@ export const Form = (props: FormProps): JSX.Element => {
               );
 
     const cantDeposit = emptyFunds || !isApproved || pendingTx || depositExceedAmount;
-    // console.log(
-    //     `Can deposit: emptyFunds: ${emptyFunds}, isApproved: ${isApproved}, pendingTx: ${pendingTx}, depositExceedAmount: ${depositExceedAmount}`
-    // );
+    log(
+        `Can deposit: emptyFunds: ${emptyFunds}, isApproved: ${isApproved}, pendingTx: ${pendingTx}, depositExceedAmount: ${depositExceedAmount}`
+    );
     const canWithdraw = isApproved;
-
-    // console.log(canWithdraw, isApproved, Number(fullBalancetoWithdraw));
 
     return (
         <div className={'Form'}>
