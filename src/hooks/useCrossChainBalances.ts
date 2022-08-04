@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { BIG_ZERO } from '../utils/formatbalance';
 import { useWallet } from 'use-wallet';
 import useSushi from './useSushi';
+import { log } from '../utils/logger';
 
 const useCrossChainBalances = (lpPrice: BigNumber) => {
     const { account } = useWallet();
@@ -27,11 +28,11 @@ const useCrossChainBalances = (lpPrice: BigNumber) => {
         const getBalances = async () => {
             const ethContract = sushi.getEthContract(account);
             const ethBalance = await ethContract.methods.balanceOf(account).call();
-            console.log(`Raw ETH balance is: ${ethBalance}`);
+            log(`Raw ETH balance is: ${ethBalance}`);
             const bscBalance = await sushi.bscContracts.bscMasterChef.methods
                 .balanceOf(account)
                 .call();
-            console.log(`Raw BSC balance is: ${bscBalance}`);
+            log(`Raw BSC balance is: ${bscBalance}`);
 
             setBalances([
                 {

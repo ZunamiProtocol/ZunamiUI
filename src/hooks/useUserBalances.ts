@@ -9,6 +9,7 @@ import {
     usdtAddress,
     bscUsdtAddress,
 } from '../utils/formatbalance';
+import { log } from '../utils/logger';
 
 export const useUserBalances = () => {
     const [balance, setbalance] = useState([BIG_ZERO, BIG_ZERO, BIG_ZERO]);
@@ -16,7 +17,7 @@ export const useUserBalances = () => {
 
     useEffect(() => {
         const fetchbalanceStables = async () => {
-            console.log(`fetchbalanceStables, chain ID: ${chainId}`);
+            log(`fetchbalanceStables, chain ID: ${chainId}`);
             if (chainId === 1) {
                 const balanceDai = await getBalance(
                     ethereum,

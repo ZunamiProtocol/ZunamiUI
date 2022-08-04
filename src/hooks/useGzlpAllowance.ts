@@ -6,6 +6,7 @@ import { getAllowance } from '../utils/erc20';
 import useSushi from './useSushi';
 import { getZunamiAddress } from '../utils/zunami';
 import { getMasterChefContract } from '../sushi/utils';
+import { log } from '../utils/logger';
 
 export const useGzlpAllowance = () => {
     const [allowance, setAllowance] = useState(BIG_ZERO);
@@ -30,7 +31,7 @@ export const useGzlpAllowance = () => {
                 )
             );
 
-            console.log(`Allowance (GZLP): ${allowance.toString()}`);
+            log(`Allowance (GZLP): ${allowance.toString()}`);
             setAllowance(allowance);
         };
 

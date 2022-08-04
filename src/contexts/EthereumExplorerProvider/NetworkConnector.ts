@@ -110,8 +110,6 @@ export class NetworkConnector extends AbstractConnector {
             },
             {}
         );
-
-        // console.log(this.providers);
     }
 
     public async activate(): Promise<ConnectorUpdate> {

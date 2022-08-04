@@ -3,6 +3,7 @@ import { useWallet } from 'use-wallet';
 import { approve, getMasterChefContract } from '../sushi/utils';
 import useSushi from './useSushi';
 import { getZunamiAddress } from '../utils/zunami';
+import { log } from '../utils/logger';
 
 const useApprove = () => {
     const { account, chainId, ethereum } = useWallet();
@@ -23,8 +24,8 @@ const useApprove = () => {
                 account
             );
 
-            console.log(`GZLP approval granted`);
-            console.log(tx);
+            log(`GZLP approval granted`);
+            log(tx);
             return tx.hash;
         } catch (e) {
             debugger;
