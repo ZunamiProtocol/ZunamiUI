@@ -25,22 +25,8 @@
     }
 
     @media screen and (min-width: $media1024) {
-        width: 652px !important;
-        max-width: 652px !important;
         padding-left: 0 !important;
         padding-right: 0 !important;
-    }
-
-    @media screen and (min-width: $media1440) {
-        width: 925px !important;
-        max-width: 925px !important;
-        min-width: 925px !important;
-    }
-
-    @media screen and (min-width: $media1920) {
-        width: 1315px !important;
-        max-width: 1315px !important;
-        min-width: 1315px !important;
     }
 
     .first-row {
@@ -134,12 +120,13 @@
             padding-left: 0;
             margin-left: 40px;
             margin-right: 40px;
+            max-width: 845px;
         }
 
         @media screen and (min-width: $media1920) {
             padding-left: 0;
             margin-left: 47px;
-            margin-right: 275px;
+            max-width: 993px;
         }
 
         .InfoBlock {
@@ -181,7 +168,27 @@
     }
 
     .third-row {
+        display: flex;
+        gap: 10px;
         flex-grow: 1;
+
+        @media screen and (max-width: 1023px) {
+            height: auto;
+            margin-top: 10px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            min-height: 270px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            min-height: 229px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            gap: 15.2px;
+            min-height: 269px;
+        }
     }
 }
 
@@ -195,59 +202,32 @@
     @media screen and (max-width: 1023px) {
         width: 100%;
         height: auto;
-        margin-top: 10px;
-    }
-
-    @media screen and (min-width: $media1024) {
-        height: 270px;
-        width: 285px;
-    }
-
-    @media screen and (min-width: $media1440) {
-        height: 229px;
-        width: 416px;
-    }
-
-    @media screen and (min-width: $media1920) {
-        height: 269px;
-        width: 489px;
     }
 }
 
-.dashboard-col .strats-chart-col {
-    @media screen and (min-width: $media1024) {
-        margin-right: 10px;
-    }
-
-    @media screen and (min-width: $media1440) {
-        width: 416px;
-        height: 229px;
-    }
-
-    @media screen and (min-width: $media1920) {
-        margin-right: 15.2px;
-        height: 269px;
-        width: 489px;
-    }
-}
-
-.main-row.row {
-    @media screen and (max-width: 1023px) {
-    }
-
-    @media screen and (min-width: $media1024) {
-    }
-
-    @media screen and (min-width: $media1440) {
-    }
-}
-
-.ClickableHeader {
+.dashboard-col .hist-apy-col {
     @media (min-width: $media375) {
-        display: none;
+        padding: 20px;
     }
 
     @media (min-width: $media1024) {
-        display: none;
+        padding: 20px;
+    }
+
+    @media (min-width: $media1440) {
+        padding: 23px 33px 5px;
+    }
+
+    @media (min-width: $media1920) {
+        padding: 27px 39px 8px;
+    }
+}
+
+.main-row {
+    display: flex;
+    flex-direction: column;
+
+    @media screen and (min-width: $media1024) {
+        flex-direction: row;
     }
 }

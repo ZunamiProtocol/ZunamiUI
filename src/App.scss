@@ -67,18 +67,6 @@ body {
 }
 
 .dashboard-col {
-    @media screen and (min-width: $media375) {
-        .WalletStatus {
-            display: none;
-        }
-    }
-
-    @media screen and (min-width: $media1024) {
-        .WalletStatus {
-            display: none;
-        }
-    }
-
     .first-row {
         .InfoBlock:nth-child(0) {
             @media screen and (max-width: 1023) {

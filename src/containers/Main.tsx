@@ -1,7 +1,6 @@
 import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { InfoBlock } from '../components/InfoBlock/InfoBlock';
 import { BalanceInfoBlock } from '../components/BalanceInfoBlock/BalanceInfoBlock';
-import { ClickableHeader } from '../components/ClickableHeader/ClickableHeader';
 import './Main.scss';
 import { getBalanceNumber } from '../utils/formatbalance';
 import useLpPrice from '../hooks/useLpPrice';
@@ -43,12 +42,6 @@ const PendingBalance = lazy(() =>
 
 const SideBar = lazy(() =>
     import('../components/SideBar/SideBar').then((module) => ({ default: module.SideBar }))
-);
-
-const WalletStatus = lazy(() =>
-    import('../components/WalletStatus/WalletStatus').then((module) => ({
-        default: module.WalletStatus,
-    }))
 );
 
 const ApyChart = lazy(() =>
@@ -199,119 +192,120 @@ export const Main = (): JSX.Element => {
                             setShowMigrationModal(false);
                         }}
                     />
-                    <div className="row main-row h-100">
+
+                    <div className="main-row h-100">
                         <SideBar isMainPage={true} />
-                        <div className="col content-col dashboard-col">
-                            <WalletStatus />
-                            <ClickableHeader name="Dashboard" icon="dashboard" />
-                            <div className={'first-row'}>
-                                <BalanceInfoBlock
-                                    title="Balance"
-                                    description={
-                                        <div>
-                                            {account && userMaxWithdraw.toNumber() === -1 && (
-                                                <Preloader onlyIcon={true} />
-                                            )}
-                                            {!account && 'n/a'}
-                                            {account &&
-                                                userMaxWithdraw.toNumber() !== -1 &&
-                                                `$ ${getBalanceNumber(userMaxWithdraw)
-                                                    .toNumber()
-                                                    .toLocaleString('en')}`}
-                                        </div>
-                                    }
-                                    withColor={true}
-                                    isStrategy={false}
-                                    colorfulBg={true}
-                                    balances={balances}
-                                    lpPrice={lpPrice}
-                                />
-                                <InfoBlock
-                                    title="Pending Deposits / Withdraws"
-                                    isLoading={isZunLoading}
-                                    withColor={true}
-                                    isStrategy={false}
-                                    colorfulBg={true}
-                                    secondaryRow={pdElement}
-                                    hint={
-                                        <span>
-                                            {`Funds passing through the ${
-                                                chainId === 1
-                                                    ? 'Transaction Streamlining Mechanism and'
-                                                    : 'cross chain'
-                                            } will be credited within 24 hours`}
-                                        </span>
-                                    }
-                                />
-                                <InfoBlock
-                                    title="Total Income"
-                                    description={
-                                        <div>
-                                            {account && totalIncome === 'n/a' && (
-                                                <Preloader onlyIcon={true} />
-                                            )}
-                                            {!account && 'n/a'}
-                                            {account && totalIncome !== 'n/a' && totalIncome}
-                                        </div>
-                                    }
-                                    isLoading={isZunLoading}
-                                    withColor={true}
-                                    isStrategy={false}
-                                    colorfulBg={true}
-                                />
-                            </div>
-                            <div className="second-row">
-                                <InfoBlock
-                                    title="Profit"
-                                    description={
-                                        <div>
-                                            <span className="text-primary">{`${
-                                                dailyProfit ? dailyProfit.toFixed(2) : 0
-                                            } USD`}</span>
-                                            <span> Daily&nbsp;&nbsp;</span>
-                                        </div>
-                                    }
-                                    withColor={false}
-                                    isStrategy={false}
-                                />
-                                <InfoBlock
-                                    title="&nbsp;"
-                                    description={
-                                        <div>
-                                            <span className="text-primary">{`${
-                                                monthlyProfit ? monthlyProfit.toFixed(2) : 0
-                                            } USD`}</span>
-                                            <span> Monthly</span>
-                                        </div>
-                                    }
-                                    withColor={false}
-                                    isStrategy={false}
-                                />
-                                <InfoBlock
-                                    title="&nbsp;"
-                                    description={
-                                        <div>
-                                            <span className="text-primary">{`${
-                                                yearlyProfit ? yearlyProfit.toFixed(2) : 0
-                                            } USD`}</span>
-                                            <span> Yearly</span>
-                                        </div>
-                                    }
-                                    withColor={false}
-                                    isStrategy={false}
-                                />
-                            </div>
-                            <div className="third-row">
-                                <div className="strats-chart-col">
-                                    <Chart data={chartData} />
-                                </div>
-                                <div className="hist-apy-col">
-                                    <ApyChart
-                                        data={histApyData}
-                                        onRangeChange={(range: string) => {
-                                            setHistApyPeriod(range);
-                                        }}
+                        <div>
+                            <div className="col content-col dashboard-col">
+                                <div className={'first-row'}>
+                                    <BalanceInfoBlock
+                                        title="Balance"
+                                        description={
+                                            <div>
+                                                {account && userMaxWithdraw.toNumber() === -1 && (
+                                                    <Preloader onlyIcon={true} />
+                                                )}
+                                                {!account && 'n/a'}
+                                                {account &&
+                                                    userMaxWithdraw.toNumber() !== -1 &&
+                                                    `$ ${getBalanceNumber(userMaxWithdraw)
+                                                        .toNumber()
+                                                        .toLocaleString('en')}`}
+                                            </div>
+                                        }
+                                        withColor={true}
+                                        isStrategy={false}
+                                        colorfulBg={true}
+                                        balances={balances}
+                                        lpPrice={lpPrice}
                                     />
+                                    <InfoBlock
+                                        title="Pending Deposits / Withdraws"
+                                        isLoading={isZunLoading}
+                                        withColor={true}
+                                        isStrategy={false}
+                                        colorfulBg={true}
+                                        secondaryRow={pdElement}
+                                        hint={
+                                            <span>
+                                                {`Funds passing through the ${
+                                                    chainId === 1
+                                                        ? 'Transaction Streamlining Mechanism and'
+                                                        : 'cross chain'
+                                                } will be credited within 24 hours`}
+                                            </span>
+                                        }
+                                    />
+                                    <InfoBlock
+                                        title="Total Income"
+                                        description={
+                                            <div>
+                                                {account && totalIncome === 'n/a' && (
+                                                    <Preloader onlyIcon={true} />
+                                                )}
+                                                {!account && 'n/a'}
+                                                {account && totalIncome !== 'n/a' && totalIncome}
+                                            </div>
+                                        }
+                                        isLoading={isZunLoading}
+                                        withColor={true}
+                                        isStrategy={false}
+                                        colorfulBg={true}
+                                    />
+                                </div>
+                                <div className="second-row">
+                                    <InfoBlock
+                                        title="Profit"
+                                        description={
+                                            <div>
+                                                <span className="text-primary">{`${
+                                                    dailyProfit ? dailyProfit.toFixed(2) : 0
+                                                } USD`}</span>
+                                                <span> Daily&nbsp;&nbsp;</span>
+                                            </div>
+                                        }
+                                        withColor={false}
+                                        isStrategy={false}
+                                    />
+                                    <InfoBlock
+                                        title="&nbsp;"
+                                        description={
+                                            <div>
+                                                <span className="text-primary">{`${
+                                                    monthlyProfit ? monthlyProfit.toFixed(2) : 0
+                                                } USD`}</span>
+                                                <span> Monthly</span>
+                                            </div>
+                                        }
+                                        withColor={false}
+                                        isStrategy={false}
+                                    />
+                                    <InfoBlock
+                                        title="&nbsp;"
+                                        description={
+                                            <div>
+                                                <span className="text-primary">{`${
+                                                    yearlyProfit ? yearlyProfit.toFixed(2) : 0
+                                                } USD`}</span>
+                                                <span> Yearly</span>
+                                            </div>
+                                        }
+                                        withColor={false}
+                                        isStrategy={false}
+                                    />
+                                </div>
+                                <div className="third-row">
+                                    <div className="strats-chart-col">
+                                        <Chart data={chartData} />
+                                    </div>
+                                    <div className="hist-apy-col">
+                                        <ApyChart
+                                            data={histApyData}
+                                            onRangeChange={(range: string) => {
+                                                setHistApyPeriod(range);
+                                            }}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>

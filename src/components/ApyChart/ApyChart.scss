@@ -1,22 +1,6 @@
 @import 'src/variables';
 
 .ApyChart {
-    @media (min-width: $media375) {
-        margin: 20px;
-    }
-
-    @media (min-width: $media1024) {
-        margin: 20px;
-    }
-
-    @media (min-width: $media1440) {
-        margin: 23px 33px;
-    }
-
-    @media (min-width: $media1920) {
-        margin: 27px 39px;
-    }
-
     &__Header {
         display: flex;
         justify-content: space-between;
