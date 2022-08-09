@@ -151,8 +151,6 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                 setCalcError
             );
 
-            // const stablesToWithdraw = balance.dividedBy(BIG_TEN.pow(6));
-
             setDai('0');
             setUsdc('0');
             setUsdt('0');
