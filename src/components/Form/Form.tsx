@@ -60,7 +60,7 @@ const getWithdrawValidationError = (
         error = 'Please, enter the amount to withdraw';
     } else if (userMaxWithdraw.toNumber() < lpShareToWithdraw.toNumber()) {
         error = "You're trying to withdraw more than you have";
-    } else if (fullBalanceLpShare === '0') {
+    } else if (fullBalanceLpShare === '0' || lpShareToWithdraw.toNumber() === 0) {
         error = 'You have zero LP shares';
     }
 
@@ -307,10 +307,24 @@ export const Form = (props: FormProps): JSX.Element => {
               );
 
     const cantDeposit = emptyFunds || !isApproved || pendingTx || depositExceedAmount;
+
+    log(
+        `Approved stables status: DAI: ${isApprovedTokens[0].toString()}, USDT: ${isApprovedTokens[1].toString()}, USDC: ${isApprovedTokens[2].toString()}`
+    );
+
     log(
         `Can deposit: emptyFunds: ${emptyFunds}, isApproved: ${isApproved}, pendingTx: ${pendingTx}, depositExceedAmount: ${depositExceedAmount}`
     );
-    const canWithdraw = isApproved;
+
+    const canWithdraw = !validationError;
+
+    if (props.operationName === 'withdraw') {
+        log(`Can withdraw: ${canWithdraw}. Is approved: ${isApproved}`);
+
+        if (validationError) {
+            log(`Can't withdraw due to error: ${validationError}`);
+        }
+    }
 
     return (
         <div className={'Form'}>

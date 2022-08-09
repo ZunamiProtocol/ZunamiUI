@@ -5,7 +5,9 @@ const logs: Array<string> = [];
  * @param message
  */
 export function log(message: string): void {
-    logs.push(message);
+    if (logs.indexOf(message) === -1) {
+        logs.push(message);
+    }
 }
 
 export function copyLogs() {
