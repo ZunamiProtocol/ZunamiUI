@@ -25,6 +25,7 @@ import { useGzlpAllowance } from '../../hooks/useGzlpAllowance';
 import { FormProps, TransactionError } from './Form.types';
 import { useWallet } from 'use-wallet';
 import { log } from '../../utils/logger';
+import { isETH } from '../../utils/zunami';
 
 const getDepositValidationError = (
     dai: String,
@@ -55,12 +56,11 @@ const getWithdrawValidationError = (
     lpShareToWithdraw: BigNumber
 ) => {
     let error = '';
-
     if (dai === '' && usdc === '' && usdt === '') {
         error = 'Please, enter the amount to withdraw';
     } else if (userMaxWithdraw.toNumber() < lpShareToWithdraw.toNumber()) {
         error = "You're trying to withdraw more than you have";
-    } else if (fullBalanceLpShare === '0') {
+    } else if (fullBalanceLpShare === '0' || lpShareToWithdraw.toNumber() === 0) {
         error = 'You have zero LP shares';
     }
 
@@ -307,10 +307,24 @@ export const Form = (props: FormProps): JSX.Element => {
               );
 
     const cantDeposit = emptyFunds || !isApproved || pendingTx || depositExceedAmount;
+
+    log(
+        `Approved stables status: DAI: ${isApprovedTokens[0].toString()}, USDT: ${isApprovedTokens[1].toString()}, USDC: ${isApprovedTokens[2].toString()}`
+    );
+
     log(
         `Can deposit: emptyFunds: ${emptyFunds}, isApproved: ${isApproved}, pendingTx: ${pendingTx}, depositExceedAmount: ${depositExceedAmount}`
     );
-    const canWithdraw = isApproved;
+
+    const canWithdraw = isETH(chainId) ? !validationError : userLpAmount.toNumber() > 0;
+
+    if (props.operationName === 'withdraw') {
+        log(`Can withdraw: ${canWithdraw}. Is approved: ${isApproved}`);
+
+        if (validationError) {
+            log(`Can't withdraw due to error: ${validationError}`);
+        }
+    }
 
     return (
         <div className={'Form'}>
