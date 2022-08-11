@@ -1,7 +1,21 @@
+.WalletsModalWrapper {
+    .modal-header {
+        padding: 1rem 1rem !important;
+
+        .btn-close {
+            transform: none;
+        }
+    }
+}
 .WalletsModal {
     button {
         span {
             font-size: 13px;
+        }
+
+        img {
+            width: 60px;
+            height: 60px;
         }
     }
 }
