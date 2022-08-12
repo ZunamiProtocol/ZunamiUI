@@ -87,6 +87,7 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
             animation={false}
             keyboard={false}
             centered
+            className="WalletsModalWrapper"
         >
             <Modal.Header closeButton>
                 <Modal.Title>Connect a wallet</Modal.Title>
@@ -97,14 +98,14 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
                     className="border-0 d-inline-flex flex-column justify-content-center align-items-center bg-transparent"
                 >
                     <img src="/metamask.svg" alt="" />
-                    <span className="mt-1">Metamask</span>
+                    <span className="mt-2">Metamask</span>
                 </button>
                 <button
                     onClick={() => onConnect('walletconnect')}
                     className="border-0 d-inline-flex flex-column justify-content-center align-items-center bg-transparent"
                 >
                     <img src="/wallet-connect.svg" alt="" />
-                    <span className="mt-1">Wallet Connect</span>
+                    <span className="mt-2">Wallet Connect</span>
                 </button>
                 <button
                     onClick={() => onConnect('walletlink')}
@@ -113,7 +114,17 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
                     }`}
                 >
                     <img src="/wallet-link.svg" alt="" />
-                    <span className="mt-1">Coinbase Wallet</span>
+                    <span className="mt-2">Coinbase Wallet</span>
+                    {isEth && <span className="badge bg-secondary">only Ethereum</span>}
+                </button>
+                <button
+                    onClick={() => onConnect('walletconnect')}
+                    className={`border-0 d-inline-flex flex-column justify-content-center align-items-center bg-transparent ${
+                        isEth ? 'disabled' : ''
+                    }`}
+                >
+                    <img src="/zerion-wallet.svg" alt="" />
+                    <span className="mt-2">Zerion Wallet</span>
                     {isEth && <span className="badge bg-secondary">only Ethereum</span>}
                 </button>
             </Modal.Body>
