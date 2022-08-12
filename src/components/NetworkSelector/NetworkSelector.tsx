@@ -72,11 +72,6 @@ const networks = [
         value: 'Avalanche Testnet',
         icon: <ETHLogo />,
     },
-    // {
-    //   key: "0x61",
-    //   value: "Smart Chain Testnet",
-    //   icon: <BSCLogo />,
-    // },
 ];
 
 export const NetworkSelector = (props: NetworkSelectorProps): JSX.Element => {
