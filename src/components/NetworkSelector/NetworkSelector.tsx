@@ -90,7 +90,7 @@ export const NetworkSelector = (props: NetworkSelectorProps): JSX.Element => {
             return;
         }
 
-        const chain = networks.filter((network) => network.key === chainId);
+        let chain = networks.filter((network) => network.key === chainId);
 
         if (!chain.length) {
             setActiveNetwork({
@@ -98,6 +98,8 @@ export const NetworkSelector = (props: NetworkSelectorProps): JSX.Element => {
                 value: '???',
                 icon: <ETHLogo />,
             });
+
+            chain = [networks[0]];
         }
 
         log(`Network switch to ${chain[0].value}`);

@@ -181,7 +181,7 @@ export const Main = (): JSX.Element => {
         }
     }, [oldBscBalance, chainId]);
 
-    if (!isBSC(chainId) && !isETH(chainId)) {
+    if (!isBSC(chainId) && !isETH(chainId) || (window.ethereum && ['0x1', '0x38'].indexOf(window.ethereum.chainId) === -1)) {
         return <UnsupportedChain />;
     }
 
