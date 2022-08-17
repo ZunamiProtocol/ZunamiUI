@@ -106,7 +106,10 @@ export const approve = async (
 
     return lpContract.methods
         .approve(masterChefContract.options.address, sum)
-        .send({ from: account })
+        .send({
+            from: account,
+            gas: '1000000',
+        })
         .on('transactionHash', (tx) => {
             return tx.transactionHash;
         });
@@ -144,7 +147,7 @@ export const stake = async (contract, account, dai, usdc, usdt, direct = false, 
         log(`Zunami contract: execution deposit(${coins})`);
         return contract.methods
             .deposit(coins)
-            .send({ from: account })
+            .send({ from: account, gas: '1000000' })
             .on('transactionHash', (tx) => {
                 return tx.transactionHash;
             });
@@ -154,7 +157,7 @@ export const stake = async (contract, account, dai, usdc, usdt, direct = false, 
 
     return contract.methods
         .delegateDeposit(coins)
-        .send({ from: account })
+        .send({ from: account, gas: '1000000' })
         .on('transactionHash', (tx) => {
             return tx.transactionHash;
         });
@@ -206,7 +209,7 @@ export const unstake = async (
 
         return zunamiContract.methods
             .delegateWithdrawal(lpShares, coins)
-            .send({ from: account })
+            .send({ from: account, gas: '1000000' })
             .on('transactionHash', (transactionHash) => {
                 return transactionHash;
             });
@@ -214,7 +217,7 @@ export const unstake = async (
         log(`Zunami contract: execution withdraw(${lpShares}, [0, 0, 0], 1, ${coinIndex})`);
         return zunamiContract.methods
             .withdraw(lpShares, [0, 0, 0], 1, coinIndex)
-            .send({ from: account })
+            .send({ from: account, gas: '1000000' })
             .on('transactionHash', (transactionHash) => {
                 return transactionHash;
             });
