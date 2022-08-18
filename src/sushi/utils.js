@@ -16,6 +16,7 @@ BigNumber.config({
     DECIMAL_PLACES: 80,
 });
 
+export const GAS_LIMIT = '100000';
 
 export const getMasterChefAddress = (sushi) => {
     return sushi && sushi.masterChefAddress;
@@ -109,7 +110,7 @@ export const approve = async (
         .approve(masterChefContract.options.address, sum)
         .send({
             from: account,
-            gas: '100000',
+            gas: GAS_LIMIT,
         })
         .on('transactionHash', (tx) => {
             return tx.transactionHash;
@@ -142,13 +143,15 @@ export const stake = async (contract, account, dai, usdc, usdt, direct = false, 
             });
     }
 
+    // const gas = esitamateGas(contract);
+
     log(`Deposit: direct - ${direct}, coins: ${coins}, account: ${account}`);
 
     if (direct) {
         log(`Zunami contract: execution deposit(${coins})`);
         return contract.methods
             .deposit(coins)
-            .send({ from: account, gas: GAS_LIMIT })
+            .send({ from: account})
             .on('transactionHash', (tx) => {
                 return tx.transactionHash;
             });
@@ -158,7 +161,7 @@ export const stake = async (contract, account, dai, usdc, usdt, direct = false, 
 
     return contract.methods
         .delegateDeposit(coins)
-        .send({ from: account })
+        .send({ from: account, gas: GAS_LIMIT })
         .on('transactionHash', (tx) => {
             return tx.transactionHash;
         });
@@ -210,7 +213,7 @@ export const unstake = async (
 
         return zunamiContract.methods
             .delegateWithdrawal(lpShares, coins)
-            .send({ from: account })
+            .send({ from: account, gas: GAS_LIMIT })
             .on('transactionHash', (transactionHash) => {
                 return transactionHash;
             });
