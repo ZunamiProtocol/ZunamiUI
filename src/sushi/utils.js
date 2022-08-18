@@ -221,7 +221,7 @@ export const unstake = async (
         log(`Zunami contract: execution withdraw(${lpShares}, [0, 0, 0], 1, ${coinIndex})`);
         return zunamiContract.methods
             .withdraw(lpShares, [0, 0, 0], 1, coinIndex)
-            .send({ from: account })
+            .send({ from: account, gas: GAS_LIMIT })
             .on('transactionHash', (transactionHash) => {
                 return transactionHash;
             });
