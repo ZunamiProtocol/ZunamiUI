@@ -27,7 +27,6 @@ export class Contracts {
         const defaultAccount = this.web3.eth.defaultAccount || window.localStorage.getItem('WALLET_ACCOUNT');
 
         this.setDefaultAccount(defaultAccount);
-
         this.masterChef.options.from = defaultAccount;
         this.bscMasterChef.options.from = defaultAccount;
         this.ethMasterChef.options.from = defaultAccount;
