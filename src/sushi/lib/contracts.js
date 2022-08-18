@@ -23,10 +23,14 @@ export class Contracts {
         this.weth = new this.web3.eth.Contract(WETHAbi);
         this.usdc = new this.web3.eth.Contract(WETHAbi);
         this.setProvider(provider, networkId);
-        this.setDefaultAccount(this.web3.eth.defaultAccount);
-        this.masterChef.options.from = this.web3.eth.defaultAccount;
-        this.bscMasterChef.options.from = this.web3.eth.defaultAccount;
-        this.ethMasterChef.options.from = this.web3.eth.defaultAccount;
+
+        const defaultAccount = this.web3.eth.defaultAccount || window.localStorage.getItem('WALLET_ACCOUNT');
+
+        this.setDefaultAccount(defaultAccount);
+
+        this.masterChef.options.from = defaultAccount;
+        this.bscMasterChef.options.from = defaultAccount;
+        this.ethMasterChef.options.from = defaultAccount;
     }
 
     setDefaultAccount(account) {
