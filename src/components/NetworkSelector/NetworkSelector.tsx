@@ -4,17 +4,19 @@ import { ReactComponent as ETHLogo } from './eth_logo.svg';
 import { ReactComponent as BSCLogo } from './bsc_logo.svg';
 import { log } from '../../utils/logger';
 
-interface NetworkSelectorProps {
-    onChange?: Function;
+interface NetworkSelectorProps extends React.HTMLProps<HTMLDivElement> {
+    onNetworkChange?: Function;
+    defaultNetwork: Network;
+    autoChange: boolean;
 }
 
-interface Network {
+export interface Network {
     key: string;
     value: string;
     icon: ReactElement;
 }
 
-const networks = [
+export const networks = [
     {
         id: 1,
         key: '0x1',
@@ -72,16 +74,15 @@ const networks = [
         value: 'Avalanche Testnet',
         icon: <ETHLogo />,
     },
-    // {
-    //   key: "0x61",
-    //   value: "Smart Chain Testnet",
-    //   icon: <BSCLogo />,
-    // },
 ];
 
-export const NetworkSelector = (props: NetworkSelectorProps): JSX.Element => {
-    // const { requestNetworkSwitch } = useWallet();
-    const [activeNetwork, setActiveNetwork] = useState<Network>();
+export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
+    defaultNetwork = networks[0],
+    className,
+    onNetworkChange,
+    autoChange = true,
+}) => {
+    const [activeNetwork, setActiveNetwork] = useState<Network>(defaultNetwork);
     const eth = window.ethereum;
     const chainId = eth && eth.chainId;
 
@@ -90,7 +91,7 @@ export const NetworkSelector = (props: NetworkSelectorProps): JSX.Element => {
             return;
         }
 
-        const chain = networks.filter((network) => network.key === chainId);
+        let chain = networks.filter((network) => network.key === chainId);
 
         if (!chain.length) {
             setActiveNetwork({
@@ -98,6 +99,8 @@ export const NetworkSelector = (props: NetworkSelectorProps): JSX.Element => {
                 value: '???',
                 icon: <ETHLogo />,
             });
+
+            chain = [networks[0]];
         }
 
         log(`Network switch to ${chain[0].value}`);
@@ -109,7 +112,7 @@ export const NetworkSelector = (props: NetworkSelectorProps): JSX.Element => {
     }
 
     return (
-        <div className="NetworkSelector">
+        <div className={`NetworkSelector ${className}`}>
             {activeNetwork.icon}
             <span>{activeNetwork.value}</span>
             <svg
@@ -126,13 +129,13 @@ export const NetworkSelector = (props: NetworkSelectorProps): JSX.Element => {
                 value={activeNetwork.key}
                 onChange={async (e) => {
                     const selectedValue = e?.nativeEvent?.target?.value;
-                    setActiveNetwork(
-                        networks.filter((network) => network.key === selectedValue)[0]
-                    );
+                    const network = networks.filter((network) => network.key === selectedValue)[0];
+
+                    setActiveNetwork(network);
 
                     log(`Network switch to ${selectedValue}`);
 
-                    if (eth && eth.request) {
+                    if (eth && eth.request && autoChange) {
                         try {
                             await eth.request({
                                 method: 'wallet_switchEthereumChain',
@@ -163,8 +166,8 @@ export const NetworkSelector = (props: NetworkSelectorProps): JSX.Element => {
                         }
                     }
 
-                    if (props.onChange) {
-                        props.onChange(selectedValue);
+                    if (onNetworkChange) {
+                        onNetworkChange(network);
                     }
                 }}
             >
