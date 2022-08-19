@@ -16,7 +16,7 @@ BigNumber.config({
     DECIMAL_PLACES: 80,
 });
 
-export const GAS_LIMIT = '100000';
+export const GAS_LIMIT_THRESHOLD = 0.1;
 
 export const getMasterChefAddress = (sushi) => {
     return sushi && sushi.masterChefAddress;
@@ -106,11 +106,15 @@ export const approve = async (
         sum = '10000000000000000000000000';
     }
 
+    const estimate = await lpContract.methods
+        .approve(masterChefContract.options.address, sum)
+        .estimateGas();
+
     return lpContract.methods
         .approve(masterChefContract.options.address, sum)
         .send({
             from: account,
-            gas: GAS_LIMIT,
+            gas: Math.floor(estimate + estimate * GAS_LIMIT_THRESHOLD),
         })
         .on('transactionHash', (tx) => {
             return tx.transactionHash;
@@ -149,9 +153,11 @@ export const stake = async (contract, account, dai, usdc, usdt, direct = false, 
 
     if (direct) {
         log(`Zunami contract: execution deposit(${coins})`);
+        const estimate = await contract.methods.deposit(coins).estimateGas();
+
         return contract.methods
             .deposit(coins)
-            .send({ from: account})
+            .send({ from: account, gas: Math.floor(estimate + estimate * GAS_LIMIT_THRESHOLD) })
             .on('transactionHash', (tx) => {
                 return tx.transactionHash;
             });
@@ -159,9 +165,11 @@ export const stake = async (contract, account, dai, usdc, usdt, direct = false, 
 
     log(`Zunami contract: execution delegateDeposit(${coins})`);
 
+    const estimate = await contract.methods.delegateDeposit(coins).estimateGas();
+
     return contract.methods
         .delegateDeposit(coins)
-        .send({ from: account, gas: GAS_LIMIT })
+        .send({ from: account, gas: Math.floor(estimate + estimate * GAS_LIMIT_THRESHOLD) })
         .on('transactionHash', (tx) => {
             return tx.transactionHash;
         });
@@ -211,17 +219,26 @@ export const unstake = async (
 
         log(`Zunami contract: execution delegateWithdrawal(${lpShares}, ${coins})`);
 
+        const estimate = await zunamiContract.methods
+            .delegateWithdrawal(lpShares, coins)
+            .estimateGas();
+
         return zunamiContract.methods
             .delegateWithdrawal(lpShares, coins)
-            .send({ from: account, gas: GAS_LIMIT })
+            .send({ from: account, gas: Math.floor(estimate + estimate * GAS_LIMIT_THRESHOLD) })
             .on('transactionHash', (transactionHash) => {
                 return transactionHash;
             });
     } else {
         log(`Zunami contract: execution withdraw(${lpShares}, [0, 0, 0], 1, ${coinIndex})`);
+
+        const estimate = await zunamiContract.methods
+            .withdraw(lpShares, [0, 0, 0], 1, coinIndex)
+            .estimateGas();
+
         return zunamiContract.methods
             .withdraw(lpShares, [0, 0, 0], 1, coinIndex)
-            .send({ from: account, gas: GAS_LIMIT })
+            .send({ from: account, gas: Math.floor(estimate + estimate * 0.55) })
             .on('transactionHash', (transactionHash) => {
                 return transactionHash;
             });
