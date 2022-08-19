@@ -147,8 +147,6 @@ export const stake = async (contract, account, dai, usdc, usdt, direct = false, 
             });
     }
 
-    // const gas = esitamateGas(contract);
-
     log(`Deposit: direct - ${direct}, coins: ${coins}, account: ${account}`);
 
     if (direct) {
