@@ -33,7 +33,3 @@ export const usdcAddress = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';
 export const usdtAddress = '0xdac17f958d2ee523a2206206994597c13d831ec7';
 // bsc
 export const bscUsdtAddress = '0x55d398326f99059ff775485246999027b3197955';
-// testnet
-// export const daiAddress = '0x3400DDE27aafF9F733cff6903A57d87C8b2Fc907';
-// export const usdcAddress = '0x15658E0c7616ec94910134c2861C7B0699a726D7';
-// export const usdtAddress = '0x0e628afa58406343694aa7736b302356e86eb8e7';
