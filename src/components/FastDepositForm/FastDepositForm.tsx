@@ -14,6 +14,7 @@ import { daiAddress, usdcAddress, usdtAddress, bscUsdtAddress } from '../../util
 import { getFullDisplayBalance } from '../../utils/formatbalance';
 import { Link } from 'react-router-dom';
 import { useWallet } from 'use-wallet';
+import { log } from '../../utils/logger';
 
 function coinNameToAddress(coinName: string, chainId: number): string {
     if (chainId === 56) {
@@ -192,7 +193,10 @@ export const FastDepositForm = (): JSX.Element => {
 
                                     try {
                                         await onApprove(coinNameToAddress(coin, chainId));
+                                        log('USDT approved!');
                                     } catch (e) {
+                                        log('Error while approving USDT');
+                                        log(JSON.stringify(e));
                                         setPendingApproval(false);
                                         setPendingTx(false);
                                     }
@@ -214,6 +218,8 @@ export const FastDepositForm = (): JSX.Element => {
                                         const tx = await onStake();
                                         setTransactionId(tx.transactionHash);
                                         setDepositSum('0');
+                                        log('Deposit success');
+                                        log(JSON.stringify(tx));
 
                                         // @ts-ignore
                                         if (window.dataLayer) {
@@ -226,8 +232,9 @@ export const FastDepositForm = (): JSX.Element => {
                                             });
                                         }
                                     } catch (error: any) {
-                                        debugger;
                                         setTransactionError(true);
+                                        log('Error while depositing USDT');
+                                        log(JSON.stringify(error));
                                     }
 
                                     setPendingTx(false);
