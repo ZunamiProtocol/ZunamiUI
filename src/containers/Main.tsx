@@ -181,9 +181,14 @@ export const Main = (): JSX.Element => {
         }
     }, [oldBscBalance, chainId]);
 
-    if (!isBSC(chainId) && !isETH(chainId)) {
-        return <UnsupportedChain />;
-    }
+    const [unsupportedChain, setUnsupportedChain] = useState(false);
+
+    useEffect(() => {
+        setUnsupportedChain(
+            (!isBSC(chainId) && !isETH(chainId)) ||
+                (window.ethereum && ['0x1', '0x38'].indexOf(window.ethereum.chainId) === -1)
+        );
+    }, [chainId]);
 
     return (
         <Suspense fallback={<Preloader onlyIcon={true} />}>
@@ -191,6 +196,7 @@ export const Main = (): JSX.Element => {
                 <Header />
                 <MobileSidebar />
                 <div className="container">
+                    {unsupportedChain && <UnsupportedChain />}
                     <BscMigrationModal
                         show={showMigrationModal}
                         balance={oldBscBalance}

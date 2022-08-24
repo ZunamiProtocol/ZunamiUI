@@ -9,8 +9,6 @@ import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 import { NavMenu } from './NavMenu/NavMenu';
 import { NetworkSelector } from '../NetworkSelector/NetworkSelector';
 import { useWallet } from 'use-wallet';
-import useSushi from '../../hooks/useSushi';
-import { getMasterChefContract } from '../../sushi/utils';
 import { isETH } from '../../utils/zunami';
 
 function chainNameToTooltip(chainId: number) {

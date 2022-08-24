@@ -194,7 +194,8 @@ export const unstake = async (
     usdt,
     optimized = true,
     coinIndex,
-    chainId = 1
+    chainId = 1,
+    needsGasEstimation = false,
 ) => {
     const usdtVal = new BigNumber(usdt).times(USDT_TOKEN_DECIMAL).toString();
     const coins = [
@@ -204,7 +205,7 @@ export const unstake = async (
     ];
 
     if (optimized) {
-        if (chainId !== 1) {
+        if (chainId && chainId !== 1) {
             log(`Zunami contract (BNB): execution delegateWithdrawal(${lpShares})`);
 
             return zunamiContract.methods
@@ -217,26 +218,26 @@ export const unstake = async (
 
         log(`Zunami contract: execution delegateWithdrawal(${lpShares}, ${coins})`);
 
-        const estimate = await zunamiContract.methods
-            .delegateWithdrawal(lpShares, coins)
-            .estimateGas();
-
         return zunamiContract.methods
             .delegateWithdrawal(lpShares, coins)
-            .send({ from: account, gas: Math.floor(estimate + estimate * GAS_LIMIT_THRESHOLD) })
+            .send(funcParams)
             .on('transactionHash', (transactionHash) => {
                 return transactionHash;
             });
     } else {
         log(`Zunami contract: execution withdraw(${lpShares}, [0, 0, 0], 1, ${coinIndex})`);
+        const funcParams = { from: account };
 
-        const estimate = await zunamiContract.methods
-            .withdraw(lpShares, [0, 0, 0], 1, coinIndex)
-            .estimateGas();
+        if (needsGasEstimation) {
+            const estimate = await zunamiContract.methods
+                .withdraw(lpShares, [0, 0, 0], 1, coinIndex)
+                .estimateGas();
+            funcParams.gas = Math.floor(estimate + estimate * 0.55);
+        }
 
         return zunamiContract.methods
             .withdraw(lpShares, [0, 0, 0], 1, coinIndex)
-            .send({ from: account, gas: Math.floor(estimate + estimate * 0.55) })
+            .send(funcParams)
             .on('transactionHash', (transactionHash) => {
                 return transactionHash;
             });
