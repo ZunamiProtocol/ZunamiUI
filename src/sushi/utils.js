@@ -97,6 +97,7 @@ export const approve = async (
 ) => {
     const lpContract = getContract(provider, tokenAddress);
     let sum = apprSum;
+    const isZerionWallet = window.ethereum?.walletMeta?.name === 'Zerion';
 
     if (tokenAddress === bscUsdtAddress) {
         sum = '10000000000000000000000000';
@@ -106,16 +107,20 @@ export const approve = async (
         sum = '10000000000000000000000000';
     }
 
-    const estimate = await lpContract.methods
-        .approve(masterChefContract.options.address, sum)
-        .estimateGas();
+    const funcParams = { from: account };
+
+    if (isZerionWallet) {
+        const estimate = await lpContract.methods
+            .approve(masterChefContract.options.address, sum)
+            .estimateGas();
+        funcParams.gas = Math.floor(estimate + estimate * GAS_LIMIT_THRESHOLD);
+    }
+
+    log(`Executing approve for token ${tokenAddress} for ${sum} sum`);
 
     return lpContract.methods
         .approve(masterChefContract.options.address, sum)
-        .send({
-            from: account,
-            gas: Math.floor(estimate + estimate * GAS_LIMIT_THRESHOLD),
-        })
+        .send(funcParams)
         .on('transactionHash', (tx) => {
             return tx.transactionHash;
         });
@@ -217,6 +222,7 @@ export const unstake = async (
         }
 
         log(`Zunami contract: execution delegateWithdrawal(${lpShares}, ${coins})`);
+
         const funcParams = { from: account };
 
         if (needsGasEstimation) {
