@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 
-const ETH_CHAIN_ID = 1;
-const BSC_CHAIN_ID = 56;
-const SUPPORTED_CHAIN_IDS = [ETH_CHAIN_ID, BSC_CHAIN_ID];
+const ETH_CHAIN_ID : number = 1;
+const BSC_CHAIN_ID : number = 56;
+const SUPPORTED_CHAIN_IDS : Array<number> = [ETH_CHAIN_ID, BSC_CHAIN_ID];
 
-const useSupportedChain = () => {
+const useSupportedChain = () : boolean => {
     const [supportedChain, setSupportedChain] = useState(false);
 
     useEffect(() => {
