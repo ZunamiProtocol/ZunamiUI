@@ -13,17 +13,15 @@ const useSupportedChain = () : boolean => {
     useEffect(() => {
         const chainId = window.ethereum?.chainId;
 
-        if (!window.ethereum || !isConnected()) {
-            setSupportedChain(true);
-            return;
-        }
-
         if (window.ethereum && ['0x1', '0x38'].indexOf(chainId) === -1) {
             log(`Unsupported chain detected: ${chainId}`);
             setSupportedChain(false);
         } else {
-            log(`Connected to: ${chainId}`);
+            setSupportedChain(true);
         }
+
+
+        log(`Connected to: ${chainId}`);
 
         window.ethereum.on('networkChanged', (networkId: string) => {
             log(`Network changed to: ${networkId}`);
