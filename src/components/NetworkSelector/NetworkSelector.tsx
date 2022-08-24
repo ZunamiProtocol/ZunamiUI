@@ -84,7 +84,7 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
 }) => {
     const [activeNetwork, setActiveNetwork] = useState<Network>(defaultNetwork);
     const eth = window.ethereum;
-    const chainId = eth && eth.chainId;
+    const chainId = defaultNetwork.key || (eth && eth.chainId);
 
     useEffect(() => {
         if (!chainId) {

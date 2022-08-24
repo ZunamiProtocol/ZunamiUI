@@ -14,7 +14,7 @@ const useEagerConnect = (account: string, connect: any, ethereum: any) => {
         if (!account && connectorId) {
             connect(connectorId || 'injected');
         }
-    }, [account, connect, ethereum]);
+    }, [account, connect, ethereum, window.ethereum?.chainId]);
 };
 
 export default useEagerConnect;
