@@ -11,6 +11,7 @@ import {
     usdtAddress,
     bscUsdtAddress,
 } from '../utils/formatbalance';
+import { log } from '../utils/logger';
 
 const useAllowance = (tokenAddress: string) => {
     const [allowance, setAllowance] = useState(BIG_ZERO);
@@ -87,6 +88,8 @@ export const useAllowanceStables = () => {
                 const allowanceUsdt = await lpContract.methods
                     .allowance(account, sushi.bscMasterChefAddress)
                     .call();
+
+                log(`BSC USDT allowance for address (${account}) is: ${allowanceUsdt}`);
                 setAllowance([BIG_ZERO, BIG_ZERO, new BigNumber(allowanceUsdt)]);
             }
         };
