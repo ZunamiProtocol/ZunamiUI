@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 const ETH_CHAIN_ID = 1;
 const BSC_CHAIN_ID = 56;
+const SUPPORTED_CHAIN_IDS = [ETH_CHAIN_ID, BSC_CHAIN_ID];
 
 const useSupportedChain = () => {
     const [supportedChain, setSupportedChain] = useState(false);
@@ -19,7 +20,7 @@ const useSupportedChain = () => {
         }
 
         window.ethereum.on('networkChanged', (networkId: string) => {
-            setSupportedChain([ETH_CHAIN_ID, BSC_CHAIN_ID].indexOf(parseInt(networkId, 10)) !== -1);
+            setSupportedChain(SUPPORTED_CHAIN_IDS.indexOf(parseInt(networkId, 10)) !== -1);
         });
     }, []);
 
