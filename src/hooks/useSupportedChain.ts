@@ -1,28 +1,35 @@
 import { useEffect, useState } from 'react';
+import { log } from '../utils/logger';
+import { useWallet } from 'use-wallet';
 
-const ETH_CHAIN_ID = 1;
-const BSC_CHAIN_ID = 56;
-const SUPPORTED_CHAIN_IDS = [ETH_CHAIN_ID, BSC_CHAIN_ID];
+const ETH_CHAIN_ID : number = 1;
+const BSC_CHAIN_ID : number = 56;
+const SUPPORTED_CHAIN_IDS : Array<number> = [ETH_CHAIN_ID, BSC_CHAIN_ID];
 
-const useSupportedChain = () => {
-    const [supportedChain, setSupportedChain] = useState(false);
+const useSupportedChain = () : boolean => {
+    const [supportedChain, setSupportedChain] = useState(true);
+    const { isConnected, account, ethereum } = useWallet();
 
     useEffect(() => {
-        if (!window.ethereum) {
+        const chainId = window.ethereum?.chainId;
+
+        if (!window.ethereum || !isConnected()) {
             setSupportedChain(true);
             return;
         }
 
-        if (window.ethereum && ['0x1', '0x38'].indexOf(window.ethereum.chainId) === -1) {
+        if (window.ethereum && ['0x1', '0x38'].indexOf(chainId) === -1) {
+            log(`Unsupported chain detected: ${chainId}`);
             setSupportedChain(false);
         } else {
-            setSupportedChain(true);
+            log(`Connected to: ${chainId}`);
         }
 
         window.ethereum.on('networkChanged', (networkId: string) => {
+            log(`Network changed to: ${networkId}`);
             setSupportedChain(SUPPORTED_CHAIN_IDS.indexOf(parseInt(networkId, 10)) !== -1);
         });
-    }, []);
+    }, [isConnected, account, ethereum]);
 
     return supportedChain;
 };
