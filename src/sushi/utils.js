@@ -116,6 +116,8 @@ export const approve = async (
         funcParams.gas = Math.floor(estimate + estimate * GAS_LIMIT_THRESHOLD);
     }
 
+    log(`Executing approve for token ${tokenAddress} for ${sum} sum`);
+
     return lpContract.methods
         .approve(masterChefContract.options.address, sum)
         .send(funcParams)
