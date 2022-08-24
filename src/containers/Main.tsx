@@ -24,6 +24,7 @@ import { BscMigrationModal } from '../components/BscMigrationModal/BscMigrationM
 import useOldBscBalance from '../hooks/useOldBscBalance';
 import { isBSC, isETH } from '../utils/zunami';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
+import useSupportedChain from '../hooks/useSupportedChain';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -181,14 +182,7 @@ export const Main = (): JSX.Element => {
         }
     }, [oldBscBalance, chainId]);
 
-    const [unsupportedChain, setUnsupportedChain] = useState(false);
-
-    useEffect(() => {
-        setUnsupportedChain(
-            (!isBSC(chainId) && !isETH(chainId)) ||
-                (window.ethereum && ['0x1', '0x38'].indexOf(window.ethereum.chainId) === -1)
-        );
-    }, [chainId]);
+    const supportedChain = useSupportedChain();
 
     return (
         <Suspense fallback={<Preloader onlyIcon={true} />}>
@@ -196,7 +190,7 @@ export const Main = (): JSX.Element => {
                 <Header />
                 <MobileSidebar />
                 <div className="container">
-                    {unsupportedChain && <UnsupportedChain />}
+                    {!supportedChain && <UnsupportedChain />}
                     <BscMigrationModal
                         show={showMigrationModal}
                         balance={oldBscBalance}
