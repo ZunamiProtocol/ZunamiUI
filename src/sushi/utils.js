@@ -143,7 +143,18 @@ export const stake = async (contract, account, dai, usdc, usdt, direct = false, 
         new BigNumber(usdc).times(USDT_TOKEN_DECIMAL).toString(),
         new BigNumber(usdt).times(USDT_TOKEN_DECIMAL).toString(),
     ];
+
     if (chainId !== 1) {
+
+        // function delegateDepositWithConversion(
+        //     uint256 amountIn,
+        //     uint256 amountOutMin
+        // )
+
+        // amountIn сколько надо депонировать, не забудь плиз про децималс 18
+        // amountOutMin - 0
+        // 0x4a062f1501f5FF149b973b70f7027d87622445F3
+
         return contract.methods
             .delegateDeposit(new BigNumber(usdt).times(USDT_BSC_TOKEN_DECIMAL).toString())
             .send({ from: account })
@@ -173,6 +184,25 @@ export const stake = async (contract, account, dai, usdc, usdt, direct = false, 
     return contract.methods
         .delegateDeposit(coins)
         .send({ from: account, gas: Math.floor(estimate + estimate * GAS_LIMIT_THRESHOLD) })
+        .on('transactionHash', (tx) => {
+            return tx.transactionHash;
+        });
+};
+
+/**
+ * Stake BUSD
+ * @param {*} contract
+ * @param {*} account
+ * @param {*} busd
+ * @returns
+ */
+export const stakeBUSD = async (contract, account, busd) => {
+    return contract.methods
+        .delegateDepositWithConversion(
+            new BigNumber(busd).times(USDT_BSC_TOKEN_DECIMAL).toString(),
+            '0'
+        )
+        .send({ from: account })
         .on('transactionHash', (tx) => {
             return tx.transactionHash;
         });

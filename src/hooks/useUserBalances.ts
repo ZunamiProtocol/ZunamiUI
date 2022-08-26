@@ -8,11 +8,12 @@ import {
     usdcAddress,
     usdtAddress,
     bscUsdtAddress,
+    busdAddress,
 } from '../utils/formatbalance';
 import { log } from '../utils/logger';
 
 export const useUserBalances = () => {
-    const [balance, setbalance] = useState([BIG_ZERO, BIG_ZERO, BIG_ZERO]);
+    const [balance, setbalance] = useState([BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO]);
     const { account, ethereum, chainId } = useWallet();
 
     useEffect(() => {
@@ -52,7 +53,14 @@ export const useUserBalances = () => {
                     account
                 );
 
-                setbalance([BIG_ZERO, BIG_ZERO, new BigNumber(usdtBalance)]);
+                const busdBalance = await getBalance(
+                    ethereum,
+                    busdAddress,
+                    // @ts-ignore
+                    account
+                );
+
+                setbalance([BIG_ZERO, BIG_ZERO, new BigNumber(usdtBalance), new BigNumber(busdBalance)]);
             }
         };
 
