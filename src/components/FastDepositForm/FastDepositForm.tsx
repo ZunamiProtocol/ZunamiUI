@@ -61,13 +61,13 @@ export const FastDepositForm = (): JSX.Element => {
     );
 
     useEffect(() => {
-        const coins = ['DAI', 'USDC', 'USDT'];
+        const coins = ['DAI', 'USDC', 'USDT', 'BUSD'];
         if (coinIndex === -1) {
             setCoin(chainId !== 1 ? 'USDT' : 'USDC');
             setCoinIndex(coins.indexOf(coin));
         }
 
-        if (chainId !== 1) {
+        if (chainId !== 1 && coinIndex !== 3) {
             setCoin('USDT');
             setCoinIndex(coins.indexOf(coin));
         }
@@ -167,7 +167,7 @@ export const FastDepositForm = (): JSX.Element => {
                 max={userBalanceList[coinIndex]}
                 onCoinChange={(coin: string) => {
                     setCoin(coin);
-                    setCoinIndex(['DAI', 'USDC', 'USDT'].indexOf(coin));
+                    setCoinIndex(['DAI', 'USDC', 'USDT', 'BUSD'].indexOf(coin));
                 }}
                 chainId={chainId}
             />
