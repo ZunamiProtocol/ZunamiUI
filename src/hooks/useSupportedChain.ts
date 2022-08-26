@@ -23,6 +23,10 @@ const useSupportedChain = () : boolean => {
 
         log(`Connected to: ${chainId}`);
 
+        if (!window.ethereum) {
+            return;
+        }
+
         window.ethereum.on('networkChanged', (networkId: string) => {
             log(`Network changed to: ${networkId}`);
             setSupportedChain(SUPPORTED_CHAIN_IDS.indexOf(parseInt(networkId, 10)) !== -1);
