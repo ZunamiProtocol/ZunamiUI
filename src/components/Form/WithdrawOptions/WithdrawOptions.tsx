@@ -141,6 +141,9 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                     )}
                 </div>
             </div>
+            <div className="">
+                Default pool&nbsp;&nbsp;Conver finance - USDD pool
+            </div>
         </div>
     );
 };

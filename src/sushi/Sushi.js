@@ -60,9 +60,11 @@ export class Sushi {
         // console.log(options);
         this.ethContracts = new Contracts(ethProvider, 1, this.web3, options);
         this.bscContracts = new Contracts(bscProvider, 56, this.bscWeb3, options);
+        this.busdContracts = new Contracts(bscProvider, 56, this.bscWeb3, options);
 
         this.masterChefAddress = contractAddresses.zunami[1];
         this.bscMasterChefAddress = contractAddresses.zunami[56];
+        this.busdContracts = contractAddresses.busd[56];
         this.wethAddress = contractAddresses.weth[networkId];
     }
 
@@ -73,6 +75,7 @@ export class Sushi {
     addAccount(address, number) {
         this.accounts.push(new Account(this.contracts, address, number));
         this.accounts.push(new Account(this.bscContracts, address, number));
+        this.accounts.push(new Account(this.busdContracts, address, number));
         this.accounts.push(new Account(this.ethContracts, address, number));
     }
 
@@ -134,6 +137,15 @@ export class Sushi {
         contract.options.from = account;
         contract.options.address = getZunamiAddress(56);
 
+        return contract;
+    }
+
+    getBUSDContract(account) {
+        const bscProvider = new Web3.providers.HttpProvider('https://bscrpc.com');
+        const web3 = new Web3(bscProvider);
+        const contract = new web3.eth.Contract(bscAbi);
+        contract.options.from = account;
+        contract.options.address = contractAddresses.busd[56];
         return contract;
     }
 

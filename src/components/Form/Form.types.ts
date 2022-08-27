@@ -9,6 +9,7 @@ export interface FormProps {
     dai: string;
     usdc: string;
     usdt: string;
+    busd: string;
     selectedCoinIndex: number;
     directOperationDisabled?: boolean;
     lpPrice: BigNumber;

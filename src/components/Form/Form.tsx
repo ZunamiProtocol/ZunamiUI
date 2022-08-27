@@ -92,9 +92,16 @@ export const Form = (props: FormProps): JSX.Element => {
         }
     };
 
+    const busdInputHandler = (newValue: string) => {
+        if (props.onCoinChange) {
+            props.onCoinChange('busd', newValue);
+        }
+    };
+
     const [pendingDAI, setPendingDAI] = useState(false);
     const [pendingUSDC, setPendingUSDC] = useState(false);
     const [pendingUSDT, setPendingUSDT] = useState(false);
+    const [pendingBUSD, setPendingBUSD] = useState(false);
     const [pendingGZLP, setPendingGZLP] = useState(false);
 
     // wrapped in useMemo to prevent lpShareToWithdraw hook deps change on every render
@@ -106,13 +113,17 @@ export const Form = (props: FormProps): JSX.Element => {
     const stableInputsSum =
         (parseFloat(props.dai) || 0) +
         (parseFloat(props.usdc) || 0) +
-        (parseFloat(props.usdt) || 0);
+        (parseFloat(props.usdt) || 0) +
+        (parseFloat(props.busd) || 0);
     // user allowance
-    const isApprovedTokens = [
-        approveList ? approveList[0].toNumber() > 0 : false,
-        approveList ? approveList[1].toNumber() > 0 : false,
-        approveList ? approveList[2].toNumber() > 0 : false,
-    ];
+    const isApprovedTokens = useMemo(() => {
+        return [
+            approveList ? approveList[0].toNumber() > 0 : false,
+            approveList ? approveList[1].toNumber() > 0 : false,
+            approveList ? approveList[2].toNumber() > 0 : false,
+            approveList ? approveList[3].toNumber() > 0 : false,
+        ];
+    }, [approveList])
 
     // max for withdraw or deposit
     const userMaxWithdraw = props.lpPrice.multipliedBy(userLpAmount) || BIG_ZERO;
@@ -127,6 +138,7 @@ export const Form = (props: FormProps): JSX.Element => {
         (userBalanceList && userBalanceList[0].toNumber() > 0 && userBalanceList[0]) || BIG_ZERO,
         (userBalanceList && userBalanceList[1].toNumber() > 0 && userBalanceList[1]) || BIG_ZERO,
         (userBalanceList && userBalanceList[2].toNumber() > 0 && userBalanceList[2]) || BIG_ZERO,
+        (userBalanceList && userBalanceList[3].toNumber() > 0 && userBalanceList[3]) || BIG_ZERO,
     ];
 
     // final array both for deposit and withdraw
@@ -134,6 +146,7 @@ export const Form = (props: FormProps): JSX.Element => {
         action === 'deposit' ? userMaxDeposit[0] : userMaxWithdrawMinusInput,
         action === 'deposit' ? userMaxDeposit[1] : userMaxWithdrawMinusInput,
         action === 'deposit' ? userMaxDeposit[2] : userMaxWithdrawMinusInput,
+        action === 'deposit' ? userMaxDeposit[3] : userMaxWithdrawMinusInput,
     ];
 
     // approves
@@ -228,9 +241,24 @@ export const Form = (props: FormProps): JSX.Element => {
     const [transactionId, setTransactionId] = useState(undefined);
 
     const { onStake } = useStake(
-        props.dai === '' ? '0' : props.dai,
-        props.usdc === '' ? '0' : props.usdc,
-        props.usdt === '' ? '0' : props.usdt,
+        [
+            {
+                name: 'DAI',
+                value: props.dai === '' ? '0' : props.dai,
+            },
+            {
+                name: 'USDC',
+                value: props.usdc === '' ? '0' : props.usdc,
+            },
+            {
+                name: 'USDT',
+                value: props.usdt === '' ? '0' : props.usdt,
+            },
+            {
+                name: 'BUSD',
+                value: props.busd === '' ? '0' : props.busd,
+            }
+        ],
         props.directOperation
     );
 
@@ -243,7 +271,9 @@ export const Form = (props: FormProps): JSX.Element => {
 
     // TODO: need detect canceled tx's by user
     const [transactionError, setTransactionError] = useState<TransactionError>();
-    const emptyFunds = !Number(props.dai) && !Number(props.usdc) && !Number(props.usdt);
+    const emptyFunds = isETH(chainId)
+        ? !Number(props.dai) && !Number(props.usdc) && !Number(props.usdt)
+        : !Number(props.usdt) && !Number(props.busd);
 
     const [isApproved, setIsApproved] = useState(false);
 
@@ -456,6 +486,16 @@ export const Form = (props: FormProps): JSX.Element => {
                         disabled={action === 'withdraw'}
                         chainId={chainId}
                     />
+                    {chainId === 56 && action === 'deposit' && (
+                    <Input
+                        action={action}
+                        name="BUSD"
+                        value={props.busd}
+                        handler={busdInputHandler}
+                        max={max[3]}
+                        chainId={chainId}
+                    />
+                    )}
                     {action === 'deposit' && (
                         <div className="deposit-action flex-wrap d-flex flex-row flex-wrap buttons align-items-center">
                             {account &&
@@ -557,6 +597,12 @@ export const Form = (props: FormProps): JSX.Element => {
                                         />
                                     )}
                                     {pendingTx && <Preloader className="ms-2" />}
+                                    <div className="panel">
+                                        <div className="panel-body">
+                                            <span>Slippage: </span>
+                                            <span className="text-danger">~0.6%</span>
+                                        </div>
+                                    </div>
                                 </div>
                             )}
                         </div>

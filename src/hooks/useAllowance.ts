@@ -10,6 +10,7 @@ import {
     usdcAddress,
     usdtAddress,
     bscUsdtAddress,
+    busdAddress,
 } from '../utils/formatbalance';
 import { log } from '../utils/logger';
 
@@ -44,7 +45,7 @@ const useAllowance = (tokenAddress: string) => {
 export default useAllowance;
 
 export const useAllowanceStables = () => {
-    const [allowance, setAllowance] = useState([BIG_ZERO, BIG_ZERO, BIG_ZERO]);
+    const [allowance, setAllowance] = useState([BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO]);
     const { account, ethereum, chainId } = useWallet();
     const sushi = useSushi();
     const masterChefContract = getMasterChefContract(sushi);
@@ -77,6 +78,7 @@ export const useAllowanceStables = () => {
                     new BigNumber(allowanceDai),
                     new BigNumber(allowanceUsdc),
                     new BigNumber(allowanceUsdt),
+                    BIG_ZERO,
                 ];
                 // @ts-ignore
                 setAllowance(data);
@@ -85,12 +87,28 @@ export const useAllowanceStables = () => {
                     sushi.bscContracts.bscMasterChef.currentProvider,
                     bscUsdtAddress
                 );
+
                 const allowanceUsdt = await lpContract.methods
                     .allowance(account, sushi.bscMasterChefAddress)
                     .call();
 
+                const allowanceBUSD = await getContract(
+                    sushi.bscContracts.bscMasterChef.currentProvider,
+                    busdAddress
+                )
+                    .methods
+                    .allowance(account, sushi.bscMasterChefAddress)
+                    .call();
+
                 log(`BSC USDT allowance for address (${account}) is: ${allowanceUsdt}`);
-                setAllowance([BIG_ZERO, BIG_ZERO, new BigNumber(allowanceUsdt)]);
+                log(`BSC BUSD allowance for address (${account}) is: ${allowanceBUSD}`);
+
+                setAllowance([
+                    BIG_ZERO,
+                    BIG_ZERO,
+                    new BigNumber(allowanceUsdt),
+                    new BigNumber(allowanceBUSD)
+                ]);
             }
         };
 

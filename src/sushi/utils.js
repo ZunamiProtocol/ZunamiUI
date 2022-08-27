@@ -197,11 +197,12 @@ export const stake = async (contract, account, dai, usdc, usdt, direct = false, 
  * @returns
  */
 export const stakeBUSD = async (contract, account, busd) => {
+    const depositSum = new BigNumber(busd).times(USDT_BSC_TOKEN_DECIMAL).toString();
+
+    log(`Exection [ZUN-BUSD]: delegateDepositWithConversion("${depositSum}", "0")`);
+
     return contract.methods
-        .delegateDepositWithConversion(
-            new BigNumber(busd).times(USDT_BSC_TOKEN_DECIMAL).toString(),
-            '0'
-        )
+        .delegateDepositWithConversion(depositSum, '0')
         .send({ from: account })
         .on('transactionHash', (tx) => {
             return tx.transactionHash;

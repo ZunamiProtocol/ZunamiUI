@@ -22,7 +22,6 @@ import { useWallet } from 'use-wallet';
 import useEagerConnect from '../hooks/useEagerConnect';
 import { BscMigrationModal } from '../components/BscMigrationModal/BscMigrationModal';
 import useOldBscBalance from '../hooks/useOldBscBalance';
-import { isBSC, isETH } from '../utils/zunami';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
 import useSupportedChain from '../hooks/useSupportedChain';
 

@@ -22,6 +22,8 @@ export const getAllowance = async (
         const allowance: string = await lpContract.methods
             .allowance(account, masterChefContract.options.address)
             .call();
+
+        log (`Allowance for ${tokenAddress}: ${allowance}`);
         return allowance;
     } catch (e) {
         return '0';

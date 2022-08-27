@@ -51,17 +51,37 @@ export const FastDepositForm = (): JSX.Element => {
         approveList ? approveList[0].toNumber() > 0 : false,
         approveList ? approveList[1].toNumber() > 0 : false,
         approveList ? approveList[2].toNumber() > 0 : false,
+        approveList ? approveList[3].toNumber() > 0 : false,
     ];
+
+    const coins = useMemo(() => {
+        return ['DAI', 'USDC', 'USDT', 'BUSD'];
+    }, []);
+
     const { onApprove } = useApprove();
     const { onStake } = useStake(
-        coin === 'DAI' ? depositSum : '0',
-        coin === 'USDC' ? depositSum : '0',
-        coin === 'USDT' ? depositSum : '0',
+        [
+            {
+                name: 'DAI',
+                value: coin === 'DAI' ? depositSum : '0',
+            },
+            {
+                name: 'USDC',
+                value: coin === 'USDC' ? depositSum : '0',
+            },
+            {
+                name: 'USDT',
+                value: coin === 'USDT' ? depositSum : '0',
+            },
+            {
+                name: 'BUSD',
+                value: coin === 'BUSD' ? depositSum : '0',
+            },
+        ],
         !optimized
     );
 
     useEffect(() => {
-        const coins = ['DAI', 'USDC', 'USDT', 'BUSD'];
         if (coinIndex === -1) {
             setCoin(chainId !== 1 ? 'USDT' : 'USDC');
             setCoinIndex(coins.indexOf(coin));
@@ -71,7 +91,7 @@ export const FastDepositForm = (): JSX.Element => {
             setCoin('USDT');
             setCoinIndex(coins.indexOf(coin));
         }
-    }, [chainId, coin, coinIndex]);
+    }, [chainId, coin, coinIndex, coins]);
 
     // get user max balance
     const fullBalance = useMemo(() => {
@@ -232,6 +252,7 @@ export const FastDepositForm = (): JSX.Element => {
                                             });
                                         }
                                     } catch (error: any) {
+                                        debugger;
                                         setTransactionError(true);
                                         log('Error while depositing USDT');
                                         log(JSON.stringify(error));

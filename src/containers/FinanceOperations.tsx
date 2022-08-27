@@ -89,6 +89,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     const [dai, setDai] = useState('0');
     const [usdc, setUsdc] = useState('0');
     const [usdt, setUsdt] = useState('0');
+    const [busd, setBusd] = useState('0');
     const [calcError, setCalcError] = useState('');
     const [transactionList, setTransactionList] = useState([]);
     const [showMobileTransHistory, setShowMobileTransHistory] = useState(false);
@@ -118,7 +119,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
             setUsdc(oneThird);
             setUsdt(oneThird);
 
-            if (chainId !== 1) {
+            if (chainId === 56) {
                 setUsdt(getFullDisplayBalance(balance.multipliedBy(sharePercent / 100), 18));
             }
         }
@@ -314,6 +315,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                         dai={dai}
                                                         usdc={usdc}
                                                         usdt={usdt}
+                                                        busd={busd}
                                                         onCoinChange={(
                                                             coinType: string,
                                                             coinValue: number
@@ -326,8 +328,12 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                                 setUsdc(
                                                                     Number(coinValue).toString()
                                                                 );
-                                                            } else {
+                                                            } else if (coinType === 'usdt') {
                                                                 setUsdt(
+                                                                    Number(coinValue).toString()
+                                                                );
+                                                            } else if (coinType === 'busd') {
+                                                                setBusd(
                                                                     Number(coinValue).toString()
                                                                 );
                                                             }
