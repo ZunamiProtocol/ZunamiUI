@@ -13,6 +13,7 @@ import {
     busdAddress,
 } from '../utils/formatbalance';
 import { log } from '../utils/logger';
+import { contractAddresses } from '../sushi/lib/constants';
 
 const useAllowance = (tokenAddress: string) => {
     const [allowance, setAllowance] = useState(BIG_ZERO);
@@ -92,12 +93,15 @@ export const useAllowanceStables = () => {
                     .allowance(account, sushi.bscMasterChefAddress)
                     .call();
 
-                const allowanceBUSD = await getContract(
+                const busdContract = getContract(
                     sushi.bscContracts.bscMasterChef.currentProvider,
-                    busdAddress
-                )
-                    .methods
-                    .allowance(account, sushi.bscMasterChefAddress)
+                    bscUsdtAddress
+                );
+
+                busdContract.options.address = busdAddress;
+
+                const allowanceBUSD = await busdContract.methods
+                    .allowance(account, contractAddresses.busd[56])
                     .call();
 
                 log(`BSC USDT allowance for address (${account}) is: ${allowanceUsdt}`);
@@ -107,7 +111,7 @@ export const useAllowanceStables = () => {
                     BIG_ZERO,
                     BIG_ZERO,
                     new BigNumber(allowanceUsdt),
-                    new BigNumber(allowanceBUSD)
+                    new BigNumber(allowanceBUSD),
                 ]);
             }
         };

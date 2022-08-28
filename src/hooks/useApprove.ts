@@ -10,7 +10,7 @@ const useApprove = () => {
     const sushi = useSushi();
     let masterChefContract = getMasterChefContract(sushi);
 
-    if (chainId !== 1) {
+    if (chainId === 56) {
         masterChefContract.defaultAccount = account;
         masterChefContract.options.address = getZunamiAddress(chainId);
     }

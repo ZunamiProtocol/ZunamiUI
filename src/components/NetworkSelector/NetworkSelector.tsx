@@ -3,6 +3,7 @@ import './NetworkSelector.scss';
 import { ReactComponent as ETHLogo } from './eth_logo.svg';
 import { ReactComponent as BSCLogo } from './bsc_logo.svg';
 import { log } from '../../utils/logger';
+import { useWallet } from 'use-wallet';
 
 interface NetworkSelectorProps extends React.HTMLProps<HTMLDivElement> {
     onNetworkChange?: Function;
@@ -84,14 +85,14 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
 }) => {
     const [activeNetwork, setActiveNetwork] = useState<Network>(defaultNetwork);
     const eth = window.ethereum;
-    const chainId = defaultNetwork.key || (eth && eth.chainId);
+    const { chainId } = useWallet();
 
     useEffect(() => {
         if (!chainId) {
             return;
         }
 
-        let chain = networks.filter((network) => network.key === chainId);
+        let chain = networks.filter((network) => parseInt(network.key, 16) === chainId);
 
         if (!chain.length) {
             setActiveNetwork({

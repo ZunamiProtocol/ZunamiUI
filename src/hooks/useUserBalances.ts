@@ -42,6 +42,7 @@ export const useUserBalances = () => {
                     new BigNumber(balanceDai),
                     new BigNumber(balanceUsdc),
                     new BigNumber(balanceUsdt),
+                    BIG_ZERO,
                 ];
                 // @ts-ignore
                 setbalance(data);
@@ -60,7 +61,12 @@ export const useUserBalances = () => {
                     account
                 );
 
-                setbalance([BIG_ZERO, BIG_ZERO, new BigNumber(usdtBalance), new BigNumber(busdBalance)]);
+                setbalance([
+                    BIG_ZERO,
+                    BIG_ZERO,
+                    new BigNumber(usdtBalance),
+                    new BigNumber(busdBalance),
+                ]);
             }
         };
 

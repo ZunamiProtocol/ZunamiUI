@@ -10,14 +10,20 @@ import { useAllowanceStables } from '../../hooks/useAllowance';
 import useApprove from '../../hooks/useApprove';
 import useStake from '../../hooks/useStake';
 import { getActiveWalletName } from '../WalletsModal/WalletsModal';
-import { daiAddress, usdcAddress, usdtAddress, bscUsdtAddress } from '../../utils/formatbalance';
+import {
+    daiAddress,
+    usdcAddress,
+    usdtAddress,
+    bscUsdtAddress,
+    busdAddress,
+} from '../../utils/formatbalance';
 import { getFullDisplayBalance } from '../../utils/formatbalance';
 import { Link } from 'react-router-dom';
 import { useWallet } from 'use-wallet';
 import { log } from '../../utils/logger';
 
 function coinNameToAddress(coinName: string, chainId: number): string {
-    if (chainId === 56) {
+    if (chainId === 56 && coinName === 'USDT') {
         return bscUsdtAddress;
     }
 
@@ -29,6 +35,9 @@ function coinNameToAddress(coinName: string, chainId: number): string {
             break;
         case 'USDT':
             address = usdtAddress;
+            break;
+        case 'BUSD':
+            address = busdAddress;
             break;
     }
 

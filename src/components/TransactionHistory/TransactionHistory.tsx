@@ -24,11 +24,24 @@ interface TransactionItem {
  */
 function getIconFromTransaction(transaction: TransactionItem) {
     let icon = 'USDT';
+    let coinsCount = 0;
+
+    ['dai', 'usdc', 'usdt'].forEach((coin) => {
+        if (transaction[coin] > 0) {
+            coinsCount++;
+        }
+    });
 
     if (transaction.dai > 0) {
         icon = 'DAI';
     } else if (transaction.usdc > 0) {
         icon = 'USDC';
+    } else if (transaction.busd > 0) {
+        icon = 'BUSD';
+    }
+
+    if (coinsCount > 1) {
+        icon = 'all-coins.svg';
     }
 
     return icon;

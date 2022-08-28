@@ -20,13 +20,13 @@ const useStake = (coins: Coins, direct: boolean = false) => {
         zunamiContract = getMasterChefContract(sushi, chainId);
     }
 
-    const dai = coins.filter(coin => coin.name === 'DAI')[0]?.value;
-    const usdc = coins.filter(coin => coin.name === 'USDC')[0]?.value;
-    const usdt = coins.filter(coin => coin.name === 'USDT')[0]?.value;
-    const busd = coins.filter(coin => coin.name === 'BUSD')[0]?.value;
+    const dai = coins.filter((coin) => coin.name === 'DAI')[0]?.value;
+    const usdc = coins.filter((coin) => coin.name === 'USDC')[0]?.value;
+    const usdt = coins.filter((coin) => coin.name === 'USDT')[0]?.value;
+    const busd = coins.filter((coin) => coin.name === 'BUSD')[0]?.value;
 
     const handleStake = useCallback(async () => {
-        if (chainId === 56 && busd) {
+        if (chainId === 56 && busd && Number(usdt) === 0) {
             const contract = sushi.contracts.busdContract;
             contract.options.address = contractAddresses.busd[56];
             contract.defaultAccount = account;

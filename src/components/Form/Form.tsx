@@ -123,7 +123,7 @@ export const Form = (props: FormProps): JSX.Element => {
             approveList ? approveList[2].toNumber() > 0 : false,
             approveList ? approveList[3].toNumber() > 0 : false,
         ];
-    }, [approveList])
+    }, [approveList]);
 
     // max for withdraw or deposit
     const userMaxWithdraw = props.lpPrice.multipliedBy(userLpAmount) || BIG_ZERO;
@@ -257,7 +257,7 @@ export const Form = (props: FormProps): JSX.Element => {
             {
                 name: 'BUSD',
                 value: props.busd === '' ? '0' : props.busd,
-            }
+            },
         ],
         props.directOperation
     );
@@ -483,18 +483,22 @@ export const Form = (props: FormProps): JSX.Element => {
                         value={props.usdt}
                         handler={usdtInputHandler}
                         max={max[2]}
-                        disabled={action === 'withdraw'}
+                        disabled={
+                            action === 'withdraw' ||
+                            (chainId === 56 && action === 'deposit' && Number(props.busd) > 0)
+                        }
                         chainId={chainId}
                     />
                     {chainId === 56 && action === 'deposit' && (
-                    <Input
-                        action={action}
-                        name="BUSD"
-                        value={props.busd}
-                        handler={busdInputHandler}
-                        max={max[3]}
-                        chainId={chainId}
-                    />
+                        <Input
+                            action={action}
+                            name="BUSD"
+                            value={props.busd}
+                            handler={busdInputHandler}
+                            max={max[3]}
+                            chainId={chainId}
+                            disabled={Number(props.usdt) > 0}
+                        />
                     )}
                     {action === 'deposit' && (
                         <div className="deposit-action flex-wrap d-flex flex-row flex-wrap buttons align-items-center">
@@ -597,7 +601,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                         />
                                     )}
                                     {pendingTx && <Preloader className="ms-2" />}
-                                    <div className="panel">
+                                    <div className="panel Slippage">
                                         <div className="panel-body">
                                             <span>Slippage: </span>
                                             <span className="text-danger">~0.6%</span>
