@@ -71,7 +71,7 @@ export const Input = (props: InputProps): JSX.Element => {
                 placeholder={'0.00'}
                 min={0}
                 minLength={1}
-                maxLength={79}
+                maxLength={8}
                 value={value}
                 onChange={changeHandler}
             />

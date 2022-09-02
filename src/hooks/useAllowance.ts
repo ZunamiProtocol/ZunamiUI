@@ -49,11 +49,14 @@ export const useAllowanceStables = () => {
     const [allowance, setAllowance] = useState([BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO]);
     const { account, ethereum, chainId } = useWallet();
     const sushi = useSushi();
-    const masterChefContract = getMasterChefContract(sushi);
 
     useEffect(() => {
+        const masterChefContract = getMasterChefContract(sushi);
+
         const fetchAllowanceStables = async () => {
             if (chainId === 1) {
+                masterChefContract.options.address = contractAddresses.zunami[1];
+
                 const allowanceDai = await getAllowance(
                     ethereum,
                     daiAddress,
@@ -83,6 +86,9 @@ export const useAllowanceStables = () => {
                 ];
                 // @ts-ignore
                 setAllowance(data);
+                log(`Allowan DAI: ${allowanceDai}`);
+                log(`Allowan USDC: ${allowanceUsdc}`);
+                log(`Allowan USDT: ${allowanceUsdt}`);
             } else {
                 const lpContract = getContract(
                     sushi.bscContracts.bscMasterChef.currentProvider,
@@ -121,7 +127,7 @@ export const useAllowanceStables = () => {
         }
         let refreshInterval = setInterval(fetchAllowanceStables, 10000);
         return () => clearInterval(refreshInterval);
-    }, [account, ethereum, masterChefContract, chainId, sushi]);
+    }, [account, ethereum, chainId, sushi]);
 
     return allowance;
 };

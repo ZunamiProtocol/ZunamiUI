@@ -117,13 +117,13 @@ export const approve = async (
         funcParams.gas = Math.floor(estimate + estimate * GAS_LIMIT_THRESHOLD);
     }
 
-    log(`Executing approve for token ${tokenAddress} for ${sum} sum`);
-
     let spender = masterChefContract.options.address;
 
     if (tokenAddress === busdAddress) {
         spender = contractAddresses.busd[56];
     }
+
+    log(`Executing approve for token ${tokenAddress} for ${sum} sum (spender ${spender})`);
 
     return lpContract.methods
         .approve(spender, sum)

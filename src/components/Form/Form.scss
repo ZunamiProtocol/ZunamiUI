@@ -52,9 +52,12 @@
     }
 
     .deposit-button-wrapper {
+        position: relative;
+
         @media screen and (min-width: $media375) {
             display: flex;
             margin-top: 10px;
+            width: 100%;
         }
 
         @media screen and (min-width: $media1024) {

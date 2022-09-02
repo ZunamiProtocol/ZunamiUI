@@ -15,6 +15,7 @@ export interface FormProps {
     lpPrice: BigNumber;
     onWithdraw?: Function;
     onDeposit?: Function;
+    slippage: string;
 }
 
 export interface TransactionError {

@@ -23,7 +23,7 @@ export const getAllowance = async (
             .allowance(account, masterChefContract.options.address)
             .call();
 
-        log (`Allowance for ${tokenAddress}: ${allowance}`);
+        log(`Allowance for ${tokenAddress}: ${allowance}`);
         return allowance;
     } catch (e) {
         return '0';
@@ -38,13 +38,14 @@ export const getAllowance = async (
  * @returns string
  */
 export const calcWithdrawOneCoin = async (
-    zunamiContract: Contract,
     lpBalance: string,
-    coinIndex: number
+    coinIndex: number,
+    account: string | null
 ): Promise<string> => {
-    const sum: string = await zunamiContract.methods
-        .calcWithdrawOneCoin(lpBalance, coinIndex)
-        .call();
+    const contract = sushi.getEthContract();
+    contract.options.from = account;
+
+    const sum: string = await contract.methods.calcWithdrawOneCoin(lpBalance, coinIndex).call();
     log(`calcWithdrawOneCoin(${lpBalance}, ${coinIndex}). Result ${sum}`);
     return sum;
 };

@@ -41,7 +41,7 @@ function getIconFromTransaction(transaction: TransactionItem) {
     }
 
     if (coinsCount > 1) {
-        icon = 'all-coins.svg';
+        icon = 'all-coins';
     }
 
     return icon;

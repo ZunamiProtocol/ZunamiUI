@@ -18,6 +18,7 @@ interface WithdrawOptionsProps {
     lpPrice: BigNumber;
     disabled?: boolean;
     chainId?: number;
+    slippage?: string;
 }
 
 export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
@@ -141,9 +142,20 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                     )}
                 </div>
             </div>
-            <div className="">
-                Default pool&nbsp;&nbsp;Conver finance - USDD pool
-            </div>
+            {props.slippage && (
+                <div className="panel Slippage">
+                    <div className="panel-body">
+                        <span>Slippage: </span>
+                        <span
+                            className={`text-${
+                                Number(props.slippage) >= 0.4 ? 'danger' : 'success'
+                            }`}
+                        >
+                            ~{props.slippage}%
+                        </span>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
