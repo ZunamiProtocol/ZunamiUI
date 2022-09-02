@@ -7,6 +7,7 @@ import {
     USDT_TOKEN_DECIMAL,
     USDT_BSC_TOKEN_DECIMAL,
     bscUsdtAddress,
+    busdAddress,
 } from '../utils/formatbalance';
 import { log } from '../utils/logger';
 import { getZunamiAddress } from '../utils/zunami';
@@ -99,7 +100,7 @@ export const approve = async (
     let sum = apprSum;
     const isZerionWallet = window.ethereum?.walletMeta?.name === 'Zerion';
 
-    if (tokenAddress === bscUsdtAddress) {
+    if (tokenAddress === bscUsdtAddress || tokenAddress === busdAddress) {
         sum = '10000000000000000000000000';
     }
 
@@ -116,10 +117,16 @@ export const approve = async (
         funcParams.gas = Math.floor(estimate + estimate * GAS_LIMIT_THRESHOLD);
     }
 
-    log(`Executing approve for token ${tokenAddress} for ${sum} sum`);
+    let spender = masterChefContract.options.address;
+
+    if (tokenAddress === busdAddress) {
+        spender = contractAddresses.busd[56];
+    }
+
+    log(`Executing approve for token ${tokenAddress} for ${sum} sum (spender ${spender})`);
 
     return lpContract.methods
-        .approve(masterChefContract.options.address, sum)
+        .approve(spender, sum)
         .send(funcParams)
         .on('transactionHash', (tx) => {
             return tx.transactionHash;
@@ -143,7 +150,17 @@ export const stake = async (contract, account, dai, usdc, usdt, direct = false, 
         new BigNumber(usdc).times(USDT_TOKEN_DECIMAL).toString(),
         new BigNumber(usdt).times(USDT_TOKEN_DECIMAL).toString(),
     ];
+
     if (chainId !== 1) {
+        // function delegateDepositWithConversion(
+        //     uint256 amountIn,
+        //     uint256 amountOutMin
+        // )
+
+        // amountIn сколько надо депонировать, не забудь плиз про децималс 18
+        // amountOutMin - 0
+        // 0x4a062f1501f5FF149b973b70f7027d87622445F3
+
         return contract.methods
             .delegateDeposit(new BigNumber(usdt).times(USDT_BSC_TOKEN_DECIMAL).toString())
             .send({ from: account })
@@ -179,6 +196,26 @@ export const stake = async (contract, account, dai, usdc, usdt, direct = false, 
 };
 
 /**
+ * Stake BUSD
+ * @param {*} contract
+ * @param {*} account
+ * @param {*} busd
+ * @returns
+ */
+export const stakeBUSD = async (contract, account, busd) => {
+    const depositSum = new BigNumber(busd).times(USDT_BSC_TOKEN_DECIMAL).toString();
+
+    log(`Exection [ZUN-BUSD]: delegateDepositWithConversion("${depositSum}", "0")`);
+
+    return contract.methods
+        .delegateDepositWithConversion(depositSum, '0')
+        .send({ from: account })
+        .on('transactionHash', (tx) => {
+            return tx.transactionHash;
+        });
+};
+
+/**
  * Withdraw function
  * @param Contract contract zunamiContract
  * @param string account Wallet address
@@ -200,7 +237,7 @@ export const unstake = async (
     optimized = true,
     coinIndex,
     chainId = 1,
-    needsGasEstimation = false,
+    needsGasEstimation = false
 ) => {
     const usdtVal = new BigNumber(usdt).times(USDT_TOKEN_DECIMAL).toString();
     const coins = [
@@ -227,8 +264,8 @@ export const unstake = async (
 
         if (needsGasEstimation) {
             const estimate = await zunamiContract.methods
-            .delegateWithdrawal(lpShares, coins)
-            .estimateGas();
+                .delegateWithdrawal(lpShares, coins)
+                .estimateGas();
             funcParams.gas = Math.floor(estimate + estimate * GAS_LIMIT_THRESHOLD);
         }
 

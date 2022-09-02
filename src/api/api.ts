@@ -8,16 +8,6 @@ export const testnetUrl = `${root}/feature`;
 export const totalIncomeUrl = `${root}/transfers/total-income`;
 export const transHistoryUrl = `${root}/transfers/history`;
 
-function chainShortNameToApiName(chainName: string) {
-    let result = 'ETH';
-
-    if (chainName !== 'eth') {
-        result = 'BSC';
-    }
-
-    return result.toUpperCase();
-}
-
 export const getActiveStratsUrl = (): string => {
     return activeStratsUrl;
 };

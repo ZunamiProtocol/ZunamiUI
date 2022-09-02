@@ -279,6 +279,39 @@ footer {
     display: none !important;
 }
 
+.panel {
+    background: #fffaf3;
+    border: 1px solid #f4efe1;
+    border-radius: 5px;
+
+    .panel-body {
+        padding: 10px;
+        font-size: 12px;
+    }
+}
+
+.Slippage {
+    @media (min-width: $media375) {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    @media (min-width: $media1024) {
+        margin-top: 20px;
+        margin-left: 0;
+    }
+
+    @media (min-width: $media1440) {
+        margin-top: 0;
+        width: 115px;
+        margin-left: 20px;
+    }
+
+    .panel-body {
+        font-size: 11px;
+    }
+}
+
 .zun-button {
     background: linear-gradient(87.51deg, #f74e02 12.85%, #f9a412 94.75%);
     border-radius: 5px;
@@ -479,7 +512,8 @@ body.dark {
     background-color: #000 !important;
 
     .WithdrawOptions,
-    .TransactionHistory {
+    .TransactionHistory,
+    .Slippage {
         background-color: #2a2a2a;
         border-color: #333333;
         color: #fff;

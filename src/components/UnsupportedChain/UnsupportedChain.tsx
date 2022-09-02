@@ -1,11 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NetworkSelector, networks, Network } from '../NetworkSelector/NetworkSelector';
 import './UnsupportedChain.scss';
 
 export const UnsupportedChain = (): JSX.Element => {
     const eth = window.ethereum;
     const [activeNetwork, setActiveNetwork] = useState<Network>(networks[0]);
-
     return (
         <div className="UnsupportedChain">
             <div className="UnsupportedChain__Content">
@@ -16,7 +15,7 @@ export const UnsupportedChain = (): JSX.Element => {
                 <div className="mt-3 text-center">
                     <NetworkSelector
                         className="ms-0"
-                        defaultNetwork={activeNetwork}
+                        hideActiveNetwork={true}
                         autoChange={false}
                         onNetworkChange={(network: Network) => {
                             setActiveNetwork(network);

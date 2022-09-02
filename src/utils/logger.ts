@@ -7,6 +7,10 @@ const logs: Array<string> = [];
 export function log(message: string): void {
     if (logs.indexOf(message) === -1) {
         logs.push(message);
+
+        if (process.env.NODE_ENV === 'development' || window.location.hostname === 'test.zunami.io') {
+            console.log(message);
+        }
     }
 }
 

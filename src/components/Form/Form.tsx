@@ -9,6 +9,7 @@ import {
     getFullDisplayBalance,
     usdcAddress,
     usdtAddress,
+    busdAddress,
 } from '../../utils/formatbalance';
 import { useAllowanceStables } from '../../hooks/useAllowance';
 import { useUserBalances } from '../../hooks/useUserBalances';
@@ -92,9 +93,16 @@ export const Form = (props: FormProps): JSX.Element => {
         }
     };
 
+    const busdInputHandler = (newValue: string) => {
+        if (props.onCoinChange) {
+            props.onCoinChange('busd', newValue);
+        }
+    };
+
     const [pendingDAI, setPendingDAI] = useState(false);
     const [pendingUSDC, setPendingUSDC] = useState(false);
     const [pendingUSDT, setPendingUSDT] = useState(false);
+    const [pendingBUSD, setPendingBUSD] = useState(false);
     const [pendingGZLP, setPendingGZLP] = useState(false);
 
     // wrapped in useMemo to prevent lpShareToWithdraw hook deps change on every render
@@ -106,13 +114,17 @@ export const Form = (props: FormProps): JSX.Element => {
     const stableInputsSum =
         (parseFloat(props.dai) || 0) +
         (parseFloat(props.usdc) || 0) +
-        (parseFloat(props.usdt) || 0);
+        (parseFloat(props.usdt) || 0) +
+        (parseFloat(props.busd) || 0);
     // user allowance
-    const isApprovedTokens = [
-        approveList ? approveList[0].toNumber() > 0 : false,
-        approveList ? approveList[1].toNumber() > 0 : false,
-        approveList ? approveList[2].toNumber() > 0 : false,
-    ];
+    const isApprovedTokens = useMemo(() => {
+        return [
+            approveList ? approveList[0].toNumber() > 0 : false,
+            approveList ? approveList[1].toNumber() > 0 : false,
+            approveList ? approveList[2].toNumber() > 0 : false,
+            approveList ? approveList[3].toNumber() > 0 : false,
+        ];
+    }, [approveList]);
 
     // max for withdraw or deposit
     const userMaxWithdraw = props.lpPrice.multipliedBy(userLpAmount) || BIG_ZERO;
@@ -127,6 +139,7 @@ export const Form = (props: FormProps): JSX.Element => {
         (userBalanceList && userBalanceList[0].toNumber() > 0 && userBalanceList[0]) || BIG_ZERO,
         (userBalanceList && userBalanceList[1].toNumber() > 0 && userBalanceList[1]) || BIG_ZERO,
         (userBalanceList && userBalanceList[2].toNumber() > 0 && userBalanceList[2]) || BIG_ZERO,
+        (userBalanceList && userBalanceList[3].toNumber() > 0 && userBalanceList[3]) || BIG_ZERO,
     ];
 
     // final array both for deposit and withdraw
@@ -134,6 +147,7 @@ export const Form = (props: FormProps): JSX.Element => {
         action === 'deposit' ? userMaxDeposit[0] : userMaxWithdrawMinusInput,
         action === 'deposit' ? userMaxDeposit[1] : userMaxWithdrawMinusInput,
         action === 'deposit' ? userMaxDeposit[2] : userMaxWithdrawMinusInput,
+        action === 'deposit' ? userMaxDeposit[3] : userMaxWithdrawMinusInput,
     ];
 
     // approves
@@ -186,6 +200,22 @@ export const Form = (props: FormProps): JSX.Element => {
         }
     }, [onGZLPApprove]);
 
+    const handleApproveBusd = useCallback(async () => {
+        setPendingBUSD(true);
+        log(`handleApproveBusd callback`);
+
+        try {
+            const tx = onApprove(busdAddress);
+            if (!tx) {
+                setPendingBUSD(false);
+            }
+        } catch (e) {
+            setPendingBUSD(false);
+        }
+
+        setPendingBUSD(false);
+    }, [onApprove]);
+
     const fullBalanceLpShare = useMemo(() => {
         return getFullDisplayBalance(userLpAmount);
     }, [userLpAmount]);
@@ -228,9 +258,24 @@ export const Form = (props: FormProps): JSX.Element => {
     const [transactionId, setTransactionId] = useState(undefined);
 
     const { onStake } = useStake(
-        props.dai === '' ? '0' : props.dai,
-        props.usdc === '' ? '0' : props.usdc,
-        props.usdt === '' ? '0' : props.usdt,
+        [
+            {
+                name: 'DAI',
+                value: props.dai === '' ? '0' : props.dai,
+            },
+            {
+                name: 'USDC',
+                value: props.usdc === '' ? '0' : props.usdc,
+            },
+            {
+                name: 'USDT',
+                value: props.usdt === '' ? '0' : props.usdt,
+            },
+            {
+                name: 'BUSD',
+                value: props.busd === '' ? '0' : props.busd,
+            },
+        ],
         props.directOperation
     );
 
@@ -243,7 +288,9 @@ export const Form = (props: FormProps): JSX.Element => {
 
     // TODO: need detect canceled tx's by user
     const [transactionError, setTransactionError] = useState<TransactionError>();
-    const emptyFunds = !Number(props.dai) && !Number(props.usdc) && !Number(props.usdt);
+    const emptyFunds = isETH(chainId)
+        ? !Number(props.dai) && !Number(props.usdc) && !Number(props.usdt)
+        : !Number(props.usdt) && !Number(props.busd);
 
     const [isApproved, setIsApproved] = useState(false);
 
@@ -262,17 +309,24 @@ export const Form = (props: FormProps): JSX.Element => {
                         props.usdt === '')
             );
         } else {
-            const approveVal =
-                props.operationName === 'withdraw'
-                    ? gzlpAllowance.isGreaterThanOrEqualTo(
-                          new BigNumber('10000000000000000000000000')
-                      )
-                    : isApprovedTokens[2];
+            let approveVal = false;
+
+            if (props.operationName === 'withdraw') {
+                approveVal = gzlpAllowance.isGreaterThanOrEqualTo(
+                    new BigNumber('9000000000000000000000000')
+                );
+            } else {
+                if (props.busd !== '0') {
+                    approveVal = isApprovedTokens[3];
+                } else {
+                    approveVal = isApprovedTokens[2];
+                }
+            }
 
             log(
                 `Approved: ${approveVal}, GZLP allowance: ${gzlpAllowance.toNumber()}, USDT: ${parseFloat(
                     props.usdt
-                )}`
+                )}, BUSD: ${parseFloat(props.busd)}`
             );
 
             setIsApproved(approveVal);
@@ -285,6 +339,7 @@ export const Form = (props: FormProps): JSX.Element => {
         props.usdc,
         props.dai,
         props.usdt,
+        props.busd,
         isApprovedTokens,
     ]);
 
@@ -453,9 +508,23 @@ export const Form = (props: FormProps): JSX.Element => {
                         value={props.usdt}
                         handler={usdtInputHandler}
                         max={max[2]}
-                        disabled={action === 'withdraw'}
+                        disabled={
+                            action === 'withdraw' ||
+                            (chainId === 56 && action === 'deposit' && Number(props.busd) > 0)
+                        }
                         chainId={chainId}
                     />
+                    {chainId === 56 && action === 'deposit' && (
+                        <Input
+                            action={action}
+                            name="BUSD"
+                            value={props.busd}
+                            handler={busdInputHandler}
+                            max={max[3]}
+                            chainId={chainId}
+                            disabled={Number(props.usdt) > 0}
+                        />
+                    )}
                     {action === 'deposit' && (
                         <div className="deposit-action flex-wrap d-flex flex-row flex-wrap buttons align-items-center">
                             {account &&
@@ -465,6 +534,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                     <button
                                         disabled={pendingDAI || depositExceedAmount}
                                         onClick={handleApproveDai}
+                                        type="button"
                                     >
                                         Approve DAI{' '}
                                     </button>
@@ -476,6 +546,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                     <button
                                         disabled={pendingUSDC || depositExceedAmount}
                                         onClick={handleApproveUsdc}
+                                        type="button"
                                     >
                                         Approve USDC{' '}
                                     </button>
@@ -484,12 +555,22 @@ export const Form = (props: FormProps): JSX.Element => {
                                 <button
                                     disabled={pendingUSDT || depositExceedAmount}
                                     onClick={handleApproveUsdt}
+                                    type="button"
                                 >
                                     Approve USDT{' '}
                                 </button>
                             )}
+                            {account && parseFloat(props.busd) > 0 && !isApprovedTokens[3] && (
+                                <button
+                                    disabled={pendingBUSD || depositExceedAmount}
+                                    onClick={handleApproveBusd}
+                                    type="button"
+                                >
+                                    Approve BUSD{' '}
+                                </button>
+                            )}
                             {account && (
-                                <div className="deposit-button-wrapper">
+                                <div className="deposit-button-wrapper flex-wrap">
                                     <button type="submit" disabled={cantDeposit}>
                                         Deposit
                                     </button>
@@ -511,6 +592,22 @@ export const Form = (props: FormProps): JSX.Element => {
                                         />
                                     )}
                                     {pendingTx && <Preloader className="ms-2" />}
+                                    {props.slippage && (
+                                        <div className="panel Slippage">
+                                            <div className="panel-body">
+                                                <span>Slippage: </span>
+                                                <span
+                                                    className={`text-${
+                                                        Number(props.slippage) >= 0.4
+                                                            ? 'danger'
+                                                            : 'success'
+                                                    }`}
+                                                >
+                                                    ~{props.slippage}%
+                                                </span>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                             {validationError && (
@@ -522,7 +619,7 @@ export const Form = (props: FormProps): JSX.Element => {
                     {action === 'withdraw' && (
                         <div>
                             {account && (
-                                <div className="deposit-button-wrapper">
+                                <div className="deposit-button-wrapper flex-wrap">
                                     {account &&
                                         !isApproved &&
                                         Number(fullBalancetoWithdraw) > 0 &&
@@ -557,6 +654,22 @@ export const Form = (props: FormProps): JSX.Element => {
                                         />
                                     )}
                                     {pendingTx && <Preloader className="ms-2" />}
+                                    {props.slippage && (
+                                        <div className={`panel Slippage network-${chainId}`}>
+                                            <div className="panel-body">
+                                                <span>Slippage: </span>
+                                                <span
+                                                    className={`text-${
+                                                        Number(props.slippage) >= 0.4
+                                                            ? 'danger'
+                                                            : 'success'
+                                                    }`}
+                                                >
+                                                    ~{props.slippage}%
+                                                </span>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>

@@ -10,14 +10,20 @@ import { useAllowanceStables } from '../../hooks/useAllowance';
 import useApprove from '../../hooks/useApprove';
 import useStake from '../../hooks/useStake';
 import { getActiveWalletName } from '../WalletsModal/WalletsModal';
-import { daiAddress, usdcAddress, usdtAddress, bscUsdtAddress } from '../../utils/formatbalance';
+import {
+    daiAddress,
+    usdcAddress,
+    usdtAddress,
+    bscUsdtAddress,
+    busdAddress,
+} from '../../utils/formatbalance';
 import { getFullDisplayBalance } from '../../utils/formatbalance';
 import { Link } from 'react-router-dom';
 import { useWallet } from 'use-wallet';
 import { log } from '../../utils/logger';
 
 function coinNameToAddress(coinName: string, chainId: number): string {
-    if (chainId === 56) {
+    if (chainId === 56 && coinName === 'USDT') {
         return bscUsdtAddress;
     }
 
@@ -29,6 +35,9 @@ function coinNameToAddress(coinName: string, chainId: number): string {
             break;
         case 'USDT':
             address = usdtAddress;
+            break;
+        case 'BUSD':
+            address = busdAddress;
             break;
     }
 
@@ -51,27 +60,47 @@ export const FastDepositForm = (): JSX.Element => {
         approveList ? approveList[0].toNumber() > 0 : false,
         approveList ? approveList[1].toNumber() > 0 : false,
         approveList ? approveList[2].toNumber() > 0 : false,
+        approveList ? approveList[3].toNumber() > 0 : false,
     ];
+
+    const coins = useMemo(() => {
+        return ['DAI', 'USDC', 'USDT', 'BUSD'];
+    }, []);
+
     const { onApprove } = useApprove();
     const { onStake } = useStake(
-        coin === 'DAI' ? depositSum : '0',
-        coin === 'USDC' ? depositSum : '0',
-        coin === 'USDT' ? depositSum : '0',
+        [
+            {
+                name: 'DAI',
+                value: coin === 'DAI' ? depositSum : '0',
+            },
+            {
+                name: 'USDC',
+                value: coin === 'USDC' ? depositSum : '0',
+            },
+            {
+                name: 'USDT',
+                value: coin === 'USDT' ? depositSum : '0',
+            },
+            {
+                name: 'BUSD',
+                value: coin === 'BUSD' ? depositSum : '0',
+            },
+        ],
         !optimized
     );
 
     useEffect(() => {
-        const coins = ['DAI', 'USDC', 'USDT'];
         if (coinIndex === -1) {
             setCoin(chainId !== 1 ? 'USDT' : 'USDC');
             setCoinIndex(coins.indexOf(coin));
         }
 
-        if (chainId !== 1) {
+        if (chainId !== 1 && coinIndex !== 3) {
             setCoin('USDT');
             setCoinIndex(coins.indexOf(coin));
         }
-    }, [chainId, coin, coinIndex]);
+    }, [chainId, coin, coinIndex, coins]);
 
     // get user max balance
     const fullBalance = useMemo(() => {
@@ -167,7 +196,7 @@ export const FastDepositForm = (): JSX.Element => {
                 max={userBalanceList[coinIndex]}
                 onCoinChange={(coin: string) => {
                     setCoin(coin);
-                    setCoinIndex(['DAI', 'USDC', 'USDT'].indexOf(coin));
+                    setCoinIndex(['DAI', 'USDC', 'USDT', 'BUSD'].indexOf(coin));
                 }}
                 chainId={chainId}
             />
@@ -232,6 +261,7 @@ export const FastDepositForm = (): JSX.Element => {
                                             });
                                         }
                                     } catch (error: any) {
+                                        debugger;
                                         setTransactionError(true);
                                         log('Error while depositing USDT');
                                         log(JSON.stringify(error));
