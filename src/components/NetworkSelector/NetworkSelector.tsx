@@ -106,12 +106,10 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
 
         if (!chain.length) {
             return;
-
-            chain = [networks[0]];
         }
 
         log(`Network switch to ${chain[0].value}`);
-        // setActiveNetwork(chain[0]);
+        setActiveNetwork(chain[0]);
 
         setChainSupported(supportedChainIds.indexOf(parseInt(activeNetwork.key, 16)) !== -1);
     }, [chainId, activeNetwork, supportedChainIds]);
@@ -122,8 +120,10 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
 
     return (
         <div className={`NetworkSelector ${className}`}>
-            {activeNetwork.icon}
-            <span>{activeNetwork.value}</span>
+            {chainSupported && activeNetwork.icon}
+            {chainSupported && <span>{activeNetwork.value}</span>}
+            {!chainSupported && networks[0].icon}
+            {!chainSupported && <span>{networks[0].value}</span>}
             <svg
                 className="NetworkSelector__Toggler"
                 width="16"
