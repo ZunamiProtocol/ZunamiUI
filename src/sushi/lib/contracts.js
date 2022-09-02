@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js/bignumber';
 
 import ethAbi from '../../actions/abi/Zunami.json';
 import bscAbi from '../../actions/abi/zunami_bsc.json';
+import busdAbi from '../../actions/abi/zunami_busd.json';
 import WETHAbi from './abi/weth.json';
 import { contractAddresses, SUBTRACT_GAS_LIMIT } from './constants.js';
 import * as Types from './types.js';
@@ -19,6 +20,7 @@ export class Contracts {
 
         this.ethMasterChef = new this.web3.eth.Contract(ethAbi);
         this.bscMasterChef = new this.web3.eth.Contract(bscAbi);
+        this.busdContract = new this.web3.eth.Contract(busdAbi);
 
         this.weth = new this.web3.eth.Contract(WETHAbi);
         this.usdc = new this.web3.eth.Contract(WETHAbi);
@@ -30,6 +32,7 @@ export class Contracts {
         this.masterChef.options.from = defaultAccount;
         this.bscMasterChef.options.from = defaultAccount;
         this.ethMasterChef.options.from = defaultAccount;
+        this.busdContract.options.from = defaultAccount;
     }
 
     setDefaultAccount(account) {
@@ -50,6 +53,7 @@ export class Contracts {
 
         if (networkId === 56) {
             setProviderParams(this.bscMasterChef, contractAddresses.zunami[56]);
+            setProviderParams(this.busdContract, contractAddresses.busd[56]);
         }
     }
 

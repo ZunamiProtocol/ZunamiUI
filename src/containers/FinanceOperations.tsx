@@ -22,6 +22,9 @@ import useSushi from '../hooks/useSushi';
 import { getMasterChefContract } from '../sushi/utils';
 import { isBSC } from '../utils/zunami';
 import { log } from '../utils/logger';
+import { useSlippage } from '../hooks/useSlippage';
+import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
+import useSupportedChain from '../hooks/useSupportedChain';
 
 interface FinanceOperationsProps {
     operationName: string;
@@ -33,7 +36,8 @@ const calculateStables = async (
     lpPrice: BigNumber,
     sharePercent: number,
     zunamiContract: Contract,
-    setError: Function
+    setError: Function,
+    account: string | null
 ) => {
     if (!zunamiContract || coinIndex === -1 || balance.toNumber() === 0) {
         return '0';
@@ -58,7 +62,7 @@ const calculateStables = async (
             `calcWithdrawOneCoin exec (balanceToWithdraw, coinIndex) - ${balanceToWithdraw}, ${coinIndex}`
         );
 
-        result = await calcWithdrawOneCoin(zunamiContract, balanceToWithdraw, coinIndex);
+        result = await calcWithdrawOneCoin(balanceToWithdraw, coinIndex, account);
     } catch (error: any) {
         setError(
             `Error: ${error.message}. Params - coinIndex: ${coinIndex}, lpShares: ${balanceToWithdraw}`
@@ -71,6 +75,8 @@ const calculateStables = async (
 
 export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element => {
     const { account, connect, ethereum, chainId } = useWallet();
+    const { getSlippage } = useSlippage();
+
     useEagerConnect(account ? account : '', connect, ethereum);
 
     const lpPrice = useLpPrice();
@@ -85,20 +91,30 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     const [sharePercent, setSharePercent] = useState(100);
     const [selectedCoin, setSelectedCoin] = useState<string>('all');
     const userBalanceList = useUserBalances();
-    const [selectedCoinIndex, setSelectedCoinIndex] = useState(-1);
+    const [selectedCoinIndex, setSelectedCoinIndex] = useState(
+        isBSC(chainId) && props.operationName === 'withdraw' ? 2 : -1
+    );
     const [dai, setDai] = useState('0');
     const [usdc, setUsdc] = useState('0');
     const [usdt, setUsdt] = useState('0');
+    const [busd, setBusd] = useState('0');
     const [calcError, setCalcError] = useState('');
     const [transactionList, setTransactionList] = useState([]);
     const [showMobileTransHistory, setShowMobileTransHistory] = useState(false);
     const [transHistoryPage, setTransHistoryPage] = useState(0);
+    const [slippage, setSlippage] = useState('');
 
     // refetch transaction history if account/chain changes
     useEffect(() => {
         setTransHistoryPage(0);
         setTransactionList([]);
     }, [account, chainId]);
+
+    useEffect(() => {
+        if (isBSC(chainId) && props.operationName === 'withdraw') {
+            setSelectedCoinIndex(2);
+        }
+    }, [props.operationName, chainId]);
 
     // withdraw max balance default set
     useEffect(() => {
@@ -118,7 +134,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
             setUsdc(oneThird);
             setUsdt(oneThird);
 
-            if (chainId !== 1) {
+            if (chainId === 56) {
                 setUsdt(getFullDisplayBalance(balance.multipliedBy(sharePercent / 100), 18));
             }
         }
@@ -136,40 +152,61 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                 return false;
             }
 
-            if (isBSC(chainId)) {
-                const coinValue = getBalanceNumber(balance, 6).toFixed(2, 1).toString();
-                setUsdt(coinValue);
-                return;
-            }
-
             const stablesToWithdraw = await calculateStables(
                 selectedCoinIndex,
                 balance,
                 lpPrice,
                 sharePercent,
                 zunamiContract,
-                setCalcError
+                setCalcError,
+                account
             );
 
             setDai('0');
             setUsdc('0');
             setUsdt('0');
 
+            const percentOfBalance = balance.multipliedBy(sharePercent / 100);
+
             if (selectedCoinIndex === 0) {
                 const coinValue = getBalanceNumber(new BigNumber(stablesToWithdraw))
                     .toFixed(2, 1)
                     .toString();
                 setDai(coinValue);
+
+                const slippage = (
+                    Number(getBalanceNumber(percentOfBalance).toFixed(2)) - Number(coinValue)
+                )
+                    .toFixed(2)
+                    .toString();
+                setSlippage(slippage);
+                log(`DAI slippage is ${slippage}`);
             } else if (selectedCoinIndex === 1) {
                 const coinValue = getBalanceNumber(new BigNumber(stablesToWithdraw), 6)
                     .toFixed(2, 1)
                     .toString();
                 setUsdc(coinValue);
+
+                const slippage = (
+                    Number(getBalanceNumber(percentOfBalance).toFixed(2)) - Number(coinValue)
+                )
+                    .toFixed(2)
+                    .toString();
+                setSlippage(slippage);
+                log(`USDC slippage is ${slippage}`);
             } else if (selectedCoinIndex === 2) {
                 const coinValue = getBalanceNumber(new BigNumber(stablesToWithdraw), 6)
                     .toFixed(2, 1)
                     .toString();
                 setUsdt(coinValue);
+
+                const slippage = (
+                    Number(getBalanceNumber(percentOfBalance).toFixed(2)) - Number(coinValue)
+                )
+                    .toFixed(2)
+                    .toString();
+                setSlippage(slippage);
+                log(`USDT slippage is ${slippage}`);
             }
         };
 
@@ -215,11 +252,14 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
         getTransactionHistory();
     }, [account, props.operationName, transHistoryPage, chainId]);
 
+    const supportedChain = useSupportedChain();
+
     return (
         <React.Fragment>
             <Header />
             <MobileSidebar />
             <Container className={'h-100 d-flex justify-content-between flex-column'}>
+                {!supportedChain && <UnsupportedChain />}
                 <Row className={'h-100 main-row'}>
                     {!account && (
                         <Col className={'content-col'}>
@@ -314,7 +354,9 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                         dai={dai}
                                                         usdc={usdc}
                                                         usdt={usdt}
-                                                        onCoinChange={(
+                                                        busd={busd}
+                                                        slippage={slippage}
+                                                        onCoinChange={async (
                                                             coinType: string,
                                                             coinValue: number
                                                         ) => {
@@ -326,10 +368,48 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                                 setUsdc(
                                                                     Number(coinValue).toString()
                                                                 );
-                                                            } else {
+                                                            } else if (coinType === 'usdt') {
                                                                 setUsdt(
                                                                     Number(coinValue).toString()
                                                                 );
+                                                            } else if (coinType === 'busd') {
+                                                                setBusd(
+                                                                    Number(coinValue).toString()
+                                                                );
+
+                                                                if (!Number(coinValue)) {
+                                                                    setSlippage('');
+                                                                    return;
+                                                                }
+
+                                                                const slippage = await getSlippage(
+                                                                    coinValue.toString()
+                                                                );
+
+                                                                const usdtValue =
+                                                                    getFullDisplayBalance(
+                                                                        new BigNumber(slippage),
+                                                                        18
+                                                                    );
+
+                                                                log(
+                                                                    `For ${coinValue} BUSD you'll get ${usdtValue} USDT`
+                                                                );
+
+                                                                const slippageValue =
+                                                                    Number(coinValue) -
+                                                                    Number(usdtValue);
+
+                                                                const finalSlippage = (
+                                                                    (slippageValue / coinValue) *
+                                                                    100
+                                                                ).toPrecision(2);
+
+                                                                log(
+                                                                    `Final slippage is: ${finalSlippage}`
+                                                                );
+
+                                                                setSlippage(finalSlippage);
                                                             }
                                                         }}
                                                         onOperationModeChange={(direct: any) => {
@@ -382,6 +462,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                                     setUsdc(oneThird);
                                                                     setUsdt(oneThird);
                                                                     setDirectOperation(false);
+                                                                    setSlippage('');
                                                                 } else {
                                                                     setDirectOperation(true);
                                                                 }

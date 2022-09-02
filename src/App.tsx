@@ -52,7 +52,7 @@ const Providers: React.FC = ({ children }) => {
                         },
                     },
                     injected: {
-                        chainId: [1, 3, 4, 10, 56, 100, 137, 250, 1284, 43114, 42161],
+                        chainId: [1, 3, 4, 10, 56, 100, 137, 250, 1284, 1285, 43114, 42161],
                     },
                     walletlink: {
                         chainId: 1,

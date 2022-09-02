@@ -66,6 +66,7 @@ export const Input = (props: InputProps): JSX.Element => {
             >
                 {props.chainId === 1 && <option value="DAI">DAI</option>}
                 {props.chainId === 1 && <option value="USDC">USDC</option>}
+                {props.chainId === 56 && <option value="BUSD">BUSD</option>}
                 <option value="USDT">USDT</option>
             </select>
             <div className="divider"></div>

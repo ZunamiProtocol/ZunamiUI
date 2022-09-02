@@ -52,7 +52,7 @@ export const DirectAction = (props: DirectActionProps): JSX.Element => {
                     }}
                 />
             )}
-            {chainId === 1 && <span>Optimized {props.actionName}</span>}
+            {chainId === 1 && <span>Optimized</span>}
             <div ref={target} onClick={() => setShowHint(!showHint)}>
                 <OverlayTrigger placement="right" overlay={<Tooltip>{hint}</Tooltip>}>
                     <svg
