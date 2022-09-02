@@ -75,6 +75,11 @@ export const networks = [
         value: 'Avalanche Testnet',
         icon: <ETHLogo />,
     },
+    {
+        key: '0xfa',
+        value: 'Fantom',
+        icon: <ETHLogo />,
+    },
 ];
 
 export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
@@ -86,6 +91,11 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
     const [activeNetwork, setActiveNetwork] = useState<Network>(defaultNetwork);
     const eth = window.ethereum;
     const { chainId } = useWallet();
+    const supportedChainIds = [1, 56];
+    const [chainSupported, setChainSupported] = useState(false);
+    const availableNetworks = networks.filter(
+        (item) => [1, 56].indexOf(parseInt(item.key, 16)) !== -1
+    );
 
     useEffect(() => {
         if (!chainId) {
@@ -95,18 +105,16 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
         let chain = networks.filter((network) => parseInt(network.key, 16) === chainId);
 
         if (!chain.length) {
-            setActiveNetwork({
-                key: '-1',
-                value: '???',
-                icon: <ETHLogo />,
-            });
+            return;
 
             chain = [networks[0]];
         }
 
         log(`Network switch to ${chain[0].value}`);
-        setActiveNetwork(chain[0]);
-    }, [chainId]);
+        // setActiveNetwork(chain[0]);
+
+        setChainSupported(supportedChainIds.indexOf(parseInt(activeNetwork.key, 16)) !== -1);
+    }, [chainId, activeNetwork, supportedChainIds]);
 
     if (!activeNetwork) {
         return <div></div>;
@@ -172,13 +180,11 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
                     }
                 }}
             >
-                {networks
-                    .filter((item) => [1, 56].indexOf(item.id) !== -1)
-                    .map((network) => (
-                        <option key={network.key} value={network.key}>
-                            {network.value}
-                        </option>
-                    ))}
+                {availableNetworks.map((network) => (
+                    <option key={network.key} value={network.key}>
+                        {network.value}
+                    </option>
+                ))}
             </select>
         </div>
     );
