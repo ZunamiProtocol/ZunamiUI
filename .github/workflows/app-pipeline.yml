@@ -14,3 +14,14 @@ jobs:
             username: ${{ secrets.USERNAME }}
             privateKey: ${{ secrets.PRIVATEKEY }}
             port: ${{ secrets.PORT }}
+    notify-to-slack:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Notify to slack
+          id: slack
+          uses: slackapi/slack-github-action@v1.21.0
+          with:
+              channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+              slack-message: "Zunami App deploy result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+          env:
+              SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
