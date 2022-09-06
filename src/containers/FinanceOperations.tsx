@@ -174,12 +174,8 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     .toString();
                 setDai(coinValue);
 
-                const slippage = (
-                    Number(getBalanceNumber(percentOfBalance).toFixed(2)) - Number(coinValue)
-                )
-                    .toFixed(2)
-                    .toString();
-                setSlippage(slippage);
+                const slippage = 1 - (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2)));
+                setSlippage(new BigNumber(slippage).toFixed(2, 2));
                 log(`DAI slippage is ${slippage}`);
             } else if (selectedCoinIndex === 1) {
                 const coinValue = getBalanceNumber(new BigNumber(stablesToWithdraw), 6)
@@ -187,12 +183,9 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     .toString();
                 setUsdc(coinValue);
 
-                const slippage = (
-                    Number(getBalanceNumber(percentOfBalance).toFixed(2)) - Number(coinValue)
-                )
-                    .toFixed(2)
-                    .toString();
-                setSlippage(slippage);
+                const slippage = 1 - (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2)));
+                setSlippage(new BigNumber(slippage).toFixed(2, 2));
+
                 log(`USDC slippage is ${slippage}`);
             } else if (selectedCoinIndex === 2) {
                 const coinValue = getBalanceNumber(new BigNumber(stablesToWithdraw), 6)
@@ -200,12 +193,9 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     .toString();
                 setUsdt(coinValue);
 
-                const slippage = (
-                    Number(getBalanceNumber(percentOfBalance).toFixed(2)) - Number(coinValue)
-                )
-                    .toFixed(2)
-                    .toString();
-                setSlippage(slippage);
+                const slippage = 1 - (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2)));
+                setSlippage(new BigNumber(slippage).toFixed(2, 2));
+
                 log(`USDT slippage is ${slippage}`);
             }
         };
