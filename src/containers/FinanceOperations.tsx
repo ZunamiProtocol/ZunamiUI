@@ -174,7 +174,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     .toString();
                 setDai(coinValue);
 
-                const slippage = 1 - (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2)));
+                const slippage = 100 - (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2))) * 100;
                 setSlippage(new BigNumber(slippage).toFixed(2, 2));
                 log(`DAI slippage is ${slippage}`);
             } else if (selectedCoinIndex === 1) {
@@ -183,7 +183,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     .toString();
                 setUsdc(coinValue);
 
-                const slippage = 1 - (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2)));
+                const slippage = 100 - (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2))) * 100;
                 setSlippage(new BigNumber(slippage).toFixed(2, 2));
 
                 log(`USDC slippage is ${slippage}`);
@@ -193,7 +193,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     .toString();
                 setUsdt(coinValue);
 
-                const slippage = 1 - (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2)));
+                const slippage = 100 - (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2))) * 100;
                 setSlippage(new BigNumber(slippage).toFixed(2, 2));
 
                 log(`USDT slippage is ${slippage}`);
