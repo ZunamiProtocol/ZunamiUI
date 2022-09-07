@@ -188,6 +188,11 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
 
                 log(`USDC slippage is ${slippage}`);
             } else if (selectedCoinIndex === 2) {
+                // slippage temporarily hidden for BSC
+                if (isBSC(chainId)) {
+                    return;
+                }
+
                 const coinValue = getBalanceNumber(new BigNumber(stablesToWithdraw), 6)
                     .toFixed(2, 1)
                     .toString();
