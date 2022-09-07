@@ -20,7 +20,7 @@ import { Contract } from 'web3-eth-contract';
 import { calcWithdrawOneCoin } from '../utils/erc20';
 import useSushi from '../hooks/useSushi';
 import { getMasterChefContract } from '../sushi/utils';
-import { isBSC } from '../utils/zunami';
+import { isBSC, isETH } from '../utils/zunami';
 import { log } from '../utils/logger';
 import { useSlippage } from '../hooks/useSlippage';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
@@ -113,6 +113,12 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     useEffect(() => {
         if (isBSC(chainId) && props.operationName === 'withdraw') {
             setSelectedCoinIndex(2);
+            setSelectedCoin('usdt');
+        }
+
+        if (isETH(chainId)) {
+            setSelectedCoinIndex(-1);
+            setSelectedCoin('all');
         }
     }, [props.operationName, chainId]);
 
@@ -174,12 +180,9 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     .toString();
                 setDai(coinValue);
 
-                const slippage = (
-                    Number(getBalanceNumber(percentOfBalance).toFixed(2)) - Number(coinValue)
-                )
-                    .toFixed(2)
-                    .toString();
-                setSlippage(slippage);
+                const slippage = 100 - (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2))) * 100;
+                setSlippage(new BigNumber(slippage).toFixed(2, 3));
+
                 log(`DAI slippage is ${slippage}`);
             } else if (selectedCoinIndex === 1) {
                 const coinValue = getBalanceNumber(new BigNumber(stablesToWithdraw), 6)
@@ -187,12 +190,9 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     .toString();
                 setUsdc(coinValue);
 
-                const slippage = (
-                    Number(getBalanceNumber(percentOfBalance).toFixed(2)) - Number(coinValue)
-                )
-                    .toFixed(2)
-                    .toString();
-                setSlippage(slippage);
+                const slippage = 100 - (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2))) * 100;
+                setSlippage(new BigNumber(slippage).toFixed(2, 3));
+
                 log(`USDC slippage is ${slippage}`);
             } else if (selectedCoinIndex === 2) {
                 const coinValue = getBalanceNumber(new BigNumber(stablesToWithdraw), 6)
@@ -200,12 +200,13 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     .toString();
                 setUsdt(coinValue);
 
-                const slippage = (
-                    Number(getBalanceNumber(percentOfBalance).toFixed(2)) - Number(coinValue)
-                )
-                    .toFixed(2)
-                    .toString();
-                setSlippage(slippage);
+                // slippage temporarily hidden for BSC
+                if (isBSC(chainId)) {
+                    return;
+                }
+
+                const slippage = 100 - (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2))) * 100;
+                setSlippage(new BigNumber(slippage).toFixed(2, 3));
                 log(`USDT slippage is ${slippage}`);
             }
         };
