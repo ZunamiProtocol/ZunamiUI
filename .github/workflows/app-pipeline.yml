@@ -15,6 +15,7 @@ jobs:
             privateKey: ${{ secrets.PRIVATEKEY }}
             port: ${{ secrets.PORT }}
     notify-to-slack:
+      needs: app-build-deploy
       runs-on: ubuntu-latest
       environment: CI/CD
       steps:
