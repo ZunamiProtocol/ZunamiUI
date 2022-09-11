@@ -9,6 +9,7 @@ import {
     getFullDisplayBalance,
     usdcAddress,
     usdtAddress,
+    bscUsdtAddress,
     busdAddress,
 } from '../../utils/formatbalance';
 import { useAllowanceStables } from '../../hooks/useAllowance';
@@ -26,7 +27,7 @@ import { useGzlpAllowance } from '../../hooks/useGzlpAllowance';
 import { FormProps, TransactionError } from './Form.types';
 import { useWallet } from 'use-wallet';
 import { log } from '../../utils/logger';
-import { isETH } from '../../utils/zunami';
+import { isBSC, isETH } from '../../utils/zunami';
 
 const getDepositValidationError = (
     dai: String,
@@ -178,7 +179,7 @@ export const Form = (props: FormProps): JSX.Element => {
         setPendingUSDT(true);
 
         try {
-            const tx = onApprove(usdtAddress);
+            const tx = onApprove(isBSC(chainId) ? bscUsdtAddress : usdtAddress);
             if (!tx) {
                 setPendingUSDT(false);
             }
