@@ -89,6 +89,8 @@ export const getFarms = (sushi) => {
         : [];
 };
 
+export const APPROVE_SUM = '10000000000000000000000000';
+
 export const approve = async (
     provider,
     tokenAddress,
@@ -101,11 +103,11 @@ export const approve = async (
     const isZerionWallet = window.ethereum?.walletMeta?.name === 'Zerion';
 
     if (tokenAddress === bscUsdtAddress || tokenAddress === busdAddress) {
-        sum = '10000000000000000000000000';
+        sum = APPROVE_SUM;
     }
 
     if (tokenAddress === getZunamiAddress(56)) {
-        sum = '10000000000000000000000000';
+        sum = APPROVE_SUM;
     }
 
     const funcParams = { from: account };
