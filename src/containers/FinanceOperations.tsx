@@ -58,10 +58,6 @@ const calculateStables = async (
     setError('');
 
     try {
-        log(
-            `calcWithdrawOneCoin exec (balanceToWithdraw, coinIndex) - ${balanceToWithdraw}, ${coinIndex}`
-        );
-
         result = await calcWithdrawOneCoin(balanceToWithdraw, coinIndex, account);
     } catch (error: any) {
         setError(

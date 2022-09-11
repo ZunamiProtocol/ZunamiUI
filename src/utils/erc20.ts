@@ -45,8 +45,9 @@ export const calcWithdrawOneCoin = async (
     const contract = sushi.getEthContract();
     contract.options.from = account;
 
+    log(`ETH contract (${contract.options.address}) - calcWithdrawOneCoin(${lpBalance}, ${coinIndex}).`);
     const sum: string = await contract.methods.calcWithdrawOneCoin(lpBalance, coinIndex).call();
-    log(`calcWithdrawOneCoin(${lpBalance}, ${coinIndex}). Result ${sum}`);
+    log(`ETH contract (${contract.options.address}) - calcWithdrawOneCoin result ${sum}`);
     return sum;
 };
 
