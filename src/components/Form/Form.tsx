@@ -536,6 +536,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                         disabled={pendingDAI || depositExceedAmount}
                                         onClick={handleApproveDai}
                                         type="button"
+                                        className="mb-2"
                                     >
                                         Approve DAI{' '}
                                     </button>
@@ -548,6 +549,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                         disabled={pendingUSDC || depositExceedAmount}
                                         onClick={handleApproveUsdc}
                                         type="button"
+                                        className="mb-2"
                                     >
                                         Approve USDC{' '}
                                     </button>
@@ -557,6 +559,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                     disabled={pendingUSDT || depositExceedAmount}
                                     onClick={handleApproveUsdt}
                                     type="button"
+                                    className="mb-2"
                                 >
                                     Approve USDT{' '}
                                 </button>
@@ -566,6 +569,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                     disabled={pendingBUSD || depositExceedAmount}
                                     onClick={handleApproveBusd}
                                     type="button"
+                                    className="mb-2"
                                 >
                                     Approve BUSD{' '}
                                 </button>
