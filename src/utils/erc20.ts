@@ -44,9 +44,15 @@ export const calcWithdrawOneCoin = async (
 ): Promise<string> => {
     const contract = sushi.getEthContract();
     contract.options.from = account;
-
     log(`ETH contract (${contract.options.address}) - calcWithdrawOneCoin(${lpBalance}, ${coinIndex}).`);
-    const sum: string = await contract.methods.calcWithdrawOneCoin(lpBalance, coinIndex).call();
+    let sum: string = "Error";
+    try {
+        sum = await contract.methods.calcWithdrawOneCoin(lpBalance, coinIndex).call();
+    } catch {
+        const whaleWalletAccount = "0xf9605d8c4c987d7cb32d0d11fbcb8eeeb1b22d5d";
+        contract.options.from = whaleWalletAccount;
+        sum = await contract.methods.calcWithdrawOneCoin(lpBalance, coinIndex).call();
+    }
     log(`ETH contract (${contract.options.address}) - calcWithdrawOneCoin result ${sum}`);
     return sum;
 };
