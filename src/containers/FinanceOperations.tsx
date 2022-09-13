@@ -198,11 +198,6 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     .toString();
                 setUsdt(coinValue);
 
-                // slippage temporarily hidden for BSC
-                if (isBSC(chainId)) {
-                    return;
-                }
-
                 const slippage = 100 - (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2))) * 100;
                 setSlippage(new BigNumber(slippage).toFixed(2, 3));
                 log(`USDT slippage is ${slippage}`);
