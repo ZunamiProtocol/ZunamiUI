@@ -519,6 +519,16 @@ body.dark {
         color: #fff;
     }
 
+    .EthMergeWarningModal {
+        span, h3, p {
+            color: #fff;
+        }
+        
+        .disabled-section {
+            border-color: #3C3C3C;
+        }
+    }
+
     #MobileSidebar {
         background-color: #2a2a2a;
 

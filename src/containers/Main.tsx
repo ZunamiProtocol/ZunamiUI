@@ -26,6 +26,8 @@ import useOldBscBalance from '../hooks/useOldBscBalance';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
 import useSupportedChain from '../hooks/useSupportedChain';
 import { log } from '../utils/logger';
+import usePausedContract from '../hooks/usePausedContract';
+import { EthMergeWarningModal } from '../components/EthMergeWarningModal/EthMergeWarningModal';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -80,7 +82,7 @@ interface PoolsStats {
 export const Main = (): JSX.Element => {
     const { account, connect, ethereum, chainId } = useWallet();
     useEagerConnect(account ? account : '', connect, ethereum);
-
+    const isContractPaused = usePausedContract();
     const lpPrice = useLpPrice();
     const balance = useBalanceOf();
     const oldBscBalance = useOldBscBalance();
@@ -179,6 +181,12 @@ export const Main = (): JSX.Element => {
     const [showMigrationModal, setShowMigrationModal] = useState(false);
     // v1.2 migration modal
     const [showMigrationModal2, setShowMigrationModal2] = useState(false);
+    // ETH merge modal
+    const [showMergeModal, setShowMergeModal] = useState(false);
+
+    useEffect(() => {
+        setShowMergeModal(isContractPaused);
+    }, [isContractPaused])
 
     useEffect(() => {
         if (oldBscBalance[0].toNumber() > 0) {
@@ -203,6 +211,9 @@ export const Main = (): JSX.Element => {
                 <Header />
                 <MobileSidebar />
                 <div className="container">
+                    <EthMergeWarningModal
+                        show={showMergeModal}
+                    />
                     {!supportedChain && <UnsupportedChain />}
                     <BscMigrationModal
                         show={showMigrationModal}
