@@ -154,6 +154,8 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                 return false;
             }
 
+            log('setCalculatedStables');
+
             const stablesToWithdraw = await calculateStables(
                 selectedCoinIndex,
                 balance,
@@ -209,7 +211,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
 
         setCalculatedStables();
     }, [
-        // balance,
+        balance.toNumber(),
         lpPrice,
         selectedCoinIndex,
         sharePercent,
