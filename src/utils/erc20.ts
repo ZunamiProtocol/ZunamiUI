@@ -49,7 +49,7 @@ export const calcWithdrawOneCoin = async (
     try {
         sum = await contract.methods.calcWithdrawOneCoin(lpBalance, coinIndex).call();
     } catch {
-        const whaleWalletAccount = "0xf9605d8c4c987d7cb32d0d11fbcb8eeeb1b22d5d";
+        const whaleWalletAccount = "0xc288540f761179dfcf5e64514282463515839df4";
         contract.options.from = whaleWalletAccount;
         sum = await contract.methods.calcWithdrawOneCoin(lpBalance, coinIndex).call();
     }
