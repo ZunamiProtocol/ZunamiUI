@@ -3,6 +3,8 @@ import BigNumber from 'bignumber.js/bignumber';
 import ethAbi from '../../actions/abi/Zunami.json';
 import bscAbi from '../../actions/abi/zunami_bsc.json';
 import busdAbi from '../../actions/abi/zunami_busd.json';
+import uzdAbi from '../../actions/abi/zunami_uzd.json';
+
 import WETHAbi from './abi/weth.json';
 import { contractAddresses, SUBTRACT_GAS_LIMIT } from './constants.js';
 import * as Types from './types.js';
@@ -21,18 +23,21 @@ export class Contracts {
         this.ethMasterChef = new this.web3.eth.Contract(ethAbi);
         this.bscMasterChef = new this.web3.eth.Contract(bscAbi);
         this.busdContract = new this.web3.eth.Contract(busdAbi);
+        this.uzdContract = new this.web3.eth.Contract(uzdAbi);
 
         this.weth = new this.web3.eth.Contract(WETHAbi);
         this.usdc = new this.web3.eth.Contract(WETHAbi);
         this.setProvider(provider, networkId);
 
-        const defaultAccount = this.web3.eth.defaultAccount || window.localStorage.getItem('WALLET_ACCOUNT');
+        const defaultAccount =
+            this.web3.eth.defaultAccount || window.localStorage.getItem('WALLET_ACCOUNT');
 
         this.setDefaultAccount(defaultAccount);
         this.masterChef.options.from = defaultAccount;
         this.bscMasterChef.options.from = defaultAccount;
         this.ethMasterChef.options.from = defaultAccount;
         this.busdContract.options.from = defaultAccount;
+        this.uzdContract.options.from = defaultAccount;
     }
 
     setDefaultAccount(account) {
@@ -50,6 +55,7 @@ export class Contracts {
         }
 
         setProviderParams(this.ethMasterChef, contractAddresses.zunami[1]);
+        setProviderParams(this.uzdContract, contractAddresses.uzd[1]);
 
         if (networkId === 56) {
             setProviderParams(this.bscMasterChef, contractAddresses.zunami[56]);

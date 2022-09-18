@@ -5,7 +5,7 @@ import useWallet from './useWallet';
 import useSushi from './useSushi';
 import { getMasterChefContract } from '../sushi/utils';
 
-const useBalanceOf = () => {
+const useBalanceOf = (contractAddress: string | undefined = undefined) => {
     const [balance, setBalance] = useState(new BigNumber(BIG_ZERO));
     const { chainId, account } = useWallet();
     const isEth = chainId && chainId === 1;
@@ -19,6 +19,11 @@ const useBalanceOf = () => {
 
         const getBalance = async () => {
             const contract = chainId === 1 ? sushi.getEthContract() : sushi.getBscContract();
+
+            if (contractAddress) {
+                contract.options.address = contractAddress;
+            }
+
             const value = await contract.methods.balanceOf(account).call();
             if (value) {
                 setBalance(new BigNumber(value));
@@ -26,7 +31,7 @@ const useBalanceOf = () => {
         };
 
         getBalance();
-    }, [account, chainId, isEth, masterChefContract]);
+    }, [account, chainId, isEth, masterChefContract, sushi, contractAddress]);
 
     return balance;
 };
