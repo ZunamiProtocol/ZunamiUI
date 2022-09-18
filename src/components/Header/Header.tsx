@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import './Header.scss';
 import { Navbar } from 'react-bootstrap';
-import { Disclaimer } from '../Disclaimer/Disclaimer';
 import useOnlineState from '../../hooks/useOnlineState';
 import { ErrorToast } from '../ErrorToast/ErrorToast';
 import { WalletStatus } from '../WalletStatus/WalletStatus';
@@ -55,7 +54,6 @@ export const Header = (): JSX.Element => {
                         document.body.classList.remove('overflow');
                     }}
                 />
-                {!isETH(chainId) && <Disclaimer text={chainNameToTooltip(chainId)} />}
                 <NetworkSelector />
                 <WalletStatus />
                 <svg
