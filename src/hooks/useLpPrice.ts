@@ -48,6 +48,9 @@ const useLpPrice = () => {
         };
 
         getLpPrice();
+
+        let refreshInterval = setInterval(getLpPrice, 5000);
+        return () => clearInterval(refreshInterval);
     }, [account, chainId, masterChefContract, sushi]);
 
     return price;
