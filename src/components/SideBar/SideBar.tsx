@@ -7,13 +7,13 @@ import useFetch from 'react-fetch-hook';
 import { BigNumber } from 'bignumber.js';
 import { FastDepositForm } from '../FastDepositForm/FastDepositForm';
 
-interface ZunamiInfo {
+export interface ZunamiInfo {
     tvl: BigNumber;
     apy: number;
     apr: number;
 }
 
-interface ZunamiInfoFetch {
+export interface ZunamiInfoFetch {
     data: any;
     isLoading: boolean;
     error: any;

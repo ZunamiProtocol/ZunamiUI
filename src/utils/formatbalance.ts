@@ -8,6 +8,7 @@ export const DAI_TOKEN_DECIMAL = new BigNumber(10).pow(18);
 export const USDT_TOKEN_DECIMAL = new BigNumber(10).pow(6);
 export const USDT_BSC_TOKEN_DECIMAL = new BigNumber(10).pow(18);
 export const DAI_DECIMALS = 12;
+export const UZD_DECIMALS = 18;
 
 export const getBalanceNumber = (balance: BigNumber, decimals = 18): BigNumber => {
     return new BigNumber(balance).dividedBy(BIG_TEN.pow(decimals));

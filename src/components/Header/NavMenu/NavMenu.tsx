@@ -4,6 +4,7 @@ import './NavMenu.scss';
 import { ReactComponent as DashboardIcon } from './dashboard-icon.svg';
 import { ReactComponent as DepositIcon } from './deposit-icon.svg';
 import { ReactComponent as DaoIcon } from './dao-icon.svg';
+import { ReactComponent as UzdIcon } from './uzd-icon.svg';
 
 interface NavMenuProps {
     onSelect?: Function;
@@ -21,6 +22,11 @@ export const NavMenu = (props: NavMenuProps): JSX.Element => {
             title: 'Deposit & Withdraw',
             urls: ['/deposit', '/withdraw'],
             icon: <DepositIcon />,
+        },
+        {
+            title: 'UZD Stablecoin',
+            urls: ['/uzd'],
+            icon: <UzdIcon />,
         },
         {
             title: 'DAO',

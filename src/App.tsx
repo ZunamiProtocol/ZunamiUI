@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { Main } from './containers/Main';
+import { Uzd } from './containers/Uzd';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './App.scss';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -33,6 +34,7 @@ function App() {
                         path="/withdraw"
                         component={() => <FinanceOperations operationName="withdraw" />}
                     />
+                    <Route path="/uzd" component={Uzd} />
                 </Router>
             </Providers>
         </Suspense>

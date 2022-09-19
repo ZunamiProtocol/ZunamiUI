@@ -7,6 +7,7 @@ import { contractAddresses } from './lib/constants';
 import erc20Abi from '../actions/abi/erc20.abi.json';
 import ethAbi from '../actions/abi/Zunami.json';
 import bscAbi from '../actions/abi/zunami_bsc.json';
+import uzdAbi from '../actions/abi/zunami_uzd.json';
 import { getZunamiAddress } from '../utils/zunami';
 
 export class Sushi {
@@ -61,10 +62,12 @@ export class Sushi {
         this.ethContracts = new Contracts(ethProvider, 1, this.web3, options);
         this.bscContracts = new Contracts(bscProvider, 56, this.bscWeb3, options);
         this.busdContracts = new Contracts(bscProvider, 56, this.bscWeb3, options);
+        this.uzdContracts = new Contracts(ethProvider, 1, this.web3, options);
 
         this.masterChefAddress = contractAddresses.zunami[1];
         this.bscMasterChefAddress = contractAddresses.zunami[56];
         this.busdContracts = contractAddresses.busd[56];
+        this.uzdContracts = contractAddresses.uzd[1];
         this.wethAddress = contractAddresses.weth[networkId];
     }
 
@@ -77,6 +80,7 @@ export class Sushi {
         this.accounts.push(new Account(this.bscContracts, address, number));
         this.accounts.push(new Account(this.busdContracts, address, number));
         this.accounts.push(new Account(this.ethContracts, address, number));
+        this.accounts.push(new Account(this.uzdContracts, address, number));
     }
 
     getErc20Contract(account, address, chainId = 1) {
@@ -104,7 +108,16 @@ export class Sushi {
     }
 
     getEthContract(account) {
-        const ethProvider = new Web3.providers.HttpProvider(
+        const web3 = new Web3(this.getEthProvider(account));
+        const contract = new web3.eth.Contract(ethAbi);
+        contract.options.from = account;
+        contract.options.address = getZunamiAddress(1);
+
+        return contract;
+    }
+
+    getEthProvider(account) {
+        return new Web3.providers.HttpProvider(
             'https://eth-mainnet.alchemyapi.io/v2/Yh5zNTgJkqrOIqLtfkZBGIPecNPDQ1ON',
             {
                 autoGasMultiplier: 1.5,
@@ -116,13 +129,6 @@ export class Sushi {
                 testing: false,
             }
         );
-
-        const web3 = new Web3(ethProvider);
-        const contract = new web3.eth.Contract(ethAbi);
-        contract.options.from = account;
-        contract.options.address = getZunamiAddress(1);
-
-        return contract;
     }
 
     getBscProvider() {
@@ -146,6 +152,14 @@ export class Sushi {
         const contract = new web3.eth.Contract(bscAbi);
         contract.options.from = account;
         contract.options.address = contractAddresses.busd[56];
+        return contract;
+    }
+
+    getUzdContract(account) {
+        const web3 = new Web3(this.getEthProvider(account));
+        const contract = new web3.eth.Contract(uzdAbi);
+        contract.options.from = account;
+        contract.options.address = contractAddresses.uzd[1];
         return contract;
     }
 

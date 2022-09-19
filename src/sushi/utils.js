@@ -89,6 +89,7 @@ export const getFarms = (sushi) => {
         : [];
 };
 
+// 10M
 export const APPROVE_SUM = '10000000000000000000000000';
 
 export const approve = async (
@@ -107,6 +108,10 @@ export const approve = async (
     }
 
     if (tokenAddress === getZunamiAddress(56)) {
+        sum = APPROVE_SUM;
+    }
+
+    if (tokenAddress === contractAddresses.uzd[1]) {
         sum = APPROVE_SUM;
     }
 
