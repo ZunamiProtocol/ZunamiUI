@@ -20,7 +20,7 @@ import { Contract } from 'web3-eth-contract';
 import { calcWithdrawOneCoin } from '../utils/erc20';
 import useSushi from '../hooks/useSushi';
 import { getMasterChefContract } from '../sushi/utils';
-import { isBSC } from '../utils/zunami';
+import { isBSC, isETH } from '../utils/zunami';
 import { log } from '../utils/logger';
 import { useSlippage } from '../hooks/useSlippage';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
@@ -58,10 +58,6 @@ const calculateStables = async (
     setError('');
 
     try {
-        log(
-            `calcWithdrawOneCoin exec (balanceToWithdraw, coinIndex) - ${balanceToWithdraw}, ${coinIndex}`
-        );
-
         result = await calcWithdrawOneCoin(balanceToWithdraw, coinIndex, account);
     } catch (error: any) {
         setError(
@@ -113,6 +109,12 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     useEffect(() => {
         if (isBSC(chainId) && props.operationName === 'withdraw') {
             setSelectedCoinIndex(2);
+            setSelectedCoin('usdt');
+        }
+
+        if (isETH(chainId)) {
+            setSelectedCoinIndex(-1);
+            setSelectedCoin('all');
         }
     }, [props.operationName, chainId]);
 
@@ -152,6 +154,8 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                 return false;
             }
 
+            log('setCalculatedStables');
+
             const stablesToWithdraw = await calculateStables(
                 selectedCoinIndex,
                 balance,
@@ -176,6 +180,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
 
                 const slippage = 100 - (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2))) * 100;
                 setSlippage(new BigNumber(slippage).toFixed(2, 3));
+
                 log(`DAI slippage is ${slippage}`);
             } else if (selectedCoinIndex === 1) {
                 const coinValue = getBalanceNumber(new BigNumber(stablesToWithdraw), 6)
@@ -195,14 +200,13 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
 
                 const slippage = 100 - (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2))) * 100;
                 setSlippage(new BigNumber(slippage).toFixed(2, 3));
-
                 log(`USDT slippage is ${slippage}`);
             }
         };
 
         setCalculatedStables();
     }, [
-        // balance,
+        balance.toNumber(),
         lpPrice,
         selectedCoinIndex,
         sharePercent,

@@ -9,6 +9,7 @@ import {
     getFullDisplayBalance,
     usdcAddress,
     usdtAddress,
+    bscUsdtAddress,
     busdAddress,
 } from '../../utils/formatbalance';
 import { useAllowanceStables } from '../../hooks/useAllowance';
@@ -26,7 +27,8 @@ import { useGzlpAllowance } from '../../hooks/useGzlpAllowance';
 import { FormProps, TransactionError } from './Form.types';
 import { useWallet } from 'use-wallet';
 import { log } from '../../utils/logger';
-import { isETH } from '../../utils/zunami';
+import { isBSC, isETH } from '../../utils/zunami';
+import { APPROVE_SUM } from '../../sushi/utils';
 
 const getDepositValidationError = (
     dai: String,
@@ -63,6 +65,23 @@ const getWithdrawValidationError = (
         error = "You're trying to withdraw more than you have";
     } else if (fullBalanceLpShare === '0' || lpShareToWithdraw.toNumber() === 0) {
         error = 'You have zero LP shares';
+    }
+
+    return error;
+};
+
+const getBscWithdrawValidationError = (
+    isApproved: Boolean,
+    lpShareToWithdraw: BigNumber
+) => {
+    let error = '';
+
+    if (!isApproved) {
+        error = 'Please, approve GZLP before withdraw';
+    }
+
+    if (lpShareToWithdraw.toNumber() === 0) {
+        error = 'You have no funds';
     }
 
     return error;
@@ -178,7 +197,7 @@ export const Form = (props: FormProps): JSX.Element => {
         setPendingUSDT(true);
 
         try {
-            const tx = onApprove(usdtAddress);
+            const tx = onApprove(isBSC(chainId) ? bscUsdtAddress : usdtAddress);
             if (!tx) {
                 setPendingUSDT(false);
             }
@@ -252,8 +271,6 @@ export const Form = (props: FormProps): JSX.Element => {
         parseInt(props.usdc) > getBalanceNumber(userBalanceList[1], 6).toNumber() ||
         parseInt(props.usdt) > getBalanceNumber(userBalanceList[2], 6).toNumber();
 
-    // const withdrawExceedBalance = Number(fullBalancetoWithdraw)
-
     const [pendingTx, setPendingTx] = useState(false);
     const [transactionId, setTransactionId] = useState(undefined);
 
@@ -313,8 +330,10 @@ export const Form = (props: FormProps): JSX.Element => {
 
             if (props.operationName === 'withdraw') {
                 approveVal = gzlpAllowance.isGreaterThanOrEqualTo(
-                    new BigNumber('9000000000000000000000000')
+                    new BigNumber(APPROVE_SUM)
                 );
+
+                log(`Withdrawal approve set to ${approveVal}, it's less than ${APPROVE_SUM}`);
             } else {
                 if (props.busd !== '0') {
                     approveVal = isApprovedTokens[3];
@@ -352,26 +371,39 @@ export const Form = (props: FormProps): JSX.Element => {
                   isApproved,
                   depositExceedAmount
               )
-            : getWithdrawValidationError(
+            : isETH(chainId) ? getWithdrawValidationError(
                   props.dai,
                   props.usdc,
                   props.usdt,
                   fullBalanceLpShare,
                   userMaxWithdraw,
                   lpShareToWithdraw
-              );
+              ) : getBscWithdrawValidationError(isApproved, lpShareToWithdraw);
 
     const cantDeposit = emptyFunds || !isApproved || pendingTx || depositExceedAmount;
 
-    log(
-        `Approved stables status: DAI: ${isApprovedTokens[0].toString()}, USDT: ${isApprovedTokens[1].toString()}, USDC: ${isApprovedTokens[2].toString()}`
-    );
+    if (isETH(chainId)) {
+        log(
+            `Approved stables status: DAI: ${isApprovedTokens[0].toString()}, USDT: ${isApprovedTokens[1].toString()}, USDC: ${isApprovedTokens[2].toString()}`
+        );
+    }
 
-    log(
-        `Can deposit: emptyFunds: ${emptyFunds}, isApproved: ${isApproved}, pendingTx: ${pendingTx}, depositExceedAmount: ${depositExceedAmount}`
-    );
+    if (isBSC(chainId)) {
+        log(
+            `Approved stables status: USDT: ${isApprovedTokens[1].toString()}, BUSD: ${isApprovedTokens[2].toString()}`
+        );
+    }
 
-    const canWithdraw = isETH(chainId) ? !validationError : userLpAmount.toNumber() > 0;
+    if (props.operationName === 'deposit') {
+        log(
+            `Can deposit: emptyFunds: ${emptyFunds}, isApproved: ${isApproved}, pendingTx: ${pendingTx}, depositExceedAmount: ${depositExceedAmount}`
+        );
+    }
+
+    const canWithdraw = isETH(chainId) ?
+        !validationError :
+        // BSC withdraw only if there is a balance and approove granted
+        userLpAmount.toNumber() > 0 && !validationError;
 
     if (props.operationName === 'withdraw') {
         log(`Can withdraw: ${canWithdraw}. Is approved: ${isApproved}`);
@@ -535,6 +567,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                         disabled={pendingDAI || depositExceedAmount}
                                         onClick={handleApproveDai}
                                         type="button"
+                                        className="mb-2"
                                     >
                                         Approve DAI{' '}
                                     </button>
@@ -547,6 +580,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                         disabled={pendingUSDC || depositExceedAmount}
                                         onClick={handleApproveUsdc}
                                         type="button"
+                                        className="mb-2"
                                     >
                                         Approve USDC{' '}
                                     </button>
@@ -556,6 +590,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                     disabled={pendingUSDT || depositExceedAmount}
                                     onClick={handleApproveUsdt}
                                     type="button"
+                                    className="mb-2"
                                 >
                                     Approve USDT{' '}
                                 </button>
@@ -565,6 +600,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                     disabled={pendingBUSD || depositExceedAmount}
                                     onClick={handleApproveBusd}
                                     type="button"
+                                    className="mb-2"
                                 >
                                     Approve BUSD{' '}
                                 </button>
@@ -674,6 +710,11 @@ export const Form = (props: FormProps): JSX.Element => {
                             )}
                         </div>
                     )}
+                    {
+                        validationError && (
+                            <div className={'mt-2 text-danger error'}>{validationError}</div>
+                        )
+                    }
                 </div>
             </form>
         </div>
