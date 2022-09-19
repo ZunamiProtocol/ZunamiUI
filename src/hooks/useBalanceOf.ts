@@ -37,7 +37,7 @@ const useBalanceOf = (contractAddress: string | undefined = undefined) => {
         };
 
         getBalance();
-    }, [account, chainId, isEth, masterChefContract, sushi, contractAddress]);
+    }, [account, chainId, masterChefContract, sushi, contractAddress]);
 
     return balance;
 };
