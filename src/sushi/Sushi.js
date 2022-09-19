@@ -62,7 +62,7 @@ export class Sushi {
         this.ethContracts = new Contracts(ethProvider, 1, this.web3, options);
         this.bscContracts = new Contracts(bscProvider, 56, this.bscWeb3, options);
         this.busdContracts = new Contracts(bscProvider, 56, this.bscWeb3, options);
-        this.uzdContracts = new Contracts(ethProvider, 1, this.bscWeb3, options);
+        this.uzdContracts = new Contracts(ethProvider, 1, this.web3, options);
 
         this.masterChefAddress = contractAddresses.zunami[1];
         this.bscMasterChefAddress = contractAddresses.zunami[56];
