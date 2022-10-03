@@ -24,6 +24,7 @@ body {
 #root > .container {
     margin: 0 auto;
     padding: 0;
+    overflow-y: auto;
 
     @media (min-width: $media375) {
     }
@@ -32,7 +33,7 @@ body {
         max-width: 1024px;
         margin-left: auto;
         margin-right: auto;
-        height: calc(100% - 74px) !important;
+        height: calc(100% - 134px) !important;
     }
 
     @media (min-width: 960px) and (max-width: 1023px) {
@@ -43,14 +44,14 @@ body {
         max-width: 1440px;
         margin-left: auto;
         margin-right: auto;
-        height: calc(100% - 74px) !important;
+        height: calc(100% - 134px) !important;
     }
 
     @media (min-width: $media1920) {
         max-width: 1920px;
         margin-left: auto;
         margin-right: auto;
-        height: calc(100% - 87px) !important;
+        height: calc(100% - 147px) !important;
     }
 }
 
@@ -132,35 +133,27 @@ nav {
 footer {
     @media (min-width: $media375) {
         // display: none;
-        padding-bottom: 20px;
-        margin-top: 80px;
+        height: 60px;
+        padding-left: 10px;
     }
 
     @media (min-width: $media1024) {
         display: flex;
         align-items: center;
-        position: absolute;
-        bottom: 20px;
-        left: 50%;
-        padding: 0 40px;
-        transform: translateX(-512px);
-        margin-top: 0;
+        padding-left: 40px;
+        max-width: 1024px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     @media (min-width: $media1440) {
-        position: absolute;
-        bottom: 20px;
-        left: 50%;
-        padding: 0 40px;
-        transform: translateX(-722px);
+        padding-left: 40px;
+        max-width: 1440px;
     }
 
     @media (min-width: $media1920) {
-        position: absolute;
-        bottom: 38px;
-        left: 50%;
-        padding: 0 40px;
-        transform: translateX(-950px);
+        padding-left: 50px;
+        max-width: 19200px;
     }
 
     ul {
@@ -520,12 +513,14 @@ body.dark {
     }
 
     .EthMergeWarningModal {
-        span, h3, p {
+        span,
+        h3,
+        p {
             color: #fff;
         }
-        
+
         .disabled-section {
-            border-color: #3C3C3C;
+            border-color: #3c3c3c;
         }
     }
 
@@ -649,6 +644,57 @@ body.dark {
 
         &__Description {
             color: #6a6a6a;
+        }
+    }
+
+    .UzdContainer__Actions_Inner {
+        background: linear-gradient(9.38deg, #222222 3.94%, #111111 89.76%);
+        border: none;
+        color: #fff;
+
+        .s-coin {
+            background: #171717;
+            border: 1px solid #232323;
+
+            input[type='text'] {
+                background-color: transparent;
+                border-color: #232323;
+                color: #fff;
+            }
+
+            .coin {
+                color: #fff;
+            }
+        }
+
+        .protocol_fee__text {
+            color: #fff;
+        }
+
+        .curve-boost {
+            background: linear-gradient(88.25deg, #262626 6.57%, #252525 94.5%);
+
+            div {
+                color: #fff;
+            }
+        }
+
+        .counter {
+            background-color: #3f3f3f;
+            color: #fff;
+        }
+
+        .go-to-curve {
+            background: #434343;
+
+            span {
+                color: #fff;
+            }
+        }
+
+        .how-it-works,
+        ul li span {
+            color: #fff !important;
         }
     }
 
@@ -779,6 +825,10 @@ body.dark {
     #collapsed-nav-menu {
         background: linear-gradient(180deg, rgba(250, 91, 6, 0) 0%, rgba(250, 91, 6, 0.04) 100%);
         color: $primary-color;
+
+        span {
+            color: $primary-color;
+        }
     }
 
     .SidebarColumn {

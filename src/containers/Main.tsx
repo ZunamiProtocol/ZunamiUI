@@ -186,7 +186,7 @@ export const Main = (): JSX.Element => {
 
     useEffect(() => {
         setShowMergeModal(isContractPaused);
-    }, [isContractPaused])
+    }, [isContractPaused]);
 
     useEffect(() => {
         if (oldBscBalance[0].toNumber() > 0) {
@@ -196,7 +196,9 @@ export const Main = (): JSX.Element => {
         }
 
         if (oldBscBalance[1].toNumber() > 0) {
-            log(`Migration from BSC gateway 1.1 to 1.2 needed. Old balance is ${oldBscBalance[1].toNumber()}`);
+            log(
+                `Migration from BSC gateway 1.1 to 1.2 needed. Old balance is ${oldBscBalance[1].toNumber()}`
+            );
             setShowMigrationModal2(true);
         } else {
             setShowMigrationModal2(false);
@@ -211,10 +213,10 @@ export const Main = (): JSX.Element => {
                 <Header />
                 <MobileSidebar />
                 <div className="container">
-                    <EthMergeWarningModal
-                        show={showMergeModal}
-                    />
-                    {!supportedChain && <UnsupportedChain />}
+                    <EthMergeWarningModal show={showMergeModal} />
+                    {!supportedChain && (
+                        <UnsupportedChain text="You're using unsupported chain. Please, switch either to Ethereum or Binance network." />
+                    )}
                     <BscMigrationModal
                         show={showMigrationModal}
                         balance={oldBscBalance[0]}
@@ -348,44 +350,40 @@ export const Main = (): JSX.Element => {
                             </div>
                         </div>
                     </div>
-                    <footer className="">
-                        <div className="mobile">
-                            <a href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing">
+                </div>
+                <footer className="">
+                    <div className="mobile">
+                        <a href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing">
+                            How to use?
+                        </a>
+                        <a href="https://www.zunami.io/#faq-main" target="_blank" rel="noreferrer">
+                            FAQ
+                        </a>
+                    </div>
+                    <span className="copyright">
+                        © 2022 Zunami Protocol. {`Version: ${process.env.REACT_APP_VERSION}`}
+                    </span>
+                    <ul className="list-inline mb-0">
+                        <li className="list-inline-item">
+                            <a
+                                href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing"
+                                target="blank"
+                            >
                                 How to use?
                             </a>
-                            <a
-                                href="https://www.zunami.io/#faq-main"
-                                target="_blank"
-                                rel="noreferrer"
-                            >
+                        </li>
+                        <li className="list-inline-item">
+                            <a href="https://www.zunami.io/#faq-main" target="blank">
                                 FAQ
                             </a>
-                        </div>
-                        <span className="copyright">
-                            © 2022 Zunami Protocol. {`Version: ${process.env.REACT_APP_VERSION}`}
-                        </span>
-                        <ul className="list-inline mb-0">
-                            <li className="list-inline-item">
-                                <a
-                                    href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing"
-                                    target="blank"
-                                >
-                                    How to use?
-                                </a>
-                            </li>
-                            <li className="list-inline-item">
-                                <a href="https://www.zunami.io/#faq-main" target="blank">
-                                    FAQ
-                                </a>
-                            </li>
-                            <li className="list-inline-item">
-                                <a href="https://zunami.io" target="blank">
-                                    Website
-                                </a>
-                            </li>
-                        </ul>
-                    </footer>
-                </div>
+                        </li>
+                        <li className="list-inline-item">
+                            <a href="https://zunami.io" target="blank">
+                                Website
+                            </a>
+                        </li>
+                    </ul>
+                </footer>
             </React.Fragment>
         </Suspense>
     );

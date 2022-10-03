@@ -1,17 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { NetworkSelector, networks, Network } from '../NetworkSelector/NetworkSelector';
 import './UnsupportedChain.scss';
 
-export const UnsupportedChain = (): JSX.Element => {
+interface UnsupportedChainProps {
+    text: string;
+}
+
+export const UnsupportedChain = (props: UnsupportedChainProps): JSX.Element => {
     const eth = window.ethereum;
     const [activeNetwork, setActiveNetwork] = useState<Network>(networks[0]);
     return (
         <div className="UnsupportedChain">
             <div className="UnsupportedChain__Content">
-                <div>
-                    You're using unsupported chain. Please, switch either to Ethereum or Binance
-                    network.
-                </div>
+                <div>{props.text}</div>
                 <div className="mt-3 text-center">
                     <NetworkSelector
                         className="ms-0"
