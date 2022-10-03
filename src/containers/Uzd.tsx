@@ -255,7 +255,7 @@ export const Uzd = (): JSX.Element => {
                                                     ethereum,
                                                     'ZLP',
                                                     UZD_DECIMALS,
-                                                    'https://pbs.twimg.com/profile_images/1529390021022826498/3Khtw3jp_x96.jpg'
+                                                    'https://app.zunami.io/zlp-token.jpg'
                                                 );
                                             }}>
                                                 <img src="/metamask-icon.svg" alt="Add token to Metamask" />
