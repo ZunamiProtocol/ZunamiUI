@@ -711,8 +711,8 @@ export const Form = (props: FormProps): JSX.Element => {
                         </div>
                     )}
                     {
-                        validationError && (
-                            <div className={'mt-2 text-danger error'}>{validationError}</div>
+                        validationError && props.operationName === 'withdraw' && (
+                            <div className={'mt-2 text-danger error withdraw-error'}>{validationError}</div>
                         )
                     }
                 </div>

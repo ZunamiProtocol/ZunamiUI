@@ -178,7 +178,10 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     .toString();
                 setDai(coinValue);
 
-                const slippage = 100 - (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2))) * 100;
+                const slippage =
+                    100 -
+                    (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2))) *
+                        100;
                 setSlippage(new BigNumber(slippage).toFixed(2, 3));
 
                 log(`DAI slippage is ${slippage}`);
@@ -188,7 +191,10 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     .toString();
                 setUsdc(coinValue);
 
-                const slippage = 100 - (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2))) * 100;
+                const slippage =
+                    100 -
+                    (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2))) *
+                        100;
                 setSlippage(new BigNumber(slippage).toFixed(2, 3));
 
                 log(`USDC slippage is ${slippage}`);
@@ -198,7 +204,10 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     .toString();
                 setUsdt(coinValue);
 
-                const slippage = 100 - (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2))) * 100;
+                const slippage =
+                    100 -
+                    (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2))) *
+                        100;
                 setSlippage(new BigNumber(slippage).toFixed(2, 3));
                 log(`USDT slippage is ${slippage}`);
             }
@@ -253,7 +262,9 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
             <Header />
             <MobileSidebar />
             <Container className={'h-100 d-flex justify-content-between flex-column'}>
-                {!supportedChain && <UnsupportedChain />}
+                {!supportedChain && (
+                    <UnsupportedChain text="You're using unsupported chain. Please, switch either to Ethereum or Binance network." />
+                )}
                 <Row className={'h-100 main-row'}>
                     {!account && (
                         <Col className={'content-col'}>
@@ -512,20 +523,20 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                         </Col>
                     )}
                 </Row>
-                <footer>
-                    <div className="mobile">
-                        <a href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing">
-                            How to use?
-                        </a>
-                        <a href="https://www.zunami.io/#faq-main" target="_blank" rel="noreferrer">
-                            FAQ
-                        </a>
-                    </div>
-                    <span className="copyright">
-                        © 2022 Zunami Protocol. {`Version: ${process.env.REACT_APP_VERSION}`}
-                    </span>
-                </footer>
             </Container>
+            <footer>
+                <div className="mobile">
+                    <a href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing">
+                        How to use?
+                    </a>
+                    <a href="https://www.zunami.io/#faq-main" target="_blank" rel="noreferrer">
+                        FAQ
+                    </a>
+                </div>
+                <span className="copyright">
+                    © 2022 Zunami Protocol. {`Version: ${process.env.REACT_APP_VERSION}`}
+                </span>
+            </footer>
         </React.Fragment>
     );
 };

@@ -77,6 +77,19 @@ nav #nav-menu {
             }
 
             a {
+                &[href='/uzd'] {
+                    svg {
+                        path:first-child {
+                            fill: #f95a05;
+                        }
+                        path:nth-child(2) {
+                            fill: #fff;
+                        }
+                    }
+                }
+            }
+
+            a {
                 &[href='/deposit'] {
                     svg {
                         rect,
@@ -132,12 +145,24 @@ nav #nav-menu {
                 fill: #f95a05;
                 stroke: #f95a05;
             }
+
+            &.uzd-icon {
+                path:first-child {
+                    fill: #f95a05;
+                    stroke: transparent;
+                }
+                path:nth-child(2) {
+                    fill: #ffffff;
+                    stroke: #ffffff;
+                    stroke-width: 0.1px;
+                }
+            }
         }
     }
 
     .dropdown-menu.show {
         width: 249px;
-        height: 110px;
+        height: 130px;
         background: #fffaf3;
         border: 1px solid #f4efe1;
         border-radius: 5px;

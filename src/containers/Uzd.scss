@@ -21,13 +21,13 @@
         }
 
         @media screen and (min-width: $media1024) {
-            width: 273px;
+            width: 350px;
             padding: 44px 30px 0 30px;
         }
 
         @media screen and (min-width: $media1440) {
-            width: 349px;
-            padding: 76px 30px 0 70px;
+            width: 430px;
+            padding: 56px 30px 0 70px;
         }
 
         &_Title {
@@ -64,11 +64,35 @@
 
         .InfoBlock {
             height: 82px;
-            margin-top: 0;
-            margin-bottom: 0;
+            // margin-top: 0;
+            // margin-bottom: 10px;
+            margin: 0 5px 10px 5px;
 
             &__title {
                 padding: 20px 0 0 0px;
+                margin-top: 0;
+                display: flex;
+
+                .InfoBlock__buttons {
+                    margin-left: 10px;
+                    display: flex;
+                    cursor: pointer;
+
+                    img {
+                        width: 12px;
+                        height: auto;
+                        margin-left: 5px;
+                    }
+                }
+            }
+        }
+
+        > .row {
+            .col-6:first-child,
+            .col-sm-12 {
+                .InfoBlock {
+                    margin-left: 0;
+                }
             }
         }
     }
@@ -80,7 +104,7 @@
         }
 
         @media screen and (min-width: $media1440) {
-            padding: 131px 0 0 0;
+            padding: 111px 0 0 0;
             width: 863px;
         }
 
@@ -101,10 +125,12 @@
             .protocol_fee {
                 @media screen and (min-width: $media375) {
                     margin-top: 40px;
+                    margin-left: 0;
                 }
 
                 @media screen and (min-width: $media1024) {
-                    margin-top: 0;
+                    margin-top: 70px;
+                    margin-left: 50px;
                 }
 
                 &__text {
@@ -113,6 +139,7 @@
                     font-size: 12px;
                     line-height: 16px;
                     color: #636363;
+                    width: 60%;
                 }
             }
 
@@ -172,6 +199,8 @@
                     font-size: 12px;
                     line-height: 16px;
                     color: #636363;
+                    padding-right: 50px;
+                    width: 170px;
                 }
 
                 .max {
@@ -184,7 +213,7 @@
                     cursor: pointer;
                     position: absolute;
                     right: 10px;
-                    top: 6px;
+                    top: 7px;
 
                     &:hover {
                         background-color: #f95404;
@@ -299,14 +328,14 @@
                         font-weight: 500;
                         font-size: 12px;
                         line-height: 16px;
-                        color: #636363;
+                        // color: #636363;
                     }
 
                     div:last-child {
                         font-weight: 500;
                         font-size: 10px;
                         line-height: 14px;
-                        color: #7c7c7c;
+                        // color: #7c7c7c;
                         margin-top: 2px;
                     }
                 }
