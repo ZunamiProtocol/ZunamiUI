@@ -17,7 +17,7 @@ export const contractAddresses = {
         1: '0xdac17f958d2ee523a2206206994597c13d831ec7',
     },
     busd: {
-        56: '0x4a062f1501f5FF149b973b70f7027d87622445F3',
+        56: '0x0aeB8D3aA2D806cb7141c1C0accFf1aC8CbCF3AD',
     },
     uzd: {
         1: '0xe5c987f93734cb44ab03f1b18e30a374254891b6',
