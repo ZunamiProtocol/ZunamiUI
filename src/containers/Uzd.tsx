@@ -716,7 +716,12 @@ export const Uzd = (): JSX.Element => {
                                                     </span>
                                                 </li>
                                             </ul>
-                                            <a href="https://curve.fi" className="go-to-curve">
+                                            <a
+                                                href="https://curve.fi/factory/203"
+                                                className="go-to-curve"
+                                                target="_blank"
+                                                rel="noreferrer"
+                                            >
                                                 <img src="/curve-icon.svg" alt="" />
                                                 <span>Go to Curve</span>
                                             </a>
