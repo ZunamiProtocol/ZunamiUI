@@ -24,7 +24,8 @@ const colors = [
     '#FFC129',
     '#2cd5db',
     '#1C77F2',
-    '#323232'
+    '#323232',
+    '#5856d6',
 ]
 
 const poolsChartdata: { [key: string]: any } = {
@@ -67,6 +68,11 @@ const poolsChartdata: { [key: string]: any } = {
         title: 'Convex finance - DOLA pool',
         value: 0,
         icon: '/convex.svg',
+    },
+    STAKEDAO_MIM: {
+        title: 'Stake DAO - MIM pool',
+        value: 0,
+        icon: '/stake-dao.svg',
     },
 };
 
