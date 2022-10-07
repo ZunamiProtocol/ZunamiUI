@@ -126,7 +126,7 @@ export const Main = (): JSX.Element => {
 
         const getTotalIncome = async () => {
             const response = await fetch(
-                getTotalIncomeUrl(account, activeBalance.toNumber().toString(), chainId)
+                getTotalIncomeUrl(account, activeBalance.toString(), chainId)
             );
 
             const data = await response.json();
