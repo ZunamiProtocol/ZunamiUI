@@ -690,7 +690,13 @@ export const Uzd = (): JSX.Element => {
                                                         <div className="title">Curve APY</div>
                                                         <div className="status green"></div>
                                                     </div>
-                                                    <div className="percent">15%</div>
+                                                    <div className="percent">
+                                                        {`${
+                                                            zunamiInfo && !zunError
+                                                                ? `${zunamiInfo.apy.toFixed(2)}%`
+                                                                : 'n/a'
+                                                        }`}
+                                                    </div>
                                                 </div>
                                             </div>
                                             <h2 className="how-it-works">How it works?</h2>
