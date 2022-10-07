@@ -150,7 +150,7 @@ export const Uzd = (): JSX.Element => {
         Number(zunLpValue) <= 0 ||
         isNaN(Number(zunLpValue)) ||
         pendingTx ||
-        parseFloat(zunLpValue) > parseFloat(getFullDisplayBalance(zlpBalance));
+        parseFloat(zunLpValue) > zlpBalance.dividedBy(BIG_TEN.pow(UZD_DECIMALS)).toNumber();
 
     const withdrawDisabled =
         Number(uzdValue) <= 0 ||
