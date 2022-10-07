@@ -69,7 +69,7 @@ const poolsChartdata: { [key: string]: any } = {
         value: 0,
         icon: '/convex.svg',
     },
-    STAKEDAO_MIM: {
+    STAKE_DAO_MIM: {
         title: 'Stake DAO - MIM pool',
         value: 0,
         icon: '/stake-dao.svg',
