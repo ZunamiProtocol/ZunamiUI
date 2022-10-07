@@ -92,6 +92,7 @@ export const Uzd = (): JSX.Element => {
     const [mode, setMode] = useState('mint');
     const [ltvValue, setLtvValue] = useState('0');
     const [supportedChain, setSupportedChain] = useState(true);
+    const [withdrawAll, setWithdrawAll] = useState(false);
 
     const {
         isLoading,
@@ -156,7 +157,7 @@ export const Uzd = (): JSX.Element => {
         Number(uzdValue) <= 0 ||
         isNaN(Number(uzdValue)) ||
         pendingTx ||
-        parseFloat(uzdValue) > parseFloat(formatBigNumberFull(uzdBalance));
+        parseFloat(uzdValue) > uzdBalance.dividedBy(BIG_TEN.pow(UZD_DECIMALS)).toNumber();
 
     return (
         <React.Fragment>
@@ -487,6 +488,7 @@ export const Uzd = (): JSX.Element => {
                                                                     e.nativeEvent.target.value;
 
                                                                 setUzdValue(inputVal);
+                                                                setWithdrawAll(false);
 
                                                                 if (
                                                                     Number(inputVal) <= 0 ||
@@ -538,6 +540,8 @@ export const Uzd = (): JSX.Element => {
                                                                             .toFixed()
                                                                             .toString()
                                                                     );
+
+                                                                    setWithdrawAll(true);
                                                                 }}
                                                             >
                                                                 max
@@ -640,16 +644,20 @@ export const Uzd = (): JSX.Element => {
                                                         );
 
                                                         try {
+                                                            const sumToWithdraw = withdrawAll
+                                                                ? uzdBalance.toString()
+                                                                : new BigNumber(uzdValue)
+                                                                    .multipliedBy(
+                                                                        BIG_TEN.pow(
+                                                                            UZD_DECIMALS
+                                                                        )
+                                                                    )
+                                                                    .toString();
+
                                                             const tx =
                                                                 await sushi.contracts.uzdContract.methods
                                                                     .withdraw(
-                                                                        new BigNumber(uzdValue)
-                                                                            .multipliedBy(
-                                                                                BIG_TEN.pow(
-                                                                                    UZD_DECIMALS
-                                                                                )
-                                                                            )
-                                                                            .toString(),
+                                                                        sumToWithdraw,
                                                                         account,
                                                                         account
                                                                     )
