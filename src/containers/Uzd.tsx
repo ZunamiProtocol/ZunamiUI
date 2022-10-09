@@ -23,9 +23,24 @@ import { approve, getMasterChefContract } from '../sushi/utils';
 import { Preloader } from '../components/Preloader/Preloader';
 import { log } from '../utils/logger';
 import { ZunamiInfo, ZunamiInfoFetch } from '../components/SideBar/SideBar';
-import { zunamiInfoUrl } from '../api/api';
+import { zunamiInfoUrl, curvePoolsApyUrl } from '../api/api';
 import useFetch from 'react-fetch-hook';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
+
+interface CurvePoolInfo {
+    apy: number;
+    apyFormatted: string;
+    apyWeekly: number;
+    index: number;
+    poolAddress: string;
+    poolSymbol: string;
+}
+
+export interface CurveInfoFetch {
+    data: any;
+    isLoading: boolean;
+    error: any;
+}
 
 function convertZlpToUzd(zlpAmount: BigNumber, lpPrice: BigNumber): BigNumber {
     return zlpAmount.multipliedBy(lpPrice);
@@ -101,6 +116,15 @@ export const Uzd = (): JSX.Element => {
     } = useFetch(zunamiInfoUrl) as ZunamiInfoFetch;
 
     const zunamiInfo = zunData as ZunamiInfo;
+
+    const {
+        isLoading: isCurveLoading,
+        data: curvePoolData,
+    } = useFetch(curvePoolsApyUrl) as CurveInfoFetch;
+
+    const uzdCurvePool = !isCurveLoading
+        && curvePoolData.data.poolDetails
+        .filter((pool: CurvePoolInfo) => pool.poolSymbol === 'UZD3CRV-f')[0]
 
     useEagerConnect(account ? account : '', connect, ethereum);
 
@@ -698,7 +722,7 @@ export const Uzd = (): JSX.Element => {
                                                         <div className="title">Curve APY</div>
                                                         <div className="status green"></div>
                                                     </div>
-                                                    <div className="percent">0%</div>
+                                                    <div className="percent">{uzdCurvePool.apyFormatted}</div>
                                                 </div>
                                             </div>
                                             <h2 className="how-it-works">How it works?</h2>

@@ -8,6 +8,8 @@ export const testnetUrl = `${root}/feature`;
 export const totalIncomeUrl = `${root}/transfers/total-income`;
 export const transHistoryUrl = `${root}/transfers/history`;
 
+export const curvePoolsApyUrl = 'https://api.curve.fi/api/getFactoryAPYs?version=2';
+
 export const getActiveStratsUrl = (): string => {
     return activeStratsUrl;
 };
