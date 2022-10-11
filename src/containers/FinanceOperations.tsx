@@ -12,7 +12,7 @@ import { ReactComponent as FinIcon } from '../components/Form/deposit-withdraw.s
 import useLpPrice from '../hooks/useLpPrice';
 import { useUserBalances } from '../hooks/useUserBalances';
 import { TransactionHistory } from '../components/TransactionHistory/TransactionHistory';
-import { getTransHistoryUrl } from '../api/api';
+import { getTransHistoryUrl, getBackendSlippage } from '../api/api';
 import useBalanceOf from '../hooks/useBalanceOf';
 import { useWallet } from 'use-wallet';
 import useEagerConnect from '../hooks/useEagerConnect';
@@ -178,11 +178,12 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     .toString();
                 setDai(coinValue);
 
-                const slippage =
-                    100 -
-                    (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2))) *
-                        100;
-                setSlippage(new BigNumber(slippage).toFixed(2, 3));
+                const slippage = await getBackendSlippage(
+                    percentOfBalance.toNumber().toString(),
+                    0
+                );
+
+                setSlippage(slippage);
 
                 log(`DAI slippage is ${slippage}`);
             } else if (selectedCoinIndex === 1) {
@@ -191,11 +192,12 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     .toString();
                 setUsdc(coinValue);
 
-                const slippage =
-                    100 -
-                    (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2))) *
-                        100;
-                setSlippage(new BigNumber(slippage).toFixed(2, 3));
+                const slippage = await getBackendSlippage(
+                    percentOfBalance.toNumber().toString(),
+                    1
+                );
+
+                setSlippage(slippage);
 
                 log(`USDC slippage is ${slippage}`);
             } else if (selectedCoinIndex === 2) {
@@ -204,11 +206,12 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     .toString();
                 setUsdt(coinValue);
 
-                const slippage =
-                    100 -
-                    (Number(coinValue) / Number(getBalanceNumber(percentOfBalance).toFixed(2))) *
-                        100;
-                setSlippage(new BigNumber(slippage).toFixed(2, 3));
+                const slippage = await getBackendSlippage(
+                    percentOfBalance.toNumber().toString(),
+                    2
+                );
+
+                setSlippage(slippage);
                 log(`USDT slippage is ${slippage}`);
             }
         };
