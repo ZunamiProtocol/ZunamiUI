@@ -640,7 +640,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                                             : 'success'
                                                     }`}
                                                 >
-                                                    ~{props.slippage}%
+                                                    {props.slippage}%
                                                 </span>
                                             </div>
                                         </div>
@@ -697,12 +697,12 @@ export const Form = (props: FormProps): JSX.Element => {
                                                 <span>Slippage: </span>
                                                 <span
                                                     className={`text-${
-                                                        Number(props.slippage) >= 0.4
+                                                        Number(props.slippage) < -0.4
                                                             ? 'danger'
                                                             : 'success'
                                                     }`}
                                                 >
-                                                    ~{props.slippage}%
+                                                    {props.slippage}%
                                                 </span>
                                             </div>
                                         </div>

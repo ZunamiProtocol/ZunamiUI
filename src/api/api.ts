@@ -1,3 +1,5 @@
+import { log } from "../utils/logger";
+
 const root = 'https://zunami-reward-api.herokuapp.com/api';
 export const poolStatsUrl = `${root}/pool/stats`;
 export const activeStratsUrl = `${root}/pool/active-pools-stats`;
@@ -45,3 +47,19 @@ export const getTransHistoryUrl = (
     const chain = chainId === 1 ? 'ETH' : 'BSC';
     return `${transHistoryUrl}?address=${address.toLowerCase()}&type=${type}&page=${page}&size=${size}&chain=${chain}`;
 };
+
+export const getBackendSlippage = async (lpAmount: string, tokenIndex: number) => {
+    return fetch(`${root}/zunami/slippage?tokenIndex=${tokenIndex}&lpAmount=${lpAmount}`)
+        .then((response) => {
+            if (response.status !== 200) {
+                throw new Error(`Server response: ${response.statusText}, code ${response.status}`);
+            }
+
+            return response.json();
+        })
+        .then((data) => data.slippage)
+        .catch((error) => {
+            log(`❗️ Error while retrieving slippage: ${error.message}`);
+            return '0';
+        });
+}
