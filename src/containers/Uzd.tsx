@@ -777,12 +777,17 @@ export const Uzd = (): JSX.Element => {
                                                     pool
                                                 </div>
                                             </div>
-                                            {/* <div className="text-center">
-                                            <a href="https://curve.fi" className="go-to-curve">
-                                                <img src="/curve-icon.svg" alt="" />
-                                                <span>Go to Curve</span>
-                                            </a>
-                                        </div> */}
+                                            <div className="text-center">
+                                                <a
+                                                    href="https://curve.exchange/#/ethereum/pools/factory-v2-203/swap"
+                                                    className="go-to-curve ms-auto me-auto"
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                >
+                                                    <img src="/curve-icon.svg" alt="" />
+                                                    <span>Go to Curve</span>
+                                                </a>
+                                            </div>
                                         </div>
                                     )}
                                 </div>
