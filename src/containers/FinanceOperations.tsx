@@ -178,17 +178,12 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     .toString();
                 setDai(coinValue);
 
-                try {
-                    const slippage = await getBackendSlippage(
-                        percentOfBalance.toNumber().toString(),
-                        0
-                    );
-    
-                    setSlippage(slippage);
-                } catch (error: any) {
-                    setSlippage('0');
-                    log(`❗️ Error getting DAI slippage: ${error.message}`);
-                }
+                const slippage = await getBackendSlippage(
+                    percentOfBalance.toNumber().toString(),
+                    0
+                );
+
+                setSlippage(slippage);
 
                 log(`DAI slippage is ${slippage}`);
             } else if (selectedCoinIndex === 1) {
@@ -197,17 +192,12 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     .toString();
                 setUsdc(coinValue);
 
-                try {
-                    const slippage = await getBackendSlippage(
-                        percentOfBalance.toNumber().toString(),
-                        1
-                    );
-    
-                    setSlippage(slippage);
-                } catch (error: any) {
-                    setSlippage('0');
-                    log(`❗️ Error getting USDC slippage: ${error.message}`);
-                }
+                const slippage = await getBackendSlippage(
+                    percentOfBalance.toNumber().toString(),
+                    1
+                );
+
+                setSlippage(slippage);
 
                 log(`USDC slippage is ${slippage}`);
             } else if (selectedCoinIndex === 2) {
@@ -216,17 +206,12 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     .toString();
                 setUsdt(coinValue);
 
-                try {
-                    const slippage = await getBackendSlippage(
-                        percentOfBalance.toNumber().toString(),
-                        0
-                    );
-    
-                    setSlippage(slippage);
-                } catch (error: any) {
-                    setSlippage('0');
-                    log(`❗️ Error getting USDT slippage: ${error.message}`);
-                }
+                const slippage = await getBackendSlippage(
+                    percentOfBalance.toNumber().toString(),
+                    2
+                );
+
+                setSlippage(slippage);
 
                 log(`USDT slippage is ${slippage}`);
             }

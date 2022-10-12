@@ -50,9 +50,16 @@ export const getTransHistoryUrl = (
 
 export const getBackendSlippage = async (lpAmount: string, tokenIndex: number) => {
     return fetch(`${root}/zunami/slippage?tokenIndex=${tokenIndex}&lpAmount=${lpAmount}`)
-        .then((response) => response.json())
+        .then((response) => {
+            if (response.status !== 200) {
+                throw new Error(`Server response: ${response.statusText}, code ${response.status}`);
+            }
+
+            return response.json();
+        })
         .then((data) => data.slippage)
         .catch((error) => {
-            log(`Error while retrieving slippage: ${error.message}`);
+            log(`❗️ Error while retrieving slippage: ${error.message}`);
+            return '0';
         });
 }
