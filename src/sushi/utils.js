@@ -152,6 +152,8 @@ export const approve = async (
  * @returns
  */
 export const stake = async (contract, account, dai, usdc, usdt, direct = false, chainId = 1) => {
+    const isZerionWallet = window.ethereum?.walletMeta?.name === 'Zerion';
+
     const coins = [
         new BigNumber(dai).times(DEFAULT_TOKEN_DECIMAL).toString(),
         new BigNumber(usdc).times(USDT_TOKEN_DECIMAL).toString(),
@@ -159,15 +161,6 @@ export const stake = async (contract, account, dai, usdc, usdt, direct = false, 
     ];
 
     if (chainId !== 1) {
-        // function delegateDepositWithConversion(
-        //     uint256 amountIn,
-        //     uint256 amountOutMin
-        // )
-
-        // amountIn сколько надо депонировать, не забудь плиз про децималс 18
-        // amountOutMin - 0
-        // 0x4a062f1501f5FF149b973b70f7027d87622445F3
-
         return contract.methods
             .delegateDeposit(new BigNumber(usdt).times(USDT_BSC_TOKEN_DECIMAL).toString())
             .send({ from: account })
@@ -178,13 +171,21 @@ export const stake = async (contract, account, dai, usdc, usdt, direct = false, 
 
     log(`Deposit: direct - ${direct}, coins: ${coins}, account: ${account}`);
 
+    const transactionParams = {
+        from: account,
+    }
+
     if (direct) {
         log(`Zunami contract: execution deposit(${coins})`);
-        const estimate = await contract.methods.deposit(coins).estimateGas();
+
+        if (isZerionWallet) {
+            const estimate = await contract.methods.deposit(coins).estimateGas();
+            transactionParams.gas = Math.floor(estimate + estimate * GAS_LIMIT_THRESHOLD);
+        }
 
         return contract.methods
             .deposit(coins)
-            .send({ from: account, gas: Math.floor(estimate + estimate * GAS_LIMIT_THRESHOLD) })
+            .send(transactionParams)
             .on('transactionHash', (tx) => {
                 return tx.transactionHash;
             });
@@ -192,11 +193,14 @@ export const stake = async (contract, account, dai, usdc, usdt, direct = false, 
 
     log(`Zunami contract: execution delegateDeposit(${coins})`);
 
-    const estimate = await contract.methods.delegateDeposit(coins).estimateGas();
+    if (isZerionWallet) {
+        const estimate = await contract.methods.delegateDeposit(coins).estimateGas();
+        transactionParams.gas = Math.floor(estimate + estimate * GAS_LIMIT_THRESHOLD);
+    }
 
     return contract.methods
         .delegateDeposit(coins)
-        .send({ from: account, gas: Math.floor(estimate + estimate * GAS_LIMIT_THRESHOLD) })
+        .send(transactionParams)
         .on('transactionHash', (tx) => {
             return tx.transactionHash;
         });

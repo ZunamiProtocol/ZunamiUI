@@ -125,12 +125,18 @@ export const Main = (): JSX.Element => {
         }
 
         const getTotalIncome = async () => {
-            const response = await fetch(
-                getTotalIncomeUrl(account, activeBalance.toString(), chainId)
-            );
+            let response = null
+            
+            try {
+                response = await fetch(
+                    getTotalIncomeUrl(account, activeBalance.toString(), chainId)
+                );
 
-            const data = await response.json();
-            setTotalIncome(`$${data.totalIncome}`);
+                const data = await response.json();
+                setTotalIncome(`$${data.totalIncome}`);
+            } catch (error: any) {
+                log(`❗️ Error fetching total income: ${error.message}`);
+            }
         };
 
         getTotalIncome();

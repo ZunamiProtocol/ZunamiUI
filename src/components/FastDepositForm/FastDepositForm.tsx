@@ -223,9 +223,8 @@ export const FastDepositForm = (): JSX.Element => {
                                     try {
                                         await onApprove(coinNameToAddress(coin, chainId));
                                         log('USDT approved!');
-                                    } catch (e) {
-                                        log('Error while approving USDT');
-                                        log(JSON.stringify(e));
+                                    } catch (error: any) {
+                                        log(`Error while approving ${coin}: ${error.message}`);
                                         setPendingApproval(false);
                                         setPendingTx(false);
                                     }
@@ -261,9 +260,8 @@ export const FastDepositForm = (): JSX.Element => {
                                             });
                                         }
                                     } catch (error: any) {
-                                        debugger;
                                         setTransactionError(true);
-                                        log('Error while depositing USDT');
+                                        log(`❗️ Deposit error: ${error.message}`);
                                         log(JSON.stringify(error));
                                     }
 

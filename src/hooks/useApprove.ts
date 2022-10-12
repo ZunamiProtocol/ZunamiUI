@@ -27,8 +27,8 @@ const useApprove = () => {
             log(`GZLP approval granted`);
             log(tx);
             return tx.hash;
-        } catch (e) {
-            debugger;
+        } catch (error: any) {
+            log(`❗️ Error while approving GZLP: ${error.message}`)
             return false;
         }
     }, [account, masterChefContract, chainId, ethereum]);
@@ -38,8 +38,8 @@ const useApprove = () => {
             try {
                 const tx = await approve(ethereum, tokenAddress, masterChefContract, account);
                 return tx;
-            } catch (e) {
-                debugger;
+            } catch (error: any) {
+                log(`❗️ Error while approving token: ${error.message}`)
                 return false;
             }
         },
