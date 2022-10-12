@@ -13,6 +13,10 @@ const useSupportedChain = (): boolean => {
     useEffect(() => {
         const chainId = window.ethereum?.chainId;
 
+        if (!account) {
+            return false;
+        }
+
         if (window.ethereum && SUPPORTED_CHAIN_IDS.indexOf(parseInt(chainId, 16)) === -1) {
             log(`Unsupported chain detected: ${chainId}`);
             setSupportedChain(false);
