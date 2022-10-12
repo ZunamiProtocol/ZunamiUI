@@ -85,8 +85,8 @@ const addToken = async (ethereum: any, tokenSymbol: string, tokenDecimals: Numbe
       } else {
         console.log('Your loss!');
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      log(`❗️ Error while adding ${tokenSymbol} token: ${error.message}`)
     }
 }
 
@@ -597,11 +597,8 @@ export const Uzd = (): JSX.Element => {
                                                                 );
 
                                                                 log('ZLP approved');
-                                                            } catch (e) {
-                                                                log(
-                                                                    `Error while approving ZLP: ${e.message}`
-                                                                );
-                                                                console.log(e);
+                                                            } catch (error: any) {
+                                                                log(`❗️ Error while approving ZLP: ${error.message}`)
                                                             }
 
                                                             setPendingTx(false);
@@ -636,10 +633,9 @@ export const Uzd = (): JSX.Element => {
                                                                     });
 
                                                             setTransactionId(tx.transactionHash);
-                                                        } catch (error) {
+                                                        } catch (error: any) {
                                                             setTransactionError(true);
-                                                            log('Error while minting GZP');
-                                                            log(JSON.stringify(error));
+                                                            log(`❗️ Error while minting UZD: ${error.message}`)
                                                         }
 
                                                         setPendingTx(false);
@@ -690,10 +686,9 @@ export const Uzd = (): JSX.Element => {
                                                                     });
 
                                                             setTransactionId(tx.transactionHash);
-                                                        } catch (error) {
+                                                        } catch (error: any) {
                                                             setTransactionError(true);
-                                                            log('Error while redeeming ZLP');
-                                                            log(JSON.stringify(error));
+                                                            log(`❗️ Error while redeeming ZLP: ${error.message}`)
                                                         }
 
                                                         setPendingTx(false);

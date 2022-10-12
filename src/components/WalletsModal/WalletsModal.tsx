@@ -2,6 +2,7 @@ import { Modal } from 'react-bootstrap';
 import config from '../../config';
 import { useWallet } from 'use-wallet';
 import './WalletsModal.scss';
+import { log } from '../../utils/logger';
 
 export const LS_ACCOUNT_KEY = 'WALLET_ACCOUNT';
 export const LS_WALLET_TYPE_KEY = 'WALLET_TYPE';
@@ -30,7 +31,11 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
     const eth = window.ethereum || ethereum;
     const isEth = eth && eth.chainId !== '0x1';
     const onConnect = async (providerId = 'injected') => {
-        await connect(providerId);
+        try {
+            await connect(providerId);
+        } catch (connectionError: any) {
+            log(`❗️ Error connecting wallet: ${connectionError.message}`);
+        }
 
         window.localStorage.setItem(LS_WALLET_TYPE_KEY, providerId);
         let walletAddress = '';

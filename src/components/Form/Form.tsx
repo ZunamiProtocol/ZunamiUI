@@ -467,7 +467,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                     });
                                 }
                             } catch (error: any) {
-                                debugger;
+                                log(`Withdraw error: ${error.message}`);
                                 setTransactionError(error);
                             }
 
@@ -493,6 +493,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                     });
                                 }
                             } catch (error: any) {
+                                log(`Deposit error: ${error.message}`);
                                 setTransactionError(error);
                             }
 
