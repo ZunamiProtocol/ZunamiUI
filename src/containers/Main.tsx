@@ -28,6 +28,7 @@ import useSupportedChain from '../hooks/useSupportedChain';
 import { log } from '../utils/logger';
 import usePausedContract from '../hooks/usePausedContract';
 import { EthMergeWarningModal } from '../components/EthMergeWarningModal/EthMergeWarningModal';
+import useUzdBalance from '../hooks/useUzdBalance';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -87,6 +88,8 @@ export const Main = (): JSX.Element => {
     const balance = useBalanceOf();
     const oldBscBalance = useOldBscBalance();
     const balances = useCrossChainBalances(lpPrice);
+    const uzdBalance = useUzdBalance();
+
     const userMaxWithdraw =
         lpPrice.toNumber() > 0 && balance.toNumber() !== -1
             ? lpPrice.multipliedBy(chainId === 1 ? balances[0].value : balances[1].value)
@@ -125,22 +128,33 @@ export const Main = (): JSX.Element => {
         }
 
         const getTotalIncome = async () => {
-            let response = null
+            let response = null;
+
+            let totalIncomeBalance = activeBalance;
+
+            // if user has minted UZD
+            if (uzdBalance.toNumber()) {
+                totalIncomeBalance = totalIncomeBalance.plus(uzdBalance.dividedBy(lpPrice))
+            }
             
             try {
-                response = await fetch(
-                    getTotalIncomeUrl(account, activeBalance.toString(), chainId)
-                );
+                const totalIncomeUrl =
+                    getTotalIncomeUrl(account, totalIncomeBalance.toString(), chainId);
+                
+                response = await fetch(totalIncomeUrl);
 
                 const data = await response.json();
                 setTotalIncome(`$${data.totalIncome}`);
+
+                log(`Total income. Requesting (${totalIncomeUrl})`)
+                log(`Total income. Value set to: ${data.totalIncome}`);
             } catch (error: any) {
                 log(`❗️ Error fetching total income: ${error.message}`);
             }
         };
 
         getTotalIncome();
-    }, [account, balances, chainId]);
+    }, [account, balances, chainId, lpPrice, uzdBalance]);
 
     const chartData =
         poolStats && poolStats.pools && zunamiInfo
