@@ -49,6 +49,7 @@ export const getTransHistoryUrl = (
 };
 
 export const getBackendSlippage = async (lpAmount: string, tokenIndex: number) => {
+    log(`Requesting backend slippage (${`${root}/zunami/slippage?tokenIndex=${tokenIndex}&lpAmount=${lpAmount}`})`);
     return fetch(`${root}/zunami/slippage?tokenIndex=${tokenIndex}&lpAmount=${lpAmount}`)
         .then((response) => {
             if (response.status !== 200) {

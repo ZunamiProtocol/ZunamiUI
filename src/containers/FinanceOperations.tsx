@@ -179,7 +179,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                 setDai(coinValue);
 
                 const slippage = await getBackendSlippage(
-                    percentOfBalance.toNumber().toString(),
+                    percentOfBalance.decimalPlaces(0).toString(),
                     0
                 );
 
@@ -193,7 +193,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                 setUsdc(coinValue);
 
                 const slippage = await getBackendSlippage(
-                    percentOfBalance.toNumber().toString(),
+                    percentOfBalance.decimalPlaces(0).toString(),
                     1
                 );
 
@@ -207,7 +207,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                 setUsdt(coinValue);
 
                 const slippage = await getBackendSlippage(
-                    percentOfBalance.toNumber().toString(),
+                    percentOfBalance.decimalPlaces(0).toString(),
                     2
                 );
 
