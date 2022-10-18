@@ -609,9 +609,7 @@ export const Uzd = (): JSX.Element => {
                                             {zlpAllowance.toNumber() > 0 && mode === 'mint' && (
                                                 <input
                                                     type="button"
-                                                    className={`zun-button ${
-                                                        depositDisabled ? 'disabled' : ''
-                                                    }`}
+                                                    className='zun-button disabled'
                                                     value="Mint"
                                                     onClick={async () => {
                                                         setPendingTx(true);
