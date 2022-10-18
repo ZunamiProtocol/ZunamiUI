@@ -672,7 +672,7 @@ export const Uzd = (): JSX.Element => {
                                                 <input
                                                     type="button"
                                                     className={`zun-button ${
-                                                        withdrawDisabled ? 'disabled' : ''
+                                                        depositDisabled ? 'disabled' : ''
                                                     }`}
                                                     value="Mint"
                                                     onClick={async () => {
