@@ -7,7 +7,7 @@ import { getMasterChefContract } from '../sushi/utils';
 import { log } from '../utils/logger';
 import { contractAddresses } from '../sushi/lib/constants';
 
-const useUzdBalance = (contractAddress: string | undefined = undefined) => {
+const useUzdBalance = (address: string | undefined = undefined) => {
     const [balance, setBalance] = useState(new BigNumber(BIG_ZERO));
     const { account, ethereum } = useWallet();
 
@@ -25,11 +25,11 @@ const useUzdBalance = (contractAddress: string | undefined = undefined) => {
 
         const getBalance = async () => {
             const contract = sushi.getEthContract();
-            contract.options.address = contractAddresses.uzd[1];
+            contract.options.address = address || contractAddresses.uzd[1];
 
             const value = await contract.methods.balanceOf(account).call();
             if (value) {
-                log(`🔄 UZD Balance set to ${value}`);
+                log(`🔄 UZD Balance (contract ${contract.options.address}) set to ${value}`);
                 setBalance(new BigNumber(value));
             }
         };
@@ -38,7 +38,7 @@ const useUzdBalance = (contractAddress: string | undefined = undefined) => {
 
         let refreshInterval = setInterval(getBalance, 5000);
         return () => clearInterval(refreshInterval);
-    }, [account, chainId, masterChefContract, sushi, contractAddress]);
+    }, [account, chainId, masterChefContract, sushi, address]);
 
     return balance;
 };

@@ -9,12 +9,7 @@ import useUzdBalance from '../hooks/useUzdBalance';
 import useSushi from '../hooks/useSushi';
 import useUzdTotalSupply from '../hooks/useUzdTotalSupply';
 import useEagerConnect from '../hooks/useEagerConnect';
-import {
-    BIG_TEN,
-    BIG_ZERO,
-    getBalanceNumber,
-    UZD_DECIMALS,
-} from '../utils/formatbalance';
+import { BIG_TEN, BIG_ZERO, getBalanceNumber, UZD_DECIMALS } from '../utils/formatbalance';
 import useLpPrice from '../hooks/useLpPrice';
 import BigNumber from 'bignumber.js';
 import { getAllowance } from '../utils/erc20';
@@ -26,6 +21,7 @@ import { ZunamiInfo, ZunamiInfoFetch } from '../components/SideBar/SideBar';
 import { zunamiInfoUrl, curvePoolsApyUrl } from '../api/api';
 import useFetch from 'react-fetch-hook';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
+import { UzdMigrationModal } from '../components/UzdMigrationModal/UzdMigrationModal';
 
 interface CurvePoolInfo {
     apy: number;
@@ -63,32 +59,37 @@ export const formatBigNumberFull = (balance: BigNumber) => {
     return balance.dividedBy(BIG_TEN.pow(UZD_DECIMALS)).toFixed().toString();
 };
 
-const addToken = async (ethereum: any, tokenSymbol: string, tokenDecimals: Number, tokenImage: string) => {
+const addToken = async (
+    ethereum: any,
+    tokenSymbol: string,
+    tokenDecimals: Number,
+    tokenImage: string
+) => {
     const tokenAddress = contractAddresses.uzd[1];
 
     try {
-      const wasAdded = await ethereum.request({
-        method: 'wallet_watchAsset',
-        params: {
-          type: 'ERC20',
-          options: {
-            address: tokenAddress,
-            symbol: tokenSymbol,
-            decimals: tokenDecimals,
-            image: tokenImage,
-          },
-        },
-      });
+        const wasAdded = await ethereum.request({
+            method: 'wallet_watchAsset',
+            params: {
+                type: 'ERC20',
+                options: {
+                    address: tokenAddress,
+                    symbol: tokenSymbol,
+                    decimals: tokenDecimals,
+                    image: tokenImage,
+                },
+            },
+        });
 
-      if (wasAdded) {
-        console.log('Thanks for your interest!');
-      } else {
-        console.log('Your loss!');
-      }
+        if (wasAdded) {
+            console.log('Thanks for your interest!');
+        } else {
+            console.log('Your loss!');
+        }
     } catch (error: any) {
-      log(`❗️ Error while adding ${tokenSymbol} token: ${error.message}`)
+        log(`❗️ Error while adding ${tokenSymbol} token: ${error.message}`);
     }
-}
+};
 
 export const Uzd = (): JSX.Element => {
     const { account, connect, ethereum, chainId } = useWallet();
@@ -96,6 +97,7 @@ export const Uzd = (): JSX.Element => {
     const masterChefContract = getMasterChefContract(sushi);
     const zlpBalance = useBalanceOf(undefined, true);
     const uzdBalance = useUzdBalance();
+    const deprecatedUzdBalance = useUzdBalance(contractAddresses.deprecated.v_1_0_uzd);
     const uzdTotalSupply = useUzdTotalSupply();
     const [zunLpValue, setZunLpValue] = useState('');
     const [uzdValue, setUzdValue] = useState('');
@@ -117,14 +119,15 @@ export const Uzd = (): JSX.Element => {
 
     const zunamiInfo = zunData as ZunamiInfo;
 
-    const {
-        isLoading: isCurveLoading,
-        data: curvePoolData,
-    } = useFetch(curvePoolsApyUrl) as CurveInfoFetch;
+    const { isLoading: isCurveLoading, data: curvePoolData } = useFetch(
+        curvePoolsApyUrl
+    ) as CurveInfoFetch;
 
-    const uzdCurvePool = !isCurveLoading
-        && curvePoolData.data.poolDetails
-        .filter((pool: CurvePoolInfo) => pool.poolSymbol === 'UZD3CRV-f')[0]
+    const uzdCurvePool =
+        !isCurveLoading &&
+        curvePoolData.data.poolDetails.filter(
+            (pool: CurvePoolInfo) => pool.poolSymbol === 'UZD3CRV-f'
+        )[0];
 
     useEagerConnect(account ? account : '', connect, ethereum);
 
@@ -183,6 +186,17 @@ export const Uzd = (): JSX.Element => {
         pendingTx ||
         parseFloat(uzdValue) > uzdBalance.dividedBy(BIG_TEN.pow(UZD_DECIMALS)).toNumber();
 
+    // v1.1 migration modal
+    const [showMigrationModal, setShowMigrationModal] = useState(false);
+
+    useEffect(() => {
+        if (deprecatedUzdBalance) {
+            setShowMigrationModal(true);
+        } else {
+            setShowMigrationModal(false);
+        }
+    }, [deprecatedUzdBalance]);
+
     return (
         <React.Fragment>
             <Header />
@@ -190,6 +204,13 @@ export const Uzd = (): JSX.Element => {
                 {!supportedChain && (
                     <UnsupportedChain text="You're using unsupported chain. Please, switch to Ethereum network." />
                 )}
+                <UzdMigrationModal
+                    show={showMigrationModal}
+                    balance={deprecatedUzdBalance}
+                    onHide={() => {
+                        setShowMigrationModal(false);
+                    }}
+                />
                 <div className="UzdContainer__Content">
                     <div className="UzdContainer__Sidebar">
                         <div className="UzdContainer__Sidebar_Title">
@@ -240,21 +261,43 @@ export const Uzd = (): JSX.Element => {
                         </div>
                         <div className="row">
                             <div className="col-sm-6 col-6">
-                                <div className="InfoBlock InfoBlock_colorful" data-title="UZD Balance">
+                                <div
+                                    className="InfoBlock InfoBlock_colorful"
+                                    data-title="UZD Balance"
+                                >
                                     <div className="InfoBlock__title ">
                                         <span>UZD Balance</span>
                                         <div className="InfoBlock__buttons">
-                                            <div onClick={async () => {
-                                                navigator.clipboard.writeText(contractAddresses.uzd[1]).then(function() {
-                                                    alert('UZD address copied to the clipboard');
-                                                });
-                                            }}>
-                                                <img src="/copy-icon.svg" alt="Copy token address" />
+                                            <div
+                                                onClick={async () => {
+                                                    navigator.clipboard
+                                                        .writeText(contractAddresses.uzd[1])
+                                                        .then(function () {
+                                                            alert(
+                                                                'UZD address copied to the clipboard'
+                                                            );
+                                                        });
+                                                }}
+                                            >
+                                                <img
+                                                    src="/copy-icon.svg"
+                                                    alt="Copy token address"
+                                                />
                                             </div>
-                                            <div onClick={async () => {
-                                                addToken(ethereum, 'UZD', UZD_DECIMALS, 'https://app.zunami.io/uzd-token.png');
-                                            }}>
-                                                <img src="/metamask-icon.svg" alt="Add token to Metamask" />
+                                            <div
+                                                onClick={async () => {
+                                                    addToken(
+                                                        ethereum,
+                                                        'UZD',
+                                                        UZD_DECIMALS,
+                                                        'https://app.zunami.io/uzd-token.png'
+                                                    );
+                                                }}
+                                            >
+                                                <img
+                                                    src="/metamask-icon.svg"
+                                                    alt="Add token to Metamask"
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -264,26 +307,43 @@ export const Uzd = (): JSX.Element => {
                                 </div>
                             </div>
                             <div className="col-sm-6 col-6">
-                                <div className="InfoBlock InfoBlock_colorful" data-title="ZLP Balance">
+                                <div
+                                    className="InfoBlock InfoBlock_colorful"
+                                    data-title="ZLP Balance"
+                                >
                                     <div className="InfoBlock__title ">
                                         <span>ZLP Balance</span>
                                         <div className="InfoBlock__buttons">
-                                            <div onClick={async () => {
-                                                navigator.clipboard.writeText(contractAddresses.zunami[1]).then(function() {
-                                                    alert('ZLP address copied to the clipboard');
-                                                });
-                                            }}>
-                                                <img src="/copy-icon.svg" alt="Copy token address" />
+                                            <div
+                                                onClick={async () => {
+                                                    navigator.clipboard
+                                                        .writeText(contractAddresses.zunami[1])
+                                                        .then(function () {
+                                                            alert(
+                                                                'ZLP address copied to the clipboard'
+                                                            );
+                                                        });
+                                                }}
+                                            >
+                                                <img
+                                                    src="/copy-icon.svg"
+                                                    alt="Copy token address"
+                                                />
                                             </div>
-                                            <div onClick={async () => {
-                                                addToken(
-                                                    ethereum,
-                                                    'ZLP',
-                                                    UZD_DECIMALS,
-                                                    'https://app.zunami.io/zlp-token.jpg'
-                                                );
-                                            }}>
-                                                <img src="/metamask-icon.svg" alt="Add token to Metamask" />
+                                            <div
+                                                onClick={async () => {
+                                                    addToken(
+                                                        ethereum,
+                                                        'ZLP',
+                                                        UZD_DECIMALS,
+                                                        'https://app.zunami.io/zlp-token.jpg'
+                                                    );
+                                                }}
+                                            >
+                                                <img
+                                                    src="/metamask-icon.svg"
+                                                    alt="Add token to Metamask"
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -598,7 +658,9 @@ export const Uzd = (): JSX.Element => {
 
                                                                 log('ZLP approved');
                                                             } catch (error: any) {
-                                                                log(`❗️ Error while approving ZLP: ${error.message}`)
+                                                                log(
+                                                                    `❗️ Error while approving ZLP: ${error.message}`
+                                                                );
                                                             }
 
                                                             setPendingTx(false);
@@ -633,7 +695,9 @@ export const Uzd = (): JSX.Element => {
                                                             setTransactionId(tx.transactionHash);
                                                         } catch (error: any) {
                                                             setTransactionError(true);
-                                                            log(`❗️ Error while minting UZD: ${error.message}`)
+                                                            log(
+                                                                `❗️ Error while minting UZD: ${error.message}`
+                                                            );
                                                         }
 
                                                         setPendingTx(false);
@@ -665,12 +729,10 @@ export const Uzd = (): JSX.Element => {
                                                             const sumToWithdraw = withdrawAll
                                                                 ? uzdBalance.toString()
                                                                 : new BigNumber(uzdValue)
-                                                                    .multipliedBy(
-                                                                        BIG_TEN.pow(
-                                                                            UZD_DECIMALS
-                                                                        )
-                                                                    )
-                                                                    .toString();
+                                                                      .multipliedBy(
+                                                                          BIG_TEN.pow(UZD_DECIMALS)
+                                                                      )
+                                                                      .toString();
 
                                                             const tx =
                                                                 await sushi.contracts.uzdContract.methods
@@ -686,7 +748,9 @@ export const Uzd = (): JSX.Element => {
                                                             setTransactionId(tx.transactionHash);
                                                         } catch (error: any) {
                                                             setTransactionError(true);
-                                                            log(`❗️ Error while redeeming ZLP: ${error.message}`)
+                                                            log(
+                                                                `❗️ Error while redeeming ZLP: ${error.message}`
+                                                            );
                                                         }
 
                                                         setPendingTx(false);
@@ -715,7 +779,9 @@ export const Uzd = (): JSX.Element => {
                                                         <div className="title">Curve APY</div>
                                                         <div className="status green"></div>
                                                     </div>
-                                                    <div className="percent">{uzdCurvePool.apyFormatted}</div>
+                                                    <div className="percent">
+                                                        {uzdCurvePool.apyFormatted}
+                                                    </div>
                                                 </div>
                                             </div>
                                             <h2 className="how-it-works">How it works?</h2>
