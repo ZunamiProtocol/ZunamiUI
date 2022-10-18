@@ -190,7 +190,7 @@ export const Uzd = (): JSX.Element => {
     const [showMigrationModal, setShowMigrationModal] = useState(false);
 
     useEffect(() => {
-        if (deprecatedUzdBalance) {
+        if (deprecatedUzdBalance.toNumber() > 0) {
             setShowMigrationModal(true);
         } else {
             setShowMigrationModal(false);
