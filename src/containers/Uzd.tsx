@@ -10,7 +10,7 @@ import useSushi from '../hooks/useSushi';
 import useUzdTotalSupply from '../hooks/useUzdTotalSupply';
 import useEagerConnect from '../hooks/useEagerConnect';
 import { BIG_TEN, BIG_ZERO, getBalanceNumber, UZD_DECIMALS } from '../utils/formatbalance';
-import useLpPrice from '../hooks/useLpPrice';
+import useUzdLpPrice from '../hooks/useUzdLpPrice';
 import BigNumber from 'bignumber.js';
 import { getAllowance } from '../utils/erc20';
 import { contractAddresses } from '../sushi/lib/constants';
@@ -44,7 +44,7 @@ function convertZlpToUzd(zlpAmount: BigNumber, lpPrice: BigNumber): BigNumber {
 
 const getFullDisplayBalance = (balance: BigNumber, decimals = 18, roundDown = false) => {
     const newNumber = new BigNumber(balance);
-    return newNumber.dividedBy(BIG_TEN.pow(decimals)).toFixed(2, 1);
+    return newNumber.dividedBy(BIG_TEN.pow(decimals)).decimalPlaces(2, 1).toString();
 };
 
 function convertUzdToZlp(uzdAmount: BigNumber, lpPrice: BigNumber): BigNumber {
@@ -52,11 +52,11 @@ function convertUzdToZlp(uzdAmount: BigNumber, lpPrice: BigNumber): BigNumber {
 }
 
 function formatUzd(sum: BigNumber) {
-    return sum.dividedBy(BIG_TEN.pow(UZD_DECIMALS)).toFixed(2, 1);
+    return sum.dividedBy(BIG_TEN.pow(UZD_DECIMALS)).decimalPlaces(2, 1).toString();
 }
 
 export const formatBigNumberFull = (balance: BigNumber) => {
-    return balance.dividedBy(BIG_TEN.pow(UZD_DECIMALS)).toFixed().toString();
+    return balance.dividedBy(BIG_TEN.pow(UZD_DECIMALS)).decimalPlaces(18, 1).toString();
 };
 
 const addToken = async (
@@ -101,7 +101,7 @@ export const Uzd = (): JSX.Element => {
     const uzdTotalSupply = useUzdTotalSupply();
     const [zunLpValue, setZunLpValue] = useState('');
     const [uzdValue, setUzdValue] = useState('');
-    const lpPrice = useLpPrice();
+    const lpPrice = useUzdLpPrice();
     const [zlpAllowance, setZlpAllowance] = useState(BIG_ZERO);
     const [pendingTx, setPendingTx] = useState(false);
     const [transactionError, setTransactionError] = useState(false);
@@ -716,36 +716,55 @@ export const Uzd = (): JSX.Element => {
                                                     value="Redeem"
                                                     onClick={async () => {
                                                         setPendingTx(true);
-
-                                                        log(
-                                                            `UZD contract (ETH): withdraw('${new BigNumber(
-                                                                uzdValue
-                                                            )
-                                                                .multipliedBy(
-                                                                    BIG_TEN.pow(UZD_DECIMALS)
-                                                                )
-                                                                .toString()}', '${account}', '${account}'')`
-                                                        );
+                                                        let tx = null;
 
                                                         try {
-                                                            const sumToWithdraw = withdrawAll
-                                                                ? uzdBalance.toString()
-                                                                : new BigNumber(uzdValue)
-                                                                      .multipliedBy(
-                                                                          BIG_TEN.pow(UZD_DECIMALS)
-                                                                      )
-                                                                      .toString();
+                                                            if (withdrawAll) {
+                                                                log(
+                                                                    'UZD contract (ETH): withdrawAll()'
+                                                                );
 
-                                                            const tx =
-                                                                await sushi.contracts.uzdContract.methods
-                                                                    .withdraw(
-                                                                        sumToWithdraw,
-                                                                        account,
-                                                                        account
+                                                                tx =
+                                                                    await sushi.contracts.uzdContract.methods
+                                                                        .withdrawAll(
+                                                                            account,
+                                                                            account
+                                                                        )
+                                                                        .send({
+                                                                            from: account,
+                                                                        });
+                                                            } else {
+                                                                const sumToWithdraw = new BigNumber(
+                                                                    uzdValue
+                                                                )
+                                                                    .multipliedBy(
+                                                                        BIG_TEN.pow(UZD_DECIMALS)
                                                                     )
-                                                                    .send({
-                                                                        from: account,
-                                                                    });
+                                                                    .toString();
+
+                                                                log(
+                                                                    `UZD contract (ETH): withdraw('${new BigNumber(
+                                                                        uzdValue
+                                                                    )
+                                                                        .multipliedBy(
+                                                                            BIG_TEN.pow(
+                                                                                UZD_DECIMALS
+                                                                            )
+                                                                        )
+                                                                        .toString()}', '${account}', '${account}'')`
+                                                                );
+
+                                                                tx =
+                                                                    await sushi.contracts.uzdContract.methods
+                                                                        .withdraw(
+                                                                            sumToWithdraw,
+                                                                            account,
+                                                                            account
+                                                                        )
+                                                                        .send({
+                                                                            from: account,
+                                                                        });
+                                                            }
 
                                                             setTransactionId(tx.transactionHash);
                                                         } catch (error: any) {
