@@ -829,7 +829,7 @@ export const Uzd = (): JSX.Element => {
                                                 </li>
                                             </ul>
                                             <a
-                                                href="https://curve.fi/factory/203"
+                                                href="https://curve.fi/factory/"
                                                 className="go-to-curve"
                                                 target="_blank"
                                                 rel="noreferrer"
@@ -864,7 +864,7 @@ export const Uzd = (): JSX.Element => {
                                             </div>
                                             <div className="text-center">
                                                 <a
-                                                    href="https://curve.exchange/#/ethereum/pools/factory-v2-203/swap"
+                                                    href="https://curve.exchange/#/ethereum/pools/factory-v2-/swap"
                                                     className="go-to-curve ms-auto me-auto"
                                                     target="_blank"
                                                     rel="noreferrer"
