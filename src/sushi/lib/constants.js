@@ -27,4 +27,7 @@ export const contractAddresses = {
         v_1_1_bsc: '0xFEdcBA60B3842e3F9Ed8BC56De171da5426AF8CF',
         v_1_0_uzd: '0xe5c987f93734cb44ab03f1b18e30a374254891b6',
     },
+    curve: {
+        uzdPool: '0xbeDca4252b27cc12ed7DaF393F331886F86cd3CE',
+    },
 };

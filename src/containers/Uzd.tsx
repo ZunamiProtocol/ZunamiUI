@@ -126,7 +126,7 @@ export const Uzd = (): JSX.Element => {
     const uzdCurvePool =
         !isCurveLoading &&
         curvePoolData.data.poolDetails.filter(
-            (pool: CurvePoolInfo) => pool.poolSymbol === 'UZD3CRV-f'
+            (pool: CurvePoolInfo) => pool.poolAddress === contractAddresses.curve.uzdPool
         )[0];
 
     useEagerConnect(account ? account : '', connect, ethereum);
