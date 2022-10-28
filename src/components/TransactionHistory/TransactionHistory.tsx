@@ -51,7 +51,7 @@ export const TransactionHistory = (props: TransactionHistoryProps): JSX.Element 
     const { chainId } = useWallet();
 
     const onScroll = (e: any) => {
-        const areaHeight = e.target.offsetHeight - 15;
+        const areaHeight = e.target.offsetHeight - 25;
         const totalScroll = e.target.scrollTop + areaHeight;
         const fullHeight = e.target.children[0].offsetHeight;
 
@@ -87,7 +87,7 @@ export const TransactionHistory = (props: TransactionHistoryProps): JSX.Element 
                                         />
                                         <span className="ms-1">{getIconFromTransaction(item)}</span>
                                     </td>
-                                    <td>${item.value.toFixed(2)}</td>
+                                    <td>{item.status === 'COMPLETED' ? `$${item.value.toFixed(2)}` : '-'}</td>
                                     <td>{format(new Date(item.dateTime), 'd MMM, yyyy, h:mm a')}</td>
                                     <td
                                         className={`${item.status} d-flex align-items-center justify-content-end status-col`}

@@ -653,7 +653,6 @@ export const Uzd = (): JSX.Element => {
                                                                     contractAddresses.zunami[1],
                                                                     sushi.contracts.uzdContract,
                                                                     account
-                                                                    // new BigNumber('1000000000')
                                                                 );
 
                                                                 log('ZLP approved');
@@ -797,11 +796,10 @@ export const Uzd = (): JSX.Element => {
                                                 <div className="divider"></div>
                                                 <div className="pool-percent">
                                                     <div className="inner">
-                                                        <div className="title">Curve APY</div>
-                                                        <div className="status green"></div>
+                                                        <div className="title">Curve APY / Extra Reward APR</div>
                                                     </div>
                                                     <div className="percent">
-                                                        {uzdCurvePool.apyFormatted}
+                                                        {uzdCurvePool.apyFormatted} / {isLoading ? 'n/a' : `${zunamiInfo.curve.uzdRewardApr.toFixed(2)}%`}
                                                     </div>
                                                 </div>
                                             </div>

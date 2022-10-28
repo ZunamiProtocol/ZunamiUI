@@ -81,6 +81,10 @@ interface PoolsStats {
 }
 
 export const Main = (): JSX.Element => {
+    useEffect(() => {
+        log(`🏁 Session started ${new Date().toString()}`);
+    }, []);
+
     const { account, connect, ethereum, chainId } = useWallet();
     useEagerConnect(account ? account : '', connect, ethereum);
     const isContractPaused = usePausedContract();
