@@ -21,13 +21,13 @@ export function log(message: string): void {
  * @param message 
  */
 function appendLogs(message: string) {
-    const data = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '{}');
+    const data = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '[]');
     data.push(message);
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
 export function copyLogs() {
-    const data = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '{}');
+    const data = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '[]');
 
     navigator.clipboard.writeText(data.join(`\n`)).then(() => {
         alert('Logs copied to clipboard');
