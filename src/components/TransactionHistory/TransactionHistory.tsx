@@ -51,7 +51,7 @@ export const TransactionHistory = (props: TransactionHistoryProps): JSX.Element 
     const { chainId } = useWallet();
 
     const onScroll = (e: any) => {
-        const areaHeight = e.target.offsetHeight - 15;
+        const areaHeight = e.target.offsetHeight - 25;
         const totalScroll = e.target.scrollTop + areaHeight;
         const fullHeight = e.target.children[0].offsetHeight;
 

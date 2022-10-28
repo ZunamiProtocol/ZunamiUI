@@ -653,7 +653,6 @@ export const Uzd = (): JSX.Element => {
                                                                     contractAddresses.zunami[1],
                                                                     sushi.contracts.uzdContract,
                                                                     account
-                                                                    // new BigNumber('1000000000')
                                                                 );
 
                                                                 log('ZLP approved');
