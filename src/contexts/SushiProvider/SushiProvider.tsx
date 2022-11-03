@@ -41,7 +41,7 @@ type Config = {
 };
 
 const SushiProvider: React.FC = ({ children }) => {
-    const { ethereum } = useWallet();
+    const { ethereum, chainId } = useWallet();
     const { provider } = useEthExplorer();
     const [sushi, setSushi] = useState<any>();
 
@@ -70,7 +70,7 @@ const SushiProvider: React.FC = ({ children }) => {
             setSushi(sushiLib);
             window.sushisauce = sushiLib;
         }
-    }, [provider, ethereum]);
+    }, [provider, ethereum, chainId]);
 
     return <Context.Provider value={{ sushi }}>{children}</Context.Provider>;
 };

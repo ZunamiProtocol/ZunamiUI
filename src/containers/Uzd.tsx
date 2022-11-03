@@ -636,7 +636,7 @@ export const Uzd = (): JSX.Element => {
                                             </div>
                                         </div>
                                         <div className="d-flex align-items-center">
-                                            {zlpAllowance.toNumber() === 0 && (
+                                            {zlpAllowance.toNumber() === 0 && mode === 'mint' && (
                                                 <div>
                                                     <input
                                                         type="button"
