@@ -13,13 +13,14 @@ const useUnstake = (
 ) => {
     const { account, chainId, ethereum } = useWallet();
     const sushi = useSushi();
-    const zunamiContract = getMasterChefContract(sushi, chainId);
     const isZerionWallet = ethereum?.walletMeta?.name === 'Zerion';
 
     const handleUnstake = useCallback(async () => {
         if (!account) {
             return;
         }
+
+        let zunamiContract = getMasterChefContract(sushi, chainId);
 
         const balanceToWithdraw = balance
             .multipliedBy(sharePercent / 100)
@@ -59,7 +60,7 @@ const useUnstake = (
         }
     }, [
         account,
-        zunamiContract,
+        sushi,
         optimized,
         sharePercent,
         coinIndex,
