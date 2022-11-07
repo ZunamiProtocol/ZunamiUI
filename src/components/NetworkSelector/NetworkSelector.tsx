@@ -9,6 +9,7 @@ interface NetworkSelectorProps extends React.HTMLProps<HTMLDivElement> {
     onNetworkChange?: Function;
     hideActiveNetwork: boolean;
     autoChange: boolean;
+    customNetworksList?: Array<Network>;
 }
 
 export interface Network {
@@ -92,13 +93,14 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
     onNetworkChange,
     autoChange = true,
     hideActiveNetwork = false,
+    customNetworksList,
 }) => {
     const [activeNetwork, setActiveNetwork] = useState<Network>(networks[0]);
     const eth = window.ethereum;
     const { chainId } = useWallet();
-    const supportedChainIds = [1, 56];
     const [chainSupported, setChainSupported] = useState(false);
-    const availableNetworks = networks.filter(
+    const networksList = customNetworksList ? customNetworksList : networks;
+    const availableNetworks = networksList.filter(
         (item) => [1, 56].indexOf(parseInt(item.key, 16)) !== -1
     );
 
@@ -106,6 +108,8 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
         if (!chainId) {
             return;
         }
+
+        const supportedChainIds = [1, 56];
 
         const defaultNetwork = networks.filter(
             (network) => parseInt(network.key, 16) === chainId
@@ -116,7 +120,7 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
         }
 
         setChainSupported(supportedChainIds.indexOf(parseInt(activeNetwork.key, 16)) !== -1);
-    }, [chainId, activeNetwork, supportedChainIds, hideActiveNetwork]);
+    }, [chainId, activeNetwork, hideActiveNetwork]);
 
     if (!activeNetwork) {
         return <div></div>;
