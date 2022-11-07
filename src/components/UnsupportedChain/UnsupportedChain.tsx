@@ -4,11 +4,14 @@ import './UnsupportedChain.scss';
 
 interface UnsupportedChainProps {
     text: string;
+    customNetworksList?: Array<Network>;
 }
 
 export const UnsupportedChain = (props: UnsupportedChainProps): JSX.Element => {
     const eth = window.ethereum;
     const [activeNetwork, setActiveNetwork] = useState<Network>(networks[0]);
+    const networksList = props.customNetworksList ? props.customNetworksList : undefined;
+
     return (
         <div className="UnsupportedChain">
             <div className="UnsupportedChain__Content">
@@ -18,6 +21,7 @@ export const UnsupportedChain = (props: UnsupportedChainProps): JSX.Element => {
                         className="ms-0"
                         hideActiveNetwork={true}
                         autoChange={false}
+                        customNetworksList={networksList}
                         onNetworkChange={(network: Network) => {
                             setActiveNetwork(network);
                         }}
