@@ -22,6 +22,7 @@ import { zunamiInfoUrl, curvePoolsApyUrl } from '../api/api';
 import useFetch from 'react-fetch-hook';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
 import { UzdMigrationModal } from '../components/UzdMigrationModal/UzdMigrationModal';
+import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar';
 
 interface CurvePoolInfo {
     apy: number;
@@ -200,6 +201,7 @@ export const Uzd = (): JSX.Element => {
     return (
         <React.Fragment>
             <Header />
+            <MobileSidebar />
             <Container className={'h-100 d-flex justify-content-between flex-column UzdContainer'}>
                 {!supportedChain && (
                     <UnsupportedChain text="You're using unsupported chain. Please, switch to Ethereum network." />
