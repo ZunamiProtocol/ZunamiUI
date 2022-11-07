@@ -23,6 +23,7 @@ import useFetch from 'react-fetch-hook';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
 import { UzdMigrationModal } from '../components/UzdMigrationModal/UzdMigrationModal';
 import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar';
+import { networks } from '../components/NetworkSelector/NetworkSelector';
 
 interface CurvePoolInfo {
     apy: number;
@@ -204,7 +205,10 @@ export const Uzd = (): JSX.Element => {
             <MobileSidebar />
             <Container className={'h-100 d-flex justify-content-between flex-column UzdContainer'}>
                 {!supportedChain && (
-                    <UnsupportedChain text="You're using unsupported chain. Please, switch to Ethereum network." />
+                    <UnsupportedChain
+                        text="You're using unsupported chain. Please, switch to Ethereum network."
+                        customNetworksList={[networks[0]]}
+                    />
                 )}
                 <UzdMigrationModal
                     show={showMigrationModal}
