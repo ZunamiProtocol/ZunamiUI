@@ -9,7 +9,7 @@ interface HowToUseProps {
 export const HowToUse = (props: HowToUseProps): JSX.Element => {
     return (
         <Button variant={'light'} className={'HowToUse'} onClick={props.onClick}>
-            <span className={'HowToUse__lg'}>How to use</span>
+            <span className={'HowToUse__lg'}>View docs</span>
             <span className={'HowToUse__sm'}>?</span>
         </Button>
     );

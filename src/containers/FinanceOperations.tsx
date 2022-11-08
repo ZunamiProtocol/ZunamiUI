@@ -531,7 +531,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
             <footer>
                 <div className="mobile">
                     <a href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing">
-                        How to use?
+                        View docs
                     </a>
                     <a href="https://www.zunami.io/#faq-main" target="_blank" rel="noreferrer">
                         FAQ

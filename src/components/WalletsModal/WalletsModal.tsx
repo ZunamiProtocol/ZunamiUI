@@ -32,6 +32,7 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
     const isEth = eth && eth.chainId !== '0x1';
     const onConnect = async (providerId = 'injected') => {
         try {
+            log(`🔑 Attempt to connect wallet (provider ID is "${providerId}")`);
             await connect(providerId);
         } catch (connectionError: any) {
             log(`❗️ Error connecting wallet: ${connectionError.message}`);
@@ -97,7 +98,7 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
             <Modal.Header closeButton>
                 <Modal.Title>Connect a wallet</Modal.Title>
             </Modal.Header>
-            <Modal.Body className="d-flex gap-3 flex-row justify-content-center align-items-start WalletsModal">
+            <Modal.Body className="d-flex gap-3 flex-row justify-content-center align-items-start flex-wrap WalletsModal">
                 <button
                     onClick={() => onConnect('injected')}
                     className="border-0 d-inline-flex flex-column justify-content-center align-items-center bg-transparent"
