@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Header } from '../components/Header/Header';
 import './Uzd.scss';
 import { Container, Toast, ToastContainer } from 'react-bootstrap';
@@ -24,6 +24,7 @@ import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChai
 import { UzdMigrationModal } from '../components/UzdMigrationModal/UzdMigrationModal';
 import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar';
 import { networks } from '../components/NetworkSelector/NetworkSelector';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 interface CurvePoolInfo {
     apy: number;
@@ -112,6 +113,9 @@ export const Uzd = (): JSX.Element => {
     const [ltvValue, setLtvValue] = useState('0');
     const [supportedChain, setSupportedChain] = useState(true);
     const [withdrawAll, setWithdrawAll] = useState(false);
+    const target = useRef(null);
+    const [showHint, setShowHint] = useState(false);
+    const hint = 'The new version of UZD v1.2 is coming soon…';
 
     const {
         isLoading,
@@ -674,44 +678,17 @@ export const Uzd = (): JSX.Element => {
                                                 </div>
                                             )}
                                             {zlpAllowance.toNumber() > 0 && mode === 'mint' && (
-                                                <input
-                                                    type="button"
-                                                    className={`zun-button ${
-                                                        depositDisabled ? 'disabled' : ''
-                                                    }`}
-                                                    value="Mint"
-                                                    onClick={async () => {
-                                                        setPendingTx(true);
-
-                                                        const sum = new BigNumber(zunLpValue)
-                                                            .multipliedBy(BIG_TEN.pow(UZD_DECIMALS))
-                                                            .toString();
-
-                                                        log(
-                                                            `UZD contract (ETH): deposit('${sum}', '${account}')`
-                                                        );
-
-                                                        try {
-                                                            const tx =
-                                                                await sushi.contracts.uzdContract.methods
-                                                                    .deposit(sum, account)
-                                                                    .send({
-                                                                        from: account,
-                                                                    });
-
-                                                            setTransactionId(tx.transactionHash);
-                                                        } catch (error: any) {
-                                                            setTransactionError(true);
-                                                            log(
-                                                                `❗️ Error while minting UZD: ${error.message}`
-                                                            );
-                                                        }
-
-                                                        setPendingTx(false);
-                                                    }}
-                                                />
+                                            <div ref={target} onClick={() => setShowHint(!showHint)}>
+                                                <OverlayTrigger placement="right" overlay={<Tooltip>{hint}</Tooltip>}>
+                                                    <input
+                                                        type="button"
+                                                        className="zun-button"
+                                                        style={{ opacity: 0.5 }}
+                                                        value="Mint"
+                                                    />
+                                                </OverlayTrigger>
+                                            </div>
                                             )}
-
                                             {zlpAllowance.toNumber() > 0 && mode === 'redeem' && (
                                                 <input
                                                     type="button"
@@ -861,7 +838,7 @@ export const Uzd = (): JSX.Element => {
                                                     </svg>
                                                 </div>
                                                 <div className="protocol_fee__text">
-                                                    Protocol Takes 0.5% redemption fee. It will be
+                                                    Protocol Takes no redemption fee. It will be
                                                     cheaper and easier to withdraw using the Curve
                                                     pool
                                                 </div>
