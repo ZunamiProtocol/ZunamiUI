@@ -20,7 +20,7 @@ export const MobileSidebar = (): JSX.Element => {
                         href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing"
                         target="blank"
                     >
-                        How to use?
+                        View docs
                     </a>
                 </li>
                 <li className="list-inline-item">

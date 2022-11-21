@@ -865,7 +865,7 @@ export const Uzd = (): JSX.Element => {
             <footer className="">
                 <div className="mobile">
                     <a href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing">
-                        How to use?
+                        View docs
                     </a>
                     <a href="https://www.zunami.io/#faq-main" target="_blank" rel="noreferrer">
                         FAQ
@@ -880,7 +880,7 @@ export const Uzd = (): JSX.Element => {
                             href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing"
                             target="blank"
                         >
-                            How to use?
+                            View docs
                         </a>
                     </li>
                     <li className="list-inline-item">
