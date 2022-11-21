@@ -23,7 +23,12 @@ const useBalanceOf = (contractAddress: string | undefined = undefined, autoRefre
         }
 
         const getBalance = async () => {
-            const contract = chainId === 1 ? sushi.getEthContract() : sushi.getBscContract();
+            let contract = sushi.getEthContract();
+            
+            switch (chainId) {
+                case 56: contract = sushi.getBscContract();  break;
+                case 137: contract = sushi.getPolygonContract();  break;
+            }
 
             if (contractAddress) {
                 contract.options.address = contractAddress;

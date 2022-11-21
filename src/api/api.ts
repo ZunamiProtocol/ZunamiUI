@@ -12,6 +12,9 @@ export const transHistoryUrl = `${root}/transfers/history`;
 
 export const curvePoolsApyUrl = 'https://api.curve.fi/api/getFactoryAPYs?version=2';
 
+const BSC_NETWORK_ID = 56;
+const POLYGON_NETWORK_ID = 137;
+
 export const getActiveStratsUrl = (): string => {
     return activeStratsUrl;
 };
@@ -33,7 +36,13 @@ export const getTotalIncomeUrl = (
     lpTokens: string,
     chainId: number = 1
 ): string => {
-    const chain = chainId === 1 ? 'ETH' : 'BSC';
+    let chain = 'ETH';
+
+    switch (chainId) {
+        case BSC_NETWORK_ID: chain = 'BSC'; break;
+        case POLYGON_NETWORK_ID: chain = 'MATIC'; break;
+    }
+
     return `${totalIncomeUrl}?address=${address.toLowerCase()}&lpTokens=${lpTokens}&chain=${chain}`;
 };
 
@@ -44,7 +53,13 @@ export const getTransHistoryUrl = (
     size: number = 10,
     chainId: number = 1
 ): string => {
-    const chain = chainId === 1 ? 'ETH' : 'BSC';
+    let chain = 'ETH';
+
+    switch (chainId) {
+        case BSC_NETWORK_ID: chain = 'BSC'; break;
+        case POLYGON_NETWORK_ID: chain = 'MATIC'; break;
+    }
+
     return `${transHistoryUrl}?address=${address.toLowerCase()}&type=${type}&page=${page}&size=${size}&chain=${chain}`;
 };
 

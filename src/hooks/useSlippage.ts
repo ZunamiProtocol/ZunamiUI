@@ -10,7 +10,7 @@ import { isBSC } from '../utils/zunami';
 export const useSlippage = () => {
     const { chainId } = useWallet();
     const sushi = useSushi();
-    const web3 = new Web3(sushi.getBscProvider());
+    
 
     const fetchSlippage = useCallback(
         async (busd: string) => {
@@ -18,6 +18,7 @@ export const useSlippage = () => {
                 return;
             }
 
+            const web3 = new Web3(sushi.getBscProvider());
             const contract = new web3.eth.Contract(converterABI);
             contract.options.address = '0xbDA7FAb835a8202B89a9C827dbA0224703e90CC9';
             const value = new BigNumber(busd).multipliedBy(new BigNumber(10).pow(18)).toString();
@@ -26,7 +27,7 @@ export const useSlippage = () => {
 
             return await contract.methods.getAmountOut(value).call();
         },
-        [chainId, web3.eth.Contract]
+        [chainId, sushi]
     );
 
     return {

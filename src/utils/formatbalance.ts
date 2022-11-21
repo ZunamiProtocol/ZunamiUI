@@ -35,3 +35,7 @@ export const usdtAddress = '0xdac17f958d2ee523a2206206994597c13d831ec7';
 // bsc
 export const bscUsdtAddress = '0x55d398326f99059ff775485246999027b3197955';
 export const busdAddress = '0xe9e7cea3dedca5984780bafc599bd69add087d56';
+// polygon
+export const plgDaiAddress = '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063';
+export const plgUsdcAddress = '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174';
+export const plgUsdtAddress = '0xc2132d05d31c914a87c6611c10748aeb04b58e8f';

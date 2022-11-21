@@ -4,6 +4,7 @@ import { useWallet } from 'use-wallet';
 import useSushi from './useSushi';
 import { BIG_TEN, DAI_DECIMALS } from '../utils/formatbalance';
 import { log } from '../utils/logger';
+import { isBSC, isETH, isPLG } from '../utils/zunami';
 
 export interface PendingOperations {
     deposit: BigNumber;
@@ -17,12 +18,12 @@ const usePendingOperations = () => {
     const [pendingWithdraw, setPendingWithdraw] = useState(new BigNumber(0));
 
     useEffect(() => {
-        if (!account || !chainId) {
+        if (!account || !chainId || !sushi) {
             return;
         }
 
         const getPendingSums = async () => {
-            if (chainId === 1) {
+            if (isETH(chainId)) {
                 const ethPendingDeposits = await sushi.contracts.masterChef.methods
                     .pendingDeposits(account)
                     .call();
@@ -48,7 +49,7 @@ const usePendingOperations = () => {
 
                 setPendingWithdraw(new BigNumber(ethPendingWithdrawals[0].toString()));
                 log(`ETH pending withdrawals: ${ethPendingWithdrawals[0].toString()}`);
-            } else {
+            } else if (isBSC(chainId)) {
                 const bscPendingDeposits = await sushi.bscContracts.bscMasterChef.methods
                     .pendingDeposits(account)
                     .call();
@@ -61,6 +62,19 @@ const usePendingOperations = () => {
 
                 log(`BSC pending deposits: ${bscPendingDeposits.toString()}`);
                 log(`BSC pending withdrawals: ${bscPendingWithdrawals.toString()}`);
+            } else if (isPLG(chainId)) {
+                const plgPendingDeposits = await sushi.plgContracts.polygonContract.methods
+                    .pendingDeposits(account)
+                    .call();
+                const plgPendingWithdrawals = await sushi.plgContracts.polygonContract.methods
+                    .pendingWithdrawals(account)
+                    .call();
+
+                setPendingDeposit(new BigNumber(plgPendingDeposits.toString()));
+                setPendingWithdraw(new BigNumber(plgPendingWithdrawals.toString()));
+
+                log(`PLG pending deposits: ${plgPendingDeposits.toString()}`);
+                log(`PLG pending withdrawals: ${plgPendingWithdrawals.toString()}`);
             }
         };
 

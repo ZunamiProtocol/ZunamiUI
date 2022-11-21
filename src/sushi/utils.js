@@ -8,9 +8,12 @@ import {
     USDT_BSC_TOKEN_DECIMAL,
     bscUsdtAddress,
     busdAddress,
+    plgDaiAddress,
+    plgUsdcAddress,
+    plgUsdtAddress,
 } from '../utils/formatbalance';
 import { log } from '../utils/logger';
-import { getZunamiAddress } from '../utils/zunami';
+import { getZunamiAddress, isBSC, isPLG } from '../utils/zunami';
 
 BigNumber.config({
     EXPONENTIAL_AT: 1000,
@@ -46,9 +49,12 @@ export const getMasterChefContract = (sushi, chain = 1) => {
         if (chain === 1 || chainId === '0x1') {
             // sushi.contracts.masterChef.options.address = getZunamiAddress(chainId);
             result = sushi.contracts.masterChef;
-        } else {
+        } else if (chain === 56 || chainId === '0x38') {
             sushi.contracts.bscMasterChef.options.address = getZunamiAddress(chainId);
             result = sushi.contracts.bscMasterChef;
+        } else if (chain === 137 || chainId === '0x89') {
+            sushi.contracts.polygonContract.options.address = getZunamiAddress(chainId);
+            result = sushi.contracts.polygonContract;
         }
     }
 
@@ -115,7 +121,15 @@ export const approve = async (
         sum = APPROVE_SUM;
     }
 
-    const funcParams = { from: account };
+    if ([plgDaiAddress, plgUsdcAddress, plgUsdtAddress].indexOf(tokenAddress) !== -1) {
+        sum = APPROVE_SUM;
+    }
+
+    const funcParams = {
+        from: account,
+        maxPriorityFeePerGas: null,
+        maxFeePerGas: null, 
+    };
 
     if (isZerionWallet) {
         const estimate = await lpContract.methods
@@ -160,10 +174,25 @@ export const stake = async (contract, account, dai, usdc, usdt, direct = false, 
         new BigNumber(usdt).times(USDT_TOKEN_DECIMAL).toString(),
     ];
 
-    if (chainId !== 1) {
+    if (isBSC(chainId)) {
         return contract.methods
             .delegateDeposit(new BigNumber(usdt).times(USDT_BSC_TOKEN_DECIMAL).toString())
             .send({ from: account })
+            .on('transactionHash', (tx) => {
+                return tx.transactionHash;
+            });
+    }
+
+    if (isPLG(chainId)) {
+        log(`Polygon: delegateDeposit("${new BigNumber(usdt).times(USDT_TOKEN_DECIMAL).toString()}")`);
+
+        return contract.methods
+            .delegateDeposit(new BigNumber(usdt).times(USDT_TOKEN_DECIMAL).toString())
+            .send({
+                from: account,
+                maxPriorityFeePerGas: null,
+                maxFeePerGas: null, 
+            })
             .on('transactionHash', (tx) => {
                 return tx.transactionHash;
             });
@@ -258,12 +287,28 @@ export const unstake = async (
     ];
 
     if (optimized) {
-        if (chainId && chainId !== 1) {
+        if (chainId && isBSC(chainId)) {
             log(`Zunami contract (BNB): execution delegateWithdrawal(${lpShares})`);
 
             return zunamiContract.methods
                 .delegateWithdrawal(lpShares)
                 .send({ from: account })
+                .on('transactionHash', (transactionHash) => {
+                    return transactionHash;
+                });
+        }
+
+        if (chainId && isPLG(chainId)) {
+            log(`Zunami contract (PLG): execution delegateWithdrawal(${lpShares})`);
+
+            return zunamiContract.methods
+                .delegateWithdrawal(lpShares)
+                .send({
+                    from: account,
+                    maxPriorityFeePerGas: null,
+                    maxFeePerGas: null,
+                    gasPrice: null,
+                })
                 .on('transactionHash', (transactionHash) => {
                     return transactionHash;
                 });

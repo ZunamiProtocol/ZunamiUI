@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js/bignumber';
 import ethAbi from '../../actions/abi/Zunami.json';
 import bscAbi from '../../actions/abi/zunami_bsc.json';
 import busdAbi from '../../actions/abi/zunami_busd.json';
+import polygonAbi from '../../actions/abi/zunami_polygon.json';
 import uzdAbi from '../../actions/abi/zunami_uzd.json';
 
 import WETHAbi from './abi/weth.json';
@@ -23,6 +24,7 @@ export class Contracts {
         this.ethMasterChef = new this.web3.eth.Contract(ethAbi);
         this.bscMasterChef = new this.web3.eth.Contract(bscAbi);
         this.busdContract = new this.web3.eth.Contract(busdAbi);
+        this.polygonContract = new this.web3.eth.Contract(polygonAbi);
         this.uzdContract = new this.web3.eth.Contract(uzdAbi);
 
         this.weth = new this.web3.eth.Contract(WETHAbi);
@@ -35,6 +37,7 @@ export class Contracts {
         this.setDefaultAccount(defaultAccount);
         this.masterChef.options.from = defaultAccount;
         this.bscMasterChef.options.from = defaultAccount;
+        this.polygonContract.options.from = defaultAccount;
         this.ethMasterChef.options.from = defaultAccount;
         this.busdContract.options.from = defaultAccount;
         this.uzdContract.options.from = defaultAccount;
@@ -60,6 +63,10 @@ export class Contracts {
         if (networkId === 56) {
             setProviderParams(this.bscMasterChef, contractAddresses.zunami[56]);
             setProviderParams(this.busdContract, contractAddresses.busd[56]);
+        }
+
+        if (networkId === 137) {
+            setProviderParams(this.polygonContract, contractAddresses.zunami[137]);
         }
     }
 

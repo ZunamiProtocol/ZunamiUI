@@ -9,8 +9,10 @@ import {
     usdtAddress,
     bscUsdtAddress,
     busdAddress,
+    plgUsdtAddress,
 } from '../utils/formatbalance';
 import { log } from '../utils/logger';
+import { isBSC, isETH, isPLG } from '../utils/zunami';
 
 export const useUserBalances = () => {
     const [balance, setbalance] = useState([BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO]);
@@ -19,7 +21,7 @@ export const useUserBalances = () => {
     useEffect(() => {
         const fetchbalanceStables = async () => {
             log(`fetchbalanceStables, chain ID: ${chainId}`);
-            if (chainId === 1) {
+            if (isETH(chainId)) {
                 const balanceDai = await getBalance(
                     ethereum,
                     daiAddress,
@@ -46,7 +48,7 @@ export const useUserBalances = () => {
                 ];
                 // @ts-ignore
                 setbalance(data);
-            } else {
+            } else if (isBSC(chainId)) {
                 const usdtBalance = await getBalance(
                     ethereum,
                     bscUsdtAddress,
@@ -67,6 +69,21 @@ export const useUserBalances = () => {
                     new BigNumber(usdtBalance),
                     new BigNumber(busdBalance),
                 ]);
+            } else if (isPLG(chainId)) {
+                const balanceUsdt = await getBalance(
+                    ethereum,
+                    plgUsdtAddress,
+                    // @ts-ignore
+                    account
+                );
+                const data = [
+                    BIG_ZERO,
+                    BIG_ZERO,
+                    new BigNumber(balanceUsdt),
+                    BIG_ZERO,
+                ];
+                // @ts-ignore
+                setbalance(data);
             }
         };
 

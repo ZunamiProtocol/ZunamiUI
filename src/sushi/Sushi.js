@@ -50,22 +50,25 @@ export class Sushi {
         // this.web3 = new Web3(ethProvider);
         this.web3 = networkId === 1 ? new Web3(ethProvider) : new Web3(bscProvider);
         this.bscWeb3 = new Web3(bscProvider);
+        this.plgWeb3 = new Web3(this.getPolygonProvider());
 
         if (options.defaultAccount) {
             this.web3.eth.defaultAccount = options.defaultAccount;
             this.bscWeb3.eth.defaultAccount = options.defaultAccount;
+            this.plgWeb3.eth.defaultAccount = options.defaultAccount;
         }
 
-        // this.contracts = new Contracts(ethProvider, 1, this.web3, options);
         this.contracts = new Contracts(realProvider, networkId, this.web3, options);
-        // console.log(options);
         this.ethContracts = new Contracts(ethProvider, 1, this.web3, options);
         this.bscContracts = new Contracts(bscProvider, 56, this.bscWeb3, options);
         this.busdContracts = new Contracts(bscProvider, 56, this.bscWeb3, options);
         this.uzdContracts = new Contracts(ethProvider, 1, this.web3, options);
+        this.plgContracts = new Contracts(this.getPolygonProvider(), 137, this.plgWeb3, options);
 
         this.masterChefAddress = contractAddresses.zunami[1];
         this.bscMasterChefAddress = contractAddresses.zunami[56];
+        this.polygonMasterChefAddress = contractAddresses.zunami[137];
+
         this.busdContracts = contractAddresses.busd[56];
         this.uzdContracts = contractAddresses.uzd[1];
         this.wethAddress = contractAddresses.weth[networkId];
@@ -81,6 +84,7 @@ export class Sushi {
         this.accounts.push(new Account(this.busdContracts, address, number));
         this.accounts.push(new Account(this.ethContracts, address, number));
         this.accounts.push(new Account(this.uzdContracts, address, number));
+        this.accounts.push(new Account(this.plgContracts, address, number));
     }
 
     getErc20Contract(account, address, chainId = 1) {
@@ -135,14 +139,23 @@ export class Sushi {
         return new Web3.providers.HttpProvider('https://bscrpc.com');
     }
 
-    getBscContract(account) {
-        const bscProvider = new Web3.providers.HttpProvider('https://bscrpc.com');
+    getPolygonProvider() {
+        return new Web3.providers.HttpProvider('https://polygon-rpc.com');
+    }
 
-        const web3 = new Web3(bscProvider);
+    getBscContract(account) {
+        const web3 = new Web3(this.getBscProvider());
         const contract = new web3.eth.Contract(bscAbi);
         contract.options.from = account;
         contract.options.address = getZunamiAddress(56);
+        return contract;
+    }
 
+    getPolygonContract(account) {
+        const web3 = new Web3(this.getPolygonProvider());
+        const contract = new web3.eth.Contract(bscAbi);
+        contract.options.from = account;
+        contract.options.address = getZunamiAddress(137);
         return contract;
     }
 

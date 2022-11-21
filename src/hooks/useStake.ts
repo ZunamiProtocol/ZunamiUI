@@ -3,6 +3,7 @@ import useSushi from './useSushi';
 import { useWallet } from 'use-wallet';
 import { stake, getMasterChefContract, stakeBUSD } from '../sushi/utils';
 import { contractAddresses } from '../sushi/lib/constants';
+import { isBSC, isPLG } from '../utils/zunami';
 
 interface Coin {
     name: string;
@@ -16,7 +17,11 @@ const useStake = (coins: Coins, direct: boolean = false) => {
     const sushi = useSushi();
     let zunamiContract = getMasterChefContract(sushi);
 
-    if (chainId === 56) {
+    if (isBSC(chainId)) {
+        zunamiContract = getMasterChefContract(sushi, chainId);
+    }
+
+    if (isPLG(chainId)) {
         zunamiContract = getMasterChefContract(sushi, chainId);
     }
 
@@ -31,6 +36,12 @@ const useStake = (coins: Coins, direct: boolean = false) => {
             contract.options.address = contractAddresses.busd[56];
             contract.defaultAccount = account;
             return await stakeBUSD(contract, account, busd);
+        }
+
+        if (isPLG(chainId)) {
+            const contract = sushi.contracts.polygonContract;
+            contract.options.address = contractAddresses.zunami[137];
+            contract.defaultAccount = account;
         }
 
         return await stake(zunamiContract, account, dai, usdc, usdt, direct, chainId);

@@ -11,9 +11,11 @@ import {
     usdtAddress,
     bscUsdtAddress,
     busdAddress,
+    plgUsdtAddress,
 } from '../utils/formatbalance';
 import { log } from '../utils/logger';
 import { contractAddresses } from '../sushi/lib/constants';
+import { isBSC, isPLG } from '../utils/zunami';
 
 const useAllowance = (tokenAddress: string) => {
     const [allowance, setAllowance] = useState(BIG_ZERO);
@@ -89,7 +91,7 @@ export const useAllowanceStables = () => {
                 log(`Allowan DAI: ${allowanceDai}`);
                 log(`Allowan USDC: ${allowanceUsdc}`);
                 log(`Allowan USDT: ${allowanceUsdt}`);
-            } else {
+            } else if (isBSC(chainId)) {
                 const lpContract = getContract(
                     sushi.bscContracts.bscMasterChef.currentProvider,
                     bscUsdtAddress
@@ -118,6 +120,24 @@ export const useAllowanceStables = () => {
                     BIG_ZERO,
                     new BigNumber(allowanceUsdt),
                     new BigNumber(allowanceBUSD),
+                ]);
+            } else if (isPLG(chainId)) {
+                const lpContract = getContract(
+                    sushi.plgContracts.polygonContract.currentProvider,
+                    plgUsdtAddress
+                );
+
+                const allowanceUsdt = await lpContract.methods
+                    .allowance(account, sushi.polygonMasterChefAddress)
+                    .call();
+
+                log(`PLG USDT allowance for address (${account}) is: ${allowanceUsdt}`);
+
+                setAllowance([
+                    BIG_ZERO,
+                    BIG_ZERO,
+                    new BigNumber(allowanceUsdt),
+                    BIG_ZERO,
                 ]);
             }
         };

@@ -6,6 +6,8 @@ export const contractAddresses = {
         1: '0x2ffCC661011beC72e1A9524E12060983E74D14ce',
         // BNB
         56: '0xeAC5e2b6F1d7eBF4a715a235e097b59ACa40b786',
+        // Polygon
+        137: '0x8141d8f73c837acab6F4736Cc51143E002985Cf5',
     },
     zunami_bsc_migrator: {
         v1_1_to_1_2: '0xBCabe08134b6895d7Da8b7a0C0241cfbD29A4bc2',
