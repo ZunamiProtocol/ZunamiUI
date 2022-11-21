@@ -2,6 +2,7 @@ import { ReactElement, useEffect, useState } from 'react';
 import './NetworkSelector.scss';
 import { ReactComponent as ETHLogo } from './eth_logo.svg';
 import { ReactComponent as BSCLogo } from './bsc_logo.svg';
+import { ReactComponent as PLGLogo } from './polygon_logo.svg';
 import { log } from '../../utils/logger';
 import { useWallet } from 'use-wallet';
 
@@ -59,7 +60,7 @@ export const networks = [
     {
         key: '0x89',
         value: 'Polygon',
-        icon: <ETHLogo />,
+        icon: <PLGLogo />,
     },
     {
         key: '0x13881',
@@ -101,7 +102,7 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
     const [chainSupported, setChainSupported] = useState(false);
     const networksList = customNetworksList ? customNetworksList : networks;
     const availableNetworks = networksList.filter(
-        (item) => [1, 56].indexOf(parseInt(item.key, 16)) !== -1
+        (item) => [1, 56, 137].indexOf(parseInt(item.key, 16)) !== -1
     );
 
     useEffect(() => {
@@ -109,7 +110,7 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
             return;
         }
 
-        const supportedChainIds = [1, 56];
+        const supportedChainIds = [1, 56, 137];
 
         const defaultNetwork = networks.filter(
             (network) => parseInt(network.key, 16) === chainId
@@ -158,22 +159,36 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
                                 params: [{ chainId: selectedValue }],
                             });
                         } catch (e) {
+                            let chainParams = {
+                                chainId: '0x38',
+                                chainName: 'Binance Smart Chain Mainnet',
+                                nativeCurrency: {
+                                    name: 'Binance Coin',
+                                    symbol: 'BNB',
+                                    decimals: 18,
+                                },
+                                rpcUrls: ['https://bsc-dataseed1.ninicoin.io'],
+                                blockExplorerUrls: ['https://bscscan.com'],
+                            };
+
+                            if (selectedValue === '0x89') {
+                                chainParams = {
+                                    chainId: '0x89',
+                                    chainName: 'Polygon Mainnet',
+                                    nativeCurrency: {
+                                        name: 'MATIC',
+                                        symbol: 'MATIC',
+                                        decimals: 18,
+                                    },
+                                    rpcUrls: ['https://polygon-rpc.com'],
+                                    blockExplorerUrls: ['https://polygonscan.com'],
+                                };
+                            }
+
                             window.ethereum
                                 .request({
                                     method: 'wallet_addEthereumChain',
-                                    params: [
-                                        {
-                                            chainId: '0x38',
-                                            chainName: 'Binance Smart Chain Mainnet',
-                                            nativeCurrency: {
-                                                name: 'Binance Coin',
-                                                symbol: 'BNB',
-                                                decimals: 18,
-                                            },
-                                            rpcUrls: ['https://bsc-dataseed1.ninicoin.io'],
-                                            blockExplorerUrls: ['https://bscscan.com'],
-                                        },
-                                    ],
+                                    params: [chainParams],
                                 })
                                 .catch((error) => {
                                     log(error);

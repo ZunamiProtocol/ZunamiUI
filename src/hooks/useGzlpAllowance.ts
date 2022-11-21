@@ -4,7 +4,7 @@ import { BIG_ZERO } from '../utils/formatbalance';
 import { useWallet } from 'use-wallet';
 import { getAllowance } from '../utils/erc20';
 import useSushi from './useSushi';
-import { getZunamiAddress } from '../utils/zunami';
+import { getZunamiAddress, isBSC, isPLG } from '../utils/zunami';
 import { getMasterChefContract } from '../sushi/utils';
 import { log } from '../utils/logger';
 
@@ -16,7 +16,7 @@ export const useGzlpAllowance = () => {
 
     useEffect(() => {
         let refreshInterval: NodeJS.Timeout | undefined = undefined;
-        if (!account || chainId !== 56) {
+        if (!account || (!isBSC(chainId) && !isPLG(chainId))) {
             return;
         }
 

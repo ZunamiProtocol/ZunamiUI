@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useWallet } from 'use-wallet';
 import { approve, getMasterChefContract } from '../sushi/utils';
 import useSushi from './useSushi';
-import { getZunamiAddress } from '../utils/zunami';
+import { getZunamiAddress, isPLG } from '../utils/zunami';
 import { log } from '../utils/logger';
 
 const useApprove = () => {
@@ -11,6 +11,11 @@ const useApprove = () => {
     let masterChefContract = getMasterChefContract(sushi);
 
     if (chainId === 56) {
+        masterChefContract.defaultAccount = account;
+        masterChefContract.options.address = getZunamiAddress(chainId);
+    }
+
+    if (isPLG(chainId) && masterChefContract) {
         masterChefContract.defaultAccount = account;
         masterChefContract.options.address = getZunamiAddress(chainId);
     }
