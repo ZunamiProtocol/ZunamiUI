@@ -33,6 +33,14 @@ export const getNetworkConfig = (NETWORK: string): Config => {
         };
     }
 
+    if (window.ethereum && window.ethereum.chainId === '0x89') {
+        return {
+            INFURA_URL: `https://polygon-rpc.com`,
+            CHAIN_ID: 137,
+            NETWORK: 'mainnet',
+        };
+    }
+
     return {
         INFURA_URL: `https://eth-mainnet.alchemyapi.io/v2/Yh5zNTgJkqrOIqLtfkZBGIPecNPDQ1ON`,
         CHAIN_ID,

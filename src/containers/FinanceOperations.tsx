@@ -20,7 +20,7 @@ import { Contract } from 'web3-eth-contract';
 import { calcWithdrawOneCoin } from '../utils/erc20';
 import useSushi from '../hooks/useSushi';
 import { getMasterChefContract } from '../sushi/utils';
-import { isBSC, isETH } from '../utils/zunami';
+import { isBSC, isETH, isPLG } from '../utils/zunami';
 import { log } from '../utils/logger';
 import { useSlippage } from '../hooks/useSlippage';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
@@ -108,6 +108,11 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
 
     useEffect(() => {
         if (isBSC(chainId) && props.operationName === 'withdraw') {
+            setSelectedCoinIndex(2);
+            setSelectedCoin('usdt');
+        }
+
+        if (isPLG(chainId) && props.operationName === 'withdraw') {
             setSelectedCoinIndex(2);
             setSelectedCoin('usdt');
         }
@@ -531,7 +536,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
             <footer>
                 <div className="mobile">
                     <a href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing">
-                        How to use?
+                        View docs
                     </a>
                     <a href="https://www.zunami.io/#faq-main" target="_blank" rel="noreferrer">
                         FAQ

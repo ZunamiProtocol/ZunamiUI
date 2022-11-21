@@ -18,6 +18,10 @@ const useCrossChainBalances = (lpPrice: BigNumber) => {
             chainId: 'bsc',
             value: new BigNumber(BIG_ZERO),
         },
+        {
+            chainId: 'plg',
+            value: new BigNumber(BIG_ZERO),
+        },
     ]);
 
     useEffect(() => {
@@ -34,6 +38,12 @@ const useCrossChainBalances = (lpPrice: BigNumber) => {
                 .call();
             log(`Raw BSC balance is: ${bscBalance}`);
 
+            const plgBalance = await sushi.plgContracts.polygonContract.methods
+                .balanceOf(account)
+                .call();
+
+            log(`Raw PLG balance is: ${bscBalance}`);
+
             setBalances([
                 {
                     chainId: 'eth',
@@ -42,6 +52,10 @@ const useCrossChainBalances = (lpPrice: BigNumber) => {
                 {
                     chainId: 'bsc',
                     value: new BigNumber(bscBalance),
+                },
+                {
+                    chainId: 'plg',
+                    value: new BigNumber(plgBalance),
                 },
             ]);
         };

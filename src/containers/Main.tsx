@@ -29,6 +29,7 @@ import { log } from '../utils/logger';
 import usePausedContract from '../hooks/usePausedContract';
 import { EthMergeWarningModal } from '../components/EthMergeWarningModal/EthMergeWarningModal';
 import useUzdBalance from '../hooks/useUzdBalance';
+import { isBSC, isETH, isPLG } from '../utils/zunami';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -93,10 +94,19 @@ export const Main = (): JSX.Element => {
     const oldBscBalance = useOldBscBalance();
     const balances = useCrossChainBalances(lpPrice);
     const uzdBalance = useUzdBalance();
+    let activeBalance = balances[0];
+
+    if (isBSC(chainId)) {
+        activeBalance = balances[1];
+    }
+
+    if (isPLG(chainId)) {
+        activeBalance = balances[2];
+    }
 
     const userMaxWithdraw =
         lpPrice.toNumber() > 0 && balance.toNumber() !== -1
-            ? lpPrice.multipliedBy(chainId === 1 ? balances[0].value : balances[1].value)
+            ? lpPrice.multipliedBy(activeBalance.value)
             : new BigNumber(-1);
 
     const { isLoading: isZunLoading, data: zunData } = useFetch(zunamiInfoUrl) as ZunamiInfoFetch;
@@ -125,7 +135,15 @@ export const Main = (): JSX.Element => {
     const [totalIncome, setTotalIncome] = useState('n/a');
 
     useEffect(() => {
-        const activeBalance = chainId === 1 ? balances[0].value : balances[1].value;
+        let activeBalance = balances[0].value;
+
+        if (isBSC(chainId)) {
+            activeBalance = balances[1].value;
+        }
+
+        if (isPLG(chainId)) {
+            activeBalance = balances[2].value;
+        }
 
         if (!account || activeBalance.toNumber() === -1 || !chainId) {
             return;
@@ -190,7 +208,7 @@ export const Main = (): JSX.Element => {
             <PendingBalance
                 val={`PD: $${getBalanceNumber(
                     pendingOperations.deposit,
-                    chainId === 1 ? 6 : 18
+                    isETH(chainId) || isPLG(chainId) ? 6 : 18
                 ).toFixed(2)}`}
                 hint={`You have $${pendingOperations.deposit} in pending deposit`}
             />
@@ -378,7 +396,7 @@ export const Main = (): JSX.Element => {
                 <footer className="">
                     <div className="mobile">
                         <a href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing">
-                            How to use?
+                            View docs
                         </a>
                         <a href="https://www.zunami.io/#faq-main" target="_blank" rel="noreferrer">
                             FAQ
@@ -393,7 +411,7 @@ export const Main = (): JSX.Element => {
                                 href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing"
                                 target="blank"
                             >
-                                How to use?
+                                View docs
                             </a>
                         </li>
                         <li className="list-inline-item">

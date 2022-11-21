@@ -11,6 +11,7 @@ import {
     usdtAddress,
     bscUsdtAddress,
     busdAddress,
+    plgUsdtAddress,
 } from '../../utils/formatbalance';
 import { useAllowanceStables } from '../../hooks/useAllowance';
 import { useUserBalances } from '../../hooks/useUserBalances';
@@ -27,8 +28,23 @@ import { useGzlpAllowance } from '../../hooks/useGzlpAllowance';
 import { FormProps, TransactionError } from './Form.types';
 import { useWallet } from 'use-wallet';
 import { log } from '../../utils/logger';
-import { isBSC, isETH } from '../../utils/zunami';
+import { isBSC, isETH, isPLG } from '../../utils/zunami';
 import { APPROVE_SUM } from '../../sushi/utils';
+
+function getScanAddressByChainId(chainId: number) {
+    let address = 'etherscan.io';
+
+    switch (chainId) {
+        case 56:
+            address = 'bscscan.com';
+            break;
+        case 137:
+            address = 'polygonscan.com';
+            break;
+    }
+
+    return address;
+}
 
 const getDepositValidationError = (
     dai: String,
@@ -197,7 +213,15 @@ export const Form = (props: FormProps): JSX.Element => {
         setPendingUSDT(true);
 
         try {
-            const tx = onApprove(isBSC(chainId) ? bscUsdtAddress : usdtAddress);
+            let address = usdtAddress;
+            if (isBSC(chainId)) {
+                address = bscUsdtAddress;
+            }
+            if (isPLG(chainId)) {
+                address = plgUsdtAddress;
+            }
+
+            const tx = onApprove(address);
             if (!tx) {
                 setPendingUSDT(false);
             }
@@ -206,7 +230,7 @@ export const Form = (props: FormProps): JSX.Element => {
         }
 
         setPendingUSDT(false);
-    }, [onApprove]);
+    }, [onApprove, chainId]);
     const handleApproveGzlp = useCallback(async () => {
         try {
             setPendingGZLP(true);
@@ -325,7 +349,7 @@ export const Form = (props: FormProps): JSX.Element => {
                         props.usdt === '0' ||
                         props.usdt === '')
             );
-        } else {
+        } else if (isBSC(chainId)) {
             let approveVal = false;
 
             if (props.operationName === 'withdraw') {
@@ -349,6 +373,31 @@ export const Form = (props: FormProps): JSX.Element => {
             );
 
             setIsApproved(approveVal);
+        } else if (isPLG(chainId)) {
+            let approveVal = false;
+
+            if (props.operationName === 'withdraw') {
+                approveVal = gzlpAllowance.isGreaterThanOrEqualTo(
+                    new BigNumber(APPROVE_SUM)
+                );
+
+                log(`Withdrawal approve set to ${approveVal}, it's less than ${APPROVE_SUM}`);
+                setIsApproved(approveVal);
+                return;
+            } 
+
+            setIsApproved(
+                approveList &&
+                    ((parseFloat(props.dai) > 0 && isApprovedTokens[0]) ||
+                        props.dai === '0' ||
+                        props.dai === '') &&
+                    ((parseFloat(props.usdc) > 0 && isApprovedTokens[1]) ||
+                        props.usdc === '0' ||
+                        props.usdc === '') &&
+                    ((parseFloat(props.usdt) > 0 && isApprovedTokens[2]) ||
+                        props.usdt === '0' ||
+                        props.usdt === '')
+            );
         }
     }, [
         gzlpAllowance,
@@ -394,6 +443,12 @@ export const Form = (props: FormProps): JSX.Element => {
         );
     }
 
+    if (isPLG(chainId)) {
+        log(
+            `Approved stables status: DAI: ${isApprovedTokens[0].toString()}, USDT: ${isApprovedTokens[1].toString()}, USDC: ${isApprovedTokens[2].toString()}`
+        );
+    }
+
     if (props.operationName === 'deposit') {
         log(
             `Can deposit: emptyFunds: ${emptyFunds}, isApproved: ${isApproved}, pendingTx: ${pendingTx}, depositExceedAmount: ${depositExceedAmount}`
@@ -429,7 +484,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                 target="_blank"
                                 rel="noreferrer"
                                 href={`https://${
-                                    chainId === 1 ? 'etherscan.io' : 'bscscan.com'
+                                    getScanAddressByChainId(chainId)
                                 }/tx/${transactionId}`}
                             >
                                 transaction

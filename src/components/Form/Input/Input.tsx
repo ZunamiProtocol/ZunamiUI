@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import './Input.scss';
 import BigNumber from 'bignumber.js';
 import { getFullDisplayBalance } from '../../../utils/formatbalance';
+import { isBSC, isPLG } from '../../../utils/zunami';
 
 interface InputProps {
     name: string;
@@ -35,8 +36,12 @@ export const Input = (props: InputProps): JSX.Element => {
             decimals = 18;
         }
 
-        if (props.chainId !== 1) {
+        if (isBSC(props.chainId)) {
             decimals = 18;
+        }
+
+        if (isPLG(props.chainId)) {
+            decimals = 6;
         }
 
         return (

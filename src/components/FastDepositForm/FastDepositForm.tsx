@@ -16,11 +16,13 @@ import {
     usdtAddress,
     bscUsdtAddress,
     busdAddress,
+    plgUsdtAddress,
 } from '../../utils/formatbalance';
 import { getFullDisplayBalance } from '../../utils/formatbalance';
 import { Link } from 'react-router-dom';
 import { useWallet } from 'use-wallet';
 import { log } from '../../utils/logger';
+import { isBSC, isETH, isPLG } from '../../utils/zunami';
 
 function coinNameToAddress(coinName: string, chainId: number): string {
     if (chainId === 56 && coinName === 'USDT') {
@@ -34,10 +36,25 @@ function coinNameToAddress(coinName: string, chainId: number): string {
             address = usdcAddress;
             break;
         case 'USDT':
-            address = usdtAddress;
+            address = isPLG(chainId) ? plgUsdtAddress : usdtAddress;
             break;
         case 'BUSD':
             address = busdAddress;
+            break;
+    }
+
+    return address;
+}
+
+function getScanAddressByChainId(chainId: number) {
+    let address = 'etherscan.io';
+
+    switch (chainId) {
+        case 56:
+            address = 'bscscan.com';
+            break;
+        case 137:
+            address = 'polygonscan.com';
             break;
     }
 
@@ -96,7 +113,12 @@ export const FastDepositForm = (): JSX.Element => {
             setCoinIndex(coins.indexOf(coin));
         }
 
-        if (chainId !== 1 && coinIndex !== 3) {
+        if (chainId === 56 && coinIndex !== 3) {
+            setCoin('USDT');
+            setCoinIndex(coins.indexOf(coin));
+        }
+
+        if (isPLG(chainId) && coinIndex !== 3) {
             setCoin('USDT');
             setCoinIndex(coins.indexOf(coin));
         }
@@ -104,9 +126,11 @@ export const FastDepositForm = (): JSX.Element => {
 
     // get user max balance
     const fullBalance = useMemo(() => {
-        if (chainId !== 1) {
+        if (isBSC(chainId)) {
             return getFullDisplayBalance(userBalanceList[coinIndex], 18);
-        } else {
+        } else if (isETH(chainId)) {
+            return getFullDisplayBalance(userBalanceList[coinIndex], coin === 'DAI' ? 18 : 6);
+        } else if (isPLG(chainId)) {
             return getFullDisplayBalance(userBalanceList[coinIndex], coin === 'DAI' ? 18 : 6);
         }
     }, [userBalanceList, coin, coinIndex, chainId]);
@@ -119,6 +143,10 @@ export const FastDepositForm = (): JSX.Element => {
 
     // set default input to max
     useEffect(() => {
+        if (!fullBalance) {
+            return;
+        }
+
         setDepositSum(fullBalance.toString());
     }, [fullBalance]);
 
@@ -138,7 +166,7 @@ export const FastDepositForm = (): JSX.Element => {
                                 target="_blank"
                                 rel="noreferrer"
                                 href={`https://${
-                                    chainId === 1 ? 'etherscan.io' : 'bscscan.com'
+                                    getScanAddressByChainId(chainId)
                                 }/tx/${transactionId}`}
                             >
                                 transaction
