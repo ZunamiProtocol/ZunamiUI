@@ -71,6 +71,7 @@ export const TransactionHistory = (props: TransactionHistoryProps): JSX.Element 
                         <tr>
                             <th>Coin</th>
                             <th>Value</th>
+                            <th>Type</th>
                             <th>Date & Time</th>
                             <th>Status</th>
                         </tr>
@@ -88,6 +89,7 @@ export const TransactionHistory = (props: TransactionHistoryProps): JSX.Element 
                                         <span className="ms-1">{getIconFromTransaction(item)}</span>
                                     </td>
                                     <td>{`${item.value ? `$${item.value.toFixed(2)}` : ''}`}</td>
+                                    <td>{item.type}</td>
                                     <td>{format(new Date(item.dateTime), 'd MMM, yyyy, h:mm a')}</td>
                                     <td
                                         className={`${item.status} d-flex align-items-center justify-content-end status-col`}
