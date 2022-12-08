@@ -246,7 +246,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     account,
                     props.operationName.toUpperCase(),
                     transHistoryPage,
-                    6,
+                    10,
                     chainId
                 )
             );

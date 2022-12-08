@@ -15,6 +15,7 @@ interface TransactionItem {
     dateTime: String;
     transactionHash: String;
     status: String;
+    type: String;
 }
 
 /**
@@ -44,14 +45,52 @@ function getIconFromTransaction(transaction: TransactionItem) {
         icon = 'all-coins';
     }
 
+    if (transaction.type === 'RECEIVED') {
+        icon = 'uzd';
+    }
+
     return icon;
+}
+
+/**
+ * Returns a coin name for transaction
+ * @param transaction
+ * @returns
+ */
+function getCoinNameFromTransaction(transaction: TransactionItem): string {
+    let name = 'USDT';
+    let coinsCount = 0;
+
+    ['dai', 'usdc', 'usdt'].forEach((coin) => {
+        if (transaction[coin] > 0) {
+            coinsCount++;
+        }
+    });
+
+    if (transaction.dai > 0) {
+        name = 'DAI';
+    } else if (transaction.usdc > 0) {
+        name = 'USDC';
+    } else if (transaction.busd > 0) {
+        name = 'BUSD';
+    }
+
+    if (coinsCount > 1) {
+        name = 'All';
+    }
+
+    if (transaction.type === 'RECEIVED') {
+        name = 'UZD/LP';
+    }
+
+    return name;
 }
 
 export const TransactionHistory = (props: TransactionHistoryProps): JSX.Element => {
     const { chainId } = useWallet();
 
     const onScroll = (e: any) => {
-        const areaHeight = e.target.offsetHeight - 25;
+        const areaHeight = e.target.offsetHeight;
         const totalScroll = e.target.scrollTop + areaHeight;
         const fullHeight = e.target.children[0].offsetHeight;
 
@@ -86,7 +125,7 @@ export const TransactionHistory = (props: TransactionHistoryProps): JSX.Element 
                                             className="icon"
                                             alt=""
                                         />
-                                        <span className="ms-1">{getIconFromTransaction(item)}</span>
+                                        <span className="ms-1">{getCoinNameFromTransaction(item)}</span>
                                     </td>
                                     <td>{`${item.value ? `$${item.value.toFixed(2)}` : ''}`}</td>
                                     <td>{item.type}</td>
