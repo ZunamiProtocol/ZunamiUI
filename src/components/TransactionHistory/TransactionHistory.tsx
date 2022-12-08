@@ -4,6 +4,7 @@ import './TransactionHistory.scss';
 
 interface TransactionHistoryProps {
     title: any;
+    section: string;
     items?: Array<any>;
     onPageEnd?: Function;
 }
@@ -15,7 +16,7 @@ interface TransactionItem {
     dateTime: String;
     transactionHash: String;
     status: String;
-    type: String;
+    type: string;
 }
 
 /**
@@ -45,7 +46,7 @@ function getIconFromTransaction(transaction: TransactionItem) {
         icon = 'all-coins';
     }
 
-    if (transaction.type === 'RECEIVED') {
+    if (['RECEIVED', 'SENT'].indexOf(transaction.type) !== -1) {
         icon = 'uzd';
     }
 
@@ -57,7 +58,10 @@ function getIconFromTransaction(transaction: TransactionItem) {
  * @param transaction
  * @returns
  */
-function getCoinNameFromTransaction(transaction: TransactionItem): string {
+function getCoinNameFromTransaction(
+    transaction: TransactionItem,
+    section: string
+): string {
     let name = 'USDT';
     let coinsCount = 0;
 
@@ -79,8 +83,12 @@ function getCoinNameFromTransaction(transaction: TransactionItem): string {
         name = 'All';
     }
 
-    if (transaction.type === 'RECEIVED') {
-        name = 'UZD/LP';
+    if (['RECEIVED', 'SENT'].indexOf(transaction.type) !== -1) {
+        if (['DEPOSIT', 'WITHDRAW'].indexOf(section.toUpperCase()) !== -1) {
+            name = 'ZLP';
+        } else {
+            name = 'UZD';
+        }
     }
 
     return name;
@@ -125,7 +133,7 @@ export const TransactionHistory = (props: TransactionHistoryProps): JSX.Element 
                                             className="icon"
                                             alt=""
                                         />
-                                        <span className="ms-1">{getCoinNameFromTransaction(item)}</span>
+                                        <span className="ms-1">{getCoinNameFromTransaction(item, props.section)}</span>
                                     </td>
                                     <td>{`${item.value ? `$${item.value.toFixed(2)}` : ''}`}</td>
                                     <td>{item.type}</td>

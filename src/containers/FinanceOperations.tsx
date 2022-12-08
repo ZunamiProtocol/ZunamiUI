@@ -345,6 +345,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                 <div className="TransactionHisoryMobile__Content">
                                                     <TransactionHistory
                                                         title=""
+                                                        section={props.operationName}
                                                         items={transactionList}
                                                         onPageEnd={() => {
                                                             if (transHistoryPage !== -1) {
@@ -500,6 +501,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                     {props.operationName === 'Deposit' && (
                                                         <TransactionHistory
                                                             title="My deposits history"
+                                                            section={props.operationName}
                                                             items={transactionList}
                                                             onPageEnd={() => {
                                                                 if (transHistoryPage !== -1) {
@@ -513,6 +515,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                     {props.operationName === 'withdraw' && (
                                                         <TransactionHistory
                                                             title="My withdrawals history"
+                                                            section={props.operationName}
                                                             items={transactionList}
                                                             onPageEnd={() => {
                                                                 if (transHistoryPage !== -1) {
