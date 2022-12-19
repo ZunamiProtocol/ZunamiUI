@@ -155,9 +155,9 @@ export const Main = (): JSX.Element => {
             let totalIncomeBalance = activeBalance;
 
             // if user has minted UZD
-            if (uzdBalance.toNumber()) {
-                totalIncomeBalance = totalIncomeBalance.plus(uzdBalance.dividedBy(lpPrice))
-            }
+            // if (uzdBalance.toNumber()) {
+            //     totalIncomeBalance = totalIncomeBalance.plus(uzdBalance.dividedBy(lpPrice))
+            // }
             
             try {
                 const totalIncomeUrl =
