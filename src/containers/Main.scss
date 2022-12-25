@@ -25,16 +25,16 @@
     }
 
     @media screen and (min-width: $media1024) {
-        width: 652px !important;
-        max-width: 652px !important;
+        width: 640px !important;
+        max-width: 640px !important;
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
 
     @media screen and (min-width: $media1440) {
-        width: 925px !important;
-        max-width: 925px !important;
-        min-width: 925px !important;
+        width: 990px !important;
+        max-width: 990px !important;
+        min-width: 990px !important;
     }
 
     @media screen and (min-width: $media1920) {
@@ -92,8 +92,6 @@
     }
 
     .second-row {
-        background-color: #fff;
-
         @media screen and (min-width: $media375) {
             flex-wrap: nowrap !important;
         }

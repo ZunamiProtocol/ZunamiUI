@@ -1,6 +1,21 @@
 @import 'src/variables';
 
 .Form {
+    border-radius: $border-radius;
+    background: linear-gradient(64.61deg, #f7f7f7 9.76%, #f6f6f6 99.42%);
+
+    @media screen and (min-width: $media375) {
+        padding: 20px;
+    }
+
+    @media screen and (min-width: $media1024) {
+        padding: 20px;
+    }
+
+    @media screen and (min-width: $media1440) {
+        padding: 30px;
+    }
+
     .InputInfo {
         display: flex;
     }
@@ -14,28 +29,38 @@
 
     .buttons {
         gap: 0 10px;
+
+        @media screen and (min-width: $media1024) {
+            margin-top: 20px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            margin-top: 40px;
+        }
     }
 
     button {
-        background: linear-gradient(87.51deg, #f74e02 12.85%, #f9a412 94.75%);
-        border-radius: 5px;
+        background: linear-gradient(0deg, #f96501 0%, #ffa001 100%);
+        border-radius: $border-radius;
         border: none;
         color: #fff;
 
         @media screen and (min-width: $media375) {
             width: 120px;
-            height: 36px;
+            padding: 10px 28px;
             font-size: 14px;
             line-height: 19px;
             margin-top: 0;
+            margin-bottom: 20px;
         }
 
         @media screen and (min-width: $media1024) {
-            width: 109px;
-            height: 28px;
+            width: 96px;
+            height: 30px;
             font-size: 12px;
             line-height: 16px;
             margin-top: 0;
+            margin-bottom: 0;
         }
 
         @media screen and (min-width: $media1440) {
@@ -76,11 +101,11 @@
 
     @media screen and (min-width: $media1024) {
         flex-basis: auto;
-        width: 257px;
+        width: 300px;
     }
 
     @media screen and (min-width: $media1440) {
-        width: 484px;
+        width: 498px;
     }
 
     @media screen and (min-width: $media1920) {
@@ -93,14 +118,6 @@
         font-size: 12px;
         padding: 10px 20px;
         color: #767676;
-    }
-
-    @media screen and (min-width: $media1440) {
-        width: 484px;
-    }
-
-    @media screen and (min-width: $media1920) {
-        width: 543px;
     }
 
     .direct-withdraw-warning {
@@ -113,8 +130,7 @@
 
     .inner {
         @media screen and (min-width: $media375) {
-            padding: 15px 15px 30px 15px;
-            background: #fff5e9;
+            // padding: 15px 15px 30px 15px;
             border-radius: 3px;
         }
 
@@ -122,6 +138,7 @@
             padding: 0;
             background: transparent;
             border-radius: 0;
+            // background: #fff5e9;
         }
     }
 }

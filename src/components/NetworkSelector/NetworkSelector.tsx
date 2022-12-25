@@ -23,13 +23,13 @@ export const networks = [
     {
         id: 1,
         key: '0x1',
-        value: 'Ethereum',
+        value: 'Ethereum Network',
         icon: <ETHLogo />,
     },
     {
         id: 56,
         key: '0x38',
-        value: 'Binance',
+        value: 'Binance Network',
         icon: <BSCLogo />,
     },
     {
@@ -59,7 +59,7 @@ export const networks = [
     },
     {
         key: '0x89',
-        value: 'Polygon',
+        value: 'Polygon Network',
         icon: <PLGLogo />,
     },
     {

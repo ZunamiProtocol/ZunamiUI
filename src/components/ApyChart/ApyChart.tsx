@@ -73,6 +73,7 @@ if (document.body.clientWidth > 1024) {
 
 const chartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     layout: {
         padding: paddings,
     },
@@ -100,6 +101,7 @@ const chartOptions = {
             },
         },
         y: {
+            display: false,
             grid: {
                 display: false,
             },
@@ -135,7 +137,6 @@ export const ApyChart = (props: ChartProps): JSX.Element => {
     return (
         <div className={'ApyChart'}>
             <div className="ApyChart__Header">
-                <div className="ApyChart__Title">Historical Realised APY</div>
                 <div className="ApyChart__Selector">
                     {renderRanges(ranges, currentRange, (e: string) => {
                         setCurrentRange(e);

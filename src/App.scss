@@ -8,17 +8,57 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Space Grotesk';
+    src: url('./fonts/spacegrotesk-regular-webfont.woff2') format('woff2'),
+        url('./fonts/spacegrotesk-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'space_groteskbold';
+    src: url('./fonts/spacegrotesk-bold-webfont.woff2') format('woff2'),
+        url('./fonts/spacegrotesk-bold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'space_groteskmedium';
+    src: url('./fonts/spacegrotesk-medium-webfont.woff2') format('woff2'),
+        url('./fonts/spacegrotesk-medium-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'space_grotesksemibold';
+    src: url('./fonts/spacegrotesk-semibold-webfont.woff2') format('woff2'),
+        url('./fonts/spacegrotesk-semibold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'space_grotesklight';
+    src: url('./fonts/spacegrotesk-light-webfont.woff2') format('woff2'),
+        url('./fonts/spacegrotesk-light-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 html,
 body,
 #root {
     height: 100%;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
-    font-family: 'Vela Sans Regular';
+    font-family: 'Space Grotesk', sans-serif;
 }
 
 body {
-    background-color: #fffcf5 !important;
+    background-color: #fff !important;
 }
 
 #root > .container {
@@ -33,7 +73,7 @@ body {
         max-width: 1024px;
         margin-left: auto;
         margin-right: auto;
-        height: calc(100% - 134px) !important;
+        height: 100% !important;
     }
 
     @media (min-width: 960px) and (max-width: 1023px) {
@@ -44,14 +84,12 @@ body {
         max-width: 1440px;
         margin-left: auto;
         margin-right: auto;
-        height: calc(100% - 134px) !important;
     }
 
     @media (min-width: $media1920) {
         max-width: 1920px;
         margin-left: auto;
         margin-right: auto;
-        height: calc(100% - 147px) !important;
     }
 }
 
@@ -306,40 +344,43 @@ footer {
 }
 
 .zun-button {
-    background: linear-gradient(87.51deg, #f74e02 12.85%, #f9a412 94.75%);
-    border-radius: 5px;
+    background: linear-gradient(0deg, #f96501 0%, #ffa001 100%);
+    border-radius: 44px;
     text-align: center;
     color: #ffffff;
     border: none;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
+    font-family: 'Space Grotesk';
+    text-decoration: none;
 
     @media (min-width: $media375) {
-        width: 126px;
-        height: 33px;
-        font-size: 12px;
-        line-height: 16px;
+        font-size: 14px;
+        line-height: 18px;
+        padding: 10px 28px;
     }
 
     @media (min-width: $media1024) {
-        width: 105px;
-        height: 29px;
         font-size: 11px;
-        line-height: 15px;
+        line-height: 14px;
+        padding: 8px 28px;
     }
 
     @media (min-width: $media1440) {
-        font-size: 12px;
-        line-height: 16px;
-        width: 99px;
-        height: 33px;
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 17px;
+        padding: 10px 30px;
     }
 
     @media (min-width: $media1920) {
-        width: 170px;
-        height: 43px;
         font-size: 16px;
         line-height: 22px;
+    }
+
+    &:hover {
+        text-decoration: none;
+        color: #fff;
     }
 }
 
@@ -823,7 +864,7 @@ body.dark {
     }
 
     #collapsed-nav-menu {
-        background: linear-gradient(180deg, rgba(250, 91, 6, 0) 0%, rgba(250, 91, 6, 0.04) 100%);
+        // background: linear-gradient(180deg, rgba(250, 91, 6, 0) 0%, rgba(250, 91, 6, 0.04) 100%);
         color: $primary-color;
 
         span {
@@ -1036,5 +1077,522 @@ body.dark {
                 background: #252323;
             }
         }
+    }
+}
+
+.badge {
+    border-radius: $border-radius !important;
+    padding: 7px 20px !important;
+    font-size: 14px !important;
+    line-height: 19px !important;
+
+    &-light {
+        background: #f0f0f0;
+        color: #000 !important;
+    }
+}
+
+.text-primary {
+    color: $primary-color;
+}
+
+.btn {
+    border-radius: $border-radius !important;
+}
+
+.btn-sm {
+    padding: 6px 15px !important;
+    font-size: 14px !important;
+    line-height: 19px !important;
+    max-height: 31px;
+
+    span {
+        font-size: 14px !important;
+    }
+}
+
+.btn-light {
+    background-color: $btn-secondary-color !important;
+}
+
+.dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.features-slider {
+    background-color: #cecece;
+    border-radius: $border-radius;
+
+    @media (min-width: $media1024) {
+        width: 275px;
+        height: 171px;
+    }
+
+    @media (min-width: $media1440) {
+        width: 353px;
+        height: 222px;
+    }
+
+    @media (min-width: $media1920) {
+        width: 610px;
+        height: 262px;
+    }
+
+    .carousel-item {
+        border-radius: $border-radius;
+        position: relative;
+
+        @media (min-width: $media1440) {
+            width: 353px;
+            height: 222px;
+        }
+
+        .title {
+            font-family: 'Space Grotesk';
+            font-weight: 500;
+            font-size: 13px;
+            line-height: 17px;
+            color: #ffffff;
+            position: absolute;
+            top: 23px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        &.nft {
+            background: linear-gradient(66.29deg, #10013c 8.08%, #2a06be 100.86%);
+
+            .shark {
+                position: absolute;
+                bottom: 0;
+                left: 148px;
+            }
+
+            .logo {
+                left: 59px;
+                top: 72px;
+                position: absolute;
+            }
+        }
+
+        &.loans {
+            background: linear-gradient(66.29deg, #30013c 1.49%, #8306be 94.28%);
+
+            .logo {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        &.uzd {
+            background: linear-gradient(0deg, #ff3902 -49.44%, #ffa701 100%);
+
+            .uzd-logo {
+                left: 52px;
+                top: 57px;
+                position: absolute;
+            }
+
+            .uzd {
+                top: 82px;
+                left: 139px;
+                position: absolute;
+                display: flex;
+                align-items: baseline;
+            }
+
+            .description {
+                left: 142px;
+                top: 147px;
+                position: absolute;
+                color: #fff;
+                font-family: 'Space Grotesk';
+                font-weight: 600;
+                font-size: 12px;
+                line-height: 14px;
+                width: 143px;
+            }
+        }
+    }
+}
+
+.ApyBarWrapper {
+    @media (min-width: $media375) {
+        width: 100%;
+    }
+
+    @media (min-width: $media1024) {
+        width: auto;
+    }
+}
+
+.ApyBar {
+    background: linear-gradient(78.51deg, #f7f7f7 12.17%, #f6f6f6 65.32%);
+    border-radius: $border-radius;
+
+    @media (min-width: $media375) {
+        padding: 20px;
+        margin: 0;
+    }
+
+    @media (min-width: $media1024) {
+        width: 300px;
+        height: 316px;
+        padding: 20px;
+        margin: 21px 20px 0 20px;
+    }
+
+    @media (min-width: $media1440) {
+        width: 517px;
+        height: 316px;
+        padding: 25px;
+        margin: 21px 23px 0 48px;
+    }
+
+    @media (min-width: $media1920) {
+        width: 610px;
+        height: 373px;
+        padding: 25px;
+        margin: 21px 23px 0 48px;
+    }
+
+    &__title {
+        font-family: 'Space Grotesk';
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 17px;
+        margin-bottom: 20px;
+
+        @media (min-width: $media375) {
+            font-size: 14px;
+            line-height: 18px;
+        }
+
+        @media (min-width: $media1920) {
+            font-size: 14px;
+            line-height: 18px;
+        }
+    }
+
+    &__counters {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+        @media (min-width: $media375) {
+            gap: 20px;
+        }
+
+        @media (min-width: $media1024) {
+            gap: 0;
+        }
+
+        .ApyBar__Counter {
+            background: #f0f0f0;
+            border-radius: $border-radius;
+
+            @media (min-width: $media375) {
+                width: calc(50% - 10px);
+                height: 53px;
+                margin-bottom: 0;
+            }
+
+            @media (min-width: $media1024) {
+                width: 127px;
+                height: 53px;
+                margin-bottom: 12px;
+            }
+
+            @media (min-width: $media1440) {
+                width: 148px;
+                height: 64px;
+                margin-bottom: 0;
+            }
+
+            @media (min-width: $media1920) {
+                width: 174px;
+                height: 75px;
+                margin-bottom: 0;
+            }
+
+            &__Title {
+                span {
+                    display: block;
+                    font-family: 'Space Grotesk';
+                    font-weight: 500;
+
+                    @media (min-width: $media375) {
+                        font-size: 14px;
+                        line-height: 14px;
+                        margin: 11px 0 2px 15px;
+                    }
+
+                    @media (min-width: $media1024) {
+                        font-size: 11px;
+                        line-height: 14px;
+                        margin: 11px 0 2px 15px;
+                    }
+
+                    @media (min-width: $media1440) {
+                        font-size: 13px;
+                        line-height: 17px;
+                        margin: 11px 0 2px 19px;
+                    }
+
+                    @media (min-width: $media1920) {
+                        font-size: 14px;
+                        line-height: 18px;
+                        margin: 15px 0 6px 19px;
+                    }
+                }
+            }
+
+            &__Value {
+                @media (min-width: $media375) {
+                    margin-left: 15px;
+                    font-size: 14px;
+                }
+
+                @media (min-width: $media1024) {
+                    margin-left: 15px;
+                    font-size: 12px;
+                }
+
+                @media (min-width: $media1440) {
+                    margin-left: 19px;
+                    font-size: 14px;
+                }
+
+                &--primary {
+                    color: $primary-color;
+                }
+            }
+        }
+    }
+}
+
+.card {
+    border: none !important;
+    border-radius: $border-radius !important;
+    background: linear-gradient(86.2deg, #f8f8f8 4.31%, #f7f7f7 40.59%);
+
+    &-body {
+        @media (min-width: $media1024) {
+            padding: 20px !important;
+        }
+
+        @media (min-width: $media1440) {
+            padding: 25px !important;
+        }
+
+        > .title {
+            @media (min-width: $media1440) {
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 20px;
+            }
+        }
+    }
+}
+
+.Deposit__RightBlock {
+    border-radius: $border-radius;
+    background: linear-gradient(57.3deg, #f8f8f8 -9.62%, #f7f7f7 99.29%);
+
+    @media (min-width: $media375) {
+        padding: 20px 22px;
+        margin-left: 0;
+        margin-top: 20px;
+    }
+
+    @media (min-width: $media1024) {
+        margin-top: 0;
+        padding: 20px 22px;
+        margin-left: 20px;
+    }
+
+    @media (min-width: $media1440) {
+        padding: 32px 37px;
+        margin-left: 23px;
+    }
+
+    > .title {
+        @media (min-width: $media375) {
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        @media (min-width: $media1024) {
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+
+        @media (min-width: $media1440) {
+            margin-bottom: 28px;
+            font-size: 14px;
+        }
+
+        @media (min-width: $media1920) {
+            margin-bottom: 28px;
+            font-size: 16px;
+        }
+    }
+
+    .balance {
+        background: linear-gradient(0deg, #f86001 0%, #fea001 93.75%);
+        border-radius: $border-radius;
+        padding: 11px 20px;
+        color: #fff;
+        font-weight: 600;
+
+        @media (min-width: $media1024) {
+            width: 139px;
+        }
+
+        @media (min-width: $media1440) {
+            width: 147px;
+        }
+
+        @media (min-width: $media1920) {
+            width: 197px;
+        }
+
+        .title {
+            @media (min-width: $media1024) {
+                font-size: 12px;
+                line-height: 16px;
+            }
+
+            @media (min-width: $media1440) {
+                font-size: 13px;
+                line-height: 17px;
+            }
+
+            @media (min-width: $media1920) {
+                font-size: 14px;
+                line-height: 16px;
+            }
+        }
+
+        .value {
+            @media (min-width: $media1024) {
+                font-size: 12px;
+                line-height: 16px;
+                margin-top: 3px;
+            }
+
+            @media (min-width: $media1440) {
+                font-size: 14px;
+                line-height: 19px;
+                margin-top: 3px;
+            }
+
+            @media (min-width: $media1920) {
+                font-size: 16px;
+                line-height: 22px;
+                margin-top: 3px;
+            }
+        }
+    }
+}
+
+.Counter {
+    background: #f0f0f0;
+    border-radius: $border-radius;
+
+    @media screen and (min-width: $media375) {
+        padding: 11px 17px;
+    }
+
+    @media screen and (min-width: $media1024) {
+        padding: 11px 17px;
+    }
+
+    @media screen and (min-width: $media1440) {
+        padding: 13px 20px;
+    }
+
+    &__Title {
+        color: #000000;
+
+        @media screen and (min-width: $media375) {
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 19px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            font-weight: 500;
+            font-size: 11px;
+            line-height: 14px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-weight: 500;
+            font-size: 13px;
+            line-height: 17px;
+        }
+
+        &__Buttons {
+            display: flex;
+            cursor: pointer;
+            gap: 5px;
+
+            img {
+                width: 12px;
+                height: auto;
+            }
+        }
+    }
+
+    &__Value {
+        color: #5b5959;
+
+        @media screen and (min-width: $media375) {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 19px;
+            margin-top: 4px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            font-weight: 600;
+            font-size: 11px;
+            line-height: 17px;
+            margin-top: 4px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 19px;
+            margin-top: 4px;
+        }
+
+        &-Active {
+            color: #ff7a00;
+        }
+
+        &-Big {
+            @media screen and (min-width: $media1440) {
+                font-size: 16px;
+                line-height: 22px;
+            }
+        }
+    }
+}
+
+.fast-deposit-wrapper,
+.PieChartWrapper {
+    @media screen and (min-width: $media375) {
+        width: 100%;
+    }
+
+    @media screen and (min-width: $media1024) {
+        width: auto;
     }
 }

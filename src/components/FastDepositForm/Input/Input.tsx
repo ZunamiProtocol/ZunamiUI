@@ -43,33 +43,34 @@ export const Input = (props: InputProps): JSX.Element => {
 
     return (
         <div className={`FastDepositInput ${props.disabled ? 'disabled' : ''}`}>
-            <img src={`${props.name}.svg`} alt="" />
-            <div className={'coinName'}>{props.name}</div>
-            <svg
-                width="14"
-                height="5"
-                viewBox="0 0 14 5"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="selector"
-            >
-                <path d="M1 1L7 4L13 1" stroke="#404040" strokeWidth="1.1" strokeLinecap="round" />
-            </svg>
+            <div className="selector-wrapper">
+                <img src={`${props.name}.svg`} alt="" />
+                <div className={'coinName'}>{props.name}</div>
+                <svg
+                    width="14"
+                    height="5"
+                    viewBox="0 0 14 5"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="selector"
+                >
+                    <path d="M1 1L7 4L13 1" stroke="#404040" strokeWidth="1.1" strokeLinecap="round" />
+                </svg>
 
-            <select
-                value={props.name}
-                onChange={(val) => {
-                    if (props.onCoinChange) {
-                        props.onCoinChange(val.target.value);
-                    }
-                }}
-            >
-                {props.chainId === 1 && <option value="DAI">DAI</option>}
-                {props.chainId === 1 && <option value="USDC">USDC</option>}
-                {props.chainId === 56 && <option value="BUSD">BUSD</option>}
-                <option value="USDT">USDT</option>
-            </select>
-            <div className="divider"></div>
+                <select
+                    value={props.name}
+                    onChange={(val) => {
+                        if (props.onCoinChange) {
+                            props.onCoinChange(val.target.value);
+                        }
+                    }}
+                >
+                    {props.chainId === 1 && <option value="DAI">DAI</option>}
+                    {props.chainId === 1 && <option value="USDC">USDC</option>}
+                    {props.chainId === 56 && <option value="BUSD">BUSD</option>}
+                    <option value="USDT">USDT</option>
+                </select>
+            </div>
             <input
                 inputMode={'decimal'}
                 autoComplete={'off'}

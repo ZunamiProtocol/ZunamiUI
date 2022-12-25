@@ -1,142 +1,141 @@
 @import 'src/variables';
 
 .WithdrawOptions {
-    background: #fffaf3;
-    border: 1px solid #f4efe1;
-    border-radius: 5px;
+    border-radius: $border-radius;
+    background: linear-gradient(57.3deg, #F8F8F8 -9.62%, #F7F7F7 99.29%);
 
-    @media screen and (min-width: $media375) {
-        flex-basis: 100%;
-        padding: 20px;
-        font-size: 14px;
-        line-height: 13.6px;
-        margin-top: 20px;
+    @media (min-width: $media1440) {
+        padding: 32px 37px;
+        margin-left: 23px;
+        // width: 368px;
     }
 
-    @media screen and (min-width: $media1024) {
-        min-width: 270px;
-        width: 270px;
-        height: 251px;
-        margin-left: 10px;
-        padding: 17px 18px;
-        font-size: 11px;
-        line-height: 15px;
-        flex-basis: auto;
-        margin-top: 0;
+    &__Title {
+        @media screen and (min-width: $media1440) {
+            font-size: 16px;
+            line-height: 20px;
+            margin-bottom: 28px;
+        }
     }
 
-    @media screen and (min-width: $media1440) {
-        min-width: 367px;
-        width: 367px;
-        height: 283px;
-        margin-left: 25px;
-        padding: 30px 25px;
-        font-size: 12px;
-        line-height: 16px;
-    }
+    .balance {
+        background: linear-gradient(0deg, #F86001 0%, #FEA001 93.75%);
+        border-radius: $border-radius;
+        padding: 11px 20px;
+        color: #fff;
+        font-weight: 600;
 
-    @media screen and (min-width: $media1920) {
-        min-width: 412px;
-        width: 435px;
-        height: 334px;
-        margin-left: 25px;
-        padding: 32px 28px;
-        font-size: 14px;
-        line-height: 19px;
-    }
+        @media (min-width: $media1440) {
+            width: 147px;
+        }
 
-    &__BalanceBlock {
-        .balance {
-            color: $primary-color;
-            margin-left: 5px;
+        .title {
+            @media (min-width: $media1440) {
+                font-size: 13px;
+                line-height: 17px;
+            }
+        }
+
+        .value {
+            @media (min-width: $media1440) {
+                font-size: 14px;
+                line-height: 19px;
+                margin-top: 3px;
+            }
         }
     }
 
     &__LiquidityBlock {
+        border-radius: $border-radius;
+        background: #F0F0F0;
+        display: flex;
+        align-items: center;
+
         @media screen and (min-width: $media375) {
-            margin-top: 15px;
+            
         }
 
         @media screen and (min-width: $media1024) {
-            margin-top: 31px;
+            
         }
 
         @media screen and (min-width: $media1440) {
-            margin-top: 30px;
+            padding: 15px 22px;
+            margin-top: 13px;
+            font-size: 13px;
+            line-height: 17px;
         }
 
         @media screen and (min-width: $media1920) {
-            margin-top: 25px;
+            
         }
 
         input[type='text'],
         input[type='number'] {
             display: block;
-            background: #fffaf3;
-            border: 1px solid #f4efe1;
-            border-radius: 5px;
-            color: #636363;
+            background: #E7E7E7;
+            border-radius: $border-radius;
+            color: #000;
 
             &:disabled {
                 background: #ededed;
             }
 
             @media screen and (min-width: $media375) {
-                padding: 4px 8px;
-                margin-top: 12px;
-                font-size: 14px;
-                line-height: 13px;
-                height: 35px;
-                width: 109px;
+                
             }
 
             @media screen and (min-width: $media1024) {
-                padding: 4px 8px;
-                margin-top: 13px;
-                font-size: 11px;
-                line-height: 15px;
-                height: 30px;
-                width: 67px;
+                
             }
 
             @media screen and (min-width: $media1440) {
                 padding: 6px 12px;
-                margin-top: 10px;
                 font-size: 14px;
+                font-size: 14px;
+                line-height: 19px;
+                width: 80px;
+                margin-left: 20px;
             }
 
             @media screen and (min-width: $media1920) {
-                padding: 6px 12px;
-                margin-top: 10px;
-                font-size: 14px;
-                line-height: 19px;
-                height: 34px;
-                width: 193px;
+                
             }
         }
     }
 
     &__CoinsBlock {
         @media screen and (min-width: $media375) {
-            margin-top: 20px;
+            
         }
 
         @media screen and (min-width: $media1024) {
-            margin-top: 23px;
+            
         }
 
         @media screen and (min-width: $media1440) {
-            margin-top: 25px;
+            margin-top: 20px;
         }
 
         @media screen and (min-width: $media1920) {
             margin-top: 25px;
         }
 
+        > span {
+            display: block;
+
+            @media screen and (min-width: $media1440) {
+                font-size: 13px;
+                line-height: 17px;
+                margin-bottom: 15px;
+            }
+        }
+
         .coins {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
+            gap: 10px;
 
             @media screen and (min-width: $media375) {
                 margin-top: 10px;
@@ -148,31 +147,31 @@
 
             @media screen and (min-width: $media1440) {
                 margin-top: 0;
+                width: 310px;
             }
         }
 
         .coin {
             display: flex;
             align-items: center;
+            border-radius: $border-radius;
+            background: #F0F0F0;
+            padding: 10px 12px;
 
             @media screen and (min-width: $media375) {
-                width: 100%;
-                margin-top: 10px;
+                
             }
 
             @media screen and (min-width: $media1024) {
-                width: 50%;
-                margin-top: 10px;
+                
             }
 
             @media screen and (min-width: $media1440) {
-                width: 50%;
-                margin-top: 10px;
+                
             }
 
             @media screen and (min-width: $media1920) {
-                width: 50%;
-                margin-top: 22px;
+                
             }
 
             input[type='radio'] {

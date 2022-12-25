@@ -3,6 +3,8 @@
 .WalletStatus {
     display: flex;
     align-items: center;
+    background: linear-gradient(81.95deg, #f1f1f1 5.86%, #f3f3f3 93.43%);
+    border-radius: $border-radius;
 
     @media screen and (min-width: $media375) {
     }
@@ -11,9 +13,13 @@
     }
 
     @media screen and (min-width: $media1440) {
+        width: 358px;
+        height: 141px;
     }
 
     @media screen and (min-width: $media1920) {
+        width: 100%;
+        height: 141px;
     }
 
     &__connected {
@@ -31,7 +37,7 @@
         }
 
         .state {
-            color: #636363;
+            color: #000;
 
             @media screen and (min-width: $media375) {
                 display: none;
@@ -93,6 +99,16 @@
                 display: inline-block;
             }
         }
+
+        .btn {
+            @media screen and (min-width: $media1024) {
+                font-size: 12px !important;
+            }
+
+            @media screen and (min-width: $media1440) {
+                font-size: 14px !important;
+            }
+        }
     }
 
     &__Connect {
@@ -101,7 +117,6 @@
         color: #fff;
         border: none;
         text-align: center;
-        cursor: pointer;
 
         @media screen and (min-width: $media375) {
             width: 148px;
@@ -161,6 +176,51 @@
             height: 57px;
             top: 38px;
             right: 30px;
+        }
+    }
+
+    &__inner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        padding: 26px;
+        row-gap: 15px;
+
+        > div {
+            width: 50%;
+        }
+
+        &__network {
+            display: flex;
+            gap: 20px;
+
+            svg {
+                height: 35px;
+                width: auto;
+            }
+
+            span {
+                font-weight: 500;
+                font-size: 14px;
+                line-height: 18px;
+
+                @media screen and (min-width: $media1920) {
+                    width: 100px;
+                }
+            }
+        }
+
+        &__wallet {
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            row-gap: 5px;
+        }
+
+        .btn-sm {
+            background: #ebebeb !important;
+            color: #5b5959;
         }
     }
 }

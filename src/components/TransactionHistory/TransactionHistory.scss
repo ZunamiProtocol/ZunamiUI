@@ -2,37 +2,34 @@
 
 .TransactionHistory {
     background: #fffaf3;
-    border: 1px solid #f4efe1;
-    border-radius: 5px;
+    border-radius: $border-radius;
+    padding: 25px;
+    border-radius: $border-radius;
 
     @media screen and (min-width: $media375) {
-        display: none;
+        margin-top: 16px;
+        background: linear-gradient(67.75deg, #f3f3f3 25.38%, #f7f7f7 94.59%);
     }
 
     @media screen and (min-width: $media1024) {
-        display: block;
-        padding: 17px 24px 24px 24px;
-        margin-left: 12px;
-        width: 400px;
-        height: 251px;
+        margin-top: 16px;
+        height: 280px;
+        background: linear-gradient(69.07deg, #f0f0f0 8.53%, #f2f2f2 91.72%);
     }
 
     @media screen and (min-width: $media1440) {
-        padding: 30px 25px 25px 25px;
-        margin-left: 25px;
-        width: 400px;
-        height: 284px;
+        margin-top: 17px;
+        height: 306px;
     }
 
     @media screen and (min-width: $media1920) {
-        padding: 34px 30px 30px 30px;
-        margin-left: 25px;
-        width: 471px;
-        height: 334px;
     }
 
     &__Title {
-        color: #636363;
+        @media screen and (min-width: $media375) {
+            font-size: 14px;
+            line-height: 18px;
+        }
 
         @media screen and (min-width: $media1024) {
             font-size: 11px;
@@ -40,103 +37,184 @@
         }
 
         @media screen and (min-width: $media1440) {
-            font-size: 12px;
-            line-height: 16px;
+            font-size: 13px;
+            line-height: 17px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            font-size: 14px;
+            line-height: 18px;
         }
     }
 
     &__List {
-        height: 100%;
+        height: calc(100% - 35px);
         overflow: hidden;
         overflow-y: auto;
 
-        table {
-            width: 100%;
+        @media screen and (min-width: $media375) {
+            margin-top: 18px;
+        }
 
-            thead {
-                tr {
-                    th {
-                        border-top: 1px solid #f4efe1;
-                        border-bottom: 1px solid #f4efe1;
-                        color: #636363;
+        @media screen and (min-width: $media1024) {
+            margin-top: 18px;
+        }
 
-                        @media screen and (min-width: $media1024) {
-                            font-size: 11px;
-                            line-height: 15px;
-                            padding-top: 10px;
-                            padding-bottom: 10px;
-                        }
+        @media screen and (min-width: $media1440) {
+            margin-top: 20px;
+        }
 
-                        @media screen and (min-width: $media1440) {
-                            font-size: 12px;
-                            line-height: 16px;
-                            padding-top: 10px;
-                            padding-bottom: 10px;
-                        }
-                    }
-                }
-            }
+        &-Item {
+            background: #ebebeb;
+            border-radius: $border-radius;
 
-            tbody {
-                tr {
-                    td {
-                        @media screen and (min-width: $media1024) {
-                            font-size: 11px;
-                            line-height: 15px;
-                            height: 30px;
-                        }
-
-                        @media screen and (min-width: $media1440) {
-                            font-size: 10px;
-                            line-height: 14px;
-                            height: 30px;
-                        }
-
-                        .icon {
-                            width: 13px;
-                            height: 13px;
-                        }
-
-                        .trans-link {
-                            margin-left: 7px;
-
-                            svg {
-                                width: 10px;
-                                height: 10px;
-                            }
-                        }
-
-                        &.COMPLETED {
-                            color: #9bc17c;
-                        }
-
-                        &.PENDING {
-                            color: #f95404;
-                        }
-
-                        &.REMOVED {
-                            color: #f13308;
-                        }
-
-                        &.status-col {
-                            @media screen and (min-width: $media1024) {
-                                width: 80px;
-                            }
-
-                            @media screen and (min-width: $media1440) {
-                                width: 80px;
-                            }
-                        }
-                    }
-                }
+            @media screen and (min-width: $media375) {
+                padding: 12px 20px;
+                margin-bottom: 20px;
             }
 
             @media screen and (min-width: $media1024) {
-                margin-top: 22px;
+                padding: 9px 17px;
+                margin-bottom: 9px;
             }
 
             @media screen and (min-width: $media1440) {
-                margin-top: 15px;
+                padding: 10px 20px;
+                margin-bottom: 12px;
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            .first-row {
+                display: flex;
+                justify-content: space-between;
+
+                .type {
+                    text-transform: lowercase;
+                    color: #5b5959;
+
+                    @media screen and (min-width: $media375) {
+                        font-size: 14px;
+                        line-height: 18px;
+                    }
+
+                    @media screen and (min-width: $media1024) {
+                        font-size: 12px;
+                        line-height: 15px;
+                    }
+
+                    @media screen and (min-width: $media1440) {
+                        font-size: 12px;
+                        line-height: 15px;
+                    }
+
+                    &::first-letter {
+                        text-transform: capitalize;
+                    }
+                }
+
+                .date {
+                    @media screen and (min-width: $media375) {
+                        font-size: 12px;
+                        line-height: 15px;
+                    }
+
+                    @media screen and (min-width: $media1024) {
+                        font-size: 10px;
+                        line-height: 13px;
+                    }
+
+                    @media screen and (min-width: $media1440) {
+                        font-size: 10px;
+                        line-height: 13px;
+                    }
+
+                    text-align: right;
+                    color: #636363;
+                }
+            }
+
+            .second-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                @media screen and (min-width: $media375) {
+                    margin-top: 5px;
+                }
+
+                @media screen and (min-width: $media1024) {
+                    margin-top: 5px;
+                }
+
+                @media screen and (min-width: $media1440) {
+                    margin-top: 10px;
+                }
+
+                .sum {
+                    color: #000;
+                    width: 100%;
+
+                    @media screen and (min-width: $media375) {
+                        font-size: 14px;
+                        line-height: 19px;
+                    }
+
+                    @media screen and (min-width: $media1024) {
+                        font-size: 13px;
+                        line-height: 18px;
+                    }
+
+                    @media screen and (min-width: $media1440) {
+                        font-size: 14px;
+                        line-height: 19px;
+                    }
+                }
+
+                .status {
+                    text-align: right;
+                    font-weight: 600;
+
+                    @media screen and (min-width: $media375) {
+                        font-size: 11px;
+                        line-height: 13px;
+                    }
+
+                    @media screen and (min-width: $media1024) {
+                        font-size: 11px;
+                        line-height: 13px;
+                    }
+
+                    @media screen and (min-width: $media1440) {
+                        font-size: 11px;
+                        line-height: 13px;
+                    }
+
+                    &.COMPLETED {
+                        color: #85b900;
+                    }
+
+                    &.PENDING {
+                        color: #ffb100;
+                    }
+
+                    &.REMOVED {
+                        color: #f13308;
+                    }
+                }
+
+                .trans-link {
+                    margin-left: 7px;
+                    display: block;
+                    line-height: 1px;
+
+                    svg {
+                        width: 10px;
+                        height: 10px;
+                    }
+                }
             }
         }
     }
