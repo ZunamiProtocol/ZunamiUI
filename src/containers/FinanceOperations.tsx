@@ -306,6 +306,42 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     </SideBar>
                     <div className="col content-col dashboard-col">
                         <Header />
+                        <div
+                            className="d-flex d-lg-none gap-3 mt-2 mb-2 pb-3 mobile-menu"
+                            style={{
+                                fontSize: '13px',
+                                overflowX: 'scroll',
+                            }}
+                        >
+                            <a
+                                href="/dashboard"
+                                className="text-center d-flex flex-column text-decoration-none"
+                            >
+                                <img src="/dashboard.png" alt="" />
+                                <span className="text-muted mt-2">Dashboard</span>
+                            </a>
+                            <a
+                                href="/deposit"
+                                className="text-center d-flex flex-column text-decoration-none"
+                            >
+                                <img src="/deposit.png" alt="" />
+                                <span className="text-muted mt-2">Deposit&Withdraw</span>
+                            </a>
+                            <a
+                                href="/uzd"
+                                className="text-center d-flex flex-column text-decoration-none"
+                            >
+                                <img src="/uzd.png" alt="" />
+                                <span className="text-muted mt-2">UZD</span>
+                            </a>
+                            <a
+                                href="/dao"
+                                className="text-center d-flex flex-column text-decoration-none"
+                            >
+                                <img src="/dao.png" alt="" />
+                                <span className="text-muted mt-2">DAO</span>
+                            </a>
+                        </div>
                         <InfoBar />
                         {!account && (
                             <Col className={'content-col'}>

@@ -5,11 +5,11 @@
     }
 
     @media (min-width: $media1024) {
-        height: 130px;
+        // height: 130px;
     }
 
     @media (min-width: $media1440) {
-        height: 150px;
+        // height: 150px;
     }
 
     @media (min-width: $media1920) {
@@ -129,17 +129,18 @@
         }
 
         @media screen and (min-width: $media1024) {
-            margin-top: 50px;
+            margin-top: 0;
+            height: 120px !important;
         }
 
         @media screen and (min-width: $media1440) {
             margin-top: 10px;
-            height: 150px;
+            height: 150px !important;
         }
 
         @media screen and (min-width: $media1920) {
             margin-top: 15px;
-            height: 180px;
+            height: 180px !important;
         }
     }
 }

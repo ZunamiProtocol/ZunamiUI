@@ -278,7 +278,7 @@
                 @media screen and (min-width: $media1024) {
                     margin-top: 20px;
                     margin-left: 20px;
-                    max-width: 275px;
+                    max-width: 285px;
                 }
 
                 @media screen and (min-width: $media1440) {
@@ -288,7 +288,7 @@
                 }
 
                 @media screen and (min-width: $media1440) {
-                    max-width: 420px;
+                    max-width: 416px;
                 }
 
                 .title {
@@ -408,6 +408,7 @@
                     color: #636363;
                     // padding-right: 50px;
                     width: 170px;
+                    font-family: 'Vela Sans Regular';
 
                     @media screen and (min-width: $media1024) {
                         width: 56px;
@@ -478,19 +479,34 @@
                 top: 50%;
                 right: 0;
                 transform: translate(0, -50%);
+                display: flex;
+                align-items: center;
+                gap: 10px;
+
+                @media screen and (min-width: $media375) {
+                    width: 71px;
+                    margin-right: -12px;
+                }
 
                 @media screen and (min-width: $media1024) {
+                    margin-right: 0;
                     width: 71px;
                 }
 
                 @media screen and (min-width: $media1440) {
-                    width: 125px;
+                    width: 136px;
                 }
 
                 svg {
                     background-color: #f0f0f0;
                     border-radius: 100%;
                     border: solid 10px #f7f7f7;
+
+                    @media screen and (min-width: $media375) {
+                        width: 63px;
+                        height: 63px;
+                        padding: 8px;
+                    }
 
                     @media screen and (min-width: $media1024) {
                         width: 50px;
@@ -510,6 +526,10 @@
                     font-size: 10px;
                     line-height: 14px;
                     color: #fb7b0b;
+
+                    @media screen and (min-width: $media375) {
+                        display: none;
+                    }
 
                     @media screen and (min-width: $media1024) {
                         display: none;
@@ -678,10 +698,12 @@
     .CurveWarning {
         @media screen and (min-width: $media1024) {
             min-height: 146px;
+            margin-left: 10px;
         }
 
         @media screen and (min-width: $media1440) {
             min-height: auto;
+            margin-left: 0;
         }
 
         .title {
@@ -793,6 +815,10 @@
         }
 
         .Counters {
+            @media screen and (min-width: $media375) {
+                gap: 10px;
+            }
+
             @media screen and (min-width: $media1024) {
                 gap: 10px;
             }
@@ -865,6 +891,8 @@
         }
 
         .Counter__Value {
+            font-family: 'Vela Sans Regular';
+
             @media screen and (min-width: $media375) {
                 margin-top: 7px;
                 font-size: 14px;

@@ -99,6 +99,11 @@ const chartOptions = {
             grid: {
                 display: false,
             },
+            ticks: {
+                font: {
+                    size: 9,
+                },
+            },
         },
         y: {
             display: false,

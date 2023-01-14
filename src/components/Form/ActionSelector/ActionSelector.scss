@@ -36,11 +36,13 @@
             font-size: 16px;
             background-color: #eaeaea;
             border-radius: $border-radius;
-            padding: 23px 46px;
+            padding: 23px 37px;
             border: none;
+            width: 50%;
         }
 
         @media screen and (min-width: $media1024) {
+            padding: 23px 46px;
             font-size: 12px;
             background-color: transparent;
             border-radius: 0;

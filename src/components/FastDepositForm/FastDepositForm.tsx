@@ -230,8 +230,8 @@ export const FastDepositForm = (): JSX.Element => {
                             y2="-11"
                             gradientUnits="userSpaceOnUse"
                         >
-                            <stop stop-color="#FFA902" />
-                            <stop offset="1" stop-color="#FFCF54" />
+                            <stop stopColor="#FFA902" />
+                            <stop offset="1" stopColor="#FFCF54" />
                         </linearGradient>
                     </defs>
                 </svg>

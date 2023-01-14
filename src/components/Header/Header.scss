@@ -13,6 +13,7 @@
     }
 
     @media screen and (min-width: $media1024) {
+        z-index: 1;
         height: 74px;
         min-height: 74px;
         display: flex;
@@ -70,22 +71,6 @@
 
         @media screen and (min-width: $media1920) {
             width: 500px;
-        }
-    }
-
-    .nav-menu {
-        @media screen and (min-width: $media375) {
-            display: flex;
-            justify-content: flex-end;
-            position: absolute;
-            top: 30px;
-            right: 24px;
-            height: 33px;
-            width: 33px;
-        }
-
-        @media screen and (min-width: $media1024) {
-            display: none;
         }
     }
 

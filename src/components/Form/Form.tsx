@@ -562,10 +562,12 @@ export const Form = (props: FormProps): JSX.Element => {
                         {
                             name: 'deposit',
                             title: 'Deposit',
+                            url: '/deposit',
                         },
                         {
                             name: 'withdraw',
                             title: 'Withdraw',
+                            url: '/withdraw',
                         },
                     ]}
                     onChange={(action: string) => {

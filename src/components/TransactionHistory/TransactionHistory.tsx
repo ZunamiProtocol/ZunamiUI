@@ -40,9 +40,19 @@ function getIconFromTransaction(transaction: TransactionItem) {
         icon = 'BUSD';
     }
 
+    if (transaction.lpAmount !== null) {
+        icon = 'LP';
+    }
+
+    if (transaction.uzd !== null) {
+        icon = 'UZD';
+    }
+
     if (coinsCount > 1) {
         icon = 'all-coins';
     }
+
+    //console.log(transaction);
 
     return icon;
 }
@@ -112,7 +122,7 @@ export const TransactionHistory: React.FC<
                             </div>
                         </div>
                     ))}
-                {(!items || items.length) && <div>No transactions</div>}
+                {!items.length && <div>No data</div>}
             </div>
         </div>
     );

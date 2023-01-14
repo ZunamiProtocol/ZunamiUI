@@ -3,11 +3,26 @@
 .SidebarColumn {
     display: flex;
     flex-direction: column;
-    background: linear-gradient(
-        0.02deg,
-        rgba(242, 242, 242, 0.45) 76.02%,
-        rgba(241, 241, 241, 0.45) 95.61%
-    );
+    background: linear-gradient(0.02deg, #fbfbfb 76.02%, #f1f1f1 95.61%);
+
+    &::after {
+        position: absolute;
+        content: '';
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 200px;
+        background: linear-gradient(0.02deg, #fbfbfb 76.02%, #f1f1f1 95.61%);
+        z-index: 1;
+
+        @media (min-width: $media375) {
+            display: none;
+        }
+
+        @media (min-width: $media1024) {
+            display: block;
+        }
+    }
 
     @media (min-width: $media375) {
         padding: 20px !important;
@@ -36,6 +51,7 @@
     .Sidebar {
         display: flex;
         flex-direction: column;
+        z-index: 2;
 
         &__Title {
             color: #636363;

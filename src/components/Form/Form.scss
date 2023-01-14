@@ -46,7 +46,7 @@
         color: #fff;
 
         @media screen and (min-width: $media375) {
-            width: 120px;
+            // width: 120px;
             padding: 10px 28px;
             font-size: 14px;
             line-height: 19px;
@@ -55,8 +55,6 @@
         }
 
         @media screen and (min-width: $media1024) {
-            width: 96px;
-            height: 30px;
             font-size: 12px;
             line-height: 16px;
             margin-top: 0;
@@ -64,7 +62,6 @@
         }
 
         @media screen and (min-width: $media1440) {
-            width: 120px;
             height: 36px;
         }
 
