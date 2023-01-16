@@ -25,6 +25,10 @@ import { log } from '../utils/logger';
 import { useSlippage } from '../hooks/useSlippage';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
 import useSupportedChain from '../hooks/useSupportedChain';
+import { SideBar } from '../components/SideBar/SideBar';
+import { Pendings } from '../components/Pendings/Pendings';
+import usePendingOperations from '../hooks/usePendingOperations';
+import { InfoBar } from '../components/InfoBar/InfoBar';
 
 interface FinanceOperationsProps {
     operationName: string;
@@ -265,290 +269,359 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     }, [account, props.operationName, transHistoryPage, chainId]);
 
     const supportedChain = useSupportedChain();
+    const pendingOperations = usePendingOperations();
+
+    const pendingWithdraw =
+        lpPrice.toNumber() > 0 && pendingOperations.withdraw.toNumber() !== -1
+            ? lpPrice.multipliedBy(pendingOperations.withdraw)
+            : new BigNumber(0);
 
     return (
         <React.Fragment>
-            <Header />
             <MobileSidebar />
-            <Container className={'h-100 d-flex justify-content-between flex-column'}>
+            <div className="container h-100 d-flex justify-content-between flex-column">
                 {!supportedChain && (
                     <UnsupportedChain text="You're using unsupported chain. Please, switch either to Ethereum or Binance network." />
                 )}
-                <Row className={'h-100 main-row'}>
-                    {!account && (
-                        <Col className={'content-col'}>
-                            <WelcomeCarousel />
-                        </Col>
-                    )}
-                    {account && (
-                        <Col className={'content-col'}>
-                            <ToastContainer
-                                position={'top-end'}
-                                id="toasts"
-                                className={'toasts mt-3 me-3'}
+                <div className="row main-row h-100">
+                    <SideBar isMainPage={false}>
+                        <Pendings
+                            className={`d-none d-md-block`}
+                            deposit={`$${getBalanceNumber(
+                                pendingOperations.deposit,
+                                isETH(chainId) || isPLG(chainId) ? 6 : 18
+                            ).toFixed(2)}`}
+                            withdraw={`$${getBalanceNumber(pendingWithdraw).toFixed(2)}`}
+                        />
+                        <TransactionHistory
+                            className={`d-none d-md-block`}
+                            title="Transactions history"
+                            items={transactionList}
+                            onPageEnd={() => {
+                                if (transHistoryPage !== -1) {
+                                    setTransHistoryPage(transHistoryPage + 1);
+                                }
+                            }}
+                        />
+                    </SideBar>
+                    <div className="col content-col dashboard-col">
+                        <Header />
+                        <div
+                            className="d-flex d-lg-none gap-3 mt-2 mb-2 pb-3 mobile-menu"
+                            style={{
+                                fontSize: '13px',
+                                overflowX: 'scroll',
+                            }}
+                        >
+                            <a
+                                href="/dashboard"
+                                className="text-center d-flex flex-column text-decoration-none"
                             >
-                                {calcError && (
-                                    <Toast onClose={() => setCalcError('')} delay={10000} autohide>
-                                        <Toast.Body>{calcError}</Toast.Body>
-                                    </Toast>
-                                )}
-                            </ToastContainer>
-                            <Row className={'zun-rounded zun-shadow h-100 operation-col'}>
-                                <Col className={'ps-0 pe-0'}>
-                                    <div className={'DepositBlock'}>
-                                        <div className={'DepositContent'}>
-                                            <h3 className="DepositContent__Title">
-                                                <FinIcon />
-                                                Deposit & Withdraw
-                                            </h3>
-                                            <div
-                                                id="trans-story-mobile-btn"
-                                                className={showMobileTransHistory ? 'active' : ''}
-                                            >
-                                                <svg
-                                                    width="11"
-                                                    height="12"
-                                                    viewBox="0 0 11 12"
-                                                    fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <path
-                                                        d="M10.6236 11.0138L10.6235 11.0138C10.5976 11.2374 10.4136 11.3805 10.1869 11.3902C10.1667 11.391 10.1459 11.3909 10.1279 11.3909C10.123 11.3908 10.1183 11.3908 10.114 11.3908L2.49809 11.3911C2.49809 11.3911 2.49808 11.3911 2.49807 11.3911C1.96381 11.3913 1.52468 11.2042 1.19989 10.8133C1.0116 10.5867 0.920792 10.3272 0.903542 10.0497C0.901005 10.009 0.900685 9.9687 0.900683 9.93081C0.900571 7.33663 0.900343 4.74246 0.9 2.14829L10.6236 11.0138ZM10.6236 11.0138L10.6239 11.0102M10.6236 11.0138L10.6239 11.0102M10.6239 11.0102C10.6274 10.9661 10.6284 10.9218 10.6269 10.8776L10.627 6.04986L10.6269 1.19128C10.6283 1.15043 10.6273 1.10954 10.6239 1.06878L10.624 1.06878M10.6239 11.0102L10.624 1.06878M10.624 1.06878L10.6236 1.06535M10.624 1.06878L10.6236 1.06535M10.6236 1.06535C10.5976 0.84203 10.4137 0.698423 10.1869 0.689019C10.159 0.687865 10.1302 0.688044 10.1043 0.688205C10.0957 0.688258 10.0874 0.688309 10.0797 0.688309L2.54395 0.688324C2.53469 0.688324 2.52518 0.68829 2.51546 0.688254C2.47938 0.688122 2.44056 0.68798 2.40235 0.689581C1.93356 0.709233 1.54287 0.882505 1.24394 1.21359C0.996923 1.48718 0.899867 1.80616 0.9 2.14826L10.6236 1.06535ZM2.61757 8.5966C2.33832 8.59635 2.05604 8.61933 1.78983 8.73226L1.7898 2.15232C1.7898 1.99286 1.82418 1.85564 1.92744 1.73816C2.05563 1.59232 2.22521 1.51791 2.43986 1.50615C2.46633 1.5047 2.49228 1.50482 2.52151 1.50495C2.5303 1.50499 2.53939 1.50503 2.54887 1.50503L9.69493 1.50498H9.72903L9.72902 8.59777H9.72874H9.72845H9.72817H9.72789H9.7276H9.72732H9.72704H9.72675H9.72647H9.72618H9.7259H9.72562H9.72533H9.72505H9.72477H9.72448H9.7242H9.72392H9.72363H9.72335H9.72306H9.72278H9.7225H9.72221H9.72193H9.72165H9.72136H9.72108H9.72079H9.72051H9.72023H9.71994H9.71966H9.71938H9.71909H9.71881H9.71853H9.71824H9.71796H9.71768H9.71739H9.71711H9.71682H9.71654H9.71626H9.71597H9.71569H9.71541H9.71512H9.71484H9.71456H9.71427H9.71399H9.71371H9.71342H9.71314H9.71285H9.71257H9.71229H9.712H9.71172H9.71144H9.71115H9.71087H9.71059H9.7103H9.71002H9.70973H9.70945H9.70917H9.70888H9.7086H9.70832H9.70803H9.70775H9.70747H9.70718H9.7069H9.70662H9.70633H9.70605H9.70577H9.70548H9.7052H9.70492H9.70463H9.70435H9.70406H9.70378H9.7035H9.70321H9.70293H9.70265H9.70236H9.70208H9.7018H9.70151H9.70123H9.70095H9.70066H9.70038H9.7001H9.69981H9.69953H9.69925H9.69896H9.69868H9.69839H9.69811H9.69783H9.69754H9.69726H9.69698H9.69669H9.69641H9.69613H9.69584H9.69556H9.69528H9.69499H9.69471H9.69443H9.69414H9.69386H9.69358H9.69329H9.69301H9.69273H9.69244H9.69216H9.69187H9.69159H9.69131H9.69102H9.69074H9.69046H9.69017H9.68989H9.68961H9.68932H9.68904H9.68876H9.68847H9.68819H9.68791H9.68762H9.68734H9.68706H9.68677H9.68649H9.68621H9.68592H9.68564H9.68536H9.68507H9.68479H9.68451H9.68422H9.68394H9.68365H9.68337H9.68331C7.32806 8.59912 4.97282 8.59873 2.61757 8.5966ZM9.68885 9.4155H9.73194V10.5738C9.72634 10.5739 9.72074 10.574 9.71504 10.574C7.31369 10.5738 4.91235 10.574 2.51101 10.5744C2.20736 10.5744 1.99072 10.4707 1.85943 10.2416C1.66543 9.90292 1.92332 9.451 2.38845 9.4209C2.44314 9.41736 2.49831 9.41574 2.55357 9.41574L9.68885 9.4155Z"
-                                                        fill="#808080"
-                                                        stroke="#808080"
-                                                        strokeWidth="0.2"
-                                                    />
-                                                </svg>
-                                                <span
-                                                    onClick={() => {
-                                                        setShowMobileTransHistory(
-                                                            !showMobileTransHistory
-                                                        );
+                                <img src="/dashboard.png" alt="" />
+                                <span className="text-muted mt-2">Dashboard</span>
+                            </a>
+                            <a
+                                href="/deposit"
+                                className="text-center d-flex flex-column text-decoration-none"
+                            >
+                                <img src="/deposit.png" alt="" />
+                                <span className="text-muted mt-2">Deposit&Withdraw</span>
+                            </a>
+                            <a
+                                href="/uzd"
+                                className="text-center d-flex flex-column text-decoration-none"
+                            >
+                                <img src="/uzd.png" alt="" />
+                                <span className="text-muted mt-2">UZD</span>
+                            </a>
+                            <a
+                                href="/dao"
+                                className="text-center d-flex flex-column text-decoration-none"
+                            >
+                                <img src="/dao.png" alt="" />
+                                <span className="text-muted mt-2">DAO</span>
+                            </a>
+                        </div>
+                        <InfoBar />
+                        {!account && (
+                            <Col className={'content-col'}>
+                                <WelcomeCarousel />
+                            </Col>
+                        )}
+                        {account && (
+                            <Col className={'content-col'}>
+                                <ToastContainer
+                                    position={'top-end'}
+                                    id="toasts"
+                                    className={'toasts mt-3 me-3'}
+                                >
+                                    {calcError && (
+                                        <Toast
+                                            onClose={() => setCalcError('')}
+                                            delay={10000}
+                                            autohide
+                                        >
+                                            <Toast.Body>{calcError}</Toast.Body>
+                                        </Toast>
+                                    )}
+                                </ToastContainer>
 
-                                                        document.body.classList.toggle('overflow');
+                                <div className={'DepositBlock'}>
+                                    <div className={'DepositContent'}>
+                                        {!showMobileTransHistory && (
+                                            <div className="flex-wrap d-flex justify-content-start mt-3 mt-md-0">
+                                                <Form
+                                                    operationName={props.operationName}
+                                                    directOperation={directOperation}
+                                                    directOperationDisabled={false}
+                                                    lpPrice={lpPrice}
+                                                    sharePercent={sharePercent}
+                                                    selectedCoinIndex={selectedCoinIndex}
+                                                    dai={dai}
+                                                    usdc={usdc}
+                                                    usdt={usdt}
+                                                    busd={busd}
+                                                    slippage={slippage}
+                                                    onCoinChange={async (
+                                                        coinType: string,
+                                                        coinValue: number
+                                                    ) => {
+                                                        if (coinType === 'dai') {
+                                                            setDai(Number(coinValue).toString());
+                                                        } else if (coinType === 'usdc') {
+                                                            setUsdc(Number(coinValue).toString());
+                                                        } else if (coinType === 'usdt') {
+                                                            setUsdt(Number(coinValue).toString());
+                                                        } else if (coinType === 'busd') {
+                                                            setBusd(Number(coinValue).toString());
+
+                                                            if (!Number(coinValue)) {
+                                                                setSlippage('');
+                                                                return;
+                                                            }
+
+                                                            const slippage = await getSlippage(
+                                                                coinValue.toString()
+                                                            );
+
+                                                            const usdtValue = getFullDisplayBalance(
+                                                                new BigNumber(slippage),
+                                                                18
+                                                            );
+
+                                                            log(
+                                                                `For ${coinValue} BUSD you'll get ${usdtValue} USDT`
+                                                            );
+
+                                                            const slippageValue =
+                                                                Number(coinValue) -
+                                                                Number(usdtValue);
+
+                                                            const finalSlippage = (
+                                                                (slippageValue / coinValue) *
+                                                                100
+                                                            ).toPrecision(2);
+
+                                                            log(
+                                                                `Final slippage is: ${finalSlippage}`
+                                                            );
+
+                                                            setSlippage(finalSlippage);
+                                                        }
                                                     }}
-                                                >
-                                                    Transaction Story
-                                                </span>
-                                            </div>
-                                            <div
-                                                id="trans-history-mobile"
-                                                className={`TransactionHisoryMobile ${
-                                                    showMobileTransHistory ? 'active' : ''
-                                                }`}
-                                            >
-                                                <div className="TransactionHisoryMobile__Title">
-                                                    {props.operationName === 'withdraw'
-                                                        ? 'My withdrawals'
-                                                        : 'My deposits'}
-                                                </div>
-                                                <div className="TransactionHisoryMobile__Content">
-                                                    <TransactionHistory
-                                                        title=""
-                                                        section={props.operationName}
-                                                        items={transactionList}
-                                                        onPageEnd={() => {
-                                                            if (transHistoryPage !== -1) {
-                                                                setTransHistoryPage(
-                                                                    transHistoryPage + 1
-                                                                );
-                                                            }
-                                                        }}
-                                                    />
-                                                </div>
-                                            </div>
-                                            {!showMobileTransHistory && (
-                                                <div className="flex-wrap d-flex justify-content-start">
-                                                    <Form
-                                                        operationName={props.operationName}
-                                                        directOperation={directOperation}
-                                                        directOperationDisabled={false}
-                                                        lpPrice={lpPrice}
+                                                    onOperationModeChange={(direct: any) => {
+                                                        setDirectOperation(!direct);
+
+                                                        if (
+                                                            direct &&
+                                                            props.operationName === 'withdraw'
+                                                        ) {
+                                                            setSelectedCoin('all');
+                                                            setSelectedCoinIndex(-1);
+                                                            setDaiChecked(false);
+                                                            setUsdcChecked(false);
+                                                            setUsdtChecked(false);
+                                                        } else {
+                                                            setSharePercent(100);
+                                                        }
+                                                    }}
+                                                />
+                                                {props.operationName === 'Deposit' && (
+                                                    <div className="Deposit__RightBlock flex-fill">
+                                                        <div className="title">
+                                                            Deposit Information
+                                                        </div>
+                                                        <div className="balance">
+                                                            <div className="title">
+                                                                Your balance
+                                                            </div>
+                                                            <div className="value">
+                                                                ${' '}
+                                                                {getBalanceNumber(balance).toFixed(
+                                                                    3,
+                                                                    1
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                {props.operationName === 'withdraw' && (
+                                                    <WithdrawOptions
+                                                        chainId={chainId}
+                                                        disabled={chainId === 56}
                                                         sharePercent={sharePercent}
-                                                        selectedCoinIndex={selectedCoinIndex}
-                                                        dai={dai}
-                                                        usdc={usdc}
-                                                        usdt={usdt}
-                                                        busd={busd}
-                                                        slippage={slippage}
-                                                        onCoinChange={async (
-                                                            coinType: string,
-                                                            coinValue: number
-                                                        ) => {
-                                                            if (coinType === 'dai') {
-                                                                setDai(
-                                                                    Number(coinValue).toString()
-                                                                );
-                                                            } else if (coinType === 'usdc') {
-                                                                setUsdc(
-                                                                    Number(coinValue).toString()
-                                                                );
-                                                            } else if (coinType === 'usdt') {
-                                                                setUsdt(
-                                                                    Number(coinValue).toString()
-                                                                );
-                                                            } else if (coinType === 'busd') {
-                                                                setBusd(
-                                                                    Number(coinValue).toString()
-                                                                );
-
-                                                                if (!Number(coinValue)) {
-                                                                    setSlippage('');
-                                                                    return;
-                                                                }
-
-                                                                const slippage = await getSlippage(
-                                                                    coinValue.toString()
-                                                                );
-
-                                                                const usdtValue =
-                                                                    getFullDisplayBalance(
-                                                                        new BigNumber(slippage),
-                                                                        18
-                                                                    );
-
-                                                                log(
-                                                                    `For ${coinValue} BUSD you'll get ${usdtValue} USDT`
-                                                                );
-
-                                                                const slippageValue =
-                                                                    Number(coinValue) -
-                                                                    Number(usdtValue);
-
-                                                                const finalSlippage = (
-                                                                    (slippageValue / coinValue) *
-                                                                    100
-                                                                ).toPrecision(2);
-
-                                                                log(
-                                                                    `Final slippage is: ${finalSlippage}`
-                                                                );
-
-                                                                setSlippage(finalSlippage);
+                                                        daiChecked={daiChecked}
+                                                        usdcChecked={usdcChecked}
+                                                        usdtChecked={usdtChecked}
+                                                        coinsSelectionEnabled={!directOperation}
+                                                        selectedCoin={selectedCoin}
+                                                        balance={balance}
+                                                        lpPrice={lpPrice}
+                                                        onCoinSelect={(coin: string) => {
+                                                            if (!coin) {
+                                                                return;
                                                             }
-                                                        }}
-                                                        onOperationModeChange={(direct: any) => {
-                                                            setDirectOperation(!direct);
 
-                                                            if (
-                                                                direct &&
-                                                                props.operationName === 'withdraw'
-                                                            ) {
-                                                                setSelectedCoin('all');
-                                                                setSelectedCoinIndex(-1);
-                                                                setDaiChecked(false);
-                                                                setUsdcChecked(false);
-                                                                setUsdtChecked(false);
+                                                            setSelectedCoin(coin);
+
+                                                            if (coin === 'all') {
+                                                                const sum =
+                                                                    Number(dai) +
+                                                                    Number(usdc) +
+                                                                    Number(usdt);
+
+                                                                const oneThird = (sum / 3)
+                                                                    .toFixed(2)
+                                                                    .toString();
+
+                                                                setDai(oneThird);
+                                                                setUsdc(oneThird);
+                                                                setUsdt(oneThird);
+                                                                setDirectOperation(false);
+                                                                setSlippage('');
                                                             } else {
-                                                                setSharePercent(100);
+                                                                setDirectOperation(true);
                                                             }
+
+                                                            const coins = ['dai', 'usdc', 'usdt'];
+
+                                                            // -1 for "all"
+                                                            setSelectedCoinIndex(
+                                                                coins.indexOf(coin)
+                                                            );
+                                                        }}
+                                                        onShareSelect={(percent: any) => {
+                                                            setSharePercent(percent);
                                                         }}
                                                     />
-                                                    {props.operationName === 'withdraw' && (
-                                                        <WithdrawOptions
-                                                            chainId={chainId}
-                                                            disabled={chainId === 56}
-                                                            sharePercent={sharePercent}
-                                                            daiChecked={daiChecked}
-                                                            usdcChecked={usdcChecked}
-                                                            usdtChecked={usdtChecked}
-                                                            coinsSelectionEnabled={!directOperation}
-                                                            selectedCoin={selectedCoin}
-                                                            balance={balance}
-                                                            lpPrice={lpPrice}
-                                                            onCoinSelect={(coin: string) => {
-                                                                if (!coin) {
-                                                                    return;
-                                                                }
-
-                                                                setSelectedCoin(coin);
-
-                                                                if (coin === 'all') {
-                                                                    const sum =
-                                                                        Number(dai) +
-                                                                        Number(usdc) +
-                                                                        Number(usdt);
-
-                                                                    const oneThird = (sum / 3)
-                                                                        .toFixed(2)
-                                                                        .toString();
-
-                                                                    setDai(oneThird);
-                                                                    setUsdc(oneThird);
-                                                                    setUsdt(oneThird);
-                                                                    setDirectOperation(false);
-                                                                    setSlippage('');
-                                                                } else {
-                                                                    setDirectOperation(true);
-                                                                }
-
-                                                                const coins = [
-                                                                    'dai',
-                                                                    'usdc',
-                                                                    'usdt',
-                                                                ];
-
-                                                                // -1 for "all"
-                                                                setSelectedCoinIndex(
-                                                                    coins.indexOf(coin)
-                                                                );
-                                                            }}
-                                                            onShareSelect={(percent: any) => {
-                                                                setSharePercent(percent);
-                                                            }}
-                                                        />
-                                                    )}
-                                                    {props.operationName === 'Deposit' && (
-                                                        <TransactionHistory
-                                                            title="My deposits history"
-                                                            section={props.operationName}
-                                                            items={transactionList}
-                                                            onPageEnd={() => {
-                                                                if (transHistoryPage !== -1) {
-                                                                    setTransHistoryPage(
-                                                                        transHistoryPage + 1
-                                                                    );
-                                                                }
-                                                            }}
-                                                        />
-                                                    )}
-                                                    {props.operationName === 'withdraw' && (
-                                                        <TransactionHistory
-                                                            title="My withdrawals history"
-                                                            section={props.operationName}
-                                                            items={transactionList}
-                                                            onPageEnd={() => {
-                                                                if (transHistoryPage !== -1) {
-                                                                    setTransHistoryPage(
-                                                                        transHistoryPage + 1
-                                                                    );
-                                                                }
-                                                            }}
-                                                        />
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
-                                </Col>
-                            </Row>
-                        </Col>
-                    )}
-                </Row>
-            </Container>
-            <footer>
-                <div className="mobile">
-                    <a href="https://zunamilab.gitbook.io/product-docs/activity/liquidity-providing">
-                        View docs
-                    </a>
-                    <a href="https://www.zunami.io/#faq-main" target="_blank" rel="noreferrer">
-                        FAQ
-                    </a>
+                                </div>
+                                <TransactionHistory
+                                    className={`d-block d-md-none`}
+                                    title="Transactions history"
+                                    items={transactionList}
+                                    onPageEnd={() => {
+                                        if (transHistoryPage !== -1) {
+                                            setTransHistoryPage(transHistoryPage + 1);
+                                        }
+                                    }}
+                                />
+                            </Col>
+                        )}
+                    </div>
+                    <div
+                        className="d-flex justify-content-center d-md-none text-center flex-column ps-3 pe-3"
+                        style={{ width: '100%', padding: '35px', color: '#B3B3B3' }}
+                    >
+                        <div
+                            style={{ height: '2px', backgroundColor: '#EFEFEF', margin: '20px 0' }}
+                        ></div>
+                        <div className="text-center">About Zunami Protocol</div>
+                        <p style={{ fontSize: '14px', marginTop: '20px', color: '#B3B3B3' }}>
+                            Zunami is the DAO that works with stablecoins and solves the main issues
+                            of current yield-farming protocols by streamlining interaction with
+                            DeFi, making it easier and cheaper while increasing profitability by
+                            differentiating and rebalancing users’ funds.
+                        </p>
+                        <div className="d-flex gap-2 mt-3 justify-content-center">
+                            <a
+                                href="#"
+                                className="badge rounded-pill text-bg-secondary bg-secondary"
+                            >
+                                Documentation
+                            </a>
+                            <a
+                                href="#"
+                                className="badge rounded-pill text-bg-secondary bg-secondary"
+                            >
+                                FAQ
+                            </a>
+                            <a
+                                href="#"
+                                className="badge rounded-pill text-bg-secondary bg-secondary"
+                            >
+                                Website
+                            </a>
+                        </div>
+                        <div
+                            style={{
+                                height: '2px',
+                                backgroundColor: '#EFEFEF',
+                                margin: '50px 0 20px 0',
+                            }}
+                        ></div>
+                        <p style={{ color: '#B3B3B3' }}>© 2023 Zunami Protocol. Version 4.0</p>
+                        <div
+                            style={{
+                                height: '2px',
+                                backgroundColor: '#EFEFEF',
+                                margin: '5px 0 20px 0',
+                            }}
+                        ></div>
+                        <div className="text-center">
+                            <svg
+                                width="99"
+                                height="23"
+                                viewBox="0 0 99 23"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M21.3094 11.5247L21.31 11.0796C21.312 7.68233 21.3139 4.99893 20.0776 3.27385C19.6377 2.66659 19.0653 2.16782 18.4033 1.81614C17.4417 1.27555 16.501 1.14153 15.6707 1.02323L15.6037 1.01404C14.8449 0.91209 14.0802 0.863675 13.3149 0.870213H7.99517C7.22982 0.863675 6.46512 0.91209 5.70628 1.01404L5.63936 1.02323C4.80905 1.14153 3.86829 1.27555 2.90675 1.81614C2.2447 2.16781 1.67213 2.66659 1.2326 3.27385C-0.00395362 4.99893 -0.00213667 7.68233 0.000200148 11.0796L0.000391149 11.5247L0.000200148 11.9699C-0.00213667 15.3672 -0.00395238 18.0506 1.23267 19.7756C1.67213 20.3829 2.2447 20.8816 2.90675 21.2334C3.86829 21.7739 4.80905 21.908 5.63936 22.0263L5.70628 22.0355C6.46512 22.1374 7.22982 22.1858 7.99517 22.1792H13.3149C14.0802 22.1858 14.8449 22.1374 15.6038 22.0355L15.6707 22.0263C16.501 21.908 17.4417 21.7739 18.4033 21.2334C19.0653 20.8816 19.6377 20.3829 20.0776 19.7756C21.3139 18.0506 21.312 15.3672 21.31 11.9699L21.3094 11.5247L21.3094 11.5247ZM15.406 14.3804C14.7352 15.1233 13.4997 16.0283 11.4238 16.1207C11.3185 16.1253 11.214 16.1277 11.1102 16.1277C9.49278 16.1277 8.0557 15.5609 6.93802 14.4782C6.18942 13.7531 5.61207 12.8216 5.22205 11.7097C4.83646 10.6103 4.64094 9.34876 4.64094 7.95994H7.1589C7.1589 9.05746 7.30559 10.0322 7.5949 10.857C7.85221 11.5906 8.21693 12.1894 8.67896 12.637C9.36975 13.3061 10.2561 13.6215 11.3132 13.5746C12.2875 13.5312 13.0392 13.2238 13.5474 12.6609C13.9704 12.1925 14.2034 11.5591 14.2034 10.8775C14.2092 10.4898 14.0663 10.115 13.8047 9.83187C13.6822 9.70111 13.5342 9.5975 13.3701 9.52756C13.2059 9.45761 13.0293 9.42283 12.8512 9.42548C12.6054 9.42739 12.3687 9.52052 12.1862 9.68723C12.0106 9.8537 11.8014 10.197 11.8014 10.8868H9.28342C9.28342 9.28424 9.92562 8.33869 10.4643 7.82764C11.1137 7.21846 11.9658 6.87906 12.8512 6.8769C13.3691 6.87407 13.8821 6.9783 14.3588 7.18331C14.8354 7.38826 15.2657 7.68967 15.6232 8.06892C16.3314 8.81735 16.7214 9.81478 16.7214 10.8775C16.7214 12.197 16.2542 13.441 15.406 14.3804L15.406 14.3804Z"
+                                    fill="#B3B3B3"
+                                />
+                                <path
+                                    d="M95.6019 16.4278V6.24515H97.8645V16.4278H95.6019ZM97.4962 4.59509L97.528 4.56298C97.7712 4.31777 97.9632 4.12411 97.9968 3.91054C98.0083 3.83503 98.0023 3.75782 97.9794 3.68477C97.9482 3.57653 97.8894 3.49915 97.8375 3.43085L97.8333 3.42538C97.7855 3.3634 97.7334 3.30488 97.6773 3.25027L97.2907 2.86744C97.2356 2.81189 97.1766 2.76035 97.1141 2.71311L97.1086 2.70895C97.0398 2.65774 96.9619 2.59972 96.8533 2.56957C96.7801 2.54732 96.7028 2.54214 96.6274 2.55437C96.4141 2.58997 96.2224 2.7839 95.9795 3.02943L95.9477 3.06159L95.9159 3.09373C95.6727 3.33892 95.4806 3.53259 95.4471 3.74617C95.4356 3.82166 95.4415 3.89888 95.4645 3.97193C95.4957 4.08017 95.5545 4.15755 95.6064 4.22585L95.6106 4.23132C95.6584 4.2933 95.7105 4.35182 95.7666 4.40643L96.1532 4.78926C96.2083 4.84481 96.2673 4.89635 96.3298 4.94359L96.3353 4.94775C96.4041 4.99895 96.482 5.05698 96.5906 5.08713C96.6638 5.10937 96.7411 5.11454 96.8165 5.10234C97.0297 5.06672 97.2215 4.87278 97.4644 4.62729L97.4962 4.59509V4.59509Z"
+                                    fill="#B3B3B3"
+                                />
+                                <path
+                                    d="M89.549 5.96539C88.1175 5.96539 86.8331 6.66495 85.9522 7.77437C85.5025 7.20967 84.9309 6.75374 84.2804 6.44053C83.63 6.12732 82.9172 5.9649 82.1952 5.96539C81.8264 5.96519 81.4591 6.01228 81.1023 6.10551C80.7791 6.19191 80.4797 6.34989 80.2259 6.56776C79.9723 6.78562 79.771 7.05778 79.6368 7.36407V6.24639H78.5729V6.24812H77.3867V16.4308H79.6495V11.3395C79.6495 9.46517 80.7891 7.9454 82.1952 7.9454C83.6011 7.9454 84.7408 9.21188 84.7408 10.774V16.4308H87.0036V11.3395C87.0036 9.46517 88.1432 7.9454 89.549 7.9454C90.955 7.9454 92.0946 9.21188 92.0946 10.774V16.4308H94.3574V10.774C94.3574 10.1426 94.2332 9.51724 93.9914 8.93382C93.7498 8.35039 93.3957 7.82028 92.9492 7.37374C92.5026 6.92722 91.9726 6.57301 91.3892 6.33136C90.8058 6.08971 90.1804 5.96536 89.549 5.96539Z"
+                                    fill="#B3B3B3"
+                                />
+                                <path
+                                    d="M74.7679 6.24814V6.24642H73.704V7.57274C73.4649 7.10015 73.0682 6.72596 72.5825 6.51488C71.7372 6.1498 70.8257 5.96277 69.9049 5.96542C66.5469 5.96542 63.8242 8.37124 63.8242 11.3395C63.8242 14.3072 65.9767 16.7135 68.6326 16.7135C71.2881 16.7135 73.3188 14.561 73.3188 11.9049H71.0558C71.0558 12.6243 70.9538 13.3158 70.5557 13.815C70.3255 14.1037 70.0328 14.3363 69.6997 14.4955C69.3667 14.6546 69.0017 14.736 68.6326 14.7335C67.2264 14.7335 66.0868 13.2138 66.0868 11.3395C66.0868 9.46518 67.7969 7.94541 69.9049 7.94541C72.014 7.94541 73.7236 9.46519 73.7236 11.3395V16.4308H75.9863V6.24814H74.7679Z"
+                                    fill="#B3B3B3"
+                                />
+                                <path
+                                    d="M58.2256 5.96554C57.2856 5.95939 56.3548 6.15118 55.4937 6.52847C55.0137 6.74265 54.6244 7.11902 54.3942 7.59154V6.24654H53.3304V6.24824H52.1211V16.4309H54.3839V11.3396C54.3839 9.46531 56.0938 7.94553 58.202 7.94553C59.6078 7.94553 60.7474 9.212 60.7474 10.7742V16.4309H63.01V10.7886C63.0122 9.51551 62.5101 8.29336 61.6135 7.38952C60.7168 6.48567 59.4987 5.97368 58.2256 5.96554Z"
+                                    fill="#B3B3B3"
+                                />
+                                <path
+                                    d="M48.4505 6.24811V11.3395C48.4505 13.2137 46.7405 14.7335 44.6326 14.7335C43.2265 14.7335 42.0869 13.467 42.0869 11.9049V6.24811H39.8242V11.8904C39.8222 13.1635 40.3244 14.3856 41.221 15.2894C42.1176 16.1933 43.3356 16.7053 44.6087 16.7135C45.5487 16.7197 46.4795 16.5278 47.3406 16.1506C47.8209 15.936 48.2104 15.5592 48.4408 15.0863V16.4308H50.7132V6.24811H48.4505Z"
+                                    fill="#B3B3B3"
+                                />
+                                <path
+                                    d="M29.2773 7.34679V8.25051H35.4347L29.2773 14.3725V16.4191H38.63V14.3725H38.0676V14.3723H32.5861L32.9226 13.9853C32.9447 13.9621 32.9665 13.9386 32.9876 13.9144L33.6856 13.2191L38.63 8.15598V6.25006H29.2773V7.34679Z"
+                                    fill="#B3B3B3"
+                                />
+                            </svg>
+                        </div>
+                    </div>
                 </div>
-                <span className="copyright">
-                    © 2022 Zunami Protocol. {`Version: ${process.env.REACT_APP_VERSION}`}
-                </span>
-            </footer>
+            </div>
         </React.Fragment>
     );
 };

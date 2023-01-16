@@ -16,6 +16,47 @@
         display: block;
     }
 
+    > svg {
+        margin: 20px 0 0 20px;
+    }
+
+    .close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+
+        img {
+            width: 26px;
+            height: 26px;
+        }
+    }
+
+    .inner {
+        margin: 20px;
+
+        .listings {
+            margin-top: 20px;
+            column-gap: 40px;
+            row-gap: 20px;
+
+            a {
+                color: #515151;
+                font-size: 14px;
+                line-height: 18px;
+            }
+        }
+    }
+
+    .copyright {
+        color: #b3b3b3;
+        font-size: 12px;
+        line-height: 15px;
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        margin: 0;
+    }
+
     .NavMenu {
         height: auto;
         margin-top: 150px;

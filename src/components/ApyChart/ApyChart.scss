@@ -2,25 +2,24 @@
 
 .ApyChart {
     @media (min-width: $media375) {
-        margin: 20px;
     }
 
     @media (min-width: $media1024) {
-        margin: 20px;
+        // height: 130px;
     }
 
     @media (min-width: $media1440) {
-        margin: 23px 33px;
+        // height: 150px;
     }
 
     @media (min-width: $media1920) {
-        margin: 27px 39px;
+        height: 180px;
     }
 
     &__Header {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
+        justify-content: flex-end;
+        align-items: flex-end;
 
         @media (min-width: $media375) {
             flex-wrap: wrap;
@@ -31,17 +30,16 @@
         }
 
         @media (min-width: $media1440) {
+            margin: 20px 0 0 0;
         }
 
         @media (min-width: $media1920) {
         }
 
         .ApyChart__Title {
-            color: #636363;
+            color: #5b5959;
 
             @media screen and (min-width: $media375) {
-                // width: 100%;
-                // margin-bottom: 20px;
                 font-size: 12px;
                 line-height: 16px;
             }
@@ -54,8 +52,10 @@
             }
 
             @media screen and (min-width: $media1440) {
-                font-size: 12px;
-                line-height: 16px;
+                font-family: 'Space Grotesk';
+                font-weight: 500;
+                font-size: 10px;
+                line-height: 13px;
             }
 
             @media screen and (min-width: $media1920) {
@@ -85,6 +85,7 @@
 
             @media screen and (min-width: $media1920) {
                 grid-gap: 45px;
+                margin-top: 20px;
                 gap: 45px;
             }
 
@@ -110,8 +111,8 @@
                 }
 
                 @media screen and (min-width: $media1920) {
-                    font-size: 10px;
-                    line-height: 14px;
+                    font-size: 12px;
+                    line-height: 15px;
                 }
 
                 &.active {
@@ -124,18 +125,22 @@
     canvas {
         @media screen and (min-width: $media375) {
             margin-top: 50px;
+            height: 150px !important;
         }
 
         @media screen and (min-width: $media1024) {
-            margin-top: 50px;
+            margin-top: 0;
+            height: 120px !important;
         }
 
         @media screen and (min-width: $media1440) {
             margin-top: 10px;
+            height: 150px !important;
         }
 
         @media screen and (min-width: $media1920) {
             margin-top: 15px;
+            height: 180px !important;
         }
     }
 }

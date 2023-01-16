@@ -1,40 +1,38 @@
 @import 'src/variables';
 
 .FastDepositInput {
-    background: #fffaf3;
-    border: 1px solid #f4efe1;
-    border-radius: 5px;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     flex-wrap: wrap;
     position: relative;
 
     @media screen and (min-width: $media375) {
-        width: calc(100% - 34px);
-        height: 55px;
-        margin-top: 19px;
+        // height: 55px;
+        width: 250px;
+        margin-top: 30px;
         margin-bottom: 20px;
-        margin-left: 14px;
+        margin-left: auto;
+        margin-right: auto;
+        justify-content: center;
     }
 
     @media screen and (min-width: $media1024) {
-        width: 257px;
-        height: 55px;
-        margin-top: 19px;
+        width: auto;
+        height: 30px;
+        margin-top: 30px;
         margin-bottom: 20px;
         margin-left: 0;
+        justify-content: baseline;
     }
 
     @media screen and (min-width: $media1440) {
-        width: 377px;
-        height: 55px;
+        height: 42px;
         margin-top: 31px;
         margin-bottom: 31px;
     }
 
     @media screen and (min-width: $media1920) {
-        width: 443px;
-        height: 65px;
+        height: 49px;
         margin-top: 31px;
         margin-bottom: 31px;
     }
@@ -42,33 +40,88 @@
     @media screen and (min-width: $media1920) {
     }
 
-    img {
+    .selector-wrapper {
+        background: #f0f0f0;
+        border-radius: $border-radius;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+
         @media screen and (min-width: $media375) {
-            width: 23px;
-            height: 23px;
-            margin-left: 15px;
-            margin-right: 8px;
+            width: 164px;
+            height: 42px;
+            margin-bottom: 20px;
         }
 
         @media screen and (min-width: $media1024) {
-            width: 23px;
-            height: 23px;
-            margin-left: 15px;
-            margin-right: 8px;
+            width: 116px;
+            height: 30px;
+            margin-bottom: 0;
         }
 
         @media screen and (min-width: $media1440) {
-            width: 17px;
-            height: 17px;
-            margin-left: 20px;
-            margin-right: 8px;
+            width: 163px;
+            height: 42px;
         }
 
         @media screen and (min-width: $media1920) {
-            width: 20px;
-            height: 20px;
-            margin-left: 23px;
-            margin-right: 8px;
+            width: 192px;
+            height: 49px;
+        }
+
+        img {
+            @media screen and (min-width: $media375) {
+                width: 23px;
+                height: 23px;
+                margin-right: 8px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                width: 23px;
+                height: 23px;
+                margin-right: 8px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                width: 21px;
+                height: 21px;
+                margin-right: 16px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                width: 20px;
+                height: 20px;
+                margin-right: 8px;
+            }
+        }
+
+        .coinName {
+            font-family: 'Space Grotesk';
+
+            @media screen and (min-width: $media375) {
+                font-size: 14px;
+                line-height: 16px;
+                width: 45px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                font-size: 11px;
+                line-height: 15px;
+                width: 40px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                font-size: 13px;
+                line-height: 17px;
+                width: 50px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                font-size: 14px;
+                line-height: 18px;
+                width: 80px;
+            }
         }
     }
 
@@ -94,6 +147,11 @@
     }
 
     .selector {
+        @media screen and (min-width: $media375) {
+            // margin-left: 10px;
+            // margin-right: 20px;
+        }
+
         @media screen and (min-width: $media1440) {
             margin-left: 10px;
             margin-right: 20px;
@@ -102,54 +160,6 @@
         @media screen and (min-width: $media1920) {
             margin-left: 10px;
             margin-right: 20px;
-        }
-    }
-
-    .coinName {
-        color: #636363;
-
-        @media screen and (min-width: $media375) {
-            font-size: 12px;
-            line-height: 16px;
-            width: 45px;
-        }
-
-        @media screen and (min-width: $media1024) {
-            font-size: 11px;
-            line-height: 15px;
-            width: 40px;
-        }
-
-        @media screen and (min-width: $media1440) {
-            font-size: 12px;
-            line-height: 16px;
-            width: 50px;
-        }
-
-        @media screen and (min-width: $media1920) {
-            font-size: 12px;
-            line-height: 16px;
-            width: 80px;
-        }
-    }
-
-    .divider {
-        background-color: #f4efe1;
-
-        @media screen and (min-width: $media375) {
-        }
-
-        @media screen and (min-width: $media1024) {
-            height: 21px;
-            width: 1px;
-            position: static;
-            margin-left: 15px;
-        }
-
-        @media screen and (min-width: $media1440) {
-            height: 28px;
-            width: 1px;
-            margin-left: 0;
         }
     }
 
@@ -161,6 +171,7 @@
         border: 1px solid #f95404;
         color: #f95404;
         cursor: pointer;
+        border-radius: $border-radius;
 
         &:hover {
             background-color: #f95404;
@@ -168,47 +179,46 @@
         }
 
         @media screen and (min-width: $media375) {
-            font-size: 10px;
-            line-height: 13px;
-            width: 35px;
-            height: 17px;
+            font-size: 14px;
+            line-height: 18px;
+            width: 73px;
+            height: 42px;
         }
 
         @media screen and (min-width: $media1024) {
             font-size: 10px;
             line-height: 13px;
-            width: 35px;
-            height: 17px;
+            padding: 8px 13px;
+            height: auto;
+            width: auto;
         }
 
         @media screen and (min-width: $media1440) {
-            font-size: 10px;
-            line-height: 14px;
-            width: 35px;
-            height: 17px;
+            font-size: 13px;
+            line-height: 17px;
+            padding: 12px 15px;
         }
 
         @media screen and (min-width: $media1920) {
-            font-size: 10px;
-            line-height: 14px;
-            width: 41px;
-            height: 20px;
+            font-size: 14px;
+            line-height: 18px;
+            padding: 12px 15px;
+            width: 86px;
         }
     }
 
     input {
-        background: #fffaf3;
+        background: #f0f0f0;
         border: 1px solid #f4efe1;
         box-sizing: border-box;
-        border-radius: 5px;
-        color: #636363;
+        border-radius: $border-radius;
+        color: $primary-color;
 
         @media screen and (min-width: $media375) {
-            font-size: 11px;
-            line-height: 15px;
+            font-size: 16px;
+            line-height: 22px;
             padding-left: 11px;
-            width: 76px;
-            height: 35px;
+            width: 129px;
             margin-left: 20px;
             margin-right: 11px;
         }
@@ -217,9 +227,8 @@
             font-size: 11px;
             line-height: 15px;
             padding-left: 11px;
-            width: 61px;
-            height: 30px;
-            margin-left: 20px;
+            width: 73px;
+            margin-left: 12px;
             margin-right: 11px;
         }
 
@@ -227,9 +236,8 @@
             font-size: 14px;
             line-height: 19px;
             padding-left: 15px;
-            width: 146px;
-            height: 23px;
-            margin-left: 20px;
+            width: 182px;
+            margin-left: 12px;
             margin-right: 13px;
         }
 
@@ -237,9 +245,8 @@
             font-size: 14px;
             line-height: 19px;
             padding-left: 15px;
-            width: 171px;
-            height: 27px;
-            margin-left: 20px;
+            width: 214px;
+            margin-left: 13px;
             margin-right: 13px;
         }
     }

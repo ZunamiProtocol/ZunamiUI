@@ -1,0 +1,144 @@
+@import 'src/variables';
+
+.InfoBar {
+    @media screen and (min-width: $media1024) {
+        margin-left: 32px;
+    }
+
+    @media screen and (min-width: $media1440) {
+        margin-left: 50px;
+    }
+
+    @media screen and (min-width: $media1920) {
+        margin-left: 50px;
+    }
+
+    .title {
+        font-weight: 600;
+        color: #000000;
+
+        @media screen and (min-width: $media375) {
+            font-size: 14px;
+            line-height: 18px;
+            margin-bottom: 15px;
+            margin-left: 10px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            font-size: 12px;
+            line-height: 20px;
+            margin-bottom: 15px;
+            margin-left: 10px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-size: 16px;
+            line-height: 20px;
+            margin-bottom: 20px;
+            margin-left: 10px;
+        }
+    }
+
+    .values {
+        display: flex;
+        flex-wrap: wrap;
+
+        @media screen and (min-width: $media375) {
+            justify-content: stretch;
+            gap: 15px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            gap: 10px;
+            justify-content: baseline;
+        }
+
+        @media screen and (min-width: $media1440) {
+            gap: 17px;
+        }
+
+        .block {
+            background: #f0f0f0;
+            border-radius: $border-radius;
+            display: flex;
+
+            &:first-child {
+                @media screen and (min-width: $media375) {
+                    width: 100%;
+                }
+
+                @media screen and (min-width: $media1024) {
+                    width: auto;
+                    margin-bottom: 0;
+                }
+            }
+
+            &:nth-child(2),
+            &:nth-child(3) {
+                @media screen and (min-width: $media375) {
+                    width: calc(50% - 8px);
+                }
+
+                @media screen and (min-width: $media1024) {
+                    width: auto;
+                }
+            }
+
+            img {
+                width: 20px;
+                margin-right: 10px;
+
+                @media screen and (min-width: $media375) {
+                    width: 25px;
+                }
+
+                @media screen and (min-width: $media1024) {
+                    width: 25px;
+                }
+
+                @media screen and (min-width: $media1920) {
+                    width: 30px;
+                }
+            }
+
+            @media screen and (min-width: $media375) {
+                padding: 13px 20px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                padding: 13px 20px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                padding: 13px 20px;
+            }
+
+            span {
+                display: block;
+
+                &.name {
+                    color: #000000;
+                }
+
+                &.value {
+                    color: #5b5959;
+                }
+
+                @media screen and (min-width: $media1024) {
+                    font-size: 12px;
+                    line-height: 16px;
+                }
+
+                @media screen and (min-width: $media1440) {
+                    font-size: 13px;
+                    line-height: 17px;
+                }
+
+                @media screen and (min-width: $media1920) {
+                    font-size: 14px;
+                    line-height: 18px;
+                }
+            }
+        }
+    }
+}

@@ -1,4 +1,4 @@
-$border-radius: 25px;
+$border-radius: 20px;
 $border-radius17: 17px;
 
 $media1920: 1920px;
@@ -15,7 +15,8 @@ $box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
 $on-hover-color: #de4300;
 $on-hover-secondary-color: #e6e6e6;
 
-$primary-color: #f95404;
+$primary-color: #FB7501;
+$primary-bg-gradient: linear-gradient(78.51deg, #F7F7F7 12.17%, #F6F6F6 65.32%);
 $muted-color: #767676;
 
 /* Black theme */
@@ -27,3 +28,5 @@ $dark-border-color: #333333;
 $dark-muted-text-color: #a1a1a1;
 
 $--bs-body-bg: #fffcf5;
+
+$btn-secondary-color: #F1F1F1;

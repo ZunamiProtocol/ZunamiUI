@@ -1,0 +1,59 @@
+@import 'src/variables';
+
+.Pendings {
+    margin-top: 18px;
+    padding: 25px;
+    background: linear-gradient(69.07deg, #f0f0f0 8.53%, #f2f2f2 91.72%);
+    border-radius: $border-radius;
+
+    > .title {
+        font-size: 13px;
+        line-height: 17px;
+        margin-bottom: 15px;
+        margin-left: 5px;
+    }
+
+    .values {
+        display: flex;
+        gap: 20px;
+
+        .deposit,
+        .withdraw {
+            background: #ebebeb;
+            border-radius: $border-radius;
+            padding: 11px 20px;
+            width: 50%;
+        }
+
+        .title {
+            font-weight: 500;
+
+            @media (min-width: $media1024) {
+                font-size: 11px;
+                line-height: 14px;
+                margin-bottom: 6px;
+            }
+
+            @media (min-width: $media1440) {
+                font-size: 13px;
+                line-height: 17px;
+                margin-bottom: 6px;
+            }
+
+            @media (min-width: $media1920) {
+                font-size: 14px;
+                line-height: 18px;
+                margin-bottom: 6px;
+            }
+        }
+
+        .value {
+            font-family: 'Vela Sans Regular';
+            font-style: normal;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 22px;
+            color: $primary-color;
+        }
+    }
+}

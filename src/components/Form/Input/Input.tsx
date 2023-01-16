@@ -59,14 +59,10 @@ export const Input = (props: InputProps): JSX.Element => {
 
     return (
         <div className={`Input ${props.disabled ? 'disabled' : ''}`}>
-            <img src={`${props.name}.svg`} alt="" />
-            <div className={'coinName'}>{props.name}</div>
-            <div className="divider"></div>
-            <span className="max" onClick={handleSelectMax}>
-                MAX
-            </span>
-            {props.action !== 'withdraw' && <span className="balance">{displayBalance}</span>}
-            <div className="divider"></div>
+            <div className="coin">
+                <img src={`${props.name}.svg`} alt="" />
+                <span>{props.name}</span>
+            </div>
             <input
                 inputMode={'decimal'}
                 autoComplete={'off'}
@@ -80,6 +76,10 @@ export const Input = (props: InputProps): JSX.Element => {
                 value={value}
                 onChange={changeHandler}
             />
+            {props.action !== 'withdraw' && <span className="balance">{displayBalance}</span>}
+            <span className="max" onClick={handleSelectMax}>
+                MAX
+            </span>
         </div>
     );
 };

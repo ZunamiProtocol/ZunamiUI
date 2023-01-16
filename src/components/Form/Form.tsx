@@ -86,10 +86,7 @@ const getWithdrawValidationError = (
     return error;
 };
 
-const getBscWithdrawValidationError = (
-    isApproved: Boolean,
-    lpShareToWithdraw: BigNumber
-) => {
+const getBscWithdrawValidationError = (isApproved: Boolean, lpShareToWithdraw: BigNumber) => {
     let error = '';
 
     if (!isApproved) {
@@ -353,9 +350,7 @@ export const Form = (props: FormProps): JSX.Element => {
             let approveVal = false;
 
             if (props.operationName === 'withdraw') {
-                approveVal = gzlpAllowance.isGreaterThanOrEqualTo(
-                    new BigNumber(APPROVE_SUM)
-                );
+                approveVal = gzlpAllowance.isGreaterThanOrEqualTo(new BigNumber(APPROVE_SUM));
 
                 log(`Withdrawal approve set to ${approveVal}, it's less than ${APPROVE_SUM}`);
             } else {
@@ -377,14 +372,12 @@ export const Form = (props: FormProps): JSX.Element => {
             let approveVal = false;
 
             if (props.operationName === 'withdraw') {
-                approveVal = gzlpAllowance.isGreaterThanOrEqualTo(
-                    new BigNumber(APPROVE_SUM)
-                );
+                approveVal = gzlpAllowance.isGreaterThanOrEqualTo(new BigNumber(APPROVE_SUM));
 
                 log(`Withdrawal approve set to ${approveVal}, it's less than ${APPROVE_SUM}`);
                 setIsApproved(approveVal);
                 return;
-            } 
+            }
 
             setIsApproved(
                 approveList &&
@@ -420,14 +413,16 @@ export const Form = (props: FormProps): JSX.Element => {
                   isApproved,
                   depositExceedAmount
               )
-            : isETH(chainId) ? getWithdrawValidationError(
+            : isETH(chainId)
+            ? getWithdrawValidationError(
                   props.dai,
                   props.usdc,
                   props.usdt,
                   fullBalanceLpShare,
                   userMaxWithdraw,
                   lpShareToWithdraw
-              ) : getBscWithdrawValidationError(isApproved, lpShareToWithdraw);
+              )
+            : getBscWithdrawValidationError(isApproved, lpShareToWithdraw);
 
     const cantDeposit = emptyFunds || !isApproved || pendingTx || depositExceedAmount;
 
@@ -455,10 +450,10 @@ export const Form = (props: FormProps): JSX.Element => {
         );
     }
 
-    const canWithdraw = isETH(chainId) ?
-        !validationError :
-        // BSC withdraw only if there is a balance and approove granted
-        userLpAmount.toNumber() > 0 && !validationError;
+    const canWithdraw = isETH(chainId)
+        ? !validationError
+        : // BSC withdraw only if there is a balance and approove granted
+          userLpAmount.toNumber() > 0 && !validationError;
 
     if (props.operationName === 'withdraw') {
         log(`Can withdraw: ${canWithdraw}. Is approved: ${isApproved}`);
@@ -483,9 +478,9 @@ export const Form = (props: FormProps): JSX.Element => {
                             <a
                                 target="_blank"
                                 rel="noreferrer"
-                                href={`https://${
-                                    getScanAddressByChainId(chainId)
-                                }/tx/${transactionId}`}
+                                href={`https://${getScanAddressByChainId(
+                                    chainId
+                                )}/tx/${transactionId}`}
                             >
                                 transaction
                             </a>
@@ -563,6 +558,18 @@ export const Form = (props: FormProps): JSX.Element => {
             >
                 <ActionSelector
                     value={action}
+                    actions={[
+                        {
+                            name: 'deposit',
+                            title: 'Deposit',
+                            url: '/deposit',
+                        },
+                        {
+                            name: 'withdraw',
+                            title: 'Withdraw',
+                            url: '/withdraw',
+                        },
+                    ]}
                     onChange={(action: string) => {
                         setAction(action);
                     }}
@@ -662,7 +669,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                 </button>
                             )}
                             {account && (
-                                <div className="deposit-button-wrapper flex-wrap">
+                                <div className="deposit-button-wrapper flex-wrap flex-column flex-md-row align-items-center">
                                     <button type="submit" disabled={cantDeposit}>
                                         Deposit
                                     </button>
@@ -766,11 +773,11 @@ export const Form = (props: FormProps): JSX.Element => {
                             )}
                         </div>
                     )}
-                    {
-                        validationError && props.operationName === 'withdraw' && (
-                            <div className={'mt-2 text-danger error withdraw-error'}>{validationError}</div>
-                        )
-                    }
+                    {validationError && props.operationName === 'withdraw' && (
+                        <div className={'mt-2 text-danger error withdraw-error'}>
+                            {validationError}
+                        </div>
+                    )}
                 </div>
             </form>
         </div>

@@ -1,16 +1,17 @@
 @import 'src/variables';
 
 .WelcomeCarousel {
-    background: linear-gradient(0.02deg, #ffffff 76.02%, #fdf1de 95.61%);
-    height: 100%;
+    background: linear-gradient(262.84deg, #f9f9f9 -27.39%, #fbfbfb 71.59%);
+    height: calc(100% - 40px);
 
     @media screen and (min-width: $media1024) {
-        margin-left: 10px;
-        border-radius: 5px;
+        margin-left: 32px;
+        border-radius: $border-radius;
+        margin-top: 20px;
     }
 
     @media screen and (min-width: $media1440) {
-        margin-left: 18px;
+        margin-left: 50px;
     }
 
     &__Content {

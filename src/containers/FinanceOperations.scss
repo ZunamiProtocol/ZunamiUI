@@ -1,9 +1,6 @@
 @import 'src/variables';
 
 .operation-col {
-    background-color: #fffcf5;
-    border-radius: 5px;
-
     @media screen and (min-width: $media1024) {
         margin-left: 10px !important;
         padding: 30px !important;
@@ -22,11 +19,16 @@
 
 .DepositContent {
     @media screen and (min-width: $media375) {
-        padding: 31px;
     }
 
     @media screen and (min-width: $media1024) {
-        padding: 0;
+        margin-left: 32px;
+        margin-top: 22px;
+    }
+
+    @media screen and (min-width: $media1440) {
+        margin-left: 50px;
+        margin-top: 22px;
     }
 
     &__Title {

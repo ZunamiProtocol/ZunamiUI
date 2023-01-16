@@ -1,172 +1,140 @@
 @import 'src/variables';
 
 .Input {
-    background: #fffaf3;
-    border: 1px solid #f4efe1;
     border-radius: 5px;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     flex-wrap: wrap;
     position: relative;
 
     @media screen and (min-width: $media375) {
-        width: 100%;
-        height: 82px;
-        margin-bottom: 11px;
+        margin-bottom: 20px;
+        height: 42px;
     }
 
     @media screen and (min-width: $media1024) {
-        margin-bottom: 12px;
-        width: 257px;
-        height: 55px;
+        margin-bottom: 15px;
+        height: 30px;
     }
 
     @media screen and (min-width: $media1440) {
         margin-bottom: 15px;
-        width: 484px;
-        height: 54px;
+        height: 42px;
     }
 
     @media screen and (min-width: $media1920) {
         margin-bottom: 18.7px;
         width: 543px;
-        height: 64px;
+        height: 48px;
     }
 
-    img {
+    .coin {
+        background: #f0f0f0;
+        border-radius: $border-radius;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        color: #000;
+
         @media screen and (min-width: $media375) {
-            width: 23px;
-            height: 23px;
-            margin-left: 13.9px;
-            margin-right: 8px;
-            position: static;
+            padding: 10px 14px;
+            width: 106px;
         }
 
         @media screen and (min-width: $media1024) {
-            width: 18px;
-            height: 18px;
-            margin-left: 13.9px;
-            margin-right: 8px;
-            position: static;
+            padding: 3px 14px;
+            width: 109px;
         }
 
         @media screen and (min-width: $media1440) {
-            width: 23px;
-            height: 23px;
-            margin-left: 16px;
-            margin-right: 10px;
+            padding: 10px 14px;
+            width: 113px;
         }
 
         @media screen and (min-width: $media1920) {
-            width: 26px;
-            height: 26px;
-            margin-left: 25px;
-            margin-right: 10px;
-        }
-    }
-
-    .coinName {
-        color: #636363;
-
-        @media screen and (min-width: $media375) {
-            font-size: 12px;
-            line-height: 16px;
-            width: 63px;
-            position: static;
+            padding: 10px 14px;
+            width: 131px;
         }
 
-        @media screen and (min-width: $media1024) {
-            font-size: 11px;
-            line-height: 15px;
-            width: 63px;
-            position: static;
+        img {
+            @media screen and (min-width: $media375) {
+                width: 23px;
+                height: auto;
+                margin-right: 12px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                width: 13px;
+                height: auto;
+                margin-right: 12px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                width: 21px;
+                height: auto;
+                margin-right: 12px;
+            }
         }
 
-        @media screen and (min-width: $media1440) {
-            font-size: 12px;
-            line-height: 16px;
-            width: 80px;
-        }
+        span {
+            @media screen and (min-width: $media1024) {
+                display: block;
+                font-size: 12px;
+                line-height: 16px;
+                margin-right: 10px;
+            }
 
-        @media screen and (min-width: $media1920) {
-            font-size: 14px;
-            line-height: 19px;
-            width: 80px;
-        }
-    }
-
-    .divider {
-        background-color: #f4efe1;
-
-        @media screen and (min-width: $media375) {
-            height: 21px;
-            width: 1px;
-            position: static;
-        }
-
-        @media screen and (min-width: $media1024) {
-            height: 21px;
-            width: 1px;
-            position: static;
-        }
-
-        @media screen and (min-width: $media1440) {
-            height: 28px;
-            width: 2px;
+            @media screen and (min-width: $media1440) {
+                display: block;
+                font-size: 14px;
+                line-height: 18px;
+                margin-right: 10px;
+            }
         }
     }
 
     .max {
-        border-radius: 3px;
+        border-radius: $border-radius;
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 1px solid #f95404;
-        color: #f95404;
+        border: 1px solid $primary-color;
+        color: $primary-color;
+        background: #f0f0f0;
         cursor: pointer;
 
         &:hover {
-            background-color: #f95404;
+            background-color: $primary-color;
             color: #fff;
         }
 
         @media screen and (min-width: $media375) {
-            margin-left: 20px;
-            font-size: 10px;
-            line-height: 14px;
-            width: 35px;
-            height: 17px;
-            position: static;
+            width: 60px;
+            height: 42px;
+            font-size: 14px;
         }
 
         @media screen and (min-width: $media1024) {
-            margin-left: 20px;
-            font-size: 9px;
-            line-height: 12px;
-            width: 29px;
-            height: 14px;
-            position: static;
+            width: 49px;
+            height: 30px;
+            font-size: 10px;
+            line-height: 13px;
         }
 
         @media screen and (min-width: $media1440) {
-            margin-left: 19px;
-            font-size: 10px;
-            line-height: 14px;
-            width: 35px;
-            height: 17px;
+            width: 73px;
+            height: 42px;
         }
 
         @media screen and (min-width: $media1920) {
-            margin-left: 19px;
-            font-size: 12px;
-            line-height: 16px;
-            width: 39px;
-            height: 20px;
+            width: 86px;
+            height: 49px;
         }
     }
 
     .balance {
-        color: #f95404;
+        color: $primary-color;
+        font-family: 'Vela Sans Regular';
 
         @media screen and (min-width: $media375) {
             display: none;
@@ -177,62 +145,61 @@
         }
 
         @media screen and (min-width: $media1440) {
-            display: block;
-            font-size: 12px;
-            line-height: 16px;
-            margin-left: 10px;
-            width: 77px;
+            display: flex;
+            font-size: 14px;
+            line-height: 19px;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100px;
+            margin-left: 25px;
         }
 
         @media screen and (min-width: $media1920) {
-            font-size: 14px;
-            line-height: 19px;
-            margin-left: 10px;
-            width: 120px;
         }
     }
 
     input {
-        background: #fffaf3;
-        border: 1px solid #f4efe1;
+        border: none;
+        background: #f0f0f0;
         box-sizing: border-box;
-        border-radius: 5px;
-        color: #636363;
+        border-radius: $border-radius;
+        color: #000;
+        font-family: 'Vela Sans Regular';
 
         @media screen and (min-width: $media375) {
-            font-size: 11px;
-            line-height: 15px;
-            padding-left: 8px;
-            width: calc(100% - 200px);
-            height: 30px;
-            margin-left: 14px;
-            position: static;
+            padding: 5px 20px;
+            font-size: 14px;
+            line-height: 19px;
+            margin-left: 10px;
+            margin-right: 10px;
+            width: 100px;
         }
 
         @media screen and (min-width: $media1024) {
-            font-size: 11px;
-            line-height: 15px;
-            padding-left: 8px;
-            width: 72px;
-            height: 30px;
-            margin-left: 14px;
-            position: static;
+            padding: 5px 20px;
+            font-size: 14px;
+            line-height: 19px;
+            margin-left: 10px;
+            margin-right: 10px;
+            width: 78px;
         }
 
         @media screen and (min-width: $media1440) {
+            padding: 10px 20px;
             font-size: 14px;
             line-height: 19px;
-            padding-left: 15px;
-            width: 173px;
-            height: 29px;
-            margin-left: 17px;
+            margin-left: 15px;
+            margin-right: 0;
+            width: 110px;
         }
 
         @media screen and (min-width: $media1920) {
-            padding-left: 15px;
-            width: 175px;
-            height: 33px;
-            margin-left: 17px;
+            padding: 10px 20px;
+            font-size: 14px;
+            line-height: 19px;
+            margin-left: 15px;
+            margin-right: 0;
+            width: 127px;
         }
     }
 }

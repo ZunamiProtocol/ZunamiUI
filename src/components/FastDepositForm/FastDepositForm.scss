@@ -1,52 +1,72 @@
 @import 'src/variables';
 
 .FastDepositForm {
-    background-color: #fffaf3;
-    border: solid 1px #f4efe1;
-    border-radius: 5px;
+    background: linear-gradient(81.61deg, #f7f7f7 6.26%, #f5f5f5 93.21%);
+    border-radius: $border-radius;
+    position: relative;
 
     @media screen and (min-width: $media375) {
-        background: linear-gradient(262.84deg, #fff3e9 -27.39%, #fef5e8 71.59%);
-        border-radius: 3px;
-        margin: 0 31px 41px 31px;
+        margin: 50px 0 20px 0;
+        height: 364px;
+        width: 100%;
+        padding-top: 50px;
     }
 
     @media screen and (min-width: $media1024) {
-        background: transparent;
-        border-radius: 0;
+        padding-top: 0;
         padding: 16px;
-        margin: 0 40px 14px 40px;
-        max-width: 289px;
-        height: 191px;
-        width: 289px;
+        margin: 0 20px 0 25px;
+        max-width: 300px;
+        height: 171px;
+        width: 300px;
     }
 
     @media screen and (min-width: $media1440) {
         padding: 24px;
-        margin: 0 40px 14px 40px;
-        max-width: 435px;
-        height: 229px;
-        width: 435px;
+        margin: 0 23px 0 48px;
+        max-width: 517px;
+        height: 222px;
+        width: 517px;
     }
 
     @media screen and (min-width: $media1920) {
         padding: 28px;
-        margin: 0 47px 14px 47px;
-        max-width: 511px;
-        height: 269px;
-        width: 511px;
+        margin: 0 31px 14px 47px;
+        max-width: 609px;
+        height: 262px;
+        width: 609px;
     }
 
     &__Title {
-        font-size: 12px;
-        line-height: 16px;
-
         @media screen and (min-width: $media375) {
             display: none;
         }
 
         @media screen and (min-width: $media1024) {
             display: block;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 15px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 26px;
+        }
+
+        svg {
+            @media screen and (min-width: $media1024) {
+                margin-right: 10px;
+                width: 23px;
+                height: 23px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                margin-right: 10px;
+                width: 37px;
+                height: 37px;
+            }
         }
     }
 
@@ -65,11 +85,24 @@
         }
 
         @media screen and (min-width: $media1440) {
-            margin-right: 10px;
+            font-weight: 600;
+            font-size: 12px;
+            line-height: 14px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 17px;
         }
     }
 
     .Input {
+        @media screen and (min-width: $media1440) {
+            margin-top: 30px;
+            margin-bottom: 31px;
+        }
+
         @media screen and (min-width: $media1440) {
             margin-top: 30px;
             margin-bottom: 31px;
@@ -103,15 +136,13 @@
     &__MobileToggle {
         @media screen and (min-width: $media375) {
             display: block;
-            background: linear-gradient(263.21deg, #faa212 3.68%, #f85003 92.08%);
-            border-radius: 3px;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: stretch;
-            color: #fff;
-            // width: calc(100% - 62px);
-            // margin-left: 31px;
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 100px;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            text-align: center;
         }
 
         @media screen and (min-width: $media1024) {
@@ -119,16 +150,20 @@
         }
 
         &__Title {
-            margin-left: 16px;
+            margin-left: 5px;
             font-weight: 500;
-            font-size: 14px;
-            line-height: 19px;
+            font-size: 16px;
+            line-height: 20px;
+            text-align: center;
+            margin-top: 10px;
         }
 
         &__Icon {
-            width: 35px;
-            height: 24.21px;
-            margin-left: 22px;
+            padding: 20px;
+            background: linear-gradient(225.25deg, #f7f7f7 16.17%, #f6f6f6 85.98%);
+            border-radius: 100%;
+            width: 80px;
+            height: auto;
         }
 
         &__ToggleIcon {
@@ -142,17 +177,25 @@
     &__Actions {
         @media screen and (min-width: $media375) {
             margin-bottom: 26px;
-            margin-left: 11px;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        @media screen and (min-width: $media1024) {
+            flex-direction: row;
         }
 
         @media screen and (min-width: $media1440) {
             margin-bottom: 25px;
-            margin-left: 11px;
+            flex-direction: row;
+            gap: 0;
+            align-items: flex-start;
         }
 
         @media screen and (min-width: $media1920) {
             margin-bottom: 25px;
-            margin-left: 11px;
         }
     }
 

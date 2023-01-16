@@ -8,17 +8,57 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Space Grotesk';
+    src: url('./fonts/spacegrotesk-regular-webfont.woff2') format('woff2'),
+        url('./fonts/spacegrotesk-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'space_groteskbold';
+    src: url('./fonts/spacegrotesk-bold-webfont.woff2') format('woff2'),
+        url('./fonts/spacegrotesk-bold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'space_groteskmedium';
+    src: url('./fonts/spacegrotesk-medium-webfont.woff2') format('woff2'),
+        url('./fonts/spacegrotesk-medium-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'space_grotesksemibold';
+    src: url('./fonts/spacegrotesk-semibold-webfont.woff2') format('woff2'),
+        url('./fonts/spacegrotesk-semibold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'space_grotesklight';
+    src: url('./fonts/spacegrotesk-light-webfont.woff2') format('woff2'),
+        url('./fonts/spacegrotesk-light-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 html,
 body,
 #root {
     height: 100%;
     text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    font-family: 'Vela Sans Regular';
+    // -webkit-font-smoothing: antialiased;
+    font-family: 'Space Grotesk', sans-serif;
 }
 
 body {
-    background-color: #fffcf5 !important;
+    background-color: #fff !important;
 }
 
 #root > .container {
@@ -33,7 +73,7 @@ body {
         max-width: 1024px;
         margin-left: auto;
         margin-right: auto;
-        height: calc(100% - 134px) !important;
+        height: 100% !important;
     }
 
     @media (min-width: 960px) and (max-width: 1023px) {
@@ -44,14 +84,12 @@ body {
         max-width: 1440px;
         margin-left: auto;
         margin-right: auto;
-        height: calc(100% - 134px) !important;
     }
 
     @media (min-width: $media1920) {
         max-width: 1920px;
         margin-left: auto;
         margin-right: auto;
-        height: calc(100% - 147px) !important;
     }
 }
 
@@ -306,40 +344,43 @@ footer {
 }
 
 .zun-button {
-    background: linear-gradient(87.51deg, #f74e02 12.85%, #f9a412 94.75%);
-    border-radius: 5px;
+    background: linear-gradient(0deg, #f96501 0%, #ffa001 100%);
+    border-radius: 44px;
     text-align: center;
     color: #ffffff;
     border: none;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
+    font-family: 'Space Grotesk';
+    text-decoration: none;
 
     @media (min-width: $media375) {
-        width: 126px;
-        height: 33px;
-        font-size: 12px;
-        line-height: 16px;
+        font-size: 14px;
+        line-height: 18px;
+        padding: 10px 28px;
     }
 
     @media (min-width: $media1024) {
-        width: 105px;
-        height: 29px;
         font-size: 11px;
-        line-height: 15px;
+        line-height: 14px;
+        padding: 8px 28px;
     }
 
     @media (min-width: $media1440) {
-        font-size: 12px;
-        line-height: 16px;
-        width: 99px;
-        height: 33px;
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 17px;
+        padding: 10px 30px;
     }
 
     @media (min-width: $media1920) {
-        width: 170px;
-        height: 43px;
         font-size: 16px;
         line-height: 22px;
+    }
+
+    &:hover {
+        text-decoration: none;
+        color: #fff;
     }
 }
 
@@ -352,7 +393,7 @@ button.disabled,
 
 input[type='checkbox'] {
     appearance: none;
-    background: #fffaf3;
+    background: #e7e7e7;
     border: 1px solid #f4efe1;
     border-radius: 5px;
     position: relative;
@@ -360,10 +401,11 @@ input[type='checkbox'] {
     &:checked {
         &:after {
             content: '';
-            width: 11px;
+            width: 7px;
             height: 7px;
             position: absolute;
-            background-image: url("data:image/svg+xml,%3Csvg width='11' height='7' viewBox='0 0 11 7' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5.5 6L10 1' stroke='%23636363' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
+            background: #000000;
+            border-radius: 5px;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
@@ -524,8 +566,22 @@ body.dark {
         }
     }
 
+    .badge.bg-secondary {
+        background: #1d1d1d !important;
+        text-decoration: none;
+    }
+
+    .Pendings .values .deposit,
+    .Pendings .values .withdraw {
+        background: #1d1d1d !important;
+    }
+
     #MobileSidebar {
         background-color: #2a2a2a;
+
+        .inner {
+            color: #fff;
+        }
 
         .secondary-menu {
             li {
@@ -597,12 +653,13 @@ body.dark {
     input[type='text'] {
         border-color: $dark-border-color;
         background-color: $dark-panel-bg;
-        color: #fff;
+        color: $primary-color !important;
     }
 
     .BscMigrationModal,
     .modal-content,
-    .modal-header {
+    .modal-header,
+    .Sidebar__Header > span {
         background: linear-gradient(180deg, #1b1b1b 0%, #1d1d1d 100%) !important;
     }
 
@@ -617,7 +674,7 @@ body.dark {
     }
 
     .navbar {
-        background: linear-gradient(180deg, #1b1b1b 0%, #1d1d1d 100%);
+        background: #000;
 
         .NavMenu li.selected {
             background: linear-gradient(
@@ -639,7 +696,7 @@ body.dark {
     }
 
     .FastDepositForm {
-        background: linear-gradient(9.38deg, #222222 3.94%, #111111 89.76%);
+        background: linear-gradient(81.61deg, #161616 6.26%, #181818 93.21%);
         border: none;
 
         &__Description {
@@ -648,7 +705,7 @@ body.dark {
     }
 
     .UzdContainer__Actions_Inner {
-        background: linear-gradient(9.38deg, #222222 3.94%, #111111 89.76%);
+        // background: linear-gradient(9.38deg, #222222 3.94%, #111111 89.76%);
         border: none;
         color: #fff;
 
@@ -715,20 +772,40 @@ body.dark {
         .Sidebar__Description {
             color: #ffffff;
         }
+
+        &::after {
+            background: linear-gradient(0.02deg, #181818 76.02%, #0b0b0b 95.61%);
+
+            @media (min-width: $media375) {
+                display: none;
+            }
+
+            @media (min-width: $media1024) {
+                display: block;
+            }
+        }
     }
 
     input[type='checkbox'] {
-        background: #2a2a2a;
-        border: 1px solid #333333;
+        background: #313131;
+        border: none;
 
-        ::after {
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOSIgaGVpZ2h0PSI1IiB2aWV3Qm94PSIwIDAgOSA1IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNMSAxTDQuNSA0TDggMSIgc3Ryb2tlPSIjODI4MjgyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==');
+        &:checked {
+            &::after {
+                background: #fff;
+            }
         }
     }
 
     .DirectAction {
         span {
             color: #828282;
+        }
+
+        svg {
+            path {
+                fill: #fff;
+            }
         }
     }
 
@@ -738,6 +815,11 @@ body.dark {
 
     .LinkBlock__active .LinkBlock__title {
         color: rgba(249, 84, 4, 0.53);
+    }
+
+    input[type='text'],
+    .Input .coin {
+        background: #1d1d1d !important;
     }
 
     .Disclaimer__Content a {
@@ -763,7 +845,7 @@ body.dark {
     }
 
     .second-row {
-        background: linear-gradient(9.38deg, #1c1c1c 3.94%, #1a1919 89.76%);
+        // background: linear-gradient(9.38deg, #1c1c1c 3.94%, #1a1919 89.76%);
 
         .InfoBlock {
             background: none;
@@ -801,8 +883,50 @@ body.dark {
     .DepositStory__Table thead tr td,
     .PendingBalance__val,
     .TransactionHistory__Title,
-    .TransactionHistory__List th {
+    .TransactionHistory__List th,
+    .Pendings,
+    .Sidebar__Content__Data,
+    .total-income,
+    .ApyBar__title,
+    .InfoBar .values .block .name,
+    .InfoBar .values .block .value,
+    .card-body > .title,
+    .TransactionHistory__List-Item .type,
+    .TransactionHistory__List-Item .date,
+    .TransactionHistory__List-Item .sum,
+    .Deposit__RightBlock .title,
+    .UzdContainer__Actions .InfoBars .InfoBar .title,
+    .UzdContainer__Actions .InfoBars .InfoBar .values .block span.name,
+    .UzdContainer__Actions .InfoBars .InfoBar .values .block span.value,
+    .Uzd-Zlp-Balances .title,
+    .ApyBar__counters .ApyBar__Counter__Value,
+    #networks-selector,
+    #networks-selector .network-item .choose-btn,
+    .badge-light,
+    #MobileSidebar .inner .listings a,
+    .FastDepositForm__MobileToggle__Title,
+    .modal-title,
+    .title {
         color: #fff;
+    }
+
+    #networks-selector .close img {
+        filter: invert(1);
+    }
+
+    .SidebarColumn .Sidebar__Content__Data .profits .title,
+    .Pendings .values .title,
+    .ApyBar__counters .ApyBar__Counter__Title span {
+        color: #c8c8c8;
+    }
+
+    .text-muted {
+        color: rgba(255, 255, 255, 0.6) !important;
+    }
+
+    .total-income .title,
+    .total-income .value {
+        color: #fff !important;
     }
 
     #trans-story-mobile-btn {
@@ -815,6 +939,14 @@ body.dark {
         color: $primary-color;
     }
 
+    .ActionSelector__Action {
+        border-bottom-color: #fff;
+
+        &__Active {
+            border-bottom-color: #fb7501;
+        }
+    }
+
     .strats-chart-col,
     .hist-apy-col,
     .InfoBlock,
@@ -822,8 +954,21 @@ body.dark {
         background: #1e1e1e;
     }
 
+    .Sidebar__Header > svg path,
+    #MobileSidebar svg path {
+        fill: #fff;
+    }
+
+    #MobileSidebar .close {
+        filter: invert(1);
+    }
+
+    .nav-menu svg path {
+        stroke: #fff;
+    }
+
     #collapsed-nav-menu {
-        background: linear-gradient(180deg, rgba(250, 91, 6, 0) 0%, rgba(250, 91, 6, 0.04) 100%);
+        // background: linear-gradient(180deg, rgba(250, 91, 6, 0) 0%, rgba(250, 91, 6, 0.04) 100%);
         color: $primary-color;
 
         span {
@@ -832,11 +977,13 @@ body.dark {
     }
 
     .SidebarColumn {
-        background: linear-gradient(
-            0.02deg,
-            rgba(30, 30, 30, 0.45) 76.02%,
-            rgba(40, 40, 40, 0.45) 95.61%
-        );
+        @media (min-width: $media375) {
+            background: none;
+        }
+
+        @media (min-width: $media1024) {
+            background: linear-gradient(0.02deg, #181818 76.02%, #0b0b0b 95.61%);
+        }
     }
 
     .ComingSoonPlaceholder {
@@ -897,14 +1044,94 @@ body.dark {
         background: linear-gradient(9.38deg, #1c1c1c 3.94%, #1a1919 89.76%);
     }
 
-    // .WalletStatus {
-    //     background: linear-gradient(0.02deg, #1e1e1e 76.02%, #282828 95.61%);
-    // }
+    .UzdContainer__Actions_Inner .swap svg {
+        border-color: #1b1b1b;
+        background-color: transparent;
+    }
+
+    .WalletStatus__inner,
+    .Sidebar__Content__Data,
+    .Pendings,
+    .withdraw,
+    .deposit,
+    .PieChart,
+    .ApyBar,
+    .ApyBar__Counter,
+    .card,
+    .Deposit__RightBlock,
+    .Form,
+    .TransactionHistory,
+    .ThemeSwitcher,
+    .InfoBar .values .block,
+    .Input .max,
+    .WithdrawOptions,
+    .WithdrawOptions__LiquidityBlock,
+    label.coin,
+    .Counter,
+    .mint-redeem-inputs,
+    .Uzd-Zlp-Balances,
+    #networks-selector .network-item,
+    .badge-light {
+        background: linear-gradient(132deg, #272727 10.02%, #181818 93.49%) !important;
+    }
+
+    #networks-selector {
+        background-color: #000;
+    }
+
+    .WalletStatus__toggler svg path {
+        fill: #fff !important;
+    }
+
+    .FastDepositForm__Title svg path {
+        fill: #494949;
+    }
+
+    .card-body svg.bg path {
+        fill: #444;
+    }
+
+    .divider {
+        background-color: #242424;
+    }
+
+    .WithdrawOptions__LiquidityBlock input[type='text'] {
+        border-color: #444444;
+    }
+
+    .selector-wrapper,
+    #networks-selector .network-item .choose-btn {
+        background: #1d1d1d;
+    }
+
+    .btn.btn-light {
+        background: #1d1d1d !important;
+        color: #fff;
+        border-color: transparent;
+    }
+
+    .TransactionHistory__List-Item {
+        background: linear-gradient(132deg, #181818 10.02%, #272727 93.49%) !important;
+    }
 
     .TestnetPlaceholder {
         h1,
         a {
             color: #fff;
+        }
+    }
+
+    button {
+        svg {
+            path {
+                fill: #fff;
+            }
+        }
+    }
+
+    .UzdContainer .ZLPBalance__Logo {
+        path {
+            fill: #fff;
         }
     }
 
@@ -922,7 +1149,7 @@ body.dark {
         }
 
         .carousel-item {
-            background: linear-gradient(262.84deg, #1e1e1e -27.39%, #2c2c2c 71.59%);
+            background: transparent;
 
             h1,
             span {
@@ -944,21 +1171,21 @@ body.dark {
         }
     }
 
+    .ActionSelector__Action {
+        background-color: $dark-panel-bg;
+    }
+
     .Form {
         .divider {
             background-color: $dark-border-color;
         }
 
-        .ActionSelector__Action {
-            background-color: $dark-panel-bg;
-        }
-
         .inner {
-            background: #202020;
+            // background: #202020;
         }
 
         .Input {
-            background-color: #2b2b2b;
+            // background-color: #2b2b2b;
             border-color: $dark-border-color;
 
             input {
@@ -1037,4 +1264,707 @@ body.dark {
             }
         }
     }
+}
+
+.badge {
+    border-radius: $border-radius !important;
+    padding: 7px 20px !important;
+    font-size: 14px !important;
+    line-height: 19px !important;
+
+    &-light {
+        background: #f0f0f0;
+        color: #000 !important;
+    }
+}
+
+.text-primary {
+    color: $primary-color;
+}
+
+.btn {
+    border-radius: $border-radius !important;
+    border-color: transparent;
+}
+
+.btn-sm {
+    padding: 6px 15px !important;
+    font-size: 14px !important;
+    line-height: 19px !important;
+    max-height: 31px;
+
+    span {
+        font-size: 14px !important;
+    }
+}
+
+.btn-light {
+    background-color: $btn-secondary-color !important;
+    border-color: transparent !important;
+}
+
+.dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.features-slider {
+    background-color: #cecece;
+    border-radius: $border-radius;
+
+    @media (min-width: $media375) {
+        width: 100%;
+        height: 193px;
+        margin-bottom: 20px;
+    }
+
+    @media (min-width: $media1024) {
+        width: 275px;
+        height: 170px;
+        margin-bottom: 0;
+    }
+
+    @media (min-width: $media1440) {
+        width: 353px;
+        height: 222px;
+    }
+
+    @media (min-width: $media1920) {
+        width: 610px;
+        height: 262px;
+    }
+
+    .carousel-inner,
+    .carousel-item {
+        height: 100%;
+    }
+
+    .carousel-item {
+        border-radius: $border-radius;
+        position: relative;
+
+        @media (min-width: $media375) {
+            width: 100%;
+            height: 193px;
+        }
+
+        @media (min-width: $media1024) {
+            width: 100%;
+            height: 170px;
+        }
+
+        @media (min-width: $media1440) {
+            width: 353px;
+            height: 222px;
+        }
+
+        @media (min-width: $media1920) {
+            width: 609px;
+            height: 262px;
+        }
+
+        .title {
+            font-family: 'Space Grotesk';
+            font-weight: 500;
+            font-size: 13px;
+            line-height: 17px;
+            color: #ffffff;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+
+            @media (min-width: $media1920) {
+                font-size: 14px;
+                line-height: 18px;
+            }
+        }
+
+        &.yeld {
+            background: linear-gradient(66.52deg, #10013c 1.48%, #2a06be 93.56%);
+
+            .logo {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                margin-top: 10px;
+
+                @media (min-width: $media1440) {
+                    width: 245px;
+                    height: 130px;
+                }
+
+                @media (min-width: $media1920) {
+                    width: 300px;
+                    height: 160px;
+                }
+            }
+        }
+
+        &.curve {
+            background: linear-gradient(66.52deg, #6b0000 1.48%, #e60000 93.56%);
+
+            .logo {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                margin-top: 10px;
+
+                @media (min-width: $media1440) {
+                    width: 242px;
+                    height: 139px;
+                }
+
+                @media (min-width: $media1920) {
+                    width: 300px;
+                    height: 160px;
+                }
+            }
+        }
+
+        &.uzd {
+            background: linear-gradient(0deg, #ff3902 -49.44%, #ffa701 100%);
+
+            .uzd-logo {
+                @media (min-width: $media375) {
+                    left: 31px;
+                    top: 52px;
+                    position: absolute;
+                    width: 123px;
+                    height: 142px;
+                }
+
+                @media (min-width: $media1024) {
+                    left: 55px;
+                    top: 49px;
+                    position: absolute;
+                    width: 86px;
+                    height: 99px;
+                }
+
+                @media (min-width: $media1440) {
+                    left: 57px;
+                    top: 52px;
+                    position: absolute;
+                    width: 134px;
+                    height: 154px;
+                }
+
+                @media (min-width: $media1920) {
+                    left: 138px;
+                    top: 57px;
+                    position: absolute;
+                    width: 248px;
+                    height: 283px;
+                }
+            }
+
+            .uzd {
+                @media (min-width: $media375) {
+                    top: 62px;
+                    left: 126px;
+                    width: 128px;
+                    height: 52px;
+                    position: absolute;
+                    display: flex;
+                    align-items: baseline;
+                }
+
+                @media (min-width: $media1024) {
+                    top: 45px;
+                    left: 109px;
+                    width: 87px;
+                    height: 35px;
+                    position: absolute;
+                    display: flex;
+                    align-items: baseline;
+                }
+
+                @media (min-width: $media1440) {
+                    top: 69px;
+                    left: 139px;
+                    width: 136px;
+                    height: 66px;
+                    position: absolute;
+                    display: flex;
+                    align-items: baseline;
+                }
+
+                @media (min-width: $media1920) {
+                    top: 86px;
+                    left: 276px;
+                    width: 157px;
+                    height: 66px;
+                    position: absolute;
+                    display: flex;
+                    align-items: baseline;
+                }
+            }
+
+            .description {
+                @media (min-width: $media375) {
+                    left: 129px;
+                    top: 125px;
+                    position: absolute;
+                    color: #fff;
+                    font-family: 'Space Grotesk';
+                    font-weight: 600;
+                    font-size: 12px;
+                    line-height: 14px;
+                    width: 135px;
+                }
+
+                @media (min-width: $media1024) {
+                    left: 110px;
+                    top: 99px;
+                    position: absolute;
+                    color: #fff;
+                    font-family: 'Space Grotesk';
+                    font-weight: 600;
+                    font-size: 10px;
+                    line-height: 12px;
+                    width: 143px;
+                }
+
+                @media (min-width: $media1440) {
+                    left: 142px;
+                    top: 137px;
+                    position: absolute;
+                    color: #fff;
+                    font-family: 'Space Grotesk';
+                    font-weight: 600;
+                    font-size: 12px;
+                    line-height: 14px;
+                    width: 143px;
+                }
+
+                @media (min-width: $media1920) {
+                    left: 276px;
+                    top: 164px;
+                    position: absolute;
+                    color: #fff;
+                    font-family: 'Space Grotesk';
+                    font-weight: 600;
+                    font-size: 14px;
+                    line-height: 17px;
+                    width: 169px;
+                }
+            }
+        }
+    }
+}
+
+.ApyBarWrapper {
+    @media (min-width: $media375) {
+        width: 100%;
+    }
+
+    @media (min-width: $media1024) {
+        width: auto;
+    }
+}
+
+.ApyBar {
+    background: linear-gradient(78.51deg, #f7f7f7 12.17%, #f6f6f6 65.32%);
+    border-radius: $border-radius;
+
+    @media (min-width: $media375) {
+        padding: 20px;
+        margin: 0;
+    }
+
+    @media (min-width: $media1024) {
+        width: 300px;
+        height: 316px;
+        padding: 20px;
+        margin: 21px 20px 0 25px;
+    }
+
+    @media (min-width: $media1440) {
+        width: 517px;
+        height: 316px;
+        padding: 25px;
+        margin: 21px 23px 0 48px;
+    }
+
+    @media (min-width: $media1920) {
+        width: 610px;
+        height: 373px;
+        padding: 25px;
+        margin: 21px 23px 0 48px;
+    }
+
+    &__title {
+        font-family: 'Space Grotesk';
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 17px;
+        margin-bottom: 20px;
+
+        @media (min-width: $media375) {
+            font-size: 14px;
+            line-height: 18px;
+        }
+
+        @media (min-width: $media1920) {
+            font-size: 14px;
+            line-height: 18px;
+        }
+    }
+
+    &__counters {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+        @media (min-width: $media375) {
+            gap: 20px;
+        }
+
+        @media (min-width: $media1024) {
+            gap: 0;
+        }
+
+        .ApyBar__Counter {
+            background: #f0f0f0;
+            border-radius: $border-radius;
+
+            @media (min-width: $media375) {
+                width: calc(50% - 10px);
+                height: 53px;
+                margin-bottom: 0;
+            }
+
+            @media (min-width: $media1024) {
+                width: 127px;
+                height: 53px;
+                margin-bottom: 12px;
+            }
+
+            @media (min-width: $media1440) {
+                width: 148px;
+                height: 64px;
+                margin-bottom: 0;
+            }
+
+            @media (min-width: $media1920) {
+                width: 174px;
+                height: 75px;
+                margin-bottom: 0;
+            }
+
+            &__Title {
+                span {
+                    display: block;
+                    font-family: 'Space Grotesk';
+                    font-weight: 500;
+
+                    @media (min-width: $media375) {
+                        font-size: 14px;
+                        line-height: 14px;
+                        margin: 11px 0 2px 15px;
+                    }
+
+                    @media (min-width: $media1024) {
+                        font-size: 11px;
+                        line-height: 14px;
+                        margin: 11px 0 2px 15px;
+                    }
+
+                    @media (min-width: $media1440) {
+                        font-size: 13px;
+                        line-height: 17px;
+                        margin: 11px 0 2px 19px;
+                    }
+
+                    @media (min-width: $media1920) {
+                        font-size: 14px;
+                        line-height: 18px;
+                        margin: 15px 0 6px 19px;
+                    }
+                }
+            }
+
+            &__Value {
+                @media (min-width: $media375) {
+                    margin-left: 15px;
+                    font-size: 14px;
+                }
+
+                @media (min-width: $media1024) {
+                    margin-left: 15px;
+                    font-size: 12px;
+                }
+
+                @media (min-width: $media1440) {
+                    margin-left: 19px;
+                    font-size: 14px;
+                }
+
+                &--primary {
+                    color: $primary-color;
+                }
+            }
+        }
+    }
+}
+
+.card {
+    border: none !important;
+    border-radius: $border-radius !important;
+    background: linear-gradient(86.2deg, #f8f8f8 4.31%, #f7f7f7 40.59%);
+
+    &-body {
+        @media (min-width: $media1024) {
+            padding: 20px !important;
+        }
+
+        @media (min-width: $media1440) {
+            padding: 25px !important;
+        }
+
+        > .title {
+            @media (min-width: $media1440) {
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 20px;
+            }
+        }
+    }
+}
+
+.Deposit__RightBlock {
+    border-radius: $border-radius;
+    background: linear-gradient(57.3deg, #f8f8f8 -9.62%, #f7f7f7 99.29%);
+
+    @media (min-width: $media375) {
+        padding: 20px 22px;
+        margin-left: 0;
+        margin-top: 20px;
+    }
+
+    @media (min-width: $media1024) {
+        margin-top: 0;
+        padding: 20px 22px;
+        margin-left: 20px;
+    }
+
+    @media (min-width: $media1440) {
+        padding: 32px 37px;
+        margin-left: 23px;
+    }
+
+    > .title {
+        @media (min-width: $media375) {
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        @media (min-width: $media1024) {
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+
+        @media (min-width: $media1440) {
+            margin-bottom: 28px;
+            font-size: 14px;
+        }
+
+        @media (min-width: $media1920) {
+            margin-bottom: 28px;
+            font-size: 16px;
+        }
+    }
+
+    .balance {
+        background: linear-gradient(0deg, #f86001 0%, #fea001 93.75%);
+        border-radius: $border-radius;
+        padding: 11px 20px;
+        color: #fff;
+        font-weight: 600;
+        font-family: 'Vela Sans Regular';
+
+        @media (min-width: $media1024) {
+            width: 139px;
+        }
+
+        @media (min-width: $media1440) {
+            width: 147px;
+        }
+
+        @media (min-width: $media1920) {
+            width: 197px;
+        }
+
+        .title {
+            @media (min-width: $media1024) {
+                font-size: 12px;
+                line-height: 16px;
+            }
+
+            @media (min-width: $media1440) {
+                font-size: 13px;
+                line-height: 17px;
+            }
+
+            @media (min-width: $media1920) {
+                font-size: 14px;
+                line-height: 16px;
+            }
+        }
+
+        .value {
+            @media (min-width: $media1024) {
+                font-size: 12px;
+                line-height: 16px;
+                margin-top: 3px;
+            }
+
+            @media (min-width: $media1440) {
+                font-size: 14px;
+                line-height: 19px;
+                margin-top: 3px;
+            }
+
+            @media (min-width: $media1920) {
+                font-size: 16px;
+                line-height: 22px;
+                margin-top: 3px;
+            }
+        }
+    }
+}
+
+.Counter {
+    background: #f0f0f0;
+    border-radius: $border-radius;
+
+    @media screen and (min-width: $media375) {
+        padding: 11px 11px;
+    }
+
+    @media screen and (min-width: $media1024) {
+        padding: 11px 17px;
+    }
+
+    @media screen and (min-width: $media1440) {
+        padding: 13px 20px;
+    }
+
+    &__Title {
+        color: #000000;
+
+        @media screen and (min-width: $media375) {
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 19px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            font-weight: 500;
+            font-size: 11px;
+            line-height: 14px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-weight: 500;
+            font-size: 13px;
+            line-height: 17px;
+        }
+
+        &__Buttons {
+            display: flex;
+            cursor: pointer;
+            gap: 5px;
+
+            img {
+                width: 12px;
+                height: auto;
+            }
+        }
+    }
+
+    &__Value {
+        color: #5b5959;
+        font-family: 'Vela Sans Regular';
+
+        @media screen and (min-width: $media375) {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 19px;
+            margin-top: 4px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            font-weight: 600;
+            font-size: 11px;
+            line-height: 17px;
+            margin-top: 4px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 19px;
+            margin-top: 4px;
+        }
+
+        &-Active {
+            color: #ff7a00;
+        }
+
+        &-Big {
+            @media screen and (min-width: $media1440) {
+                font-size: 16px;
+                line-height: 22px;
+            }
+        }
+    }
+}
+
+.fast-deposit-wrapper,
+.PieChartWrapper {
+    @media screen and (min-width: $media375) {
+        width: 100%;
+    }
+
+    @media screen and (min-width: $media1024) {
+        width: auto;
+    }
+}
+
+.nav-menu {
+    @media screen and (min-width: $media375) {
+        display: flex;
+        justify-content: flex-end;
+        position: absolute;
+        top: 30px;
+        right: 24px;
+        height: 33px;
+        width: 33px;
+        z-index: 3;
+    }
+
+    @media screen and (min-width: $media1024) {
+        display: none;
+    }
+}
+
+.mobile-menu {
+    a {
+        letter-spacing: -1px;
+        align-items: center;
+
+        img {
+            width: 79px;
+            height: 79px;
+        }
+    }
+}
+
+.vela-sans {
+    font-family: 'Vela Sans Regular';
 }

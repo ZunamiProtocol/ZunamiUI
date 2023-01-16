@@ -99,20 +99,145 @@
 
     &__Actions {
         @media screen and (min-width: $media1024) {
-            padding: 86px 0 0 0;
-            width: 682px;
+            // padding-left: 30px;
         }
 
         @media screen and (min-width: $media1440) {
-            padding: 111px 0 0 0;
-            width: 863px;
+            // padding-left: 50px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            // padding-left: 50px;
+        }
+
+        .InfoBars {
+            display: flex;
+            width: 100%;
+
+            @media screen and (min-width: $media375) {
+                gap: 10px;
+                flex-direction: column;
+            }
+
+            @media screen and (min-width: $media1024) {
+                gap: 10px;
+                flex-direction: row;
+            }
+
+            @media screen and (min-width: $media1440) {
+                gap: 23px;
+            }
+
+            .InfoBar {
+                @media screen and (min-width: $media1024) {
+                    width: 240px;
+
+                    &:nth-child(1) {
+                        margin-left: 30px;
+                    }
+                }
+
+                @media screen and (min-width: $media1440) {
+                    width: 338px;
+
+                    &:nth-child(1) {
+                        margin-left: 50px;
+                    }
+                }
+
+                @media screen and (min-width: $media1920) {
+                    width: 394px;
+
+                    &:nth-child(1) {
+                        margin-left: 50px;
+                    }
+                }
+
+                .title {
+                    font-weight: 600;
+                    color: #000000;
+
+                    @media screen and (min-width: $media1024) {
+                        font-size: 12px;
+                        line-height: 15px;
+                        margin-bottom: 20px;
+                    }
+
+                    @media screen and (min-width: $media1440) {
+                        font-size: 16px;
+                        line-height: 20px;
+                        margin-bottom: 20px;
+                    }
+                }
+
+                .values {
+                    display: flex;
+
+                    @media screen and (min-width: $media375) {
+                        gap: 10px;
+                    }
+
+                    @media screen and (min-width: $media1024) {
+                        gap: 10px;
+                    }
+
+                    @media screen and (min-width: $media1440) {
+                        gap: 17px;
+                    }
+
+                    .block {
+                        background: #f0f0f0;
+                        border-radius: $border-radius;
+                        display: flex;
+
+                        img {
+                            width: 20px;
+                            margin-right: 10px;
+                        }
+
+                        @media screen and (min-width: $media375) {
+                            padding: 11px 17px;
+                        }
+
+                        @media screen and (min-width: $media1024) {
+                            padding: 11px 17px;
+                        }
+
+                        @media screen and (min-width: $media1440) {
+                            padding: 13px 20px;
+                        }
+
+                        span {
+                            display: block;
+
+                            &.name {
+                                color: #000000;
+                            }
+
+                            &.value {
+                                color: #5b5959;
+                                font-family: 'Vela Sans Regular';
+                            }
+
+                            @media screen and (min-width: $media1024) {
+                                font-size: 12px;
+                                line-height: 16px;
+                            }
+
+                            @media screen and (min-width: $media1440) {
+                                font-size: 13px;
+                                line-height: 17px;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         &_Inner {
-            background: #fffaf3;
-            border: 1px solid #f4efe1;
-            border-radius: 5px;
-            padding: 30px;
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
 
             @media screen and (min-width: $media375) {
                 min-height: 900px;
@@ -120,6 +245,9 @@
 
             @media screen and (min-width: $media1024) {
                 min-height: auto;
+            }
+
+            @media screen and (min-width: $media1440) {
             }
 
             .protocol_fee {
@@ -143,18 +271,78 @@
                 }
             }
 
-            .mint-redeem-inputs {
+            .mint-card {
                 @media screen and (min-width: $media375) {
-                    padding-right: 0;
+                    margin-top: 20px;
                 }
 
                 @media screen and (min-width: $media1024) {
-                    padding-right: 20px;
+                    margin-top: 20px;
+                    margin-left: 20px;
+                    max-width: 285px;
+                }
+
+                @media screen and (min-width: $media1440) {
+                    margin-top: 22px;
+                    margin-left: 22px;
+                    max-width: none;
+                }
+
+                @media screen and (min-width: $media1440) {
+                    max-width: 416px;
+                }
+
+                .title {
+                    @media screen and (min-width: $media1024) {
+                        font-size: 12px;
+                    }
+
+                    @media screen and (min-width: $media1440) {
+                        font-size: 16px;
+                    }
+
+                    img {
+                        @media screen and (min-width: $media1024) {
+                            width: 20px;
+                            height: 20px;
+                        }
+
+                        @media screen and (min-width: $media1440) {
+                            width: 28px;
+                            height: 28px;
+                        }
+                    }
+                }
+            }
+
+            .mint-redeem-inputs {
+                background: linear-gradient(64.61deg, #f7f7f7 9.76%, #f7f7f7 99.42%);
+                border-radius: $border-radius;
+
+                @media screen and (min-width: $media375) {
+                    padding: 20px;
+                    margin-top: 22px;
+                    width: 100%;
+                }
+
+                @media screen and (min-width: $media1024) {
+                    padding: 20px;
+                    margin-top: 22px;
+                    width: 300px;
+                    margin-left: 30px;
+                }
+
+                @media screen and (min-width: $media1440) {
+                    padding: 32px;
+                    margin-top: 22px;
+                    width: 498px;
+                    margin-left: 50px;
                 }
 
                 .inputs {
                     display: flex;
                     flex-direction: column;
+                    position: relative;
 
                     &.redeem {
                         flex-direction: column-reverse;
@@ -163,44 +351,96 @@
             }
 
             .s-coin {
-                background: #fffaf3;
-                border: 1px solid #f4efe1;
-                border-radius: 5px;
+                background: #f0f0f0;
+                border-radius: $border-radius;
                 padding: 15px 20px;
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
                 margin-bottom: 12px;
+
+                // @media screen and (min-width: $media375) {
+                //     width: 215px;
+                //     font-size: 12px;
+                // }
+
+                @media screen and (min-width: $media1024) {
+                    width: 215px;
+                    font-size: 12px;
+                }
+
+                @media screen and (min-width: $media1440) {
+                    width: 339px;
+                    font-size: 14px;
+                }
+
+                .left-part {
+                    @media screen and (min-width: $media375) {
+                        width: 100px;
+                    }
+
+                    @media screen and (min-width: $media1024) {
+                        width: 120px;
+                    }
+
+                    @media screen and (min-width: $media1440) {
+                        width: 120px;
+                    }
+                }
 
                 .right-part {
                     position: relative;
                 }
 
                 .action {
-                    font-weight: 500;
-                    font-size: 10px;
-                    line-height: 14px;
-                    color: #838383;
+                    @media screen and (min-width: $media1440) {
+                        font-weight: 500;
+                        font-size: 13px;
+                        line-height: 17px;
+                        color: #5b5959;
+                    }
                 }
 
                 .coin {
-                    font-weight: 500;
-                    font-size: 12px;
-                    line-height: 16px;
-                    color: #636363;
+                    @media screen and (min-width: $media1440) {
+                        font-weight: 600;
+                        font-size: 16px;
+                        line-height: 22px;
+                    }
                 }
 
                 input[type='text'] {
-                    background: #fffaf3;
-                    border: 1px solid #f4efe1;
-                    border-radius: 5px;
-                    padding: 6px 12px;
+                    background: #e7e7e7;
+                    border: none;
+                    border-radius: $border-radius;
                     font-weight: 500;
                     font-size: 12px;
                     line-height: 16px;
                     color: #636363;
-                    padding-right: 50px;
+                    // padding-right: 50px;
                     width: 170px;
+                    font-family: 'Vela Sans Regular';
+
+                    @media screen and (min-width: $media375) {
+                        width: 90px;
+                        height: 24px;
+                        font-size: 11px;
+                        padding: 3px 12px;
+                        margin-left: 10px;
+                    }
+
+                    @media screen and (min-width: $media1024) {
+                        width: 56px;
+                        height: 24px;
+                        font-size: 11px;
+                        padding: 3px 12px;
+                    }
+
+                    @media screen and (min-width: $media1440) {
+                        width: 110px;
+                        height: 42px;
+                        font-size: 13px;
+                        padding: 6px 12px;
+                    }
                 }
 
                 .max {
@@ -213,7 +453,9 @@
                     cursor: pointer;
                     position: absolute;
                     right: 10px;
-                    top: 7px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    display: none;
 
                     &:hover {
                         background-color: #f95404;
@@ -251,12 +493,69 @@
             }
 
             .swap {
+                position: absolute;
+                top: 50%;
+                right: 0;
+                transform: translate(0, -50%);
+                display: flex;
+                align-items: center;
+                gap: 10px;
+
+                @media screen and (min-width: $media375) {
+                    width: 71px;
+                    margin-right: -12px;
+                }
+
+                @media screen and (min-width: $media1024) {
+                    margin-right: 0;
+                    width: 71px;
+                }
+
+                @media screen and (min-width: $media1440) {
+                    width: 136px;
+                }
+
+                svg {
+                    background-color: #f0f0f0;
+                    border-radius: 100%;
+                    border: solid 10px #f7f7f7;
+
+                    @media screen and (min-width: $media375) {
+                        width: 63px;
+                        height: 63px;
+                        padding: 8px;
+                    }
+
+                    @media screen and (min-width: $media1024) {
+                        width: 50px;
+                        height: 50px;
+                        padding: 8px;
+                    }
+
+                    @media screen and (min-width: $media1440) {
+                        width: 54px;
+                        height: 54px;
+                        padding: 8px;
+                    }
+                }
+
                 span {
                     font-weight: 500;
                     font-size: 10px;
                     line-height: 14px;
                     color: #fb7b0b;
-                    margin-left: 11px;
+
+                    @media screen and (min-width: $media375) {
+                        display: none;
+                    }
+
+                    @media screen and (min-width: $media1024) {
+                        display: none;
+                    }
+
+                    @media screen and (min-width: $media1440) {
+                        display: block;
+                    }
                 }
 
                 margin-bottom: 15px;
@@ -275,34 +574,28 @@
                     }
 
                     @media screen and (min-width: $media1024) {
-                        margin: 22px 0 0 30px;
+                        margin: 22px 0 0 0;
+                    }
+
+                    @media screen and (min-width: $media1440) {
+                        margin: 22px 0 0 0;
+                    }
+
+                    @media screen and (min-width: $media1920) {
+                        margin: 22px 0 0 0;
                     }
                 }
             }
 
             .curve-boost {
                 @media screen and (min-width: $media375) {
-                    width: 100%;
-                    height: 64px;
-                    margin-top: 20px;
                 }
 
                 @media screen and (min-width: $media1024) {
-                    width: 316px;
-                    height: 64px;
-                    margin-top: 0;
                 }
 
                 @media screen and (min-width: $media1440) {
-                    width: 402px;
-                    height: 77px;
                 }
-
-                background: #fff5e9;
-                border-radius: 20px;
-                padding: 22px;
-                display: flex;
-                align-items: center;
 
                 .left-part {
                     @media screen and (min-width: $media375) {
@@ -328,14 +621,12 @@
                         font-weight: 500;
                         font-size: 12px;
                         line-height: 16px;
-                        // color: #636363;
                     }
 
                     div:last-child {
                         font-weight: 500;
                         font-size: 10px;
                         line-height: 14px;
-                        // color: #7c7c7c;
                         margin-top: 2px;
                     }
                 }
@@ -383,7 +674,7 @@
 
             ul {
                 list-style: none;
-                margin: 0 0 0 30px;
+                margin: 0;
                 padding: 0;
 
                 li {
@@ -411,41 +702,243 @@
                         font-size: 12px;
                         line-height: 16px;
                         color: #636363;
+
+                        @media screen and (min-width: $media1440) {
+                            font-size: 14px;
+                            line-height: 21px;
+                        }
                     }
                 }
             }
+        }
+    }
 
-            .go-to-curve {
-                background: #fff5e9;
-                border-radius: 5px;
-                width: 126px;
-                height: 33px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                text-decoration: none;
+    .CurveWarning {
+        @media screen and (min-width: $media1024) {
+            min-height: 146px;
+            margin-left: 10px;
+        }
 
-                @media screen and (min-width: $media375) {
-                    margin: 25px auto 10px auto;
-                }
+        @media screen and (min-width: $media1440) {
+            min-height: auto;
+            margin-left: 0;
+        }
 
-                @media screen and (min-width: $media1024) {
-                    margin: 25px 0 10px 30px;
-                }
+        .title {
+            @media screen and (min-width: $media375) {
+                margin-bottom: 10px !important;
+            }
 
-                span {
-                    font-weight: 500;
-                    font-size: 12px;
-                    line-height: 16px;
-                    text-align: center;
-                    color: #636363;
-                }
+            @media screen and (min-width: $media1024) {
+                margin-bottom: 10px !important;
+            }
 
-                img {
-                    width: 19px;
-                    height: 19px;
-                    margin-right: 12px;
-                }
+            @media screen and (min-width: $media1440) {
+                margin-bottom: 20px !important;
+            }
+        }
+
+        .text {
+            font-weight: 500;
+            z-index: 2;
+
+            @media screen and (min-width: $media375) {
+                // margin-bottom: 20px;
+                position: relative;
+            }
+
+            @media screen and (min-width: $media1024) {
+                width: 70%;
+                font-size: 11px;
+                line-height: 14px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                width: 50%;
+                font-size: 13px;
+                line-height: 17px;
+            }
+        }
+
+        .zun-button {
+            @media screen and (min-width: $media375) {
+                display: inline-flex;
+                margin: 30px 0;
+            }
+
+            @media screen and (min-width: $media1024) {
+                margin: 0;
+                position: absolute;
+                z-index: 2;
+                top: auto;
+                bottom: 15px;
+                left: 20px;
+                right: auto;
+            }
+
+            @media screen and (min-width: $media1440) {
+                right: 34px;
+                top: 50%;
+                bottom: auto;
+                left: auto;
+                transform: translateY(-50%);
+            }
+        }
+
+        .bg {
+            position: absolute;
+            pointer-events: none;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+
+            @media screen and (min-width: $media375) {
+                right: 20px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                right: 40px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                right: 195px;
+            }
+        }
+    }
+
+    .Uzd-Zlp-Balances {
+        background: linear-gradient(80.69deg, #f1f1f1 9.7%, #f4f4f4 92.78%);
+        border-radius: $border-radius;
+
+        @media screen and (min-width: $media375) {
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 16px;
+            padding: 20px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 15px;
+            padding: 20px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-weight: 500;
+            font-size: 13px;
+            line-height: 17px;
+            padding: 22px;
+        }
+
+        .Counters {
+            @media screen and (min-width: $media375) {
+                gap: 10px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                gap: 10px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                gap: 10px;
+            }
+
+            .Counter {
+                width: 50%;
+                background: #ebebeb;
+            }
+        }
+    }
+
+    .ZLPBalance {
+        position: relative;
+
+        @media screen and (min-width: $media375) {
+            height: 83px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            height: 69px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            height: 78px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            height: 91px;
+        }
+
+        &__Bg {
+            pointer-events: none;
+            position: absolute;
+            right: 70px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        &__Logo {
+            pointer-events: none;
+            position: absolute;
+            right: 32px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .Counter__Title {
+            @media screen and (min-width: $media375) {
+                padding-top: 10px;
+                font-size: 14px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                padding-top: 0;
+                margin-top: 3px;
+                font-size: 12px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                margin-top: 3px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                margin-top: 6px;
+            }
+        }
+
+        .Counter__Value {
+            font-family: 'Vela Sans Regular';
+
+            @media screen and (min-width: $media375) {
+                margin-top: 7px;
+                font-size: 14px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                margin-top: 7px;
+                font-size: 12px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                margin-top: 7px;
+            }
+
+            @media screen and (min-width: $media1920) {
+                margin-top: 10px;
+                font-size: 16px;
+                line-height: 22px;
+            }
+        }
+    }
+
+    .Mode-Selector {
+        &-Item {
+            @media screen and (min-width: $media1440) {
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 20px;
             }
         }
     }

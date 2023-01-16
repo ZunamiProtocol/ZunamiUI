@@ -30,10 +30,11 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
     };
 
     return (
-        <div className="WithdrawOptions">
-            <div className="WithdrawOptions__BalanceBlock">
-                <span>Your balance:</span>
-                <span className="balance">{getBalanceNumber(props.balance).toFixed(3, 1)}</span>
+        <div className="WithdrawOptions flex-fill">
+            <div className="WithdrawOptions__Title">Withdraw information</div>
+            <div className="balance">
+                <div className="title">Balance</div>
+                <div className="value">$ {getBalanceNumber(props.balance).toFixed(3, 1)}</div>
             </div>
             <div className="WithdrawOptions__LiquidityBlock">
                 <span>Share of liquidity, %</span>
@@ -80,6 +81,22 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                 <div className="coins">
                     {isETH(props.chainId) && (
                         <label
+                            className="coin all-coins"
+                            onClick={() => onCoinSelect('all', props.onCoinSelect)}
+                        >
+                            <input
+                                type="radio"
+                                name="active-coin"
+                                data-coin="usdt"
+                                checked={props.selectedCoin === 'all'}
+                                onChange={() => {}}
+                            />
+                            <img src="/all-coins.svg" alt="" data-coin="all" />
+                            <span>All coins</span>
+                        </label>
+                    )}
+                    {isETH(props.chainId) && (
+                        <label
                             className="coin"
                             onClick={() => onCoinSelect('usdc', props.onCoinSelect)}
                         >
@@ -124,22 +141,6 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                         <img src="/USDT.svg" alt="" />
                         <span>USDT</span>
                     </label>
-                    {isETH(props.chainId) && (
-                        <label
-                            className="coin all-coins"
-                            onClick={() => onCoinSelect('all', props.onCoinSelect)}
-                        >
-                            <input
-                                type="radio"
-                                name="active-coin"
-                                data-coin="usdt"
-                                checked={props.selectedCoin === 'all'}
-                                onChange={() => {}}
-                            />
-                            <img src="/all-coins.svg" alt="" data-coin="all" />
-                            <span>All coins</span>
-                        </label>
-                    )}
                 </div>
             </div>
             {props.slippage && (
