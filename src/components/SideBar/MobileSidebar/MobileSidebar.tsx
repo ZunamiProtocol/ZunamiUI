@@ -126,13 +126,13 @@ export const MobileSidebar = (): JSX.Element => {
                     </a>
                 </div>
                 <div className="d-flex gap-2 mt-5">
-                    <a href="#" className="badge rounded-pill text-bg-secondary bg-secondary">
+                    <a href="https://zunamilab.gitbook.io/product-docs/" className="badge rounded-pill text-bg-secondary bg-secondary">
                         Documentation
                     </a>
-                    <a href="#" className="badge rounded-pill text-bg-secondary bg-secondary">
+                    <a href="https://www.zunami.io/#faq-main" className="badge rounded-pill text-bg-secondary bg-secondary">
                         FAQ
                     </a>
-                    <a href="#" className="badge rounded-pill text-bg-secondary bg-secondary">
+                    <a href="https://zunami.io" className="badge rounded-pill text-bg-secondary bg-secondary">
                         Website
                     </a>
                 </div>

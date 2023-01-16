@@ -547,22 +547,13 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                             differentiating and rebalancing users’ funds.
                         </p>
                         <div className="d-flex gap-2 mt-3 justify-content-center">
-                            <a
-                                href="#"
-                                className="badge rounded-pill text-bg-secondary bg-secondary"
-                            >
+                            <a href="https://zunamilab.gitbook.io/product-docs/" className="badge rounded-pill text-bg-secondary bg-secondary">
                                 Documentation
                             </a>
-                            <a
-                                href="#"
-                                className="badge rounded-pill text-bg-secondary bg-secondary"
-                            >
+                            <a href="https://www.zunami.io/#faq-main" className="badge rounded-pill text-bg-secondary bg-secondary">
                                 FAQ
                             </a>
-                            <a
-                                href="#"
-                                className="badge rounded-pill text-bg-secondary bg-secondary"
-                            >
+                            <a href="https://zunami.io" className="badge rounded-pill text-bg-secondary bg-secondary">
                                 Website
                             </a>
                         </div>
