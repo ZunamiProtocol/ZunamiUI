@@ -547,10 +547,10 @@ export const Main = (): JSX.Element => {
                                                     y2="120.112"
                                                     gradientUnits="userSpaceOnUse"
                                                 >
-                                                    <stop stop-color="white" stop-opacity="0.66" />
+                                                    <stop stopColor="white" stopOpacity="0.66" />
                                                     <stop
                                                         offset="1"
-                                                        stop-color="white"
+                                                        stopColor="white"
                                                         stop-opacity="0"
                                                     />
                                                 </linearGradient>
@@ -562,11 +562,11 @@ export const Main = (): JSX.Element => {
                                                     y2="100.583"
                                                     gradientUnits="userSpaceOnUse"
                                                 >
-                                                    <stop stop-color="white" stop-opacity="0.66" />
+                                                    <stop stopColor="white" stopOpacity="0.66" />
                                                     <stop
                                                         offset="1"
-                                                        stop-color="white"
-                                                        stop-opacity="0"
+                                                        stopColor="white"
+                                                        stopOpacity="0"
                                                     />
                                                 </linearGradient>
                                             </defs>
@@ -647,11 +647,11 @@ export const Main = (): JSX.Element => {
                                                     y2="7.75412"
                                                     gradientUnits="userSpaceOnUse"
                                                 >
-                                                    <stop stop-color="white" stop-opacity="0.66" />
+                                                    <stop stopColor="white" stopOpacity="0.66" />
                                                     <stop
                                                         offset="1"
-                                                        stop-color="white"
-                                                        stop-opacity="0"
+                                                        stopColor="white"
+                                                        stopOpacity="0"
                                                     />
                                                 </linearGradient>
                                                 <linearGradient
@@ -662,11 +662,11 @@ export const Main = (): JSX.Element => {
                                                     y2="53.5694"
                                                     gradientUnits="userSpaceOnUse"
                                                 >
-                                                    <stop stop-color="white" stop-opacity="0.66" />
+                                                    <stop stopColor="white" stopOpacity="0.66" />
                                                     <stop
                                                         offset="1"
-                                                        stop-color="white"
-                                                        stop-opacity="0"
+                                                        stopColor="white"
+                                                        stopOpacity="0"
                                                     />
                                                 </linearGradient>
                                                 <linearGradient
@@ -677,11 +677,11 @@ export const Main = (): JSX.Element => {
                                                     y2="5.70374"
                                                     gradientUnits="userSpaceOnUse"
                                                 >
-                                                    <stop stop-color="white" stop-opacity="0.66" />
+                                                    <stop stopColor="white" stopOpacity="0.66" />
                                                     <stop
                                                         offset="1"
-                                                        stop-color="white"
-                                                        stop-opacity="0"
+                                                        stopColor="white"
+                                                        stopOpacity="0"
                                                     />
                                                 </linearGradient>
                                                 <linearGradient
@@ -692,11 +692,11 @@ export const Main = (): JSX.Element => {
                                                     y2="13.947"
                                                     gradientUnits="userSpaceOnUse"
                                                 >
-                                                    <stop stop-color="white" stop-opacity="0.66" />
+                                                    <stop stopColor="white" stopOpacity="0.66" />
                                                     <stop
                                                         offset="1"
-                                                        stop-color="white"
-                                                        stop-opacity="0"
+                                                        stopColor="white"
+                                                        stopOpacity="0"
                                                     />
                                                 </linearGradient>
                                             </defs>

@@ -49,7 +49,7 @@ function getIconFromTransaction(transaction: TransactionItem) {
     }
 
     if (coinsCount > 1) {
-        icon = 'all-coins';
+        icon = 'MIXED';
     }
 
     //console.log(transaction);

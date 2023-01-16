@@ -216,6 +216,7 @@
 
                             &.value {
                                 color: #5b5959;
+                                font-family: 'Vela Sans Regular';
                             }
 
                             @media screen and (min-width: $media1024) {
@@ -357,6 +358,11 @@
                 align-items: center;
                 margin-bottom: 12px;
 
+                // @media screen and (min-width: $media375) {
+                //     width: 215px;
+                //     font-size: 12px;
+                // }
+
                 @media screen and (min-width: $media1024) {
                     width: 215px;
                     font-size: 12px;
@@ -368,6 +374,10 @@
                 }
 
                 .left-part {
+                    @media screen and (min-width: $media375) {
+                        width: 100px;
+                    }
+
                     @media screen and (min-width: $media1024) {
                         width: 120px;
                     }
@@ -409,6 +419,14 @@
                     // padding-right: 50px;
                     width: 170px;
                     font-family: 'Vela Sans Regular';
+
+                    @media screen and (min-width: $media375) {
+                        width: 90px;
+                        height: 24px;
+                        font-size: 11px;
+                        padding: 3px 12px;
+                        margin-left: 10px;
+                    }
 
                     @media screen and (min-width: $media1024) {
                         width: 56px;

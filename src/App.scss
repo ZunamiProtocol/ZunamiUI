@@ -1045,10 +1045,11 @@ body.dark {
     }
 
     .UzdContainer__Actions_Inner .swap svg {
-        border-color: #000;
+        border-color: #1b1b1b;
+        background-color: transparent;
     }
 
-    .WalletStatus,
+    .WalletStatus__inner,
     .Sidebar__Content__Data,
     .Pendings,
     .withdraw,
@@ -1062,20 +1063,24 @@ body.dark {
     .TransactionHistory,
     .ThemeSwitcher,
     .InfoBar .values .block,
-    .Input .coin,
     .Input .max,
     .WithdrawOptions,
     .WithdrawOptions__LiquidityBlock,
     label.coin,
     .Counter,
     .mint-redeem-inputs,
-    .UzdContainer__Actions_Inner .swap svg,
     .Uzd-Zlp-Balances,
-    #networks-selector,
     #networks-selector .network-item,
-    #networks-selector .network-item .choose-btn,
     .badge-light {
         background: linear-gradient(132deg, #272727 10.02%, #181818 93.49%) !important;
+    }
+
+    #networks-selector {
+        background-color: #000;
+    }
+
+    .WalletStatus__toggler svg path {
+        fill: #fff !important;
     }
 
     .FastDepositForm__Title svg path {
@@ -1094,7 +1099,8 @@ body.dark {
         border-color: #444444;
     }
 
-    .selector-wrapper {
+    .selector-wrapper,
+    #networks-selector .network-item .choose-btn {
         background: #1d1d1d;
     }
 
@@ -1383,6 +1389,7 @@ body.dark {
                 left: 50%;
                 top: 50%;
                 transform: translate(-50%, -50%);
+                margin-top: 10px;
 
                 @media (min-width: $media1440) {
                     width: 245px;
@@ -1404,6 +1411,7 @@ body.dark {
                 left: 50%;
                 top: 50%;
                 transform: translate(-50%, -50%);
+                margin-top: 10px;
 
                 @media (min-width: $media1440) {
                     width: 242px;
@@ -1881,6 +1889,7 @@ body.dark {
 
     &__Value {
         color: #5b5959;
+        font-family: 'Vela Sans Regular';
 
         @media screen and (min-width: $media375) {
             font-weight: 600;
