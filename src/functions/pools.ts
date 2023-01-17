@@ -28,7 +28,7 @@ const colors = [
     '#5856d6',
 ]
 
-const poolsChartdata: { [key: string]: any } = {
+export const poolsChartdata: { [key: string]: any } = {
     DUSD: {
         title: 'Convex finance - DUSD pool',
         value: 0,

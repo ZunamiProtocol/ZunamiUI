@@ -546,7 +546,7 @@ export const Main = (): JSX.Element => {
                                                     <stop
                                                         offset="1"
                                                         stopColor="white"
-                                                        stop-opacity="0"
+                                                        stopOpacity="0"
                                                     />
                                                 </linearGradient>
                                                 <linearGradient

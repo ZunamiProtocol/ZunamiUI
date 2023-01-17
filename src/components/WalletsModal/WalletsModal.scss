@@ -1,6 +1,19 @@
+@import 'src/variables';
+
 .WalletsModalWrapper {
+    @media screen and (min-width: $media1024) {
+        .modal-dialog {
+            min-width: 725px;
+        }
+    }
     .modal-header {
-        padding: 1rem 1rem !important;
+        font-size: 20px;
+        line-height: 26px;
+        font-family: 'Space Grotesk';
+
+        .modal-title {
+            margin-left: 50px;
+        }
 
         .btn-close {
             transform: none;
@@ -9,15 +22,61 @@
 }
 .WalletsModal {
     button {
-        width: 150px;
+        width: 126px;
+        height: 153px;
+        border-radius: 20px !important;
+        border: none;
+        padding: 15px;
 
-        span {
-            font-size: 13px;
+        .name {
+            font-family: 'Space Grotesk';
+            font-size: 14px;
+            line-height: 18px;
+            text-align: left;
+            margin-right: 20px;
+            margin-top: 15px;
+        }
+
+        .connect {
+            background: #fff;
+            color: #000;
+            border-radius: $border-radius;
+            padding: 6px 12px;
+            font-size: 11px;
+            line-height: 14px;
+            text-align: center;
+            margin-top: 25px;
         }
 
         img {
-            width: 60px;
-            height: 60px;
+            width: auto;
+            height: 22px;
+        }
+
+        &.metamask {
+            background: linear-gradient(255.16deg, #FFB800 3.65%, #FFA800 94.22%);
+            color: #fff;
+        }
+
+        &.walletconnect {
+            background: linear-gradient(80.97deg, #0E75FE 6.89%, #4C95F7 138.91%);
+            color: #fff;
+        }
+
+        &.coinbase {
+            background: linear-gradient(78.23deg, #F9F9F9 6.99%, #FBFBFB 98.23%);
+            
+            span {
+                color: #000 !important;
+            }
+        }
+
+        &.zerion {
+            background: linear-gradient(80.97deg, #DCE6FF 6.89%, #E9EFFF 138.91%);
+            
+            span {
+                color: #000 !important;
+            }
         }
     }
 }

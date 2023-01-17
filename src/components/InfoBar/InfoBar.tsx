@@ -1,9 +1,11 @@
-import React from 'react';
-import { Button } from 'react-bootstrap';
 import useFetch from 'react-fetch-hook';
-import { zunamiInfoUrl } from '../../api/api';
+import { getActiveStratsUrl, zunamiInfoUrl } from '../../api/api';
 import './InfoBar.scss';
 import { BigNumber } from 'bignumber.js';
+import useSushi from '../../hooks/useSushi';
+import { useEffect, useState } from 'react';
+import useWallet from '../../hooks/useWallet';
+import { PoolInfo, poolsChartdata } from '../../functions/pools';
 
 interface InfoBarProps {
     // onClick: any;
@@ -22,10 +24,39 @@ interface ZunamiInfoFetch {
     error: any;
 }
 
-export const InfoBar = (props: InfoBarProps): JSX.Element => {
-    const { isLoading: isZunLoading, data: zunData } = useFetch(zunamiInfoUrl) as ZunamiInfoFetch;
+interface PoolsStats {
+    pools: Array<PoolInfo>;
+}
 
+export const InfoBar = (props: InfoBarProps): JSX.Element => {
+    const sushi = useSushi();
+    const { account, chainId } = useWallet();
+    const { isLoading: isZunLoading, data: zunData } = useFetch(zunamiInfoUrl) as ZunamiInfoFetch;
     const zunamiInfo = zunData as ZunamiInfo;
+    const contract = sushi.getEthContract();
+    const { data: activeStratsStat } = useFetch(getActiveStratsUrl());
+    const poolStat = activeStratsStat as PoolsStats;
+    const [defaultPool, setDefautPool] = useState<PoolInfo>();
+
+    useEffect(() => {
+        if (!account || !chainId || !poolStat) {
+            return;
+        }
+
+        const getDefaultPool = async () => {
+            const defaultPoolId = await contract.methods.defaultDepositPid().call();
+            const pool = poolStat.pools.filter(item => item.pid === parseInt(defaultPoolId, 10));
+            
+            if (pool.length) {
+                const poolInfo = poolsChartdata[pool[0].type];
+                setDefautPool(poolInfo);
+            }
+            // debugger;
+        };
+
+        getDefaultPool();
+    }, [chainId, account, contract.methods, poolStat])
+
 
     return (
         <div className="card InfoBar">
@@ -33,10 +64,10 @@ export const InfoBar = (props: InfoBarProps): JSX.Element => {
                 <div className="title">Info bar</div>
                 <div className="values">
                     <div className="block">
-                        <img src="/convex.svg" alt="" />
+                        <img src={defaultPool ? defaultPool.icon : ''} alt="" />
                         <div>
                             <span className="name">Default pool</span>
-                            <span className="value">Convex finance USDD pool</span>
+                            <span className="value">{defaultPool ? defaultPool.title : 'n/a'}</span>
                         </div>
                     </div>
                     <div className="block">

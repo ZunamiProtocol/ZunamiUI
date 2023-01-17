@@ -935,6 +935,14 @@ body.dark {
         }
     }
 
+    .hint {
+        svg {
+            path {
+                fill: #fff;
+            }
+        }
+    }
+
     .InfoBlock__description_color {
         color: $primary-color;
     }

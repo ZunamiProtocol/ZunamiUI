@@ -98,40 +98,44 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
             <Modal.Header closeButton>
                 <Modal.Title>Connect a wallet</Modal.Title>
             </Modal.Header>
-            <Modal.Body className="d-flex gap-3 flex-row justify-content-center align-items-start flex-wrap WalletsModal">
+            <Modal.Body className="d-flex gap-3 flex-row flex-wrap WalletsModal  justify-content-center align-items-center">
                 <button
                     onClick={() => onConnect('injected')}
-                    className="border-0 d-inline-flex flex-column justify-content-center align-items-center bg-transparent"
+                    className="d-inline-flex flex-column bg-transparent metamask"
                 >
                     <img src="/metamask.svg" alt="" />
-                    <span className="mt-2">Metamask</span>
+                    <span className="name">Metamask Wallet</span>
+                    <span className="connect">Connect</span>
                 </button>
                 <button
                     onClick={() => onConnect('walletconnect')}
-                    className="border-0 d-inline-flex flex-column justify-content-center align-items-center bg-transparent"
+                    className="d-inline-flex flex-column bg-transparent walletconnect"
                 >
                     <img src="/wallet-connect.svg" alt="" />
-                    <span className="mt-2">Wallet Connect</span>
+                    <span className="name">Wallet Connect</span>
+                    <span className="connect">Connect</span>
                 </button>
                 <button
                     onClick={() => onConnect('walletlink')}
-                    className={`border-0 d-inline-flex flex-column justify-content-center align-items-center bg-transparent ${
+                    className={`d-inline-flex flex-column bg-transparent coinbase ${
                         isEth ? 'disabled' : ''
                     }`}
                 >
                     <img src="/wallet-link.svg" alt="" />
-                    <span className="mt-2">Coinbase Wallet</span>
+                    <span className="name">Coinbase Wallet</span>
                     {isEth && <span className="badge bg-secondary">only Ethereum</span>}
+                    <span className="connect">Connect</span>
                 </button>
                 <button
                     onClick={() => onConnect('walletconnect')}
-                    className={`border-0 d-inline-flex flex-column justify-content-center align-items-center bg-transparent ${
+                    className={`d-inline-flex flex-column bg-transparent zerion ${
                         isEth ? 'disabled' : ''
                     }`}
                 >
                     <img src="/zerion-wallet.svg" alt="" />
-                    <span className="mt-2">Zerion Wallet</span>
+                    <span className="name">Zerion Wallet</span>
                     {isEth && <span className="badge bg-secondary">only Ethereum</span>}
+                    <span className="connect">Connect</span>
                 </button>
             </Modal.Body>
         </Modal>
