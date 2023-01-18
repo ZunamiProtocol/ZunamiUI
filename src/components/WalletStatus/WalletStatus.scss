@@ -9,7 +9,7 @@
     position: relative;
 
     @media screen and (min-width: $media375) {
-        padding: 20px;
+        // padding: 20px;
     }
 
     @media screen and (min-width: $media1024) {
@@ -29,6 +29,12 @@
     &__connected {
         justify-content: space-between;
         padding: 0;
+
+        &.WalletStatus__inner {
+            @media screen and (min-width: $media1024) {
+                width: calc(100% - 30px);
+            }
+        }
 
         .mobile-icon {
             @media screen and (min-width: $media375) {
@@ -117,71 +123,29 @@
     }
 
     &__Connect {
-        background: linear-gradient(87.51deg, #f74e02 12.85%, #f9a412 94.75%);
-        border-radius: 5px;
-        color: #fff;
+        background: #eaeaea;
+        border-radius: $border-radius;
+        color: #5b5959;
         border: none;
         text-align: center;
-
-        @media screen and (min-width: $media375) {
-            width: 148px;
-            height: 36px;
-            font-size: 14px;
-            line-height: 19px;
-        }
-
-        @media screen and (min-width: $media1024) {
-            width: 126px;
-            height: 29px;
-            font-size: 12px;
-            line-height: 16px;
-        }
-
-        @media screen and (min-width: $media1440) {
-            width: 126px;
-            height: 33px;
-            font-size: 12px;
-            line-height: 16px;
-        }
-
-        @media screen and (min-width: $media1920) {
-            width: 148px;
-            height: 38px;
-            font-size: 12px;
-            line-height: 16px;
-        }
+        width: 80px;
+        margin: 15px auto 0 auto;
+        font-size: 11px;
+        line-height: 14px;
+        text-align: center;
+        padding: 3px 12px;
     }
 
     &__Icon {
-        position: absolute;
-
-        @media screen and (min-width: $media375) {
-            width: 148px;
-            height: 36px;
-            font-size: 14px;
-            line-height: 19px;
-        }
-
-        @media screen and (min-width: $media1024) {
-            width: 45px;
-            height: 35px;
-            top: 26px;
-            right: 20px;
-        }
-
-        @media screen and (min-width: $media1440) {
-            width: 54.5px;
-            height: 43px;
-            top: 32px;
-            right: 20px;
-        }
-
-        @media screen and (min-width: $media1920) {
-            width: 73px;
-            height: 57px;
-            top: 38px;
-            right: 30px;
-        }
+        background: #eaeaea;
+        padding: 15px 30px;
+        border-radius: $border-radius;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 80px;
+        margin: 0 auto;
+        cursor: pointer;
     }
 
     &__toggler {
@@ -232,10 +196,6 @@
 
         @media screen and (min-width: $media375) {
             width: 100%;
-        }
-
-        @media screen and (min-width: $media1024) {
-            width: calc(100% - 30px);
         }
 
         > div {

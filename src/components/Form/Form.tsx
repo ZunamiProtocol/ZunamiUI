@@ -753,22 +753,6 @@ export const Form = (props: FormProps): JSX.Element => {
                                         />
                                     )}
                                     {pendingTx && <Preloader className="ms-2" />}
-                                    {props.slippage && (
-                                        <div className={`panel Slippage network-${chainId}`}>
-                                            <div className="panel-body">
-                                                <span>Slippage: </span>
-                                                <span
-                                                    className={`text-${
-                                                        Number(props.slippage) < -0.4
-                                                            ? 'danger'
-                                                            : 'success'
-                                                    }`}
-                                                >
-                                                    {props.slippage}%
-                                                </span>
-                                            </div>
-                                        </div>
-                                    )}
                                 </div>
                             )}
                         </div>

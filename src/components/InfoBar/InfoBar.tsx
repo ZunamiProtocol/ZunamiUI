@@ -9,6 +9,7 @@ import { PoolInfo, poolsChartdata } from '../../functions/pools';
 
 interface InfoBarProps {
     // onClick: any;
+    slippage?: string | undefined;
 }
 
 interface ZunamiInfo {
@@ -45,8 +46,8 @@ export const InfoBar = (props: InfoBarProps): JSX.Element => {
 
         const getDefaultPool = async () => {
             const defaultPoolId = await contract.methods.defaultDepositPid().call();
-            const pool = poolStat.pools.filter(item => item.pid === parseInt(defaultPoolId, 10));
-            
+            const pool = poolStat.pools.filter((item) => item.pid === parseInt(defaultPoolId, 10));
+
             if (pool.length) {
                 const poolInfo = poolsChartdata[pool[0].type];
                 setDefautPool(poolInfo);
@@ -55,9 +56,7 @@ export const InfoBar = (props: InfoBarProps): JSX.Element => {
         };
 
         getDefaultPool();
-    }, [chainId, account, contract.methods, poolStat])
-
-
+    }, [chainId, account, contract.methods, poolStat]);
     return (
         <div className="card InfoBar">
             <div className="card-body">
@@ -73,7 +72,13 @@ export const InfoBar = (props: InfoBarProps): JSX.Element => {
                     <div className="block">
                         <div>
                             <span className="name">Slippage rate</span>
-                            <span className="value">~ 0.43%</span>
+                            <span
+                                className={`value text-${
+                                    Number(props.slippage) >= 0.4 ? 'danger' : 'success'
+                                }`}
+                            >
+                                {props.slippage ? `${props.slippage}%` : '0%'}
+                            </span>
                         </div>
                     </div>
                     <div className="block">

@@ -572,7 +572,9 @@ body.dark {
     }
 
     .Pendings .values .deposit,
-    .Pendings .values .withdraw {
+    .Pendings .values .withdraw,
+    .WalletStatus__Icon,
+    .WalletStatus__Connect {
         background: #1d1d1d !important;
     }
 
@@ -906,7 +908,8 @@ body.dark {
     #MobileSidebar .inner .listings a,
     .FastDepositForm__MobileToggle__Title,
     .modal-title,
-    .title {
+    .title,
+    .WalletStatus__Connect {
         color: #fff;
     }
 
