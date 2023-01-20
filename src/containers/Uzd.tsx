@@ -236,7 +236,7 @@ export const Uzd = (): JSX.Element => {
                             }}
                         >
                             <a
-                                href="/dashboard"
+                                href="/"
                                 className="text-center d-flex flex-column text-decoration-none"
                             >
                                 <img src="/dashboard.png" alt="" />
@@ -257,7 +257,7 @@ export const Uzd = (): JSX.Element => {
                                 <span className="text-muted mt-2">UZD</span>
                             </a>
                             <a
-                                href="/dao"
+                                href="https://snapshot.org/#/zunamidao.eth"
                                 className="text-center d-flex flex-column text-decoration-none"
                             >
                                 <img src="/dao.png" alt="" />

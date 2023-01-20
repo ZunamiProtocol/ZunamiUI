@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Suspense, lazy } from 'react';
+import React, { useEffect, useState, Suspense, lazy, useRef } from 'react';
 import { InfoBlock } from '../components/InfoBlock/InfoBlock';
 import { BalanceInfoBlock } from '../components/BalanceInfoBlock/BalanceInfoBlock';
 import { ClickableHeader } from '../components/ClickableHeader/ClickableHeader';
@@ -34,6 +34,7 @@ import { FastDepositForm } from '../components/FastDepositForm/FastDepositForm';
 import Carousel from 'react-bootstrap/Carousel';
 import { Pendings } from '../components/Pendings/Pendings';
 import { ServicesMenu } from '../components/ServicesMenu/ServicesMenu';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -252,6 +253,23 @@ export const Main = (): JSX.Element => {
 
     const supportedChain = useSupportedChain();
 
+    const apyHintTarget = useRef(null);
+    const [showApyHint, setShowApyHint] = useState(false);
+    const apyPopover = (
+        <Popover onMouseEnter={() => setShowApyHint(true)} onMouseLeave={() => setShowApyHint(false)}>
+            <Popover.Body>
+                <div className="">
+                    <span>Average APY in 30 days: </span>
+                    <span className="text-primary">{isZunLoading ? 'n/a' : `${zunamiInfo.monthlyAvgApy.toFixed(2)}%`}</span>
+                </div>
+                <div className="">
+                    <span>Average APY in 90 days: </span>
+                    <span className="text-primary">{isZunLoading ? 'n/a' : `${zunamiInfo.threeMonthAvgApy.toFixed(2)}%`}</span>
+                </div>
+            </Popover.Body>
+        </Popover>
+    );
+
     return (
         <Suspense fallback={<Preloader onlyIcon={true} />}>
             <React.Fragment>
@@ -288,7 +306,7 @@ export const Main = (): JSX.Element => {
                                 }}
                             >
                                 <a
-                                    href="/dashboard"
+                                    href="/"
                                     className="text-center d-flex flex-column text-decoration-none"
                                 >
                                     <img src="/dashboard.png" alt="" />
@@ -309,7 +327,7 @@ export const Main = (): JSX.Element => {
                                     <span className="text-muted mt-2">UZD</span>
                                 </a>
                                 <a
-                                    href="/dao"
+                                    href="https://snapshot.org/#/zunamidao.eth"
                                     className="text-center d-flex flex-column text-decoration-none"
                                 >
                                     <img src="/dao.png" alt="" />
@@ -561,7 +579,7 @@ export const Main = (): JSX.Element => {
                                                     y2="147.438"
                                                     gradientUnits="userSpaceOnUse"
                                                 >
-                                                    <stop stop-color="white" stop-opacity="0.66" />
+                                                    <stop stopColor="white" stopOpacity="0.66" />
                                                     <stop
                                                         offset="1"
                                                         stopColor="white"
@@ -715,8 +733,32 @@ export const Main = (): JSX.Element => {
                                                 </div>
                                             </div>
                                             <div className="ApyBar__Counter">
-                                                <div className="ApyBar__Counter__Title">
+                                                <div className="ApyBar__Counter__Title d-flex align-items-start gap-2">
                                                     <span>Average APY</span>
+                                                    <div
+                                                        ref={apyHintTarget}
+                                                        onClick={() => setShowApyHint(!showApyHint)}
+                                                        className={'hint'}
+                                                    >
+                                                        <OverlayTrigger
+                                                            trigger={['hover', 'focus']}
+                                                            placement="right"
+                                                            overlay={apyPopover}
+                                                            show={showApyHint}
+                                                        >
+                                                            <svg
+                                                                width="13"
+                                                                height="13"
+                                                                viewBox="0 0 13 13"
+                                                                fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                onMouseEnter={() => setShowApyHint(true)}
+                                                                onMouseLeave={() => setShowApyHint(false)}
+                                                            >
+                                                                <path fillRule="evenodd" clipRule="evenodd" d="M6.5 13C10.0899 13 13 10.0899 13 6.5C13 2.91015 10.0899 0 6.5 0C2.91015 0 0 2.91015 0 6.5C0 10.0899 2.91015 13 6.5 13ZM6.23296 9.97261H4.98638L5.79002 7.12336H3.02741V5.87679H6.14162L6.94529 3.02741H8.19186L7.38819 5.87679L9.97261 5.87679V7.12336H7.03659L6.23296 9.97261Z" fill="black"/>
+                                                            </svg>
+                                                        </OverlayTrigger>
+                                                    </div>
                                                 </div>
                                                 <div className="ApyBar__Counter__Value vela-sans">
                                                     {isZunLoading
