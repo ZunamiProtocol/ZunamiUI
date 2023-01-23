@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Suspense, lazy, useRef } from 'react';
-import { InfoBlock } from '../components/InfoBlock/InfoBlock';
-import { BalanceInfoBlock } from '../components/BalanceInfoBlock/BalanceInfoBlock';
-import { ClickableHeader } from '../components/ClickableHeader/ClickableHeader';
+// import { InfoBlock } from '../components/InfoBlock/InfoBlock';
+// import { BalanceInfoBlock } from '../components/BalanceInfoBlock/BalanceInfoBlock';
+// import { ClickableHeader } from '../components/ClickableHeader/ClickableHeader';
 import './Main.scss';
 import { getBalanceNumber } from '../utils/formatbalance';
 import useLpPrice from '../hooks/useLpPrice';
@@ -25,7 +25,7 @@ import { BscMigrationModal2 } from '../components/BscMigrationModal2/BscMigratio
 import useOldBscBalance from '../hooks/useOldBscBalance';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
 import useSupportedChain from '../hooks/useSupportedChain';
-import { log } from '../utils/logger';
+import { log, copyLogs } from '../utils/logger';
 import usePausedContract from '../hooks/usePausedContract';
 import { EthMergeWarningModal } from '../components/EthMergeWarningModal/EthMergeWarningModal';
 import useUzdBalance from '../hooks/useUzdBalance';
@@ -33,8 +33,9 @@ import { isBSC, isETH, isPLG } from '../utils/zunami';
 import { FastDepositForm } from '../components/FastDepositForm/FastDepositForm';
 import Carousel from 'react-bootstrap/Carousel';
 import { Pendings } from '../components/Pendings/Pendings';
-import { ServicesMenu } from '../components/ServicesMenu/ServicesMenu';
+// import { ServicesMenu } from '../components/ServicesMenu/ServicesMenu';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
+import { networks } from '../components/NetworkSelector/NetworkSelector';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -56,11 +57,11 @@ const SideBar = lazy(() =>
     import('../components/SideBar/SideBar').then((module) => ({ default: module.SideBar }))
 );
 
-const WalletStatus = lazy(() =>
-    import('../components/WalletStatus/WalletStatus').then((module) => ({
-        default: module.WalletStatus,
-    }))
-);
+// const WalletStatus = lazy(() =>
+//     import('../components/WalletStatus/WalletStatus').then((module) => ({
+//         default: module.WalletStatus,
+//     }))
+// );
 
 const ApyChart = lazy(() =>
     import('../components/ApyChart/ApyChart').then((module) => ({ default: module.ApyChart }))
@@ -85,6 +86,42 @@ interface ZunamiInfoFetch {
 
 interface PoolsStats {
     pools: Array<PoolInfo>;
+}
+
+interface Balance {
+    chainId: String;
+    value: BigNumber;
+    key: string;
+}
+
+function getNetworkByKey(key: string) {
+    return networks.filter(network => network.key === key)[0];
+}
+
+function renderBalances(balances: Array<Balance>, lpPrice: BigNumber) {
+    return (
+        <div className="">
+            <div className="mb-3">Another balances</div>
+            <div className="balances">
+                {balances.map((balance) => {
+                    return (
+                        balance.key &&
+                            <div className="balance" key={balance.key}>
+                                {getNetworkByKey(balance.key).icon}
+                                <div className="meta">
+                                    <div className="chain">{getNetworkByKey(balance.key).value}</div>
+                                    <div className="sum">
+                                        {`$ ${getBalanceNumber(balance.value.multipliedBy(lpPrice))
+                                            .toNumber()
+                                            .toLocaleString('en')}`}
+                                    </div>
+                                </div>
+                            </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
 }
 
 export const Main = (): JSX.Element => {
@@ -207,21 +244,21 @@ export const Main = (): JSX.Element => {
             ? lpPrice.multipliedBy(pendingOperations.withdraw)
             : new BigNumber(0);
 
-    const pdElement = (
-        <div className="d-flex">
-            <PendingBalance
-                val={`PD: $${getBalanceNumber(
-                    pendingOperations.deposit,
-                    isETH(chainId) || isPLG(chainId) ? 6 : 18
-                ).toFixed(2)}`}
-                hint={`You have $${pendingOperations.deposit} in pending deposit`}
-            />
-            <PendingBalance
-                val={`PW: $${getBalanceNumber(pendingWithdraw).toFixed(2)}`}
-                hint={`You have $${pendingWithdraw} in pending withdraw`}
-            />
-        </div>
-    );
+    // const pdElement = (
+    //     <div className="d-flex">
+    //         <PendingBalance
+    //             val={`PD: $${getBalanceNumber(
+    //                 pendingOperations.deposit,
+    //                 isETH(chainId) || isPLG(chainId) ? 6 : 18
+    //             ).toFixed(2)}`}
+    //             hint={`You have $${pendingOperations.deposit} in pending deposit`}
+    //         />
+    //         <PendingBalance
+    //             val={`PW: $${getBalanceNumber(pendingWithdraw).toFixed(2)}`}
+    //             hint={`You have $${pendingWithdraw} in pending withdraw`}
+    //         />
+    //     </div>
+    // );
 
     // v1.1 migration modal
     const [showMigrationModal, setShowMigrationModal] = useState(false);
@@ -270,6 +307,19 @@ export const Main = (): JSX.Element => {
         </Popover>
     );
 
+    const balanceTarget = useRef(null);
+    const [showBalanceHint, setShowBalanceHint] = useState(false);
+    const [clickCounter, setClickCounter] = useState(0);
+
+    const balancePopover = (
+        <Popover
+            onMouseEnter={() => setShowBalanceHint(true)}
+            onMouseLeave={() => setShowBalanceHint(false)}
+        >
+            <Popover.Body>{renderBalances(balances, lpPrice)}</Popover.Body>
+        </Popover>
+    );
+
     return (
         <Suspense fallback={<Preloader onlyIcon={true} />}>
             <React.Fragment>
@@ -298,6 +348,7 @@ export const Main = (): JSX.Element => {
                     />
                     <div className="row main-row h-100">
                         <SideBar isMainPage={true}>
+                            <div className="mobile-menu-title d-block d-lg-none">Menu</div>
                             <div
                                 className="d-flex d-lg-none gap-3 mt-4 pb-3 mobile-menu"
                                 style={{
@@ -307,7 +358,7 @@ export const Main = (): JSX.Element => {
                             >
                                 <a
                                     href="/"
-                                    className="text-center d-flex flex-column text-decoration-none"
+                                    className="text-center d-flex flex-column text-decoration-none selected"
                                 >
                                     <img src="/dashboard.png" alt="" />
                                     <span className="text-muted mt-2">Dashboard</span>
@@ -337,8 +388,44 @@ export const Main = (): JSX.Element => {
                             <div className="Sidebar__Content__Data">
                                 <div className="title">Your data</div>
                                 <div className="values">
-                                    <div className="balance">
-                                        <div className="title">Balance</div>
+                                    <div
+                                        className="balance"
+                                        onClick={() => {
+                                            setClickCounter(clickCounter + 1);
+                            
+                                            if (clickCounter === 4) {
+                                                copyLogs();
+                                                setClickCounter(0);
+                                            }
+                                        }}
+                                    >
+                                        <div className="title d-flex gap-2 justify-content-between">
+                                            <span>Balance</span>
+                                            <div
+                                                ref={balanceTarget}
+                                                onClick={() => setShowBalanceHint(!showApyHint)}
+                                                className={'hint'}
+                                            >
+                                                <OverlayTrigger
+                                                    trigger={['hover', 'focus']}
+                                                    placement="right"
+                                                    overlay={balancePopover}
+                                                    show={showBalanceHint}
+                                                >
+                                                    <svg
+                                                        width="13"
+                                                        height="13"
+                                                        viewBox="0 0 13 13"
+                                                        fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        onMouseEnter={() => setShowBalanceHint(true)}
+                                                        onMouseLeave={() => setShowBalanceHint(false)}
+                                                    >
+                                                        <path fillRule="evenodd" clipRule="evenodd" d="M6.5 13C10.0899 13 13 10.0899 13 6.5C13 2.91015 10.0899 0 6.5 0C2.91015 0 0 2.91015 0 6.5C0 10.0899 2.91015 13 6.5 13ZM6.23296 9.97261H4.98638L5.79002 7.12336H3.02741V5.87679H6.14162L6.94529 3.02741H8.19186L7.38819 5.87679L9.97261 5.87679V7.12336H7.03659L6.23296 9.97261Z" fill="white"/>
+                                                    </svg>
+                                                </OverlayTrigger>
+                                            </div>
+                                        </div>
                                         <div className="value">
                                             {!account && 'n/a'}
                                             {account &&
@@ -392,7 +479,7 @@ export const Main = (): JSX.Element => {
                                 <div className="fast-deposit-wrapper">
                                     <FastDepositForm />
                                 </div>
-                                <Carousel className="features-slider" fade indicators={false}>
+                                <Carousel className="features-slider" fade indicators>
                                     <Carousel.Item className="uzd">
                                         <span className="title">Zunami Universe</span>
                                         <svg

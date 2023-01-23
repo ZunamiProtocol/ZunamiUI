@@ -364,7 +364,7 @@
                 // }
 
                 @media screen and (min-width: $media1024) {
-                    width: 215px;
+                    width: 250px;
                     font-size: 12px;
                 }
 
@@ -379,7 +379,7 @@
                     }
 
                     @media screen and (min-width: $media1024) {
-                        width: 120px;
+                        width: 90px;
                     }
 
                     @media screen and (min-width: $media1440) {
@@ -429,17 +429,19 @@
                     }
 
                     @media screen and (min-width: $media1024) {
-                        width: 56px;
+                        width: 100px;
                         height: 24px;
                         font-size: 11px;
                         padding: 3px 12px;
+                        padding-right: 50px;
                     }
 
                     @media screen and (min-width: $media1440) {
-                        width: 110px;
+                        width: 140px;
                         height: 42px;
                         font-size: 13px;
                         padding: 6px 12px;
+                        padding-right: 50px;
                     }
                 }
 
@@ -455,7 +457,7 @@
                     right: 10px;
                     top: 50%;
                     transform: translateY(-50%);
-                    display: none;
+                    // display: none;
 
                     &:hover {
                         background-color: #f95404;
@@ -507,7 +509,7 @@
                 }
 
                 @media screen and (min-width: $media1024) {
-                    margin-right: 0;
+                    margin-right: -30px;
                     width: 71px;
                 }
 

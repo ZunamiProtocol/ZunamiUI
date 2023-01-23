@@ -858,19 +858,47 @@ body.dark {
         }
     }
 
+    .popover {
+        border-radius: $border-radius;
+        overflow: hidden;
+    }
+
     .popover-body {
         background-color: #3e3e3e;
-        color: #fff;
+        color: #fff;;
     }
 
     .popover-arrow::after {
         border-right-color: #3e3e3e !important;
         background-color: #3e3e3e;
         color: #fff;
+        display: none;
     }
 
     .popover-arrow::after {
         border-right-color: #3e3e3e !important;
+    }
+
+    .popover {
+        box-shadow: 0 0 5px #575757;
+
+        .balance {
+            background: #1D1D1D;
+        }
+
+        .popover-body {
+            background: linear-gradient(86.3deg, #252525 4.51%, #222222 98.06%);
+        }
+    }
+
+    .TransactionHistory {
+        .empty {
+            svg {
+                rect {
+                    fill: #373737;
+                }
+            }
+        }
     }
 
     span,
@@ -913,8 +941,13 @@ body.dark {
     .FastDepositForm__MobileToggle__Title,
     .modal-title,
     .title,
-    .WalletStatus__Connect {
+    .WalletStatus__Connect,
+    .mobile-menu-title {
         color: #fff;
+    }
+
+    .mobile-menu .selected span {
+        color: #fff !important;
     }
 
     #networks-selector .close img {
@@ -1321,7 +1354,12 @@ body.dark {
 .dashboard {
     display: flex;
     flex-wrap: wrap;
-    margin-top: 10px;
+}
+
+.carousel-indicators button {
+    width: 7px !important;
+    height: 7px !important;
+    border-radius: 100px !important;
 }
 
 .features-slider {
@@ -1992,6 +2030,11 @@ body.dark {
     }
 }
 
+.mobile-menu-title {
+    font-size: 16px;
+    margin: 20px 0;
+}
+
 .mobile-menu {
     a {
         letter-spacing: -1px;
@@ -2000,6 +2043,13 @@ body.dark {
         img {
             width: 79px;
             height: 79px;
+        }
+
+        &.selected {
+            img {
+                border: solid 1px #fff;
+                border-radius: $border-radius;
+            }
         }
     }
 }

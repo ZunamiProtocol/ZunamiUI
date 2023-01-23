@@ -7,6 +7,7 @@ interface TransactionHistoryProps {
     section: string;
     items?: Array<any>;
     onPageEnd?: Function;
+    emptyText: string;
 }
 
 interface TransactionItem {
@@ -55,7 +56,7 @@ function getIconFromTransaction(transaction: TransactionItem) {
 
 export const TransactionHistory: React.FC<
     TransactionHistoryProps & React.HTMLProps<HTMLDivElement>
-> = ({ className, title, items, onPageEnd }) => {
+> = ({ className, title, items, onPageEnd, emptyText }) => {
     const { chainId } = useWallet();
 
     const onScroll = (e: any) => {
@@ -118,7 +119,14 @@ export const TransactionHistory: React.FC<
                             </div>
                         </div>
                     ))}
-                {!items.length && <div>No data</div>}
+                {
+                    !items.length && <div className="text-center empty">
+                        <svg width="130" height="24" viewBox="0 0 130 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="130" height="24" rx="12" fill="#E4E4E4"/>
+                        </svg>
+                        <div className="">{emptyText}</div>
+                    </div>
+                }
             </div>
         </div>
     );

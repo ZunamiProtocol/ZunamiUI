@@ -220,4 +220,17 @@
             }
         }
     }
+
+    .empty {
+        font-size: 14px;
+        line-height: 18px;
+        text-align: center;
+        color: #B4B4B4;
+        width: 200px;
+        margin: 20px auto 0 auto;
+
+        svg {
+            margin-bottom: 20px;
+        }
+    }
 }

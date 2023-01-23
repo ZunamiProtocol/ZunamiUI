@@ -12,14 +12,17 @@ const useCrossChainBalances = (lpPrice: BigNumber) => {
     const [balances, setBalances] = useState([
         {
             chainId: 'eth',
+            key: '0x1',
             value: new BigNumber(BIG_ZERO),
         },
         {
             chainId: 'bsc',
+            key: '0x38',
             value: new BigNumber(BIG_ZERO),
         },
         {
             chainId: 'plg',
+            key: '0x89',
             value: new BigNumber(BIG_ZERO),
         },
     ]);
@@ -47,14 +50,17 @@ const useCrossChainBalances = (lpPrice: BigNumber) => {
             setBalances([
                 {
                     chainId: 'eth',
+                    key: '0x1',
                     value: new BigNumber(ethBalance),
                 },
                 {
                     chainId: 'bsc',
+                    key: '0x38',
                     value: new BigNumber(bscBalance),
                 },
                 {
                     chainId: 'plg',
+                    key: '0x89',
                     value: new BigNumber(plgBalance),
                 },
             ]);

@@ -302,10 +302,12 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                     setTransHistoryPage(transHistoryPage + 1);
                                 }
                             }}
+                            emptyText="Your deposit and withdraw story will be here"
                         />
                     </SideBar>
                     <div className="col content-col dashboard-col">
                         <Header />
+                        <div className="mobile-menu-title d-block d-lg-none">Menu</div>
                         <div
                             className="d-flex d-lg-none gap-3 mt-2 mb-2 pb-3 mobile-menu"
                             style={{
@@ -322,7 +324,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                             </a>
                             <a
                                 href="/deposit"
-                                className="text-center d-flex flex-column text-decoration-none"
+                                className="text-center d-flex flex-column text-decoration-none selected"
                             >
                                 <img src="/deposit.png" alt="" />
                                 <span className="text-muted mt-2">Deposit&Withdraw</span>
@@ -528,6 +530,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                             setTransHistoryPage(transHistoryPage + 1);
                                         }
                                     }}
+                                    emptyText="Your deposit and withdraw story will be here"
                                 />
                             </Col>
                         )}
