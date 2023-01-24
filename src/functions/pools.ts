@@ -20,7 +20,7 @@ export interface ChartDataElement {
 
 const colors = [
     '#FA6005',
-    '#8DDA2C',
+    '#FFD118',
     '#FFC129',
     '#2cd5db',
     '#1C77F2',
@@ -51,6 +51,11 @@ export const poolsChartdata: { [key: string]: any } = {
     },
     MIM: {
         title: 'Convex finance - MIM pool',
+        value: 0,
+        icon: '/convex.svg',
+    },
+    XAI_FRAXBP: {
+        title: 'Convex Finance - XAI/FRAXBP Pool',
         value: 0,
         icon: '/convex.svg',
     },
