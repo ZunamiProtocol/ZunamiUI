@@ -1,5 +1,6 @@
 const logs: Array<string> = [];
 const STORAGE_KEY = 'ZUNAMI_LOGS';
+const LOGS_THRESHOLD = 1000;
 
 /**
  * Logs message to the console or any other destination
@@ -10,7 +11,10 @@ export function log(message: string): void {
         logs.push(message);
         appendLogs(message);
 
-        if (process.env.NODE_ENV === 'development' || window.location.hostname === 'test.zunami.io') {
+        if (
+            process.env.NODE_ENV === 'development' ||
+            window.location.hostname === 'test.zunami.io'
+        ) {
             console.log(message);
         }
     }
@@ -18,11 +22,17 @@ export function log(message: string): void {
 
 /**
  * Append logs to permanent storage
- * @param message 
+ * @param message
  */
 function appendLogs(message: string) {
-    const data = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '[]');
+    let data = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '[]');
     data.push(message);
+
+    if (data.length >= LOGS_THRESHOLD) {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+        data = data.slice(-1000);
+    }
+
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
