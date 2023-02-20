@@ -18,10 +18,16 @@ const useStratLpPrice = () => {
 
         const getLpPrice = async () => {
             const contract = sushi.getEthContract();
-            const totalHoldings = await contract.methods.totalHoldings().call();
             const wPid = await contract.methods.defaultWithdrawPid().call();
             const pool = await contract.methods.poolInfo(wPid).call();
-            const lpPrice = new BigNumber(totalHoldings).dividedBy(new BigNumber(pool.lpShares));
+            const strategyContract = sushi.getEthContract();
+            strategyContract.options.address = pool.strategy;
+
+            const strategyTotalHoldings = await strategyContract.methods.totalHoldings().call();
+
+            const lpPrice = new BigNumber(strategyTotalHoldings).dividedBy(
+                new BigNumber(pool.lpShares)
+            );
             setPrice(lpPrice);
         };
 
