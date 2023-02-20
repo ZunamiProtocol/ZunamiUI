@@ -147,10 +147,12 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
     const [gasPrice, setGasPrice] = useState('');
 
     useEffect(() => {
-        fetch('https://ethgasstation.info/api/ethgasAPI.json')
+        fetch(
+            'https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=UPPVCS8VTCCNT3T83BZ8H6YRE9WVDY6W2P'
+        )
             .then((response) => response.json())
             .then((data) => {
-                setGasPrice((data.average / 10).toFixed(2));
+                setGasPrice(Number(data.result.ProposeGasPrice));
             });
     }, []);
 

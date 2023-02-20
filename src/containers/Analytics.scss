@@ -1,0 +1,208 @@
+@import 'src/variables';
+
+.AnalyticsContainer {
+    h2 {
+        font-weight: 500;
+        font-size: 19px;
+        line-height: 24px;
+    }
+
+    .panel {
+        background: #f8f8f8;
+        border-radius: 9px;
+        padding: 24px;
+        border: none;
+    }
+
+    .ext-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        background: #e7e7e7;
+
+        svg {
+            width: 12px;
+            height: 12px;
+        }
+    }
+
+    .links {
+        width: 150px;
+
+        a {
+            color: #000;
+        }
+    }
+
+    .dao-strats {
+        background: linear-gradient(71.9deg, #ebebeb 6.04%, #f1f1f1 84.37%);
+    }
+
+    .strats-strats {
+        background: linear-gradient(63.79deg, #ebebeb 11.66%, #f0f0f0 89.17%);
+    }
+
+    .gray-block {
+        background: #f0f0f0;
+        border-radius: $border-radius;
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        color: #000;
+        text-decoration: none;
+
+        img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .subtitle {
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 15px;
+            color: #3a3a3a;
+        }
+
+        .name {
+            font-weight: 600;
+            font-size: 13px;
+            line-height: 16px;
+        }
+
+        &.small-block {
+            gap: 0;
+            flex-direction: column;
+            font-size: 13px;
+            line-height: 18px;
+            padding: 10px 20px;
+            min-height: 59px;
+
+            &.stablecoin {
+                max-width: 225px;
+
+                img {
+                    width: 13px;
+                    height: 13px;
+                }
+
+                .name {
+                    font-size: 13px;
+                    line-height: 17px;
+                    color: #3a3a3a;
+                    margin-left: 5px;
+                }
+
+                .value {
+                    font-size: 13px;
+                    line-height: 18px;
+                    color: #000000;
+                }
+            }
+        }
+    }
+
+    .tbl {
+        display: flex;
+        border-top: 1px solid #e2e2e2;
+        border-bottom: 1px solid #e2e2e2;
+
+        > div {
+            padding: 12px 23px;
+            border-right: 1px solid #e2e2e2;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            line-height: 17px;
+            color: #3a3a3a;
+            margin-bottom: 10px;
+        }
+    }
+
+    .logos {
+        margin-top: 30px;
+        width: 114px;
+    }
+
+    .selected-strat {
+        .logos {
+            margin-top: 10px;
+
+            img {
+                width: 30px;
+                height: 30px;
+            }
+
+            .meta {
+                .subtitle {
+                    font-weight: 500;
+                    font-size: 12px;
+                    line-height: 15px;
+                    color: #3a3a3a;
+                    margin: 0;
+                }
+
+                .name {
+                    font-weight: 600;
+                    font-size: 13px;
+                    line-height: 16px;
+                }
+            }
+        }
+    }
+
+    .about-uzd {
+        margin-left: 100px;
+
+        p {
+            font-weight: 500;
+            font-size: 13px;
+            line-height: 145.5%;
+            width: 350px;
+            margin-bottom: 0;
+        }
+    }
+
+    .pools {
+        display: flex;
+        flex-wrap: wrap;
+
+        .pool-item {
+            background: #f0f0f0;
+            border-radius: $border-radius;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+            width: 184px;
+
+            &.selected {
+                border: 1px solid #ffc129;
+            }
+
+            img {
+                width: 30px;
+                height: 30px;
+            }
+
+            .subtitle {
+                font-weight: 500;
+                font-size: 12px;
+                line-height: 15px;
+                color: #3a3a3a;
+            }
+
+            .name {
+                font-weight: 600;
+                font-size: 13px;
+                line-height: 16px;
+            }
+        }
+    }
+}

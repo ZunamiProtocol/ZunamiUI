@@ -95,7 +95,7 @@ interface Balance {
 }
 
 function getNetworkByKey(key: string) {
-    return networks.filter(network => network.key === key)[0];
+    return networks.filter((network) => network.key === key)[0];
 }
 
 function renderBalances(balances: Array<Balance>, lpPrice: BigNumber) {
@@ -105,11 +105,13 @@ function renderBalances(balances: Array<Balance>, lpPrice: BigNumber) {
             <div className="balances">
                 {balances.map((balance) => {
                     return (
-                        balance.key &&
+                        balance.key && (
                             <div className="balance" key={balance.key}>
                                 {getNetworkByKey(balance.key).icon}
                                 <div className="meta">
-                                    <div className="chain">{getNetworkByKey(balance.key).value}</div>
+                                    <div className="chain">
+                                        {getNetworkByKey(balance.key).value}
+                                    </div>
                                     <div className="sum">
                                         {`$ ${getBalanceNumber(balance.value.multipliedBy(lpPrice))
                                             .toNumber()
@@ -117,6 +119,7 @@ function renderBalances(balances: Array<Balance>, lpPrice: BigNumber) {
                                     </div>
                                 </div>
                             </div>
+                        )
                     );
                 })}
             </div>
@@ -293,15 +296,22 @@ export const Main = (): JSX.Element => {
     const apyHintTarget = useRef(null);
     const [showApyHint, setShowApyHint] = useState(false);
     const apyPopover = (
-        <Popover onMouseEnter={() => setShowApyHint(true)} onMouseLeave={() => setShowApyHint(false)}>
+        <Popover
+            onMouseEnter={() => setShowApyHint(true)}
+            onMouseLeave={() => setShowApyHint(false)}
+        >
             <Popover.Body>
                 <div className="">
                     <span>Average APY in 30 days: </span>
-                    <span className="text-primary">{isZunLoading ? 'n/a' : `${zunamiInfo.monthlyAvgApy.toFixed(2)}%`}</span>
+                    <span className="text-primary">
+                        {isZunLoading ? 'n/a' : `${zunamiInfo.monthlyAvgApy.toFixed(2)}%`}
+                    </span>
                 </div>
                 <div className="">
                     <span>Average APY in 90 days: </span>
-                    <span className="text-primary">{isZunLoading ? 'n/a' : `${zunamiInfo.threeMonthAvgApy.toFixed(2)}%`}</span>
+                    <span className="text-primary">
+                        {isZunLoading ? 'n/a' : `${zunamiInfo.threeMonthAvgApy.toFixed(2)}%`}
+                    </span>
                 </div>
             </Popover.Body>
         </Popover>
@@ -326,7 +336,7 @@ export const Main = (): JSX.Element => {
                 <MobileSidebar />
                 {/* <ServicesMenu /> */}
                 <div className="container">
-                    <EthMergeWarningModal show={showMergeModal} />
+                    {/* <EthMergeWarningModal show={showMergeModal} /> */}
                     {!supportedChain && (
                         <UnsupportedChain text="You're using unsupported chain. Please, switch either to Ethereum or Binance network." />
                     )}
@@ -392,7 +402,7 @@ export const Main = (): JSX.Element => {
                                         className="balance"
                                         onClick={() => {
                                             setClickCounter(clickCounter + 1);
-                            
+
                                             if (clickCounter === 4) {
                                                 copyLogs();
                                                 setClickCounter(0);
@@ -418,10 +428,19 @@ export const Main = (): JSX.Element => {
                                                         viewBox="0 0 13 13"
                                                         fill="none"
                                                         xmlns="http://www.w3.org/2000/svg"
-                                                        onMouseEnter={() => setShowBalanceHint(true)}
-                                                        onMouseLeave={() => setShowBalanceHint(false)}
+                                                        onMouseEnter={() =>
+                                                            setShowBalanceHint(true)
+                                                        }
+                                                        onMouseLeave={() =>
+                                                            setShowBalanceHint(false)
+                                                        }
                                                     >
-                                                        <path fillRule="evenodd" clipRule="evenodd" d="M6.5 13C10.0899 13 13 10.0899 13 6.5C13 2.91015 10.0899 0 6.5 0C2.91015 0 0 2.91015 0 6.5C0 10.0899 2.91015 13 6.5 13ZM6.23296 9.97261H4.98638L5.79002 7.12336H3.02741V5.87679H6.14162L6.94529 3.02741H8.19186L7.38819 5.87679L9.97261 5.87679V7.12336H7.03659L6.23296 9.97261Z" fill="white"/>
+                                                        <path
+                                                            fillRule="evenodd"
+                                                            clipRule="evenodd"
+                                                            d="M6.5 13C10.0899 13 13 10.0899 13 6.5C13 2.91015 10.0899 0 6.5 0C2.91015 0 0 2.91015 0 6.5C0 10.0899 2.91015 13 6.5 13ZM6.23296 9.97261H4.98638L5.79002 7.12336H3.02741V5.87679H6.14162L6.94529 3.02741H8.19186L7.38819 5.87679L9.97261 5.87679V7.12336H7.03659L6.23296 9.97261Z"
+                                                            fill="white"
+                                                        />
                                                     </svg>
                                                 </OverlayTrigger>
                                             </div>
@@ -839,10 +858,19 @@ export const Main = (): JSX.Element => {
                                                                 viewBox="0 0 13 13"
                                                                 fill="none"
                                                                 xmlns="http://www.w3.org/2000/svg"
-                                                                onMouseEnter={() => setShowApyHint(true)}
-                                                                onMouseLeave={() => setShowApyHint(false)}
+                                                                onMouseEnter={() =>
+                                                                    setShowApyHint(true)
+                                                                }
+                                                                onMouseLeave={() =>
+                                                                    setShowApyHint(false)
+                                                                }
                                                             >
-                                                                <path fillRule="evenodd" clipRule="evenodd" d="M6.5 13C10.0899 13 13 10.0899 13 6.5C13 2.91015 10.0899 0 6.5 0C2.91015 0 0 2.91015 0 6.5C0 10.0899 2.91015 13 6.5 13ZM6.23296 9.97261H4.98638L5.79002 7.12336H3.02741V5.87679H6.14162L6.94529 3.02741H8.19186L7.38819 5.87679L9.97261 5.87679V7.12336H7.03659L6.23296 9.97261Z" fill="black"/>
+                                                                <path
+                                                                    fillRule="evenodd"
+                                                                    clipRule="evenodd"
+                                                                    d="M6.5 13C10.0899 13 13 10.0899 13 6.5C13 2.91015 10.0899 0 6.5 0C2.91015 0 0 2.91015 0 6.5C0 10.0899 2.91015 13 6.5 13ZM6.23296 9.97261H4.98638L5.79002 7.12336H3.02741V5.87679H6.14162L6.94529 3.02741H8.19186L7.38819 5.87679L9.97261 5.87679V7.12336H7.03659L6.23296 9.97261Z"
+                                                                    fill="black"
+                                                                />
                                                             </svg>
                                                         </OverlayTrigger>
                                                     </div>

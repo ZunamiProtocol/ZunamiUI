@@ -38,12 +38,12 @@ export const UzdMigrationModal = (props: UzdMigrationModalProps): JSX.Element =>
             setPending(true);
             // OLD DEPRECATED UZD contract. DO NOT USE
             const zunamiContract = sushi.contracts.uzdContract;
-            zunamiContract.options.address = contractAddresses.deprecated.v_1_0_uzd;
+            zunamiContract.options.address = contractAddresses.deprecated.v_1_1_uzd;
             zunamiContract.options.from = account;
             zunamiContract.defaultAccount = account;
 
             log(
-                `Calling withdrawAll('${account}', '${contractAddresses.deprecated.v_1_0_uzd}') on old USD contract`
+                `Calling withdrawAll('${account}', '${contractAddresses.deprecated.v_1_1_uzd}') on old USD contract`
             );
 
             await zunamiContract.methods
@@ -81,10 +81,10 @@ export const UzdMigrationModal = (props: UzdMigrationModalProps): JSX.Element =>
             }}
         >
             <Modal.Header closeButton>
-                <Modal.Title></Modal.Title>
+                <Modal.Title>&nbsp;</Modal.Title>
             </Modal.Header>
             <Modal.Body className="d-flex gap-3 flex-column justify-content-center align-items-center BscMigrationModal">
-                <h3 className="text-center">It's time to migrate to Zunami UZD v1.1</h3>
+                <h3 className="text-center">It's time to migrate to Zunami UZD v1.2</h3>
                 <p className="text-center">
                     We apologize, but in order to continue using the protocol, you will need to
                     withdraw funds from the outdated version and deposit them again. Don't worry!

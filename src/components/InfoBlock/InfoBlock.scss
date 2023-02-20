@@ -5,11 +5,7 @@
     position: relative;
 
     &_colorful {
-        background: #fff3e9;
-        background: -moz-linear-gradient(top, #fff3e9 0%, #fef5e8 100%);
-        background: -webkit-linear-gradient(top, #fff3e9 0%, #fef5e8 100%);
-        background: linear-gradient(to bottom, #fff3e9 0%, #fef5e8 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fff3e9', endColorstr='#fef5e8',GradientType=0 );
+        background: #f0f0f0;
     }
 
     @media screen and (min-width: $media375) {

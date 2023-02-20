@@ -51,6 +51,14 @@ function getIconFromTransaction(transaction: TransactionItem) {
         icon = 'uzd';
     }
 
+    if (transaction.hasOwnProperty('type') && transaction.type === 'MINT') {
+        icon = 'UZD';
+    }
+
+    if (transaction.hasOwnProperty('type') && transaction.type === 'REDEEM') {
+        icon = 'LP';
+    }
+
     return icon;
 }
 

@@ -73,7 +73,7 @@ export const InfoBar = (props: InfoBarProps): JSX.Element => {
                         <div>
                             <span className="name">Slippage rate</span>
                             <span
-                                className={`value text-${
+                                className={`value vela-sans text-${
                                     Number(props.slippage) >= 0.4 ? 'danger' : 'success'
                                 }`}
                             >
@@ -84,7 +84,7 @@ export const InfoBar = (props: InfoBarProps): JSX.Element => {
                     <div className="block">
                         <div>
                             <span className="name">Base APY</span>
-                            <span className="value">
+                            <span className="value vela-sans">
                                 {isZunLoading
                                     ? 'n/a'
                                     : `${zunamiInfo.monthlyAvgApy.toPrecision(3)}%`}

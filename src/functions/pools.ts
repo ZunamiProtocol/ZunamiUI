@@ -18,15 +18,7 @@ export interface ChartDataElement {
     address: string;
 }
 
-const colors = [
-    '#FA6005',
-    '#FFD118',
-    '#FFC129',
-    '#2cd5db',
-    '#1C77F2',
-    '#323232',
-    '#5856d6',
-]
+const colors = ['#FA6005', '#FFD118', '#FFC129', '#2cd5db', '#1C77F2', '#323232', '#5856d6'];
 
 export const poolsChartdata: { [key: string]: any } = {
     DUSD: {
@@ -86,7 +78,7 @@ export function poolInfoToChartElement(pool: PoolInfo, percent: BigNumber): Char
         ...poolsChartdata[pool.type],
         tvlInZunami: pool.tvlInZunami,
         value: new BigNumber(pool.tvlInZunami).dividedBy(percent).toNumber() * 100,
-        link: `https://etherscan.io/address/${pool.address}`
+        link: `https://etherscan.io/address/${pool.address}`,
     };
 }
 
@@ -95,9 +87,11 @@ export function poolDataToChartData(poolData: Array<PoolInfo>, TVL: BigNumber) {
         .map((pool, index) => {
             return {
                 ...poolInfoToChartElement(pool, TVL),
+                type: pool.type,
+                address: pool.address,
                 color: colors[index],
-            }
+            };
         })
         .filter((el) => el.value > 0)
-        .sort((a, b) => a.tvlInZunami > b.tvlInZunami ? -1 : 1);
+        .sort((a, b) => (a.tvlInZunami > b.tvlInZunami ? -1 : 1));
 }

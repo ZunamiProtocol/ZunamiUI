@@ -15,7 +15,6 @@ interface WithdrawOptionsProps {
     selectedCoin: string | undefined;
     rawBalance?: BigNumber;
     balance: BigNumber;
-    lpPrice: BigNumber;
     disabled?: boolean;
     chainId?: number;
     slippage?: string;
@@ -91,6 +90,7 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                                 checked={props.selectedCoin === 'all'}
                                 onChange={() => {}}
                             />
+                            <div className="fake-radio"></div>
                             <img src="/all-coins.svg" alt="" data-coin="all" />
                             <span>All coins</span>
                         </label>
@@ -107,6 +107,7 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                                 checked={props.selectedCoin === 'usdc'}
                                 onChange={() => {}}
                             />
+                            <div className="fake-radio"></div>
                             <img src="/USDC.svg" alt="" />
                             <span>USDC</span>
                         </label>
@@ -123,6 +124,7 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                                 checked={props.selectedCoin === 'dai'}
                                 onChange={() => {}}
                             />
+                            <div className="fake-radio"></div>
                             <img src="/DAI.svg" alt="" />
                             <span>DAI</span>
                         </label>
@@ -138,6 +140,7 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                             checked={props.selectedCoin === 'usdt'}
                             onChange={() => {}}
                         />
+                        <div className="fake-radio"></div>
                         <img src="/USDT.svg" alt="" />
                         <span>USDT</span>
                     </label>

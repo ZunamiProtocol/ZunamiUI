@@ -13,6 +13,7 @@ export interface FormProps {
     selectedCoinIndex: number;
     directOperationDisabled?: boolean;
     lpPrice: BigNumber;
+    zunLpPrice: BigNumber;
     onWithdraw?: Function;
     onDeposit?: Function;
     slippage: string;
