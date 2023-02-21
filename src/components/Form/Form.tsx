@@ -159,7 +159,7 @@ export const Form = (props: FormProps): JSX.Element => {
     }, [approveList]);
 
     // max for withdraw or deposit
-    const userMaxWithdraw = props.lpPrice.multipliedBy(userLpAmount) || BIG_ZERO;
+    const userMaxWithdraw = userLpAmount || BIG_ZERO;
 
     const userMaxWithdrawMinusInput =
         !userMaxWithdraw || userMaxWithdraw.toNumber() <= 0 || !userMaxWithdraw.toNumber()
