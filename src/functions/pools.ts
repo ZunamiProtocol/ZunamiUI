@@ -1,4 +1,5 @@
 import { BigNumber } from 'bignumber.js';
+import { getBalanceNumber } from '../utils/formatbalance';
 
 export interface PoolInfo {
     pid: number;
@@ -74,10 +75,16 @@ export const poolsChartdata: { [key: string]: any } = {
 };
 
 export function poolInfoToChartElement(pool: PoolInfo, percent: BigNumber): ChartDataElement {
+    const percentFromTVL = new BigNumber(pool.tvlInZunami).dividedBy(percent).toNumber() * 100;
+    const tvlInUsd = Number(
+        (getBalanceNumber(new BigNumber(percent)).toNumber() / 100) * percentFromTVL
+    ).toFixed(0);
+
     return {
         ...poolsChartdata[pool.type],
         tvlInZunami: pool.tvlInZunami,
-        value: new BigNumber(pool.tvlInZunami).dividedBy(percent).toNumber() * 100,
+        value: percentFromTVL,
+        tvlInUsd,
         link: `https://etherscan.io/address/${pool.address}`,
     };
 }

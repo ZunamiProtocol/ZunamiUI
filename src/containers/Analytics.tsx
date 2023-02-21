@@ -9,6 +9,8 @@ import useFetch from 'react-fetch-hook';
 import { getActiveStratsUrl, zunamiInfoUrl } from '../api/api';
 import { PoolInfo, poolDataToChartData } from '../functions/pools';
 import { PieChart2 } from '../components/PieChart/PieChart';
+import BigNumber from 'bignumber.js';
+import { getBalanceNumber } from '../utils/formatbalance';
 
 interface PoolsStats {
     pools: Array<PoolInfo>;
@@ -119,6 +121,9 @@ export const Analytics = (): JSX.Element => {
                                                                 : ''
                                                         }`}
                                                         key={pool.title}
+                                                        onClick={() => {
+                                                            setSelectedStrat(pool);
+                                                        }}
                                                     >
                                                         <img src={pool.icon} alt={pool.title} />
                                                         <div>
@@ -164,9 +169,9 @@ export const Analytics = (): JSX.Element => {
                                     {selectedStrat && (
                                         <div className="row selected-strat">
                                             <div className="col">
-                                                <div className="tbl">
-                                                    <div className="d-flex flex-wrap">
-                                                        <div className="logos d-flex gap-2">
+                                                <div className="tbl align-items-center">
+                                                    <div className="d-flex flex-wrap w-100">
+                                                        <div className="logos d-flex gap-2 w-100 mt-0">
                                                             <img
                                                                 src={selectedStrat.icon}
                                                                 alt={selectedStrat.title}
@@ -195,7 +200,13 @@ export const Analytics = (): JSX.Element => {
                                                     </div>
                                                     <div>
                                                         <div className="subtitle">TVL, $</div>
-                                                        <div>00000000</div>
+                                                        <div>
+                                                            {Number(
+                                                                selectedStrat.tvlInUsd
+                                                            ).toLocaleString('en', {
+                                                                maximumFractionDigits: 0,
+                                                            })}
+                                                        </div>
                                                     </div>
                                                     <div>
                                                         <div className="subtitle">Pool balance</div>

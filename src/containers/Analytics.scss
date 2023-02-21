@@ -173,6 +173,7 @@
         flex-wrap: wrap;
 
         .pool-item {
+            cursor: pointer;
             background: #f0f0f0;
             border-radius: $border-radius;
             padding: 15px 20px;
