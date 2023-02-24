@@ -551,9 +551,7 @@ export const Main = (): JSX.Element => {
                                                 />
                                             </svg>
                                         </div>
-                                        <span className="description">
-                                            The first high-profitable stablecoin
-                                        </span>
+                                        <span className="description">First-ever Aggregated Stablecoin</span>
                                     </Carousel.Item>
                                     <Carousel.Item className="yeld">
                                         <span className="title">Zunami Universe</span>
