@@ -9,6 +9,7 @@ import { NavMenu } from './NavMenu/NavMenu';
 import { NetworkSelector } from '../NetworkSelector/NetworkSelector';
 import { useWallet } from 'use-wallet';
 import { isETH } from '../../utils/zunami';
+import { useGasPrice } from '../../hooks/useGasPrice';
 
 function chainNameToTooltip(chainId: number) {
     if (chainId === 1 || !chainId) {
@@ -40,16 +41,7 @@ export const Header = (): JSX.Element => {
     const logoVariant = document.body.classList.contains('dark') ? 'logo-dark.svg' : 'logo.svg';
     const [open, setOpen] = useState(false);
     const isOnline = useOnlineState();
-    const { chainId } = useWallet();
-    const [gasPrice, setGasPrice] = useState('');
-
-    useEffect(() => {
-        fetch('https://ethgasstation.info/api/ethgasAPI.json')
-            .then((response) => response.json())
-            .then((data) => {
-                setGasPrice((data.average / 10).toFixed(2));
-            });
-    }, []);
+    const gasPrice = useGasPrice();
 
     return (
         <Navbar expand="lg" className={'Header'}>
