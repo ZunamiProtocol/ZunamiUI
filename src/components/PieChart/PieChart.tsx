@@ -13,6 +13,7 @@ interface DataItem {
 
 interface ChartProps {
     data: Array<DataItem>;
+    hideSummary?: boolean;
 }
 
 function renderStratList(items: Array<DataItem>) {
@@ -23,7 +24,7 @@ function renderStratList(items: Array<DataItem>) {
                 style={{ background: item.color }}
             />
             <div className={'PieChart__StratList__Item__Name d-flex align-items-center'}>
-                <img src={item.icon} alt={item.title} className="me-2" />
+                {item.icon && <img src={item.icon} alt={item.title} className="me-2" />}
                 <a target="blank" href={item.link}>
                     <div>{item.title.split(' - ')[0]}</div>
                     <div>{item.title.split(' - ')[1]}</div>
@@ -59,10 +60,16 @@ export const PieChart2 = (props: ChartProps): JSX.Element => {
                     className={'PieChart__Chart'}
                 />
                 <div className={'PieChartWrapper__Legend'}>
-                    <div className={'PieChartWrapper__Legend__Counter'}>{props.data.length}</div>
-                    <div className={'PieChartWrapper__Legend__Label'}>
-                        {props.data.length > 1 ? 'strategies' : 'strategy'}
-                    </div>
+                    {!props.hideSummary && (
+                        <div className={'PieChartWrapper__Legend__Counter'}>
+                            {props.data.length}
+                        </div>
+                    )}
+                    {!props.hideSummary && (
+                        <div className={'PieChartWrapper__Legend__Label'}>
+                            {props.data.length > 1 ? 'strategies' : 'strategy'}
+                        </div>
+                    )}
                 </div>
             </div>
             <div className={'PieChart__StratList'}>{renderStratList(props.data)}</div>

@@ -35,6 +35,28 @@ export const Analytics = (): JSX.Element => {
         poolStats && poolStats.pools && zunamiInfo
             ? poolDataToChartData(poolStats.pools, zunamiInfo.tvl)
             : [];
+    const collateralData = [
+        {
+            address: '0x9848EDb097Bee96459dFf7609fb582b80A8F8EfD',
+            color: '#FA6005',
+            link: 'https://etherscan.io/address/0x9848EDb097Bee96459dFf7609fb582b80A8F8EfD',
+            title: 'BTC',
+            tvlInUsd: '836755',
+            tvlInZunami: 8.367551075392854e23,
+            type: 'STAKE_DAO_MIM',
+            value: 92.09894980200251,
+        },
+        {
+            address: '0x9848EDb097Bee96459dFf7609fb582b80A8F8EfD',
+            color: '#159FFD',
+            link: 'https://etherscan.io/address/0x9848EDb097Bee96459dFf7609fb582b80A8F8EfD',
+            title: 'USDT',
+            tvlInUsd: '836755',
+            tvlInZunami: 8.367551075392854e23,
+            type: 'STAKE_DAO_MIM',
+            value: 92.09894980200251,
+        },
+    ];
 
     useEffect(() => {
         if (chartData.length && !selectedStrat) {
@@ -359,6 +381,102 @@ export const Analytics = (): JSX.Element => {
                                             </div>
                                         </div>
                                     )}
+                                    {selectedStrat && (
+                                        <div className="panel mt-4">
+                                            <div className="d-flex gap-3">
+                                                <div className="gray-block small-block align-items-start">
+                                                    <div>Current APR, %</div>
+                                                    <div>000</div>
+                                                </div>
+                                                <div className="gray-block small-block align-items-start">
+                                                    <div>Base</div>
+                                                    <div>000</div>
+                                                </div>
+                                                <div className="gray-block small-block align-items-start">
+                                                    <div>CRV, %</div>
+                                                    <div>000</div>
+                                                </div>
+                                                <div className="gray-block small-block align-items-start">
+                                                    <div>CRV, %</div>
+                                                    <div>000</div>
+                                                </div>
+                                                <div className="gray-block small-block align-items-start">
+                                                    <div>Incentives, $, MIM</div>
+                                                    <div>000</div>
+                                                </div>
+                                            </div>
+                                            <div className="d-flex gap-3 mt-3">
+                                                <div className="gray-block small-block align-items-start">
+                                                    <div>Current APR, %</div>
+                                                    <div>000</div>
+                                                </div>
+                                                <div className="gray-block small-block align-items-start">
+                                                    <div>Base</div>
+                                                    <div>000</div>
+                                                </div>
+                                                <div className="gray-block small-block align-items-start">
+                                                    <div>CRV, %</div>
+                                                    <div>000</div>
+                                                </div>
+                                                <div className="gray-block small-block align-items-start">
+                                                    <div>CRV, %</div>
+                                                    <div>000</div>
+                                                </div>
+                                                <div className="gray-block small-block align-items-start">
+                                                    <div>Incentives, $, MIM</div>
+                                                    <div>000</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                    {selectedStrat && (
+                                        <div className="panel mt-4">
+                                            <div className="d-flex gap-3">
+                                                <div className="gray-block small-block align-items-start">
+                                                    <div>Last bribes amount</div>
+                                                    <div>000</div>
+                                                </div>
+                                                <div className="gray-block small-block align-items-start">
+                                                    <div>Amount, $</div>
+                                                    <div>000</div>
+                                                </div>
+                                                <div className="gray-block small-block align-items-start">
+                                                    <div>Token</div>
+                                                    <div>FXS</div>
+                                                </div>
+                                                <div className="gray-block small-block align-items-start">
+                                                    <div>Token</div>
+                                                    <div>APEFI</div>
+                                                </div>
+                                                <div className="gray-block small-block align-items-start">
+                                                    <div>Current weight, %</div>
+                                                    <div>34</div>
+                                                </div>
+                                            </div>
+                                            <div className="d-flex gap-3 mt-3">
+                                                <div className="gray-block small-block align-items-start">
+                                                    <div>Last bribes amount</div>
+                                                    <div>000</div>
+                                                </div>
+                                                <div className="gray-block small-block align-items-start">
+                                                    <div>Amount, $</div>
+                                                    <div>000</div>
+                                                </div>
+                                                <div className="gray-block small-block align-items-start">
+                                                    <div>Token</div>
+                                                    <div>FXS</div>
+                                                </div>
+                                                <div className="gray-block small-block align-items-start">
+                                                    <div>Token</div>
+                                                    <div>APEFI</div>
+                                                </div>
+                                                <div className="gray-block small-block align-items-start">
+                                                    <div>Current weight, %</div>
+                                                    <div>34</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                     <div className="row">
                                         <div className="col">
                                             <h2 className="mt-5">Stablecoin</h2>
@@ -492,8 +610,14 @@ export const Analytics = (): JSX.Element => {
                                                     Audit
                                                 </a>
                                             </div>
-                                            <div className="panel">
+                                            <div className="panel collateral-block">
                                                 <div>Collateral</div>
+                                                <div>
+                                                    <PieChart2
+                                                        data={collateralData}
+                                                        hideSummary={true}
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="col-md-5">
