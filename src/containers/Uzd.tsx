@@ -270,7 +270,14 @@ export const Uzd = (): JSX.Element => {
                                 <span>Total UZD issued</span>
                             </div>
                             <div className="Counter__Value Counter__Value-Big Counter__Value-Active">
-                                <div>{getFullDisplayBalance(uzdTotalSupply)}</div>
+                                <div>
+                                    {Number(getFullDisplayBalance(uzdTotalSupply)).toLocaleString(
+                                        'en',
+                                        {
+                                            maximumFractionDigits: 0,
+                                        }
+                                    )}
+                                </div>
                             </div>
                             <svg
                                 width="59"
@@ -491,7 +498,7 @@ export const Uzd = (): JSX.Element => {
                                         <div className="card-body">
                                             <div className="title">Important</div>
                                             <div className="text">
-                                                Protocol Takes no redemption fee. It will be cheaper
+                                                Protocol Takes 0,5% redemption fee. It will be cheaper
                                                 and easier to withdraw using the Curve pool
                                             </div>
                                             <a
