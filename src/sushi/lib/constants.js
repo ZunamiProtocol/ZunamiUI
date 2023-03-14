@@ -22,7 +22,7 @@ export const contractAddresses = {
         56: '0x0aeB8D3aA2D806cb7141c1C0accFf1aC8CbCF3AD',
     },
     uzd: {
-        1: '0xB8f15e0F9c5dAa562c24024F12e384af28805187',
+        1: '0xb40b6608B2743E691C9B54DdBDEe7bf03cd79f1c',
     },
     deprecated: {
         v_1_0_bsc: '0x02a228D826Cbb1C0E8765A6DB6E7AB64EAA80BFD',

@@ -1,71 +1,41 @@
-import './MobileSidebar.scss';
-import { NavMenu } from '../../Header/NavMenu/NavMenu';
-import { ThemeSwitcher } from '../../ThemeSwitcher/ThemeSwitcher';
+import './AllServicesPanel.scss';
 
-export const MobileSidebar = (): JSX.Element => {
+interface AllServicesPanelProps {
+    
+}
+
+export const AllServicesPanel = (props: AllServicesPanelProps): JSX.Element => {
     return (
-        <div id="MobileSidebar">
-            <svg
-                width="92"
-                height="19"
-                viewBox="0 0 92 19"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <path
-                    d="M88.7757 1.08348L89.583 0.276139C89.6706 0.188593 89.7745 0.119147 89.8889 0.0717671C90.0033 0.0243875 90.1259 0 90.2497 0C90.3735 0 90.4961 0.0243875 90.6104 0.0717671C90.7248 0.119147 90.8288 0.188593 90.9163 0.276139L91.7236 1.08348C91.8112 1.17103 91.8806 1.27496 91.928 1.38935C91.9754 1.50373 91.9998 1.62633 91.9998 1.75013C91.9998 1.87394 91.9754 1.99654 91.928 2.11092C91.8806 2.22531 91.8112 2.32924 91.7236 2.41678L90.9163 3.22413C90.8288 3.31168 90.7248 3.38112 90.6104 3.4285C90.4961 3.47588 90.3735 3.50027 90.2497 3.50027C90.1259 3.50027 90.0033 3.47588 89.8889 3.4285C89.7745 3.38112 89.6706 3.31168 89.583 3.22413L88.7757 2.41678C88.5988 2.23998 88.4995 2.00018 88.4995 1.75013C88.4995 1.50009 88.5988 1.26029 88.7757 1.08348ZM88.736 18.5383V4.91466H91.7633V18.5383H88.736Z"
-                    fill="black"
-                />
-                <path
-                    d="M80.6344 4.54053C78.7191 4.54053 77.0007 5.47648 75.8222 6.9608C75.2204 6.20527 74.4558 5.59527 73.5855 5.17622C72.7152 4.75717 71.7615 4.53988 70.7956 4.54053C70.3021 4.54025 69.8107 4.60325 69.3333 4.72799C68.9011 4.84357 68.5004 5.05494 68.161 5.34644C67.8216 5.63793 67.5521 6.00207 67.3726 6.41186V4.91649H65.9493V4.91879H64.3623V18.5424H67.3896V11.7306C67.3896 9.22296 68.9143 7.18962 70.7956 7.18962C72.6765 7.18962 74.2015 8.88407 74.2015 10.9741V18.5424H77.2288V11.7306C77.2288 9.22296 78.7535 7.18962 80.6344 7.18962C82.5156 7.18962 84.0403 8.88407 84.0403 10.9741V18.5424H87.0676V10.9741C87.0677 10.1292 86.9014 9.29263 86.5781 8.51205C86.2549 7.73147 85.781 7.02222 85.1836 6.42479C84.5862 5.82736 83.877 5.35347 83.0964 5.03016C82.3159 4.70686 81.4793 4.54048 80.6344 4.54053Z"
-                    fill="black"
-                />
-                <path
-                    d="M60.8615 4.91882V4.91652H59.4383V6.69103C59.1184 6.05875 58.5877 5.55812 57.9378 5.27571C56.8068 4.78726 55.5874 4.53701 54.3554 4.54056C49.8625 4.54056 46.2197 7.75936 46.2197 11.7307C46.2197 15.7013 49.0996 18.9207 52.653 18.9207C56.206 18.9207 58.9229 16.0408 58.9229 12.4871H55.8952C55.8952 13.4496 55.7586 14.3749 55.226 15.0428C54.9181 15.429 54.5265 15.7402 54.0808 15.9531C53.6351 16.166 53.1469 16.2749 52.653 16.2717C50.7717 16.2717 49.247 14.2383 49.247 11.7307C49.247 9.22299 51.5349 7.18965 54.3554 7.18965C57.177 7.18965 59.4645 9.223 59.4645 11.7307V18.5425H62.4918V4.91882H60.8615Z"
-                    fill="black"
-                />
-                <path
-                    d="M38.7299 4.54072C37.4722 4.53249 36.2268 4.78911 35.0748 5.29389C34.4326 5.58045 33.9118 6.08399 33.6038 6.71621V4.91668H32.1805V4.91898H30.5625V18.5426H33.5898V11.7308C33.5898 9.22315 35.8777 7.18981 38.6982 7.18981C40.5791 7.18981 42.1038 8.88426 42.1038 10.9743V18.5426H45.1311V10.9937C45.1339 9.29032 44.462 7.65519 43.2625 6.44591C42.0629 5.23663 40.4332 4.55163 38.7299 4.54072Z"
-                    fill="black"
-                />
-                <path
-                    d="M25.6551 4.91858V11.7304C25.6551 14.2381 23.3672 16.2714 20.547 16.2714C18.6658 16.2714 17.1411 14.5769 17.1411 12.4869V4.91858H14.1138V12.4676C14.1111 14.1709 14.783 15.8059 15.9826 17.0152C17.1821 18.2244 18.8117 18.9095 20.515 18.9205C21.7727 18.9287 23.0181 18.6721 24.1701 18.1673C24.8127 17.8802 25.3338 17.3762 25.6422 16.7435V18.5422H28.6824V4.91858H25.6551Z"
-                    fill="black"
-                />
-                <path
-                    d="M0 6.388V7.59712H8.23805L0 15.7879V18.5261H12.5131V15.7879H11.7606V15.7876H4.54665L4.99689 15.2698C5.02644 15.2387 5.05562 15.2073 5.08388 15.175L5.89789 14.2447L12.5131 7.47065V4.92065H0V6.388Z"
-                    fill="black"
-                />
-            </svg>
-            <div
-                className="close"
-                onClick={() => {
-                    document.getElementById('MobileSidebar').classList.toggle('active');
-                    document.body.classList.toggle('overflow');
-                }}
-            >
-                <img src="/exit.png" alt="" />
+        <div id="all-services" className="all-services-panel">
+            <div className="row">
+                <div className="col">
+                    <div className="title mt-4 mb-4">Zunami Protocol Menu</div>
+                    <div className="d-flex gap-4 flex-wrap fast-menu">
+                        <a href="/deposit">
+                            <span>Deposit & Withdraw</span>
+                            <img src="/fast-menu-1.png" alt="" />
+                        </a>
+                        <a href="/uzd" target="_blank" rel='noreferrer'>
+                            <span>UZD</span>
+                            <img src="/fast-menu-2.png" alt="" />
+                        </a>
+                        <a href="https://snapshot.org/#/zunamidao.eth">
+                            <span>DAO</span>
+                            <img src="/fast-menu-3.png" alt="" />
+                        </a>
+                        <a href="/analytics">
+                            <span>Analytics</span>
+                            <img src="/fast-menu-4.png" alt="" />
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div className="inner">
-                <div className="mt-5">
-                    <strong>Zunami listing</strong>
-                </div>
-                <div className="d-flex listings flex-wrap">
-                    <a href="https://www.coingecko.com/en/coins/zunami-usd" target="_blank" rel="noreferrer">
-                        CoinGecko
-                    </a>
-                    <a href="https://defillama.com/protocol/zunami-protocol" target="_blank" rel="noreferrer">
-                        DeFI Lama
-                    </a>
-                    <a href="https://www.dapp.com/app/zunami-protocol" target="_blank" rel="noreferrer">
-                        Dapp
-                    </a>
-                    <a href="https://dappradar.com/ethereum/defi/zunami-protocol" target="_blank" rel="noreferrer">
-                        DappRadar
-                    </a>
-                </div>
-                <div className="title mb-4 mt-5">Audited by</div>
-                    <div className="d-flex gap-4 flex-wrap audits">
+            <div className="row mt-5">
+                <div className="col">
+                    <div className="title">About Zunami Protocol</div>
+                    <p className="mt-3 about">Zunami is the DAO that works with stablecoins and solves the main issues of current yield-farming protocols by streamlining interaction with DeFi, making it easier and cheaper while increasing profitability by differentiating and rebalancing users’ funds.</p>
+                    <div className="title mb-4">Audited by</div>
+                    <div className="d-flex gap-4 audits">
                         <a href="https://ackeeblockchain.com/blog/ackee-blockchain-audited-zunami-protocol/" rel="noreferrer" target="_blank">
                             <svg width="197" height="27" viewBox="0 0 197 27" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path fillRule="evenodd" clipRule="evenodd" d="M0 26.8472H85.9111V0H0V26.8472Z" fill="#0035F1"/>
@@ -90,7 +60,9 @@ export const MobileSidebar = (): JSX.Element => {
                             <span>zunami.io</span>
                         </a>
                     </div>
-                <div className="title mb-4 mt-5">Zunami Media</div>
+                </div>
+                <div className="col">
+                    <div className="title mb-4">Zunami Media</div>
                     <div className="media-links d-flex gap-3 flex-wrap">
                         <a href="https://zunamilab.gitbook.io/product-docs/" rel='noreferrer' target="blank">
                             <svg width="38" height="28" viewBox="0 0 38 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -129,7 +101,7 @@ export const MobileSidebar = (): JSX.Element => {
                             </div>
                         </a>
                     </div>
-                <p className="copyright">© 2023 Zunami Protocol. Version 4.0</p>
+                </div>
             </div>
         </div>
     );

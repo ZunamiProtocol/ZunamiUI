@@ -157,7 +157,7 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
     }, []);
 
     return (
-        <Col className={'SidebarColumn'}>
+        <Col id="sidebar-col" className={'SidebarColumn'}>
             <div className="Sidebar">
                 <div className="Sidebar__Header d-flex align-items-center">
                     <svg

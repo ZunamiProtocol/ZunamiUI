@@ -3,12 +3,32 @@ import { provider as Provider } from 'web3-core';
 import { Contract } from 'web3-eth-contract';
 import { AbiItem } from 'web3-utils';
 import ERC20 from '../actions/abi/erc20.abi.json';
+import { contractAddresses } from '../sushi/lib/constants';
 import { log } from '../utils/logger';
 
 export const getContract = (provider: Provider, address: string) => {
     const web3 = new Web3(provider);
     const contract = new web3.eth.Contract(ERC20 as unknown as AbiItem, address);
     return contract;
+};
+
+export const getUzdAllowance = async (
+    provider: Provider,
+    zunamiContractAddress: string,
+    account: string
+): Promise<string> => {
+    const lpContract = getContract(provider, contractAddresses.zunami[1]);
+
+    try {
+        const allowance: string = await lpContract.methods
+            .allowance(account, contractAddresses.uzd[1])
+            .call();
+
+        log(`Executing allowance() for contract ${contractAddresses.uzd[1]}. Parameters: ${account}, ${zunamiContractAddress}`);
+        return allowance;
+    } catch (e) {
+        return '0';
+    }
 };
 
 export const getAllowance = async (
@@ -19,11 +39,13 @@ export const getAllowance = async (
 ): Promise<string> => {
     const lpContract = getContract(provider, tokenAddress);
     try {
+        // debugger;
         const allowance: string = await lpContract.methods
             .allowance(account, masterChefContract.options.address)
             .call();
 
-        log(`Allowance for ${tokenAddress}: ${allowance}`);
+        log(`Executing  of contract ${lpContract.options.address} - allowance(${account}, ${masterChefContract.options.address})`);
+        log(`Allowance result: ${allowance}`);
         return allowance;
     } catch (e) {
         return '0';

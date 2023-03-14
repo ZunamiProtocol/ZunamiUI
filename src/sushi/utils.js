@@ -96,15 +96,17 @@ export const getFarms = (sushi) => {
 };
 
 // 10M
-export const APPROVE_SUM = '10000000000000000000000000';
+export const APPROVE_SUM = '10000000000000000000000000000';
 
 export const approve = async (
     provider,
     tokenAddress,
     masterChefContract,
     account,
-    apprSum = ethers.constants.MaxUint256
+    apprSum = ethers.constants.MaxUint256,
+    spenderAddress = false
 ) => {
+    debugger;
     const lpContract = getContract(provider, tokenAddress);
     let sum = apprSum;
     const isZerionWallet = window.ethereum?.walletMeta?.name === 'Zerion';
@@ -144,7 +146,11 @@ export const approve = async (
         spender = contractAddresses.busd[56];
     }
 
-    log(`Executing approve for token ${tokenAddress} for ${sum} sum (spender ${spender})`);
+    if (spenderAddress) {
+        spender = spenderAddress;
+    }
+
+    log(`Executing approve() for address ${lpContract.options.address}. Params: ${spender}, ${sum}`);
 
     return lpContract.methods
         .approve(spender, sum)

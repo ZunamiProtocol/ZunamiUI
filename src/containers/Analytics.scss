@@ -16,7 +16,49 @@
 
     .collateral-block {
         .PieChart__StratList {
-            margin: 0 40px;
+            margin: 0 20px 0 40px;
+        }
+    }
+
+    .nav-tabs {
+        border: none;
+
+        .nav-link {
+            background: #f0f0f0;
+            border: 1px solid #e1e1e1;
+            border-radius: 15px;
+            color: #000;
+            width: 286px;
+            margin-bottom: 15px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 17px;
+
+            svg {
+                height: 23px;
+                width: auto;
+            }
+
+            .circle {
+                width: 8px;
+                height: 8px;
+                background: #cccccc;
+                border-radius: 100%;
+                margin-right: 0;
+                margin-left: auto;
+            }
+
+            &.active {
+                background: #f0f0f0;
+
+                .circle {
+                    background: #fd8d01;
+                }
+            }
         }
     }
 
@@ -116,6 +158,7 @@
         display: flex;
         border-top: 1px solid #e2e2e2;
         border-bottom: 1px solid #e2e2e2;
+        justify-content: end;
 
         > div {
             padding: 12px 23px;

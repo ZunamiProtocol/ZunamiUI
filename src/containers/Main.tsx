@@ -36,6 +36,7 @@ import { Pendings } from '../components/Pendings/Pendings';
 // import { ServicesMenu } from '../components/ServicesMenu/ServicesMenu';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { networks } from '../components/NetworkSelector/NetworkSelector';
+import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -334,6 +335,7 @@ export const Main = (): JSX.Element => {
         <Suspense fallback={<Preloader onlyIcon={true} />}>
             <React.Fragment>
                 <MobileSidebar />
+                <AllServicesPanel />
                 {/* <ServicesMenu /> */}
                 <div className="container">
                     {/* <EthMergeWarningModal show={showMergeModal} /> */}
@@ -493,7 +495,7 @@ export const Main = (): JSX.Element => {
                             />
                         </SideBar>
                         <div className="col content-col dashboard-col">
-                            <Header />
+                            <Header section="dashboard" />
                             <div className="dashboard">
                                 <div className="fast-deposit-wrapper">
                                     <FastDepositForm />

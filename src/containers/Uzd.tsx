@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from '../components/Header/Header';
 import './Uzd.scss';
-import { Container, Toast, ToastContainer } from 'react-bootstrap';
+import { Toast, ToastContainer } from 'react-bootstrap';
 import { useWallet } from 'use-wallet';
-import { InfoBlock } from '../components/InfoBlock/InfoBlock';
 import useBalanceOf from '../hooks/useBalanceOf';
 import useUzdBalance from '../hooks/useUzdBalance';
 import useSushi from '../hooks/useSushi';
@@ -12,9 +11,9 @@ import useEagerConnect from '../hooks/useEagerConnect';
 import { BIG_TEN, BIG_ZERO, getBalanceNumber, UZD_DECIMALS } from '../utils/formatbalance';
 import useUzdLpPrice from '../hooks/useUzdLpPrice';
 import BigNumber from 'bignumber.js';
-import { getAllowance } from '../utils/erc20';
+import { getAllowance, getUzdAllowance } from '../utils/erc20';
 import { contractAddresses } from '../sushi/lib/constants';
-import { approve, getMasterChefContract } from '../sushi/utils';
+import { approve, APPROVE_SUM, getMasterChefContract } from '../sushi/utils';
 import { Preloader } from '../components/Preloader/Preloader';
 import { log } from '../utils/logger';
 import { SideBar, ZunamiInfo, ZunamiInfoFetch } from '../components/SideBar/SideBar';
@@ -24,9 +23,9 @@ import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChai
 import { UzdMigrationModal } from '../components/UzdMigrationModal/UzdMigrationModal';
 import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar';
 import { networks } from '../components/NetworkSelector/NetworkSelector';
-import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { TransactionHistory } from '../components/TransactionHistory/TransactionHistory';
 import { ActionSelector } from '../components/Form/ActionSelector/ActionSelector';
+import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
 
 interface CurvePoolInfo {
     apy: number;
@@ -97,6 +96,7 @@ const addToken = async (
 };
 
 export const Uzd = (): JSX.Element => {
+    // const account = '0xe9b2b067ee106a6e518fb0552f3296d22b82b32b';
     const { account, connect, ethereum, chainId } = useWallet();
     const sushi = useSushi();
     const masterChefContract = getMasterChefContract(sushi);
@@ -108,6 +108,7 @@ export const Uzd = (): JSX.Element => {
     const [uzdValue, setUzdValue] = useState('');
     const lpPrice = useUzdLpPrice();
     const [zlpAllowance, setZlpAllowance] = useState(BIG_ZERO);
+    const [uzdAllowance, setUzdAllowance] = useState(BIG_ZERO);
     const [pendingTx, setPendingTx] = useState(false);
     const [transactionError, setTransactionError] = useState(false);
     const [transactionId, setTransactionId] = useState<string | undefined>(undefined);
@@ -154,6 +155,7 @@ export const Uzd = (): JSX.Element => {
 
         const getZlpApprove = async () => {
             const allowance = new BigNumber(
+                // await getUzdAllowance(
                 await getAllowance(
                     ethereum,
                     contractAddresses.zunami[1],
@@ -164,6 +166,18 @@ export const Uzd = (): JSX.Element => {
             );
 
             setZlpAllowance(allowance);
+
+            const uzdAllowance = new BigNumber(
+                await getAllowance(
+                    ethereum,
+                    contractAddresses.uzd[1],
+                    sushi.contracts.uzdContract,
+                    // @ts-ignore
+                    account,
+                )
+            );
+
+            setUzdAllowance(uzdAllowance);
         };
 
         getZlpApprove();
@@ -259,6 +273,7 @@ export const Uzd = (): JSX.Element => {
     return (
         <React.Fragment>
             <MobileSidebar />
+            <AllServicesPanel />
             <div className="container">
                 <div className="row main-row h-100 UzdContainer">
                     {!supportedChain && (
@@ -319,7 +334,12 @@ export const Uzd = (): JSX.Element => {
                             </div>
                             <div className="Counter__Value Counter__Value-Big Counter__Value-Active">
                                 <div className="vela-sans">
-                                    {getFullDisplayBalance(uzdTotalSupply)}
+                                    {Number(getFullDisplayBalance(uzdTotalSupply)).toLocaleString(
+                                        'en',
+                                        {
+                                            maximumFractionDigits: 0,
+                                        }
+                                    )}
                                 </div>
                             </div>
                             <svg
@@ -475,7 +495,7 @@ export const Uzd = (): JSX.Element => {
                         />
                     </SideBar>
                     <div className="col content-col dashboard-col">
-                        <Header />
+                    <Header section="uzd" />
                         <div className="UzdContainer__Actions">
                             <ToastContainer position={'top-end'} className={'toasts mt-3 me-3'}>
                                 {transactionError && (
@@ -541,7 +561,7 @@ export const Uzd = (): JSX.Element => {
                                         <div className="card-body">
                                             <div className="title">Important</div>
                                             <div className="text">
-                                                Protocol Takes no redemption fee. It will be cheaper
+                                                Protocol Takes 0,5% redemption fee. It will be cheaper
                                                 and easier to withdraw using the Curve pool
                                             </div>
                                             <a
@@ -847,8 +867,10 @@ export const Uzd = (): JSX.Element => {
                                                             await approve(
                                                                 ethereum,
                                                                 contractAddresses.zunami[1],
-                                                                sushi.contracts.uzdContract,
-                                                                account
+                                                                sushi.getEthContract(),
+                                                                account,
+                                                                APPROVE_SUM,
+                                                                contractAddresses.uzd[1]
                                                             );
 
                                                             log('ZLP approved');
@@ -901,7 +923,40 @@ export const Uzd = (): JSX.Element => {
                                                 }}
                                             />
                                         )}
-                                        {zlpAllowance.toNumber() > 0 && mode === 'redeem' && (
+                                        {uzdAllowance.toNumber() === 0 && mode === 'redeem' && (
+                                            <div>
+                                                <input
+                                                    type="button"
+                                                    className={`zun-button ${
+                                                        pendingTx ? 'disabled' : ''
+                                                    }`}
+                                                    value="Approve UZD"
+                                                    onClick={async () => {
+                                                        setPendingTx(true);
+
+                                                        try {
+                                                            await approve(
+                                                                ethereum,
+                                                                contractAddresses.uzd[1],
+                                                                sushi.getEthContract(),
+                                                                account,
+                                                                APPROVE_SUM,
+                                                                contractAddresses.uzd[1]
+                                                            );
+
+                                                            log('ZLP approved');
+                                                        } catch (error: any) {
+                                                            log(
+                                                                `❗️ Error while approving ZLP: ${error.message}`
+                                                            );
+                                                        }
+
+                                                        setPendingTx(false);
+                                                    }}
+                                                />
+                                            </div>
+                                        )}
+                                        {uzdAllowance.toNumber() > 0 && mode === 'redeem' && (
                                             <input
                                                 type="button"
                                                 className={`zun-button ${
@@ -970,6 +1025,18 @@ export const Uzd = (): JSX.Element => {
 
                                         {pendingTx && <Preloader className="ms-2" />}
                                     </div>
+                                    {
+                                        mode === 'mint' &&
+                                            <div className="mt-3" style={{ fontSize: '12px' }}>
+                                                ZLP allowance: {zlpAllowance.toString()}
+                                            </div>
+                                    }
+                                    {
+                                        mode === 'redeem' &&
+                                            <div className="mt-3" style={{ fontSize: '12px' }}>
+                                                UZD allowance: {uzdAllowance.toString()}
+                                            </div>
+                                    }
                                 </div>
                                 <div className={`flex-fill card mint-card`}>
                                     <div className="card-body">
@@ -1034,42 +1101,6 @@ export const Uzd = (): JSX.Element => {
                                             </li>
                                         </ul>
                                     </div>
-
-                                    {/* <div>
-                                        <div className="d-flex protocol_fee">
-                                            <div>
-                                                <svg
-                                                    width="36"
-                                                    height="35"
-                                                    viewBox="0 0 36 35"
-                                                    fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <path
-                                                        d="M17.4498 1.1791e-05C27.1429 -0.0111169 35.0164 7.85685 35.0053 17.5499C34.9942 27.2263 27.1207 35.0609 17.3664 34.9996C7.73453 34.9384 0.0334921 27.1818 0.000106157 17.5555C-0.0332798 7.87354 7.81243 0.0111405 17.4498 1.1791e-05ZM12.1025 28.0331C12.097 28.0665 12.0914 28.1054 12.0914 28.1444C12.1526 29.274 12.9038 30.0474 14.0333 30.0808C14.3449 30.0919 14.6621 30.0585 14.9626 29.9862C17.5389 29.3964 19.6478 27.9163 21.7177 26.3749C22.0015 26.1635 22.0404 25.8519 21.9403 25.5292C21.7344 24.8893 21.1167 24.611 20.4657 24.906C19.9093 25.1619 19.3862 25.4679 18.8354 25.7295H18.8298C18.5182 25.8741 18.1788 25.5792 18.2678 25.2509C18.2678 25.2454 18.2678 25.2454 18.2678 25.2398C19.3417 21.5284 20.4268 17.817 21.5118 14.1112C21.8568 12.9315 21.2503 12.019 20.0317 11.8965C19.9148 11.8854 19.7924 11.891 19.6756 11.8965C18.329 11.9578 17.0715 12.325 15.8696 12.926C14.7456 13.4879 13.7329 14.2224 12.7814 15.0404C12.4475 15.3242 12.2973 15.7137 12.4253 16.1254C12.5477 16.5094 12.9316 16.5873 13.2933 16.6429C13.6717 16.6986 13.9888 16.5428 14.3171 16.387C14.651 16.2256 14.9848 16.0531 15.3298 15.9307C15.6247 15.8305 15.7082 15.9251 15.6414 16.2256C15.6136 16.3536 15.5747 16.4816 15.5357 16.6095C14.4507 20.1651 13.3601 23.7152 12.275 27.2708C12.2082 27.5156 12.1582 27.7771 12.1025 28.0331ZM19.5643 8.09611C19.5643 8.08498 19.5643 8.07385 19.5643 8.06273C19.5476 6.71059 19.1414 5.77579 18.0842 5.21935C16.7042 4.49043 15.0961 5.21379 14.7011 6.72172C14.5008 7.48404 14.5174 8.24635 14.7122 9.01423C14.957 9.99355 15.5635 10.6168 16.554 10.7837C17.5556 10.9506 18.418 10.6334 19.0079 9.77098C19.3862 9.20898 19.5365 8.56908 19.5643 8.09611Z"
-                                                        fill="#D5D5D5"
-                                                    />
-                                                </svg>
-                                            </div>
-                                            <div className="protocol_fee__text">
-                                                Protocol Takes no redemption fee. It will be
-                                                cheaper and easier to withdraw using the Curve
-                                                pool
-                                            </div>
-                                        </div>
-                                        <div className="text-center">
-                                            <a
-                                                href="https://curve.exchange/#/ethereum/pools/factory-v2-218/swap"
-                                                className="go-to-curve ms-auto me-auto"
-                                                target="_blank"
-                                                rel="noreferrer"
-                                            >
-                                                <img src="/curve-icon.svg" alt="" />
-                                                <span>Go to Curve</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                 */}
                                 </div>
                                 <TransactionHistory
                                     className={`d-block d-md-none flex-fill`}

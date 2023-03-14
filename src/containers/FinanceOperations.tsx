@@ -29,6 +29,7 @@ import { SideBar } from '../components/SideBar/SideBar';
 import { Pendings } from '../components/Pendings/Pendings';
 import usePendingOperations from '../hooks/usePendingOperations';
 import { InfoBar } from '../components/InfoBar/InfoBar';
+import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
 
 interface FinanceOperationsProps {
     operationName: string;
@@ -279,6 +280,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     return (
         <React.Fragment>
             <MobileSidebar />
+            <AllServicesPanel />
             <div className="container h-100 d-flex justify-content-between flex-column">
                 {!supportedChain && (
                     <UnsupportedChain text="You're using unsupported chain. Please, switch either to Ethereum or Binance network." />
@@ -306,7 +308,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                         />
                     </SideBar>
                     <div className="col content-col dashboard-col">
-                        <Header />
+                        <Header section="deposit" />
                         <div className="mobile-menu-title d-block d-lg-none">Menu</div>
                         <div
                             className="d-flex d-lg-none gap-3 mt-2 mb-2 pb-3 mobile-menu"

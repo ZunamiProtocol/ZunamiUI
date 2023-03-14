@@ -52,6 +52,11 @@ export const poolsChartdata: { [key: string]: any } = {
         value: 0,
         icon: '/convex.svg',
     },
+    ALUSD_FRAXBP: {
+        title: 'Convex Finance - ALUSD/FRAXBP Pool',
+        value: 0,
+        icon: '/convex.svg',
+    },
     PUSD: {
         title: 'Convex finance - PUSD pool',
         value: 0,
@@ -68,6 +73,11 @@ export const poolsChartdata: { [key: string]: any } = {
         icon: '/convex.svg',
     },
     STAKE_DAO_MIM: {
+        title: 'Stake DAO - MIM pool',
+        value: 0,
+        icon: '/stake-dao.svg',
+    },
+    STAKE_DAO_MIM_V2: {
         title: 'Stake DAO - MIM pool',
         value: 0,
         icon: '/stake-dao.svg',

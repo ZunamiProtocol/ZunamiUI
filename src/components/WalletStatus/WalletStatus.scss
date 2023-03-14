@@ -139,7 +139,7 @@
 
     &__Icon {
         background: #eaeaea;
-        padding: 15px 30px;
+        padding: 15px 10px;
         border-radius: $border-radius;
         display: inline-flex;
         align-items: center;
@@ -147,7 +147,12 @@
         width: 80px;
         margin: 0 auto;
         cursor: pointer;
-        height: 34px;
+        height: 47px;
+
+        svg {
+            height: 24px;
+            width: 27px;
+        }
     }
 
     &__toggler {
