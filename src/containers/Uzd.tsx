@@ -560,7 +560,7 @@ export const Uzd = (): JSX.Element => {
                                                 and easier to withdraw using the Curve pool
                                             </div>
                                             <a
-                                                href="https://curve.exchange/#/ethereum/pools/factory-v2-218/swap"
+                                                href="https://curve.fi/#/ethereum/pools/factory-v2-284/deposit"
                                                 target="_blank"
                                                 rel="noreferrer"
                                                 className="zun-button"
@@ -1043,7 +1043,7 @@ export const Uzd = (): JSX.Element => {
                                                     </div>
                                                 </div>
                                                 <a
-                                                    href="https://curve.exchange/#/ethereum/pools/factory-v2-218/deposit"
+                                                    href="https://curve.fi/#/ethereum/pools/factory-v2-284/deposit"
                                                     className="zun-button"
                                                     target="_blank"
                                                     rel="noreferrer"
