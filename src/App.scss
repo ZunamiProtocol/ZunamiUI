@@ -582,6 +582,71 @@ body.dark {
         background: #1d1d1d !important;
     }
 
+    .pool-item,
+    .gray-block {
+        background: #1d1d1d !important;
+        
+        .name,
+        .subtitle {
+            color: #fff !important;
+        }
+    }
+
+    .panel {
+        background: #161616;   
+    }
+
+    .AnalyticsContainer {
+        h2,
+        .name,
+        .subtitle,
+        .value,
+        .gray-block,
+        .PieChart2 .PieChart__StratList .PieChart__StratList__Item a,
+        .panel,
+        .links a {
+            color: #fff !important;
+        }
+
+        .tbl {
+            color: #fff;
+            border-color: #383838;
+
+            > div {
+                border-color: #383838;
+            }
+        }
+
+        .uzd-logos {
+            svg:nth-child(2) {
+                path {
+                    fill: #fff;
+                }
+            }
+        }
+
+        .protocol-logos {
+            svg:nth-child(1) {
+                path {
+                    fill: #fff;
+                }
+            }
+        }
+
+        .risk-section {
+            .nav-link {
+                &.active {
+                    background: #161616;
+                }
+    
+                background: #161616;
+                border-color: transparent;
+                color: #fff;
+            }
+        }
+    }
+
+
     #MobileSidebar {
         background-color: #2a2a2a;
 
@@ -617,6 +682,39 @@ body.dark {
         color: #fff;
     }
 
+    .WalletStatus__Icon,
+    .WalletStatus__Connect {
+        background-color: #2a2a2a !important;
+    }
+
+    .WalletStatus__inner__network {
+        .network-eth {
+            path:nth-child(1) {
+                fill: #b4b4b4;
+            }
+
+            path:nth-child(2) {
+                fill: #e4e4e4;
+            }
+
+            path:nth-child(3) {
+                fill: #a4a4a4;
+            }
+
+            path:nth-child(4) {
+                fill: #bdbdbd;
+            }
+
+            path:nth-child(5) {
+                fill: #a4a4a4;
+            }
+
+            path:nth-child(6) {
+                fill: #bdbdbd;
+            }
+        }
+    }
+
     .WalletStatus {
         svg {
             path:nth-child(1) {
@@ -625,7 +723,7 @@ body.dark {
             }
 
             path:nth-child(3) {
-                fill: #3c3c3c;
+                fill: #646464;
                 stroke: transparent;
             }
 
@@ -865,7 +963,7 @@ body.dark {
 
     .popover-body {
         background-color: #3e3e3e;
-        color: #fff;;
+        color: #fff;
     }
 
     .popover-arrow::after {
@@ -883,7 +981,7 @@ body.dark {
         box-shadow: 0 0 5px #575757;
 
         .balance {
-            background: #1D1D1D;
+            background: #1d1d1d;
         }
 
         .popover-body {
@@ -954,6 +1052,63 @@ body.dark {
         filter: invert(1);
     }
 
+    .all-services-btn {
+        color: #fff;
+        border-color: #fff;
+    }
+
+    .all-services-panel {
+        background-color: #000;
+        color: #fff;
+
+        .law-links {
+            a {
+                background-color: #1d1d1d;
+                color: #fff;
+            }
+        }
+
+        .media-links {
+            a {
+                background: linear-gradient(53.71deg, #E3E5FA 15.83%, #FFFFFF 65.73%);
+            }
+        }
+
+        .about {
+            color: #828282;
+        }
+
+        .official-links {
+            a {
+                text-decoration-color: #C2C2C2;
+                
+                span {
+                    color: #C2C2C2;
+                }
+            }
+        }
+
+        
+    }
+
+    .audits {
+        a:nth-child(1) {
+            svg {
+                path:nth-child(3) {
+                    fill: #fff;
+                }
+            }
+        }
+
+        a:nth-child(2) {
+            svg {
+                path:nth-child(1) {
+                    fill: #fff;
+                }
+            }
+        }
+    }
+
     .SidebarColumn .Sidebar__Content__Data .profits .title,
     .Pendings .values .title,
     .ApyBar__counters .ApyBar__Counter__Title span {
@@ -1003,7 +1158,7 @@ body.dark {
     }
 
     .Sidebar__Header > svg path,
-    #MobileSidebar svg path {
+    #MobileSidebar > svg path {
         fill: #fff;
     }
 
@@ -1104,7 +1259,6 @@ body.dark {
     .deposit,
     .PieChart,
     .ApyBar,
-    .ApyBar__Counter,
     .card,
     .Deposit__RightBlock,
     .Form,
@@ -1144,12 +1298,33 @@ body.dark {
     }
 
     .WithdrawOptions__LiquidityBlock input[type='text'] {
-        border-color: #444444;
+        border-color: transparent;
+        background-color: #292929 !important;
     }
 
     .selector-wrapper,
-    #networks-selector .network-item .choose-btn {
+    #networks-selector .network-item .choose-btn,
+    .ApyBar__Counter,
+    .Counter__Title__Buttons > div {
         background: #1d1d1d;
+    }
+
+    .Counter__Title__Buttons > div {
+        background: #262626;
+    }
+
+    input[type='radio'] {
+        & + .fake-radio {
+            background: #515151 !important;
+        }
+
+        &:checked {
+            & + .fake-radio {
+                &::after {
+                    background-color: #fff !important;
+                }
+            }
+        }
     }
 
     .btn.btn-light {
@@ -1359,7 +1534,26 @@ body.dark {
 .carousel-indicators button {
     width: 7px !important;
     height: 7px !important;
-    border-radius: 100px !important;
+    border-radius: 100% !important;
+}
+
+.carousel-control-prev-icon {
+    background-image: url("data:image/svg+xml,%3Csvg width='13' height='13' viewBox='0 0 13 13' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M6.5 13C10.0898 13 13 10.0899 13 6.5C13 2.91015 10.0899 2.54413e-07 6.5 5.68248e-07C2.91015 -7.15916e-08 7.15914e-08 2.91015 -5.68248e-07 6.5C-2.54413e-07 10.0899 2.91015 13 6.5 13ZM7.83595 4.79911C8.09325 4.57397 8.11932 4.18288 7.89419 3.92558C7.66905 3.66828 7.27796 3.64221 7.02066 3.86735L4.54447 6.03401C4.41013 6.15156 4.33307 6.32138 4.33307 6.49989C4.33307 6.67841 4.41013 6.84823 4.54447 6.96578L7.02066 9.13244C7.27796 9.35758 7.66905 9.33151 7.89419 9.07421C8.11932 8.81691 8.09325 8.42582 7.83595 8.20068L5.8922 6.49989L7.83595 4.79911Z' fill='white' fill-opacity='1'/%3E%3C/svg%3E") !important;
+}
+
+.carousel-control-next-icon {
+    background-image: url("data:image/svg+xml,%3Csvg width='13' height='13' viewBox='0 0 13 13' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M6.5 1.1365e-06C2.91015 5.08827e-07 -5.08827e-07 2.91015 -1.1365e-06 6.5C-1.76417e-06 10.0899 2.91015 13 6.5 13C10.0898 13 13 10.0899 13 6.5C13 2.91015 10.0899 1.76417e-06 6.5 1.1365e-06ZM5.16404 8.20089C4.90675 8.42603 4.88067 8.81712 5.10581 9.07442C5.33095 9.33172 5.72204 9.35779 5.97934 9.13265L8.45553 6.96599C8.58987 6.84844 8.66693 6.67862 8.66693 6.50011C8.66693 6.3216 8.58987 6.15178 8.45553 6.03423L5.97934 3.86756C5.72204 3.64242 5.33095 3.6685 5.10581 3.92579C4.88067 4.18309 4.90675 4.57418 5.16405 4.79932L7.1078 6.50011L5.16404 8.20089Z' fill='white' fill-opacity='1'/%3E%3C/svg%3E%0A") !important;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    opacity: 0.71;
+    width: 15px !important;
+    height: 15px !important;
+
+    &:hover {
+        opacity: 1;
+    }
 }
 
 .features-slider {
@@ -1956,6 +2150,53 @@ body.dark {
             display: flex;
             cursor: pointer;
             gap: 5px;
+            position: relative;
+
+            > div {
+                background: #e4e4e4;
+                border-radius: 11px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                @media screen and (min-width: $media1024) {
+                    width: 20px;
+                    height: 18px;
+                }
+
+                @media screen and (min-width: $media1440) {
+                    width: 29px;
+                    height: 26px;
+                }
+
+                &:nth-child(1) {
+                    position: absolute;
+
+                    @media screen and (min-width: $media1024) {
+                        top: -2px;
+                        right: -10px;
+                    }
+
+                    @media screen and (min-width: $media1440) {
+                        top: -5px;
+                        right: -10px;
+                    }
+                }
+
+                &:nth-child(2) {
+                    position: absolute;
+
+                    @media screen and (min-width: $media1024) {
+                        top: 20px;
+                        right: -10px;
+                    }
+
+                    @media screen and (min-width: $media1440) {
+                        top: 24px;
+                        right: -10px;
+                    }
+                }
+            }
 
             img {
                 width: 12px;
@@ -2056,4 +2297,12 @@ body.dark {
 
 .vela-sans {
     font-family: 'Vela Sans Regular';
+}
+
+.value.text-success {
+    color: #c5f44e !important;
+}
+
+.notifications-popover {
+    margin-top: 10px;
 }

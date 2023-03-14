@@ -369,7 +369,7 @@
                 }
 
                 @media screen and (min-width: $media1440) {
-                    width: 339px;
+                    width: 404px;
                     font-size: 14px;
                 }
 
@@ -389,6 +389,8 @@
 
                 .right-part {
                     position: relative;
+                    display: flex;
+                    align-items: center;
                 }
 
                 .action {
@@ -437,7 +439,7 @@
                     }
 
                     @media screen and (min-width: $media1440) {
-                        width: 140px;
+                        width: 110px;
                         height: 42px;
                         font-size: 13px;
                         padding: 6px 12px;
@@ -446,18 +448,14 @@
                 }
 
                 .max {
-                    border-radius: 3px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     border: 1px solid #f95404;
                     color: #f95404;
                     cursor: pointer;
-                    position: absolute;
-                    right: 10px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    // display: none;
+                    border-radius: 20px;
+                    text-transform: uppercase;
 
                     &:hover {
                         background-color: #f95404;
@@ -476,13 +474,14 @@
                         line-height: 13px;
                         width: 35px;
                         height: 17px;
+                        margin-left: 10px;
                     }
 
                     @media screen and (min-width: $media1440) {
-                        font-size: 10px;
-                        line-height: 14px;
-                        width: 35px;
-                        height: 17px;
+                        font-size: 13px;
+                        line-height: 16px;
+                        width: 73px;
+                        height: 42px;
                     }
 
                     @media screen and (min-width: $media1920) {
@@ -514,6 +513,7 @@
                 }
 
                 @media screen and (min-width: $media1440) {
+                    margin-right: -75px;
                     width: 136px;
                 }
 
@@ -925,6 +925,7 @@
 
             @media screen and (min-width: $media1440) {
                 margin-top: 7px;
+                font-size: 16px;
             }
 
             @media screen and (min-width: $media1920) {

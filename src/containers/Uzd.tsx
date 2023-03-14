@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from '../components/Header/Header';
 import './Uzd.scss';
-import { Container, Toast, ToastContainer } from 'react-bootstrap';
+import { Toast, ToastContainer } from 'react-bootstrap';
 import { useWallet } from 'use-wallet';
-import { InfoBlock } from '../components/InfoBlock/InfoBlock';
 import useBalanceOf from '../hooks/useBalanceOf';
 import useUzdBalance from '../hooks/useUzdBalance';
 import useSushi from '../hooks/useSushi';
@@ -12,21 +11,21 @@ import useEagerConnect from '../hooks/useEagerConnect';
 import { BIG_TEN, BIG_ZERO, getBalanceNumber, UZD_DECIMALS } from '../utils/formatbalance';
 import useUzdLpPrice from '../hooks/useUzdLpPrice';
 import BigNumber from 'bignumber.js';
-import { getAllowance } from '../utils/erc20';
+import { getAllowance, getUzdAllowance } from '../utils/erc20';
 import { contractAddresses } from '../sushi/lib/constants';
-import { approve, getMasterChefContract } from '../sushi/utils';
+import { approve, APPROVE_SUM, getMasterChefContract } from '../sushi/utils';
 import { Preloader } from '../components/Preloader/Preloader';
 import { log } from '../utils/logger';
 import { SideBar, ZunamiInfo, ZunamiInfoFetch } from '../components/SideBar/SideBar';
-import { zunamiInfoUrl, curvePoolsApyUrl } from '../api/api';
+import { zunamiInfoUrl, curvePoolsApyUrl, getTransHistoryUrl } from '../api/api';
 import useFetch from 'react-fetch-hook';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
 import { UzdMigrationModal } from '../components/UzdMigrationModal/UzdMigrationModal';
 import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar';
 import { networks } from '../components/NetworkSelector/NetworkSelector';
-import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { TransactionHistory } from '../components/TransactionHistory/TransactionHistory';
 import { ActionSelector } from '../components/Form/ActionSelector/ActionSelector';
+import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
 
 interface CurvePoolInfo {
     apy: number;
@@ -102,12 +101,13 @@ export const Uzd = (): JSX.Element => {
     const masterChefContract = getMasterChefContract(sushi);
     const zlpBalance = useBalanceOf(undefined, true);
     const uzdBalance = useUzdBalance();
-    const deprecatedUzdBalance = useUzdBalance(contractAddresses.deprecated.v_1_0_uzd);
+    const deprecatedUzdBalance = useUzdBalance(contractAddresses.deprecated.v_1_1_uzd);
     const uzdTotalSupply = useUzdTotalSupply();
     const [zunLpValue, setZunLpValue] = useState('');
     const [uzdValue, setUzdValue] = useState('');
     const lpPrice = useUzdLpPrice();
     const [zlpAllowance, setZlpAllowance] = useState(BIG_ZERO);
+    const [uzdAllowance, setUzdAllowance] = useState(BIG_ZERO);
     const [pendingTx, setPendingTx] = useState(false);
     const [transactionError, setTransactionError] = useState(false);
     const [transactionId, setTransactionId] = useState<string | undefined>(undefined);
@@ -115,9 +115,7 @@ export const Uzd = (): JSX.Element => {
     const [ltvValue, setLtvValue] = useState('0');
     const [supportedChain, setSupportedChain] = useState(true);
     const [withdrawAll, setWithdrawAll] = useState(false);
-    const target = useRef(null);
-    const [showHint, setShowHint] = useState(false);
-    const hint = 'The new version of UZD v1.2 is coming soon…';
+    const [hideMigrationModal, setHideMigrationModal] = useState(false);
 
     const {
         isLoading,
@@ -163,6 +161,18 @@ export const Uzd = (): JSX.Element => {
             );
 
             setZlpAllowance(allowance);
+
+            const uzdAllowance = new BigNumber(
+                await getAllowance(
+                    ethereum,
+                    contractAddresses.uzd[1],
+                    sushi.contracts.uzdContract,
+                    // @ts-ignore
+                    account,
+                )
+            );
+
+            setUzdAllowance(uzdAllowance);
         };
 
         getZlpApprove();
@@ -209,9 +219,56 @@ export const Uzd = (): JSX.Element => {
     const [showMobileTransHistory, setShowMobileTransHistory] = useState(false);
     const [transHistoryPage, setTransHistoryPage] = useState(0);
 
+    useEffect(() => {
+        if (!account || transHistoryPage === -1) {
+            return;
+        }
+
+        const getTransactionHistory = async () => {
+            let mintResponse = await fetch(
+                getTransHistoryUrl(account, 'MINT', transHistoryPage, 100, chainId, 'UZD')
+            );
+
+            let redeemResponse = await fetch(
+                getTransHistoryUrl(account, 'REDEEM', transHistoryPage, 100, chainId, 'UZD')
+            );
+
+            let mintData = await mintResponse.json();
+            let redeemData = await redeemResponse.json();
+
+            mintData = mintData.uzdTransfers.map((item: any) => {
+                return {
+                    ...item,
+                    type: 'MINT',
+                    status: 'COMPLETED',
+                };
+            });
+
+            redeemData = redeemData.uzdTransfers.map((item: any) => {
+                return {
+                    ...item,
+                    type: 'REDEEM',
+                    status: 'COMPLETED',
+                };
+            });
+
+            const data = mintData.concat(redeemData);
+
+            if (!data.length) {
+                setTransHistoryPage(-1);
+                return;
+            }
+
+            setTransactionList(transactionList.concat(data));
+        };
+
+        getTransactionHistory();
+    }, [account, transHistoryPage, chainId]);
+
     return (
         <React.Fragment>
             <MobileSidebar />
+            <AllServicesPanel />
             <div className="container">
                 <div className="row main-row h-100 UzdContainer">
                     {!supportedChain && (
@@ -221,14 +278,15 @@ export const Uzd = (): JSX.Element => {
                         />
                     )}
                     <UzdMigrationModal
-                        show={showMigrationModal}
+                        show={showMigrationModal && !hideMigrationModal}
                         balance={deprecatedUzdBalance}
                         onHide={() => {
                             setShowMigrationModal(false);
+                            setHideMigrationModal(true);
                         }}
                     />
                     <SideBar isMainPage={false}>
-                    <div className="mobile-menu-title d-block d-lg-none">Menu</div>
+                        <div className="mobile-menu-title d-block d-lg-none">Menu</div>
                         <div
                             className="d-flex d-lg-none gap-3 mt-4 pb-3 mobile-menu"
                             style={{
@@ -270,7 +328,7 @@ export const Uzd = (): JSX.Element => {
                                 <span>Total UZD issued</span>
                             </div>
                             <div className="Counter__Value Counter__Value-Big Counter__Value-Active">
-                                <div>
+                                <div className="vela-sans">
                                     {Number(getFullDisplayBalance(uzdTotalSupply)).toLocaleString(
                                         'en',
                                         {
@@ -432,7 +490,7 @@ export const Uzd = (): JSX.Element => {
                         />
                     </SideBar>
                     <div className="col content-col dashboard-col">
-                        <Header />
+                    <Header section="uzd" />
                         <div className="UzdContainer__Actions">
                             <ToastContainer position={'top-end'} className={'toasts mt-3 me-3'}>
                                 {transactionError && (
@@ -502,7 +560,7 @@ export const Uzd = (): JSX.Element => {
                                                 and easier to withdraw using the Curve pool
                                             </div>
                                             <a
-                                                href="https://curve.fi/#/ethereum/pools/factory-v2-284/deposit"
+                                                href="https://curve.exchange/#/ethereum/pools/factory-v2-218/swap"
                                                 target="_blank"
                                                 rel="noreferrer"
                                                 className="zun-button"
@@ -677,9 +735,6 @@ export const Uzd = (): JSX.Element => {
                                                     </linearGradient>
                                                 </defs>
                                             </svg>
-                                            <span>
-                                                Tap to {mode === 'mint' ? 'Redeem' : 'Mint'}
-                                            </span>
                                         </div>
                                         <div className="s-coin">
                                             <div className="left-part">
@@ -688,87 +743,106 @@ export const Uzd = (): JSX.Element => {
                                                 </div>
                                                 <div className="coin d-flex align-item-center">
                                                     <span>UZD COIN</span>
-                                                    <svg className="ms-1" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <circle cx="8" cy="8" r="8" fill="url(#paint0_linear_120_10487)"/>
-                                                        <path d="M12.6216 9.16714L12.3903 8.76146C12.3663 8.71937 12.3335 8.68208 12.2939 8.65173C12.2542 8.62138 12.2085 8.59857 12.1593 8.58461C12.1102 8.57042 12.0585 8.56536 12.0072 8.56971C11.956 8.57406 11.9061 8.58773 11.8606 8.60994L9.70492 9.66152L8.67618 7.85692L10.2869 4.26314C10.3126 4.2064 10.3218 4.14444 10.3136 4.0834C10.311 4.03046 10.2959 3.9787 10.2693 3.93177L10.0381 3.5262C10.0141 3.4841 9.9813 3.44681 9.94167 3.41647C9.90203 3.38613 9.8563 3.36334 9.80711 3.3494C9.75797 3.33523 9.70627 3.33018 9.655 3.33451C9.60374 3.33885 9.55392 3.3525 9.50837 3.37468L6.858 4.66763L6.32307 3.72931C6.29906 3.68722 6.26628 3.64993 6.22665 3.61958C6.18702 3.58924 6.14131 3.56642 6.09212 3.55246C6.04299 3.53823 5.99129 3.53314 5.94002 3.53749C5.88874 3.54184 5.83891 3.55554 5.79339 3.5778L5.35493 3.79164C5.30943 3.81387 5.26912 3.84418 5.23631 3.88085C5.2035 3.91752 5.17884 3.95982 5.16375 4.00533C5.14841 4.05079 5.14292 4.0986 5.14761 4.14602C5.1523 4.19344 5.16708 4.23954 5.19108 4.28167L5.726 5.21982L4.20892 5.95987C4.16342 5.98206 4.1231 6.01235 4.0903 6.04901C4.0575 6.08566 4.03286 6.12795 4.01779 6.17344C4.00243 6.2189 3.99693 6.26673 4.00162 6.31416C4.00631 6.3616 4.0211 6.40771 4.04512 6.44984L4.27636 6.85541C4.30036 6.89751 4.33312 6.9348 4.37275 6.96514C4.41239 6.99548 4.45812 7.01828 4.50731 7.03221C4.55645 7.04639 4.60812 7.05146 4.65939 7.04712C4.71065 7.04279 4.7605 7.02912 4.80605 7.00693L6.32295 6.26693L7.26376 7.91724L5.56815 11.7003C5.54591 11.7523 5.53617 11.8082 5.53959 11.864C5.54319 11.9199 5.55989 11.9744 5.58853 12.0238C5.59413 12.0333 5.59843 12.0411 5.60284 12.049L5.84445 12.4731C5.86844 12.5152 5.90119 12.5525 5.94081 12.5829C5.98044 12.6132 6.02616 12.636 6.07534 12.6499C6.1131 12.6608 6.15242 12.6663 6.19196 12.6663C6.25544 12.6663 6.31795 12.652 6.37414 12.6247L9.16993 11.2608L9.49394 11.8291C9.51794 11.8712 9.5507 11.9085 9.59033 11.9389C9.62997 11.9692 9.67569 11.992 9.72489 12.0059C9.77403 12.0201 9.8257 12.0252 9.87697 12.0209C9.92823 12.0165 9.97808 12.0029 10.0236 11.9807L10.4621 11.7668C10.5076 11.7445 10.5479 11.7142 10.5807 11.6776C10.6135 11.6409 10.6381 11.5986 10.6532 11.5531C10.6685 11.5077 10.674 11.4599 10.6693 11.4124C10.6646 11.365 10.6499 11.3189 10.6259 11.2768L10.3019 10.7086L12.4577 9.657C12.5032 9.63479 12.5435 9.60449 12.5763 9.56783C12.6092 9.53117 12.6338 9.48887 12.6489 9.44337C12.6642 9.39794 12.6697 9.35015 12.665 9.30274C12.6604 9.25534 12.6456 9.20926 12.6216 9.16714ZM7.45495 5.71474L8.47362 5.21786L7.90058 6.49636L7.45495 5.71474ZM8.57298 10.2137L7.35323 10.8087L8.03935 9.27774L8.57298 10.2137Z" fill="white"/>
+                                                    <svg
+                                                        className="ms-1"
+                                                        width="16"
+                                                        height="16"
+                                                        viewBox="0 0 16 16"
+                                                        fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                    >
+                                                        <circle
+                                                            cx="8"
+                                                            cy="8"
+                                                            r="8"
+                                                            fill="url(#paint0_linear_120_10487)"
+                                                        />
+                                                        <path
+                                                            d="M12.6216 9.16714L12.3903 8.76146C12.3663 8.71937 12.3335 8.68208 12.2939 8.65173C12.2542 8.62138 12.2085 8.59857 12.1593 8.58461C12.1102 8.57042 12.0585 8.56536 12.0072 8.56971C11.956 8.57406 11.9061 8.58773 11.8606 8.60994L9.70492 9.66152L8.67618 7.85692L10.2869 4.26314C10.3126 4.2064 10.3218 4.14444 10.3136 4.0834C10.311 4.03046 10.2959 3.9787 10.2693 3.93177L10.0381 3.5262C10.0141 3.4841 9.9813 3.44681 9.94167 3.41647C9.90203 3.38613 9.8563 3.36334 9.80711 3.3494C9.75797 3.33523 9.70627 3.33018 9.655 3.33451C9.60374 3.33885 9.55392 3.3525 9.50837 3.37468L6.858 4.66763L6.32307 3.72931C6.29906 3.68722 6.26628 3.64993 6.22665 3.61958C6.18702 3.58924 6.14131 3.56642 6.09212 3.55246C6.04299 3.53823 5.99129 3.53314 5.94002 3.53749C5.88874 3.54184 5.83891 3.55554 5.79339 3.5778L5.35493 3.79164C5.30943 3.81387 5.26912 3.84418 5.23631 3.88085C5.2035 3.91752 5.17884 3.95982 5.16375 4.00533C5.14841 4.05079 5.14292 4.0986 5.14761 4.14602C5.1523 4.19344 5.16708 4.23954 5.19108 4.28167L5.726 5.21982L4.20892 5.95987C4.16342 5.98206 4.1231 6.01235 4.0903 6.04901C4.0575 6.08566 4.03286 6.12795 4.01779 6.17344C4.00243 6.2189 3.99693 6.26673 4.00162 6.31416C4.00631 6.3616 4.0211 6.40771 4.04512 6.44984L4.27636 6.85541C4.30036 6.89751 4.33312 6.9348 4.37275 6.96514C4.41239 6.99548 4.45812 7.01828 4.50731 7.03221C4.55645 7.04639 4.60812 7.05146 4.65939 7.04712C4.71065 7.04279 4.7605 7.02912 4.80605 7.00693L6.32295 6.26693L7.26376 7.91724L5.56815 11.7003C5.54591 11.7523 5.53617 11.8082 5.53959 11.864C5.54319 11.9199 5.55989 11.9744 5.58853 12.0238C5.59413 12.0333 5.59843 12.0411 5.60284 12.049L5.84445 12.4731C5.86844 12.5152 5.90119 12.5525 5.94081 12.5829C5.98044 12.6132 6.02616 12.636 6.07534 12.6499C6.1131 12.6608 6.15242 12.6663 6.19196 12.6663C6.25544 12.6663 6.31795 12.652 6.37414 12.6247L9.16993 11.2608L9.49394 11.8291C9.51794 11.8712 9.5507 11.9085 9.59033 11.9389C9.62997 11.9692 9.67569 11.992 9.72489 12.0059C9.77403 12.0201 9.8257 12.0252 9.87697 12.0209C9.92823 12.0165 9.97808 12.0029 10.0236 11.9807L10.4621 11.7668C10.5076 11.7445 10.5479 11.7142 10.5807 11.6776C10.6135 11.6409 10.6381 11.5986 10.6532 11.5531C10.6685 11.5077 10.674 11.4599 10.6693 11.4124C10.6646 11.365 10.6499 11.3189 10.6259 11.2768L10.3019 10.7086L12.4577 9.657C12.5032 9.63479 12.5435 9.60449 12.5763 9.56783C12.6092 9.53117 12.6338 9.48887 12.6489 9.44337C12.6642 9.39794 12.6697 9.35015 12.665 9.30274C12.6604 9.25534 12.6456 9.20926 12.6216 9.16714ZM7.45495 5.71474L8.47362 5.21786L7.90058 6.49636L7.45495 5.71474ZM8.57298 10.2137L7.35323 10.8087L8.03935 9.27774L8.57298 10.2137Z"
+                                                            fill="white"
+                                                        />
                                                         <defs>
-                                                            <linearGradient id="paint0_linear_120_10487" x1="3" y1="13.6667" x2="15" y2="1" gradientUnits="userSpaceOnUse">
-                                                            <stop stopColor="#FB6E01"/>
-                                                            <stop offset="1" stopColor="#FF9D01"/>
+                                                            <linearGradient
+                                                                id="paint0_linear_120_10487"
+                                                                x1="3"
+                                                                y1="13.6667"
+                                                                x2="15"
+                                                                y2="1"
+                                                                gradientUnits="userSpaceOnUse"
+                                                            >
+                                                                <stop stopColor="#FB6E01" />
+                                                                <stop
+                                                                    offset="1"
+                                                                    stopColor="#FF9D01"
+                                                                />
                                                             </linearGradient>
                                                         </defs>
                                                     </svg>
-
                                                 </div>
                                             </div>
                                             <div className="right-part">
-                                                <div>
-                                                    <input
-                                                        type="text"
-                                                        value={uzdValue}
-                                                        onChange={(e) => {
-                                                            const inputVal =
-                                                                e.nativeEvent.target.value;
+                                                <input
+                                                    type="text"
+                                                    value={uzdValue}
+                                                    onChange={(e) => {
+                                                        const inputVal = e.nativeEvent.target.value;
 
-                                                            setUzdValue(inputVal);
-                                                            setWithdrawAll(false);
+                                                        setUzdValue(inputVal);
+                                                        setWithdrawAll(false);
 
-                                                            if (
-                                                                Number(inputVal) <= 0 ||
-                                                                isNaN(inputVal)
-                                                            ) {
-                                                                return;
-                                                            }
+                                                        if (
+                                                            Number(inputVal) <= 0 ||
+                                                            isNaN(inputVal)
+                                                        ) {
+                                                            return;
+                                                        }
 
-                                                            if (mode === 'mint') {
-                                                                setZunLpValue(
-                                                                    convertUzdToZlp(
-                                                                        new BigNumber(inputVal),
-                                                                        lpPrice
-                                                                    )
-                                                                        .toFixed(2)
-                                                                        .toString()
-                                                                );
-                                                            } else {
-                                                                setZunLpValue(
-                                                                    convertUzdToZlp(
-                                                                        new BigNumber(inputVal),
-                                                                        lpPrice
-                                                                    )
-                                                                        .toFixed(2)
-                                                                        .toString()
-                                                                );
-                                                            }
+                                                        if (mode === 'mint') {
+                                                            setZunLpValue(
+                                                                convertUzdToZlp(
+                                                                    new BigNumber(inputVal),
+                                                                    lpPrice
+                                                                )
+                                                                    .toFixed(2)
+                                                                    .toString()
+                                                            );
+                                                        } else {
+                                                            setZunLpValue(
+                                                                convertUzdToZlp(
+                                                                    new BigNumber(inputVal),
+                                                                    lpPrice
+                                                                )
+                                                                    .toFixed(2)
+                                                                    .toString()
+                                                            );
+                                                        }
+                                                    }}
+                                                />
+                                                {mode === 'redeem' && (
+                                                    <div
+                                                        className="max"
+                                                        onClick={() => {
+                                                            setUzdValue(
+                                                                formatBigNumberFull(uzdBalance)
+                                                            );
+
+                                                            setZunLpValue(
+                                                                convertUzdToZlp(
+                                                                    uzdBalance.dividedBy(
+                                                                        BIG_TEN.pow(UZD_DECIMALS)
+                                                                    ),
+                                                                    lpPrice
+                                                                )
+                                                                    .toFixed()
+                                                                    .toString()
+                                                            );
+
+                                                            setWithdrawAll(true);
                                                         }}
-                                                    />
-                                                    {mode === 'redeem' && (
-                                                        <div
-                                                            className="max"
-                                                            onClick={() => {
-                                                                setUzdValue(
-                                                                    formatBigNumberFull(uzdBalance)
-                                                                );
-
-                                                                setZunLpValue(
-                                                                    convertUzdToZlp(
-                                                                        uzdBalance.dividedBy(
-                                                                            BIG_TEN.pow(
-                                                                                UZD_DECIMALS
-                                                                            )
-                                                                        ),
-                                                                        lpPrice
-                                                                    )
-                                                                        .toFixed()
-                                                                        .toString()
-                                                                );
-
-                                                                setWithdrawAll(true);
-                                                            }}
-                                                        >
-                                                            max
-                                                        </div>
-                                                    )}
-                                                </div>
+                                                    >
+                                                        max
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -788,8 +862,10 @@ export const Uzd = (): JSX.Element => {
                                                             await approve(
                                                                 ethereum,
                                                                 contractAddresses.zunami[1],
-                                                                sushi.contracts.uzdContract,
-                                                                account
+                                                                sushi.getEthContract(),
+                                                                account,
+                                                                APPROVE_SUM,
+                                                                contractAddresses.uzd[1]
                                                             );
 
                                                             log('ZLP approved');
@@ -805,24 +881,77 @@ export const Uzd = (): JSX.Element => {
                                             </div>
                                         )}
                                         {zlpAllowance.toNumber() > 0 && mode === 'mint' && (
-                                            <div
-                                                ref={target}
-                                                onClick={() => setShowHint(!showHint)}
-                                            >
-                                                <OverlayTrigger
-                                                    placement="right"
-                                                    overlay={<Tooltip>{hint}</Tooltip>}
-                                                >
-                                                    <input
-                                                        type="button"
-                                                        className="zun-button"
-                                                        style={{ opacity: 0.5 }}
-                                                        value="Mint"
-                                                    />
-                                                </OverlayTrigger>
+                                            <input
+                                                type="button"
+                                                className={`zun-button ${
+                                                    depositDisabled ? 'disabled' : ''
+                                                }`}
+                                                value="Mint"
+                                                onClick={async () => {
+                                                    setPendingTx(true);
+
+                                                    const sum = new BigNumber(zunLpValue)
+                                                        .multipliedBy(BIG_TEN.pow(UZD_DECIMALS))
+                                                        .toString();
+
+                                                    log(
+                                                        `UZD contract (ETH): deposit('${sum}', '${account}')`
+                                                    );
+
+                                                    try {
+                                                        const tx =
+                                                            await sushi.contracts.uzdContract.methods
+                                                                .deposit(sum, account)
+                                                                .send({
+                                                                    from: account,
+                                                                });
+
+                                                        setTransactionId(tx.transactionHash);
+                                                    } catch (error: any) {
+                                                        setTransactionError(true);
+                                                        log(
+                                                            `❗️ Error while minting UZD: ${error.message}`
+                                                        );
+                                                    }
+
+                                                    setPendingTx(false);
+                                                }}
+                                            />
+                                        )}
+                                        {uzdAllowance.toNumber() === 0 && mode === 'redeem' && (
+                                            <div>
+                                                <input
+                                                    type="button"
+                                                    className={`zun-button ${
+                                                        pendingTx ? 'disabled' : ''
+                                                    }`}
+                                                    value="Approve UZD"
+                                                    onClick={async () => {
+                                                        setPendingTx(true);
+
+                                                        try {
+                                                            await approve(
+                                                                ethereum,
+                                                                contractAddresses.uzd[1],
+                                                                sushi.getEthContract(),
+                                                                account,
+                                                                APPROVE_SUM,
+                                                                contractAddresses.uzd[1]
+                                                            );
+
+                                                            log('ZLP approved');
+                                                        } catch (error: any) {
+                                                            log(
+                                                                `❗️ Error while approving ZLP: ${error.message}`
+                                                            );
+                                                        }
+
+                                                        setPendingTx(false);
+                                                    }}
+                                                />
                                             </div>
                                         )}
-                                        {zlpAllowance.toNumber() > 0 && mode === 'redeem' && (
+                                        {uzdAllowance.toNumber() > 0 && mode === 'redeem' && (
                                             <input
                                                 type="button"
                                                 className={`zun-button ${
@@ -914,7 +1043,7 @@ export const Uzd = (): JSX.Element => {
                                                     </div>
                                                 </div>
                                                 <a
-                                                    href="https://curve.fi/#/ethereum/pools/factory-v2-284/deposit"
+                                                    href="https://curve.exchange/#/ethereum/pools/factory-v2-218/deposit"
                                                     className="zun-button"
                                                     target="_blank"
                                                     rel="noreferrer"
@@ -955,42 +1084,6 @@ export const Uzd = (): JSX.Element => {
                                             </li>
                                         </ul>
                                     </div>
-
-                                    {/* <div>
-                                        <div className="d-flex protocol_fee">
-                                            <div>
-                                                <svg
-                                                    width="36"
-                                                    height="35"
-                                                    viewBox="0 0 36 35"
-                                                    fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <path
-                                                        d="M17.4498 1.1791e-05C27.1429 -0.0111169 35.0164 7.85685 35.0053 17.5499C34.9942 27.2263 27.1207 35.0609 17.3664 34.9996C7.73453 34.9384 0.0334921 27.1818 0.000106157 17.5555C-0.0332798 7.87354 7.81243 0.0111405 17.4498 1.1791e-05ZM12.1025 28.0331C12.097 28.0665 12.0914 28.1054 12.0914 28.1444C12.1526 29.274 12.9038 30.0474 14.0333 30.0808C14.3449 30.0919 14.6621 30.0585 14.9626 29.9862C17.5389 29.3964 19.6478 27.9163 21.7177 26.3749C22.0015 26.1635 22.0404 25.8519 21.9403 25.5292C21.7344 24.8893 21.1167 24.611 20.4657 24.906C19.9093 25.1619 19.3862 25.4679 18.8354 25.7295H18.8298C18.5182 25.8741 18.1788 25.5792 18.2678 25.2509C18.2678 25.2454 18.2678 25.2454 18.2678 25.2398C19.3417 21.5284 20.4268 17.817 21.5118 14.1112C21.8568 12.9315 21.2503 12.019 20.0317 11.8965C19.9148 11.8854 19.7924 11.891 19.6756 11.8965C18.329 11.9578 17.0715 12.325 15.8696 12.926C14.7456 13.4879 13.7329 14.2224 12.7814 15.0404C12.4475 15.3242 12.2973 15.7137 12.4253 16.1254C12.5477 16.5094 12.9316 16.5873 13.2933 16.6429C13.6717 16.6986 13.9888 16.5428 14.3171 16.387C14.651 16.2256 14.9848 16.0531 15.3298 15.9307C15.6247 15.8305 15.7082 15.9251 15.6414 16.2256C15.6136 16.3536 15.5747 16.4816 15.5357 16.6095C14.4507 20.1651 13.3601 23.7152 12.275 27.2708C12.2082 27.5156 12.1582 27.7771 12.1025 28.0331ZM19.5643 8.09611C19.5643 8.08498 19.5643 8.07385 19.5643 8.06273C19.5476 6.71059 19.1414 5.77579 18.0842 5.21935C16.7042 4.49043 15.0961 5.21379 14.7011 6.72172C14.5008 7.48404 14.5174 8.24635 14.7122 9.01423C14.957 9.99355 15.5635 10.6168 16.554 10.7837C17.5556 10.9506 18.418 10.6334 19.0079 9.77098C19.3862 9.20898 19.5365 8.56908 19.5643 8.09611Z"
-                                                        fill="#D5D5D5"
-                                                    />
-                                                </svg>
-                                            </div>
-                                            <div className="protocol_fee__text">
-                                                Protocol Takes no redemption fee. It will be
-                                                cheaper and easier to withdraw using the Curve
-                                                pool
-                                            </div>
-                                        </div>
-                                        <div className="text-center">
-                                            <a
-                                                href="https://curve.exchange/#/ethereum/pools/factory-v2-218/swap"
-                                                className="go-to-curve ms-auto me-auto"
-                                                target="_blank"
-                                                rel="noreferrer"
-                                            >
-                                                <img src="/curve-icon.svg" alt="" />
-                                                <span>Go to Curve</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                 */}
                                 </div>
                                 <TransactionHistory
                                     className={`d-block d-md-none flex-fill`}

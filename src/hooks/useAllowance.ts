@@ -17,11 +17,11 @@ import { log } from '../utils/logger';
 import { contractAddresses } from '../sushi/lib/constants';
 import { isBSC, isPLG } from '../utils/zunami';
 
-const useAllowance = (tokenAddress: string) => {
+const useAllowance = (tokenAddress: string, contract: Contract) => {
     const [allowance, setAllowance] = useState(BIG_ZERO);
     const { account, ethereum } = useWallet();
     const sushi = useSushi();
-    const masterChefContract = getMasterChefContract(sushi);
+    const masterChefContract = contract ? contract : getMasterChefContract(sushi);
 
     useEffect(() => {
         const fetchAllowance = async () => {

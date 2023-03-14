@@ -9,6 +9,7 @@ export const historicalApyUrl = `${root}/zunami/apy-chart`;
 export const testnetUrl = `${root}/feature`;
 export const totalIncomeUrl = `${root}/transfers/total-income`;
 export const transHistoryUrl = `${root}/transfers/history`;
+export const uzdTransHistoryUrl = `${root}/uzd/transfers/history`;
 
 export const curvePoolsApyUrl = 'https://api.curve.fi/api/getFactoryAPYs?version=2';
 
@@ -55,7 +56,8 @@ export const getTransHistoryUrl = (
     type: string,
     page: number = 0,
     size: number = 50,
-    chainId: number = 1
+    chainId: number = 1,
+    historyType: string,
 ): string => {
     let chain = 'ETH';
 
@@ -68,7 +70,11 @@ export const getTransHistoryUrl = (
             break;
     }
 
-    return `${transHistoryUrl}?address=${address.toLowerCase()}&type=${type}&page=${page}&size=${size}&chain=${chain}`;
+    const endpointUrl = historyType === 'DEPOSIT_WITHDRAW'
+        ? `${transHistoryUrl}?address=${address.toLowerCase()}&type=${type}&page=${page}&size=${size}&chain=${chain}`
+        : `${uzdTransHistoryUrl}?address=${address.toLowerCase()}&type=${type}&page=${page}&size=${size}`;
+
+    return endpointUrl;
 };
 
 export const getBackendSlippage = async (lpAmount: string, tokenIndex: number) => {

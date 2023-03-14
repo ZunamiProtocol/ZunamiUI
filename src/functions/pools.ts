@@ -1,4 +1,5 @@
 import { BigNumber } from 'bignumber.js';
+import { getBalanceNumber } from '../utils/formatbalance';
 
 export interface PoolInfo {
     pid: number;
@@ -92,11 +93,17 @@ export const poolsChartdata: { [key: string]: any } = {
 };
 
 export function poolInfoToChartElement(pool: PoolInfo, percent: BigNumber): ChartDataElement {
+    const percentFromTVL = new BigNumber(pool.tvlInZunami).dividedBy(percent).toNumber() * 100;
+    const tvlInUsd = Number(
+        (getBalanceNumber(new BigNumber(percent)).toNumber() / 100) * percentFromTVL
+    ).toFixed(0);
+
     return {
         ...poolsChartdata[pool.type],
         tvlInZunami: pool.tvlInZunami,
-        value: new BigNumber(pool.tvlInZunami).dividedBy(percent).toNumber() * 100,
-        link: `https://etherscan.io/address/${pool.address}`
+        value: percentFromTVL,
+        tvlInUsd,
+        link: `https://etherscan.io/address/${pool.address}`,
     };
 }
 
@@ -105,9 +112,11 @@ export function poolDataToChartData(poolData: Array<PoolInfo>, TVL: BigNumber) {
         .map((pool, index) => {
             return {
                 ...poolInfoToChartElement(pool, TVL),
+                type: pool.type,
+                address: pool.address,
                 color: colors[index],
-            }
+            };
         })
         .filter((el) => el.value > 0)
-        .sort((a, b) => a.tvlInZunami > b.tvlInZunami ? -1 : 1);
+        .sort((a, b) => (a.tvlInZunami > b.tvlInZunami ? -1 : 1));
 }

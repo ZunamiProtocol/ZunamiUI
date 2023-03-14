@@ -29,6 +29,7 @@ import { SideBar } from '../components/SideBar/SideBar';
 import { Pendings } from '../components/Pendings/Pendings';
 import usePendingOperations from '../hooks/usePendingOperations';
 import { InfoBar } from '../components/InfoBar/InfoBar';
+import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
 
 interface FinanceOperationsProps {
     operationName: string;
@@ -103,6 +104,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     const [showMobileTransHistory, setShowMobileTransHistory] = useState(false);
     const [transHistoryPage, setTransHistoryPage] = useState(0);
     const [slippage, setSlippage] = useState('');
+    const [loadingHistory, setLoadingHistory] = useState(false);
 
     // refetch transaction history if account/chain changes
     useEffect(() => {
@@ -240,7 +242,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
 
     // load transaction list
     useEffect(() => {
-        if (!account || transHistoryPage === -1) {
+        if (!account || transHistoryPage === -1 || loadingHistory) {
             return;
         }
 
@@ -250,8 +252,9 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     account,
                     props.operationName.toUpperCase(),
                     transHistoryPage,
-                    10,
-                    chainId
+                    50,
+                    chainId,
+                    'DEPOSIT_WITHDRAW'
                 )
             );
 
@@ -263,6 +266,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
             }
 
             setTransactionList(transactionList.concat(data.userTransfers));
+            setLoadingHistory(false);
         };
 
         getTransactionHistory();
@@ -279,6 +283,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     return (
         <React.Fragment>
             <MobileSidebar />
+            <AllServicesPanel />
             <div className="container h-100 d-flex justify-content-between flex-column">
                 {!supportedChain && (
                     <UnsupportedChain text="You're using unsupported chain. Please, switch either to Ethereum or Binance network." />
@@ -299,6 +304,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                             items={transactionList}
                             onPageEnd={() => {
                                 if (transHistoryPage !== -1) {
+                                    setLoadingHistory(true);
                                     setTransHistoryPage(transHistoryPage + 1);
                                 }
                             }}
@@ -306,7 +312,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                         />
                     </SideBar>
                     <div className="col content-col dashboard-col">
-                        <Header />
+                        <Header section="deposit" />
                         <div className="mobile-menu-title d-block d-lg-none">Menu</div>
                         <div
                             className="d-flex d-lg-none gap-3 mt-2 mb-2 pb-3 mobile-menu"

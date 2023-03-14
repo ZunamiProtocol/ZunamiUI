@@ -1,0 +1,120 @@
+@import 'src/variables';
+
+.all-services-panel {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: none;
+    background-color: #fff;
+    z-index: 111111;
+    padding: 20px 35px;
+
+    &.active {
+        display: block;
+    }
+
+    .fast-menu {
+        a {
+            position: relative;
+
+            span {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                color: #fff;
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 20px;
+                text-align: center;
+                width: 100%;
+            }
+        }
+    }
+
+    .law-links {
+        a {
+            background: #EBEBEB;
+            color: #000;
+            text-decoration: none;
+        }
+    }
+
+    .about {
+        font-size: 14px;
+        line-height: 138.1%;
+        width: 466px;
+    }
+}
+
+#sidebar-col.transparent {
+    background: none !important;
+
+    &::after {
+        background: none !important;
+    }
+}
+
+#nav-menu.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.official-links {
+    a {
+        font-size: 15px;
+        line-height: 19px;
+        text-underline-offset: 3px;
+        color: #444444;
+        text-decoration-color: #444444;
+
+        span {
+            margin-left: 5px;
+        }
+    }
+}
+
+.media-links {
+    a {
+        width: 244px;
+        height: 93px;
+        text-decoration: none;
+        color: #000;
+        border-radius: $border-radius;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 16px;
+        line-height: 20px;
+        padding-left: 30px;
+
+        &:nth-child(1) {
+            background: linear-gradient(55.16deg, #EEF4FF 21.38%, #F8F8F8 68.33%);
+        }
+
+        &:nth-child(2) {
+            background: linear-gradient(53.71deg, #E3E5FA 15.83%, #F9F9F9 65.73%);
+        }
+
+        &:nth-child(3) {
+            background: linear-gradient(50.03deg, #F4F4F4 21.18%, #F5F5F5 65.78%);
+        }
+
+        &:nth-child(4) {
+            background: linear-gradient(47.54deg, #EFFBFF 20.54%, #F7F7F7 70.21%);
+        }
+
+        .muted {
+            font-size: 14px;
+            line-height: 18px;
+            color: #4B4B4B;
+            margin-top: 3px;
+        }
+
+        svg {
+            margin-right: 10px;
+        }
+    }
+}

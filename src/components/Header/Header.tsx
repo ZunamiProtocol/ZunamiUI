@@ -41,7 +41,19 @@ export const Header = (): JSX.Element => {
     const logoVariant = document.body.classList.contains('dark') ? 'logo-dark.svg' : 'logo.svg';
     const [open, setOpen] = useState(false);
     const isOnline = useOnlineState();
-    const gasPrice = useGasPrice();
+    const { chainId, account } = useWallet();
+    const [gasPrice, setGasPrice] = useState('');
+    const [showServices, setShowServices] = useState(false);
+
+    useEffect(() => {
+        fetch(
+            'https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=UPPVCS8VTCCNT3T83BZ8H6YRE9WVDY6W2P'
+        )
+            .then((response) => response.json())
+            .then((data) => {
+                setGasPrice(Number(data.result.ProposeGasPrice));
+            });
+    }, []);
 
     return (
         <Navbar expand="lg" className={'Header'}>
@@ -84,32 +96,15 @@ export const Header = (): JSX.Element => {
 
                         <span className="ms-2">{gasPrice}</span>
                     </button>
-                    {/* <button className="btn btn-light btn-sm d-flex align-items-center">
-                        <svg
-                            width="14"
-                            height="15"
-                            viewBox="0 0 14 15"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                d="M3.65152 12.4473C2.81022 12.4456 1.96894 12.4439 1.12764 12.4421C0.805142 12.4413 0.522557 12.3431 0.294388 12.105C0.19546 12.002 0.118449 11.8799 0.0680223 11.7463C0.0175954 11.6126 -0.00520567 11.4701 0.000996377 11.3274C0.00719843 11.1847 0.0422888 11.0447 0.10412 10.9159C0.165952 10.7871 0.253251 10.6722 0.360747 10.5782C1.08955 9.94138 1.57314 9.15957 1.74838 8.2023C1.79375 7.9455 1.81843 7.68547 1.82216 7.42472C1.83309 6.87356 1.82463 6.32203 1.82569 5.77065C1.82965 3.70536 3.24363 1.97388 5.27006 1.56225C5.84039 1.44934 6.42808 1.45758 6.99502 1.58646C7.01162 1.59277 7.02753 1.60078 7.04248 1.61036C6.5291 2.89516 6.55776 4.16246 7.23885 5.37742C7.91758 6.58816 8.97429 7.28298 10.3382 7.52579C10.3612 7.71689 10.3783 7.90971 10.4085 8.10043C10.557 9.03564 10.9891 9.81915 11.685 10.458C11.8686 10.6265 12.0417 10.7985 12.1207 11.0451C12.3445 11.7432 11.8298 12.4368 11.0751 12.4412C10.248 12.446 9.42083 12.4423 8.5937 12.4425C8.56999 12.4425 8.54627 12.4447 8.52256 12.4458L3.65152 12.4473Z"
-                                fill="black"
-                            />
-                            <path
-                                d="M10.9529 6.34896C9.27019 6.3486 7.90484 4.98309 7.9087 3.30445C7.91187 2.49697 8.23519 1.72371 8.80773 1.1543C9.38028 0.584891 10.1553 0.265825 10.9628 0.267094C11.7678 0.270269 12.5389 0.591686 13.1079 1.16123C13.6769 1.73077 13.9975 2.50221 13.9998 3.30725C13.9998 3.70711 13.9209 4.10303 13.7676 4.47238C13.6144 4.84172 13.3899 5.17724 13.1069 5.45974C12.8239 5.74224 12.488 5.96618 12.1184 6.11876C11.7488 6.27134 11.3527 6.34957 10.9529 6.34896Z"
-                                fill="#FF8B02"
-                            />
-                            <path
-                                d="M3.65186 12.447L8.5229 12.4456C8.49244 13.6395 7.71194 14.582 6.55325 14.824C5.28063 15.0898 3.98918 14.2492 3.71224 12.9687C3.67541 12.7984 3.67118 12.6211 3.65186 12.447Z"
-                                fill="black"
-                            />
-                        </svg>
-                    </button> */}
                     <ThemeSwitcher />
-                    {/* <button type="button" className="btn btn-sm btn-outline-dark">
-                        All services
-                    </button> */}
+                    <button type="button" className="btn btn-sm btn-outline-dark all-services-btn" onClick={() => {
+                        setShowServices(!showServices);
+                        document.getElementById('all-services')?.classList.toggle('active');
+                        document.getElementById('sidebar-col')?.classList.toggle('transparent');
+                        document.getElementById('nav-menu')?.classList.toggle('hidden');
+                    }}>
+                        {showServices ? 'Back' : 'All services'}
+                    </button>
                 </div>
             </div>
         </Navbar>

@@ -173,3 +173,59 @@
         }
     }
 }
+
+.notifications-list {
+    width: 350px;
+    height: 350px;
+    overflow: hidden;
+    overflow-y: auto;
+
+    .notification {
+        display: flex;
+        border-bottom: solid 1px #e7e7e7;
+        padding: 20px 0;
+        flex-wrap: wrap;
+
+        .first-row,
+        .second-row {
+            width: 100%;
+            display: flex;
+
+            > div {
+                width: 50%;
+            }
+        }
+
+        .first-row {
+            font-size: 12px;
+            color: #636363;
+        }
+
+        .second-row {
+            font-size: 14px;
+            margin-top: 3px;
+
+            a {
+                color: #5b5959;
+            }
+        }
+
+        .status {
+            width: 5px;
+            height: 5px;
+            border-radius: 100%;
+
+            &.COMPLETED {
+                background-color: #85b900;
+            }
+
+            &.PENDING {
+                background-color: #ffb100;
+            }
+
+            &.REMOVED {
+                background-color: #f13308;
+            }
+        }
+    }
+}
