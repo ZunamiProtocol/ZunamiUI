@@ -573,9 +573,7 @@ export const Main = (): JSX.Element => {
                                                     />
                                                 </svg>
                                             </div>
-                                            <span className="description">
-                                                The first high-profitable stablecoin
-                                            </span>
+                                            <span className="description">The First-ever Aggregated Stablecoin</span>
                                         </a>
                                     </Carousel.Item>
                                     <Carousel.Item className="yeld">
