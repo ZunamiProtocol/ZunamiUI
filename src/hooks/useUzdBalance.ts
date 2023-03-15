@@ -29,7 +29,7 @@ const useUzdBalance = (address: string | undefined = undefined) => {
 
             const value = await contract.methods.balanceOf(account).call();
             if (value) {
-                log(`🔄 UZD Balance (contract ${contract.options.address}) set to ${value}`);
+                log(`🔄 UZD Balance (contract ${contract.options.address}) for wallet ${account} set to ${value}`);
                 setBalance(new BigNumber(value));
             }
         };
