@@ -42,6 +42,14 @@ export interface CurveInfoFetch {
     error: any;
 }
 
+interface iHistoryTransaction {
+    chain: string;
+    contractAddress: string;
+    dateTime: string;
+    transactionHash: string;
+    value: number;
+}
+
 function convertZlpToUzd(zlpAmount: BigNumber, lpPrice: BigNumber): BigNumber {
     return zlpAmount.multipliedBy(lpPrice);
 }
@@ -259,7 +267,17 @@ export const Uzd = (): JSX.Element => {
                 return;
             }
 
-            setTransactionList(transactionList.concat(data));
+            setTransactionList(
+                transactionList
+                .concat(data)
+                .sort((a: iHistoryTransaction, b: iHistoryTransaction | undefined) => {
+                    if (!b) {
+                        return 0;
+                    }
+
+                    return new Date(a.dateTime).getTime() > new Date(b.dateTime).getTime() ? -1 : 1;
+                })
+            );
         };
 
         getTransactionHistory();
