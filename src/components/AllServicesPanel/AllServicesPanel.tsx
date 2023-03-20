@@ -104,7 +104,7 @@ export const AllServicesPanel = (props: AllServicesPanelProps): JSX.Element => {
                             target="_blank"
                             rel="noreferrer"
                         >
-                            <span>DeFI Lama</span>
+                            <span>DefiLlama</span>
                         </a>
                         <a
                             href="https://www.dapp.com/app/zunami-protocol"
