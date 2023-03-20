@@ -10,6 +10,7 @@ import { PoolInfo, poolsChartdata } from '../../functions/pools';
 interface InfoBarProps {
     // onClick: any;
     slippage?: string | undefined;
+    section?: string;
 }
 
 interface ZunamiInfo {
@@ -45,7 +46,10 @@ export const InfoBar = (props: InfoBarProps): JSX.Element => {
         }
 
         const getDefaultPool = async () => {
-            const defaultPoolId = await contract.methods.defaultDepositPid().call();
+            const defaultPoolId =
+                props.section === 'withdraw'
+                    ? await contract.methods.defaultWithdrawPid().call()
+                    : await contract.methods.defaultDepositPid().call();
             const pool = poolStat.pools.filter((item) => item.pid === parseInt(defaultPoolId, 10));
 
             if (pool.length) {
@@ -56,7 +60,7 @@ export const InfoBar = (props: InfoBarProps): JSX.Element => {
         };
 
         getDefaultPool();
-    }, [chainId, account, contract.methods, poolStat]);
+    }, [chainId, account, contract.methods, poolStat, props.section]);
     return (
         <div className="card InfoBar">
             <div className="card-body">

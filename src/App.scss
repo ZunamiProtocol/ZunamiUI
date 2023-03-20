@@ -585,7 +585,7 @@ body.dark {
     .pool-item,
     .gray-block {
         background: #1d1d1d !important;
-        
+
         .name,
         .subtitle {
             color: #fff !important;
@@ -593,7 +593,7 @@ body.dark {
     }
 
     .panel {
-        background: #161616;   
+        background: #161616;
     }
 
     .AnalyticsContainer {
@@ -638,14 +638,13 @@ body.dark {
                 &.active {
                     background: #161616;
                 }
-    
+
                 background: #161616;
                 border-color: transparent;
                 color: #fff;
             }
         }
     }
-
 
     #MobileSidebar {
         background-color: #2a2a2a;
@@ -678,8 +677,12 @@ body.dark {
     }
 
     .UnsupportedChain__Content {
-        background: #2a2a2a;
+        background: #292929;
         color: #fff;
+
+        .NetworkSelector {
+            background-color: #313131;
+        }
     }
 
     .WalletStatus__Icon,
@@ -1070,7 +1073,7 @@ body.dark {
 
         .media-links {
             a {
-                background: linear-gradient(53.71deg, #E3E5FA 15.83%, #FFFFFF 65.73%);
+                background: linear-gradient(53.71deg, #e3e5fa 15.83%, #ffffff 65.73%);
             }
         }
 
@@ -1080,15 +1083,13 @@ body.dark {
 
         .official-links {
             a {
-                text-decoration-color: #C2C2C2;
-                
+                text-decoration-color: #c2c2c2;
+
                 span {
-                    color: #C2C2C2;
+                    color: #c2c2c2;
                 }
             }
         }
-
-        
     }
 
     .audits {

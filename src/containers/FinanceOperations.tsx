@@ -350,7 +350,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                 <span className="text-muted mt-2">DAO</span>
                             </a>
                         </div>
-                        <InfoBar slippage={slippage} />
+                        <InfoBar slippage={slippage} section={props.operationName} />
                         {!account && (
                             <Col className={'content-col'}>
                                 <WelcomeCarousel />
