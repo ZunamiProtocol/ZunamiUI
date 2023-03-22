@@ -85,7 +85,7 @@ export const TransactionHistory: React.FC<
             <div className="TransactionHistory__List" onScroll={onScroll}>
                 {items &&
                     items.map((item) => (
-                        <div className="TransactionHistory__List-Item" key={item.dateTime}>
+                        <div className="TransactionHistory__List-Item" key={`${item.dateTime}_${item.value}`}>
                             <div className="first-row">
                                 <span className="type">{item.type}</span>
                                 <span className="date">
@@ -96,7 +96,7 @@ export const TransactionHistory: React.FC<
                                 <span className="sum">{`${
                                     item.value
                                         ? `${item.value.toFixed(2)} ${getIconFromTransaction(item)}`
-                                        : ''
+                                        : '0'
                                 }`}</span>
                                 <span className={`status ${item.status}`}>{item.status}</span>
                                 <a

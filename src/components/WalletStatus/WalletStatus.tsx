@@ -162,6 +162,7 @@ export const WalletStatus = (): JSX.Element => {
                                             const selectedValue = network.key;
 
                                             setActiveNetwork(network);
+                                            setOpen(!open);
 
                                             log(
                                                 `Network switch to ${selectedValue} (select onChange)`

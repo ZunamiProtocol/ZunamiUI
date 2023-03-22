@@ -43,7 +43,7 @@ export const UzdMigrationModal = (props: UzdMigrationModalProps): JSX.Element =>
             zunamiContract.defaultAccount = account;
 
             log(
-                `Calling withdrawAll('${account}', '${contractAddresses.deprecated.v_1_1_uzd}') on old USD contract`
+                `Calling withdrawAll('${account}', '${account}' of deprecated UZD contract ${zunamiContract.options.address}`
             );
 
             await zunamiContract.methods

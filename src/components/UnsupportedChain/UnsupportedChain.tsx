@@ -15,7 +15,7 @@ export const UnsupportedChain = (props: UnsupportedChainProps): JSX.Element => {
     return (
         <div className="UnsupportedChain">
             <div className="UnsupportedChain__Content">
-                <div>{props.text}</div>
+                <p>{props.text}</p>
                 <div className="mt-3 text-center">
                     <NetworkSelector
                         className="ms-0"
@@ -34,7 +34,7 @@ export const UnsupportedChain = (props: UnsupportedChainProps): JSX.Element => {
                                     params: [{ chainId: activeNetwork.key }],
                                 });
                             }}
-                            className="zun-button mt-3"
+                            className="zun-button"
                         >
                             Switch
                         </button>

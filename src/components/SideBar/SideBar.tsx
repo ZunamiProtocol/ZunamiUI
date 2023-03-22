@@ -98,6 +98,11 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                 totalIncomeBalance = totalIncomeBalance.plus(uzdBalance.dividedBy(lpPrice));
             }
 
+            if (totalIncomeBalance.toNumber() === 0) {
+                setTotalIncome('$0');
+                return;
+            }
+
             try {
                 const totalIncomeUrl = getTotalIncomeUrl(
                     account,

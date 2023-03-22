@@ -1,3 +1,5 @@
+@import 'src/variables';
+
 .UnsupportedChain {
     position: absolute;
     left: 0;
@@ -16,8 +18,6 @@
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        width: 400px;
-        height: 250px;
         z-index: 3;
         background: linear-gradient(180deg, #fff4e4 0%, #fff4e4 7.29%, #fff4e3 100%);
         display: flex;
@@ -25,12 +25,61 @@
         justify-content: center;
         flex-direction: column;
         padding: 10px;
-        border-radius: 10px;
+        border-radius: $border-radius;
         text-align: center;
-        border: solid 1px #00000012;
 
         .NetworkSelector {
             margin: 0 auto !important;
+            width: 281px;
+            height: 74px;
+            border-radius: 20px;
+            justify-content: flex-start;
+            padding-left: 23px;
+
+            > span {
+                font-size: 14px;
+                line-height: 18px;
+                width: 120px;
+                text-align: left;
+                margin-left: 14px;
+            }
+
+            > svg:first-child {
+                height: 34px;
+                width: auto;
+            }
+
+            &__Toggler {
+                margin-right: 23px;
+                margin-left: auto;
+            }
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 132%;
+            width: 70%;
+        }
+
+        .zun-button {
+            width: 144px;
+            height: 40px;
+            margin-top: 36px;
+        }
+
+        @media screen and (min-width: $media375) {
+            width: 100%;
+            height: 350px;
+
+            .NetworkSelector span,
+            .NetworkSelector svg {
+                display: block;
+            }
+        }
+
+        @media screen and (min-width: $media1024) {
+            width: 574px;
+            height: 368px;
         }
     }
 }

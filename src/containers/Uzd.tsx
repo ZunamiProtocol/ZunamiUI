@@ -42,6 +42,14 @@ export interface CurveInfoFetch {
     error: any;
 }
 
+interface iHistoryTransaction {
+    chain: string;
+    contractAddress: string;
+    dateTime: string;
+    transactionHash: string;
+    value: number;
+}
+
 function convertZlpToUzd(zlpAmount: BigNumber, lpPrice: BigNumber): BigNumber {
     return zlpAmount.multipliedBy(lpPrice);
 }
@@ -116,10 +124,7 @@ export const Uzd = (): JSX.Element => {
     const [ltvValue, setLtvValue] = useState('0');
     const [supportedChain, setSupportedChain] = useState(true);
     const [withdrawAll, setWithdrawAll] = useState(false);
-    // const target = useRef(null);
     const [hideMigrationModal, setHideMigrationModal] = useState(false);
-    // const [showHint, setShowHint] = useState(false);
-    // const hint = 'The new version of UZD v1.2 is coming soon…';
 
     const {
         isLoading,
@@ -264,7 +269,17 @@ export const Uzd = (): JSX.Element => {
                 return;
             }
 
-            setTransactionList(transactionList.concat(data));
+            setTransactionList(
+                transactionList
+                .concat(data)
+                .sort((a: iHistoryTransaction, b: iHistoryTransaction | undefined) => {
+                    if (!b) {
+                        return 0;
+                    }
+
+                    return new Date(a.dateTime).getTime() > new Date(b.dateTime).getTime() ? -1 : 1;
+                })
+            );
         };
 
         getTransactionHistory();
@@ -565,7 +580,7 @@ export const Uzd = (): JSX.Element => {
                                                 and easier to withdraw using the Curve pool
                                             </div>
                                             <a
-                                                href="https://curve.exchange/#/ethereum/pools/factory-v2-218/swap"
+                                                href="https://curve.fi/#/ethereum/pools/factory-v2-284/deposit"
                                                 target="_blank"
                                                 rel="noreferrer"
                                                 className="zun-button"
@@ -1060,7 +1075,7 @@ export const Uzd = (): JSX.Element => {
                                                     </div>
                                                 </div>
                                                 <a
-                                                    href="https://curve.exchange/#/ethereum/pools/factory-v2-218/deposit"
+                                                    href="https://curve.fi/#/ethereum/pools/factory-v2-284/deposit"
                                                     className="zun-button"
                                                     target="_blank"
                                                     rel="noreferrer"

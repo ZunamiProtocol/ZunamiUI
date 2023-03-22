@@ -8,12 +8,11 @@ import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 import { NavMenu } from './NavMenu/NavMenu';
 // import { NetworkSelector } from '../NetworkSelector/NetworkSelector';
 import { useWallet } from 'use-wallet';
-// import { isETH } from '../../utils/zunami';
 import { getTransHistoryUrl } from '../../api/api';
 import { format } from 'date-fns';
 import { log } from '../../utils/logger';
-// import Web3 from 'web3';
-// import useSushi from '../../hooks/useSushi';
+import { isETH } from '../../utils/zunami';
+import { useGasPrice } from '../../hooks/useGasPrice';
 
 function chainNameToTooltip(chainId: number) {
     if (chainId === 1 || !chainId) {
@@ -106,6 +105,7 @@ export const Header: React.FC<HeaderProps> = ({
     const isOnline = useOnlineState();
     const { chainId, account } = useWallet();
     const [gasPrice, setGasPrice] = useState('');
+
     const notificationsTarget = useRef(null);
     const [showServices, setShowServices] = useState(false);
 
@@ -120,8 +120,6 @@ export const Header: React.FC<HeaderProps> = ({
             <Popover.Body>{renderNotifications(notifications)}</Popover.Body>
         </Popover>
     );
-
-    // const sushi = useSushi();
 
     useEffect(() => {
         fetch(

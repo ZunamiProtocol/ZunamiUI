@@ -9,7 +9,7 @@ import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar
 import { BigNumber } from 'bignumber.js';
 import { BIG_ZERO, getBalanceNumber, getFullDisplayBalance } from '../utils/formatbalance';
 import { ReactComponent as FinIcon } from '../components/Form/deposit-withdraw.svg';
-import useLpPrice from '../hooks/useLpPrice';
+import useStratLpPrice from '../hooks/useStratLpPrice';
 import { useUserBalances } from '../hooks/useUserBalances';
 import { TransactionHistory } from '../components/TransactionHistory/TransactionHistory';
 import { getTransHistoryUrl, getBackendSlippage } from '../api/api';
@@ -80,7 +80,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
 
     useEagerConnect(account ? account : '', connect, ethereum);
 
-    const lpPrice = useLpPrice();
+    const lpPrice = useStratLpPrice();
     const balance = useBalanceOf().multipliedBy(lpPrice);
     const sushi = useSushi();
     const zunamiContract = getMasterChefContract(sushi);
@@ -104,6 +104,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     const [showMobileTransHistory, setShowMobileTransHistory] = useState(false);
     const [transHistoryPage, setTransHistoryPage] = useState(0);
     const [slippage, setSlippage] = useState('');
+    const [loadingHistory, setLoadingHistory] = useState(false);
 
     // refetch transaction history if account/chain changes
     useEffect(() => {
@@ -241,7 +242,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
 
     // load transaction list
     useEffect(() => {
-        if (!account || transHistoryPage === -1) {
+        if (!account || transHistoryPage === -1 || loadingHistory) {
             return;
         }
 
@@ -251,8 +252,9 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     account,
                     props.operationName.toUpperCase(),
                     transHistoryPage,
-                    10,
-                    chainId
+                    50,
+                    chainId,
+                    'DEPOSIT_WITHDRAW'
                 )
             );
 
@@ -264,6 +266,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
             }
 
             setTransactionList(transactionList.concat(data.userTransfers));
+            setLoadingHistory(false);
         };
 
         getTransactionHistory();
@@ -301,6 +304,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                             items={transactionList}
                             onPageEnd={() => {
                                 if (transHistoryPage !== -1) {
+                                    setLoadingHistory(true);
                                     setTransHistoryPage(transHistoryPage + 1);
                                 }
                             }}
@@ -346,7 +350,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                 <span className="text-muted mt-2">DAO</span>
                             </a>
                         </div>
-                        <InfoBar slippage={slippage} />
+                        <InfoBar slippage={slippage} section={props.operationName} />
                         {!account && (
                             <Col className={'content-col'}>
                                 <WelcomeCarousel />
