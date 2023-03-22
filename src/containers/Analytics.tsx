@@ -63,6 +63,7 @@ export const Analytics = (): JSX.Element => {
     useEffect(() => {
         if (chartData.length && !selectedStrat) {
             setSelectedStrat(chartData[0]);
+            // console.log(chartData[0]);
         }
     }, [chartData, selectedStrat]);
 
@@ -376,7 +377,7 @@ export const Analytics = (): JSX.Element => {
                                                         </div>
                                                         <div className="mt-3">
                                                             <button className="btn btn-secondary btn-sm">
-                                                                200
+                                                                {/* {selectedStrat.analytics.data.curveData.data.amplificationCoefficient} */}
                                                             </button>
                                                         </div>
                                                     </div>

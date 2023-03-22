@@ -246,6 +246,9 @@
                 font-size: 12px;
                 line-height: 15px;
                 color: #3a3a3a;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             .name {
