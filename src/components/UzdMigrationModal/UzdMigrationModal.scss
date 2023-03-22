@@ -7,10 +7,11 @@
         border-bottom: none !important;
         padding: 30px 30px 0 30px !important;
         border-radius: $border-radius;
-    
-        // .btn-close {
-        //     transform: translate(-15px, 15px);
-        // }
+
+        .btn-close {
+            height: 32px;
+            transform: none !important;
+        }
     }
 
     .modal-body {

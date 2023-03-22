@@ -2,7 +2,7 @@
 
 .modal-content,
 .modal-header {
-    background: linear-gradient(85.81deg, #F2F2F2 4.89%, #F2F2F2 88.71%) !important;
+    background: linear-gradient(85.81deg, #f2f2f2 4.89%, #f2f2f2 88.71%) !important;
 }
 
 .modal-header {
@@ -15,7 +15,7 @@
 }
 
 .BscMigrationModal {
-    background: #fffaf3;
+    // background: linear-gradient(80.09deg, #f8f8f8 10.29%, #f7f7f7 96.88%);
     border-radius: 5px;
     margin-left: auto;
     margin-right: auto;
@@ -37,7 +37,7 @@
 
     h3 {
         font-weight: 500;
-        font-size: 14px;
+        font-size: 16px;
         line-height: 23px;
         text-align: center;
         color: #636363;
@@ -45,8 +45,8 @@
 
     p {
         font-weight: 500;
-        font-size: 10px;
-        line-height: 138.1%;
+        font-size: 13px;
+        // line-height: 138.1%;
         text-align: center;
         color: #8c8c8c;
     }
