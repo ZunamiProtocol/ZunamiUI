@@ -139,14 +139,14 @@ export const Analytics = (): JSX.Element => {
                                                 Choose the pool to get more info
                                             </div>
                                             <div className="pools mt-3 gap-3">
-                                                {chartData.map((pool) => (
+                                                {chartData.map((pool, poolIndex) => (
                                                     <div
                                                         className={`pool-item d-flex ${
                                                             pool.type === selectedStrat?.type
                                                                 ? 'selected'
                                                                 : ''
                                                         }`}
-                                                        key={pool.title}
+                                                        key={poolIndex}
                                                         onClick={() => {
                                                             setSelectedStrat(pool);
                                                         }}
@@ -220,14 +220,14 @@ export const Analytics = (): JSX.Element => {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div>
+                                                    {/* <div>
                                                         <div className="subtitle">Volume</div>
                                                         <div>00000000</div>
-                                                    </div>
+                                                    </div> */}
                                                     <div>
-                                                        <div className="subtitle">TVL, $</div>
+                                                        <div className="subtitle">TVL</div>
                                                         <div>
-                                                            {Number(
+                                                            ${Number(
                                                                 selectedStrat.tvlInUsd
                                                             ).toLocaleString('en', {
                                                                 maximumFractionDigits: 0,
@@ -236,7 +236,7 @@ export const Analytics = (): JSX.Element => {
                                                     </div>
                                                     <div>
                                                         <div className="subtitle">Pool balance</div>
-                                                        <div>00000000</div>
+                                                        <div>${selectedStrat.analytics.curveData.data.usdTotal.toLocaleString('en', { maximumFractionDigits: 0 })}</div>
                                                     </div>
                                                     <div>
                                                         <div className="subtitle">
@@ -323,7 +323,7 @@ export const Analytics = (): JSX.Element => {
                                     {selectedStrat && (
                                         <div className="panel mt-4">
                                             <div className="row">
-                                                <div className="col-md-3">
+                                                <div className="col-md-4">
                                                     <div className="d-flex gap-3">
                                                         <div className="gray-block small-block">
                                                             {
@@ -332,14 +332,32 @@ export const Analytics = (): JSX.Element => {
                                                                     .split(' pool')[0]
                                                             }
                                                         </div>
-                                                        <div className="gray-block small-block align-items-start">
+                                                        <div className="gray-block small-block align-items-start disabled">
                                                             <div>$350 493</div>
                                                             <div>(50%)</div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="col-md-4">
-                                                    <div className="gray-block small-block align-items-start stablecoin mb-2">
+                                                    {
+                                                        selectedStrat.analytics.curveData.data.underlyingCoins.map((coin, coinIndex) => 
+                                                            <div className="gray-block small-block align-items-start stablecoin mb-2" key={coinIndex}>
+                                                                <div>
+                                                                    <img src={`https://cdn.jsdelivr.net/gh/curvefi/curve-assets/images/assets/${coin.address.toLowerCase()}.png`} alt="" />
+                                                                    <span className="name">{coin.symbol}</span>
+                                                                </div>
+                                                                <div className="vela-sans value">
+                                                                    {(getBalanceNumber(coin.poolBalance, coin.decimals).toFixed(2) * coin.usdPrice).toLocaleString('en', { maximumFractionDigits: 0 })}
+                                                                    <span> (
+                                                                        {
+                                                                            (getBalanceNumber(coin.poolBalance, coin.decimals).toFixed(0) / getBalanceNumber(selectedStrat.analytics.curveData.data.totalSupply).toFixed(0) * 100).toFixed(2)
+                                                                        }
+                                                                    %)</span>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
+                                                    {/* <div className="gray-block small-block align-items-start stablecoin mb-2">
                                                         <div>
                                                             <img src="/usdt.svg" alt="" />
                                                             <span className="name">USDT</span>
@@ -347,25 +365,7 @@ export const Analytics = (): JSX.Element => {
                                                         <div className="vela-sans value">
                                                             $100 000 (15%)
                                                         </div>
-                                                    </div>
-                                                    <div className="gray-block small-block align-items-start stablecoin mb-2">
-                                                        <div>
-                                                            <img src="/dai.svg" alt="" />
-                                                            <span className="name">DAI</span>
-                                                        </div>
-                                                        <div className="vela-sans value">
-                                                            $100 000 (15%)
-                                                        </div>
-                                                    </div>
-                                                    <div className="gray-block small-block align-items-start stablecoin">
-                                                        <div>
-                                                            <img src="/usdc.svg" alt="" />
-                                                            <span className="name">USDC</span>
-                                                        </div>
-                                                        <div className="vela-sans value">
-                                                            $100 000 (15%)
-                                                        </div>
-                                                    </div>
+                                                    </div> */}
                                                 </div>
                                                 <div className="col-md-4">
                                                     <div className="gray-block small-block align-items-start">
@@ -377,7 +377,7 @@ export const Analytics = (): JSX.Element => {
                                                         </div>
                                                         <div className="mt-3">
                                                             <button className="btn btn-secondary btn-sm">
-                                                                {/* {selectedStrat.analytics.data.curveData.data.amplificationCoefficient} */}
+                                                                {selectedStrat.analytics.curveData.data.amplificationCoefficient}
                                                             </button>
                                                         </div>
                                                     </div>
@@ -386,7 +386,7 @@ export const Analytics = (): JSX.Element => {
                                         </div>
                                     )}
                                     {selectedStrat && (
-                                        <div className="panel mt-4">
+                                        <div className="panel mt-4 disabled">
                                             <div className="d-flex gap-3">
                                                 <div className="gray-block small-block align-items-start">
                                                     <div>Current APR, %</div>
@@ -435,50 +435,35 @@ export const Analytics = (): JSX.Element => {
                                     )}
                                     {selectedStrat && (
                                         <div className="panel mt-4">
-                                            <div className="d-flex gap-3">
-                                                <div className="gray-block small-block align-items-start">
-                                                    <div>Last bribes amount</div>
-                                                    <div>000</div>
-                                                </div>
-                                                <div className="gray-block small-block align-items-start">
-                                                    <div>Amount, $</div>
-                                                    <div>000</div>
-                                                </div>
-                                                <div className="gray-block small-block align-items-start">
-                                                    <div>Token</div>
-                                                    <div>FXS</div>
-                                                </div>
-                                                <div className="gray-block small-block align-items-start">
-                                                    <div>Token</div>
-                                                    <div>APEFI</div>
-                                                </div>
-                                                <div className="gray-block small-block align-items-start">
-                                                    <div>Current weight, %</div>
-                                                    <div>34</div>
-                                                </div>
-                                            </div>
-                                            <div className="d-flex gap-3 mt-3">
-                                                <div className="gray-block small-block align-items-start">
-                                                    <div>Last bribes amount</div>
-                                                    <div>000</div>
-                                                </div>
-                                                <div className="gray-block small-block align-items-start">
-                                                    <div>Amount, $</div>
-                                                    <div>000</div>
-                                                </div>
-                                                <div className="gray-block small-block align-items-start">
-                                                    <div>Token</div>
-                                                    <div>FXS</div>
-                                                </div>
-                                                <div className="gray-block small-block align-items-start">
-                                                    <div>Token</div>
-                                                    <div>APEFI</div>
-                                                </div>
-                                                <div className="gray-block small-block align-items-start">
-                                                    <div>Current weight, %</div>
-                                                    <div>34</div>
-                                                </div>
-                                            </div>
+                                            {
+                                                selectedStrat.analytics.bribesData.votiumBribesData.map((bribeItem, bribeItemIndex) => {
+                                                    return (
+                                                        <div key={bribeItemIndex}>
+                                                            {
+                                                                bribeItem.bribes.map((bribe, bribeIndex) =>
+                                                                    <div className="d-flex gap-3 mb-3" key={bribeIndex}>
+                                                                        <div className="gray-block small-block align-items-start">
+                                                                            <div>Last bribes amount</div>
+                                                                            <div>{bribe.amount.toFixed(0)}</div>
+                                                                        </div>
+                                                                        <div className="gray-block small-block align-items-start">
+                                                                            <div>Amount, $</div>
+                                                                            <div>{bribe.amountDollars.toFixed(0)}</div>
+                                                                        </div>
+                                                                        <div className="gray-block small-block align-items-start">
+                                                                            <div>Token</div>
+                                                                            <div>{bribe.token}</div>
+                                                                        </div>
+                                                                        <div className="gray-block small-block align-items-start">
+                                                                            <div>Current weight, %</div>
+                                                                            <div>-</div>
+                                                                        </div>
+                                                                    </div>
+                                                            )}
+                                                        </div>
+                                                    );
+                                                })
+                                            }
                                         </div>
                                     )}
                                     <div className="row">

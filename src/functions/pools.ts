@@ -107,6 +107,7 @@ export function poolDataToChartData(poolData: Array<PoolInfo>, TVL: BigNumber) {
                 type: pool.type,
                 address: pool.address,
                 color: colors[index],
+                analytics: pool.analytics.data,
             };
         })
         .filter((el) => el.value > 0)
