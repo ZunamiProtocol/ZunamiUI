@@ -216,7 +216,7 @@ export const Uzd = (): JSX.Element => {
     const [showMigrationModal, setShowMigrationModal] = useState(false);
 
     useEffect(() => {
-        if (deprecatedUzdBalance.toNumber() > 0) {
+        if (deprecatedUzdBalance.dividedBy(BIG_TEN.pow(UZD_DECIMALS)).toNumber() >= 1) {
             setShowMigrationModal(true);
         } else {
             setShowMigrationModal(false);
