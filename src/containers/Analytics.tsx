@@ -18,6 +18,70 @@ interface PoolsStats {
     pools: Array<PoolInfo>;
 }
 
+function renderBribes(data, gaugeData) {
+    const lastRound = data.votiumBribesData[0]; // current bribe
+    const prevRound = data.votiumBribesData[1]; // last (previous) bribe
+    
+    lastRound.bribesAmount = lastRound.bribes.map(bribe => bribe.amount).reduce((a, b) => a + b, 0);
+    lastRound.bribesAmountUSD = lastRound.bribes.map(bribe => bribe.amountDollars).reduce((a, b) => a + b, 0);
+
+    prevRound.bribesAmount = prevRound.bribes.map(bribe => bribe.amount).reduce((a, b) => a + b, 0);
+    prevRound.bribesAmountUSD = prevRound.bribes.map(bribe => bribe.amountDollars).reduce((a, b) => a + b, 0);
+
+    return (
+        <div>
+            {
+                <div className="d-flex gap-3 mb-3">
+                    <div className="gray-block small-block align-items-start">
+                        <div style={{ width: '145px'}}>Last bribes amount</div>
+                        <div>{prevRound.bribesAmount.toFixed(0)}</div>
+                    </div>
+                    <div className="gray-block small-block align-items-start">
+                        <div>Amount, $</div>
+                        <div>{prevRound.bribesAmountUSD.toFixed(0)}</div>
+                    </div>
+                    {
+                        prevRound.bribes.map(bribe =>
+                            <div className="gray-block small-block align-items-start">
+                                <div>Token</div>
+                                <div>{bribe.token}</div>
+                            </div>
+                        )
+                    }
+                    <div className="gray-block small-block align-items-start">
+                        <div>Current weight, %</div>
+                        <div>-</div>
+                    </div>
+                </div>
+            }
+            {
+                <div className="d-flex gap-3 mb-3">
+                    <div className="gray-block small-block align-items-start">
+                        <div style={{ width: '145px'}}>Current bribes amount</div>
+                        <div>{lastRound.bribesAmount.toFixed(0)}</div>
+                    </div>
+                    <div className="gray-block small-block align-items-start">
+                        <div>Amount, $</div>
+                        <div>{lastRound.bribesAmountUSD.toFixed(0)}</div>
+                    </div>
+                    {
+                        lastRound.bribes.map(bribe =>
+                            <div className="gray-block small-block align-items-start">
+                                <div>Token</div>
+                                <div>{bribe.token}</div>
+                            </div>
+                        )
+                    }
+                    <div className="gray-block small-block align-items-start">
+                        <div>Future weight, %</div>
+                        <div>{gaugeData.crvGaugeWeightData.weight}</div>
+                    </div>
+                </div>
+            }
+        </div>
+    );
+}
+
 export const Analytics = (): JSX.Element => {
     const { account, connect, ethereum, chainId } = useWallet();
     useEagerConnect(account ? account : '', connect, ethereum);
@@ -435,35 +499,7 @@ export const Analytics = (): JSX.Element => {
                                     )}
                                     {selectedStrat && (
                                         <div className="panel mt-4">
-                                            {
-                                                selectedStrat.analytics.bribesData.votiumBribesData.map((bribeItem, bribeItemIndex) => {
-                                                    return (
-                                                        <div key={bribeItemIndex}>
-                                                            {
-                                                                bribeItem.bribes.map((bribe, bribeIndex) =>
-                                                                    <div className="d-flex gap-3 mb-3" key={bribeIndex}>
-                                                                        <div className="gray-block small-block align-items-start">
-                                                                            <div>Last bribes amount</div>
-                                                                            <div>{bribe.amount.toFixed(0)}</div>
-                                                                        </div>
-                                                                        <div className="gray-block small-block align-items-start">
-                                                                            <div>Amount, $</div>
-                                                                            <div>{bribe.amountDollars.toFixed(0)}</div>
-                                                                        </div>
-                                                                        <div className="gray-block small-block align-items-start">
-                                                                            <div>Token</div>
-                                                                            <div>{bribe.token}</div>
-                                                                        </div>
-                                                                        <div className="gray-block small-block align-items-start">
-                                                                            <div>Current weight, %</div>
-                                                                            <div>-</div>
-                                                                        </div>
-                                                                    </div>
-                                                            )}
-                                                        </div>
-                                                    );
-                                                })
-                                            }
+                                            {renderBribes(selectedStrat.analytics.bribesData, selectedStrat.analytics.gaugeData)}
                                         </div>
                                     )}
                                     <div className="row">
