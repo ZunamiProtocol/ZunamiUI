@@ -1,6 +1,26 @@
 @import 'src/variables';
 
 .WalletsModalWrapper {
+    @media screen and (min-width: $media375) {
+        .badge {
+            padding: 6px 12px;
+            font-size: 11px !important;
+            line-height: 14px;
+            text-align: center;
+            margin-top: 25px;
+        }
+    }
+
+    @media screen and (min-width: $media1024) {
+        .badge {
+            padding: 6px 12px;
+            font-size: 11px !important;
+            line-height: 14px;
+            text-align: center;
+            margin-top: 25px;
+        }
+    }
+
     @media screen and (min-width: $media1024) {
         .modal-dialog {
             min-width: 725px;
