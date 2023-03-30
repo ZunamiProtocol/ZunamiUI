@@ -103,6 +103,10 @@
 
     @media screen and (min-width: $media1440) {
         width: 498px;
+
+        &.Form-withdraw {
+            width: 465px;
+        }
     }
 
     @media screen and (min-width: $media1920) {

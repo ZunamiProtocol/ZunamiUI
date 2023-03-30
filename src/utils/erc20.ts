@@ -5,6 +5,7 @@ import { AbiItem } from 'web3-utils';
 import ERC20 from '../actions/abi/erc20.abi.json';
 import { contractAddresses } from '../sushi/lib/constants';
 import { log } from '../utils/logger';
+import { daiAddress, fraxAddress, usdcAddress, usdtAddress } from './formatbalance';
 
 export const getContract = (provider: Provider, address: string) => {
     const web3 = new Web3(provider);
@@ -43,10 +44,19 @@ export const getAllowance = async (
             .allowance(account, masterChefContract.options.address)
             .call();
 
-        log(`Executing  of contract ${lpContract.options.address} - allowance(${account}, ${masterChefContract.options.address})`);
-        log(`Allowance result: ${allowance}`);
+        let debugName = lpContract.options.address;
+
+        switch (debugName.toLowerCase()) {
+            case daiAddress.toLowerCase(): debugName = '(DAI)'; break;
+            case usdcAddress: debugName = '(USDC)'; break;
+            case usdtAddress: debugName = '(USDT)'; break;
+            case fraxAddress.toLowerCase(): debugName = '(FRAX)'; break;
+        }
+
+        log(`Executing of contract ${debugName} - allowance(${account}, ${masterChefContract.options.address}). Result: ${allowance}`);
         return allowance;
     } catch (e) {
+        debugger;
         return '0';
     }
 };
@@ -75,6 +85,31 @@ export const calcWithdrawOneCoin = async (
         sum = await contract.methods.calcWithdrawOneCoin(lpBalance, coinIndex).call();
     }
     log(`ETH contract (${contract.options.address}) - calcWithdrawOneCoin result ${sum}`);
+    return sum;
+};
+
+/**
+ * Calculates how many coins user will get in exchange to lp tokens
+ * @param zunamiContract contract
+ * @param lpBalance string Balance in LP tokens
+ * @returns string
+ */
+export const calcWithdrawOneCoinFrax = async (
+    lpBalance: string,
+    account: string | null
+): Promise<string> => {
+    const contract = sushi.getFraxContract();
+    contract.options.from = account;
+    log(`FRAX contract (${contract.options.address}) - calcWithdraw(${lpBalance}).`);
+    let sum: string = "Error";
+    try {
+        sum = await contract.methods.calcWithdraw(lpBalance).call();
+    } catch {
+        const whaleWalletAccount = "0xc288540f761179dfcf5e64514282463515839df4";
+        contract.options.from = whaleWalletAccount;
+        sum = await contract.methods.calcWithdraw(lpBalance).call();
+    }
+    log(`FRAX contract (${contract.options.address}) - calcWithdraw result ${sum}`);
     return sum;
 };
 

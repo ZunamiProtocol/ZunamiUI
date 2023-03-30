@@ -261,6 +261,26 @@ export const stakeBUSD = async (contract, account, busd) => {
 };
 
 /**
+ * Stake FRAX
+ * @param {*} contract
+ * @param {*} account
+ * @param {*} frax
+ * @returns
+ */
+export const stakeFRAX = async (contract, account, frax) => {
+    const depositSum = new BigNumber(frax).times(USDT_BSC_TOKEN_DECIMAL).toString();
+
+    log(`Exection [ZUN-FRAX]: deposit("${depositSum}", "0")`);
+
+    return contract.methods
+        .deposit(depositSum, '0')
+        .send({ from: account })
+        .on('transactionHash', (tx) => {
+            return tx.transactionHash;
+        });
+};
+
+/**
  * Withdraw function
  * @param Contract contract zunamiContract
  * @param string account Wallet address
@@ -289,6 +309,7 @@ export const unstake = async (
         new BigNumber(dai).times(DEFAULT_TOKEN_DECIMAL).toString(),
         new BigNumber(usdc).times(USDT_TOKEN_DECIMAL).toString(),
         usdtVal,
+
     ];
 
     if (optimized) {
@@ -354,4 +375,29 @@ export const unstake = async (
                 return transactionHash;
             });
     }
+};
+
+/**
+ * Withdraw function
+ * @param Contract contract zunamiContract
+ * @param string account Wallet address
+ * @param {*} lpShares
+ * @param boolean optimized Whether is should be an optimized withdraw (expensive) or not
+ * @param number coinIndex Index of coin (0 - DAI, 1 - USDC, 2 - USDT)
+ * @returns
+ */
+export const unstakeFrax = async (
+    fraxContract,
+    account,
+    lpShares,
+) => {
+    log(`FRAX contract: execution withdraw(${lpShares}, 0`);
+    const funcParams = { from: account };
+
+    return fraxContract.methods
+        .withdraw(lpShares, 0)
+        .send(funcParams)
+        .on('transactionHash', (transactionHash) => {
+            return transactionHash;
+        });
 };

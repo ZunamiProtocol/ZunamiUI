@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useWallet } from 'use-wallet';
 import useSushi from './useSushi';
-import { getMasterChefContract, unstake } from '../sushi/utils';
+import { getMasterChefContract, unstake, unstakeFrax } from '../sushi/utils';
 import BigNumber from 'bignumber.js';
 import { log } from '../utils/logger';
 
@@ -30,6 +30,16 @@ const useUnstake = (
         log(
             `Raw balance: ${balance.toString()}, percent (${sharePercent}) - ${balanceToWithdraw.toString()}`
         );
+
+        if (coinIndex === 3) {
+            let fraxContract = sushi.contracts.fraxContract;
+
+            return await unstakeFrax(
+                fraxContract,
+                account,
+                balanceToWithdraw,
+            );
+        }
 
         if (optimized) {
             return await unstake(

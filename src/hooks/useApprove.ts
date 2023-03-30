@@ -1,9 +1,11 @@
 import { useCallback } from 'react';
 import { useWallet } from 'use-wallet';
-import { approve, getMasterChefContract } from '../sushi/utils';
+import { APPROVE_SUM, approve, getMasterChefContract } from '../sushi/utils';
 import useSushi from './useSushi';
 import { getZunamiAddress, isPLG } from '../utils/zunami';
 import { log } from '../utils/logger';
+import { fraxAddress } from '../utils/formatbalance';
+import { contractAddresses } from '../sushi/lib/constants';
 
 const useApprove = () => {
     const { account, chainId, ethereum } = useWallet();
@@ -41,7 +43,24 @@ const useApprove = () => {
     const handleApprove = useCallback(
         async (tokenAddress: string) => {
             try {
-                const tx = await approve(ethereum, tokenAddress, masterChefContract, account);
+                let tx;
+                debugger;
+
+                if (tokenAddress === fraxAddress) {
+                    tx = await approve(
+                        ethereum,
+                        fraxAddress,
+                        sushi.getEthContract(),
+                        account,
+                        '10000000000000000000',
+                        contractAddresses.frax[1]
+                    );
+
+                    log('ZLP approved');
+                } else {
+                    tx = await approve(ethereum, tokenAddress, masterChefContract, account)
+                }
+
                 return tx;
             } catch (error: any) {
                 log(`❗️ Error while approving token: ${error.message}`)

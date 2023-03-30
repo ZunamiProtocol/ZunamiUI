@@ -1055,7 +1055,7 @@ export const Uzd = (): JSX.Element => {
                                                         {uzdCurvePool.apyFormatted} /{' '}
                                                         {isLoading
                                                             ? 'n/a'
-                                                            : `${zunamiInfo.curve.uzdRewardApr.toFixed(
+                                                            : `${zunamiInfo.curve.uzdRewardApy.toFixed(
                                                                   2
                                                               )}%`}
                                                     </div>

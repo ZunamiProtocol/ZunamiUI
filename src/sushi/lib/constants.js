@@ -24,6 +24,9 @@ export const contractAddresses = {
     uzd: {
         1: '0xb40b6608B2743E691C9B54DdBDEe7bf03cd79f1c',
     },
+    frax: {
+        1: '0x3D8aBC464D5313a576e78706aC97F79fe1EB0b61',
+    },
     deprecated: {
         v_1_0_bsc: '0x02a228D826Cbb1C0E8765A6DB6E7AB64EAA80BFD',
         v_1_1_bsc: '0xFEdcBA60B3842e3F9Ed8BC56De171da5426AF8CF',
