@@ -144,6 +144,23 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
                         <img src="/USDT.svg" alt="" />
                         <span>USDT</span>
                     </label>
+                    {isETH(props.chainId) && (
+                        <label
+                            className="coin"
+                            onClick={() => onCoinSelect('frax', props.onCoinSelect)}
+                        >
+                            <input
+                                type="radio"
+                                name="active-coin"
+                                data-coin="frax"
+                                checked={props.selectedCoin === 'frax'}
+                                onChange={() => {}}
+                            />
+                            <div className="fake-radio"></div>
+                            <img src="/FRAX.svg" alt="" />
+                            <span>FRAX</span>
+                        </label>
+                    )}
                 </div>
             </div>
             {props.slippage && (

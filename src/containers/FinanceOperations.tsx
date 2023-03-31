@@ -17,7 +17,7 @@ import useBalanceOf from '../hooks/useBalanceOf';
 import { useWallet } from 'use-wallet';
 import useEagerConnect from '../hooks/useEagerConnect';
 import { Contract } from 'web3-eth-contract';
-import { calcWithdrawOneCoin } from '../utils/erc20';
+import { calcWithdrawOneCoin, calcWithdrawOneCoinFrax } from '../utils/erc20';
 import useSushi from '../hooks/useSushi';
 import { getMasterChefContract } from '../sushi/utils';
 import { isBSC, isETH, isPLG } from '../utils/zunami';
@@ -63,7 +63,13 @@ const calculateStables = async (
     setError('');
 
     try {
-        result = await calcWithdrawOneCoin(balanceToWithdraw, coinIndex, account);
+        if (coinIndex !== 3) {
+            result = await calcWithdrawOneCoin(balanceToWithdraw, coinIndex, account);
+        } else {
+            // frax one coin withdraw
+            result = await calcWithdrawOneCoinFrax(balanceToWithdraw, account);
+        }
+        
     } catch (error: any) {
         setError(
             `Error: ${error.message}. Params - coinIndex: ${coinIndex}, lpShares: ${balanceToWithdraw}`
@@ -99,6 +105,8 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
     const [usdc, setUsdc] = useState('0');
     const [usdt, setUsdt] = useState('0');
     const [busd, setBusd] = useState('0');
+    const [frax, setFrax] = useState('0');
+
     const [calcError, setCalcError] = useState('');
     const [transactionList, setTransactionList] = useState([]);
     const [showMobileTransHistory, setShowMobileTransHistory] = useState(false);
@@ -146,6 +154,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
             setDai(oneThird);
             setUsdc(oneThird);
             setUsdt(oneThird);
+            setFrax('0');
 
             if (chainId === 56) {
                 setUsdt(getFullDisplayBalance(balance.multipliedBy(sharePercent / 100), 18));
@@ -180,6 +189,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
             setDai('0');
             setUsdc('0');
             setUsdt('0');
+            setFrax('0');
 
             const percentOfBalance = balance.multipliedBy(sharePercent / 100);
 
@@ -225,6 +235,16 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                 setSlippage(slippage);
 
                 log(`USDT slippage is ${slippage}`);
+            } else if (selectedCoinIndex === 3) {
+                const coinValue = getBalanceNumber(new BigNumber(stablesToWithdraw), 18)
+                    .toFixed(2, 1)
+                    .toString();
+                setFrax(coinValue);
+
+                // temp fix while backend is not ready
+                setSlippage('0');
+
+                log(`FRAX slippage is ${slippage}`);
             }
         };
 
@@ -389,6 +409,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                     usdc={usdc}
                                                     usdt={usdt}
                                                     busd={busd}
+                                                    frax={frax}
                                                     slippage={slippage}
                                                     onCoinChange={async (
                                                         coinType: string,
@@ -400,6 +421,12 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                             setUsdc(Number(coinValue).toString());
                                                         } else if (coinType === 'usdt') {
                                                             setUsdt(Number(coinValue).toString());
+                                                        } else if (coinType === 'frax') {
+                                                            setDai('0');
+                                                            setUsdc('0');
+                                                            setUsdt('0');
+                                                            setFrax(Number(coinValue).toString());
+                                                            setDirectOperation(true);
                                                         } else if (coinType === 'busd') {
                                                             setBusd(Number(coinValue).toString());
 
@@ -505,13 +532,14 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                                 setDai(oneThird);
                                                                 setUsdc(oneThird);
                                                                 setUsdt(oneThird);
+                                                                setFrax('0');
                                                                 setDirectOperation(false);
                                                                 setSlippage('');
                                                             } else {
                                                                 setDirectOperation(true);
                                                             }
 
-                                                            const coins = ['dai', 'usdc', 'usdt'];
+                                                            const coins = ['dai', 'usdc', 'usdt', 'frax'];
 
                                                             // -1 for "all"
                                                             setSelectedCoinIndex(

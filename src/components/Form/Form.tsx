@@ -12,6 +12,7 @@ import {
     bscUsdtAddress,
     busdAddress,
     plgUsdtAddress,
+    fraxAddress,
 } from '../../utils/formatbalance';
 import { useAllowanceStables } from '../../hooks/useAllowance';
 import { useUserBalances } from '../../hooks/useUserBalances';
@@ -50,12 +51,13 @@ const getDepositValidationError = (
     dai: String,
     usdc: String,
     usdt: String,
+    frax: String,
     isApproved: Boolean,
     depositExceedAmount: Boolean
 ) => {
     let error = '';
 
-    if (dai === '' && usdc === '' && usdt === '') {
+    if (dai === '' && usdc === '' && usdt === '' && frax === '') {
         error = 'Please, enter the amount of stablecoins to deposit';
     } else if (depositExceedAmount) {
         error = "You're trying to deposit more than you have";
@@ -131,10 +133,17 @@ export const Form = (props: FormProps): JSX.Element => {
         }
     };
 
+    const fraxInputHandler = (newValue: string) => {
+        if (props.onCoinChange) {
+            props.onCoinChange('frax', newValue);
+        }
+    };
+
     const [pendingDAI, setPendingDAI] = useState(false);
     const [pendingUSDC, setPendingUSDC] = useState(false);
     const [pendingUSDT, setPendingUSDT] = useState(false);
     const [pendingBUSD, setPendingBUSD] = useState(false);
+    const [pendingFRAX, setPendingFRAX] = useState(false);
     const [pendingGZLP, setPendingGZLP] = useState(false);
 
     // wrapped in useMemo to prevent lpShareToWithdraw hook deps change on every render
@@ -147,7 +156,8 @@ export const Form = (props: FormProps): JSX.Element => {
         (parseFloat(props.dai) || 0) +
         (parseFloat(props.usdc) || 0) +
         (parseFloat(props.usdt) || 0) +
-        (parseFloat(props.busd) || 0);
+        (parseFloat(props.busd) || 0) +
+        (parseFloat(props.frax) || 0);
     // user allowance
     const isApprovedTokens = useMemo(() => {
         return [
@@ -155,6 +165,7 @@ export const Form = (props: FormProps): JSX.Element => {
             approveList ? approveList[1].toNumber() > 0 : false,
             approveList ? approveList[2].toNumber() > 0 : false,
             approveList ? approveList[3].toNumber() > 0 : false,
+            approveList ? approveList[4].toNumber() > 0 : false,
         ];
     }, [approveList]);
 
@@ -172,6 +183,7 @@ export const Form = (props: FormProps): JSX.Element => {
         (userBalanceList && userBalanceList[1].toNumber() > 0 && userBalanceList[1]) || BIG_ZERO,
         (userBalanceList && userBalanceList[2].toNumber() > 0 && userBalanceList[2]) || BIG_ZERO,
         (userBalanceList && userBalanceList[3].toNumber() > 0 && userBalanceList[3]) || BIG_ZERO,
+        (userBalanceList && userBalanceList[4].toNumber() > 0 && userBalanceList[4]) || BIG_ZERO,
     ];
 
     // final array both for deposit and withdraw
@@ -180,6 +192,7 @@ export const Form = (props: FormProps): JSX.Element => {
         action === 'deposit' ? userMaxDeposit[1] : userMaxWithdrawMinusInput,
         action === 'deposit' ? userMaxDeposit[2] : userMaxWithdrawMinusInput,
         action === 'deposit' ? userMaxDeposit[3] : userMaxWithdrawMinusInput,
+        action === 'deposit' ? userMaxDeposit[4] : userMaxWithdrawMinusInput,
     ];
 
     // approves
@@ -228,6 +241,24 @@ export const Form = (props: FormProps): JSX.Element => {
 
         setPendingUSDT(false);
     }, [onApprove, chainId]);
+
+    const handleApproveFrax = useCallback(async () => {
+        setPendingFRAX(true);
+
+        try {
+            let address = fraxAddress;
+            const tx = onApprove(address);
+
+            if (!tx) {
+                setPendingFRAX(false);
+            }
+        } catch (e) {
+            setPendingFRAX(false);
+        }
+
+        setPendingFRAX(false);
+    }, [onApprove]);
+
     const handleApproveGzlp = useCallback(async () => {
         try {
             setPendingGZLP(true);
@@ -313,6 +344,10 @@ export const Form = (props: FormProps): JSX.Element => {
                 name: 'BUSD',
                 value: props.busd === '' ? '0' : props.busd,
             },
+            {
+                name: 'FRAX',
+                value: props.frax === '' ? '0' : props.frax,
+            },
         ],
         props.directOperation
     );
@@ -327,7 +362,7 @@ export const Form = (props: FormProps): JSX.Element => {
     // TODO: need detect canceled tx's by user
     const [transactionError, setTransactionError] = useState<TransactionError>();
     const emptyFunds = isETH(chainId)
-        ? !Number(props.dai) && !Number(props.usdc) && !Number(props.usdt)
+        ? !Number(props.dai) && !Number(props.usdc) && !Number(props.usdt) && !Number(props.frax)
         : !Number(props.usdt) && !Number(props.busd);
 
     const [isApproved, setIsApproved] = useState(false);
@@ -344,7 +379,10 @@ export const Form = (props: FormProps): JSX.Element => {
                         props.usdc === '') &&
                     ((parseFloat(props.usdt) > 0 && isApprovedTokens[2]) ||
                         props.usdt === '0' ||
-                        props.usdt === '')
+                        props.usdt === '') &&
+                    ((parseFloat(props.frax) > 0 && isApprovedTokens[4]) ||
+                        props.frax === '0' ||
+                        props.frax === '')
             );
         } else if (isBSC(chainId)) {
             let approveVal = false;
@@ -401,6 +439,7 @@ export const Form = (props: FormProps): JSX.Element => {
         props.dai,
         props.usdt,
         props.busd,
+        props.frax,
         isApprovedTokens,
     ]);
 
@@ -410,6 +449,7 @@ export const Form = (props: FormProps): JSX.Element => {
                   props.dai,
                   props.usdc,
                   props.usdt,
+                  props.frax,
                   isApproved,
                   depositExceedAmount
               )
@@ -428,7 +468,7 @@ export const Form = (props: FormProps): JSX.Element => {
 
     if (isETH(chainId)) {
         log(
-            `Approved stables status: DAI: ${isApprovedTokens[0].toString()}, USDT: ${isApprovedTokens[1].toString()}, USDC: ${isApprovedTokens[2].toString()}`
+            `Approved stables status: DAI: ${isApprovedTokens[0].toString()}, USDT: ${isApprovedTokens[1].toString()}, USDC: ${isApprovedTokens[2].toString()}, FRAX: ${isApprovedTokens[4].toString()}`
         );
     }
 
@@ -464,7 +504,7 @@ export const Form = (props: FormProps): JSX.Element => {
     }
 
     return (
-        <div className={'Form'}>
+        <div className={`Form Form-${props.operationName}`}>
             <ToastContainer position={'top-end'} className={'toasts mt-3 me-3'}>
                 {transactionError && (
                     <Toast onClose={() => setTransactionError(undefined)} delay={5000} autohide>
@@ -496,7 +536,8 @@ export const Form = (props: FormProps): JSX.Element => {
                     const totalSum =
                         parseInt(props.dai, 10) +
                         parseInt(props.usdc, 10) +
-                        parseInt(props.usdt, 10);
+                        parseInt(props.usdt, 10) +
+                        parseInt(props.frax, 10);
 
                     switch (action) {
                         case 'withdraw':
@@ -504,7 +545,6 @@ export const Form = (props: FormProps): JSX.Element => {
 
                             try {
                                 const tx = await onUnstake();
-
                                 setTransactionId(tx.transactionHash);
 
                                 // @ts-ignore
@@ -582,7 +622,7 @@ export const Form = (props: FormProps): JSX.Element => {
                             value={props.dai}
                             handler={daiInputHandler}
                             max={max[0]}
-                            disabled={action === 'withdraw'}
+                            disabled={action === 'withdraw' || (action === 'deposit' && Number(props.frax) > 0)}
                             chainId={chainId}
                         />
                     )}
@@ -593,7 +633,7 @@ export const Form = (props: FormProps): JSX.Element => {
                             value={props.usdc}
                             handler={usdcInputHandler}
                             max={max[1]}
-                            disabled={action === 'withdraw'}
+                            disabled={action === 'withdraw' || (action === 'deposit' && Number(props.frax) > 0)}
                             chainId={chainId}
                         />
                     )}
@@ -606,9 +646,23 @@ export const Form = (props: FormProps): JSX.Element => {
                         disabled={
                             action === 'withdraw' ||
                             (chainId === 56 && action === 'deposit' && Number(props.busd) > 0)
+                            || ((action === 'deposit' && Number(props.frax) > 0))
                         }
                         chainId={chainId}
                     />
+                    {chainId === 1 && (
+                        <Input
+                            action={action}
+                            name="FRAX"
+                            value={props.frax}
+                            handler={fraxInputHandler}
+                            max={max[4]}
+                            disabled={
+                                action === 'withdraw'
+                            }
+                            chainId={chainId}
+                        />
+                    )}
                     {chainId === 56 && action === 'deposit' && (
                         <Input
                             action={action}
@@ -668,6 +722,16 @@ export const Form = (props: FormProps): JSX.Element => {
                                     Approve BUSD{' '}
                                 </button>
                             )}
+                            {account && parseFloat(props.frax) > 0 && !isApprovedTokens[4] && (
+                                <button
+                                    disabled={pendingFRAX || depositExceedAmount}
+                                    onClick={handleApproveFrax}
+                                    type="button"
+                                    className="mb-2"
+                                >
+                                    Approve FRAX{' '}
+                                </button>
+                            )}
                             {account && (
                                 <div className="deposit-button-wrapper flex-wrap flex-column flex-md-row align-items-center">
                                     <button type="submit" disabled={cantDeposit}>
@@ -677,7 +741,7 @@ export const Form = (props: FormProps): JSX.Element => {
                                         <DirectAction
                                             actionName="deposit"
                                             checked={!props.directOperation}
-                                            disabled={chainId !== 1}
+                                            disabled={chainId !== 1 || parseFloat(props.frax) > 0}
                                             hint={`${
                                                 chainId === 1
                                                     ? 'When using optimized deposit funds will be deposited within 24 hours and many times cheaper'

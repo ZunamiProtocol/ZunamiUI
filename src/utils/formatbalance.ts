@@ -32,6 +32,7 @@ export function toFixed(number: number, digits: number = 2) {
 export const daiAddress = '0x6B175474E89094C44Da98b954EedeAC495271d0F';
 export const usdcAddress = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';
 export const usdtAddress = '0xdac17f958d2ee523a2206206994597c13d831ec7';
+export const fraxAddress = '0x853d955acef822db058eb8505911ed77f175b99e';
 // bsc
 export const bscUsdtAddress = '0x55d398326f99059ff775485246999027b3197955';
 export const busdAddress = '0xe9e7cea3dedca5984780bafc599bd69add087d56';

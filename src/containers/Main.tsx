@@ -201,6 +201,10 @@ export const Main = (): JSX.Element => {
 
             let totalIncomeBalance = activeBalance;
 
+            if (totalIncomeBalance.toNumber() === 0) {
+                return;
+            }
+
             try {
                 const totalIncomeUrl = getTotalIncomeUrl(
                     account,

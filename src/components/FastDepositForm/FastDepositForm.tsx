@@ -17,6 +17,7 @@ import {
     bscUsdtAddress,
     busdAddress,
     plgUsdtAddress,
+    fraxAddress,
 } from '../../utils/formatbalance';
 import { getFullDisplayBalance } from '../../utils/formatbalance';
 import { Link } from 'react-router-dom';
@@ -40,6 +41,9 @@ function coinNameToAddress(coinName: string, chainId: number): string {
             break;
         case 'BUSD':
             address = busdAddress;
+            break;
+        case 'FRAX':
+            address = fraxAddress;
             break;
     }
 
@@ -78,10 +82,11 @@ export const FastDepositForm = (): JSX.Element => {
         approveList ? approveList[1].toNumber() > 0 : false,
         approveList ? approveList[2].toNumber() > 0 : false,
         approveList ? approveList[3].toNumber() > 0 : false,
+        approveList ? approveList[4].toNumber() > 0 : false,
     ];
 
     const coins = useMemo(() => {
-        return ['DAI', 'USDC', 'USDT', 'BUSD'];
+        return ['DAI', 'USDC', 'USDT', 'BUSD', 'FRAX'];
     }, []);
 
     const { onApprove } = useApprove();
@@ -102,6 +107,10 @@ export const FastDepositForm = (): JSX.Element => {
             {
                 name: 'BUSD',
                 value: coin === 'BUSD' ? depositSum : '0',
+            },
+            {
+                name: 'FRAX',
+                value: coin === 'FRAX' ? depositSum : '0',
             },
         ],
         !optimized
@@ -129,7 +138,8 @@ export const FastDepositForm = (): JSX.Element => {
         if (isBSC(chainId)) {
             return getFullDisplayBalance(userBalanceList[coinIndex], 18);
         } else if (isETH(chainId)) {
-            return getFullDisplayBalance(userBalanceList[coinIndex], coin === 'DAI' ? 18 : 6);
+            const isDaiOrFrax = ['DAI', 'FRAX'].indexOf(coin) !== -1;
+            return getFullDisplayBalance(userBalanceList[coinIndex], isDaiOrFrax ? 18 : 6);
         } else if (isPLG(chainId)) {
             return getFullDisplayBalance(userBalanceList[coinIndex], coin === 'DAI' ? 18 : 6);
         }
@@ -247,7 +257,13 @@ export const FastDepositForm = (): JSX.Element => {
                 max={userBalanceList[coinIndex]}
                 onCoinChange={(coin: string) => {
                     setCoin(coin);
-                    setCoinIndex(['DAI', 'USDC', 'USDT', 'BUSD'].indexOf(coin));
+                    setCoinIndex(['DAI', 'USDC', 'USDT', 'BUSD', 'FRAX'].indexOf(coin));
+
+                    if (coin === 'FRAX') {
+                        setOptimized(false);
+                    } else {
+                        setOptimized(true);
+                    }
                 }}
                 chainId={chainId}
             />
@@ -273,7 +289,7 @@ export const FastDepositForm = (): JSX.Element => {
 
                                     try {
                                         await onApprove(coinNameToAddress(coin, chainId));
-                                        log('USDT approved!');
+                                        log(`${coin} approved!`);
                                     } catch (error: any) {
                                         log(`Error while approving ${coin}: ${error.message}`);
                                         setPendingApproval(false);
@@ -326,7 +342,7 @@ export const FastDepositForm = (): JSX.Element => {
                             <DirectAction
                                 actionName="deposit"
                                 checked={optimized}
-                                disabled={chainId !== 1 || false}
+                                disabled={chainId !== 1 || coinIndex === 4}
                                 hint={`${
                                     chainId === 1
                                         ? 'When using optimized deposit funds will be deposited within 24 hours and many times cheaper'

@@ -12,6 +12,7 @@ import {
     bscUsdtAddress,
     busdAddress,
     plgUsdtAddress,
+    fraxAddress,
 } from '../utils/formatbalance';
 import { log } from '../utils/logger';
 import { contractAddresses } from '../sushi/lib/constants';
@@ -48,7 +49,7 @@ const useAllowance = (tokenAddress: string, contract: Contract) => {
 export default useAllowance;
 
 export const useAllowanceStables = () => {
-    const [allowance, setAllowance] = useState([BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO]);
+    const [allowance, setAllowance] = useState([BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO]);
     const { account, ethereum, chainId } = useWallet();
     const sushi = useSushi();
 
@@ -56,6 +57,10 @@ export const useAllowanceStables = () => {
         const masterChefContract = getMasterChefContract(sushi);
 
         const fetchAllowanceStables = async () => {
+            if (!account) {
+                return;
+            }
+
             if (chainId === 1) {
                 masterChefContract.options.address = contractAddresses.zunami[1];
 
@@ -80,17 +85,27 @@ export const useAllowanceStables = () => {
                     // @ts-ignore
                     account
                 );
+                // debugger;
+                const allowanceFrax = await getAllowance(
+                    ethereum,
+                    fraxAddress,
+                    sushi.getFraxContract(account),
+                    // @ts-ignore
+                    account
+                );
                 const data = [
                     new BigNumber(allowanceDai),
                     new BigNumber(allowanceUsdc),
                     new BigNumber(allowanceUsdt),
                     BIG_ZERO,
+                    new BigNumber(allowanceFrax),
                 ];
                 // @ts-ignore
                 setAllowance(data);
-                log(`Allowan DAI: ${allowanceDai}`);
-                log(`Allowan USDC: ${allowanceUsdc}`);
-                log(`Allowan USDT: ${allowanceUsdt}`);
+                log(`Allowance DAI: ${allowanceDai}`);
+                log(`Allowance USDC: ${allowanceUsdc}`);
+                log(`Allowance USDT: ${allowanceUsdt}`);
+                log(`Allowance FRAX: ${allowanceFrax}`);
             } else if (isBSC(chainId)) {
                 const lpContract = getContract(
                     sushi.bscContracts.bscMasterChef.currentProvider,

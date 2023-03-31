@@ -28,6 +28,10 @@ export const Input = (props: InputProps): JSX.Element => {
             decimals = 18;
         }
 
+        if (props.name === 'FRAX') {
+            decimals = 18;
+        }
+
         return getFullDisplayBalance(props.max, decimals);
     }, [props.max, props.name, props.action, props.chainId]);
 
@@ -69,6 +73,7 @@ export const Input = (props: InputProps): JSX.Element => {
                     {props.chainId === 1 && <option value="USDC">USDC</option>}
                     {props.chainId === 56 && <option value="BUSD">BUSD</option>}
                     <option value="USDT">USDT</option>
+                    {props.chainId === 1 && <option value="FRAX">FRAX</option>}
                 </select>
             </div>
             <input

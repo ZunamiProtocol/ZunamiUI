@@ -44,6 +44,10 @@ export const Input = (props: InputProps): JSX.Element => {
             decimals = 6;
         }
 
+        if (props.name === 'FRAX') {
+            decimals = 18;
+        }
+
         return (
             Math.trunc(Number(getFullDisplayBalance(props.max, decimals)) * 100) / 100
         ).toString();

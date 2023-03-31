@@ -10,12 +10,13 @@ import {
     bscUsdtAddress,
     busdAddress,
     plgUsdtAddress,
+    fraxAddress,
 } from '../utils/formatbalance';
 import { log } from '../utils/logger';
 import { isBSC, isETH, isPLG } from '../utils/zunami';
 
 export const useUserBalances = () => {
-    const [balance, setbalance] = useState([BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO]);
+    const [balance, setbalance] = useState([BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO]);
     const { account, ethereum, chainId } = useWallet();
 
     useEffect(() => {
@@ -40,11 +41,18 @@ export const useUserBalances = () => {
                     // @ts-ignore
                     account
                 );
+                const balanceFrax = await getBalance(
+                    ethereum,
+                    fraxAddress,
+                    // @ts-ignore
+                    account
+                );
                 const data = [
                     new BigNumber(balanceDai),
                     new BigNumber(balanceUsdc),
                     new BigNumber(balanceUsdt),
                     BIG_ZERO,
+                    new BigNumber(balanceFrax),
                 ];
                 // @ts-ignore
                 setbalance(data);

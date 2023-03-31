@@ -10,6 +10,7 @@ export interface FormProps {
     usdc: string;
     usdt: string;
     busd: string;
+    frax: string;
     selectedCoinIndex: number;
     directOperationDisabled?: boolean;
     lpPrice: BigNumber;
