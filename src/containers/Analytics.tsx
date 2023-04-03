@@ -13,6 +13,7 @@ import BigNumber from 'bignumber.js';
 import { getBalanceNumber, toFixed } from '../utils/formatbalance';
 import { TwitterTimelineEmbed } from 'react-twitter-embed';
 import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
+import { format } from 'date-fns';
 
 interface PoolsStats {
     pools: Array<PoolInfo>;
@@ -86,6 +87,7 @@ export const Analytics = (): JSX.Element => {
     const { account, connect, ethereum, chainId } = useWallet();
     useEagerConnect(account ? account : '', connect, ethereum);
     const [selectedStrat, setSelectedStrat] = useState(null);
+    const [lastUpdateDt, setLastUpdateDt] = useState(new Date());
 
     const {
         isLoading: isZunLoading,
@@ -118,29 +120,6 @@ export const Analytics = (): JSX.Element => {
             }
         }) : [];
     }, [selectedStrat]);
-
-    // const collateralData = [
-    //     {
-    //         address: '0x9848EDb097Bee96459dFf7609fb582b80A8F8EfD',
-    //         color: '#FA6005',
-    //         link: 'https://etherscan.io/address/0x9848EDb097Bee96459dFf7609fb582b80A8F8EfD',
-    //         title: 'BTC',
-    //         tvlInUsd: '836755',
-    //         tvlInZunami: 8.367551075392854e23,
-    //         type: 'STAKE_DAO_MIM',
-    //         value: 92.09894980200251,
-    //     },
-    //     {
-    //         address: '0x9848EDb097Bee96459dFf7609fb582b80A8F8EfD',
-    //         color: '#159FFD',
-    //         link: 'https://etherscan.io/address/0x9848EDb097Bee96459dFf7609fb582b80A8F8EfD',
-    //         title: 'USDT',
-    //         tvlInUsd: '836755',
-    //         tvlInZunami: 8.367551075392854e23,
-    //         type: 'STAKE_DAO_MIM',
-    //         value: 92.09894980200251,
-    //     },
-    // ];
 
     useEffect(() => {
         if (chartData.length && !selectedStrat) {
@@ -202,12 +181,6 @@ export const Analytics = (): JSX.Element => {
                                 </div>
                             </div>
                         </div>
-                        {/* <div className="card InfoBar mt-3 strats-strats">
-                            <div className="card-body">
-                                <div className="title">Strategies</div>
-                                <div className="mt-4">QWE</div>
-                            </div>
-                        </div> */}
                     </SideBar>
                     <div className="col content-col dashboard-col">
                         <Header />
@@ -268,9 +241,12 @@ export const Analytics = (): JSX.Element => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="row">
-                                        <div className="col">
-                                            <h2 className="mt-5">Pool Info</h2>
+                                    <div className="row mt-5">
+                                        <div className="col d-flex align-items-center mb-2 justify-content-between">
+                                            <h2 className="mb-0">Pool Info</h2>
+                                            <div className="text-muted updated-at pull-right">
+                                                updated at {format(lastUpdateDt.getTime(), 'H:m')}
+                                            </div>
                                         </div>
                                     </div>
                                     {selectedStrat && (
@@ -301,10 +277,6 @@ export const Analytics = (): JSX.Element => {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    {/* <div>
-                                                        <div className="subtitle">Volume</div>
-                                                        <div>00000000</div>
-                                                    </div> */}
                                                     <div>
                                                         <div className="subtitle">TVL</div>
                                                         <div>
