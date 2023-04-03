@@ -1532,6 +1532,14 @@ body.dark {
     flex-wrap: wrap;
 }
 
+body.overflow {
+    .carousel {
+        pointer-events: none;
+        opacity: 0;
+        z-index: 0;
+    }
+}
+
 .carousel-indicators button {
     width: 7px !important;
     height: 7px !important;

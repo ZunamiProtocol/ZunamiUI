@@ -183,9 +183,17 @@
         }
 
         &.opened {
-            transform: translateX(70px);
-            width: 100px;
-            padding-right: 32px;
+            @media screen and (min-width: $media1024) {
+                transform: translateX(50px);
+                width: 70px;
+                padding-right: 18px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                transform: translateX(70px);
+                width: 100px;
+                padding-right: 32px;
+            }
         }
     }
 
@@ -335,6 +343,10 @@
             }
 
             @media screen and (min-width: $media1024) {
+                width: calc(50% - 10px);
+            }
+
+            @media screen and (min-width: $media1440) {
                 width: calc(50% - 40px);
             }
 
@@ -372,6 +384,7 @@
                 top: 20px;
                 bottom: 20px;
                 width: 90px;
+                pointer-events: none;
 
                 svg {
                     width: 100%;
