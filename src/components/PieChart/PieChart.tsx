@@ -14,6 +14,7 @@ interface DataItem {
 interface ChartProps {
     data: Array<DataItem>;
     hideSummary?: boolean;
+    hideList?: boolean;
 }
 
 function renderStratList(items: Array<DataItem>) {
@@ -72,7 +73,9 @@ export const PieChart2 = (props: ChartProps): JSX.Element => {
                     )}
                 </div>
             </div>
-            <div className={'PieChart__StratList'}>{renderStratList(props.data)}</div>
+            {!props.hideSummary && (
+                <div className={'PieChart__StratList'}>{renderStratList(props.data)}</div>
+            )}
         </div>
     );
 };

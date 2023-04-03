@@ -104,9 +104,10 @@ export function poolDataToChartData(poolData: Array<PoolInfo>, TVL: BigNumber) {
         .map((pool, index) => {
             return {
                 ...poolInfoToChartElement(pool, TVL),
-                type: pool.type,
-                address: pool.address,
+                // type: pool.type,
+                // address: pool.address,
                 color: colors[index],
+                ...pool,
                 analytics: pool.analytics.data,
             };
         })

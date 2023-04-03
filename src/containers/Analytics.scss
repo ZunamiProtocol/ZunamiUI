@@ -82,6 +82,9 @@
 
         a {
             color: #000;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 
@@ -174,8 +177,12 @@
     }
 
     .logos {
-        margin-top: 30px;
         width: 114px;
+
+        img {
+            width: 48px;
+            height: 48px;
+        }
     }
 
     .selected-strat {
