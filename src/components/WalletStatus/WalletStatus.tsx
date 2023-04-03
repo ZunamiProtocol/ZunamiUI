@@ -79,6 +79,7 @@ export const WalletStatus = (): JSX.Element => {
                                 document
                                     .getElementById('networks-selector')
                                     ?.classList.toggle('active');
+                                document.body.classList.toggle('overflow');
                             }}
                         >
                             Change network

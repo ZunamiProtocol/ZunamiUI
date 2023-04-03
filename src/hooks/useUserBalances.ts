@@ -76,6 +76,7 @@ export const useUserBalances = () => {
                     BIG_ZERO,
                     new BigNumber(usdtBalance),
                     new BigNumber(busdBalance),
+                    BIG_ZERO,
                 ]);
             } else if (isPLG(chainId)) {
                 const balanceUsdt = await getBalance(
@@ -88,6 +89,7 @@ export const useUserBalances = () => {
                     BIG_ZERO,
                     BIG_ZERO,
                     new BigNumber(balanceUsdt),
+                    BIG_ZERO,
                     BIG_ZERO,
                 ];
                 // @ts-ignore

@@ -35,7 +35,7 @@ export const InfoBar = (props: InfoBarProps): JSX.Element => {
     const { account, chainId } = useWallet();
     const { isLoading: isZunLoading, data: zunData } = useFetch(zunamiInfoUrl) as ZunamiInfoFetch;
     const zunamiInfo = zunData as ZunamiInfo;
-    const contract = sushi.getEthContract();
+    
     const { data: activeStratsStat } = useFetch(getActiveStratsUrl());
     const poolStat = activeStratsStat as PoolsStats;
     const [defaultPool, setDefautPool] = useState<PoolInfo>();
@@ -44,6 +44,8 @@ export const InfoBar = (props: InfoBarProps): JSX.Element => {
         if (!account || !chainId || !poolStat) {
             return;
         }
+
+        const contract = sushi.getEthContract();
 
         const getDefaultPool = async () => {
             const defaultPoolId =
@@ -60,7 +62,7 @@ export const InfoBar = (props: InfoBarProps): JSX.Element => {
         };
 
         getDefaultPool();
-    }, [chainId, account, contract.methods, poolStat, props.section]);
+    }, [chainId, account, poolStat, props.section, sushi]);
     return (
         <div className="card InfoBar">
             <div className="card-body">
