@@ -123,8 +123,8 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
                 >
                     <img src="/wallet-link.svg" alt="" />
                     <span className="name">Coinbase Wallet</span>
-                    {isEth && <span className="badge bg-secondary">only Ethereum</span>}
-                    <span className="connect">Connect</span>
+                    {isEth && <span className="badge bg-secondary">only ETH</span>}
+                    {!isEth && <span className="connect">Connect</span>}
                 </button>
                 <button
                     onClick={() => onConnect('walletconnect')}
@@ -134,8 +134,8 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
                 >
                     <img src="/zerion-wallet.svg" alt="" />
                     <span className="name">Zerion Wallet</span>
-                    {isEth && <span className="badge bg-secondary">only Ethereum</span>}
-                    <span className="connect">Connect</span>
+                    {isEth && <span className="badge bg-secondary">only ETH</span>}
+                    {!isEth && <span className="connect">Connect</span>}
                 </button>
             </Modal.Body>
         </Modal>

@@ -18,7 +18,7 @@
     }
 
     @media (min-width: $media1440) {
-        padding: 32px 37px;
+        padding: 32px 30px;
         margin-left: 23px;
         width: 368px;
     }
@@ -199,7 +199,7 @@
 
             @media screen and (min-width: $media1440) {
                 margin-top: 0;
-                width: 320px;
+                
             }
         }
 
@@ -269,14 +269,14 @@
                     width: 20px;
                     height: 20px;
                     margin-right: 7px;
-                    margin-left: 10px;
+                    margin-left: 34px;
                 }
 
                 @media screen and (min-width: $media1024) {
                     width: 17px;
                     height: 17px;
                     margin-right: 7px;
-                    margin-left: 10px;
+                    margin-left: 34px;
                 }
 
                 @media screen and (min-width: $media1440) {
@@ -290,7 +290,7 @@
                     width: 21px;
                     height: 21px;
                     margin-right: 7px;
-                    margin-left: 10px;
+                    margin-left: 34px;
                 }
             }
 
