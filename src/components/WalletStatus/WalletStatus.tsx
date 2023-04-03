@@ -99,6 +99,7 @@ export const WalletStatus = (): JSX.Element => {
                     onClick={() => {
                         setOpen(!open);
                         document.getElementById('networks-selector')?.classList.toggle('active');
+                        document.body.classList.toggle('overflow');
                     }}
                 >
                     {!open && (
@@ -141,6 +142,7 @@ export const WalletStatus = (): JSX.Element => {
                             document
                                 .getElementById('networks-selector')
                                 ?.classList.remove('active');
+                            document.body.classList.toggle('overflow');
                         }}
                     >
                         <img src="/exit.png" alt="" />
@@ -164,6 +166,7 @@ export const WalletStatus = (): JSX.Element => {
 
                                             setActiveNetwork(network);
                                             setOpen(!open);
+                                            document.body.classList.remove('overflow');
 
                                             log(
                                                 `Network switch to ${selectedValue} (select onChange)`
@@ -179,6 +182,7 @@ export const WalletStatus = (): JSX.Element => {
                                                     document
                                                         .getElementById('networks-selector')
                                                         ?.classList.remove('active');
+                                                    document.body.classList.remove('overflow');
                                                 } catch (e) {
                                                     let chainParams = {
                                                         chainId: '0x38',
