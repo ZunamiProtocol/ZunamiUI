@@ -717,7 +717,7 @@ export const Analytics = (): JSX.Element => {
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <div className="subtitle">Marketcap, $</div>
+                                                    <div className="subtitle text-nowrap">Marketcap, $</div>
                                                     <div className="vela-sans">
                                                         ${selectedStrat.analytics.coinsMarketData.stableCoin.marketCap.toLocaleString('en', { maximumFractionDigits: 0 })}
                                                     </div>

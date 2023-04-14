@@ -1,3 +1,5 @@
+@import 'src/variables';
+
 .supporters-bar {
     bottom: 0;
     right: 0;
@@ -26,7 +28,14 @@
 
     &[data-section="analytics"] {
         .supporters-links {
-            padding-right: 60px;
+            @media screen and (min-width: $media375) {
+                padding-right: 0px;
+                overflow-x: auto;
+            }
+
+            @media screen and (min-width: $media1024) {
+                padding-right: 60px;
+            }
         }
     }
     

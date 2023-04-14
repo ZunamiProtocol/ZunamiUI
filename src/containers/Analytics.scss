@@ -496,7 +496,7 @@
             align-items: center;
             justify-content: flex-start;
             gap: 10px;
-            width: 221px;
+            width: 210px;
             height: 66px;
             position: relative;
 
@@ -596,6 +596,7 @@
 
         @media screen and (min-width: $media1440) {
             width: auto;
+            min-width: 310px;
             margin-left: 1rem;            
         }
 
