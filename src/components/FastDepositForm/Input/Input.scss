@@ -13,7 +13,7 @@
         margin-bottom: 20px;
         margin-left: auto;
         margin-right: auto;
-        justify-content: center;
+        // justify-content: center;
     }
 
     @media screen and (min-width: $media1024) {
@@ -40,90 +40,90 @@
     @media screen and (min-width: $media1920) {
     }
 
-    .selector-wrapper {
-        background: #f0f0f0;
-        border-radius: $border-radius;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
+    // .selector-wrapper {
+    //     background: #f0f0f0;
+    //     border-radius: $border-radius;
+    //     display: flex;
+    //     align-items: center;
+    //     justify-content: center;
+    //     position: relative;
 
-        @media screen and (min-width: $media375) {
-            width: 164px;
-            height: 42px;
-            margin-bottom: 20px;
-        }
+    //     @media screen and (min-width: $media375) {
+    //         width: 164px;
+    //         height: 42px;
+    //         margin-bottom: 20px;
+    //     }
 
-        @media screen and (min-width: $media1024) {
-            width: 116px;
-            height: 30px;
-            margin-bottom: 0;
-        }
+    //     @media screen and (min-width: $media1024) {
+    //         width: 116px;
+    //         height: 30px;
+    //         margin-bottom: 0;
+    //     }
 
-        @media screen and (min-width: $media1440) {
-            width: 163px;
-            height: 42px;
-        }
+    //     @media screen and (min-width: $media1440) {
+    //         width: 163px;
+    //         height: 42px;
+    //     }
 
-        @media screen and (min-width: $media1920) {
-            width: 192px;
-            height: 49px;
-        }
+    //     @media screen and (min-width: $media1920) {
+    //         width: 192px;
+    //         height: 49px;
+    //     }
 
-        img {
-            @media screen and (min-width: $media375) {
-                width: 23px;
-                height: 23px;
-                margin-right: 8px;
-            }
+    //     img {
+    //         @media screen and (min-width: $media375) {
+    //             width: 23px;
+    //             height: 23px;
+    //             margin-right: 8px;
+    //         }
 
-            @media screen and (min-width: $media1024) {
-                width: 23px;
-                height: 23px;
-                margin-right: 8px;
-            }
+    //         @media screen and (min-width: $media1024) {
+    //             width: 23px;
+    //             height: 23px;
+    //             margin-right: 8px;
+    //         }
 
-            @media screen and (min-width: $media1440) {
-                width: 21px;
-                height: 21px;
-                margin-right: 16px;
-            }
+    //         @media screen and (min-width: $media1440) {
+    //             width: 21px;
+    //             height: 21px;
+    //             margin-right: 16px;
+    //         }
 
-            @media screen and (min-width: $media1920) {
-                width: 20px;
-                height: 20px;
-                margin-right: 8px;
-            }
-        }
+    //         @media screen and (min-width: $media1920) {
+    //             width: 20px;
+    //             height: 20px;
+    //             margin-right: 8px;
+    //         }
+    //     }
 
-        .coinName {
-            font-family: 'Space Grotesk';
+    //     .coinName {
+    //         font-family: 'Space Grotesk';
 
-            @media screen and (min-width: $media375) {
-                font-size: 14px;
-                line-height: 16px;
-                width: 45px;
-            }
+    //         @media screen and (min-width: $media375) {
+    //             font-size: 14px;
+    //             line-height: 16px;
+    //             width: 45px;
+    //         }
 
-            @media screen and (min-width: $media1024) {
-                font-size: 11px;
-                line-height: 15px;
-                width: 40px;
-            }
+    //         @media screen and (min-width: $media1024) {
+    //             font-size: 11px;
+    //             line-height: 15px;
+    //             width: 40px;
+    //         }
 
-            @media screen and (min-width: $media1440) {
-                font-size: 13px;
-                line-height: 17px;
-                width: 50px;
-            }
+    //         @media screen and (min-width: $media1440) {
+    //             font-size: 13px;
+    //             line-height: 17px;
+    //             width: 50px;
+    //         }
 
-            @media screen and (min-width: $media1920) {
-                font-size: 14px;
-                line-height: 18px;
-                width: 80px;
-            }
-        }
-    }
+    //         @media screen and (min-width: $media1920) {
+    //             font-size: 14px;
+    //             line-height: 18px;
+    //             width: 80px;
+    //         }
+    //     }
+    // }
 
     select {
         position: absolute;

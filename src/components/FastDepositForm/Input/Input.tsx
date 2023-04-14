@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import './Input.scss';
 import BigNumber from 'bignumber.js';
 import { getFullDisplayBalance } from '../../../utils/formatbalance';
+import { CoinSelector } from '../../CoinSelector/CoinSelector';
 
 interface InputProps {
     name: string;
@@ -48,7 +49,16 @@ export const Input = (props: InputProps): JSX.Element => {
     return (
         <div className={`FastDepositInput ${props.disabled ? 'disabled' : ''}`}>
             <div className="selector-wrapper">
-                <img src={`${props.name}.svg`} alt="" />
+                <CoinSelector
+                    name={props.name}
+                    chainId={props.chainId}
+                    onCoinSelect={(coinName) => {
+                        if (props.onCoinChange) {
+                            props.onCoinChange(coinName);
+                        }
+                    }}
+                />
+                {/* <img src={`${props.name}.svg`} alt="" />
                 <div className={'coinName'}>{props.name}</div>
                 <svg
                     width="14"
@@ -74,7 +84,7 @@ export const Input = (props: InputProps): JSX.Element => {
                     {props.chainId === 56 && <option value="BUSD">BUSD</option>}
                     <option value="USDT">USDT</option>
                     {props.chainId === 1 && <option value="FRAX">FRAX</option>}
-                </select>
+                </select> */}
             </div>
             <input
                 inputMode={'decimal'}

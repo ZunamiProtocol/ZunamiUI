@@ -30,6 +30,8 @@ import { Pendings } from '../components/Pendings/Pendings';
 import usePendingOperations from '../hooks/usePendingOperations';
 import { InfoBar } from '../components/InfoBar/InfoBar';
 import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
+import { SupportersBar } from '../components/SupportersBar/SupportersBar';
+import { WalletStatus } from '../components/WalletStatus/WalletStatus';
 
 interface FinanceOperationsProps {
     operationName: string;
@@ -310,6 +312,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                 )}
                 <div className="row main-row h-100">
                     <SideBar isMainPage={false}>
+                        <WalletStatus />
                         <Pendings
                             className={`d-none d-md-block`}
                             deposit={`$${getBalanceNumber(
@@ -361,6 +364,13 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                             >
                                 <img src="/uzd.png" alt="" />
                                 <span className="text-muted mt-2">UZD</span>
+                            </a>
+                            <a
+                                href="/analytics"
+                                className="text-center d-flex flex-column text-decoration-none"
+                            >
+                                <img src="/analytics.png" alt="" />
+                                <span className="text-muted mt-2">Analytics</span>
                             </a>
                             <a
                                 href="https://snapshot.org/#/zunamidao.eth"
@@ -568,7 +578,9 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                 />
                             </Col>
                         )}
+                        <SupportersBar section="deposit" />
                     </div>
+                    
                     <div
                         className="d-flex justify-content-center d-md-none text-center flex-column ps-3 pe-3"
                         style={{ width: '100%', padding: '35px', color: '#B3B3B3' }}
@@ -658,7 +670,9 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                         </div>
                     </div>
                 </div>
+                
             </div>
+            
         </React.Fragment>
     );
 };

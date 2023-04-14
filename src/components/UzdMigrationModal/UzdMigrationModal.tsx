@@ -81,7 +81,7 @@ export const UzdMigrationModal = (props: UzdMigrationModalProps): JSX.Element =>
             }}
         >
             <Modal.Header closeButton>
-                <Modal.Title></Modal.Title>
+                <Modal.Title>&nbsp;</Modal.Title>
             </Modal.Header>
             <Modal.Body className="d-flex gap-3 flex-column justify-content-center align-items-center BscMigrationModal">
                 <h3 className="text-center">It's time to migrate to Zunami UZD v1.2</h3>

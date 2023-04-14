@@ -19,15 +19,7 @@ export interface ChartDataElement {
     address: string;
 }
 
-const colors = [
-    '#FA6005',
-    '#FFD118',
-    '#FFC129',
-    '#2cd5db',
-    '#1C77F2',
-    '#323232',
-    '#5856d6',
-]
+const colors = ['#FC6505', '#12A0FE', '#8EEA19', '#2cd5db', '#1C77F2', '#323232', '#5856d6'];
 
 export const poolsChartdata: { [key: string]: any } = {
     DUSD: {
@@ -112,9 +104,11 @@ export function poolDataToChartData(poolData: Array<PoolInfo>, TVL: BigNumber) {
         .map((pool, index) => {
             return {
                 ...poolInfoToChartElement(pool, TVL),
-                type: pool.type,
-                address: pool.address,
+                // type: pool.type,
+                // address: pool.address,
                 color: colors[index],
+                ...pool,
+                analytics: pool.analytics.data,
             };
         })
         .filter((el) => el.value > 0)

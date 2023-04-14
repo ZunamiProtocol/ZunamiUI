@@ -29,6 +29,11 @@ export const NavMenu = (props: NavMenuProps): JSX.Element => {
             icon: <UzdIcon />,
         },
         {
+            title: 'Analytics',
+            urls: ['/analytics'],
+            icon: <UzdIcon />,
+        },
+        {
             title: 'DAO',
             urls: ['https://snapshot.org/#/zunamidao.eth'],
             icon: <DaoIcon />,

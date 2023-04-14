@@ -25,6 +25,10 @@ export const getFullDisplayBalance = (balance: BigNumber, decimals = 18) => {
  * @param digits
  */
 export function toFixed(number: number, digits: number = 2) {
+    if (!number) {
+        return 0;
+    }
+
     return Math.trunc(number * Math.pow(10, digits)) / Math.pow(10, digits);
 }
 

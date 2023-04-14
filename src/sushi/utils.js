@@ -106,6 +106,7 @@ export const approve = async (
     apprSum = ethers.constants.MaxUint256,
     spenderAddress = false
 ) => {
+    debugger;
     const lpContract = getContract(provider, tokenAddress);
     let sum = apprSum;
     const isZerionWallet = window.ethereum?.walletMeta?.name === 'Zerion';

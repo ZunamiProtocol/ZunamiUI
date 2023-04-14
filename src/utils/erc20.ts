@@ -40,6 +40,7 @@ export const getAllowance = async (
 ): Promise<string> => {
     const lpContract = getContract(provider, tokenAddress);
     try {
+        // debugger;
         const allowance: string = await lpContract.methods
             .allowance(account, masterChefContract.options.address)
             .call();

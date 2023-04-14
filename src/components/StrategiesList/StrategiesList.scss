@@ -1,0 +1,178 @@
+@import 'src/variables';
+
+.StrategiesList {
+    background: linear-gradient(71.9deg, #ebebeb 6.04%, #f1f1f1 84.37%);
+    border-radius: $border-radius;
+    padding: 20px 25px;
+    border-radius: $border-radius;
+
+    @media screen and (min-width: $media375) {
+        margin-top: 16px;
+        background: linear-gradient(67.75deg, #f3f3f3 25.38%, #f7f7f7 94.59%);
+        margin-bottom: 20px;
+    }
+
+    @media screen and (min-width: $media1024) {
+        margin-bottom: 0;
+        margin-top: 16px;
+        height: 250px;
+        background: linear-gradient(69.07deg, #f0f0f0 8.53%, #f2f2f2 91.72%);
+    }
+
+    @media screen and (min-width: $media1440) {
+        margin-top: 17px;
+        height: 280px;
+    }
+
+    @media screen and (min-width: $media1920) {
+    }
+
+    &__Title {
+        @media screen and (min-width: $media375) {
+            font-size: 14px;
+            line-height: 18px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            font-size: 11px;
+            line-height: 15px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-size: 13px;
+            line-height: 17px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            font-size: 14px;
+            line-height: 18px;
+        }
+    }
+
+    &__List {
+        height: calc(100% - 35px);
+        overflow: hidden;
+        overflow-y: auto;
+
+        @media screen and (min-width: $media375) {
+            margin-top: 18px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            margin-top: 18px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            margin-top: 20px;
+        }
+
+        &-Item {
+            background: #E2E2E2;
+            border-radius: $border-radius;
+
+            @media screen and (min-width: $media375) {
+                padding: 10px 15px;
+                margin-bottom: 20px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                margin-bottom: 9px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                margin-bottom: 12px;
+            }
+
+            .header {
+                font-size: 12px;
+                line-height: 14px;
+                align-items: center;
+                margin-bottom: 10px;
+
+                .title {
+                    font-weight: 700;
+                    font-size: 12px;
+                    line-height: 14px;
+                }
+
+                .desc {
+                    color: #3A3A3A;
+                }
+
+                .new-coin {
+                    margin: 3px 0 0 5px;
+
+                    .wrapper {
+                        margin: 0 0 0 0;
+    
+                        > img {
+                            width: 17px;
+                            height: 17px;
+                            transform: translateY(-2px);
+                        }
+    
+                        .coin {
+                            width: 11px;
+                            height: 11px;
+                            top: 10px;
+                            left: -3px;
+                            background: #D7D7D7;
+            
+                            &:nth-child(2) {
+                                left: 9px;
+                            }
+    
+                            > img,
+                            > svg {
+                                width: 8px;
+                                height: 8px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .props {
+                gap: 10px;
+                justify-content: stretch;
+
+                .block {
+                    background: #DADADA;
+                    border-radius: 13px;
+                    padding: 10px 15px;
+
+                    .title {
+                        font-size: 10px;
+                        line-height: 13px;
+                        color: #3A3A3A;
+                    }
+
+                    .value {
+                        font-family: 'Vela Sans Regular';
+                        font-weight: 600;
+                        font-size: 11px;
+                        line-height: 15px;
+                        color: #000;
+                    }
+                }
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    .empty {
+        font-size: 14px;
+        line-height: 18px;
+        text-align: center;
+        color: #B4B4B4;
+        width: 200px;
+        margin: 20px auto 0 auto;
+
+        svg {
+            margin-bottom: 20px;
+        }
+    }
+}

@@ -26,6 +26,8 @@ import { networks } from '../components/NetworkSelector/NetworkSelector';
 import { TransactionHistory } from '../components/TransactionHistory/TransactionHistory';
 import { ActionSelector } from '../components/Form/ActionSelector/ActionSelector';
 import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
+import { SupportersBar } from '../components/SupportersBar/SupportersBar';
+import { WalletStatus } from '../components/WalletStatus/WalletStatus';
 
 interface CurvePoolInfo {
     apy: number;
@@ -104,6 +106,7 @@ const addToken = async (
 };
 
 export const Uzd = (): JSX.Element => {
+    // const account = '0xe9b2b067ee106a6e518fb0552f3296d22b82b32b';
     const { account, connect, ethereum, chainId } = useWallet();
     const sushi = useSushi();
     const masterChefContract = getMasterChefContract(sushi);
@@ -159,6 +162,7 @@ export const Uzd = (): JSX.Element => {
 
         const getZlpApprove = async () => {
             const allowance = new BigNumber(
+                // await getUzdAllowance(
                 await getAllowance(
                     ethereum,
                     contractAddresses.zunami[1],
@@ -304,6 +308,7 @@ export const Uzd = (): JSX.Element => {
                         }}
                     />
                     <SideBar isMainPage={false}>
+                        <WalletStatus />
                         <div className="mobile-menu-title d-block d-lg-none">Menu</div>
                         <div
                             className="d-flex d-lg-none gap-3 mt-4 pb-3 mobile-menu"
@@ -332,6 +337,13 @@ export const Uzd = (): JSX.Element => {
                             >
                                 <img src="/uzd.png" alt="" />
                                 <span className="text-muted mt-2">UZD</span>
+                            </a>
+                            <a
+                                href="/analytics"
+                                className="text-center d-flex flex-column text-decoration-none"
+                            >
+                                <img src="/analytics.png" alt="" />
+                                <span className="text-muted mt-2">Analytics</span>
                             </a>
                             <a
                                 href="https://snapshot.org/#/zunamidao.eth"
@@ -1038,6 +1050,18 @@ export const Uzd = (): JSX.Element => {
 
                                         {pendingTx && <Preloader className="ms-2" />}
                                     </div>
+                                    {
+                                        mode === 'mint' &&
+                                            <div className="mt-3" style={{ fontSize: '12px' }}>
+                                                ZLP allowance: {zlpAllowance.toString()}
+                                            </div>
+                                    }
+                                    {
+                                        mode === 'redeem' &&
+                                            <div className="mt-3" style={{ fontSize: '12px' }}>
+                                                UZD allowance: {uzdAllowance.toString()}
+                                            </div>
+                                    }
                                 </div>
                                 <div className={`flex-fill card mint-card`}>
                                     <div className="card-body">
@@ -1116,7 +1140,9 @@ export const Uzd = (): JSX.Element => {
                                 />
                             </div>
                         </div>
+                        <SupportersBar section="uzd" />
                     </div>
+                    
                 </div>
             </div>
         </React.Fragment>

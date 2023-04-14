@@ -22,13 +22,8 @@ export const EthMergeWarningModal = (props: EthMergeWarningModalProps): JSX.Elem
             <Modal.Body className="d-flex gap-3 flex-column justify-content-center align-items-center">
                 <div className="content-area">
                     <div className="left-part">
-                        <h3>The Merge Ethereum<br />is taking place right now</h3>
-                        <p>The Zunami Protocol application has been suspended for the duration of the Merge. We will resume the protocol immediately after the Merge once we have ascertained the correct functioning of the system.</p>
-                        <p>During the suspension of the protocol, the following operations will be unavailable:</p>
-                        <div className="disabled-section">
-                            <DepositIcon />
-                            <span>Deposit & Withdraw</span>
-                        </div>
+                        <h3>Contract temporarily suspended</h3>
+                        <p>Deposits and withdrawals are temporarily suspended due to an attack on the protocol. Please stay tuned for updates.</p>
                     </div>
                     <div className="right-part">
                         <img className="shark" src="/zunami-merge.svg" alt="Merge is coming" />

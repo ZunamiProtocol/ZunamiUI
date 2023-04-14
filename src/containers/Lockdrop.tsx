@@ -9,6 +9,7 @@ import { useWallet } from 'use-wallet';
 import { HistoryTable } from '../components/HistoryTable/HistoryTable';
 import { LockedCoinInput } from '../components/Staking/LockedCoinInput/LockedCoinInput';
 import { UnclaimedGiftIcon } from '../components/UnclaimedGiftIcon/UnclaimedGiftIcon';
+import { WalletStatus } from '../components/WalletStatus/WalletStatus';
 
 /* Mock data for table */
 const historyItems = [
@@ -48,7 +49,11 @@ export const Lockdrop = (): JSX.Element => {
         <Container className={'h-100 d-flex justify-content-between flex-column'}>
             <Header />
             <Row className={'h-100 mb-4 main-row'}>
-                <SideBar isMainPage={true} />
+                <SideBar
+                    isMainPage={true}
+                >
+                    <WalletStatus />
+                </SideBar>
                 <Col className={'content-col'}>
                     <Row className={'h-100 operation-col'}>
                         <Col className={'ps-0 pe-0'}>

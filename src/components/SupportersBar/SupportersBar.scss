@@ -1,0 +1,70 @@
+.supporters-bar {
+    bottom: 0;
+    right: 0;
+    padding: 20px 0;
+
+    &[data-section="dashboard"] {
+        .supporters-links {
+            padding-right: 40px;
+        }
+    }
+    
+    &[data-section="deposit"] {
+        padding-top: 0;
+        position: absolute;
+
+        .supporters-links {
+            padding-right: 0;
+        }
+    }
+
+    &[data-section="uzd"] {
+        .supporters-links {
+            padding-right: 0;
+        }
+    }
+
+    &[data-section="analytics"] {
+        .supporters-links {
+            padding-right: 60px;
+        }
+    }
+    
+    .text-muted {
+        font-size: 12px;
+        margin-right: 20px;
+    }
+
+    .supporters-links {
+        display: flex;
+        gap: 10px;
+
+        a {
+            background: #F7F7F7;
+            padding: 8px 25px 8px 12px;
+            color: #999999;
+            text-decoration: none;
+            font-size: 12px;
+            line-height: 14px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: nowrap;
+            position: relative;
+            border-radius: 20px;
+
+            img {
+                opacity: .5;
+                height: 16px;
+                width: 16px;
+            }
+
+            svg {
+                position: absolute;
+                top: 8px;
+                right: 13px;
+                width: 6px;
+                height: 6px;
+            }
+        }
+    }
+}
