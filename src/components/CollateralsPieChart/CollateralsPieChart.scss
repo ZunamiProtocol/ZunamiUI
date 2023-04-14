@@ -1,21 +1,21 @@
 @import 'src/variables';
 
-.PieChart2 {
+.CollateralChart {
     position: relative;
 
     @media (min-width: $media375) {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         flex-wrap: wrap;
         align-items: center;
-        justify-content: space-evenly;
+        justify-content: flex-start;
     }
 
     @media (min-width: $media1024) {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        align-items: center;
+        align-items: flex-start;
     }
 
     &__Header {
@@ -45,31 +45,12 @@
     .PieChart__Tooltip {
         position: fixed;
         font-size: 12px;
-        text-align: left;
+        text-align: center;
         // width: 110%;
         bottom: auto;
-        background-color: #FFF;
+        background-color: #EBEBEB;
         padding: 10px;
         border-radius: 20px;
-
-        &:empty {
-            display: none;
-        }
-
-        .circle {
-            width: 6px;
-            height: 6px;
-            margin: 6px 10px 0 6px;
-            border-radius: 20px;
-        }
-
-        .platform {
-            font-weight: 600;
-        }
-
-        .pool {
-            opacity: .7;
-        }
     }
 
     .PieChartWrapper {
@@ -77,11 +58,12 @@
         display: flex;
         align-content: center;
         justify-content: center;
+
         margin-top: 30px;
         margin-bottom: 30px;
 
         @media (min-width: $media375) {
-            width: 82px;
+            width: 280px;
             margin-top: 30px;
         }
 
@@ -91,7 +73,7 @@
         }
 
         @media (min-width: $media1440) {
-            width: 110px;
+            width: 100px;
             margin-top: 16px;
         }
 
@@ -100,8 +82,8 @@
 
         .PieChart__Chart {
             @media (min-width: $media375) {
-                width: 82px;
-                height: 82px;
+                width: 280px;
+                height: 280px;
             }
 
             @media (min-width: $media1024) {
@@ -186,6 +168,15 @@
         }
     }
 
+    &__more {
+        border: none;
+        background-color: transparent;
+        font-size: 12px;
+        margin: 0 0 0 auto;
+        text-align: center;
+        width: 100%;
+    }
+
     .PieChart__StratList {
         @media (min-width: $media375) {
             margin-bottom: 0;
@@ -208,7 +199,7 @@
 
             @media (min-width: $media375) {
                 margin-bottom: 10px;
-                font-size: 12px;
+                font-size: 14px;
                 line-height: 16px;
             }
 
@@ -239,14 +230,16 @@
                 @media (min-width: $media1024) {
                     width: 10px;
                     height: 10px;
+                    min-width: 10px;
                     border-radius: 100%;
                     margin-right: 10px;
                 }
 
                 @media (min-width: $media1440) {
-                    width: 7px;
-                    height: 7px;
+                    width: 6px;
+                    height: 6px;
                     margin-right: 12px;
+                    min-width: auto;
                 }
 
                 @media (min-width: $media1920) {
@@ -256,38 +249,26 @@
                 }
             }
 
+            &__Name {
+                @media (min-width: $media375) {
+                    max-width: 100%;
+                }
+
+                @media (min-width: $media1024) {
+                    max-width: 140px;
+                }
+            }
+
             a {
                 color: #000;
                 text-decoration: none;
+                display: flex;
+                gap: 5px;
             }
 
-            .new-coin {
-                .wrapper {
-                    margin: 0 0 0 0;
-
-                    > img {
-                        width: 17px;
-                        height: 17px;
-                    }
-
-                    .coin {
-                        width: 11px;
-                        height: 11px;
-                        top: 16px;
-                        left: -3px;
-                        background: #D7D7D7;
-        
-                        &:nth-child(2) {
-                            left: 9px;
-                        }
-
-                        > img,
-                        > svg {
-                            width: 8px;
-                            height: 8px;
-                        }
-                    }
-                }
+            img {
+                width: 28px;
+                height: 28px;
             }
         }
     }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { PieChart } from 'react-minimal-pie-chart';
 import './PieChart.scss';
-import { is1024, is1440, is1920 } from '../../functions/screen';
+// import 'react-tooltip/dist/';
 
 interface DataItem {
     color: string;
@@ -24,8 +24,22 @@ function renderStratList(items: Array<DataItem>) {
                 className={'PieChart__StratList__Item__Circle'}
                 style={{ background: item.color }}
             />
-            <div className={'PieChart__StratList__Item__Name d-flex align-items-center'}>
-                {item.icon && <img src={item.icon} alt={item.title} className="me-2" />}
+            <div className={'PieChart__StratList__Item__Name d-flex align-items-center new-coin'}>
+                {
+                    item.icon && 
+                        <div className="wrapper">
+                            <img
+                                src={item.analytics.coinsMarketData.stableCoin.image}
+                                alt={item.title}
+                            />
+                            <div className="coin">
+                                <img src={item.icon} alt={item.title} />
+                            </div>
+                            <div className="coin">
+                                <img src='/curve-icon.svg' alt={item.title} />
+                            </div>
+                        </div>
+                }
                 <a target="blank" href={item.link}>
                     <div>{item.title.split(' - ')[0]}</div>
                     <div>{item.title.split(' - ')[1]}</div>
@@ -40,8 +54,29 @@ function screenWidthToChartWidth() {
     return width;
 }
 
+function makeTooltipContent(entry) {
+    const nameParts = entry.tooltip.split(' - ');
+
+    return (
+        <div className="d-flex justify-content-center">
+            <div className="circle" style={{ backgroundColor: entry.color }}></div>
+            <div>
+                <div className="platform">{nameParts[0]} - {`${entry.value.toFixed(2)}%`}</div>
+                <div className="pool">{nameParts[1]}</div>
+            </div>
+        </div>
+    );
+  }
+
 export const PieChart2 = (props: ChartProps): JSX.Element => {
     const [width, setWidth] = useState(screenWidthToChartWidth());
+    const [hovered, setHovered] = useState<number | null>(null);
+    const data = props.data.map(({ title, ...entry }) => {
+        return {
+          ...entry,
+          tooltip: title,
+        };
+    });
 
     useEffect(() => {
         window.addEventListener('resize', (e) => {
@@ -59,6 +94,12 @@ export const PieChart2 = (props: ChartProps): JSX.Element => {
                     paddingAngle={0}
                     labelPosition={0}
                     className={'PieChart__Chart'}
+                    onMouseOver={(_, index) => {
+                        setHovered(index);
+                      }}
+                      onMouseOut={() => {
+                        setHovered(null);
+                    }}
                 />
                 <div className={'PieChartWrapper__Legend'}>
                     {!props.hideSummary && (
@@ -76,6 +117,9 @@ export const PieChart2 = (props: ChartProps): JSX.Element => {
             {!props.hideSummary && (
                 <div className={'PieChart__StratList'}>{renderStratList(props.data)}</div>
             )}
+            {
+                <div className="PieChart__Tooltip">{typeof hovered === 'number' ? makeTooltipContent(data[hovered]) : ''}</div>
+            }
         </div>
     );
 };

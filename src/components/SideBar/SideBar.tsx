@@ -236,7 +236,6 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                             )}
                         </div>
                     </div>
-                    <WalletStatus />
                     {props.children}
                 </div>
             </div>

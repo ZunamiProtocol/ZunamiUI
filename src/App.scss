@@ -61,6 +61,10 @@ body {
     background-color: #fff !important;
 }
 
+#root {
+    position: relative;
+}
+
 #root > .container {
     margin: 0 auto;
     padding: 0;
@@ -578,7 +582,8 @@ body.dark {
     .Pendings .values .deposit,
     .Pendings .values .withdraw,
     .WalletStatus__Icon,
-    .WalletStatus__Connect {
+    .WalletStatus__Connect,
+    .WalletStatus_anal__inner__wallet {
         background: #1d1d1d !important;
     }
 
@@ -592,7 +597,8 @@ body.dark {
         }
     }
 
-    .panel {
+    .panel,
+    .supporters-links a {
         background: #161616;
     }
 
@@ -1076,7 +1082,32 @@ body.dark {
     .modal-title,
     .title,
     .WalletStatus__Connect,
-    .mobile-menu-title {
+    .mobile-menu-title,
+    .CollateralChart .PieChart__StratList .PieChart__StratList__Item a,
+    .CollateralChart__more,
+    .StrategiesList {
+        color: #fff;
+    }
+
+    .StrategiesList {
+        background: linear-gradient(63.79deg, #131313 11.66%, #161616 89.17%);
+
+        .desc {
+            color: #C8C8C8;
+        }
+
+        .block {
+            background: #2E2D2D;
+
+            .title {
+                color: #989898;
+            }
+        }
+    }
+
+    .PieChart__Tooltip,
+    .StrategiesList__List-Item {
+        background-color: #1d1d1d;
         color: #fff;
     }
 
@@ -1336,7 +1367,8 @@ body.dark {
         background-color: #292929 !important;
     }
 
-    .selector-wrapper,
+    .CoinSelector,
+    .Coin-Selector__Items,
     #networks-selector .network-item .choose-btn,
     .ApyBar__Counter,
     .Counter__Title__Buttons > div {
@@ -1380,7 +1412,9 @@ body.dark {
 
     button {
         svg {
-            path {
+            path,
+            rect,
+            circle {
                 fill: #fff;
             }
         }

@@ -37,6 +37,8 @@ import { Pendings } from '../components/Pendings/Pendings';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { networks } from '../components/NetworkSelector/NetworkSelector';
 import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
+import { SupportersBar } from '../components/SupportersBar/SupportersBar';
+import { WalletStatus } from '../components/WalletStatus/WalletStatus';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -364,6 +366,7 @@ export const Main = (): JSX.Element => {
                     />
                     <div className="row main-row h-100">
                         <SideBar isMainPage={true}>
+                            <WalletStatus />
                             <div className="mobile-menu-title d-block d-lg-none">Menu</div>
                             <div
                                 className="d-flex d-lg-none gap-3 mt-4 pb-3 mobile-menu"
@@ -392,6 +395,13 @@ export const Main = (): JSX.Element => {
                                 >
                                     <img src="/uzd.png" alt="" />
                                     <span className="text-muted mt-2">UZD</span>
+                                </a>
+                                <a
+                                    href="/analytics"
+                                    className="text-center d-flex flex-column text-decoration-none"
+                                >
+                                    <img src="/analytics.png" alt="" />
+                                    <span className="text-muted mt-2">Analytics</span>
                                 </a>
                                 <a
                                     href="https://snapshot.org/#/zunamidao.eth"
@@ -912,7 +922,9 @@ export const Main = (): JSX.Element => {
                                     <Chart data={chartData} />
                                 </div>
                             </div>
+                            <SupportersBar section="dashboard" />
                         </div>
+                        
                     </div>
                 </div>
                 <div
@@ -1002,7 +1014,9 @@ export const Main = (): JSX.Element => {
                             />
                         </svg>
                     </div>
+                    
                 </div>
+                
             </React.Fragment>
         </Suspense>
     );

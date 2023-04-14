@@ -1,6 +1,37 @@
 @import 'src/variables';
 
+.Header.navbar {
+    padding-right: 20px;
+}
+
+.analytics-col {
+    @media screen and (min-width: $media1024) {
+        width: 650px !important;
+        max-width: 650px !important;
+        min-width: 650px !important;
+    }
+
+    @media screen and (min-width: $media1440) {
+        width: 1011px !important;
+        max-width: 1011px !important;
+        min-width: 1011px !important;
+    }
+}
+
+#sidebar-col {
+    padding-bottom: 0px;
+
+    &::after {
+        display: none !important;
+    }
+}
+
+.SidebarColumn {
+    background: linear-gradient(0.02deg, rgba(242, 242, 242, 0.45) 76.02%, rgba(241, 241, 241, 0.45) 95.61%);
+}
+
 .AnalyticsContainer {
+
     h2 {
         font-weight: 500;
         font-size: 19px;
@@ -18,9 +49,42 @@
         font-size: 12px;
     }
 
-    .collateral-block {
-        .PieChart__StratList {
-            margin: 0 20px 0 40px;
+    .twitter-feed {
+        @media screen and (min-width: $media375) {
+            height: 400px;
+            min-width: 100%;
+        }
+
+        @media screen and (min-width: $media1024) {
+            min-width: 292px;
+            height: 100%;
+        }
+
+        @media screen and (min-width: $media1440) {
+            min-width: 417px;
+        }
+    }
+
+    .risk-tabs {
+        @media screen and (min-width: $media375) {
+            flex-direction: row;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+        }
+
+        @media screen and (min-width: $media1024) {
+            flex-direction: column;
+            flex-wrap: wrap;
+        }
+
+        .nav-item {
+            @media screen and (min-width: $media375) {
+                min-width: 250px;
+            }
+    
+            @media screen and (min-width: $media1024) {
+                min-width: auto;
+            }
         }
     }
 
@@ -32,12 +96,12 @@
             border: 1px solid #e1e1e1;
             border-radius: 15px;
             color: #000;
-            width: 286px;
+            width: calc(100% - 20px);
             margin-bottom: 15px;
             padding: 15px 20px;
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
             font-weight: 600;
             font-size: 14px;
             line-height: 17px;
@@ -82,18 +146,35 @@
     }
 
     .links {
-        width: 150px;
-
         a {
             color: #000;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+
+            @media screen and (min-width: $media1024) {
+                font-size: 12px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                font-size: 14px;
+            }
+        }
+    }
+
+    .collaterals-row {
+        @media screen and (min-width: $media375) {
+            flex-wrap: wrap;
+        }
+
+        @media screen and (min-width: $media1024) {
+            flex-wrap: nowrap;
         }
     }
 
     .dao-strats {
         background: linear-gradient(71.9deg, #ebebeb 6.04%, #f1f1f1 84.37%);
+        margin-left: 0;
     }
 
     .strats-strats {
@@ -139,6 +220,7 @@
 
             &.stablecoin {
                 max-width: 225px;
+                position: relative;
 
                 img {
                     width: 13px;
@@ -157,7 +239,59 @@
                     line-height: 18px;
                     color: #000000;
                 }
+
+                .buttons {
+                    position: absolute;
+                    right: 14px;
+                    top: 8px;
+                    gap: 5px;
+
+                    @media screen and (min-width: $media375) {
+                        display: none;
+                    }
+
+                    @media screen and (min-width: $media1024) {
+                        display: flex;
+                    }
+
+                    > div,
+                    > a {
+                        cursor: pointer;
+                        background: #DADADA;
+                        border-radius: 6px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        @media screen and (min-width: $media1024) {
+                            width: 16px;
+                            height: 16px;
+                        }
+    
+                        @media screen and (min-width: $media1440) {
+                            width: 18px;
+                            height: 18px;
+                        }
+
+                        svg {
+                            @media screen and (min-width: $media1024) {
+                                width: 10px;
+                                height: 10px;
+                            }
+        
+                            @media screen and (min-width: $media1440) {
+                                // width: 22px;
+                                // height: 22px;
+                            }
+                        }
+                    }
+                }
             }
+        }
+
+        .badge {
+            font-size: 10px !important;
+            padding: 1px 9px !important;
         }
     }
 
@@ -168,7 +302,7 @@
         justify-content: end;
 
         > div {
-            padding: 12px 23px;
+            padding: 12px 23px 12px 23px;
             border-right: 1px solid #e2e2e2;
         }
 
@@ -180,12 +314,66 @@
         }
     }
 
+    .logo-col {
+        padding-left: 0;
+        width: 100%;
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        align-items: center;
+        font-size: 13px;
+        line-height: 18px;
+    }
+
+    .about-uzd {
+        p {
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    .protocol-row {
+
+        .logo-col {
+            .about-uzd {
+                @media screen and (min-width: $media375) {
+                    // margin-left: 0;
+                    margin-top: 20px;
+                }
+                
+                @media screen and (min-width: $media1024) {
+                    // margin-left: 100px;
+                    margin-top: 0;
+                }
+        
+                p {
+                    font-weight: 500;
+                    font-size: 13px;
+                    line-height: 145.5%;
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+
     .logos {
         width: 114px;
 
         img {
             width: 48px;
             height: 48px;
+        }
+    }
+
+    .native-token {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        img {
+            width: 21px;
+            height: 21px;
         }
     }
 
@@ -216,21 +404,89 @@
         }
     }
 
-    .about-uzd {
-        margin-left: 100px;
+    .new-coin {
+        position: relative;
+        gap: 10px;
 
-        p {
+        > .wrapper {
+            margin-right: 19px;
+
+            > img {
+                width: 30px;
+                height: 30px;
+                border-radius: 20px;
+                margin: 0;
+                transform: translateY(-5px);
+            }
+        }
+
+        .subtitle {
             font-weight: 500;
+            font-size: 12px;
+            line-height: 15px;
+            color: #3a3a3a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .name {
+            font-weight: 600;
             font-size: 13px;
-            line-height: 145.5%;
-            width: 350px;
-            margin-bottom: 0;
+            line-height: 16px;
+        }
+
+        .coin {
+            width: 19px;
+            height: 19px;
+            padding: 5px;
+            background: #D7D7D7;
+            border-radius: 7px;
+            position: absolute;
+            left: 15px;
+            top: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:nth-child(2) {
+                left: 37px;
+            }
+
+            img {
+                width: 13px;
+                height: 13px;
+                margin: 0;
+            }
+        }
+    }
+
+    .pool-info-coin {
+        .coin {
+            top: 14px;
+            left: -5px;
+
+            &:nth-child(2) {
+                left: 16px;
+            }
         }
     }
 
     .pools {
         display: flex;
-        flex-wrap: wrap;
+        
+        @media screen and (min-width: $media375) {
+            flex-wrap: nowrap;
+            width: 100%;
+            overflow-y: auto;
+            flex-direction: row;
+        }
+        
+        @media screen and (min-width: $media1024) {
+            flex-wrap: wrap;
+            width: auto;
+            flex-direction: column;
+        }
 
         .pool-item {
             cursor: pointer;
@@ -241,32 +497,143 @@
             align-items: center;
             justify-content: flex-start;
             gap: 10px;
-            width: 184px;
+            width: 221px;
+            height: 66px;
+            position: relative;
 
             &.selected {
                 border: 1px solid #ffc129;
             }
 
-            img {
-                width: 30px;
-                height: 30px;
+            @media screen and (min-width: $media375) {
+                min-width: 200px;
             }
 
-            .subtitle {
-                font-weight: 500;
-                font-size: 12px;
-                line-height: 15px;
-                color: #3a3a3a;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
+            @media screen and (min-width: $media1024) {
+                min-width: auto;
+            }
+        }
+    }
+
+    .md-w-100 {
+        @media screen and (min-width: $media375) {
+            width: auto;
+        }
+        
+        @media screen and (min-width: $media1024) {
+            width: 100%;
+        }
+    }
+
+    .tbl {
+        @media screen and (min-width: $media375) {
+            flex-wrap: wrap;
+        }
+        
+        @media screen and (min-width: $media1024) {
+            flex-wrap: nowrap;
+        }
+
+        > div {
+            @media screen and (min-width: $media375) {
+                width: 50%;
+            }
+            
+            @media screen and (min-width: $media1024) {
+                width: inherit;
+            }
+        }
+    }
+    
+    .xs-2-col {
+        > div {
+            @media screen and (min-width: $media375) {
+                width: calc(50% - 10px);
+            }
+            
+            @media screen and (min-width: $media1024) {
+                width: inherit;
+            }
+        }
+    }
+
+    .xs-1-col {
+        > div {
+            @media screen and (min-width: $media375) {
+                width: 100%;
+            }
+            
+            @media screen and (min-width: $media1024) {
+                width: inherit;
+            }
+        }
+    }
+
+    .links {
+        @media screen and (min-width: $media375) {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        @media screen and (min-width: $media1024) {
+            // width: 150px;
+            margin-bottom: 0;
+        }
+
+        @media screen and (min-width: $media1440) {
+            width: 150px;
+        }
+    }
+
+    .collateral-block {
+        @media screen and (min-width: $media375) {
+            width: 100%;
+        }
+
+        @media screen and (min-width: $media1024) {
+            width: 188px;
+            margin-left: 9px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            width: auto;
+            margin-left: 1rem;            
+        }
+
+        .PieChart__StratList {
+            @media screen and (min-width: $media375) {
+                width: 100%;
             }
 
-            .name {
-                font-weight: 600;
-                font-size: 13px;
-                line-height: 16px;
+            @media screen and (min-width: $media1024) {
+                width: calc(100% - 110px)
             }
+        }
+
+        @media screen and (min-width: $media1024) {
+            .PieChart__StratList {
+                margin: 0;
+            }
+        }
+
+        @media screen and (min-width: $media1440) {
+            .PieChart__StratList {
+                margin-left: 10px;
+            }
+        }
+    }
+
+    .analytics-content {
+        height: calc(100% - 70px);
+        overflow: hidden;
+        overflow-y: scroll;
+
+        @media screen and (min-width: $media375) {
+            padding-right: 0;
+        }
+
+        @media screen and (min-width: $media1024) {
+            padding-right: 20px;
         }
     }
 }
