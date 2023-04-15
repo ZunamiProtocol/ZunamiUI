@@ -75,8 +75,11 @@ export const StrategiesList: React.FC<StrategiesListProps & React.HTMLProps<HTML
             <div className="StrategiesList__Title">{title}</div>
             <div className="StrategiesList__List">
                 {
-                    items?.map(item =>
-                        <div className="StrategiesList__List-Item">
+                    items?.map((item, itemIndex: number) =>
+                        <div
+                            className="StrategiesList__List-Item"
+                            key={itemIndex}
+                        >
                             {renderStratHeader(item)}
                             <div className="d-flex props">
                                 <div className="block">

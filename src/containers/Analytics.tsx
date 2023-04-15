@@ -135,7 +135,10 @@ function getPoolIcon(type: string) {
 
 function renderCoin(coin, coinIndex, selectedStrat) {
     return (
-        <div className="gray-block small-block align-items-start stablecoin mb-2" key={coinIndex}>
+        <div
+            className="gray-block small-block align-items-start stablecoin mb-2"
+            key={coinIndex}
+        >
         <div>
             <img src={`https://cdn.jsdelivr.net/gh/curvefi/curve-assets/images/assets/${coin.address.toLowerCase()}.png`} alt="" />
             <span className="name">{coin.symbol}</span>
@@ -226,8 +229,11 @@ function renderTreasury(data, type) {
     // }
 
     return (
-        treasuryData.map(treasury =>
-            <div className="gray-block small-block align-items-start">
+        treasuryData.map((treasury, treasuryIndex) =>
+            <div
+                className="gray-block small-block align-items-start"
+                key={treasuryIndex}
+            >
                 <div>{treasury.token.name} Treasury</div>
                 <div className="vela-sans">
                     {treasury.amount.toLocaleString('en', { maximumFractionDigits: 0 })}
@@ -280,7 +286,7 @@ export const Analytics = (): JSX.Element => {
         return result;
     }, [selectedStrat]);
 
-    const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+    const [selectedTabIndex, setSelectedTabIndex] = useState(2);
     const [chartData, setChartData] = useState([]);
     const [pools, setPools] = useState([]);
     const [tvl, setTvl] = useState(0);
@@ -313,7 +319,15 @@ export const Analytics = (): JSX.Element => {
                     : [] as Array<PoolResponse>;
 
                 setChartData(chartItems);
-                setSelectedStrat(chartItems[0]);
+                const hash = window.location.hash.replace('#', '');
+                const hashStrat = hash ? chartItems.filter(item => item.type === hash) : null;
+
+                if (hash && hashStrat.length) {
+                    setSelectedStrat(hashStrat[0]);
+                } else {
+                    setSelectedStrat(chartItems[0]);
+                }
+
                 setPools(poolStats.pools);
                 setTvl(zunamiInfo.tvl);
             } catch (e) {
@@ -406,7 +420,10 @@ export const Analytics = (): JSX.Element => {
                                             </div>
                                             <div className="pools mt-3 gap-3">
                                                 {chartData.map((pool, poolIndex) => (
-                                                    <div
+                                                    <a
+                                                        href={`#${selectedStrat?.type}`}
+                                                        rel="noreferrer"
+                                                        key={poolIndex}
                                                         className={`pool-item d-flex new-coin ${
                                                             pool.type === selectedStrat?.type
                                                                 ? 'selected'
@@ -434,7 +451,7 @@ export const Analytics = (): JSX.Element => {
                                                                 {pool.title.split(' - ')[0]}
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </a>
                                                 ))}
                                             </div>
                                         </div>
@@ -737,11 +754,12 @@ export const Analytics = (): JSX.Element => {
                                         <div className="col-12 col-md-2 d-flex gap-3">
                                             <div className="panel d-flex flex-column gap-1 align-items-center links">
                                                 {
-                                                    selectedStrat.analytics.protocolInfo.info.links.map(link => (
+                                                    selectedStrat.analytics.protocolInfo.info.links.map((link, linkIndex) => (
                                                         <a
                                                             href={link.url}
                                                             target="_blank"
                                                             rel="noreferrer"
+                                                            key={linkIndex}
                                                         >{link.name}</a>
                                                     ))
                                                 }
@@ -844,13 +862,13 @@ export const Analytics = (): JSX.Element => {
                                                     >
                                                         <li className="nav-item" role="presentation">
                                                             <button
-                                                                className={`nav-link ${selectedTabIndex === 0 ? 'active' : ''}`}
+                                                                className={`nav-link ${selectedTabIndex === 2 ? 'active' : ''}`}
                                                                 id="custody-tab"
                                                                 data-bs-toggle="tab"
                                                                 data-bs-target="#custody-tab-pane"
                                                                 type="button"
                                                                 role="tab"
-                                                                onClick={() => setSelectedTabIndex(0)}
+                                                                onClick={() => setSelectedTabIndex(2)}
                                                             >
                                                                 <svg
                                                                     width="32"
@@ -925,13 +943,13 @@ export const Analytics = (): JSX.Element => {
                                                         </li>
                                                         <li className="nav-item" role="presentation">
                                                             <button
-                                                                className={`nav-link ${selectedTabIndex === 2 ? 'active' : ''}`}
+                                                                className={`nav-link ${selectedTabIndex === 3 ? 'active' : ''}`}
                                                                 id="collat-tab"
                                                                 data-bs-toggle="tab"
                                                                 data-bs-target="#collat-tab-pane"
                                                                 type="button"
                                                                 role="tab"
-                                                                onClick={() => setSelectedTabIndex(2)}
+                                                                onClick={() => setSelectedTabIndex(3)}
                                                             >
                                                                 <svg
                                                                     width="28"
@@ -952,13 +970,13 @@ export const Analytics = (): JSX.Element => {
                                                         </li>
                                                         <li className="nav-item" role="presentation">
                                                             <button
-                                                                className={`nav-link ${selectedTabIndex === 3 ? 'active' : ''}`}
+                                                                className={`nav-link ${selectedTabIndex === 0 ? 'active' : ''}`}
                                                                 id="smart-risk-tab"
                                                                 data-bs-toggle="tab"
                                                                 data-bs-target="#smart-risk-tab-pane"
                                                                 type="button"
                                                                 role="tab"
-                                                                onClick={() => setSelectedTabIndex(3)}
+                                                                onClick={() => setSelectedTabIndex(0)}
                                                             >
                                                                 <svg
                                                                     width="35"
@@ -1018,7 +1036,7 @@ export const Analytics = (): JSX.Element => {
                                                                     <strong>{selectedStrat.analytics.protocolInfo.info.riskAssessment.values[selectedTabIndex].name}</strong>
                                                                 </div>
                                                                 {
-                                                                    selectedStrat.analytics.protocolInfo.info.riskAssessment.values[selectedTabIndex].value.split("\n").map((line, index) => <p key={index} className="text-break">{line}</p>)
+                                                                    selectedStrat.analytics.protocolInfo.info.riskAssessment.values[selectedTabIndex].value.split("\n").map((line: string, index: number) => <p key={index} className="text-break">{line}</p>)
                                                                 }
                                                             </div>
                                                         </div>

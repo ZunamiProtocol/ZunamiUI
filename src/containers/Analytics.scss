@@ -12,9 +12,9 @@
     }
 
     @media screen and (min-width: $media1440) {
-        width: 1011px !important;
-        max-width: 1011px !important;
-        min-width: 1011px !important;
+        width: 997px !important;
+        max-width: 997px !important;
+        min-width: 997px !important;
     }
 }
 
@@ -499,6 +499,7 @@
             width: 210px;
             height: 66px;
             position: relative;
+            text-decoration: none;
 
             &.selected {
                 border: 1px solid #ffc129;
