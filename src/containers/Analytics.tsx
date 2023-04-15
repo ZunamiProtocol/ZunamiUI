@@ -408,7 +408,7 @@ export const Analytics = (): JSX.Element => {
                             className="mt-3"
                         />
                     </SideBar>
-                    <div className="col content-col analytics-col h-100">
+                    <div className="col content-col analytics-col">
                         <Header />
                         <div className="analytics-content">
                             <div className="ps-md-4">
