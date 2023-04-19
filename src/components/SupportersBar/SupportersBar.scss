@@ -48,6 +48,14 @@
         display: flex;
         gap: 10px;
 
+        @media screen and (min-width: $media375) {
+            margin-top: 20px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            margin-top: 0;
+        }
+
         a {
             background: #F7F7F7;
             padding: 8px 25px 8px 12px;
@@ -56,6 +64,7 @@
             font-size: 12px;
             line-height: 14px;
             display: flex;
+            align-items: center;
             gap: 10px;
             flex-wrap: nowrap;
             position: relative;
@@ -73,6 +82,24 @@
                 right: 13px;
                 width: 6px;
                 height: 6px;
+            }
+
+            span {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+
+    .row {
+        .col {
+            @media screen and (min-width: $media375) {
+                flex-direction: column;
+            }
+
+            @media screen and (min-width: $media1024) {
+                flex-direction: row;
             }
         }
     }

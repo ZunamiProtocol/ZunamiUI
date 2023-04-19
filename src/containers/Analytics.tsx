@@ -54,60 +54,45 @@ function renderBribes(data, gaugeData) {
                             })}
                         </div>
                     </div>
-                    <div className="gray-block small-block align-items-start">
-                        <div>veCRV Votes on Votemarket</div>
-                        {/* <div className="vela-sans">{prevRound.bribesAmountUSD.toFixed(0)}</div> */}
-                        <div className="vela-sans text-muted">soon</div>
-                    </div>
-                    {/* {
-                        prevRound.bribes.map((bribe, bribeIndex) =>
-                            <div
-                                className="gray-block small-block align-items-start"
-                                key={bribeIndex}
-                            >
-                                <div>Token</div>
-                                <div>{bribe.token}</div>
+                    {
+                        data.votemarketBribesData &&
+                            <div className="gray-block small-block align-items-start">
+                                <div>veCRV Votes on Votemarket</div>
+                                <div className="vela-sans">
+                                    {Number(
+                                        data.votemarketBribesData.totalVotes
+                                    ).toLocaleString('en', {
+                                        maximumFractionDigits: 0,
+                                    })}
+                                </div>
                             </div>
-                        )
-                    } */}
-                    {/* <div className="gray-block small-block align-items-start">
-                        <div>Current weight, %</div>
-                        <div className="vela-sans">-</div>
-                    </div> */}
+                    }
+                    {
+                        data.yBribeBribesData &&
+                            <div className="gray-block small-block align-items-start">
+                                <div>veCRV Votes on yBribe</div>
+                                <div className="vela-sans">
+                                    {Number(
+                                        data.yBribeBribesData.totalVotes
+                                    ).toLocaleString('en', {
+                                        maximumFractionDigits: 0,
+                                    })}
+                                </div>
+                            </div>
+                    }
                 {/* </div> */}
                 </React.Fragment>
             }
             {
                 <React.Fragment>
-                    {/* <div className="d-flex gap-3 mb-3 flex-wrap xs-1-col"> */}
-                    {/* <div className="gray-block small-block align-items-start">
-                        <div style={{ width: '145px'}}>Current bribes amount</div>
-                        <div>{lastRound.bribesAmount.toFixed(0)}</div>
-                    </div> */}
-                    {/* <div className="gray-block small-block align-items-start">
-                        <div>Amount, $</div>
-                        <div>{lastRound.bribesAmountUSD.toFixed(0)}</div>
-                    </div> */}
                     <div className="gray-block small-block align-items-start">
-                        <div>Latest CVX vote</div>
-                        <div className="text-muted vela-sans">soon</div>
+                        <div>CVX votes</div>
+                        <div className="vela-sans">{gaugeData.crvGaugeWeightData.cvxVotes.toLocaleString('en', { maximumFractionDigits: 0 })}</div>
                     </div>
-                    {/* {
-                        lastRound.bribes.map((bribe, bribeIndex) =>
-                            <div
-                                className="gray-block small-block align-items-start"
-                                key={bribeIndex}
-                            >
-                                <div>Token</div>
-                                <div>{bribe.token}</div>
-                            </div>
-                        )
-                    } */}
                     <div className="gray-block small-block align-items-start">
                         <div>CRV gauge weight, %</div>
                         <div>{gaugeData.crvGaugeWeightData.weight}</div>
                     </div>
-                    {/* </div> */}
                 </React.Fragment>
             }
             </div>

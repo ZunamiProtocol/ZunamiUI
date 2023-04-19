@@ -9,7 +9,6 @@
     display: none;
     background-color: #fff;
     z-index: 111111;
-    padding: 20px 35px;
 
     &.active {
         display: block;
@@ -46,6 +45,14 @@
         font-size: 14px;
         line-height: 138.1%;
         width: 466px;
+    }
+
+    @media (min-width: $media375) {
+        padding: 20px !important;
+    }
+
+    @media (min-width: $media1024) {
+        padding: 0 35px 20px 30px !important;
     }
 }
 

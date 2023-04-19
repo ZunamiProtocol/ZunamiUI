@@ -10,7 +10,7 @@ export const SupportersBar = (props: SupporterBarProps): JSX.Element => {
     return (
         <div className="supporters-bar container" data-section={props.section}>
             <div className="row">
-                <div className="col d-flex justify-content-end  align-items-center">
+                <div className="col d-flex justify-content-end align-items-center">
                     <span className="text-muted">Supported by</span>
                     <div className="supporters-links">
                         <a href="https://dao.curve.fi/vote/ownership/299" target='_blank' rel='noreferrer'>
