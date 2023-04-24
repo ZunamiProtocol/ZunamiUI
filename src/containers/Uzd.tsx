@@ -27,7 +27,7 @@ import { TransactionHistory } from '../components/TransactionHistory/Transaction
 import { ActionSelector } from '../components/Form/ActionSelector/ActionSelector';
 import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
 import { SupportersBar } from '../components/SupportersBar/SupportersBar';
-import { WalletStatus } from '../components/WalletStatus/WalletStatus';
+import { WalletStatus } from '../components/WalletStatus_Analytics/WalletStatus';
 
 interface CurvePoolInfo {
     apy: number;

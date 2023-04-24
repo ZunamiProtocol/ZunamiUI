@@ -38,6 +38,7 @@ export const WithdrawOptions = (props: WithdrawOptionsProps): JSX.Element => {
             <div className="WithdrawOptions__LiquidityBlock">
                 <span>Share of liquidity, %</span>
                 <input
+                    className="vela-sans"
                     type="text"
                     autoComplete={'off'}
                     autoCorrect={'off'}

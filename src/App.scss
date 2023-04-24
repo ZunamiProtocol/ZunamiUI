@@ -875,7 +875,7 @@ body.dark {
         }
 
         .curve-boost {
-            background: linear-gradient(88.25deg, #262626 6.57%, #252525 94.5%);
+            // background: linear-gradient(88.25deg, #262626 6.57%, #252525 94.5%);
 
             div {
                 color: #fff;
@@ -1087,6 +1087,44 @@ body.dark {
     .CollateralChart__more,
     .StrategiesList {
         color: #fff;
+    }
+
+    .card.InfoBar {
+        background: linear-gradient(86.2deg, #141414 4.31%, #171717 40.59%) !important;
+
+        .block {
+            background: #1D1D1D !important;
+        }
+    }
+
+    .coins {
+        .coin {
+            background: #1D1D1D !important;
+        }
+    }
+
+    .WithdrawOptions {
+        background: linear-gradient(57.3deg, #141414 -9.62%, #171717 99.29%);
+
+        &__LiquidityBlock {
+            background: #222222 !important;
+        }
+    }
+
+    .InfoBars {
+        .InfoBar:first-child {
+            background: linear-gradient(80.09deg, #141414 10.29%, #171717 96.88%) !important;
+
+            .block {
+                background: #1D1D1D !important;
+            }
+        }
+    }
+
+    .mint-redeem-inputs {
+        .swap {
+            background: #1c1c1c;
+        }
     }
 
     .StrategiesList {
@@ -1317,22 +1355,23 @@ body.dark {
         background-color: transparent;
     }
 
-    .WalletStatus__inner,
+    .WalletStatus__inner {
+        background: linear-gradient(81.95deg, #141414 5.86%, #151515 93.43%);
+    }
+
+    .Pendings {
+        background: linear-gradient(80.69deg, #141414 9.7%, #171717 92.78%);
+    }
+
     .Sidebar__Content__Data,
-    .Pendings,
     .withdraw,
     .deposit,
     .PieChart,
-    .ApyBar,
     .card,
     .Deposit__RightBlock,
-    .Form,
     .TransactionHistory,
     .ThemeSwitcher,
-    .InfoBar .values .block,
     .Input .max,
-    .WithdrawOptions,
-    .WithdrawOptions__LiquidityBlock,
     label.coin,
     .Counter,
     .mint-redeem-inputs,
@@ -1340,6 +1379,18 @@ body.dark {
     #networks-selector .network-item,
     .badge-light {
         background: linear-gradient(132deg, #272727 10.02%, #181818 93.49%) !important;
+    }
+
+    .Form {
+        background: linear-gradient(64.61deg, #141414 9.76%, #171717 99.42%);
+    }
+
+    .ApyBar {
+        background: linear-gradient(76.67deg, #141414 10.07%, #161616 89.39%);
+    }
+
+    .card.mint-card {
+        background: linear-gradient(57.3deg, #141414 -9.62%, #171717 99.29%) !important;
     }
 
     #networks-selector {
@@ -2376,7 +2427,7 @@ body.overflow {
 }
 
 .value.text-success {
-    color: #c5f44e !important;
+    color: #84B900 !important;
 }
 
 .notifications-popover {

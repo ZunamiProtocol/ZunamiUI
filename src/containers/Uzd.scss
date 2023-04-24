@@ -1,6 +1,10 @@
 @import 'src/variables';
 
 .UzdContainer {
+    .WalletStatus_anal {
+        padding-left: 0;
+    }
+
     &__Content {
         display: flex;
         min-height: 100%;
@@ -501,6 +505,7 @@
                 display: flex;
                 align-items: center;
                 gap: 10px;
+                border-radius: 100%;
 
                 @media screen and (min-width: $media375) {
                     width: 71px;
@@ -513,8 +518,8 @@
                 }
 
                 @media screen and (min-width: $media1440) {
-                    margin-right: -75px;
-                    width: 136px;
+                    margin-right: 5px;
+                    width: auto;
                 }
 
                 svg {
