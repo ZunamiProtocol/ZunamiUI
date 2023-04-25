@@ -84,8 +84,8 @@ export const TransactionHistory: React.FC<
             <div className="TransactionHistory__Title">{title}</div>
             <div className="TransactionHistory__List" onScroll={onScroll}>
                 {items &&
-                    items.map((item) => (
-                        <div className="TransactionHistory__List-Item" key={`${item.dateTime}_${item.value}`}>
+                    items.map((item, index) => (
+                        <div className="TransactionHistory__List-Item" key={index}>
                             <div className="first-row">
                                 <span className="type">{item.type}</span>
                                 <span className="date">

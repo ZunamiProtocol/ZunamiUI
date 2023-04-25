@@ -6,6 +6,7 @@ import ERC20 from '../actions/abi/erc20.abi.json';
 import { contractAddresses } from '../sushi/lib/constants';
 import { log } from '../utils/logger';
 import { daiAddress, fraxAddress, usdcAddress, usdtAddress } from './formatbalance';
+import { isPLG } from './zunami';
 
 export const getContract = (provider: Provider, address: string) => {
     const web3 = new Web3(provider);
@@ -78,14 +79,31 @@ export const calcWithdrawOneCoin = async (
     contract.options.from = account;
     log(`ETH contract (${contract.options.address}) - calcWithdrawOneCoin(${lpBalance}, ${coinIndex}).`);
     let sum: string = "Error";
+
     try {
         sum = await contract.methods.calcWithdrawOneCoin(lpBalance, coinIndex).call();
+        log(`ETH contract (${contract.options.address}) - calcWithdrawOneCoin result ${sum}`);
     } catch {
-        const whaleWalletAccount = "0xc288540f761179dfcf5e64514282463515839df4";
+        const chainId = parseInt(window?.ethereum.chainId, 16);
+        let whaleWalletAccount = '';
+
+        switch (chainId) {
+            case 1:
+                whaleWalletAccount = '0xc288540f761179dfcf5e64514282463515839df4';
+                break;
+            case 137:
+                whaleWalletAccount = '0x451862c9031e57df0be61751a4888456adcd1787';
+                break;
+            case 56:
+                whaleWalletAccount = '0xc288540f761179dfcf5e64514282463515839df4';
+                break;
+        }
+
         contract.options.from = whaleWalletAccount;
         sum = await contract.methods.calcWithdrawOneCoin(lpBalance, coinIndex).call();
+        log(`ETH contract (${contract.options.address}) - calcWithdrawOneCoin result ${sum}. From address - ${whaleWalletAccount}`);
     }
-    log(`ETH contract (${contract.options.address}) - calcWithdrawOneCoin result ${sum}`);
+    
     return sum;
 };
 
