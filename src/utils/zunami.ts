@@ -24,3 +24,18 @@ export const getZunamiAddress = (chainId: number | undefined): string => {
 export const isBSC = (chainId: number | undefined) => chainId === 56;
 export const isETH = (chainId: number | undefined) => chainId === 1;
 export const isPLG = (chainId: number | undefined) => chainId === 137;
+
+export const getScanAddressByChainId = (chainId: number) => {
+    let address = 'etherscan.io';
+
+    switch (chainId) {
+        case 56:
+            address = 'bscscan.com';
+            break;
+        case 137:
+            address = 'polygonscan.com';
+            break;
+    }
+
+    return address;
+}

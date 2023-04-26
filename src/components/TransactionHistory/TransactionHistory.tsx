@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { useWallet } from 'use-wallet';
 import './TransactionHistory.scss';
+import { getScanAddressByChainId } from '../../utils/zunami';
 
 interface TransactionHistoryProps {
     title: any;
@@ -100,9 +101,7 @@ export const TransactionHistory: React.FC<
                                 }`}</span>
                                 <span className={`status ${item.status}`}>{item.status}</span>
                                 <a
-                                    href={`https://${
-                                        chainId === 1 ? 'etherscan.io' : 'bscscan.com'
-                                    }/tx/${item.transactionHash}`}
+                                    href={`https://${getScanAddressByChainId(chainId)}/tx/${item.transactionHash}`}
                                     rel="noreferrer"
                                     target="_blank"
                                     className="trans-link"
