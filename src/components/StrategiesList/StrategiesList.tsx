@@ -30,6 +30,11 @@ function renderStratHeader(item: Strategy) {
             title = 'Convex finance';
             desc = 'XAI/FRAXBP Pool';
         break;
+        case 'CLEVUSD_FRAXBP':
+            icon = '/convex.svg';
+            title = 'Convex finance';
+            desc = 'clevUSDFRAXBP Pool';
+        break;
         case 'STAKE_DAO_MIM':
             icon = '/stake-dao.svg';
             title = 'Stake DAO';

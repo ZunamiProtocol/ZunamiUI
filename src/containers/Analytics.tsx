@@ -113,6 +113,9 @@ function getPoolIcon(type: string) {
         case 'ALUSD_FRAXBP':
             result = 'alchemix.png';
             break;
+        case 'CLEVUSD_FRAXBP':
+            result = 'clever.svg';
+            break;
     }
 
     return result;
@@ -170,48 +173,6 @@ function renderCoin(coin, coinIndex, selectedStrat) {
 
 function renderTreasury(data, type) {
     let treasuryData = data.balances;
-
-    // if (type === 'XAI_FRAXBP') {
-    //     treasuryData = data.balances.filter(item => item.token.name !== 'CVX_CRV')
-    //     treasuryData[0].token.name = 'XAI';
-    //     treasuryData[0].amountUnit = 'CVX';
-    // }
-
-    // if (type === 'XAI_FRAXBP') {
-    //     treasuryData = [
-    //         {
-    //             token: {
-    //                 name: 'XAI'
-    //             },
-    //             amount: treasuryData.map(item => item.amount).reduce((a, b) => a + b, 0),
-    //             amountUnit: 'CVX',
-    //         }
-    //     ];
-    // }
-
-    // if (type === 'STAKE_DAO_MIM') {
-    //     treasuryData = [
-    //         {
-    //             token: {
-    //                 name: 'MIM'
-    //             },
-    //             amount: treasuryData.map(item => item.amount).reduce((a, b) => a + b, 0),
-    //             amountUnit: 'yCRV',
-    //         }
-    //     ];
-    // }
-
-    // if (type === 'ALUSD_FRAXBP') {
-    //     treasuryData = [
-    //         {
-    //             token: {
-    //                 name: 'alUSD'
-    //             },
-    //             amount: treasuryData.map(item => item.amount).reduce((a, b) => a + b, 0),
-    //             amountUnit: 'CVX',
-    //         }
-    //     ];
-    // }
 
     return (
         treasuryData.map((treasury, treasuryIndex) =>
