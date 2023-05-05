@@ -11,34 +11,6 @@ import { useWallet } from 'use-wallet';
 import { getTransHistoryUrl } from '../../api/api';
 import { format } from 'date-fns';
 import { log } from '../../utils/logger';
-import { isETH } from '../../utils/zunami';
-import { useGasPrice } from '../../hooks/useGasPrice';
-
-function chainNameToTooltip(chainId: number) {
-    if (chainId === 1 || !chainId) {
-        return (
-            <div>
-                Please note. The contract{' '}
-                <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href="https://github.com/ZunamiLab/ZunamiProtocol/tree/main/audit"
-                >
-                    has been audited
-                </a>
-                , <br />
-                but it's still a beta version. Use it at your own risk
-            </div>
-        );
-    } else {
-        return (
-            <div>
-                Please note. This is the alpha version of the BSC cross-chain gateway. Use it at
-                your own risk!
-            </div>
-        );
-    }
-}
 
 function renderNotifications(notifications: Array<any>) {
     return (
@@ -187,7 +159,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         loadNotifications();
 
-        let refreshInterval = setInterval(loadNotifications, 10000);
+        let refreshInterval = setInterval(loadNotifications, 60000);
         return () => clearInterval(refreshInterval);
     }, [account, chainId]);
 
