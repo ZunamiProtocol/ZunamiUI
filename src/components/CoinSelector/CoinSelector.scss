@@ -48,7 +48,7 @@
         @media screen and (min-width: $media1440) {
             width: 21px;
             height: 21px;
-            margin-right: 16px;
+            margin-right: 12px;
         }
 
         @media screen and (min-width: $media1920) {
@@ -64,25 +64,25 @@
         @media screen and (min-width: $media375) {
             font-size: 14px;
             line-height: 16px;
-            width: 45px;
+            // width: 45px;
         }
 
         @media screen and (min-width: $media1024) {
             font-size: 11px;
             line-height: 15px;
-            width: 40px;
+            // width: 40px;
         }
 
         @media screen and (min-width: $media1440) {
             font-size: 13px;
             line-height: 17px;
-            width: 50px;
+            // width: 80px;
         }
 
         @media screen and (min-width: $media1920) {
             font-size: 14px;
             line-height: 18px;
-            width: 80px;
+            // width: 80px;
         }
     }
 
@@ -101,7 +101,6 @@
 
         .coin-item {
             display: flex;
-            
         }
     }
 }

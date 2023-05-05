@@ -579,12 +579,43 @@ body.dark {
         text-decoration: none;
     }
 
+    .btn-secondary {
+        background: linear-gradient(140.24deg, #212121 44.18%, #1d1d1d 144.27%);
+
+        &.disabled {
+            background: #414141;
+        }
+    }
+
+    .StakingSummary {
+        background: linear-gradient(77.82deg, #202020 -4.26%, #232323 88.51%);
+        color: #fff;
+
+        .staking-icon {
+            .staking-text {
+                fill: #fff;
+            }
+        }
+
+        .block {
+            background: #353535;
+
+            .title {
+                color: #c8c8c8;
+            }
+
+            .value {
+                color: #fff;
+            }
+        }
+    }
+
     .Pendings .values .deposit,
     .Pendings .values .withdraw,
     .WalletStatus__Icon,
     .WalletStatus__Connect,
     .WalletStatus_anal__inner__wallet {
-        background: #1d1d1d !important;
+        background: #333333 !important;
     }
 
     .pool-item,
@@ -842,7 +873,7 @@ body.dark {
     }
 
     .FastDepositForm {
-        background: linear-gradient(81.61deg, #161616 6.26%, #181818 93.21%);
+        background: linear-gradient(81.61deg, #1a1a1a 6.26%, #1f1f1f 93.21%);
         border: none;
 
         &__Description {
@@ -1093,13 +1124,13 @@ body.dark {
         background: linear-gradient(86.2deg, #141414 4.31%, #171717 40.59%) !important;
 
         .block {
-            background: #1D1D1D !important;
+            background: #1d1d1d !important;
         }
     }
 
     .coins {
         .coin {
-            background: #1D1D1D !important;
+            background: #1d1d1d !important;
         }
     }
 
@@ -1116,9 +1147,13 @@ body.dark {
             background: linear-gradient(80.09deg, #141414 10.29%, #171717 96.88%) !important;
 
             .block {
-                background: #1D1D1D !important;
+                background: #1d1d1d !important;
             }
         }
+    }
+
+    .letter {
+        fill: #fff;
     }
 
     .mint-redeem-inputs {
@@ -1131,11 +1166,11 @@ body.dark {
         background: linear-gradient(63.79deg, #131313 11.66%, #161616 89.17%);
 
         .desc {
-            color: #C8C8C8;
+            color: #c8c8c8;
         }
 
         .block {
-            background: #2E2D2D;
+            background: #2e2d2d;
 
             .title {
                 color: #989898;
@@ -1288,7 +1323,11 @@ body.dark {
         }
 
         @media (min-width: $media1024) {
-            background: linear-gradient(0.02deg, #181818 76.02%, #0b0b0b 95.61%);
+            background: linear-gradient(
+                0.02deg,
+                rgba(38, 38, 38, 0.45) 76.02%,
+                rgba(47, 47, 47, 0.45) 95.61%
+            );
         }
     }
 
@@ -1360,7 +1399,7 @@ body.dark {
     }
 
     .Pendings {
-        background: linear-gradient(80.69deg, #141414 9.7%, #171717 92.78%);
+        background: linear-gradient(81.93deg, #212121 8.1%, #242424 92.09%);
     }
 
     .Sidebar__Content__Data,
@@ -1386,7 +1425,7 @@ body.dark {
     }
 
     .ApyBar {
-        background: linear-gradient(76.67deg, #141414 10.07%, #161616 89.39%);
+        background: linear-gradient(71.21deg, #1a1a1a 12.22%, #1f1f1f 86.71%);
     }
 
     .card.mint-card {
@@ -1423,7 +1462,7 @@ body.dark {
     #networks-selector .network-item .choose-btn,
     .ApyBar__Counter,
     .Counter__Title__Buttons > div {
-        background: #1d1d1d;
+        background: #333333;
     }
 
     .Counter__Title__Buttons > div {
@@ -1701,7 +1740,7 @@ body.overflow {
 
     @media (min-width: $media1440) {
         width: 353px;
-        height: 222px;
+        height: 127px;
     }
 
     @media (min-width: $media1920) {
@@ -1730,7 +1769,7 @@ body.overflow {
 
         @media (min-width: $media1440) {
             width: 353px;
-            height: 222px;
+            height: 127px;
         }
 
         @media (min-width: $media1920) {
@@ -1800,68 +1839,46 @@ body.overflow {
         }
 
         &.uzd {
-            background: linear-gradient(0deg, #ff3902 -49.44%, #ffa701 100%);
+            background: linear-gradient(82.46deg, #ff6202 7.33%, #ffa402 92.02%);
 
             .uzd-logo {
                 @media (min-width: $media375) {
-                    left: 31px;
-                    top: 52px;
                     position: absolute;
-                    width: 123px;
-                    height: 142px;
                 }
 
                 @media (min-width: $media1024) {
-                    left: 55px;
-                    top: 49px;
-                    position: absolute;
-                    width: 86px;
-                    height: 99px;
                 }
 
                 @media (min-width: $media1440) {
-                    left: 57px;
-                    top: 52px;
+                    left: 36px;
+                    top: 14px;
                     position: absolute;
-                    width: 134px;
-                    height: 154px;
+                    width: 89px;
+                    height: 102px;
                 }
 
                 @media (min-width: $media1920) {
-                    left: 138px;
-                    top: 57px;
-                    position: absolute;
-                    width: 248px;
-                    height: 283px;
                 }
             }
 
             .uzd {
                 @media (min-width: $media375) {
-                    top: 62px;
-                    left: 126px;
-                    width: 128px;
-                    height: 52px;
                     position: absolute;
                     display: flex;
                     align-items: baseline;
                 }
 
                 @media (min-width: $media1024) {
-                    top: 45px;
-                    left: 109px;
-                    width: 87px;
-                    height: 35px;
+                    top: 38px;
+                    left: 65px;
+                    width: 97px;
+                    height: 40px;
                     position: absolute;
                     display: flex;
                     align-items: baseline;
                 }
 
                 @media (min-width: $media1440) {
-                    top: 69px;
-                    left: 139px;
-                    width: 136px;
-                    height: 66px;
                     position: absolute;
                     display: flex;
                     align-items: baseline;
@@ -1880,39 +1897,21 @@ body.overflow {
 
             .description {
                 @media (min-width: $media375) {
-                    left: 129px;
-                    top: 125px;
                     position: absolute;
+                }
+
+                @media (min-width: $media1024) {
+                    left: 175px;
+                    top: 48px;
                     color: #fff;
                     font-family: 'Space Grotesk';
                     font-weight: 600;
                     font-size: 12px;
                     line-height: 14px;
-                    width: 135px;
-                }
-
-                @media (min-width: $media1024) {
-                    left: 110px;
-                    top: 99px;
-                    position: absolute;
-                    color: #fff;
-                    font-family: 'Space Grotesk';
-                    font-weight: 600;
-                    font-size: 10px;
-                    line-height: 12px;
                     width: 143px;
                 }
 
                 @media (min-width: $media1440) {
-                    left: 142px;
-                    top: 137px;
-                    position: absolute;
-                    color: #fff;
-                    font-family: 'Space Grotesk';
-                    font-weight: 600;
-                    font-size: 12px;
-                    line-height: 14px;
-                    width: 143px;
                 }
 
                 @media (min-width: $media1920) {
@@ -2427,9 +2426,31 @@ body.overflow {
 }
 
 .value.text-success {
-    color: #84B900 !important;
+    color: #84b900 !important;
 }
 
 .notifications-popover {
     margin-top: 10px;
+}
+
+.sidebar-links {
+    display: flex;
+    gap: 13px;
+
+    .btn-secondary {
+        padding: 12px 23px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        font-size: 13px;
+        background: #eaeaea;
+        color: #000;
+        border: none;
+
+        svg {
+            height: 20px;
+            width: auto;
+        }
+    }
 }

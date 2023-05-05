@@ -82,6 +82,11 @@ export const poolsChartdata: { [key: string]: any } = {
         value: 0,
         icon: '/stake-dao.svg',
     },
+    CLEVUSD_FRAXBP: {
+        title: 'Convex Finance - clevUSDFRAXBP Pool',
+        value: 0,
+        icon: '/convex.svg',
+    },
 };
 
 export function poolInfoToChartElement(pool: PoolInfo, percent: BigNumber): ChartDataElement {
