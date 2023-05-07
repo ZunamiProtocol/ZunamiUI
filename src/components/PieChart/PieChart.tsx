@@ -29,7 +29,7 @@ function renderStratList(items: Array<DataItem>) {
                     item.icon && 
                         <div className="wrapper">
                             <img
-                                src={item.analytics.coinsMarketData.stableCoin.image}
+                                src={item.analytics.coinsMarketData.stableCoin ? item.analytics.coinsMarketData.stableCoin.image : '/clever_analytics.png'}
                                 alt={item.title}
                             />
                             <div className="coin">

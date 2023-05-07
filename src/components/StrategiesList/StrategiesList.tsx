@@ -33,7 +33,7 @@ function renderStratHeader(item: Strategy) {
         case 'CLEVUSD_FRAXBP':
             icon = '/convex.svg';
             title = 'Convex finance';
-            desc = 'clevUSDFRAXBP Pool';
+            desc = 'clevUSD/FRAXBP Pool';
         break;
         case 'STAKE_DAO_MIM':
             icon = '/stake-dao.svg';
@@ -47,13 +47,17 @@ function renderStratHeader(item: Strategy) {
         break;
     }
 
+    const stratIcon = item.analytics.data.coinsMarketData.stableCoin
+    ? item.analytics.data.coinsMarketData.stableCoin.image
+    : '/clever.svg';
+
     return (
         <div className="d-flex gap-2 header">
             { 
                 <div className="new-coin">
                     <div className="wrapper">
                         <img
-                            src={item.analytics.data.coinsMarketData.stableCoin.image}
+                            src={stratIcon}
                             alt={item.title}
                         />
                         <div className="coin">

@@ -222,9 +222,15 @@ export const Analytics = (): JSX.Element => {
         }
 
         if (selectedStrat && selectedStrat.type !== 'STAKE_DAO_MIM') {
-            result.ratio = 
-                ((result.totalCollateralSum / selectedStrat.analytics.coinsMarketData.stableCoin.marketCap) * 100)
-                .toLocaleString('en', { maximumFractionDigits: 0 });
+            const stableCoin = selectedStrat.analytics.coinsMarketData.stableCoin;
+
+            if (stableCoin) {
+                result.ratio = 
+                    ((result.totalCollateralSum / stableCoin.marketCap) * 100)
+                    .toLocaleString('en', { maximumFractionDigits: 0 });
+            } else {
+                result.ratio = 'soon';
+            }
         } else {
             result.ratio = 'soon';
         }
@@ -381,7 +387,7 @@ export const Analytics = (): JSX.Element => {
                                                         }}
                                                     >
                                                         <div className="wrapper">
-                                                            <img src={pool.analytics.coinsMarketData.stableCoin.image} alt={pool.title} />
+                                                            <img src={pool.analytics.coinsMarketData.stableCoin ? pool.analytics.coinsMarketData.stableCoin.image : '/clever_analytics.png'} alt={pool.title} />
                                                             <div className="coin">
                                                                 <img src={pool.icon} alt={pool.title} />
                                                             </div>
@@ -440,7 +446,7 @@ export const Analytics = (): JSX.Element => {
                                                         <div className="d-flex mt-0 new-coin pool-info-coin">
                                                             <div className="wrapper">
                                                                 <img
-                                                                    src={selectedStrat.analytics.coinsMarketData.stableCoin.image}
+                                                                    src={selectedStrat.analytics.coinsMarketData.stableCoin ? selectedStrat.analytics.coinsMarketData.stableCoin.image : '/clever_analytics.png'}
                                                                     alt={selectedStrat.title}
                                                                 />
                                                                 <div className="coin">
@@ -669,7 +675,7 @@ export const Analytics = (): JSX.Element => {
                                             <div className="tbl xs-1-col">
                                                 <div className="logo-col">
                                                     <div className="logos uzd-logos">
-                                                        <img src={selectedStrat.analytics.coinsMarketData.stableCoin.image} alt="" />
+                                                        <img src={selectedStrat.analytics.coinsMarketData.stableCoin ? selectedStrat.analytics.coinsMarketData.stableCoin.image : 'clever_analytics.png'} alt="" />
                                                     </div>
                                                     <div className="about-uzd">
                                                         {
@@ -682,7 +688,7 @@ export const Analytics = (): JSX.Element => {
                                                 <div>
                                                     <div className="subtitle text-nowrap">Marketcap, $</div>
                                                     <div className="vela-sans">
-                                                        ${selectedStrat.analytics.coinsMarketData.stableCoin.marketCap.toLocaleString('en', { maximumFractionDigits: 0 })}
+                                                        ${selectedStrat.analytics.coinsMarketData.stableCoin ? selectedStrat.analytics.coinsMarketData.stableCoin.marketCap.toLocaleString('en', { maximumFractionDigits: 0 }) : ''}
                                                     </div>
                                                 </div>
                                                 <div>
@@ -765,7 +771,9 @@ export const Analytics = (): JSX.Element => {
                                                     </div>
                                                     <div>
                                                         <div className="subtitle">Marketcap, $</div>
-                                                        <div className="vela-sans">${selectedStrat.analytics.coinsMarketData.nativeCoin.marketCap.toLocaleString('en', { maximumFractionDigits: 0 })}</div>
+                                                        <div className="vela-sans">
+                                                            ${selectedStrat.analytics.coinsMarketData.nativeCoin.marketCap.toLocaleString('en', { maximumFractionDigits: 0 })}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
