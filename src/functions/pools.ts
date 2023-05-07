@@ -113,7 +113,7 @@ export function poolDataToChartData(poolData: Array<PoolInfo>, TVL: BigNumber) {
                 // address: pool.address,
                 color: colors[index],
                 ...pool,
-                analytics: pool.analytics.data,
+                analytics: pool.analytics?.data,
             };
         })
         .filter((el) => el.value > 0)
