@@ -160,7 +160,9 @@ export const FastDepositForm = (): JSX.Element => {
         setDepositSum(fullBalance.toString());
     }, [fullBalance]);
 
-    const depositBlockHint = 'We have temporarily halted optimized deposits & withdrawals option due to the surge in gas prices. However, direct deposits & withdrawals are functioning as usual. Thank you!';
+    const depositBlockHint = isPLG(chainId) || isBSC(chainId)
+        ? 'We have temporarily halted deposits on Binance Smart Chain and Polygon due to the surge in gas prices. However, withdrawals are functioning as usual. We will resume deposits shortly. Deposits on Ethereum are operational without any issues. Thank you!'
+        : 'We have temporarily halted optimized deposits & withdrawals option due to the surge in gas prices. However, direct deposits & withdrawals are functioning as usual. Thank you!';
     const depositBlockHintRef = useRef(null);
     const [showHint, setShowHint] = useState(false);
 
