@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, useEffect } from 'react';
+import { useCallback, useMemo, useState, useEffect, useRef } from 'react';
 import { Input } from './Input/Input';
 import { Preloader } from '../Preloader/Preloader';
 import './Form.scss';
@@ -21,7 +21,7 @@ import useApprove from '../../hooks/useApprove';
 import useStake from '../../hooks/useStake';
 import useUnstake from '../../hooks/useUnstake';
 import { BigNumber } from 'bignumber.js';
-import { Toast, ToastContainer } from 'react-bootstrap';
+import { OverlayTrigger, Toast, ToastContainer, Tooltip } from 'react-bootstrap';
 import { ActionSelector } from './ActionSelector/ActionSelector';
 import { DirectAction } from './DirectAction/DirectAction';
 import { getActiveWalletName, getActiveWalletAddress } from '../WalletsModal/WalletsModal';
@@ -464,7 +464,11 @@ export const Form = (props: FormProps): JSX.Element => {
               )
             : getBscWithdrawValidationError(isApproved, lpShareToWithdraw);
 
-    const cantDeposit = emptyFunds || !isApproved || pendingTx || depositExceedAmount;
+    const tempBlock = isBSC(chainId) || isPLG(chainId);
+    const depositBlockHint = 'We have temporarily halted optimized deposits & withdrawals option due to the surge in gas prices. However, direct deposits & withdrawals are functioning as usual. Thank you!';
+    const cantDeposit = emptyFunds || !isApproved || pendingTx || depositExceedAmount || tempBlock;
+    const depositBlockHintRef = useRef(null);
+    const [showHint, setShowHint] = useState(false);
 
     if (isETH(chainId)) {
         log(
@@ -541,6 +545,10 @@ export const Form = (props: FormProps): JSX.Element => {
 
                     switch (action) {
                         case 'withdraw':
+                            if (!props.directOperation) {
+                                return;
+                            }
+
                             setPendingTx(true);
 
                             try {
@@ -568,6 +576,10 @@ export const Form = (props: FormProps): JSX.Element => {
                             setPendingTx(false);
                             break;
                         case 'deposit':
+                            if (!props.directOperation) {
+                                return;
+                            }
+
                             setPendingTx(true);
 
                             try {
@@ -734,9 +746,23 @@ export const Form = (props: FormProps): JSX.Element => {
                             )}
                             {account && (
                                 <div className="deposit-button-wrapper flex-wrap flex-column flex-md-row align-items-center">
-                                    <button type="submit" disabled={cantDeposit}>
-                                        Deposit
-                                    </button>
+                                    {
+                                        !props.directOperation &&
+                                        <div ref={depositBlockHintRef} onClick={() => setShowHint(!showHint)}>
+                                            <OverlayTrigger placement="right" overlay={<Tooltip>{depositBlockHint}</Tooltip>}>
+                                                <button type="submit" className={`${!props.directOperation ? 'disabled' : ''}`}>
+                                                    Deposit
+                                                </button>
+                                            </OverlayTrigger>
+                                        </div>
+                                    }
+                                    {
+                                        props.directOperation &&
+                                            <button type="submit" className={`${!props.directOperation ? 'disabled' : ''}`}>
+                                                Deposit
+                                            </button>
+                                    }
+                                  
                                     {!pendingTx && (
                                         <DirectAction
                                             actionName="deposit"
@@ -795,12 +821,28 @@ export const Form = (props: FormProps): JSX.Element => {
                                                 Approve GZLP
                                             </button>
                                         )}
-                                    <button
+                                    {
+                                        !props.directOperation &&
+                                        <div ref={depositBlockHintRef} onClick={() => setShowHint(!showHint)}>
+                                            <OverlayTrigger placement="right" overlay={<Tooltip>{depositBlockHint}</Tooltip>}>
+                                                <button type="submit" className={`${!props.directOperation ? 'disabled' : ''}`}>
+                                                    Withdraw
+                                                </button>
+                                            </OverlayTrigger>
+                                        </div>
+                                    }
+                                    {
+                                        props.directOperation &&
+                                            <button type="submit" className={`${!canWithdraw ? 'disabled' : ''}`}>
+                                                Withdraw
+                                            </button>
+                                    }
+                                    {/* <button
                                         type="submit"
                                         className={`${!canWithdraw ? 'disabled' : ''}`}
                                     >
                                         Withdraw
-                                    </button>
+                                    </button> */}
                                     {!pendingTx && (
                                         <DirectAction
                                             actionName="withdraw"
