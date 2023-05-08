@@ -1,6 +1,6 @@
 import './FastDepositForm.scss';
-import { useState, useMemo, useEffect } from 'react';
-import { ToastContainer, Toast } from 'react-bootstrap';
+import { useState, useMemo, useEffect, useRef } from 'react';
+import { ToastContainer, Toast, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Input } from './Input/Input';
 import { Preloader } from '../Preloader/Preloader';
 import { useUserBalances } from '../../hooks/useUserBalances';
@@ -160,6 +160,10 @@ export const FastDepositForm = (): JSX.Element => {
         setDepositSum(fullBalance.toString());
     }, [fullBalance]);
 
+    const depositBlockHint = 'We have temporarily halted optimized deposits & withdrawals option due to the surge in gas prices. However, direct deposits & withdrawals are functioning as usual. Thank you!';
+    const depositBlockHintRef = useRef(null);
+    const [showHint, setShowHint] = useState(false);
+
     return (
         <div className="FastDepositForm">
             <ToastContainer position={'top-end'} className={'toasts mt-3 me-3'}>
@@ -303,7 +307,17 @@ export const FastDepositForm = (): JSX.Element => {
                                 Approve
                             </button>
                         )}
-                        {approvedTokens[coinIndex] && (
+                        {
+                            optimized &&
+                            <div ref={depositBlockHintRef} onClick={() => setShowHint(!showHint)}>
+                                <OverlayTrigger placement="right" overlay={<Tooltip>{depositBlockHint}</Tooltip>}>
+                                    <button className="zun-button disabled-deposit">
+                                        Deposit
+                                    </button>
+                                </OverlayTrigger>
+                            </div>
+                        }
+                        {approvedTokens[coinIndex] && !optimized && (
                             <button
                                 className={`zun-button ${depositEnabled ? '' : 'disabled'}`}
                                 onClick={async () => {

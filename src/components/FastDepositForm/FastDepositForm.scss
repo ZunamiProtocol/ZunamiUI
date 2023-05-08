@@ -37,6 +37,11 @@
         width: 609px;
     }
 
+    .disabled-deposit {
+        pointer-events: all;
+        opacity: .5;
+    }
+
     &__Title {
         @media screen and (min-width: $media375) {
             display: none;
