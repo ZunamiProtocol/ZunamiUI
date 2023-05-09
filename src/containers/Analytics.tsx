@@ -417,14 +417,18 @@ export const Analytics = (): JSX.Element => {
                                                         <span className="badge text-bg-secondary bg-secondary">soon</span>
                                                     </div>
                                                 </a>
-                                                <a href="#treasure" className="gray-block disabled">
+                                                <a
+                                                    href="https://debank.com/profile/0xb056b9a45f09b006ec7a69770a65339586231a34"
+                                                    className="gray-block"
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                >
                                                     <img
                                                         src="/treasure.svg"
                                                         alt="Treasure Analytics"
                                                     />
                                                     <div>
-                                                        <div className="name">Treasure Analytics</div>
-                                                        <span className="badge text-bg-secondary bg-secondary">soon</span>
+                                                        <div className="name">Zunami Treasury</div>
                                                     </div>
                                                 </a>
                                             </div>
