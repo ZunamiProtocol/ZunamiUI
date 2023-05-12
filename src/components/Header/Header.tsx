@@ -11,9 +11,9 @@ import { useWallet } from 'use-wallet';
 import { getTransHistoryUrl } from '../../api/api';
 import { format } from 'date-fns';
 import { log } from '../../utils/logger';
+
 import { isETH } from '../../utils/zunami';
 import { useGasPrice } from '../../hooks/useGasPrice';
-import { WalletStatus } from '../WalletStatus/WalletStatus';
 import { WalletButton } from '../WalletButton/WalletButton';
 
 function chainNameToTooltip(chainId: number) {
@@ -192,7 +192,7 @@ export const Header: React.FC<HeaderProps> = ({ section }) => {
 
         loadNotifications();
 
-        let refreshInterval = setInterval(loadNotifications, 10000);
+        let refreshInterval = setInterval(loadNotifications, 60000);
         return () => clearInterval(refreshInterval);
     }, [account, chainId]);
 

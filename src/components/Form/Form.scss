@@ -45,6 +45,10 @@
         border: none;
         color: #fff;
 
+        &.disabled {
+            pointer-events: all;
+        }
+
         @media screen and (min-width: $media375) {
             // width: 120px;
             padding: 10px 28px;

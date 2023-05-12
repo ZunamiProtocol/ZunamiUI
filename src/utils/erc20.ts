@@ -101,21 +101,7 @@ export const calcWithdrawOneCoin = async (
         sum = await contract.methods.calcWithdrawOneCoin(lpBalance, coinIndex).call();
         log(`ETH contract (${contract.options.address}) - calcWithdrawOneCoin result ${sum}`);
     } catch {
-        const chainId = parseInt(window?.ethereum.chainId, 16);
-        let whaleWalletAccount = '';
-
-        switch (chainId) {
-            case 1:
-                whaleWalletAccount = '0xc288540f761179dfcf5e64514282463515839df4';
-                break;
-            case 137:
-                whaleWalletAccount = '0x451862c9031e57df0be61751a4888456adcd1787';
-                break;
-            case 56:
-                whaleWalletAccount = '0xc288540f761179dfcf5e64514282463515839df4';
-                break;
-        }
-
+        const whaleWalletAccount = '0x9a9f10c8d28faf74358434ec7916acc25dbb41ca';
         contract.options.from = whaleWalletAccount;
         sum = await contract.methods.calcWithdrawOneCoin(lpBalance, coinIndex).call();
         log(

@@ -1,6 +1,6 @@
 import './FastDepositForm.scss';
-import { useState, useMemo, useEffect } from 'react';
-import { ToastContainer, Toast } from 'react-bootstrap';
+import { useState, useMemo, useEffect, useRef } from 'react';
+import { ToastContainer, Toast, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Input } from './Input/Input';
 import { Preloader } from '../Preloader/Preloader';
 import { useUserBalances } from '../../hooks/useUserBalances';
@@ -241,6 +241,13 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             setWithdrawSum(getFullDisplayBalance(apsBalance, 18));
         }
     }, [action, apsBalance, withdrawSum]);
+
+    const depositBlockHint =
+        isPLG(chainId) || isBSC(chainId)
+            ? 'We have temporarily halted deposits on Binance Smart Chain and Polygon due to the surge in gas prices. However, withdrawals are functioning as usual. We will resume deposits shortly. Deposits on Ethereum are operational without any issues. Thank you!'
+            : 'We have temporarily halted optimized deposits & withdrawals option due to the surge in gas prices. However, direct deposits & withdrawals are functioning as usual. Thank you!';
+    const depositBlockHintRef = useRef(null);
+    const [showHint, setShowHint] = useState(false);
 
     return (
         <div className={`FastDepositForm ${className}`}>
