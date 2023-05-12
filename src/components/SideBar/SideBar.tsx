@@ -5,9 +5,7 @@ import { getBalanceNumber } from '../../utils/formatbalance';
 import useFetch from 'react-fetch-hook';
 import { BigNumber } from 'bignumber.js';
 import { WalletStatus } from '../WalletStatus/WalletStatus';
-import {
-    zunamiInfoUrl,
-} from '../../api/api';
+import { zunamiInfoUrl } from '../../api/api';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 
 export interface ZunamiInfo {
@@ -44,6 +42,9 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
             .then((response) => response.json())
             .then((data) => {
                 setGasPrice(Number(data.result.ProposeGasPrice));
+            })
+            .catch((error) => {
+                setGasPrice('n/a');
             });
     }, []);
 

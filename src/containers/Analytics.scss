@@ -27,11 +27,16 @@
 }
 
 .SidebarColumn {
-    background: linear-gradient(0.02deg, rgba(242, 242, 242, 0.45) 76.02%, rgba(241, 241, 241, 0.45) 95.61%);
+    @media (min-width: $media1024) {
+        background: linear-gradient(
+            0.02deg,
+            rgba(242, 242, 242, 0.45) 76.02%,
+            rgba(241, 241, 241, 0.45) 95.61%
+        );
+    }
 }
 
 .AnalyticsContainer {
-
     h2 {
         font-weight: 500;
         font-size: 19px;
@@ -81,7 +86,7 @@
             @media screen and (min-width: $media375) {
                 min-width: 250px;
             }
-    
+
             @media screen and (min-width: $media1024) {
                 min-width: auto;
             }
@@ -257,7 +262,7 @@
                     > div,
                     > a {
                         cursor: pointer;
-                        background: #DADADA;
+                        background: #dadada;
                         border-radius: 6px;
                         display: flex;
                         align-items: center;
@@ -267,7 +272,7 @@
                             width: 16px;
                             height: 16px;
                         }
-    
+
                         @media screen and (min-width: $media1440) {
                             width: 18px;
                             height: 18px;
@@ -278,7 +283,7 @@
                                 width: 10px;
                                 height: 10px;
                             }
-        
+
                             @media screen and (min-width: $media1440) {
                                 // width: 22px;
                                 // height: 22px;
@@ -334,19 +339,18 @@
     }
 
     .protocol-row {
-
         .logo-col {
             .about-uzd {
                 @media screen and (min-width: $media375) {
                     // margin-left: 0;
                     margin-top: 20px;
                 }
-                
+
                 @media screen and (min-width: $media1024) {
                     // margin-left: 100px;
                     margin-top: 0;
                 }
-        
+
                 p {
                     font-weight: 500;
                     font-size: 13px;
@@ -440,7 +444,7 @@
             width: 19px;
             height: 19px;
             padding: 5px;
-            background: #D7D7D7;
+            background: #d7d7d7;
             border-radius: 7px;
             position: absolute;
             left: 15px;
@@ -474,14 +478,14 @@
 
     .pools {
         display: flex;
-        
+
         @media screen and (min-width: $media375) {
             flex-wrap: nowrap;
             width: 100%;
             overflow-y: auto;
             flex-direction: row;
         }
-        
+
         @media screen and (min-width: $media1024) {
             flex-wrap: wrap;
             width: auto;
@@ -523,7 +527,7 @@
         @media screen and (min-width: $media375) {
             width: auto;
         }
-        
+
         @media screen and (min-width: $media1024) {
             width: 100%;
         }
@@ -533,7 +537,7 @@
         @media screen and (min-width: $media375) {
             flex-wrap: wrap;
         }
-        
+
         @media screen and (min-width: $media1024) {
             flex-wrap: nowrap;
         }
@@ -542,19 +546,19 @@
             @media screen and (min-width: $media375) {
                 width: 50%;
             }
-            
+
             @media screen and (min-width: $media1024) {
                 width: inherit;
             }
         }
     }
-    
+
     .xs-2-col {
         > div {
             @media screen and (min-width: $media375) {
                 width: calc(50% - 10px);
             }
-            
+
             @media screen and (min-width: $media1024) {
                 width: inherit;
             }
@@ -566,7 +570,7 @@
             @media screen and (min-width: $media375) {
                 width: 100%;
             }
-            
+
             @media screen and (min-width: $media1024) {
                 width: inherit;
             }
@@ -578,7 +582,7 @@
             width: 100%;
             margin-bottom: 20px;
         }
-        
+
         @media screen and (min-width: $media1024) {
             // width: 150px;
             margin-bottom: 0;
@@ -602,7 +606,7 @@
         @media screen and (min-width: $media1440) {
             width: auto;
             min-width: 310px;
-            margin-left: 1rem;            
+            margin-left: 1rem;
         }
 
         .PieChart__StratList {
@@ -611,7 +615,7 @@
             }
 
             @media screen and (min-width: $media1024) {
-                width: calc(100% - 110px)
+                width: calc(100% - 110px);
             }
         }
 

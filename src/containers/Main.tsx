@@ -1,7 +1,4 @@
 import React, { useEffect, useState, Suspense, lazy, useRef } from 'react';
-// import { InfoBlock } from '../components/InfoBlock/InfoBlock';
-// import { BalanceInfoBlock } from '../components/BalanceInfoBlock/BalanceInfoBlock';
-// import { ClickableHeader } from '../components/ClickableHeader/ClickableHeader';
 import './Main.scss';
 import { getBalanceNumber } from '../utils/formatbalance';
 import useLpPrice from '../hooks/useLpPrice';
@@ -27,19 +24,16 @@ import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChai
 import useSupportedChain from '../hooks/useSupportedChain';
 import { log, copyLogs } from '../utils/logger';
 import usePausedContract from '../hooks/usePausedContract';
-import { EthMergeWarningModal } from '../components/EthMergeWarningModal/EthMergeWarningModal';
 import useUzdBalance from '../hooks/useUzdBalance';
 import { isBSC, isETH, isPLG } from '../utils/zunami';
 import { FastDepositForm } from '../components/FastDepositForm/FastDepositForm';
-import Carousel from 'react-bootstrap/Carousel';
 import { Pendings } from '../components/Pendings/Pendings';
-// import { ServicesMenu } from '../components/ServicesMenu/ServicesMenu';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { networks } from '../components/NetworkSelector/NetworkSelector';
 import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
 import { SupportersBar } from '../components/SupportersBar/SupportersBar';
-import { WalletStatus } from '../components/WalletStatus/WalletStatus';
 import { StakingSummary } from '../components/StakingSummary/StakingSummary';
+import { DashboardCarousel } from '../components/DashboardCarousel/DashboardCarousel';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -51,21 +45,9 @@ const MobileSidebar = lazy(() =>
     }))
 );
 
-const PendingBalance = lazy(() =>
-    import('../components/PendingBalance/PendingBalance').then((module) => ({
-        default: module.PendingBalance,
-    }))
-);
-
 const SideBar = lazy(() =>
     import('../components/SideBar/SideBar').then((module) => ({ default: module.SideBar }))
 );
-
-// const WalletStatus = lazy(() =>
-//     import('../components/WalletStatus/WalletStatus').then((module) => ({
-//         default: module.WalletStatus,
-//     }))
-// );
 
 const ApyChart = lazy(() =>
     import('../components/ApyChart/ApyChart').then((module) => ({ default: module.ApyChart }))
@@ -224,6 +206,7 @@ export const Main = (): JSX.Element => {
                 log(`Total income. Value set to: ${data.totalIncome}`);
             } catch (error: any) {
                 log(`❗️ Error fetching total income: ${error.message}`);
+                setTotalIncome('n/a');
             }
         };
 
@@ -245,6 +228,9 @@ export const Main = (): JSX.Element => {
             })
             .then((items) => {
                 setHistApyData(items.data);
+            })
+            .catch((error) => {
+                setHistApyData([]);
             });
     }, [histApyPeriod]);
 
@@ -254,22 +240,6 @@ export const Main = (): JSX.Element => {
         lpPrice.toNumber() > 0 && pendingOperations.withdraw.toNumber() !== -1
             ? lpPrice.multipliedBy(pendingOperations.withdraw)
             : new BigNumber(0);
-
-    // const pdElement = (
-    //     <div className="d-flex">
-    //         <PendingBalance
-    //             val={`PD: $${getBalanceNumber(
-    //                 pendingOperations.deposit,
-    //                 isETH(chainId) || isPLG(chainId) ? 6 : 18
-    //             ).toFixed(2)}`}
-    //             hint={`You have $${pendingOperations.deposit} in pending deposit`}
-    //         />
-    //         <PendingBalance
-    //             val={`PW: $${getBalanceNumber(pendingWithdraw).toFixed(2)}`}
-    //             hint={`You have $${pendingWithdraw} in pending withdraw`}
-    //         />
-    //     </div>
-    // );
 
     // v1.1 migration modal
     const [showMigrationModal, setShowMigrationModal] = useState(false);
@@ -312,13 +282,17 @@ export const Main = (): JSX.Element => {
                 <div className="">
                     <span>Average APY in 30 days: </span>
                     <span className="text-primary">
-                        {isZunLoading ? 'n/a' : `${zunamiInfo.monthlyAvgApy.toFixed(2)}%`}
+                        {isZunLoading || !zunamiInfo
+                            ? 'n/a'
+                            : `${zunamiInfo.monthlyAvgApy.toFixed(2)}%`}
                     </span>
                 </div>
                 <div className="">
                     <span>Average APY in 90 days: </span>
                     <span className="text-primary">
-                        {isZunLoading ? 'n/a' : `${zunamiInfo.threeMonthAvgApy.toFixed(2)}%`}
+                        {isZunLoading || !zunamiInfo
+                            ? 'n/a'
+                            : `${zunamiInfo.threeMonthAvgApy.toFixed(2)}%`}
                     </span>
                 </div>
             </Popover.Body>
@@ -347,7 +321,6 @@ export const Main = (): JSX.Element => {
                 <AllServicesPanel />
                 {/* <ServicesMenu /> */}
                 <div className="container">
-                    {/* <EthMergeWarningModal show={showMergeModal} /> */}
                     {!supportedChain && (
                         <UnsupportedChain text="You're using unsupported chain. Please, switch either to Ethereum or Binance network." />
                     )}
@@ -370,8 +343,21 @@ export const Main = (): JSX.Element => {
                     <div className="row main-row h-100">
                         <SideBar isMainPage={true}>
                             <div className="row">
-                                <div className="col sidebar-links mt-3">
-                                    <button className="btn btn-secondary">
+                                <div className="col sidebar-links mt-3 d-none d-lg-flex">
+                                    <button
+                                        className="btn btn-secondary"
+                                        onClick={() => {
+                                            document
+                                                .getElementById('all-services')
+                                                ?.classList.toggle('active');
+                                            document
+                                                .getElementById('sidebar-col')
+                                                ?.classList.toggle('transparent');
+                                            document
+                                                .getElementById('nav-menu')
+                                                ?.classList.toggle('hidden');
+                                        }}
+                                    >
                                         <svg
                                             width="22"
                                             height="23"
@@ -399,7 +385,7 @@ export const Main = (): JSX.Element => {
                                                 </linearGradient>
                                             </defs>
                                         </svg>
-                                        <span>All Zunami’s services</span>
+                                        <span>All services</span>
                                     </button>
                                     <a
                                         href="https://zunamilab.gitbook.io/product-docs/"
@@ -581,12 +567,15 @@ export const Main = (): JSX.Element => {
                         </SideBar>
                         <div className="col content-col dashboard-col">
                             <Header section="dashboard" />
-                            <div className="dashboard">
-                                <div className="left-col">
+                            <div className="row ms-lg-4">
+                                <div className="col-lg-7 col-xs-12">
                                     <div className="fast-deposit-wrapper">
-                                        <FastDepositForm stakingMode={stakingMode} />
+                                        <FastDepositForm
+                                            stakingMode={stakingMode}
+                                            className="m-lg-3 mt-lg-0"
+                                        />
                                     </div>
-                                    <div className="ApyBar">
+                                    <div className="ApyBar ms-lg-3 me-lg-3 mt-3 mt-lg-0">
                                         <div className="ApyBar__title">APY Bar</div>
                                         <div className="ApyBar__counters">
                                             <div className="ApyBar__Counter">
@@ -594,7 +583,9 @@ export const Main = (): JSX.Element => {
                                                     <span>Base APY</span>
                                                 </div>
                                                 <div className="ApyBar__Counter__Value ApyBar__Counter__Value--primary vela-sans">
-                                                    {isZunLoading ? 'n/a' : `${zunamiInfo.apy}%`}
+                                                    {isZunLoading || !zunamiInfo
+                                                        ? 'n/a'
+                                                        : `${zunamiInfo.apy}%`}
                                                 </div>
                                             </div>
                                             <div className="ApyBar__Counter">
@@ -635,7 +626,7 @@ export const Main = (): JSX.Element => {
                                                     </div>
                                                 </div>
                                                 <div className="ApyBar__Counter__Value vela-sans">
-                                                    {isZunLoading
+                                                    {isZunLoading || !zunamiInfo
                                                         ? 'n/a'
                                                         : `${zunamiInfo.monthlyAvgApy}%`}
                                                 </div>
@@ -657,81 +648,26 @@ export const Main = (): JSX.Element => {
                                         />
                                     </div>
                                 </div>
-                                <div className="right-col">
-                                    <Carousel className="features-slider" fade indicators={false}>
-                                        <Carousel.Item className="uzd">
-                                            <a href="/uzd">
-                                                <svg
-                                                    className="uzd-logo"
-                                                    width="134"
-                                                    height="154"
-                                                    viewBox="0 0 134 154"
-                                                    fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <path
-                                                        d="M133.304 96.2632L129.728 89.5694C129.356 88.8749 128.849 88.2597 128.236 87.7589C127.623 87.2582 126.916 86.8818 126.156 86.6514C125.396 86.4174 124.597 86.3339 123.804 86.4056C123.011 86.4773 122.241 86.7029 121.537 87.0694L88.2068 104.421L72.3009 74.6446L97.2053 15.3472C97.6018 14.4109 97.744 13.3887 97.6178 12.3815C97.5784 11.508 97.3446 10.6538 96.933 9.87965L93.3577 3.18767C92.9866 2.49309 92.4801 1.87778 91.8673 1.37713C91.2545 0.876489 90.5475 0.500399 89.7869 0.270492C89.027 0.0367035 88.2276 -0.046732 87.435 0.0248464C86.6424 0.0964248 85.8722 0.321606 85.1679 0.687617L44.1891 22.0212L35.9183 6.53906C35.547 5.84456 35.0402 5.22928 34.4275 4.72852C33.8147 4.22776 33.108 3.85138 32.3475 3.62098C31.5877 3.38613 30.7884 3.30224 29.9956 3.37398C29.2028 3.44573 28.4323 3.6717 27.7285 4.039L20.9494 7.56749C20.2458 7.9342 19.6225 8.43441 19.1153 9.03945C18.608 9.64449 18.2267 10.3424 17.9933 11.0933C17.7562 11.8433 17.6713 12.6322 17.7438 13.4147C17.8163 14.1971 18.0448 14.9577 18.4159 15.6529L26.6867 31.1324L3.23025 43.3432C2.52673 43.7093 1.90329 44.2092 1.39614 44.814C0.888984 45.4188 0.508112 46.1165 0.275088 46.8671C0.0375425 47.6173 -0.0474112 48.4064 0.0251063 49.1891C0.0976239 49.9718 0.326186 50.7325 0.697645 51.4277L4.27298 58.1196C4.64401 58.8142 5.1505 59.4295 5.76331 59.9302C6.37612 60.4308 7.08316 60.8069 7.84376 61.0368C8.60359 61.2708 9.4025 61.3545 10.1951 61.2829C10.9878 61.2113 11.7585 60.9859 12.4627 60.6197L35.9164 48.4098L50.4627 75.6398L24.246 138.061C23.9022 138.919 23.7515 139.841 23.8044 140.762C23.8601 141.684 24.1183 142.583 24.5611 143.397C24.6477 143.555 24.7141 143.683 24.7824 143.815L28.5181 150.812C28.889 151.507 29.3953 152.122 30.0079 152.623C30.6206 153.123 31.3275 153.499 32.0879 153.729C32.6718 153.909 33.2797 154 33.8911 154C34.8725 153.999 35.8391 153.763 36.7078 153.312L79.9351 130.808L84.9448 140.186C85.3158 140.881 85.8223 141.496 86.4351 141.997C87.0479 142.498 87.755 142.874 88.5156 143.104C89.2754 143.338 90.0743 143.421 90.8669 143.35C91.6596 143.278 92.4303 143.053 93.1345 142.686L99.9146 139.157C100.618 138.79 101.241 138.29 101.748 137.685C102.255 137.08 102.636 136.383 102.869 135.632C103.106 134.882 103.19 134.093 103.118 133.311C103.045 132.528 102.817 131.768 102.446 131.073L97.4375 121.697L130.769 104.346C131.473 103.979 132.096 103.479 132.603 102.875C133.111 102.27 133.492 101.572 133.725 100.821C133.962 100.071 134.047 99.2828 133.975 98.5007C133.903 97.7185 133.674 96.9582 133.304 96.2632V96.2632ZM53.4188 39.2987L69.1691 31.1L60.309 52.1954L53.4188 39.2987ZM70.7054 113.532L51.8461 123.348L62.4546 98.0881L70.7054 113.532Z"
-                                                        fill="url(#paint0_linear_101_731)"
-                                                    />
-                                                    <defs>
-                                                        <linearGradient
-                                                            id="paint0_linear_101_731"
-                                                            x1="17.6316"
-                                                            y1="8.40805"
-                                                            x2="101.757"
-                                                            y2="104.551"
-                                                            gradientUnits="userSpaceOnUse"
-                                                        >
-                                                            <stop
-                                                                stopColor="white"
-                                                                stopOpacity="0.66"
-                                                            />
-                                                            <stop
-                                                                offset="0.845106"
-                                                                stopColor="white"
-                                                                stopOpacity="0"
-                                                            />
-                                                        </linearGradient>
-                                                    </defs>
-                                                </svg>
-                                                <div className="uzd">
-                                                    <svg
-                                                        width="98"
-                                                        height="41"
-                                                        viewBox="0 0 98 41"
-                                                        fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                    >
-                                                        <path
-                                                            d="M25.1878 10.5298V25.2697C25.1878 30.6959 20.1947 35.0957 14.04 35.0957C9.93434 35.0957 6.60696 31.4292 6.60696 26.9066V10.5298H1.74721e-05V26.8647C-0.00583848 30.5504 1.46053 34.0885 4.07846 36.7052C6.69639 39.3218 10.2528 40.8041 13.9701 40.828C16.7149 40.8458 19.4328 40.2905 21.947 39.1982C23.3574 38.5736 24.4994 37.4743 25.171 36.095V39.9968H25.1878V40.0095H31.7946V10.5298H25.1878Z"
-                                                            fill="white"
-                                                        />
-                                                        <path
-                                                            d="M90.8862 0.708008V0.709161H90.8772V14.4623C90.0829 13.0986 88.8658 12.0256 87.4069 11.4031C84.9982 10.3143 82.3858 9.73891 79.7387 9.71429C69.9347 9.71429 61.9859 16.6783 61.9859 25.2703C61.9859 33.8609 68.2701 40.8263 76.0237 40.8263C77.8673 40.8263 79.6928 40.4663 81.396 39.7668C83.0992 39.0673 84.6468 38.0421 85.9504 36.7495C87.2539 35.457 88.288 33.9225 88.9934 32.2337C89.6988 30.5449 90.0617 28.7349 90.0616 26.907H83.455C83.455 31.4289 80.128 35.0949 76.0237 35.0949C71.9187 35.0949 68.5919 30.6957 68.5919 25.2703C68.5919 19.8449 73.5841 15.4457 79.7387 15.4457C85.8955 15.4457 90.8869 19.8449 90.8869 25.2703V40.0079H97.4928V0.708008H90.8862Z"
-                                                            fill="white"
-                                                        />
-                                                        <path
-                                                            d="M34.6285 13.7046V16.3135H52.5558L34.6285 33.9865V39.8945H61.8591V33.9865H60.2215V33.9859H44.5228L45.5024 32.8686C45.5667 32.8016 45.6302 32.7338 45.6917 32.6641L47.4632 30.6568L61.8591 16.0406V10.5386H34.6285V13.7046Z"
-                                                            fill="white"
-                                                        />
-                                                    </svg>
-                                                </div>
-                                                <span className="description">
-                                                    The First-ever Aggregated Stablecoin
-                                                </span>
-                                            </a>
-                                        </Carousel.Item>
-                                    </Carousel>
-                                    <Pendings
-                                        deposit={`$${getBalanceNumber(
-                                            pendingOperations.deposit,
-                                            isETH(chainId) || isPLG(chainId) ? 6 : 18
-                                        ).toFixed(2)}`}
-                                        withdraw={`$${getBalanceNumber(pendingWithdraw).toFixed(
-                                            2
-                                        )}`}
+                                <div className="col-lg-5 col-xs-12 d-flex flex-column">
+                                    <DashboardCarousel
+                                        className="features-slider mb-3 mt-3 mt-lg-0 order-2 order-lg-0"
+                                        style={{
+                                            height: stakingMode !== 'UZD' ? '127px' : '222px',
+                                        }}
                                     />
-                                    <Chart data={chartData} />
+                                    {stakingMode !== 'UZD' && (
+                                        <Pendings
+                                            deposit={`$${getBalanceNumber(
+                                                pendingOperations.deposit,
+                                                isETH(chainId) || isPLG(chainId) ? 6 : 18
+                                            ).toFixed(2)}`}
+                                            withdraw={`$${getBalanceNumber(pendingWithdraw).toFixed(
+                                                2
+                                            )}`}
+                                            className="mb-3"
+                                        />
+                                    )}
+                                    <Chart data={chartData} className="flex-grow-1 mt-3 mt-lg-0" />
                                 </div>
                             </div>
                             <SupportersBar section="dashboard" />

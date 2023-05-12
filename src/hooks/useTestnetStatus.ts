@@ -1,9 +1,9 @@
-import {useState,useEffect} from 'react';
-import {getTestnetStatusUrl} from '../api/api';
-import {useWallet} from 'use-wallet';
+import { useState, useEffect } from 'react';
+import { getTestnetStatusUrl } from '../api/api';
+import { useWallet } from 'use-wallet';
 
 const useTestnetStatus = async () => {
-    const {account} = useWallet();
+    const { account } = useWallet();
     const [testnetStatus, setTestnetStatus] = useState(false);
 
     useEffect(() => {
@@ -11,15 +11,19 @@ const useTestnetStatus = async () => {
             if (!account) {
                 return false;
             }
-    
-            const response = await fetch(getTestnetStatusUrl(account));
-            const data = await response.json();
-            setTestnetStatus(data);
-        };
+
+            try {
+                const response = await fetch(getTestnetStatusUrl(account));
+                const data = await response.json();
+                setTestnetStatus(data);
+            } catch (error) {
+                setTestnetStatus(false);
+            }
+        }
 
         getStatus();
     }, [account]);
-    
+
     return testnetStatus;
 };
 

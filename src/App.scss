@@ -574,6 +574,22 @@ body.dark {
         }
     }
 
+    .WalletButton {
+        svg {
+            rect:first-child {
+                fill: #424242;
+            }
+
+            rect:last-child {
+                fill: #646464;
+            }
+        }
+    }
+
+    .FastDepositForm__MobileToggle__Icon {
+        background: linear-gradient(225.25deg, #171717 16.17%, #161616 85.98%);
+    }
+
     .badge.bg-secondary {
         background: #1d1d1d !important;
         text-decoration: none;
@@ -1682,6 +1698,10 @@ body.dark {
 .btn-light {
     background-color: $btn-secondary-color !important;
     border-color: transparent !important;
+
+    &:hover {
+        background-color: #d4d4d4 !important;
+    }
 }
 
 .dashboard {
@@ -1727,25 +1747,21 @@ body.overflow {
     border-radius: $border-radius;
 
     @media (min-width: $media375) {
-        width: 100%;
-        height: 193px;
+        // width: 100%;
         margin-bottom: 20px;
     }
 
     @media (min-width: $media1024) {
-        width: 275px;
-        height: 170px;
+        // width: 275px;
         margin-bottom: 0;
     }
 
     @media (min-width: $media1440) {
-        width: 353px;
-        height: 127px;
+        // width: 353px;
     }
 
     @media (min-width: $media1920) {
-        width: 610px;
-        height: 262px;
+        // width: 610px;
     }
 
     .carousel-inner,
@@ -1758,23 +1774,23 @@ body.overflow {
         position: relative;
 
         @media (min-width: $media375) {
-            width: 100%;
-            height: 193px;
+            // width: 100%;
+            height: 100%;
         }
 
         @media (min-width: $media1024) {
-            width: 100%;
-            height: 170px;
+            // width: 100%;
+            height: 100%;
         }
 
         @media (min-width: $media1440) {
-            width: 353px;
-            height: 127px;
+            // width: 353px;
+            height: 100%;
         }
 
         @media (min-width: $media1920) {
-            width: 609px;
-            height: 262px;
+            // width: 609px;
+            height: 100%;
         }
 
         .title {
@@ -1844,14 +1860,27 @@ body.overflow {
             .uzd-logo {
                 @media (min-width: $media375) {
                     position: absolute;
+                    left: calc(50% - 100px);
+                    top: calc(50%);
+                    transform: translate(-50%, -50%);
+                    position: absolute;
+                    width: 89px;
+                    height: 102px;
                 }
 
                 @media (min-width: $media1024) {
+                    left: 36px;
+                    top: calc(50%);
+                    transform: translateY(-50%);
+                    position: absolute;
+                    width: 89px;
+                    height: 102px;
                 }
 
                 @media (min-width: $media1440) {
                     left: 36px;
-                    top: 14px;
+                    top: calc(50%);
+                    transform: translateY(-50%);
                     position: absolute;
                     width: 89px;
                     height: 102px;
@@ -1866,11 +1895,17 @@ body.overflow {
                     position: absolute;
                     display: flex;
                     align-items: baseline;
+                    top: calc(50% - 20px);
+                    transform: translate(-50%, -50%);
+                    left: 50%;
+                    width: 147px;
+                    height: 40px;
                 }
 
                 @media (min-width: $media1024) {
-                    top: 38px;
-                    left: 65px;
+                    top: calc(50% - 20px);
+                    transform: translateY(-50%);
+                    left: 85px;
                     width: 97px;
                     height: 40px;
                     position: absolute;
@@ -1879,6 +1914,11 @@ body.overflow {
                 }
 
                 @media (min-width: $media1440) {
+                    top: calc(50%);
+                    transform: translateY(-50%);
+                    left: 85px;
+                    width: 97px;
+                    height: 40px;
                     position: absolute;
                     display: flex;
                     align-items: baseline;
@@ -1898,11 +1938,21 @@ body.overflow {
             .description {
                 @media (min-width: $media375) {
                     position: absolute;
+                    left: 50%;
+                    top: calc(50% + 25px);
+                    transform: translate(-50%, -50%);
+                    color: #fff;
+                    font-family: 'Space Grotesk';
+                    font-weight: 600;
+                    font-size: 12px;
+                    line-height: 14px;
+                    width: 143px;
                 }
 
                 @media (min-width: $media1024) {
-                    left: 175px;
-                    top: 48px;
+                    left: 85px;
+                    top: calc(50% + 25px);
+                    transform: translateY(-50%);
                     color: #fff;
                     font-family: 'Space Grotesk';
                     font-weight: 600;
@@ -1912,6 +1962,15 @@ body.overflow {
                 }
 
                 @media (min-width: $media1440) {
+                    left: 195px;
+                    top: calc(50% + 5px);
+                    transform: translateY(-50%);
+                    color: #fff;
+                    font-family: 'Space Grotesk';
+                    font-weight: 600;
+                    font-size: 12px;
+                    line-height: 14px;
+                    width: 143px;
                 }
 
                 @media (min-width: $media1920) {
@@ -1950,24 +2009,24 @@ body.overflow {
     }
 
     @media (min-width: $media1024) {
-        width: 300px;
-        height: 316px;
+        // width: 300px;
+        // height: 316px;
         padding: 20px;
-        margin: 21px 20px 0 25px;
+        // margin: 21px 20px 0 25px;
     }
 
     @media (min-width: $media1440) {
-        width: 517px;
-        height: 316px;
+        // width: 517px;
+        // height: 316px;
         padding: 25px;
-        margin: 21px 23px 0 48px;
+        // margin: 21px 23px 0 48px;
     }
 
     @media (min-width: $media1920) {
-        width: 610px;
-        height: 373px;
+        // width: 610px;
+        // height: 373px;
         padding: 25px;
-        margin: 21px 23px 0 48px;
+        // margin: 21px 23px 0 48px;
     }
 
     &__title {
@@ -2007,7 +2066,7 @@ body.overflow {
 
             @media (min-width: $media375) {
                 width: calc(50% - 10px);
-                height: 53px;
+                height: 63px;
                 margin-bottom: 0;
             }
 
@@ -2031,7 +2090,7 @@ body.overflow {
 
             &__Title {
                 @media (min-width: $media375) {
-                    margin-top: 11px;
+                    margin-top: 15px;
                     margin-bottom: 2px;
                 }
 

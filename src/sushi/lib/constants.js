@@ -27,6 +27,9 @@ export const contractAddresses = {
     frax: {
         1: '0x3D8aBC464D5313a576e78706aC97F79fe1EB0b61',
     },
+    aps: {
+        1: '0xCaB49182aAdCd843b037bBF885AD56A3162698Bd',
+    },
     deprecated: {
         v_1_0_bsc: '0x02a228D826Cbb1C0E8765A6DB6E7AB64EAA80BFD',
         v_1_1_bsc: '0xFEdcBA60B3842e3F9Ed8BC56De171da5426AF8CF',

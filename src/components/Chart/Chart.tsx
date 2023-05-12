@@ -1,7 +1,4 @@
-import { useState, useEffect } from 'react';
-// import { PieChart } from 'react-minimal-pie-chart';
 import './Chart.scss';
-import { is1024, is1440, is1920 } from '../../functions/screen';
 
 interface DataItem {
     color: string;
@@ -20,7 +17,9 @@ function renderStratList(items: Array<DataItem>) {
         <div key={index} className={'PieChart__StratList__Item'}>
             <div className="d-flex">
                 <img src={item.icon} alt={item.title} className="me-2" />
-                <a target="blank" href={item.link}>{item.title}</a>
+                <a target="blank" href={item.link}>
+                    {item.title}
+                </a>
                 <span className="size">{`${item.value.toFixed(1)}%`}</span>
             </div>
             <div>
@@ -30,49 +29,25 @@ function renderStratList(items: Array<DataItem>) {
                         role="progressbar"
                         style={{
                             width: `${item.value.toFixed(1)}%`,
-                            backgroundColor: item.color
+                            backgroundColor: item.color,
                         }}
                     ></div>
                 </div>
             </div>
-            
         </div>
     ));
 }
 
-// function screenWidthToChartWidth() {
-//     let width = 34;
-
-//     if (is1024()) {
-//         width = 34;
-//     }
-
-//     if (is1440()) {
-//         width = 33;
-//     }
-
-//     if (is1920()) {
-//         width = 34;
-//     }
-
-//     return width;
-// }
-
-export const Chart = (props: ChartProps): JSX.Element => {
-    // const [width, setWidth] = useState(screenWidthToChartWidth());
-
-    // useEffect(() => {
-    //     window.addEventListener('resize', (e) => {
-    //         setWidth(screenWidthToChartWidth());
-    //     });
-    // }, []);
-
+export const Chart: React.FC<ChartProps & React.HTMLProps<HTMLDivElement>> = ({
+    data,
+    className,
+}) => {
     return (
-        <div className={'PieChart'}>
+        <div className={`PieChart ${className}`}>
             <div className={'PieChart__Header'}>
                 <span>DAO Stablecoin diversification strategies</span>
             </div>
-            <div className={'PieChart__StratList'}>{renderStratList(props.data)}</div>
+            <div className={'PieChart__StratList'}>{renderStratList(data)}</div>
         </div>
     );
 };

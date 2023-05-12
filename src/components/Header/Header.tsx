@@ -13,6 +13,8 @@ import { format } from 'date-fns';
 import { log } from '../../utils/logger';
 import { isETH } from '../../utils/zunami';
 import { useGasPrice } from '../../hooks/useGasPrice';
+import { WalletStatus } from '../WalletStatus/WalletStatus';
+import { WalletButton } from '../WalletButton/WalletButton';
 
 function chainNameToTooltip(chainId: number) {
     if (chainId === 1 || !chainId) {
@@ -45,7 +47,9 @@ function renderNotifications(notifications: Array<any>) {
         <div className="notifications-list">
             <div className="title mt-2 ms-2 fs-6">Notifications</div>
             <div className="ms-2 mt-1">
-                {!notifications.length && <div className="text-muted">Everything is up to date</div>}
+                {!notifications.length && (
+                    <div className="text-muted">Everything is up to date</div>
+                )}
                 {notifications.map((notification, index) => (
                     <div className="notification" key={index}>
                         <div className="first-row">
@@ -90,18 +94,21 @@ const getTransactionHistory = async (
     section: string
 ) => {
     const url = getTransHistoryUrl(account, type, 1, 3, chainId, section);
-    const response = await fetch(url);
-    const data = await response.json();
-    return ['MINT', 'REDEEM'].indexOf(type) !== -1 ? data.uzdTransfers : data.userTransfers;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        return ['MINT', 'REDEEM'].indexOf(type) !== -1 ? data.uzdTransfers : data.userTransfers;
+    } catch (error) {
+        return [];
+    }
 };
 
 interface HeaderProps extends React.HTMLProps<HTMLDivElement> {
     section?: string;
 }
 
-export const Header: React.FC<HeaderProps> = ({
-    section
-}) => {
+export const Header: React.FC<HeaderProps> = ({ section }) => {
     const isOnline = useOnlineState();
     const { chainId, account } = useWallet();
     const [gasPrice, setGasPrice] = useState('');
@@ -128,6 +135,9 @@ export const Header: React.FC<HeaderProps> = ({
             .then((response) => response.json())
             .then((data) => {
                 setGasPrice(Number(data.result.ProposeGasPrice));
+            })
+            .catch((error) => {
+                setGasPrice('n/a');
             });
     }, []);
 
@@ -164,12 +174,7 @@ export const Header: React.FC<HeaderProps> = ({
                 return { ...item, type: 'withdraw' };
             });
 
-            let mint = await getTransactionHistory(
-                account,
-                'MINT',
-                chainId,
-                'MINT'
-            );
+            let mint = await getTransactionHistory(account, 'MINT', chainId, 'MINT');
 
             mint = mint.map((item) => {
                 return { ...item, type: 'mint' };
@@ -266,14 +271,7 @@ export const Header: React.FC<HeaderProps> = ({
                         </button>
                     </OverlayTrigger>
                     <ThemeSwitcher />
-                    <button type="button" className="btn btn-sm btn-outline-dark all-services-btn" onClick={() => {
-                        setShowServices(!showServices);
-                        document.getElementById('all-services')?.classList.toggle('active');
-                        document.getElementById('sidebar-col')?.classList.toggle('transparent');
-                        document.getElementById('nav-menu')?.classList.toggle('hidden');
-                    }}>
-                        {showServices ? 'Back' : 'All services'}
-                    </button>
+                    <WalletButton />
                 </div>
             </div>
         </Navbar>

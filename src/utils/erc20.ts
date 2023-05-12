@@ -26,7 +26,9 @@ export const getUzdAllowance = async (
             .allowance(account, contractAddresses.uzd[1])
             .call();
 
-        log(`Executing allowance() for contract ${contractAddresses.uzd[1]}. Parameters: ${account}, ${zunamiContractAddress}`);
+        log(
+            `Executing allowance() for contract ${contractAddresses.uzd[1]}. Parameters: ${account}, ${zunamiContractAddress}`
+        );
         return allowance;
     } catch (e) {
         return '0';
@@ -49,16 +51,29 @@ export const getAllowance = async (
         let debugName = lpContract.options.address;
 
         switch (debugName.toLowerCase()) {
-            case daiAddress.toLowerCase(): debugName = '(DAI)'; break;
-            case usdcAddress: debugName = '(USDC)'; break;
-            case usdtAddress: debugName = '(USDT)'; break;
-            case fraxAddress.toLowerCase(): debugName = '(FRAX)'; break;
+            case daiAddress.toLowerCase():
+                debugName = '(DAI)';
+                break;
+            case usdcAddress:
+                debugName = '(USDC)';
+                break;
+            case usdtAddress:
+                debugName = '(USDT)';
+                break;
+            case fraxAddress.toLowerCase():
+                debugName = '(FRAX)';
+                break;
+            case contractAddresses.uzd[1].toLowerCase():
+                debugName = '(UZD)';
+                break;
         }
 
-        log(`Executing of contract ${debugName} - allowance(${account}, ${masterChefContract.options.address}). Result: ${allowance}`);
+        log(
+            `Executing of contract ${debugName} - allowance(${account}, ${masterChefContract.options.address}). Result: ${allowance}`
+        );
         return allowance;
     } catch (e) {
-        debugger;
+        // debugger;
         return '0';
     }
 };
@@ -77,8 +92,10 @@ export const calcWithdrawOneCoin = async (
 ): Promise<string> => {
     const contract = sushi.getEthContract();
     contract.options.from = account;
-    log(`ETH contract (${contract.options.address}) - calcWithdrawOneCoin(${lpBalance}, ${coinIndex}).`);
-    let sum: string = "Error";
+    log(
+        `ETH contract (${contract.options.address}) - calcWithdrawOneCoin(${lpBalance}, ${coinIndex}).`
+    );
+    let sum: string = 'Error';
 
     try {
         sum = await contract.methods.calcWithdrawOneCoin(lpBalance, coinIndex).call();
@@ -101,9 +118,11 @@ export const calcWithdrawOneCoin = async (
 
         contract.options.from = whaleWalletAccount;
         sum = await contract.methods.calcWithdrawOneCoin(lpBalance, coinIndex).call();
-        log(`ETH contract (${contract.options.address}) - calcWithdrawOneCoin result ${sum}. From address - ${whaleWalletAccount}`);
+        log(
+            `ETH contract (${contract.options.address}) - calcWithdrawOneCoin result ${sum}. From address - ${whaleWalletAccount}`
+        );
     }
-    
+
     return sum;
 };
 
@@ -120,11 +139,11 @@ export const calcWithdrawOneCoinFrax = async (
     const contract = sushi.getFraxContract();
     contract.options.from = account;
     log(`FRAX contract (${contract.options.address}) - calcWithdraw(${lpBalance}).`);
-    let sum: string = "Error";
+    let sum: string = 'Error';
     try {
         sum = await contract.methods.calcWithdraw(lpBalance).call();
     } catch {
-        const whaleWalletAccount = "0xc288540f761179dfcf5e64514282463515839df4";
+        const whaleWalletAccount = '0xc288540f761179dfcf5e64514282463515839df4';
         contract.options.from = whaleWalletAccount;
         sum = await contract.methods.calcWithdraw(lpBalance).call();
     }

@@ -57,18 +57,25 @@ class MiniRpcProvider implements AsyncSendable {
             method = method.method;
         }
 
-        const response = await fetch(this.url, {
-            method: 'POST',
-            body: JSON.stringify({
-                jsonrpc: '2.0',
-                id: 1,
-                method,
-                params,
-            }),
-        });
+        let response = null;
+
+        try {
+            response = await fetch(this.url, {
+                method: 'POST',
+                body: JSON.stringify({
+                    jsonrpc: '2.0',
+                    id: 1,
+                    method,
+                    params,
+                }),
+            });
+        } catch (error) {}
+
         if (!response.ok)
             throw new RequestError(`${response.status}: ${response.statusText}`, -32000);
+
         const body = await response.json();
+
         if ('error' in body) {
             throw new RequestError(body?.error?.message, body?.error?.code, body?.error?.data);
         } else if ('result' in body) {

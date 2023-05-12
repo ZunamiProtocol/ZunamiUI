@@ -3,7 +3,10 @@
 .SidebarColumn {
     display: flex;
     flex-direction: column;
-    background: linear-gradient(0.02deg, #fbfbfb 76.02%, #f1f1f1 95.61%);
+
+    @media (min-width: $media1024) {
+        background: linear-gradient(0.02deg, #fbfbfb 76.02%, #f1f1f1 95.61%);
+    }
 
     &::after {
         position: absolute;

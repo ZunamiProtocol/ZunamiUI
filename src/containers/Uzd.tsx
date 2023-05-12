@@ -180,7 +180,7 @@ export const Uzd = (): JSX.Element => {
                     contractAddresses.uzd[1],
                     sushi.contracts.uzdContract,
                     // @ts-ignore
-                    account,
+                    account
                 )
             );
 
@@ -237,51 +237,57 @@ export const Uzd = (): JSX.Element => {
         }
 
         const getTransactionHistory = async () => {
-            let mintResponse = await fetch(
-                getTransHistoryUrl(account, 'MINT', transHistoryPage, 100, chainId, 'UZD')
-            );
+            try {
+                let mintResponse = await fetch(
+                    getTransHistoryUrl(account, 'MINT', transHistoryPage, 100, chainId, 'UZD')
+                );
 
-            let redeemResponse = await fetch(
-                getTransHistoryUrl(account, 'REDEEM', transHistoryPage, 100, chainId, 'UZD')
-            );
+                let redeemResponse = await fetch(
+                    getTransHistoryUrl(account, 'REDEEM', transHistoryPage, 100, chainId, 'UZD')
+                );
 
-            let mintData = await mintResponse.json();
-            let redeemData = await redeemResponse.json();
+                let mintData = await mintResponse.json();
+                let redeemData = await redeemResponse.json();
 
-            mintData = mintData.uzdTransfers.map((item: any) => {
-                return {
-                    ...item,
-                    type: 'MINT',
-                    status: 'COMPLETED',
-                };
-            });
+                mintData = mintData.uzdTransfers.map((item: any) => {
+                    return {
+                        ...item,
+                        type: 'MINT',
+                        status: 'COMPLETED',
+                    };
+                });
 
-            redeemData = redeemData.uzdTransfers.map((item: any) => {
-                return {
-                    ...item,
-                    type: 'REDEEM',
-                    status: 'COMPLETED',
-                };
-            });
+                redeemData = redeemData.uzdTransfers.map((item: any) => {
+                    return {
+                        ...item,
+                        type: 'REDEEM',
+                        status: 'COMPLETED',
+                    };
+                });
 
-            const data = mintData.concat(redeemData);
+                const data = mintData.concat(redeemData);
 
-            if (!data.length) {
-                setTransHistoryPage(-1);
-                return;
+                if (!data.length) {
+                    setTransHistoryPage(-1);
+                    return;
+                }
+
+                setTransactionList(
+                    transactionList
+                        .concat(data)
+                        .sort((a: iHistoryTransaction, b: iHistoryTransaction | undefined) => {
+                            if (!b) {
+                                return 0;
+                            }
+
+                            return new Date(a.dateTime).getTime() > new Date(b.dateTime).getTime()
+                                ? -1
+                                : 1;
+                        })
+                );
+            } catch (error) {
+                setTransactionList([]);
             }
-
-            setTransactionList(
-                transactionList
-                .concat(data)
-                .sort((a: iHistoryTransaction, b: iHistoryTransaction | undefined) => {
-                    if (!b) {
-                        return 0;
-                    }
-
-                    return new Date(a.dateTime).getTime() > new Date(b.dateTime).getTime() ? -1 : 1;
-                })
-            );
         };
 
         getTransactionHistory();
@@ -520,7 +526,7 @@ export const Uzd = (): JSX.Element => {
                         />
                     </SideBar>
                     <div className="col content-col dashboard-col">
-                    <Header section="uzd" />
+                        <Header section="uzd" />
                         <div className="UzdContainer__Actions">
                             <ToastContainer position={'top-end'} className={'toasts mt-3 me-3'}>
                                 {transactionError && (
@@ -586,8 +592,8 @@ export const Uzd = (): JSX.Element => {
                                         <div className="card-body">
                                             <div className="title">Important</div>
                                             <div className="text">
-                                                Protocol Takes 0,5% redemption fee. It will be cheaper
-                                                and easier to withdraw using the Curve pool
+                                                Protocol Takes 0,5% redemption fee. It will be
+                                                cheaper and easier to withdraw using the Curve pool
                                             </div>
                                             <a
                                                 href="https://curve.fi/#/ethereum/pools/factory-v2-284/deposit"
@@ -1050,18 +1056,16 @@ export const Uzd = (): JSX.Element => {
 
                                         {pendingTx && <Preloader className="ms-2" />}
                                     </div>
-                                    {
-                                        mode === 'mint' &&
-                                            <div className="mt-3" style={{ fontSize: '12px' }}>
-                                                ZLP allowance: {zlpAllowance.toString()}
-                                            </div>
-                                    }
-                                    {
-                                        mode === 'redeem' &&
-                                            <div className="mt-3" style={{ fontSize: '12px' }}>
-                                                UZD allowance: {uzdAllowance.toString()}
-                                            </div>
-                                    }
+                                    {mode === 'mint' && (
+                                        <div className="mt-3" style={{ fontSize: '12px' }}>
+                                            ZLP allowance: {zlpAllowance.toString()}
+                                        </div>
+                                    )}
+                                    {mode === 'redeem' && (
+                                        <div className="mt-3" style={{ fontSize: '12px' }}>
+                                            UZD allowance: {uzdAllowance.toString()}
+                                        </div>
+                                    )}
                                 </div>
                                 <div className={`flex-fill card mint-card`}>
                                     <div className="card-body">
@@ -1142,7 +1146,6 @@ export const Uzd = (): JSX.Element => {
                         </div>
                         <SupportersBar section="uzd" />
                     </div>
-                    
                 </div>
             </div>
         </React.Fragment>

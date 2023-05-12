@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import useSushi from './useSushi';
 import { useWallet } from 'use-wallet';
-import { stake, getMasterChefContract, stakeBUSD, stakeFRAX } from '../sushi/utils';
+import { stake, getMasterChefContract, stakeBUSD, stakeFRAX, stakeAPS } from '../sushi/utils';
 import { contractAddresses } from '../sushi/lib/constants';
 import { isBSC, isPLG } from '../utils/zunami';
 
@@ -30,6 +30,7 @@ const useStake = (coins: Coins, direct: boolean = false) => {
     const usdt = coins.filter((coin) => coin.name === 'USDT')[0]?.value;
     const busd = coins.filter((coin) => coin.name === 'BUSD')[0]?.value;
     const frax = coins.filter((coin) => coin.name === 'FRAX')[0]?.value;
+    const uzd = coins.filter((coin) => coin.name === 'UZD')[0]?.value;
 
     const handleStake = useCallback(async () => {
         if (chainId === 56 && busd && Number(usdt) === 0) {
@@ -47,6 +48,13 @@ const useStake = (coins: Coins, direct: boolean = false) => {
             return await stakeFRAX(contract, account, frax);
         }
 
+        if (chainId === 1 && uzd && Number(uzd) > 0) {
+            const contract = sushi.contracts.apsContract;
+            contract.options.address = contractAddresses.aps[1];
+            contract.defaultAccount = account;
+            return await stakeAPS(contract, account, uzd);
+        }
+
         if (isPLG(chainId)) {
             const contract = sushi.contracts.polygonContract;
             contract.options.address = contractAddresses.zunami[137];
@@ -55,11 +63,17 @@ const useStake = (coins: Coins, direct: boolean = false) => {
 
         return await stake(zunamiContract, account, dai, usdc, usdt, direct, chainId);
     }, [
-        account, dai, usdc, usdt, busd, frax,
+        account,
+        dai,
+        usdc,
+        usdt,
+        busd,
+        frax,
+        uzd,
         zunamiContract,
         // sushi.contracts.busdContract, sushi.contracts.fraxContract, sushi.contracts.polygonContract,
         direct,
-        chainId
+        chainId,
     ]);
 
     return { onStake: handleStake };
