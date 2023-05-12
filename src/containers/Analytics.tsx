@@ -216,17 +216,13 @@ function renderCoin(coin, coinIndex, selectedStrat) {
 function renderTreasury(data, type) {
     let treasuryData = data.balances;
 
-    return (
-        treasuryData.map((treasury, treasuryIndex) =>
-            <div
-                className="gray-block small-block align-items-start"
-                key={treasuryIndex}
-            >
-                <div>{treasury.token.name} Treasury</div>
-                <div className="vela-sans">
-                    {treasury.amount.toLocaleString('en', { maximumFractionDigits: 0 })}
-                </div>
+    return treasuryData.map((treasury, treasuryIndex) => (
+        <div className="gray-block small-block align-items-start" key={treasuryIndex}>
+            <div>{treasury.token.name} Treasury</div>
+            <div className="vela-sans">
+                {treasury.amount.toLocaleString('en', { maximumFractionDigits: 0 })}
             </div>
+        </div>
     ));
 }
 
@@ -268,13 +264,13 @@ export const Analytics = (): JSX.Element => {
         }
 
         if (selectedStrat && selectedStrat.type !== 'STAKE_DAO_MIM') {
-
             const stableCoin = selectedStrat.analytics.coinsMarketData.stableCoin;
 
             if (stableCoin) {
-                result.ratio = 
-                    ((result.totalCollateralSum / stableCoin.marketCap) * 100)
-                    .toLocaleString('en', { maximumFractionDigits: 0 });
+                result.ratio = (
+                    (result.totalCollateralSum / stableCoin.marketCap) *
+                    100
+                ).toLocaleString('en', { maximumFractionDigits: 0 });
             } else {
                 result.ratio = 'soon';
             }
@@ -330,9 +326,7 @@ export const Analytics = (): JSX.Element => {
                 setPools(poolStats.pools);
                 setTvl(zunamiInfo.tvl);
             } catch (e) {
-                setPools([]);
-                setSelectedStrat(null);
-                setTvl(0);
+                debugger;
             }
         };
 
@@ -436,7 +430,17 @@ export const Analytics = (): JSX.Element => {
                                                         }}
                                                     >
                                                         <div className="wrapper">
-                                                            <img src={pool.analytics.coinsMarketData.stableCoin ? pool.analytics.coinsMarketData.stableCoin.image : '/clever_analytics.png'} alt={pool.title} />
+                                                            <img
+                                                                src={
+                                                                    pool.analytics.coinsMarketData
+                                                                        .stableCoin
+                                                                        ? pool.analytics
+                                                                              .coinsMarketData
+                                                                              .stableCoin.image
+                                                                        : '/clever_analytics.png'
+                                                                }
+                                                                alt={pool.title}
+                                                            />
                                                             <div className="coin">
                                                                 <img
                                                                     src={pool.icon}
@@ -507,7 +511,16 @@ export const Analytics = (): JSX.Element => {
                                                         <div className="d-flex mt-0 new-coin pool-info-coin">
                                                             <div className="wrapper">
                                                                 <img
-                                                                    src={selectedStrat.analytics.coinsMarketData.stableCoin ? selectedStrat.analytics.coinsMarketData.stableCoin.image : '/clever_analytics.png'}
+                                                                    src={
+                                                                        selectedStrat.analytics
+                                                                            .coinsMarketData
+                                                                            .stableCoin
+                                                                            ? selectedStrat
+                                                                                  .analytics
+                                                                                  .coinsMarketData
+                                                                                  .stableCoin.image
+                                                                            : '/clever_analytics.png'
+                                                                    }
                                                                     alt={selectedStrat.title}
                                                                 />
                                                                 <div className="coin">
@@ -795,12 +808,40 @@ export const Analytics = (): JSX.Element => {
                                         </div>
                                     </div>
                                     {selectedStrat && (
-                                    <div className="row">
-                                        <div className="col">
-                                            <div className="tbl xs-1-col">
-                                                <div className="logo-col">
-                                                    <div className="logos uzd-logos">
-                                                        <img src={selectedStrat.analytics.coinsMarketData.stableCoin ? selectedStrat.analytics.coinsMarketData.stableCoin.image : 'clever_analytics.png'} alt="" />
+                                        <div className="row">
+                                            <div className="col">
+                                                <div className="tbl xs-1-col">
+                                                    <div className="logo-col">
+                                                        <div className="logos uzd-logos">
+                                                            <img
+                                                                src={
+                                                                    selectedStrat.analytics
+                                                                        .coinsMarketData.stableCoin
+                                                                        ? selectedStrat.analytics
+                                                                              .coinsMarketData
+                                                                              .stableCoin.image
+                                                                        : 'clever_analytics.png'
+                                                                }
+                                                                alt=""
+                                                            />
+                                                        </div>
+                                                        <div className="about-uzd">
+                                                            {selectedStrat.analytics.protocolInfo.info.stableCoinInfo
+                                                                .split('\n')
+                                                                .map(
+                                                                    (
+                                                                        paragraph: string,
+                                                                        parIndex
+                                                                    ) => (
+                                                                        <p
+                                                                            key={parIndex}
+                                                                            className="text-break mw-100"
+                                                                        >
+                                                                            {paragraph}
+                                                                        </p>
+                                                                    )
+                                                                )}
+                                                        </div>
                                                     </div>
                                                     <div>
                                                         <div className="subtitle text-nowrap">
@@ -808,23 +849,22 @@ export const Analytics = (): JSX.Element => {
                                                         </div>
                                                         <div className="vela-sans">
                                                             $
-                                                            {selectedStrat.analytics.coinsMarketData.stableCoin.marketCap.toLocaleString(
-                                                                'en',
-                                                                { maximumFractionDigits: 0 }
-                                                            )}
+                                                            {selectedStrat.analytics.coinsMarketData
+                                                                .stableCoin
+                                                                ? selectedStrat.analytics.coinsMarketData.stableCoin.marketCap.toLocaleString(
+                                                                      'en',
+                                                                      { maximumFractionDigits: 0 }
+                                                                  )
+                                                                : ''}
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div>
-                                                    <div className="subtitle text-nowrap">Marketcap, $</div>
-                                                    <div className="vela-sans">
-                                                        ${selectedStrat.analytics.coinsMarketData.stableCoin ? selectedStrat.analytics.coinsMarketData.stableCoin.marketCap.toLocaleString('en', { maximumFractionDigits: 0 }) : ''}
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <div className="subtitle text-nowrap">Collateral Ratio, %</div>
-                                                    <div className="vela-sans">
-                                                        {collateralData.ratio}
+                                                    <div>
+                                                        <div className="subtitle text-nowrap">
+                                                            Collateral Ratio, %
+                                                        </div>
+                                                        <div className="vela-sans">
+                                                            {collateralData.ratio}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -858,6 +898,12 @@ export const Analytics = (): JSX.Element => {
                                                         />
                                                     </div>
                                                 </div>
+                                                {/* <TwitterTimelineEmbed
+                                                sourceType="profile"
+                                                screenName={selectedStrat.analytics.protocolInfo.info.twitter}
+                                                options={{ height: '100vh', width: 450 }}
+                                                // onComplete={action}
+                                            /> */}
                                                 <iframe
                                                     title="Twitter"
                                                     className="twitter-feed"
@@ -925,7 +971,11 @@ export const Analytics = (): JSX.Element => {
                                                     <div>
                                                         <div className="subtitle">Marketcap, $</div>
                                                         <div className="vela-sans">
-                                                            ${selectedStrat.analytics.coinsMarketData.nativeCoin.marketCap.toLocaleString('en', { maximumFractionDigits: 0 })}
+                                                            $
+                                                            {selectedStrat.analytics.coinsMarketData.nativeCoin.marketCap.toLocaleString(
+                                                                'en',
+                                                                { maximumFractionDigits: 0 }
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </div>
