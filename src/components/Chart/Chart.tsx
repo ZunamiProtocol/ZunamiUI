@@ -10,6 +10,7 @@ interface DataItem {
 
 interface ChartProps {
     data: Array<DataItem>;
+    title;
 }
 
 function renderStratList(items: Array<DataItem>) {
@@ -41,11 +42,12 @@ function renderStratList(items: Array<DataItem>) {
 export const Chart: React.FC<ChartProps & React.HTMLProps<HTMLDivElement>> = ({
     data,
     className,
+    title,
 }) => {
     return (
         <div className={`PieChart ${className}`}>
             <div className={'PieChart__Header'}>
-                <span>DAO Stablecoin diversification strategies</span>
+                <span>{title}</span>
             </div>
             <div className={'PieChart__StratList'}>{renderStratList(data)}</div>
         </div>

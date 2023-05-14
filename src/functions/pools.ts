@@ -1,5 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 import { getBalanceNumber } from '../utils/formatbalance';
+import { debug } from 'console';
 
 export interface PoolInfo {
     pid: number;
@@ -87,17 +88,29 @@ export const poolsChartdata: { [key: string]: any } = {
         value: 0,
         icon: '/convex.svg',
     },
+    // UZD strats
+    VAULT: {
+        title: 'UZD Vault',
+        value: 0,
+        icon: '/uzd.svg',
+    },
+    FRAX_STAKEDAO: {
+        title: 'Stake DAO - UZD / FRAXBP Pool',
+        value: 0,
+        icon: '/uzd.svg',
+    },
 };
 
 export function poolInfoToChartElement(pool: PoolInfo, percent: BigNumber): ChartDataElement {
-    const percentFromTVL = new BigNumber(pool.tvlInZunami).dividedBy(percent).toNumber() * 100;
+    const strategyTvl = pool.tvlInZunami ? pool.tvlInZunami : pool.tvl;
+    const percentFromTVL = new BigNumber(strategyTvl).dividedBy(percent).toNumber() * 100;
     const tvlInUsd = Number(
         (getBalanceNumber(new BigNumber(percent)).toNumber() / 100) * percentFromTVL
     ).toFixed(0);
 
     return {
         ...poolsChartdata[pool.type],
-        tvlInZunami: pool.tvlInZunami,
+        tvlInZunami: strategyTvl,
         value: percentFromTVL,
         tvlInUsd,
         link: `https://etherscan.io/address/${pool.address}`,
@@ -107,7 +120,7 @@ export function poolInfoToChartElement(pool: PoolInfo, percent: BigNumber): Char
 export function poolDataToChartData(poolData: Array<PoolInfo>, TVL: BigNumber) {
     return poolData
         .map((pool, index) => {
-            return {
+            const result = {
                 ...poolInfoToChartElement(pool, TVL),
                 // type: pool.type,
                 // address: pool.address,
@@ -115,6 +128,8 @@ export function poolDataToChartData(poolData: Array<PoolInfo>, TVL: BigNumber) {
                 ...pool,
                 analytics: pool.analytics?.data,
             };
+
+            return result;
         })
         .filter((el) => el.value > 0)
         .sort((a, b) => (a.tvlInZunami > b.tvlInZunami ? -1 : 1));

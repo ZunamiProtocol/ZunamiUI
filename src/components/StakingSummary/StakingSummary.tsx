@@ -148,15 +148,15 @@ export const StakingSummary: React.FC<StakingSummaryProps & React.HTMLProps<HTML
             <div className="d-flex values">
                 <div className="block flex-fill">
                     <div className="title">Base APY</div>
-                    <div className="value vela-sans">{baseApy}</div>
+                    <div className="value vela-sans">{`${baseApy}%`}</div>
                 </div>
                 <div className="block flex-fill">
-                    <div className="title">My deposit, $</div>
-                    <div className="value vela-sans">{deposit}</div>
+                    <div className="title">My deposit</div>
+                    <div className="value vela-sans">{`$${deposit}`}</div>
                 </div>
                 <div className="block flex-fill">
                     <div className="title">TVL, $</div>
-                    <div className="value vela-sans">{tvl}</div>
+                    <div className="value vela-sans">{`$${tvl}`}</div>
                 </div>
             </div>
         </div>
