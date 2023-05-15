@@ -465,9 +465,10 @@ export const Form = (props: FormProps): JSX.Element => {
             : getBscWithdrawValidationError(isApproved, lpShareToWithdraw);
 
     const tempBlock = isBSC(chainId) || isPLG(chainId);
-    const depositBlockHint = isPLG(chainId) || isBSC(chainId)
-        ? 'We have temporarily halted deposits on Binance Smart Chain and Polygon due to the surge in gas prices. However, withdrawals are functioning as usual. We will resume deposits shortly. Deposits on Ethereum are operational without any issues. Thank you!'
-        : 'We have temporarily halted optimized deposits & withdrawals option due to the surge in gas prices. However, direct deposits & withdrawals are functioning as usual. Thank you!';
+    const depositBlockHint =
+        isPLG(chainId) || isBSC(chainId)
+            ? 'We have temporarily halted deposits on Binance Smart Chain and Polygon due to the surge in gas prices. However, withdrawals are functioning as usual. We will resume deposits shortly. Deposits on Ethereum are operational without any issues. Thank you!'
+            : 'We have temporarily halted optimized deposits & withdrawals option due to the surge in gas prices. However, direct deposits & withdrawals are functioning as usual. Thank you!';
     const cantDeposit = emptyFunds || !isApproved || pendingTx || depositExceedAmount || tempBlock;
     const depositBlockHintRef = useRef(null);
     const [showHint, setShowHint] = useState(false);
@@ -547,7 +548,9 @@ export const Form = (props: FormProps): JSX.Element => {
 
                     switch (action) {
                         case 'withdraw':
-                            if (!props.directOperation) {
+                            // for Polygon optimized withdraw
+                            // temprorarily enabled
+                            if (!props.directOperation && !isPLG(chainId)) {
                                 return;
                             }
 
@@ -636,7 +639,10 @@ export const Form = (props: FormProps): JSX.Element => {
                             value={props.dai}
                             handler={daiInputHandler}
                             max={max[0]}
-                            disabled={action === 'withdraw' || (action === 'deposit' && Number(props.frax) > 0)}
+                            disabled={
+                                action === 'withdraw' ||
+                                (action === 'deposit' && Number(props.frax) > 0)
+                            }
                             chainId={chainId}
                         />
                     )}
@@ -647,7 +653,10 @@ export const Form = (props: FormProps): JSX.Element => {
                             value={props.usdc}
                             handler={usdcInputHandler}
                             max={max[1]}
-                            disabled={action === 'withdraw' || (action === 'deposit' && Number(props.frax) > 0)}
+                            disabled={
+                                action === 'withdraw' ||
+                                (action === 'deposit' && Number(props.frax) > 0)
+                            }
                             chainId={chainId}
                         />
                     )}
@@ -659,8 +668,8 @@ export const Form = (props: FormProps): JSX.Element => {
                         max={max[2]}
                         disabled={
                             action === 'withdraw' ||
-                            (chainId === 56 && action === 'deposit' && Number(props.busd) > 0)
-                            || ((action === 'deposit' && Number(props.frax) > 0))
+                            (chainId === 56 && action === 'deposit' && Number(props.busd) > 0) ||
+                            (action === 'deposit' && Number(props.frax) > 0)
                         }
                         chainId={chainId}
                     />
@@ -671,9 +680,7 @@ export const Form = (props: FormProps): JSX.Element => {
                             value={props.frax}
                             handler={fraxInputHandler}
                             max={max[4]}
-                            disabled={
-                                action === 'withdraw'
-                            }
+                            disabled={action === 'withdraw'}
                             chainId={chainId}
                         />
                     )}
@@ -748,23 +755,37 @@ export const Form = (props: FormProps): JSX.Element => {
                             )}
                             {account && (
                                 <div className="deposit-button-wrapper flex-wrap flex-column flex-md-row align-items-center">
-                                    {
-                                        !props.directOperation &&
-                                        <div ref={depositBlockHintRef} onClick={() => setShowHint(!showHint)}>
-                                            <OverlayTrigger placement="right" overlay={<Tooltip>{depositBlockHint}</Tooltip>}>
-                                                <button type="submit" className={`${!props.directOperation ? 'disabled' : ''}`}>
+                                    {!props.directOperation && (
+                                        <div
+                                            ref={depositBlockHintRef}
+                                            onClick={() => setShowHint(!showHint)}
+                                        >
+                                            <OverlayTrigger
+                                                placement="right"
+                                                overlay={<Tooltip>{depositBlockHint}</Tooltip>}
+                                            >
+                                                <button
+                                                    type="submit"
+                                                    className={`${
+                                                        !props.directOperation ? 'disabled' : ''
+                                                    }`}
+                                                >
                                                     Deposit
                                                 </button>
                                             </OverlayTrigger>
                                         </div>
-                                    }
-                                    {
-                                        props.directOperation &&
-                                            <button type="submit" className={`${!props.directOperation ? 'disabled' : ''}`}>
-                                                Deposit
-                                            </button>
-                                    }
-                                  
+                                    )}
+                                    {props.directOperation && (
+                                        <button
+                                            type="submit"
+                                            className={`${
+                                                !props.directOperation ? 'disabled' : ''
+                                            }`}
+                                        >
+                                            Deposit
+                                        </button>
+                                    )}
+
                                     {!pendingTx && (
                                         <DirectAction
                                             actionName="deposit"
@@ -823,28 +844,19 @@ export const Form = (props: FormProps): JSX.Element => {
                                                 Approve GZLP
                                             </button>
                                         )}
-                                    {
-                                        !props.directOperation &&
-                                        <div ref={depositBlockHintRef} onClick={() => setShowHint(!showHint)}>
-                                            <OverlayTrigger placement="right" overlay={<Tooltip>{depositBlockHint}</Tooltip>}>
-                                                <button type="submit" className={`${!props.directOperation ? 'disabled' : ''}`}>
-                                                    Withdraw
-                                                </button>
-                                            </OverlayTrigger>
-                                        </div>
-                                    }
-                                    {
-                                        props.directOperation &&
-                                            <button type="submit" className={`${!canWithdraw ? 'disabled' : ''}`}>
-                                                Withdraw
-                                            </button>
-                                    }
-                                    {/* <button
-                                        type="submit"
-                                        className={`${!canWithdraw ? 'disabled' : ''}`}
+
+                                    <div
+                                        ref={depositBlockHintRef}
+                                        onClick={() => setShowHint(!showHint)}
                                     >
-                                        Withdraw
-                                    </button> */}
+                                        <OverlayTrigger
+                                            placement="right"
+                                            overlay={<Tooltip>{depositBlockHint}</Tooltip>}
+                                        >
+                                            <button type="submit">Withdraw</button>
+                                        </OverlayTrigger>
+                                    </div>
+
                                     {!pendingTx && (
                                         <DirectAction
                                             actionName="withdraw"

@@ -40,19 +40,17 @@ export const DirectAction = (props: DirectActionProps): JSX.Element => {
 
     return (
         <div className={'DirectAction'}>
-            {chainId === 1 && (
-                <input
-                    type="checkbox"
-                    checked={props.checked}
-                    className={`${props.disabled ? 'disabled' : ''}`}
-                    onChange={(e) => {
-                        if (props.onChange) {
-                            props.onChange(e.currentTarget.checked);
-                        }
-                    }}
-                />
-            )}
-            {chainId === 1 && <span>Optimized</span>}
+            <input
+                type="checkbox"
+                checked={props.checked}
+                className={`${props.disabled ? 'disabled' : ''}`}
+                onChange={(e) => {
+                    if (props.onChange) {
+                        props.onChange(e.currentTarget.checked);
+                    }
+                }}
+            />
+            {<span>Optimized</span>}
             <div ref={target} onClick={() => setShowHint(!showHint)}>
                 <OverlayTrigger placement="right" overlay={<Tooltip>{hint}</Tooltip>}>
                     <svg
