@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Suspense, lazy, useRef } from 'react';
+import React, { useEffect, useState, Suspense, lazy, useRef, useMemo } from 'react';
 import './Main.scss';
 import { getBalanceNumber, getFullDisplayBalance } from '../utils/formatbalance';
 import useLpPrice from '../hooks/useLpPrice';
@@ -201,14 +201,21 @@ export const Main = (): JSX.Element => {
 
         getTotalIncome();
     }, [account, balances, chainId, lpPrice, uzdBalance]);
-    console.log(poolStats);
-    const chartData =
-        poolStats && zunamiInfo && uzdStatData
+
+    const chartData = useMemo(() => {
+        if (!poolStats) {
+            return [];
+        }
+
+        const stratsData = poolStats.pools ? poolStats.pools : poolStats.strategies;
+
+        return poolStats && zunamiInfo && uzdStatData
             ? poolDataToChartData(
-                  poolStats[stakingMode === 'USD' ? 'pools' : 'strategies'],
+                  stratsData,
                   stakingMode === 'USD' ? zunamiInfo.tvl : uzdStatData.info.aps.tvl
               )
             : [];
+    }, [stakingMode, uzdStatData, zunamiInfo, poolStats]);
 
     const [histApyPeriod, setHistApyPeriod] = useState('week');
     const [histApyData, setHistApyData] = useState([]);
@@ -710,7 +717,7 @@ export const Main = (): JSX.Element => {
                                         />
                                     )}
                                     <Chart
-                                        data={chartData}
+                                        data={chartData || []}
                                         className="flex-grow-1 mt-3 mt-lg-0"
                                         title={
                                             stakingMode === 'USD'

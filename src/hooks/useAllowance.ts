@@ -152,6 +152,7 @@ export const useAllowanceStables = () => {
                     new BigNumber(allowanceUsdt),
                     new BigNumber(allowanceBUSD),
                     BIG_ZERO,
+                    BIG_ZERO,
                 ]);
             } else if (isPLG(chainId)) {
                 const lpContract = getContract(
@@ -169,6 +170,7 @@ export const useAllowanceStables = () => {
                     BIG_ZERO,
                     BIG_ZERO,
                     new BigNumber(allowanceUsdt),
+                    BIG_ZERO,
                     BIG_ZERO,
                     BIG_ZERO,
                 ]);
