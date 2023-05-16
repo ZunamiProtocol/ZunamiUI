@@ -128,14 +128,16 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const [coinIndex, setCoinIndex] = useState(-1);
     const approveList = useAllowanceStables();
     const apsBalance = useZapsLpBalance();
-    const approvedTokens = [
-        approveList ? approveList[0].toNumber() > 0 : false,
-        approveList ? approveList[1].toNumber() > 0 : false,
-        approveList ? approveList[2].toNumber() > 0 : false,
-        approveList ? approveList[3].toNumber() > 0 : false,
-        approveList ? approveList[4].toNumber() > 0 : false,
-        approveList ? approveList[5].toNumber() > 0 : false,
-    ];
+    const approvedTokens = useMemo(() => {
+        return [
+            approveList ? approveList[0].toNumber() > 0 : false,
+            approveList ? approveList[1].toNumber() > 0 : false,
+            approveList ? approveList[2].toNumber() > 0 : false,
+            approveList ? approveList[3].toNumber() > 0 : false,
+            approveList ? approveList[4].toNumber() > 0 : false,
+            approveList ? approveList[5].toNumber() > 0 : false,
+        ];
+    }, [approveList]);
 
     const coins = useMemo(() => {
         return ['DAI', 'USDC', 'USDT', 'BUSD', 'FRAX', 'UZD'];
@@ -219,11 +221,15 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         }
     }, [userBalanceList, coin, coinIndex, chainId]);
 
-    const depositEnabled =
-        approvedTokens[coinIndex] &&
-        Number(depositSum) > 0 &&
-        !pendingApproval &&
-        Number(depositSum) <= Number(fullBalance);
+    const depositEnabled = useMemo(() => {
+        let result =
+            approvedTokens[coinIndex] &&
+            Number(depositSum) > 0 &&
+            !pendingApproval &&
+            Number(depositSum) <= Number(fullBalance);
+
+        return result;
+    }, [approvedTokens, depositSum, pendingApproval, fullBalance, coinIndex]);
 
     // set default input to max
     useEffect(() => {
@@ -242,15 +248,27 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         }
     }, [action, apsBalance, withdrawSum]);
 
-    const depositBlockHint =
-        isPLG(chainId) || isBSC(chainId)
+    const depositBlockHint = useMemo(() => {
+        const notEth = !isETH(chainId);
+        let result = notEth
             ? 'We have temporarily halted deposits on Binance Smart Chain and Polygon due to the surge in gas prices. However, withdrawals are functioning as usual. We will resume deposits shortly. Deposits on Ethereum are operational without any issues. Thank you!'
             : 'We have temporarily halted optimized deposits & withdrawals option due to the surge in gas prices. However, direct deposits & withdrawals are functioning as usual. Thank you!';
+
+        if (stakingMode === 'UZD') {
+            result = '';
+        }
+
+        if (stakingMode === 'UZD' && notEth) {
+            result = 'Currently APS staking available only on Ethereum network';
+        }
+
+        return result;
+    }, [chainId, stakingMode]);
     const depositBlockHintRef = useRef(null);
     const [showHint, setShowHint] = useState(false);
 
     return (
-        <div className={`FastDepositForm ${className}`}>
+        <div className={`FastDepositForm ${className} mode-${stakingMode}`}>
             {renderToasts(
                 transactionError,
                 setTransactionError,
@@ -479,7 +497,24 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                 </svg>
                 <div className="FastDepositForm__MobileToggle__Title">
                     {stakingMode === 'USD' ? 'Fast Deposit' : ''}
-                    {stakingMode === 'UZD' && <div className="">QWE</div>}
+                    {stakingMode === 'UZD' && (
+                        <ActionSelector
+                            value={action}
+                            actions={[
+                                {
+                                    name: 'deposit',
+                                    title: 'Deposit',
+                                },
+                                {
+                                    name: 'withdraw',
+                                    title: 'Withdraw',
+                                },
+                            ]}
+                            onChange={(action: string) => {
+                                setAction(action);
+                            }}
+                        />
+                    )}
                 </div>
             </div>
             <Input
@@ -499,12 +534,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                 onCoinChange={(coin: string) => {
                     setCoin(coin);
                     setCoinIndex(['DAI', 'USDC', 'USDT', 'BUSD', 'FRAX', 'UZD'].indexOf(coin));
-
-                    // if (coin === 'FRAX') {
                     setOptimized(false);
-                    // } else {
-                    // setOptimized(true);
-                    // }
                 }}
                 chainId={chainId}
             />
@@ -550,85 +580,109 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                             </button>
                         )}
                         {approvedTokens[coinIndex] && action === 'deposit' && (
-                            <button
-                                className={`zun-button ${depositEnabled ? '' : 'disabled'}`}
-                                onClick={async () => {
-                                    setPendingTx(true);
+                            <div
+                                ref={depositBlockHintRef}
+                                onMouseEnter={() => setShowHint(true)}
+                                onMouseLeave={() => setShowHint(false)}
+                            >
+                                <OverlayTrigger
+                                    placement="top"
+                                    overlay={<Tooltip>{depositBlockHint}</Tooltip>}
+                                    trigger={['hover', 'focus']}
+                                    show={showHint}
+                                >
+                                    <button
+                                        className={`zun-button ${depositEnabled ? '' : 'disabled'}`}
+                                        onClick={async () => {
+                                            if (stakingMode === 'UZD' && !isETH(chainId)) {
+                                                log('Trying to deposit UZD on non-ETH network');
+                                                return false;
+                                            }
 
-                                    try {
+                                            setPendingTx(true);
+
+                                            try {
+                                                let tx = null;
+
+                                                if (coin === 'UZD') {
+                                                    tx = await onStake();
+                                                } else {
+                                                    tx = await onStake();
+                                                }
+
+                                                log(
+                                                    `Deposit executed. Tx ID: ${tx.transactionHash}`
+                                                );
+                                                setTransactionId(tx.transactionHash);
+                                                setDepositSum('0');
+                                                log('Deposit success');
+                                                log(JSON.stringify(tx));
+
+                                                // @ts-ignore
+                                                if (window.dataLayer) {
+                                                    // @ts-ignore
+                                                    window.dataLayer.push({
+                                                        event: 'deposit',
+                                                        userID: account,
+                                                        type: getActiveWalletName(),
+                                                        value: depositSum,
+                                                    });
+                                                }
+                                            } catch (error: any) {
+                                                setPendingTx(false);
+                                                setTransactionError(true);
+                                                log(`❗️ Deposit error: ${error.message}`);
+                                                log(JSON.stringify(error));
+                                            }
+
+                                            setPendingTx(false);
+                                        }}
+                                    >
+                                        Deposit
+                                    </button>
+                                </OverlayTrigger>
+                            </div>
+                        )}
+                        {stakingMode === 'UZD' &&
+                            action === 'withdraw' &&
+                            approvedTokens[coinIndex] && (
+                                <button
+                                    className={`zun-button`}
+                                    onClick={async () => {
+                                        setPendingTx(true);
                                         let tx = null;
 
-                                        if (coin === 'UZD') {
-                                            tx = await onStake();
-                                        } else {
-                                            tx = await onStake();
-                                        }
-
-                                        setTransactionId(tx.transactionHash);
-                                        setDepositSum('0');
-                                        log('Deposit success');
-                                        log(JSON.stringify(tx));
-
-                                        // @ts-ignore
-                                        if (window.dataLayer) {
-                                            // @ts-ignore
-                                            window.dataLayer.push({
-                                                event: 'deposit',
-                                                userID: account,
-                                                type: getActiveWalletName(),
-                                                value: depositSum,
-                                            });
-                                        }
-                                    } catch (error: any) {
-                                        setTransactionError(true);
-                                        log(`❗️ Deposit error: ${error.message}`);
-                                        log(JSON.stringify(error));
-                                    }
-
-                                    setPendingTx(false);
-                                }}
-                            >
-                                Deposit
-                            </button>
-                        )}
-                        {stakingMode === 'UZD' && action === 'withdraw' && (
-                            <button
-                                className={`zun-button`}
-                                onClick={async () => {
-                                    setPendingTx(true);
-                                    let tx = null;
-
-                                    try {
-                                        const sumToWithdraw = new BigNumber(withdrawSum)
-                                            .multipliedBy(BIG_TEN.pow(UZD_DECIMALS))
-                                            .toString();
-
-                                        log(
-                                            `APS contract (ETH): withdraw('${new BigNumber(
-                                                withdrawSum
-                                            )
+                                        try {
+                                            const sumToWithdraw = new BigNumber(withdrawSum)
                                                 .multipliedBy(BIG_TEN.pow(UZD_DECIMALS))
-                                                .toString()}', '${account}', '${account}'')`
-                                        );
+                                                .toString();
 
-                                        tx = await sushi.contracts.apsContract.methods
-                                            .withdraw(sumToWithdraw, '0')
-                                            .send({
-                                                from: account,
-                                            });
+                                            log(
+                                                `APS contract (ETH): withdraw('${new BigNumber(
+                                                    withdrawSum
+                                                )
+                                                    .multipliedBy(BIG_TEN.pow(UZD_DECIMALS))
+                                                    .toString()}', '${account}', '${account}'')`
+                                            );
 
-                                        setTransactionId(tx.transactionHash);
-                                    } catch (error: any) {
-                                        setTransactionError(true);
-                                        log(`❗️ Error while redeeming ZLP: ${error.message}`);
-                                    }
+                                            tx = await sushi.contracts.apsContract.methods
+                                                .withdraw(sumToWithdraw, '0')
+                                                .send({
+                                                    from: account,
+                                                });
 
-                                    setPendingTx(false);
-                                }}
-                            >
-                                Withdraw
-                            </button>
-                        )}
+                                            setTransactionId(tx.transactionHash);
+                                        } catch (error: any) {
+                                            setTransactionError(true);
+                                            log(`❗️ Error while redeeming ZLP: ${error.message}`);
+                                        }
+
+                                        setPendingTx(false);
+                                    }}
+                                >
+                                    Withdraw
+                                </button>
+                            )}
                         {/* {!pendingTx && (
                             <DirectAction
                                 actionName="deposit"

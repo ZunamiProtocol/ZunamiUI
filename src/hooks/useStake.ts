@@ -4,6 +4,7 @@ import { useWallet } from 'use-wallet';
 import { stake, getMasterChefContract, stakeBUSD, stakeFRAX, stakeAPS } from '../sushi/utils';
 import { contractAddresses } from '../sushi/lib/constants';
 import { isBSC, isPLG } from '../utils/zunami';
+import { log } from '../utils/logger';
 
 interface Coin {
     name: string;
@@ -33,6 +34,8 @@ const useStake = (coins: Coins, direct: boolean = false) => {
     const uzd = coins.filter((coin) => coin.name === 'UZD')[0]?.value;
 
     const handleStake = useCallback(async () => {
+        log('Calling deposit...');
+
         if (chainId === 56 && busd && Number(usdt) === 0) {
             const contract = sushi.contracts.busdContract;
             contract.options.address = contractAddresses.busd[56];

@@ -111,6 +111,8 @@ export const Main = (): JSX.Element => {
     const apsBalance = useZapsLpBalance();
     let activeBalance = balances[0];
     const [stakingMode, setStakingMode] = useState('UZD');
+    // total tvl (aps/zunami)
+    const [tvl, setTvl] = useState('0');
 
     if (isBSC(chainId)) {
         activeBalance = balances[1];
@@ -176,6 +178,7 @@ export const Main = (): JSX.Element => {
             let totalIncomeBalance = activeBalance;
 
             if (totalIncomeBalance.toNumber() === 0) {
+                setTotalIncome('$0');
                 return;
             }
 
@@ -274,6 +277,12 @@ export const Main = (): JSX.Element => {
     const apyHintTarget = useRef(null);
     const [showApyHint, setShowApyHint] = useState(false);
 
+    useEffect(() => {
+        if (!uzdStatLoading && uzdStatData.tvl) {
+            setTvl(uzdStatData.tvl);
+        }
+    }, [uzdStatLoading, uzdStatData?.tvl]);
+
     const apyPopover = (
         <Popover
             onMouseEnter={() => setShowApyHint(true)}
@@ -325,10 +334,10 @@ export const Main = (): JSX.Element => {
         stakingMode === 'USD'
             ? isZunLoading || !zunamiInfo
                 ? 'n/a'
-                : `${zunamiInfo.apy.toFixed(2)}%`
+                : `${uzdStatData.info.omnipool.apy.toFixed(2)}%`
             : uzdStatLoading
             ? 0
-            : `${uzdStatData.info.omnipool.apy.toFixed(2)}%`;
+            : `${uzdStatData.info.aps.apy.toFixed(2)}%`;
 
     const apyBarMonthlyApy =
         stakingMode === 'USD'
@@ -365,7 +374,7 @@ export const Main = (): JSX.Element => {
                         }}
                     />
                     <div className="row main-row h-100">
-                        <SideBar isMainPage={true}>
+                        <SideBar isMainPage={true} tvl={tvl}>
                             <div className="row">
                                 <div className="col sidebar-links mt-3 d-none d-lg-flex">
                                     <button
@@ -393,11 +402,15 @@ export const Main = (): JSX.Element => {
                                                 fillRule="evenodd"
                                                 clipRule="evenodd"
                                                 d="M14.6599 0.7805C13.0264 0.694891 11.6327 1.94972 11.5471 3.58324L11.3875 6.62912C11.3019 8.26264 12.5567 9.65627 14.1902 9.74188L17.2361 9.90151C18.8696 9.98712 20.2633 8.73228 20.3489 7.09876L20.5085 4.05289C20.5941 2.41937 19.3393 1.02574 17.7057 0.940127L14.6599 0.7805ZM0.155378 15.6116C0.0697685 13.978 1.3246 12.5844 2.95812 12.4988L6.00399 12.3392C7.63752 12.2536 9.03115 13.5084 9.11676 15.1419L9.27638 18.1878C9.36199 19.8213 8.10716 21.215 6.47364 21.3006L3.42777 21.4602C1.79425 21.5458 0.400614 20.291 0.315005 18.6574L0.155378 15.6116ZM13.04 13.4357C11.5486 14.1076 10.8844 15.8614 11.5563 17.3527L13.0413 20.6485C13.7133 22.1399 15.467 22.8041 16.9584 22.1322L20.2542 20.6472C21.7455 19.9752 22.4098 18.2215 21.7378 16.7301L20.2528 13.4343C19.5809 11.943 17.8271 11.2787 16.3358 11.9507L13.04 13.4357Z"
-                                                fill="url(#paint0_linear_18_112668)"
+                                                fill="url(#paint0_linear_18_112667)"
+                                            />
+                                            <path
+                                                d="M0.155009 4.05394C0.0694001 2.42042 1.32423 1.02679 2.95775 0.941182L6.00363 0.781555C7.63715 0.695945 9.03078 1.95078 9.11639 3.5843L9.27602 6.63017C9.36163 8.26369 8.10679 9.65732 6.47327 9.74293L3.4274 9.90256C1.79388 9.98817 0.400246 8.73334 0.314637 7.09982L0.155009 4.05394Z"
+                                                fill="#CDCDCD"
                                             />
                                             <defs>
                                                 <linearGradient
-                                                    id="paint0_linear_18_112668"
+                                                    id="paint0_linear_18_112667"
                                                     x1="14.254"
                                                     y1="21.9757"
                                                     x2="19.1462"
@@ -409,6 +422,7 @@ export const Main = (): JSX.Element => {
                                                 </linearGradient>
                                             </defs>
                                         </svg>
+
                                         <span>All services</span>
                                     </button>
                                     <a
@@ -540,7 +554,7 @@ export const Main = (): JSX.Element => {
                                         <div className="title">Total income</div>
                                         <div className="value">
                                             {!account && 'n/a'}
-                                            {account && totalIncome !== 'n/a' && totalIncome}
+                                            {account && totalIncome}
                                         </div>
                                     </div>
                                 </div>
@@ -569,9 +583,7 @@ export const Main = (): JSX.Element => {
                             <StakingSummary
                                 logo="UZD"
                                 selected={stakingMode === 'UZD'}
-                                baseApy={
-                                    uzdStatLoading ? 0 : uzdStatData.info.omnipool.apy.toFixed(2)
-                                }
+                                baseApy={uzdStatLoading ? 0 : uzdStatData.info.aps.apy.toFixed(2)}
                                 deposit={getBalanceNumber(apsBalance)
                                     .toNumber()
                                     .toLocaleString('en')}
@@ -593,7 +605,9 @@ export const Main = (): JSX.Element => {
                                 logo="USD"
                                 selected={stakingMode === 'USD'}
                                 baseApy={
-                                    isZunLoading || !zunamiInfo ? '0' : zunamiInfo.apy.toFixed(2)
+                                    uzdStatLoading || !uzdStatData
+                                        ? '0'
+                                        : uzdStatData.info.omnipool.apy.toFixed(2)
                                 }
                                 deposit={
                                     account && userMaxWithdraw.toNumber() !== -1
@@ -629,6 +643,11 @@ export const Main = (): JSX.Element => {
                                         />
                                     </div>
                                     <div className="ApyBar ms-lg-3 me-lg-3 mt-3 mt-lg-0">
+                                        {stakingMode === 'UZD' && (
+                                            <div className="soon">
+                                                <span>soon</span>
+                                            </div>
+                                        )}
                                         <div className="ApyBar__title">APY Bar</div>
                                         <div className="ApyBar__counters">
                                             <div className="ApyBar__Counter">
@@ -699,7 +718,9 @@ export const Main = (): JSX.Element => {
                                 </div>
                                 <div className="col-lg-5 col-xs-12 d-flex flex-column">
                                     <DashboardCarousel
-                                        className="features-slider mb-3 mt-3 mt-lg-0 order-2 order-lg-0"
+                                        className={`features-slider mb-3 mt-3 mt-lg-0 order-2 order-lg-0 ${
+                                            stakingMode !== 'UZD' ? 'slim' : ''
+                                        }`}
                                         style={{
                                             height: stakingMode !== 'UZD' ? '127px' : '222px',
                                         }}

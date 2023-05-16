@@ -318,7 +318,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     <SideBar isMainPage={false}>
                         <WalletStatus />
                         <Pendings
-                            className={`d-none d-md-block`}
+                            className={`d-none d-md-block mt-3`}
                             deposit={`$${getBalanceNumber(
                                 pendingOperations.deposit,
                                 isETH(chainId) || isPLG(chainId) ? 6 : 18

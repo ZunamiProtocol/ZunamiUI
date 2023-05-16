@@ -35,7 +35,7 @@
 
     .law-links {
         a {
-            background: #EBEBEB;
+            background: #ebebeb;
             color: #000;
             text-decoration: none;
         }
@@ -53,6 +53,18 @@
 
     @media (min-width: $media1024) {
         padding: 0 35px 20px 30px !important;
+    }
+
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 40px;
+        cursor: pointer;
+
+        img {
+            width: 26px;
+            height: 26px;
+        }
     }
 }
 
@@ -98,25 +110,25 @@
         padding-left: 30px;
 
         &:nth-child(1) {
-            background: linear-gradient(55.16deg, #EEF4FF 21.38%, #F8F8F8 68.33%);
+            background: linear-gradient(55.16deg, #eef4ff 21.38%, #f8f8f8 68.33%);
         }
 
         &:nth-child(2) {
-            background: linear-gradient(53.71deg, #E3E5FA 15.83%, #F9F9F9 65.73%);
+            background: linear-gradient(53.71deg, #e3e5fa 15.83%, #f9f9f9 65.73%);
         }
 
         &:nth-child(3) {
-            background: linear-gradient(50.03deg, #F4F4F4 21.18%, #F5F5F5 65.78%);
+            background: linear-gradient(50.03deg, #f4f4f4 21.18%, #f5f5f5 65.78%);
         }
 
         &:nth-child(4) {
-            background: linear-gradient(47.54deg, #EFFBFF 20.54%, #F7F7F7 70.21%);
+            background: linear-gradient(47.54deg, #effbff 20.54%, #f7f7f7 70.21%);
         }
 
         .muted {
             font-size: 14px;
             line-height: 18px;
-            color: #4B4B4B;
+            color: #4b4b4b;
             margin-top: 3px;
         }
 

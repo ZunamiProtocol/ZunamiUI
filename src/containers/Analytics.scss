@@ -26,15 +26,23 @@
     }
 }
 
-.SidebarColumn {
-    @media (min-width: $media1024) {
-        background: linear-gradient(
-            0.02deg,
-            rgba(242, 242, 242, 0.45) 76.02%,
-            rgba(241, 241, 241, 0.45) 95.61%
-        );
+.AnalyticsContainer {
+    #sidebar-col {
+        &::after {
+            display: none !important;
+        }
     }
 }
+
+// .SidebarColumn {
+//     @media (min-width: $media1024) {
+//         background: linear-gradient(
+//             0.02deg,
+//             rgba(242, 242, 242, 0.45) 76.02%,
+//             rgba(241, 241, 241, 0.45) 95.61%
+//         );
+//     }
+// }
 
 .AnalyticsContainer {
     h2 {

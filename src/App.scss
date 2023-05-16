@@ -425,6 +425,10 @@ input[type='checkbox'] {
     border-right-color: #f8f8f8 !important;
 }
 
+.bs-tooltip-top .tooltip-arrow::before {
+    border-top-color: #f8f8f8 !important;
+}
+
 .tooltip-inner {
     background: #f8f8f8 !important;
     border-radius: 5px !important;
@@ -1297,7 +1301,7 @@ body.dark {
     }
 
     .ActionSelector__Action {
-        border-bottom-color: #fff;
+        border-bottom-color: transparent;
 
         &__Active {
             border-bottom-color: #fb7501;
@@ -1316,7 +1320,8 @@ body.dark {
         fill: #fff;
     }
 
-    #MobileSidebar .close {
+    #MobileSidebar .close,
+    #all-services .close {
         filter: invert(1);
     }
 
@@ -1442,6 +1447,14 @@ body.dark {
 
     .ApyBar {
         background: linear-gradient(71.21deg, #1a1a1a 12.22%, #1f1f1f 86.71%);
+
+        .soon {
+            background-color: rgba(0, 0, 0, 0.7);
+
+            span {
+                color: #fff;
+            }
+        }
     }
 
     .card.mint-card {
@@ -1566,10 +1579,6 @@ body.dark {
         &__Title {
             color: #ffffff;
         }
-    }
-
-    .ActionSelector__Action {
-        background-color: $dark-panel-bg;
     }
 
     .Form {
@@ -1987,6 +1996,32 @@ body.overflow {
             }
         }
     }
+
+    &.slim {
+        .title {
+            display: none;
+        }
+
+        .yeld {
+            .logo {
+                width: 236px;
+                height: 82px;
+                margin-top: 0;
+            }
+        }
+
+        .curve {
+            .logo {
+                width: 236px;
+                height: 82px;
+                margin-top: 0;
+            }
+        }
+
+        .carousel-indicators {
+            margin-bottom: 0.2rem;
+        }
+    }
 }
 
 .ApyBarWrapper {
@@ -2002,6 +2037,7 @@ body.overflow {
 .ApyBar {
     background: linear-gradient(78.51deg, #f7f7f7 12.17%, #f6f6f6 65.32%);
     border-radius: $border-radius;
+    position: relative;
 
     @media (min-width: $media375) {
         padding: 20px;
@@ -2027,6 +2063,19 @@ body.overflow {
         // height: 373px;
         padding: 25px;
         // margin: 21px 23px 0 48px;
+    }
+
+    .soon {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.7);
+        border-radius: $border-radius;
+        align-items: center;
+        justify-content: center;
+        display: flex;
     }
 
     &__title {

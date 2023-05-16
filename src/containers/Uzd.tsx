@@ -314,7 +314,7 @@ export const Uzd = (): JSX.Element => {
                         }}
                     />
                     <SideBar isMainPage={false}>
-                        <WalletStatus />
+                        {/* <WalletStatus /> */}
                         <div className="mobile-menu-title d-block d-lg-none">Menu</div>
                         <div
                             className="d-flex d-lg-none gap-3 mt-4 pb-3 mobile-menu"
@@ -1056,7 +1056,7 @@ export const Uzd = (): JSX.Element => {
 
                                         {pendingTx && <Preloader className="ms-2" />}
                                     </div>
-                                    {mode === 'mint' && (
+                                    {/* {mode === 'mint' && (
                                         <div className="mt-3" style={{ fontSize: '12px' }}>
                                             ZLP allowance: {zlpAllowance.toString()}
                                         </div>
@@ -1065,7 +1065,7 @@ export const Uzd = (): JSX.Element => {
                                         <div className="mt-3" style={{ fontSize: '12px' }}>
                                             UZD allowance: {uzdAllowance.toString()}
                                         </div>
-                                    )}
+                                    )} */}
                                 </div>
                                 <div className={`flex-fill card mint-card`}>
                                     <div className="card-body">

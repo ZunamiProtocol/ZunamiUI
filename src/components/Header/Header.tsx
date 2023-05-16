@@ -15,6 +15,7 @@ import { log } from '../../utils/logger';
 import { isETH } from '../../utils/zunami';
 import { useGasPrice } from '../../hooks/useGasPrice';
 import { WalletButton } from '../WalletButton/WalletButton';
+import { Network, NetworkSelector, networks } from '../NetworkSelector/NetworkSelector';
 
 function chainNameToTooltip(chainId: number) {
     if (chainId === 1 || !chainId) {
@@ -127,6 +128,10 @@ export const Header: React.FC<HeaderProps> = ({ section }) => {
             <Popover.Body>{renderNotifications(notifications)}</Popover.Body>
         </Popover>
     );
+
+    const eth = window.ethereum;
+    const [activeNetwork, setActiveNetwork] = useState<Network>(networks[0]);
+    const networksList = networks; //props.customNetworksList ? props.customNetworksList : undefined;
 
     useEffect(() => {
         fetch(
@@ -271,6 +276,15 @@ export const Header: React.FC<HeaderProps> = ({ section }) => {
                         </button>
                     </OverlayTrigger>
                     <ThemeSwitcher />
+                    <NetworkSelector
+                        className="ms-0"
+                        hideActiveNetwork={true}
+                        autoChange={false}
+                        customNetworksList={networksList}
+                        onNetworkChange={(network: Network) => {
+                            setActiveNetwork(network);
+                        }}
+                    />
                     <WalletButton />
                 </div>
             </div>

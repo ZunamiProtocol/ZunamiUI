@@ -1,8 +1,8 @@
 @import 'src/variables';
 
 .NetworkSelector {
-    background: #FBECD9;
-    border-radius: 5px;
+    background: #f1f1f1;
+    border-radius: $border-radius;
     display: flex;
     align-items: center;
     justify-content: center;

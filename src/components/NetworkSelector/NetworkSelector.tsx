@@ -23,18 +23,18 @@ export const networks = [
     {
         id: 1,
         key: '0x1',
-        value: 'Ethereum Network',
+        value: 'Ethereum',
         icon: <ETHLogo />,
     },
     {
         id: 56,
         key: '0x38',
-        value: 'Binance Network',
+        value: 'Binance',
         icon: <BSCLogo />,
     },
     {
         key: '0x3',
-        value: 'Ropsten Testnet',
+        value: 'Ropsten',
         icon: <ETHLogo />,
     },
     {
@@ -59,7 +59,7 @@ export const networks = [
     },
     {
         key: '0x89',
-        value: 'Polygon Network',
+        value: 'Polygon',
         icon: <PLGLogo />,
     },
     {
@@ -132,7 +132,7 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
             {chainSupported && activeNetwork.icon}
             {!chainSupported && <span>?</span>}
             <span>{activeNetwork.value}</span>
-            <svg
+            {/* <svg
                 className="NetworkSelector__Toggler"
                 width="16"
                 height="5"
@@ -141,7 +141,7 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
                 xmlns="http://www.w3.org/2000/svg"
             >
                 <path d="M1 1L8 4L15 1" stroke="#404040" strokeWidth="1.1" strokeLinecap="round" />
-            </svg>
+            </svg> */}
             <select
                 value={activeNetwork.key}
                 onChange={async (e) => {

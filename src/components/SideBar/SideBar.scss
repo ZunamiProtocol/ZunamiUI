@@ -25,6 +25,10 @@
         @media (min-width: $media1024) {
             display: block;
         }
+
+        @media (min-width: $media1920) {
+            width: 400px;
+        }
     }
 
     @media (min-width: $media375) {
