@@ -24,7 +24,7 @@ export const NavMenu = (props: NavMenuProps): JSX.Element => {
             icon: <DepositIcon />,
         },
         {
-            title: 'UZD Stablecoin',
+            title: 'UZD',
             urls: ['/uzd'],
             icon: <UzdIcon />,
         },

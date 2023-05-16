@@ -71,7 +71,6 @@ const calculateStables = async (
             // frax one coin withdraw
             result = await calcWithdrawOneCoinFrax(balanceToWithdraw, account);
         }
-        
     } catch (error: any) {
         setError(
             `Error: ${error.message}. Params - coinIndex: ${coinIndex}, lpShares: ${balanceToWithdraw}`
@@ -269,26 +268,31 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
         }
 
         const getTransactionHistory = async () => {
-            const response = await fetch(
-                getTransHistoryUrl(
-                    account,
-                    props.operationName.toUpperCase(),
-                    transHistoryPage,
-                    50,
-                    chainId,
-                    'DEPOSIT_WITHDRAW'
-                )
-            );
+            try {
+                const response = await fetch(
+                    getTransHistoryUrl(
+                        account,
+                        props.operationName.toUpperCase(),
+                        transHistoryPage,
+                        50,
+                        chainId,
+                        'DEPOSIT_WITHDRAW'
+                    )
+                );
 
-            const data = await response.json();
+                const data = await response.json();
 
-            if (!data.userTransfers.length) {
-                setTransHistoryPage(-1);
-                return;
+                if (!data.userTransfers.length) {
+                    setTransHistoryPage(-1);
+                    return;
+                }
+
+                setTransactionList(transactionList.concat(data.userTransfers));
+                setLoadingHistory(false);
+            } catch (error) {
+                setTransactionList([]);
+                setLoadingHistory(false);
             }
-
-            setTransactionList(transactionList.concat(data.userTransfers));
-            setLoadingHistory(false);
         };
 
         getTransactionHistory();
@@ -314,7 +318,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                     <SideBar isMainPage={false}>
                         <WalletStatus />
                         <Pendings
-                            className={`d-none d-md-block`}
+                            className={`d-none d-md-block mt-3`}
                             deposit={`$${getBalanceNumber(
                                 pendingOperations.deposit,
                                 isETH(chainId) || isPLG(chainId) ? 6 : 18
@@ -549,7 +553,12 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                                                 setDirectOperation(true);
                                                             }
 
-                                                            const coins = ['dai', 'usdc', 'usdt', 'frax'];
+                                                            const coins = [
+                                                                'dai',
+                                                                'usdc',
+                                                                'usdt',
+                                                                'frax',
+                                                            ];
 
                                                             // -1 for "all"
                                                             setSelectedCoinIndex(
@@ -580,7 +589,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                         )}
                         <SupportersBar section="deposit" />
                     </div>
-                    
+
                     <div
                         className="d-flex justify-content-center d-md-none text-center flex-column ps-3 pe-3"
                         style={{ width: '100%', padding: '35px', color: '#B3B3B3' }}
@@ -670,9 +679,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                         </div>
                     </div>
                 </div>
-                
             </div>
-            
         </React.Fragment>
     );
 };

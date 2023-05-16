@@ -39,17 +39,17 @@ nav #nav-menu {
             color: #000 !important;
 
             @media screen and (min-width: $media1440) {
-                padding: 32px 15px 0 15px !important;
+                padding: 32px 10px 0 10px !important;
             }
 
             @media screen and (min-width: $media1920) {
-                padding: 37px 20px 0 15px !important;
+                padding: 37px 15px 0 15px !important;
             }
         }
 
         @media screen and (min-width: $media1440) {
             font-weight: 500;
-            font-size: 16px;
+            font-size: 15px;
             line-height: 20px;
         }
 

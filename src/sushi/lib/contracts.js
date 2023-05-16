@@ -6,6 +6,7 @@ import busdAbi from '../../actions/abi/zunami_busd.json';
 import polygonAbi from '../../actions/abi/zunami_polygon.json';
 import uzdAbi from '../../actions/abi/zunami_uzd.json';
 import fraxAbi from '../../actions/abi/zunami_frax.json';
+import ApsAbi from '../../actions/abi/aps.json';
 
 import WETHAbi from './abi/weth.json';
 import { contractAddresses, SUBTRACT_GAS_LIMIT } from './constants.js';
@@ -28,6 +29,7 @@ export class Contracts {
         this.polygonContract = new this.web3.eth.Contract(polygonAbi);
         this.uzdContract = new this.web3.eth.Contract(uzdAbi);
         this.fraxContract = new this.web3.eth.Contract(fraxAbi);
+        this.apsContract = new this.web3.eth.Contract(ApsAbi);
 
         this.weth = new this.web3.eth.Contract(WETHAbi);
         this.usdc = new this.web3.eth.Contract(WETHAbi);
@@ -44,6 +46,7 @@ export class Contracts {
         this.busdContract.options.from = defaultAccount;
         this.uzdContract.options.from = defaultAccount;
         this.fraxContract.options.from = defaultAccount;
+        this.apsContract.options.from = defaultAccount;
     }
 
     setDefaultAccount(account) {
@@ -62,7 +65,8 @@ export class Contracts {
 
         setProviderParams(this.ethMasterChef, contractAddresses.zunami[1]);
         setProviderParams(this.uzdContract, contractAddresses.uzd[1]);
-        setProviderParams(this.fraxContract, contractAddresses.frax[1])
+        setProviderParams(this.fraxContract, contractAddresses.frax[1]);
+        setProviderParams(this.apsContract, contractAddresses.aps[1]);
 
         if (networkId === 56) {
             setProviderParams(this.bscMasterChef, contractAddresses.zunami[56]);

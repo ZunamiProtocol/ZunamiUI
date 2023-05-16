@@ -3,7 +3,9 @@ import { log } from '../utils/logger';
 const root = 'https://zunami-reward-api.herokuapp.com/api';
 export const poolStatsUrl = `${root}/pool/stats`;
 export const activeStratsUrl = `${root}/pool/active-pools-stats`;
+export const uzdStratsUrl = `${root}/aps/strategy/active-strategies-stats`;
 export const zunamiInfoUrl = `${root}/zunami/info`;
+export const uzdStakingInfoUrl = `${root}/v2/zunami/info`;
 
 export const historicalApyUrl = `${root}/zunami/apy-chart`;
 export const testnetUrl = `${root}/feature`;
@@ -18,6 +20,10 @@ const POLYGON_NETWORK_ID = 137;
 
 export const getActiveStratsUrl = (): string => {
     return activeStratsUrl;
+};
+
+export const getUzdStratsUrl = (): string => {
+    return uzdStratsUrl;
 };
 
 export const getPoolStatsUrl = (poolTypes: string): string => {
@@ -57,7 +63,7 @@ export const getTransHistoryUrl = (
     page: number = 0,
     size: number = 50,
     chainId: number = 1,
-    historyType: string,
+    historyType: string
 ): string => {
     let chain = 'ETH';
 
@@ -70,9 +76,10 @@ export const getTransHistoryUrl = (
             break;
     }
 
-    const endpointUrl = historyType === 'DEPOSIT_WITHDRAW'
-        ? `${transHistoryUrl}?address=${address.toLowerCase()}&type=${type}&page=${page}&size=${size}&chain=${chain}`
-        : `${uzdTransHistoryUrl}?address=${address.toLowerCase()}&type=${type}&page=${page}&size=${size}`;
+    const endpointUrl =
+        historyType === 'DEPOSIT_WITHDRAW'
+            ? `${transHistoryUrl}?address=${address.toLowerCase()}&type=${type}&page=${page}&size=${size}&chain=${chain}`
+            : `${uzdTransHistoryUrl}?address=${address.toLowerCase()}&type=${type}&page=${page}&size=${size}`;
 
     return endpointUrl;
 };

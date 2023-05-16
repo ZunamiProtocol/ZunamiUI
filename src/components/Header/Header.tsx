@@ -12,12 +12,45 @@ import { getTransHistoryUrl } from '../../api/api';
 import { format } from 'date-fns';
 import { log } from '../../utils/logger';
 
+import { isETH } from '../../utils/zunami';
+import { useGasPrice } from '../../hooks/useGasPrice';
+import { WalletButton } from '../WalletButton/WalletButton';
+import { Network, NetworkSelector, networks } from '../NetworkSelector/NetworkSelector';
+
+function chainNameToTooltip(chainId: number) {
+    if (chainId === 1 || !chainId) {
+        return (
+            <div>
+                Please note. The contract{' '}
+                <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://github.com/ZunamiLab/ZunamiProtocol/tree/main/audit"
+                >
+                    has been audited
+                </a>
+                , <br />
+                but it's still a beta version. Use it at your own risk
+            </div>
+        );
+    } else {
+        return (
+            <div>
+                Please note. This is the alpha version of the BSC cross-chain gateway. Use it at
+                your own risk!
+            </div>
+        );
+    }
+}
+
 function renderNotifications(notifications: Array<any>) {
     return (
         <div className="notifications-list">
             <div className="title mt-2 ms-2 fs-6">Notifications</div>
             <div className="ms-2 mt-1">
-                {!notifications.length && <div className="text-muted">Everything is up to date</div>}
+                {!notifications.length && (
+                    <div className="text-muted">Everything is up to date</div>
+                )}
                 {notifications.map((notification, index) => (
                     <div className="notification" key={index}>
                         <div className="first-row">
@@ -62,18 +95,21 @@ const getTransactionHistory = async (
     section: string
 ) => {
     const url = getTransHistoryUrl(account, type, 1, 3, chainId, section);
-    const response = await fetch(url);
-    const data = await response.json();
-    return ['MINT', 'REDEEM'].indexOf(type) !== -1 ? data.uzdTransfers : data.userTransfers;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        return ['MINT', 'REDEEM'].indexOf(type) !== -1 ? data.uzdTransfers : data.userTransfers;
+    } catch (error) {
+        return [];
+    }
 };
 
 interface HeaderProps extends React.HTMLProps<HTMLDivElement> {
     section?: string;
 }
 
-export const Header: React.FC<HeaderProps> = ({
-    section
-}) => {
+export const Header: React.FC<HeaderProps> = ({ section }) => {
     const isOnline = useOnlineState();
     const { chainId, account } = useWallet();
     const [gasPrice, setGasPrice] = useState('');
@@ -93,6 +129,10 @@ export const Header: React.FC<HeaderProps> = ({
         </Popover>
     );
 
+    const eth = window.ethereum;
+    const [activeNetwork, setActiveNetwork] = useState<Network>(networks[0]);
+    const networksList = networks; //props.customNetworksList ? props.customNetworksList : undefined;
+
     useEffect(() => {
         fetch(
             'https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=UPPVCS8VTCCNT3T83BZ8H6YRE9WVDY6W2P'
@@ -100,6 +140,9 @@ export const Header: React.FC<HeaderProps> = ({
             .then((response) => response.json())
             .then((data) => {
                 setGasPrice(Number(data.result.ProposeGasPrice));
+            })
+            .catch((error) => {
+                setGasPrice('n/a');
             });
     }, []);
 
@@ -136,12 +179,7 @@ export const Header: React.FC<HeaderProps> = ({
                 return { ...item, type: 'withdraw' };
             });
 
-            let mint = await getTransactionHistory(
-                account,
-                'MINT',
-                chainId,
-                'MINT'
-            );
+            let mint = await getTransactionHistory(account, 'MINT', chainId, 'MINT');
 
             mint = mint.map((item) => {
                 return { ...item, type: 'mint' };
@@ -238,14 +276,16 @@ export const Header: React.FC<HeaderProps> = ({
                         </button>
                     </OverlayTrigger>
                     <ThemeSwitcher />
-                    <button type="button" className="btn btn-sm btn-outline-dark all-services-btn" onClick={() => {
-                        setShowServices(!showServices);
-                        document.getElementById('all-services')?.classList.toggle('active');
-                        document.getElementById('sidebar-col')?.classList.toggle('transparent');
-                        document.getElementById('nav-menu')?.classList.toggle('hidden');
-                    }}>
-                        {showServices ? 'Back' : 'All services'}
-                    </button>
+                    <NetworkSelector
+                        className="ms-0"
+                        hideActiveNetwork={true}
+                        autoChange={false}
+                        customNetworksList={networksList}
+                        onNetworkChange={(network: Network) => {
+                            setActiveNetwork(network);
+                        }}
+                    />
+                    <WalletButton />
                 </div>
             </div>
         </Navbar>

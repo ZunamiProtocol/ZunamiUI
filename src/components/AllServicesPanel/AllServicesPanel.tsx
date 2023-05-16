@@ -238,6 +238,16 @@ export const AllServicesPanel = (props: AllServicesPanelProps): JSX.Element => {
                     </div>
                 </div>
             </div>
+            <div
+                className="close"
+                onClick={() => {
+                    document.getElementById('all-services')?.classList.toggle('active');
+                    document.getElementById('sidebar-col')?.classList.toggle('transparent');
+                    document.getElementById('nav-menu')?.classList.toggle('hidden');
+                }}
+            >
+                <img src="/exit.png" alt="" />
+            </div>
         </div>
     );
 };

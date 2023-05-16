@@ -9,6 +9,7 @@ import ethAbi from '../actions/abi/Zunami.json';
 import bscAbi from '../actions/abi/zunami_bsc.json';
 import uzdAbi from '../actions/abi/zunami_uzd.json';
 import fraxAbi from '../actions/abi/zunami_frax.json';
+import ApsAbi from '../actions/abi/aps.json';
 import { getZunamiAddress } from '../utils/zunami';
 
 export class Sushi {
@@ -185,6 +186,14 @@ export class Sushi {
         const contract = new web3.eth.Contract(fraxAbi);
         contract.options.from = account;
         contract.options.address = contractAddresses.frax[1];
+        return contract;
+    }
+
+    getApsContract(account) {
+        const web3 = new Web3(this.getEthProvider(account));
+        const contract = new web3.eth.Contract(ApsAbi);
+        contract.options.from = account;
+        contract.options.address = contractAddresses.aps[1];
         return contract;
     }
 

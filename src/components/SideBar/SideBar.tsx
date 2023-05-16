@@ -5,9 +5,7 @@ import { getBalanceNumber } from '../../utils/formatbalance';
 import useFetch from 'react-fetch-hook';
 import { BigNumber } from 'bignumber.js';
 import { WalletStatus } from '../WalletStatus/WalletStatus';
-import {
-    zunamiInfoUrl,
-} from '../../api/api';
+import { zunamiInfoUrl } from '../../api/api';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 
 export interface ZunamiInfo {
@@ -24,6 +22,7 @@ export interface ZunamiInfoFetch {
 
 interface SideBarProps {
     isMainPage: boolean;
+    tvl: string;
 }
 
 export const SideBar = (props: SideBarProps): JSX.Element => {
@@ -33,7 +32,8 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
         error: zunError,
     } = useFetch(zunamiInfoUrl) as ZunamiInfoFetch;
 
-    const zunamiInfo = zunData as ZunamiInfo;
+    const [tvl, setTvl] = useState('0');
+
     const [open, setOpen] = useState(false);
     const [gasPrice, setGasPrice] = useState('');
 
@@ -44,8 +44,20 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
             .then((response) => response.json())
             .then((data) => {
                 setGasPrice(Number(data.result.ProposeGasPrice));
+            })
+            .catch((error) => {
+                setGasPrice('n/a');
             });
-    }, []);
+
+        if (props.tvl) {
+            setTvl(props.tvl);
+        } else {
+            if (!isZunLoading) {
+                const zunamiInfo = zunData as ZunamiInfo;
+                setTvl(zunamiInfo.tvl);
+            }
+        }
+    }, [zunData, props.tvl, isZunLoading]);
 
     return (
         <Col id="sidebar-col" className={'SidebarColumn'}>
@@ -87,16 +99,9 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                     <span className="ms-4 badge badge-pill badge-light d-none d-lg-flex align-items-center">
                         <span className="me-2">TVL</span>
                         <span className="text-primary me-2 vela-sans">
-                            {`${
-                                zunamiInfo && !zunError
-                                    ? `$${Number(getBalanceNumber(zunamiInfo.tvl)).toLocaleString(
-                                          'en',
-                                          {
-                                              maximumFractionDigits: 0,
-                                          }
-                                      )}`
-                                    : 'n/a'
-                            }`}
+                            {`${`$${Number(getBalanceNumber(tvl)).toLocaleString('en', {
+                                maximumFractionDigits: 0,
+                            })}`}`}
                         </span>
                         <svg
                             width="18"
@@ -140,15 +145,9 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                         <span className="badge badge-pill badge-light d-flex align-items-center">
                             <span className="me-2">TVL</span>
                             <span className="text-primary me-2 vela-sans">
-                                {`${
-                                    zunamiInfo && !zunError
-                                        ? `$${Number(
-                                              getBalanceNumber(zunamiInfo.tvl)
-                                          ).toLocaleString('en', {
-                                              maximumFractionDigits: 0,
-                                          })}`
-                                        : 'n/a'
-                                }`}
+                                {`${`$${Number(getBalanceNumber(tvl)).toLocaleString('en', {
+                                    maximumFractionDigits: 0,
+                                })}`}`}
                             </span>
                         </span>
                         <button className="btn btn-light btn-sm d-flex align-items-center">

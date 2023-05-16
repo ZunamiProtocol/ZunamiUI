@@ -14,9 +14,17 @@ import {
 } from '../utils/formatbalance';
 import { log } from '../utils/logger';
 import { isBSC, isETH, isPLG } from '../utils/zunami';
+import { contractAddresses } from '../sushi/lib/constants';
 
 export const useUserBalances = () => {
-    const [balance, setbalance] = useState([BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO]);
+    const [balance, setbalance] = useState([
+        BIG_ZERO,
+        BIG_ZERO,
+        BIG_ZERO,
+        BIG_ZERO,
+        BIG_ZERO,
+        BIG_ZERO,
+    ]);
     const { account, ethereum, chainId } = useWallet();
 
     useEffect(() => {
@@ -47,12 +55,19 @@ export const useUserBalances = () => {
                     // @ts-ignore
                     account
                 );
+                const balanceUzd = await getBalance(
+                    ethereum,
+                    contractAddresses.uzd[1],
+                    // @ts-ignore
+                    account
+                );
                 const data = [
                     new BigNumber(balanceDai),
                     new BigNumber(balanceUsdc),
                     new BigNumber(balanceUsdt),
                     BIG_ZERO,
                     new BigNumber(balanceFrax),
+                    new BigNumber(balanceUzd),
                 ];
                 // @ts-ignore
                 setbalance(data);
@@ -85,13 +100,7 @@ export const useUserBalances = () => {
                     // @ts-ignore
                     account
                 );
-                const data = [
-                    BIG_ZERO,
-                    BIG_ZERO,
-                    new BigNumber(balanceUsdt),
-                    BIG_ZERO,
-                    BIG_ZERO,
-                ];
+                const data = [BIG_ZERO, BIG_ZERO, new BigNumber(balanceUsdt), BIG_ZERO, BIG_ZERO];
                 // @ts-ignore
                 setbalance(data);
             }

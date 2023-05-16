@@ -425,6 +425,10 @@ input[type='checkbox'] {
     border-right-color: #f8f8f8 !important;
 }
 
+.bs-tooltip-top .tooltip-arrow::before {
+    border-top-color: #f8f8f8 !important;
+}
+
 .tooltip-inner {
     background: #f8f8f8 !important;
     border-radius: 5px !important;
@@ -574,9 +578,56 @@ body.dark {
         }
     }
 
+    .WalletButton {
+        svg {
+            rect:first-child {
+                fill: #424242;
+            }
+
+            rect:last-child {
+                fill: #646464;
+            }
+        }
+    }
+
+    .FastDepositForm__MobileToggle__Icon {
+        background: linear-gradient(225.25deg, #171717 16.17%, #161616 85.98%);
+    }
+
     .badge.bg-secondary {
         background: #1d1d1d !important;
         text-decoration: none;
+    }
+
+    .btn-secondary {
+        background: linear-gradient(140.24deg, #212121 44.18%, #1d1d1d 144.27%);
+
+        &.disabled {
+            background: #414141;
+        }
+    }
+
+    .StakingSummary {
+        background: linear-gradient(77.82deg, #202020 -4.26%, #232323 88.51%);
+        color: #fff;
+
+        .staking-icon {
+            .staking-text {
+                fill: #fff;
+            }
+        }
+
+        .block {
+            background: #353535;
+
+            .title {
+                color: #c8c8c8;
+            }
+
+            .value {
+                color: #fff;
+            }
+        }
     }
 
     .Pendings .values .deposit,
@@ -584,7 +635,7 @@ body.dark {
     .WalletStatus__Icon,
     .WalletStatus__Connect,
     .WalletStatus_anal__inner__wallet {
-        background: #1d1d1d !important;
+        background: #333333 !important;
     }
 
     .pool-item,
@@ -842,7 +893,7 @@ body.dark {
     }
 
     .FastDepositForm {
-        background: linear-gradient(81.61deg, #161616 6.26%, #181818 93.21%);
+        background: linear-gradient(81.61deg, #1a1a1a 6.26%, #1f1f1f 93.21%);
         border: none;
 
         &__Description {
@@ -1093,13 +1144,13 @@ body.dark {
         background: linear-gradient(86.2deg, #141414 4.31%, #171717 40.59%) !important;
 
         .block {
-            background: #1D1D1D !important;
+            background: #1d1d1d !important;
         }
     }
 
     .coins {
         .coin {
-            background: #1D1D1D !important;
+            background: #1d1d1d !important;
         }
     }
 
@@ -1116,9 +1167,13 @@ body.dark {
             background: linear-gradient(80.09deg, #141414 10.29%, #171717 96.88%) !important;
 
             .block {
-                background: #1D1D1D !important;
+                background: #1d1d1d !important;
             }
         }
+    }
+
+    .letter {
+        fill: #fff;
     }
 
     .mint-redeem-inputs {
@@ -1131,11 +1186,11 @@ body.dark {
         background: linear-gradient(63.79deg, #131313 11.66%, #161616 89.17%);
 
         .desc {
-            color: #C8C8C8;
+            color: #c8c8c8;
         }
 
         .block {
-            background: #2E2D2D;
+            background: #2e2d2d;
 
             .title {
                 color: #989898;
@@ -1246,7 +1301,7 @@ body.dark {
     }
 
     .ActionSelector__Action {
-        border-bottom-color: #fff;
+        border-bottom-color: transparent;
 
         &__Active {
             border-bottom-color: #fb7501;
@@ -1265,7 +1320,8 @@ body.dark {
         fill: #fff;
     }
 
-    #MobileSidebar .close {
+    #MobileSidebar .close,
+    #all-services .close {
         filter: invert(1);
     }
 
@@ -1288,7 +1344,11 @@ body.dark {
         }
 
         @media (min-width: $media1024) {
-            background: linear-gradient(0.02deg, #181818 76.02%, #0b0b0b 95.61%);
+            background: linear-gradient(
+                0.02deg,
+                rgba(38, 38, 38, 0.45) 76.02%,
+                rgba(47, 47, 47, 0.45) 95.61%
+            );
         }
     }
 
@@ -1360,7 +1420,7 @@ body.dark {
     }
 
     .Pendings {
-        background: linear-gradient(80.69deg, #141414 9.7%, #171717 92.78%);
+        background: linear-gradient(81.93deg, #212121 8.1%, #242424 92.09%);
     }
 
     .Sidebar__Content__Data,
@@ -1386,7 +1446,15 @@ body.dark {
     }
 
     .ApyBar {
-        background: linear-gradient(76.67deg, #141414 10.07%, #161616 89.39%);
+        background: linear-gradient(71.21deg, #1a1a1a 12.22%, #1f1f1f 86.71%);
+
+        .soon {
+            background-color: rgba(0, 0, 0, 0.7);
+
+            span {
+                color: #fff;
+            }
+        }
     }
 
     .card.mint-card {
@@ -1423,7 +1491,7 @@ body.dark {
     #networks-selector .network-item .choose-btn,
     .ApyBar__Counter,
     .Counter__Title__Buttons > div {
-        background: #1d1d1d;
+        background: #333333;
     }
 
     .Counter__Title__Buttons > div {
@@ -1511,10 +1579,6 @@ body.dark {
         &__Title {
             color: #ffffff;
         }
-    }
-
-    .ActionSelector__Action {
-        background-color: $dark-panel-bg;
     }
 
     .Form {
@@ -1643,6 +1707,10 @@ body.dark {
 .btn-light {
     background-color: $btn-secondary-color !important;
     border-color: transparent !important;
+
+    &:hover {
+        background-color: #d4d4d4 !important;
+    }
 }
 
 .dashboard {
@@ -1688,25 +1756,21 @@ body.overflow {
     border-radius: $border-radius;
 
     @media (min-width: $media375) {
-        width: 100%;
-        height: 193px;
+        // width: 100%;
         margin-bottom: 20px;
     }
 
     @media (min-width: $media1024) {
-        width: 275px;
-        height: 170px;
+        // width: 275px;
         margin-bottom: 0;
     }
 
     @media (min-width: $media1440) {
-        width: 353px;
-        height: 222px;
+        // width: 353px;
     }
 
     @media (min-width: $media1920) {
-        width: 610px;
-        height: 262px;
+        // width: 610px;
     }
 
     .carousel-inner,
@@ -1719,23 +1783,23 @@ body.overflow {
         position: relative;
 
         @media (min-width: $media375) {
-            width: 100%;
-            height: 193px;
+            // width: 100%;
+            height: 100%;
         }
 
         @media (min-width: $media1024) {
-            width: 100%;
-            height: 170px;
+            // width: 100%;
+            height: 100%;
         }
 
         @media (min-width: $media1440) {
-            width: 353px;
-            height: 222px;
+            // width: 353px;
+            height: 100%;
         }
 
         @media (min-width: $media1920) {
-            width: 609px;
-            height: 262px;
+            // width: 609px;
+            height: 100%;
         }
 
         .title {
@@ -1800,68 +1864,70 @@ body.overflow {
         }
 
         &.uzd {
-            background: linear-gradient(0deg, #ff3902 -49.44%, #ffa701 100%);
+            background: linear-gradient(82.46deg, #ff6202 7.33%, #ffa402 92.02%);
 
             .uzd-logo {
                 @media (min-width: $media375) {
-                    left: 31px;
-                    top: 52px;
                     position: absolute;
-                    width: 123px;
-                    height: 142px;
+                    left: calc(50% - 100px);
+                    top: calc(50%);
+                    transform: translate(-50%, -50%);
+                    position: absolute;
+                    width: 89px;
+                    height: 102px;
                 }
 
                 @media (min-width: $media1024) {
-                    left: 55px;
-                    top: 49px;
+                    left: 36px;
+                    top: calc(50%);
+                    transform: translateY(-50%);
                     position: absolute;
-                    width: 86px;
-                    height: 99px;
+                    width: 89px;
+                    height: 102px;
                 }
 
                 @media (min-width: $media1440) {
-                    left: 57px;
-                    top: 52px;
+                    left: 36px;
+                    top: calc(50%);
+                    transform: translateY(-50%);
                     position: absolute;
-                    width: 134px;
-                    height: 154px;
+                    width: 89px;
+                    height: 102px;
                 }
 
                 @media (min-width: $media1920) {
-                    left: 138px;
-                    top: 57px;
-                    position: absolute;
-                    width: 248px;
-                    height: 283px;
                 }
             }
 
             .uzd {
                 @media (min-width: $media375) {
-                    top: 62px;
-                    left: 126px;
-                    width: 128px;
-                    height: 52px;
                     position: absolute;
                     display: flex;
                     align-items: baseline;
+                    top: calc(50% - 20px);
+                    transform: translate(-50%, -50%);
+                    left: 50%;
+                    width: 147px;
+                    height: 40px;
                 }
 
                 @media (min-width: $media1024) {
-                    top: 45px;
-                    left: 109px;
-                    width: 87px;
-                    height: 35px;
+                    top: calc(50% - 20px);
+                    transform: translateY(-50%);
+                    left: 85px;
+                    width: 97px;
+                    height: 40px;
                     position: absolute;
                     display: flex;
                     align-items: baseline;
                 }
 
                 @media (min-width: $media1440) {
-                    top: 69px;
-                    left: 139px;
-                    width: 136px;
-                    height: 66px;
+                    top: calc(50%);
+                    transform: translateY(-50%);
+                    left: 85px;
+                    width: 97px;
+                    height: 40px;
                     position: absolute;
                     display: flex;
                     align-items: baseline;
@@ -1880,33 +1946,34 @@ body.overflow {
 
             .description {
                 @media (min-width: $media375) {
-                    left: 129px;
-                    top: 125px;
                     position: absolute;
+                    left: 50%;
+                    top: calc(50% + 25px);
+                    transform: translate(-50%, -50%);
                     color: #fff;
                     font-family: 'Space Grotesk';
                     font-weight: 600;
                     font-size: 12px;
                     line-height: 14px;
-                    width: 135px;
+                    width: 143px;
                 }
 
                 @media (min-width: $media1024) {
-                    left: 110px;
-                    top: 99px;
-                    position: absolute;
+                    left: 85px;
+                    top: calc(50% + 25px);
+                    transform: translateY(-50%);
                     color: #fff;
                     font-family: 'Space Grotesk';
                     font-weight: 600;
-                    font-size: 10px;
-                    line-height: 12px;
+                    font-size: 12px;
+                    line-height: 14px;
                     width: 143px;
                 }
 
                 @media (min-width: $media1440) {
-                    left: 142px;
-                    top: 137px;
-                    position: absolute;
+                    left: 195px;
+                    top: calc(50% + 5px);
+                    transform: translateY(-50%);
                     color: #fff;
                     font-family: 'Space Grotesk';
                     font-weight: 600;
@@ -1929,6 +1996,32 @@ body.overflow {
             }
         }
     }
+
+    &.slim {
+        .title {
+            display: none;
+        }
+
+        .yeld {
+            .logo {
+                width: 236px;
+                height: 82px;
+                margin-top: 0;
+            }
+        }
+
+        .curve {
+            .logo {
+                width: 236px;
+                height: 82px;
+                margin-top: 0;
+            }
+        }
+
+        .carousel-indicators {
+            margin-bottom: 0.2rem;
+        }
+    }
 }
 
 .ApyBarWrapper {
@@ -1944,6 +2037,7 @@ body.overflow {
 .ApyBar {
     background: linear-gradient(78.51deg, #f7f7f7 12.17%, #f6f6f6 65.32%);
     border-radius: $border-radius;
+    position: relative;
 
     @media (min-width: $media375) {
         padding: 20px;
@@ -1951,24 +2045,37 @@ body.overflow {
     }
 
     @media (min-width: $media1024) {
-        width: 300px;
-        height: 316px;
+        // width: 300px;
+        // height: 316px;
         padding: 20px;
-        margin: 21px 20px 0 25px;
+        // margin: 21px 20px 0 25px;
     }
 
     @media (min-width: $media1440) {
-        width: 517px;
-        height: 316px;
+        // width: 517px;
+        // height: 316px;
         padding: 25px;
-        margin: 21px 23px 0 48px;
+        // margin: 21px 23px 0 48px;
     }
 
     @media (min-width: $media1920) {
-        width: 610px;
-        height: 373px;
+        // width: 610px;
+        // height: 373px;
         padding: 25px;
-        margin: 21px 23px 0 48px;
+        // margin: 21px 23px 0 48px;
+    }
+
+    .soon {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.7);
+        border-radius: $border-radius;
+        align-items: center;
+        justify-content: center;
+        display: flex;
     }
 
     &__title {
@@ -2008,7 +2115,7 @@ body.overflow {
 
             @media (min-width: $media375) {
                 width: calc(50% - 10px);
-                height: 53px;
+                height: 63px;
                 margin-bottom: 0;
             }
 
@@ -2032,7 +2139,7 @@ body.overflow {
 
             &__Title {
                 @media (min-width: $media375) {
-                    margin-top: 11px;
+                    margin-top: 15px;
                     margin-bottom: 2px;
                 }
 
@@ -2427,9 +2534,31 @@ body.overflow {
 }
 
 .value.text-success {
-    color: #84B900 !important;
+    color: #84b900 !important;
 }
 
 .notifications-popover {
     margin-top: 10px;
+}
+
+.sidebar-links {
+    display: flex;
+    gap: 13px;
+
+    .btn-secondary {
+        padding: 12px 23px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        font-size: 13px;
+        background: #eaeaea;
+        color: #000;
+        border: none;
+
+        svg {
+            height: 20px;
+            width: auto;
+        }
+    }
 }

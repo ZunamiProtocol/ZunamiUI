@@ -3,15 +3,15 @@
 .supporters-bar {
     bottom: 0;
     right: 0;
-    padding: 20px 0;
+    padding: 10px 0;
 
-    &[data-section="dashboard"] {
+    &[data-section='dashboard'] {
         .supporters-links {
-            padding-right: 40px;
+            padding-right: 0;
         }
     }
-    
-    &[data-section="deposit"] {
+
+    &[data-section='deposit'] {
         padding-top: 0;
         position: absolute;
 
@@ -20,13 +20,13 @@
         }
     }
 
-    &[data-section="uzd"] {
+    &[data-section='uzd'] {
         .supporters-links {
             padding-right: 0;
         }
     }
 
-    &[data-section="analytics"] {
+    &[data-section='analytics'] {
         .supporters-links {
             @media screen and (min-width: $media375) {
                 padding-right: 0px;
@@ -38,7 +38,7 @@
             }
         }
     }
-    
+
     .text-muted {
         font-size: 12px;
         margin-right: 20px;
@@ -57,7 +57,7 @@
         }
 
         a {
-            background: #F7F7F7;
+            background: #f7f7f7;
             padding: 8px 25px 8px 12px;
             color: #999999;
             text-decoration: none;
@@ -71,7 +71,7 @@
             border-radius: 20px;
 
             img {
-                opacity: .5;
+                opacity: 0.5;
                 height: 16px;
                 width: 16px;
             }

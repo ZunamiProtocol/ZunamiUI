@@ -130,7 +130,7 @@ export const approve = async (
     const funcParams = {
         from: account,
         maxPriorityFeePerGas: null,
-        maxFeePerGas: null, 
+        maxFeePerGas: null,
     };
 
     if (isZerionWallet) {
@@ -150,7 +150,9 @@ export const approve = async (
         spender = spenderAddress;
     }
 
-    log(`Executing approve() for address ${lpContract.options.address}. Params: ${spender}, ${sum}`);
+    log(
+        `Executing approve() for address ${lpContract.options.address}. Params: ${spender}, ${sum}`
+    );
 
     return lpContract.methods
         .approve(spender, sum)
@@ -190,14 +192,18 @@ export const stake = async (contract, account, dai, usdc, usdt, direct = false, 
     }
 
     if (isPLG(chainId)) {
-        log(`Polygon: delegateDeposit("${new BigNumber(usdt).times(USDT_TOKEN_DECIMAL).toString()}")`);
+        log(
+            `Polygon: delegateDeposit("${new BigNumber(usdt)
+                .times(USDT_TOKEN_DECIMAL)
+                .toString()}")`
+        );
 
         return contract.methods
             .delegateDeposit(new BigNumber(usdt).times(USDT_TOKEN_DECIMAL).toString())
             .send({
                 from: account,
                 maxPriorityFeePerGas: null,
-                maxFeePerGas: null, 
+                maxFeePerGas: null,
             })
             .on('transactionHash', (tx) => {
                 return tx.transactionHash;
@@ -208,7 +214,7 @@ export const stake = async (contract, account, dai, usdc, usdt, direct = false, 
 
     const transactionParams = {
         from: account,
-    }
+    };
 
     if (direct) {
         log(`Zunami contract: execution deposit(${coins})`);
@@ -282,6 +288,26 @@ export const stakeFRAX = async (contract, account, frax) => {
 };
 
 /**
+ * Stake APS
+ * @param {*} contract
+ * @param {*} account
+ * @param {*} frax
+ * @returns
+ */
+export const stakeAPS = async (contract, account, uzd) => {
+    const depositSum = new BigNumber(uzd).times(USDT_BSC_TOKEN_DECIMAL).toString();
+
+    log(`Exection [APS]: deposit("${depositSum}", "0")`);
+
+    return contract.methods
+        .deposit(depositSum)
+        .send({ from: account })
+        .on('transactionHash', (tx) => {
+            return tx.transactionHash;
+        });
+};
+
+/**
  * Withdraw function
  * @param Contract contract zunamiContract
  * @param string account Wallet address
@@ -310,7 +336,6 @@ export const unstake = async (
         new BigNumber(dai).times(DEFAULT_TOKEN_DECIMAL).toString(),
         new BigNumber(usdc).times(USDT_TOKEN_DECIMAL).toString(),
         usdtVal,
-
     ];
 
     if (optimized) {
@@ -387,11 +412,7 @@ export const unstake = async (
  * @param number coinIndex Index of coin (0 - DAI, 1 - USDC, 2 - USDT)
  * @returns
  */
-export const unstakeFrax = async (
-    fraxContract,
-    account,
-    lpShares,
-) => {
+export const unstakeFrax = async (fraxContract, account, lpShares) => {
     log(`FRAX contract: execution withdraw(${lpShares}, 0`);
     const funcParams = { from: account };
 
