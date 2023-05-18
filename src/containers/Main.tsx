@@ -12,6 +12,7 @@ import {
     getActiveStratsUrl,
     uzdStakingInfoUrl,
     getUzdStratsUrl,
+    getApsHistoricalApyUrl,
 } from '../api/api';
 import { BigNumber } from 'bignumber.js';
 import usePendingOperations from '../hooks/usePendingOperations';
@@ -225,7 +226,12 @@ export const Main = (): JSX.Element => {
 
     // historical APY chart data
     useEffect(() => {
-        fetch(getHistoricalApyUrl(histApyPeriod))
+        const url =
+            stakingMode === 'USD'
+                ? getHistoricalApyUrl(histApyPeriod)
+                : getApsHistoricalApyUrl(histApyPeriod);
+
+        fetch(url)
             .then((response) => {
                 return response.json();
             })
@@ -235,7 +241,7 @@ export const Main = (): JSX.Element => {
             .catch((error) => {
                 setHistApyData([]);
             });
-    }, [histApyPeriod]);
+    }, [histApyPeriod, stakingMode]);
 
     const pendingOperations = usePendingOperations();
 
@@ -298,7 +304,7 @@ export const Main = (): JSX.Element => {
                                 : `${zunamiInfo.monthlyAvgApy.toFixed(2)}%`
                             : uzdStatLoading
                             ? 0
-                            : `${uzdStatData.info.omnipool.monthlyAvgApy.toFixed(2)}%`}
+                            : `${uzdStatData.info.aps.monthlyAvgApy.toFixed(2)}%`}
                     </span>
                 </div>
                 <div className="">
@@ -310,7 +316,7 @@ export const Main = (): JSX.Element => {
                                 : `${zunamiInfo.threeMonthAvgApy.toFixed(2)}%`
                             : uzdStatLoading
                             ? 0
-                            : `${uzdStatData.info.omnipool.threeMonthAvgApy.toFixed(2)}%`}
+                            : `${uzdStatData.info.aps.threeMonthAvgApy.toFixed(2)}%`}
                     </span>
                 </div>
             </Popover.Body>
@@ -346,7 +352,7 @@ export const Main = (): JSX.Element => {
                 : `${zunamiInfo.monthlyAvgApy.toFixed(2)}%`
             : uzdStatLoading
             ? 0
-            : `${uzdStatData.info.omnipool.monthlyAvgApy.toFixed(2)}%`;
+            : `${uzdStatData.info.aps.monthlyAvgApy.toFixed(2)}%`;
 
     return (
         <Suspense fallback={<Preloader onlyIcon={true} />}>
@@ -643,11 +649,11 @@ export const Main = (): JSX.Element => {
                                         />
                                     </div>
                                     <div className="ApyBar ms-lg-3 me-lg-3 mt-3 mt-lg-0">
-                                        {stakingMode === 'UZD' && (
+                                        {/* {stakingMode === 'UZD' && (
                                             <div className="soon">
                                                 <span>soon</span>
                                             </div>
-                                        )}
+                                        )} */}
                                         <div className="ApyBar__title">APY Bar</div>
                                         <div className="ApyBar__counters">
                                             <div className="ApyBar__Counter">

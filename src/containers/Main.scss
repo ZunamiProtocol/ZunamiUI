@@ -183,6 +183,40 @@
     }
 }
 
+.dashboard-col .wrapper {
+    margin: 0 0 0 0;
+    position: relative;
+
+    > img {
+        width: 17px;
+        height: 17px;
+        transform: translateY(-4px);
+    }
+
+    .coin {
+        width: 13px;
+        height: 13px;
+        top: 13px;
+        left: -4px;
+        background: #d7d7d7;
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 7px;
+
+        &:nth-child(2) {
+            left: 9px;
+        }
+
+        > img,
+        > svg {
+            width: 8px;
+            height: 8px;
+        }
+    }
+}
+
 .dashboard-col .strats-chart-col,
 .dashboard-col .hist-apy-col {
     background-color: #fff;
@@ -258,7 +292,7 @@
 }
 
 .popover {
-    background: linear-gradient(86.06deg, #F1F1F1 4.87%, #F4F4F4 98.87%);
+    background: linear-gradient(86.06deg, #f1f1f1 4.87%, #f4f4f4 98.87%);
     border-radius: $border-radius !important;
     border: none !important;
     overflow: hidden;
@@ -270,7 +304,7 @@
     }
 
     .balance {
-        background: #EBEBEB;
+        background: #ebebeb;
         padding: 20px;
         border-radius: $border-radius;
         display: flex;
@@ -285,7 +319,7 @@
             font-size: 14px;
             line-height: 18px;
         }
-        
+
         .sum {
             font-family: 'Vela Sans Regular';
             font-size: 16px;
@@ -294,8 +328,6 @@
             margin-left: 10px;
         }
     }
-
-
 }
 
 @media screen and (max-width: 1023px) {

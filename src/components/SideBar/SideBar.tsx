@@ -5,7 +5,7 @@ import { getBalanceNumber } from '../../utils/formatbalance';
 import useFetch from 'react-fetch-hook';
 import { BigNumber } from 'bignumber.js';
 import { WalletStatus } from '../WalletStatus/WalletStatus';
-import { zunamiInfoUrl } from '../../api/api';
+import { uzdStakingInfoUrl, zunamiInfoUrl } from '../../api/api';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 
 export interface ZunamiInfo {
@@ -32,6 +32,10 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
         error: zunError,
     } = useFetch(zunamiInfoUrl) as ZunamiInfoFetch;
 
+    const { isLoading: uzdStatLoading, data: uzdStatData } = useFetch(
+        uzdStakingInfoUrl
+    ) as ZunamiInfoFetch;
+
     const [tvl, setTvl] = useState('0');
 
     const [open, setOpen] = useState(false);
@@ -52,12 +56,11 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
         if (props.tvl) {
             setTvl(props.tvl);
         } else {
-            if (!isZunLoading) {
-                const zunamiInfo = zunData as ZunamiInfo;
-                setTvl(zunamiInfo.tvl);
+            if (!uzdStatLoading) {
+                setTvl(uzdStatData.tvl);
             }
         }
-    }, [zunData, props.tvl, isZunLoading]);
+    }, [zunData, props.tvl, uzdStatLoading, uzdStatData]);
 
     return (
         <Col id="sidebar-col" className={'SidebarColumn'}>

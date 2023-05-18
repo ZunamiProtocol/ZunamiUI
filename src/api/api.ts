@@ -8,6 +8,7 @@ export const zunamiInfoUrl = `${root}/zunami/info`;
 export const uzdStakingInfoUrl = `${root}/v2/zunami/info`;
 
 export const historicalApyUrl = `${root}/zunami/apy-chart`;
+export const apsHistoricalApyUrl = `${root}/zunami/aps-apy-chart`;
 export const testnetUrl = `${root}/feature`;
 export const totalIncomeUrl = `${root}/transfers/total-income`;
 export const transHistoryUrl = `${root}/transfers/history`;
@@ -32,6 +33,10 @@ export const getPoolStatsUrl = (poolTypes: string): string => {
 
 export const getHistoricalApyUrl = (period: string): string => {
     return `${historicalApyUrl}?period=${period.toUpperCase()}`;
+};
+
+export const getApsHistoricalApyUrl = (period: string): string => {
+    return `${apsHistoricalApyUrl}?period=${period.toUpperCase()}`;
 };
 
 export const getTestnetStatusUrl = (address: string): string => {
