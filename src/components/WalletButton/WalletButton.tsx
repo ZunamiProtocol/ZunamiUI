@@ -53,6 +53,11 @@ export const WalletButton = (
         setActiveNetwork(defaultNetwork);
         // }
 
+        if (!activeNetwork) {
+            setChainSupported(false);
+            return;
+        }
+
         setChainSupported(supportedChainIds.indexOf(parseInt(activeNetwork.key, 16)) !== -1);
     }, [chainId, activeNetwork]);
 

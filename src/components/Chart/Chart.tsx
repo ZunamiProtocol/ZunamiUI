@@ -10,14 +10,25 @@ interface DataItem {
 
 interface ChartProps {
     data: Array<DataItem>;
-    title;
+    title: string;
 }
 
 function renderStratList(items: Array<DataItem>) {
     return items.map((item, index) => (
         <div key={index} className={'PieChart__StratList__Item'}>
             <div className="d-flex">
-                <img src={item.icon} alt={item.title} className="me-2" />
+                <div className="wrapper me-2">
+                    <img src={item.icon} alt={item.title} />
+                    <div className="coin">
+                        <img
+                            src={item.type === 'FRAX_STAKEDAO' ? '/stake-dao.svg' : item.icon}
+                            alt={item.title}
+                        />
+                    </div>
+                    <div className="coin">
+                        <img src="/curve-icon.svg" alt={item.title} />
+                    </div>
+                </div>
                 <a target="blank" href={item.link}>
                     {item.title}
                 </a>
