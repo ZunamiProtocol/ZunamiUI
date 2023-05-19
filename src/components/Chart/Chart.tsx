@@ -6,6 +6,7 @@ interface DataItem {
     title: string;
     link: string;
     icon: string;
+    type: string;
 }
 
 interface ChartProps {
@@ -19,15 +20,19 @@ function renderStratList(items: Array<DataItem>) {
             <div className="d-flex">
                 <div className="wrapper me-2">
                     <img src={item.icon} alt={item.title} />
-                    <div className="coin">
-                        <img
-                            src={item.type === 'FRAX_STAKEDAO' ? '/stake-dao.svg' : item.icon}
-                            alt={item.title}
-                        />
-                    </div>
-                    <div className="coin">
-                        <img src="/curve-icon.svg" alt={item.title} />
-                    </div>
+                    {item.type !== 'VAULT' && (
+                        <div className="coin">
+                            <img
+                                src={item.type === 'FRAX_STAKEDAO' ? '/stake-dao.svg' : item.icon}
+                                alt={item.title}
+                            />
+                        </div>
+                    )}
+                    {item.type !== 'VAULT' && (
+                        <div className="coin">
+                            <img src="/curve-icon.svg" alt={item.title} />
+                        </div>
+                    )}
                 </div>
                 <a target="blank" href={item.link}>
                     {item.title}
