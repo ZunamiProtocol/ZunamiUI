@@ -4,7 +4,6 @@ import './SideBar.scss';
 import { getBalanceNumber } from '../../utils/formatbalance';
 import useFetch from 'react-fetch-hook';
 import { BigNumber } from 'bignumber.js';
-import { WalletStatus } from '../WalletStatus/WalletStatus';
 import { uzdStakingInfoUrl, zunamiInfoUrl } from '../../api/api';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 
@@ -12,6 +11,7 @@ export interface ZunamiInfo {
     tvl: BigNumber;
     apy: number;
     apr: number;
+    curve: Object;
 }
 
 export interface ZunamiInfoFetch {
@@ -22,7 +22,8 @@ export interface ZunamiInfoFetch {
 
 interface SideBarProps {
     isMainPage: boolean;
-    tvl: string;
+    tvl?: string;
+    children?: string | JSX.Element | JSX.Element[];
 }
 
 export const SideBar = (props: SideBarProps): JSX.Element => {

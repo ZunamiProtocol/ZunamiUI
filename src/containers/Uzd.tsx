@@ -11,7 +11,7 @@ import useEagerConnect from '../hooks/useEagerConnect';
 import { BIG_TEN, BIG_ZERO, getBalanceNumber, UZD_DECIMALS } from '../utils/formatbalance';
 import useUzdLpPrice from '../hooks/useUzdLpPrice';
 import BigNumber from 'bignumber.js';
-import { getAllowance, getUzdAllowance } from '../utils/erc20';
+import { getAllowance } from '../utils/erc20';
 import { contractAddresses } from '../sushi/lib/constants';
 import { approve, APPROVE_SUM, getMasterChefContract } from '../sushi/utils';
 import { Preloader } from '../components/Preloader/Preloader';
@@ -27,7 +27,6 @@ import { TransactionHistory } from '../components/TransactionHistory/Transaction
 import { ActionSelector } from '../components/Form/ActionSelector/ActionSelector';
 import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
 import { SupportersBar } from '../components/SupportersBar/SupportersBar';
-import { WalletStatus } from '../components/WalletStatus_Analytics/WalletStatus';
 
 interface CurvePoolInfo {
     apy: number;
@@ -106,7 +105,6 @@ const addToken = async (
 };
 
 export const Uzd = (): JSX.Element => {
-    // const account = '0xe9b2b067ee106a6e518fb0552f3296d22b82b32b';
     const { account, connect, ethereum, chainId } = useWallet();
     const sushi = useSushi();
     const masterChefContract = getMasterChefContract(sushi);
@@ -120,13 +118,14 @@ export const Uzd = (): JSX.Element => {
     const [zlpAllowance, setZlpAllowance] = useState(BIG_ZERO);
     const [uzdAllowance, setUzdAllowance] = useState(BIG_ZERO);
     const [pendingTx, setPendingTx] = useState(false);
-    const [transactionError, setTransactionError] = useState(false);
+    const [transactionError, setTransactionError] = useState<string | boolean | undefined>(false);
     const [transactionId, setTransactionId] = useState<string | undefined>(undefined);
     const [mode, setMode] = useState('mint');
     const [ltvValue, setLtvValue] = useState('0');
     const [supportedChain, setSupportedChain] = useState(true);
     const [withdrawAll, setWithdrawAll] = useState(false);
     const [hideMigrationModal, setHideMigrationModal] = useState(false);
+    const [showApproveBtn, setShowApproveBtn] = useState(false);
 
     const {
         isLoading,
@@ -162,7 +161,6 @@ export const Uzd = (): JSX.Element => {
 
         const getZlpApprove = async () => {
             const allowance = new BigNumber(
-                // await getUzdAllowance(
                 await getAllowance(
                     ethereum,
                     contractAddresses.zunami[1],
@@ -204,6 +202,21 @@ export const Uzd = (): JSX.Element => {
         }
     }, [uzdTotalSupply, zunamiInfo]);
 
+    // Allowance button
+    useEffect(() => {
+        let show = false;
+
+        if (zlpAllowance.toNumber() === 0 && mode === 'mint') {
+            show = true;
+        }
+
+        if (zlpAllowance.toNumber() < Number(zunLpValue)) {
+            show = true;
+        }
+
+        setShowApproveBtn(show);
+    }, [mode, zlpAllowance, zunLpValue]);
+
     const depositDisabled =
         Number(zunLpValue) <= 0 ||
         isNaN(Number(zunLpValue)) ||
@@ -228,7 +241,6 @@ export const Uzd = (): JSX.Element => {
     }, [deprecatedUzdBalance]);
 
     const [transactionList, setTransactionList] = useState([]);
-    const [showMobileTransHistory, setShowMobileTransHistory] = useState(false);
     const [transHistoryPage, setTransHistoryPage] = useState(0);
 
     useEffect(() => {
@@ -314,7 +326,6 @@ export const Uzd = (): JSX.Element => {
                         }}
                     />
                     <SideBar isMainPage={false}>
-                        {/* <WalletStatus /> */}
                         <div className="mobile-menu-title d-block d-lg-none">Menu</div>
                         <div
                             className="d-flex d-lg-none gap-3 mt-4 pb-3 mobile-menu"
@@ -883,12 +894,14 @@ export const Uzd = (): JSX.Element => {
                                         </div>
                                     </div>
                                     <div className="d-flex align-items-center">
-                                        {zlpAllowance.toNumber() === 0 && mode === 'mint' && (
+                                        {showApproveBtn && (
                                             <div>
                                                 <input
                                                     type="button"
                                                     className={`zun-button ${
-                                                        pendingTx ? 'disabled' : ''
+                                                        pendingTx || !Number(zunLpValue)
+                                                            ? 'disabled'
+                                                            : ''
                                                     }`}
                                                     value="Approve ZLP"
                                                     onClick={async () => {
@@ -916,7 +929,7 @@ export const Uzd = (): JSX.Element => {
                                                 />
                                             </div>
                                         )}
-                                        {zlpAllowance.toNumber() > 0 && mode === 'mint' && (
+                                        {!showApproveBtn && mode === 'mint' && (
                                             <input
                                                 type="button"
                                                 className={`zun-button ${

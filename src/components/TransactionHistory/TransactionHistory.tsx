@@ -5,7 +5,6 @@ import { getScanAddressByChainId } from '../../utils/zunami';
 
 interface TransactionHistoryProps {
     title: any;
-    section: string;
     items?: Array<any>;
     onPageEnd?: Function;
     emptyText: string;
@@ -101,7 +100,9 @@ export const TransactionHistory: React.FC<
                                 }`}</span>
                                 <span className={`status ${item.status}`}>{item.status}</span>
                                 <a
-                                    href={`https://${getScanAddressByChainId(chainId)}/tx/${item.transactionHash}`}
+                                    href={`https://${getScanAddressByChainId(chainId)}/tx/${
+                                        item.transactionHash
+                                    }`}
                                     rel="noreferrer"
                                     target="_blank"
                                     className="trans-link"
@@ -126,14 +127,20 @@ export const TransactionHistory: React.FC<
                             </div>
                         </div>
                     ))}
-                {
-                    !items.length && <div className="text-center empty">
-                        <svg width="130" height="24" viewBox="0 0 130 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="130" height="24" rx="12" fill="#E4E4E4"/>
+                {!items.length && (
+                    <div className="text-center empty">
+                        <svg
+                            width="130"
+                            height="24"
+                            viewBox="0 0 130 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <rect width="130" height="24" rx="12" fill="#E4E4E4" />
                         </svg>
                         <div className="">{emptyText}</div>
                     </div>
-                }
+                )}
             </div>
         </div>
     );
