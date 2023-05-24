@@ -126,6 +126,7 @@ export const Uzd = (): JSX.Element => {
     const [withdrawAll, setWithdrawAll] = useState(false);
     const [hideMigrationModal, setHideMigrationModal] = useState(false);
     const [showApproveBtn, setShowApproveBtn] = useState(false);
+    const [showApproveUzdBtn, setShowApproveUzdBtn] = useState(false);
 
     const {
         isLoading,
@@ -206,6 +207,10 @@ export const Uzd = (): JSX.Element => {
     useEffect(() => {
         let show = false;
 
+        if (mode !== 'mint') {
+            return;
+        }
+
         if (zlpAllowance.toNumber() === 0 && mode === 'mint') {
             show = true;
         }
@@ -216,6 +221,24 @@ export const Uzd = (): JSX.Element => {
 
         setShowApproveBtn(show);
     }, [mode, zlpAllowance, zunLpValue]);
+
+    useEffect(() => {
+        let show = false;
+
+        if (mode !== 'redeem') {
+            return;
+        }
+
+        if (uzdAllowance.toNumber() === 0 && mode === 'redeem') {
+            show = true;
+        }
+
+        if (uzdAllowance.toNumber() < Number(uzdValue)) {
+            show = true;
+        }
+
+        setShowApproveUzdBtn(show);
+    }, [mode, uzdAllowance, uzdValue]);
 
     const depositDisabled =
         Number(zunLpValue) <= 0 ||
@@ -967,7 +990,7 @@ export const Uzd = (): JSX.Element => {
                                                 }}
                                             />
                                         )}
-                                        {uzdAllowance.toNumber() === 0 && mode === 'redeem' && (
+                                        {showApproveUzdBtn && (
                                             <div>
                                                 <input
                                                     type="button"
