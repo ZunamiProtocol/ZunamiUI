@@ -11,10 +11,10 @@ interface DataItem {
 
 interface ChartProps {
     data: Array<DataItem>;
-    title: string;
+    title?: string;
 }
 
-function renderStratList(items: Array<DataItem>) {
+function renderStratList(items: Array<DataItem>, orientation: string) {
     return items.map((item, index) => (
         <div key={index} className={'PieChart__StratList__Item'}>
             <div className="d-flex">
@@ -35,7 +35,19 @@ function renderStratList(items: Array<DataItem>) {
                     )}
                 </div>
                 <a target="blank" href={item.link}>
-                    {item.title}
+                    {orientation === 'list' && item.title}
+                    {orientation === 'column' && item.title !== 'UZD Vault' && (
+                        <div>
+                            <div>{item.title.split('-')[0]}</div>
+                            <div>{item.title.split('-')[1]}</div>
+                        </div>
+                    )}
+                    {orientation === 'column' && item.title === 'UZD Vault' && (
+                        <div>
+                            <div>{item.title}</div>
+                            <div>-</div>
+                        </div>
+                    )}
                 </a>
                 <span className="size">{`${item.value.toFixed(1)}%`}</span>
             </div>
@@ -59,13 +71,18 @@ export const Chart: React.FC<ChartProps & React.HTMLProps<HTMLDivElement>> = ({
     data,
     className,
     title,
+    orientation = 'list',
 }) => {
     return (
         <div className={`PieChart ${className}`}>
-            <div className={'PieChart__Header'}>
-                <span>{title}</span>
+            {title && (
+                <div className={'PieChart__Header'}>
+                    <span>{title}</span>
+                </div>
+            )}
+            <div className={`d-flex PieChart__StratList ${orientation}`}>
+                {renderStratList(data, orientation)}
             </div>
-            <div className={'PieChart__StratList'}>{renderStratList(data)}</div>
         </div>
     );
 };

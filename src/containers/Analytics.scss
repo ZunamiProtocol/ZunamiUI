@@ -194,119 +194,119 @@
         background: linear-gradient(63.79deg, #ebebeb 11.66%, #f0f0f0 89.17%);
     }
 
-    .gray-block {
-        background: #f0f0f0;
-        border-radius: $border-radius;
-        padding: 15px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        color: #000;
-        text-decoration: none;
+    // .gray-block {
+    //     background: #f0f0f0;
+    //     border-radius: $border-radius;
+    //     padding: 15px 20px;
+    //     display: flex;
+    //     align-items: center;
+    //     justify-content: center;
+    //     gap: 10px;
+    //     color: #000;
+    //     text-decoration: none;
 
-        img {
-            width: 30px;
-            height: 30px;
-        }
+    //     img {
+    //         width: 30px;
+    //         height: 30px;
+    //     }
 
-        .subtitle {
-            font-weight: 500;
-            font-size: 12px;
-            line-height: 15px;
-            color: #3a3a3a;
-        }
+    //     .subtitle {
+    //         font-weight: 500;
+    //         font-size: 12px;
+    //         line-height: 15px;
+    //         color: #3a3a3a;
+    //     }
 
-        .name {
-            font-weight: 600;
-            font-size: 13px;
-            line-height: 16px;
-        }
+    //     .name {
+    //         font-weight: 600;
+    //         font-size: 13px;
+    //         line-height: 16px;
+    //     }
 
-        &.small-block {
-            gap: 0;
-            flex-direction: column;
-            font-size: 13px;
-            line-height: 18px;
-            padding: 10px 20px;
-            min-height: 59px;
+    //     &.small-block {
+    //         gap: 0;
+    //         flex-direction: column;
+    //         font-size: 13px;
+    //         line-height: 18px;
+    //         padding: 10px 20px;
+    //         min-height: 59px;
 
-            &.stablecoin {
-                max-width: 225px;
-                position: relative;
+    //         &.stablecoin {
+    //             max-width: 225px;
+    //             position: relative;
 
-                img {
-                    width: 13px;
-                    height: 13px;
-                }
+    //             img {
+    //                 width: 13px;
+    //                 height: 13px;
+    //             }
 
-                .name {
-                    font-size: 13px;
-                    line-height: 17px;
-                    color: #3a3a3a;
-                    margin-left: 5px;
-                }
+    //             .name {
+    //                 font-size: 13px;
+    //                 line-height: 17px;
+    //                 color: #3a3a3a;
+    //                 margin-left: 5px;
+    //             }
 
-                .value {
-                    font-size: 13px;
-                    line-height: 18px;
-                    color: #000000;
-                }
+    //             .value {
+    //                 font-size: 13px;
+    //                 line-height: 18px;
+    //                 color: #000000;
+    //             }
 
-                .buttons {
-                    position: absolute;
-                    right: 14px;
-                    top: 8px;
-                    gap: 5px;
+    //             .buttons {
+    //                 position: absolute;
+    //                 right: 14px;
+    //                 top: 8px;
+    //                 gap: 5px;
 
-                    @media screen and (min-width: $media375) {
-                        display: none;
-                    }
+    //                 @media screen and (min-width: $media375) {
+    //                     display: none;
+    //                 }
 
-                    @media screen and (min-width: $media1024) {
-                        display: flex;
-                    }
+    //                 @media screen and (min-width: $media1024) {
+    //                     display: flex;
+    //                 }
 
-                    > div,
-                    > a {
-                        cursor: pointer;
-                        background: #dadada;
-                        border-radius: 6px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
+    //                 > div,
+    //                 > a {
+    //                     cursor: pointer;
+    //                     background: #dadada;
+    //                     border-radius: 6px;
+    //                     display: flex;
+    //                     align-items: center;
+    //                     justify-content: center;
 
-                        @media screen and (min-width: $media1024) {
-                            width: 16px;
-                            height: 16px;
-                        }
+    //                     @media screen and (min-width: $media1024) {
+    //                         width: 16px;
+    //                         height: 16px;
+    //                     }
 
-                        @media screen and (min-width: $media1440) {
-                            width: 18px;
-                            height: 18px;
-                        }
+    //                     @media screen and (min-width: $media1440) {
+    //                         width: 18px;
+    //                         height: 18px;
+    //                     }
 
-                        svg {
-                            @media screen and (min-width: $media1024) {
-                                width: 10px;
-                                height: 10px;
-                            }
+    //                     svg {
+    //                         @media screen and (min-width: $media1024) {
+    //                             width: 10px;
+    //                             height: 10px;
+    //                         }
 
-                            @media screen and (min-width: $media1440) {
-                                // width: 22px;
-                                // height: 22px;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    //                         @media screen and (min-width: $media1440) {
+    //                             // width: 22px;
+    //                             // height: 22px;
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
 
-        .badge {
-            font-size: 10px !important;
-            padding: 1px 9px !important;
-        }
-    }
+    //     .badge {
+    //         font-size: 10px !important;
+    //         padding: 1px 9px !important;
+    //     }
+    // }
 
     .tbl {
         display: flex;

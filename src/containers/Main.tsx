@@ -745,7 +745,7 @@ export const Main = (): JSX.Element => {
                                     )}
                                     <Chart
                                         data={chartData || []}
-                                        className="flex-grow-1 mt-3 mt-lg-0"
+                                        className="p-4 flex-grow-1 mt-3 mt-lg-0"
                                         title={
                                             stakingMode === 'USD'
                                                 ? 'DAO Stablecoin diversification strategies'

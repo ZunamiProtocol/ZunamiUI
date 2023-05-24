@@ -560,6 +560,7 @@ body.dark {
 
     .WithdrawOptions,
     .TransactionHistory,
+    .RebaseHistory,
     .Slippage {
         background-color: #2a2a2a;
         border-color: #333333;
@@ -607,7 +608,8 @@ body.dark {
         }
     }
 
-    .StakingSummary {
+    .StakingSummary,
+    .UzdStakingSummary {
         background: linear-gradient(77.82deg, #202020 -4.26%, #232323 88.51%);
         color: #fff;
 
@@ -628,6 +630,22 @@ body.dark {
                 color: #fff;
             }
         }
+
+        .staking-icon.uzd {
+            path:nth-child(2),
+            path:nth-child(3),
+            path:nth-child(4) {
+                fill: #fff;
+            }
+        }
+
+        .staking-icon.zeth {
+            path:nth-child(2),
+            path:nth-child(4),
+            path:nth-child(1) {
+                fill: #fff;
+            }
+        }
     }
 
     .Pendings .values .deposit,
@@ -640,10 +658,11 @@ body.dark {
 
     .pool-item,
     .gray-block {
-        background: #1d1d1d !important;
+        background: #333333 !important;
 
         .name,
-        .subtitle {
+        .subtitle,
+        .value {
             color: #fff !important;
         }
     }
@@ -1082,7 +1101,8 @@ body.dark {
         }
     }
 
-    .TransactionHistory {
+    .TransactionHistory,
+    .RebaseHistory {
         .empty {
             svg {
                 rect {
@@ -1109,6 +1129,7 @@ body.dark {
     .PendingBalance__val,
     .TransactionHistory__Title,
     .TransactionHistory__List th,
+    .RebaseHistory__List th,
     .Pendings,
     .Sidebar__Content__Data,
     .total-income,
@@ -1116,9 +1137,12 @@ body.dark {
     .InfoBar .values .block .name,
     .InfoBar .values .block .value,
     .card-body > .title,
-    .TransactionHistory__List-Item .type,
-    .TransactionHistory__List-Item .date,
-    .TransactionHistory__List-Item .sum,
+    .RebaseHistory__List-Item .type,
+    .RebaseHistory__List-Item .date,
+    .RebaseHistory__List-Item .sum,
+    .RebaseHistory__List-Item .type,
+    .RebaseHistory__List-Item .date,
+    .RebaseHistory__List-Item .sum,
     .Deposit__RightBlock .title,
     .UzdContainer__Actions .InfoBars .InfoBar .title,
     .UzdContainer__Actions .InfoBars .InfoBar .values .block span.name,
@@ -1430,6 +1454,7 @@ body.dark {
     .card,
     .Deposit__RightBlock,
     .TransactionHistory,
+    .RebaseHistory,
     .ThemeSwitcher,
     .Input .max,
     label.coin,
@@ -1473,8 +1498,35 @@ body.dark {
         fill: #494949;
     }
 
-    .card-body svg.bg path {
-        fill: #444;
+    .card {
+        .card-body {
+            svg.bg path {
+                // fill: #444;
+            }
+        }
+
+        &.buy-uzd {
+            .card-body {
+                svg.bg {
+                    path {
+                        fill: linear-gradient(
+                            142.72deg,
+                            rgba(255, 255, 255, 0.35) 8.79%,
+                            rgba(255, 255, 255, 0) 52.14%
+                        ) !important;
+                    }
+                }
+
+                .gray-block {
+                    background: #fafafa !important;
+
+                    .name,
+                    .value {
+                        color: #000 !important;
+                    }
+                }
+            }
+        }
     }
 
     .divider {
@@ -1518,7 +1570,8 @@ body.dark {
         border-color: transparent;
     }
 
-    .TransactionHistory__List-Item {
+    .TransactionHistory__List-Item,
+    .RebaseHistory__List-Item {
         background: linear-gradient(132deg, #181818 10.02%, #272727 93.49%) !important;
     }
 
@@ -2224,7 +2277,7 @@ body.overflow {
 
     &-body {
         @media (min-width: $media1024) {
-            padding: 20px !important;
+            // padding: 20px !important;
         }
 
         @media (min-width: $media1440) {
@@ -2561,4 +2614,122 @@ body.overflow {
             width: auto;
         }
     }
+}
+
+.gray-block {
+    background: #f0f0f0;
+    border-radius: $border-radius;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #000;
+    text-decoration: none;
+
+    img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .subtitle {
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 15px;
+        color: #3a3a3a;
+    }
+
+    .name {
+        font-weight: 600;
+        font-size: 13px;
+        line-height: 16px;
+    }
+
+    &.small-block {
+        gap: 0;
+        flex-direction: column;
+        font-size: 13px;
+        line-height: 18px;
+        padding: 10px 20px;
+        min-height: 59px;
+
+        &.stablecoin {
+            // max-width: 225px;
+            position: relative;
+
+            img {
+                width: 13px;
+                height: 13px;
+            }
+
+            .name {
+                font-size: 13px;
+                line-height: 17px;
+                color: #3a3a3a;
+                // margin-left: 5px;
+            }
+
+            .value {
+                font-size: 13px;
+                line-height: 18px;
+                color: #000000;
+            }
+
+            .buttons {
+                position: absolute;
+                right: 14px;
+                top: 8px;
+                gap: 5px;
+
+                @media screen and (min-width: $media375) {
+                    display: none;
+                }
+
+                @media screen and (min-width: $media1024) {
+                    display: flex;
+                }
+
+                > div,
+                > a {
+                    cursor: pointer;
+                    background: #dadada;
+                    border-radius: 6px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    @media screen and (min-width: $media1024) {
+                        width: 16px;
+                        height: 16px;
+                    }
+
+                    @media screen and (min-width: $media1440) {
+                        width: 18px;
+                        height: 18px;
+                    }
+
+                    svg {
+                        @media screen and (min-width: $media1024) {
+                            width: 10px;
+                            height: 10px;
+                        }
+
+                        @media screen and (min-width: $media1440) {
+                            // width: 22px;
+                            // height: 22px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .badge {
+        font-size: 10px !important;
+        padding: 1px 9px !important;
+    }
+}
+
+.rounded-4 {
+    border-radius: $border-radius;
 }

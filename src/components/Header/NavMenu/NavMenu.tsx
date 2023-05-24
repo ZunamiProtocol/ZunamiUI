@@ -18,13 +18,13 @@ export const NavMenu = (props: NavMenuProps): JSX.Element => {
             urls: ['/'],
             icon: <DashboardIcon />,
         },
+        // {
+        //     title: 'Deposit & Withdraw',
+        //     urls: ['/deposit', '/withdraw'],
+        //     icon: <DepositIcon />,
+        // },
         {
-            title: 'Deposit & Withdraw',
-            urls: ['/deposit', '/withdraw'],
-            icon: <DepositIcon />,
-        },
-        {
-            title: 'UZD',
+            title: 'UZD & zETH',
             urls: ['/uzd'],
             icon: <UzdIcon />,
         },
