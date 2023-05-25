@@ -731,25 +731,29 @@ export const Uzd = (): JSX.Element => {
                             </div>
                         </div>
                         <div className="row ms-md-4">
-                            <div className="col-xxl-5 col-xs-12 mt-3 mt-xxl-0">
-                                <div className="card m-xxl-3 mt-xxl-0">
+                            <div className="col-xxl-5 col-xs-12 mt-3 mt-xxl-0 h-100">
+                                <div className="card m-xxl-3 mt-xxl-0 h-100">
                                     <div className="card-body">
                                         <div className="title">APY bar</div>
-                                        <div className="mt-3">
-                                            <div className="stake-and-boost rounded-4 d-flex">
-                                                <div className="col-6 pt-3 pb-3 ps-4">
-                                                    <div className="text-white">
-                                                        Stake and Boost
+                                        {stakingMode === 'UZD' && (
+                                            <div className="mt-3">
+                                                <div className="stake-and-boost rounded-4 d-flex">
+                                                    <div className="col-6 pt-3 pb-3 ps-4">
+                                                        <div className="text-white">
+                                                            Stake and Boost
+                                                        </div>
+                                                        <div className="text-white">
+                                                            APY to 24% !
+                                                        </div>
                                                     </div>
-                                                    <div className="text-white">APY to 24% !</div>
-                                                </div>
-                                                <div className="col-6 d-flex align-items-center pe-3 ps-3">
-                                                    <button className="zun-button w-100">
-                                                        Stake
-                                                    </button>
+                                                    <div className="col-6 d-flex align-items-center pe-3 ps-3">
+                                                        <button className="zun-button w-100">
+                                                            Stake
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        )}
                                         <div className="mt-3">
                                             <div className="d-flex mt-3 gap-3 me-3">
                                                 <div className="gray-block small-block align-items-start stablecoin mb-2 col-6">
@@ -788,7 +792,7 @@ export const Uzd = (): JSX.Element => {
                                         />
                                     </div>
                                 </div>
-                                <div className="card mt-3 mb-3 flex-fill">
+                                <div className="card mt-3 mb-3 mb-xxl-0 flex-fill">
                                     <div className="card-body">
                                         <div className="title">UZD Rebase History</div>
                                         <RebaseHistory
