@@ -99,6 +99,11 @@ export const poolsChartdata: { [key: string]: any } = {
         value: 0,
         icon: '/uzd.svg',
     },
+    CONVEX_FRAX: {
+        title: 'Convex Finance - UZD/FRAXBP pool',
+        value: 0,
+        icon: '/uzd.svg',
+    },
 };
 
 export function poolInfoToChartElement(pool: PoolInfo, percent: BigNumber): ChartDataElement {
