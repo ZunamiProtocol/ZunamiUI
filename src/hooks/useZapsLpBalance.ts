@@ -8,8 +8,10 @@ import { log } from '../utils/logger';
 import { contractAddresses } from '../sushi/lib/constants';
 
 const useZapsLpBalance = (address: string | undefined = undefined) => {
-    const [balance, setBalance] = useState(new BigNumber(BIG_ZERO));
+    // const [balance, setBalance] = useState(new BigNumber(BIG_ZERO));
+    const [balance, setBalance] = useState(new BigNumber(-1));
     const { account, ethereum } = useWallet();
+    // const account = '0x860A40904BDfdc6dfF82b382872AE7Aea3175529';
 
     const chainId = useMemo(() => {
         return parseInt(ethereum?.chainId, 16);
@@ -31,7 +33,12 @@ const useZapsLpBalance = (address: string | undefined = undefined) => {
                 log(
                     `🔄 APS Balance (contract ${contract.options.address}) for wallet ${account} set to ${value}`
                 );
-                setBalance(new BigNumber(value));
+
+                const newVal = new BigNumber(value);
+
+                if (newVal.toString() !== balance.toString()) {
+                    setBalance(new BigNumber(value));
+                }
             }
         };
 
