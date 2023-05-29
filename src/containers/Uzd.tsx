@@ -661,7 +661,7 @@ export const Uzd = (): JSX.Element => {
                                         <div className="d-flex mt-3 gap-3 me-3">
                                             <a
                                                 className="gray-block small-block align-items-start stablecoin mb-2 col-6 bg-white"
-                                                href="https://google.com"
+                                                href="https://curve.fi/#/ethereum/pools/factory-v2-284/deposit"
                                                 target="_blank"
                                                 rel="noreferrer"
                                             >
@@ -694,7 +694,7 @@ export const Uzd = (): JSX.Element => {
                                             </a>
                                             <a
                                                 className="gray-block small-block align-items-start stablecoin mb-2 col-6 bg-white"
-                                                href="https://google.com"
+                                                href="https://app.balancer.fi/#/ethereum/pool/0xec3626fee40ef95e7c0cbb1d495c8b67b34d398300000000000000000000053d"
                                                 target="_"
                                                 rel="noreferrer"
                                             >
