@@ -49,12 +49,12 @@ export const poolsChartdata: { [key: string]: any } = {
         icon: '/convex.svg',
     },
     XAI_FRAXBP: {
-        title: 'Convex Finance - XAI/FRAXBP Pool',
+        title: 'Convex Finance - XAI/FRAXBP pool',
         value: 0,
         icon: '/convex.svg',
     },
     ALUSD_FRAXBP: {
-        title: 'Convex Finance - ALUSD/FRAXBP Pool',
+        title: 'Convex Finance - ALUSD/FRAXBP pool',
         value: 0,
         icon: '/convex.svg',
     },
@@ -84,7 +84,7 @@ export const poolsChartdata: { [key: string]: any } = {
         icon: '/stake-dao.svg',
     },
     CLEVUSD_FRAXBP: {
-        title: 'Convex Finance - clevUSD/FRAXBP Pool',
+        title: 'Convex Finance - clevUSD/FRAXBP pool',
         value: 0,
         icon: '/convex.svg',
     },
@@ -95,7 +95,12 @@ export const poolsChartdata: { [key: string]: any } = {
         icon: '/uzd.svg',
     },
     FRAX_STAKEDAO: {
-        title: 'Stake DAO - UZD / FRAXBP Pool',
+        title: 'Stake DAO - UZD / FRAXBP pool',
+        value: 0,
+        icon: '/uzd.svg',
+    },
+    CONVEX_FRAX: {
+        title: 'Convex Finance - UZD/FRAXBP pool',
         value: 0,
         icon: '/uzd.svg',
     },

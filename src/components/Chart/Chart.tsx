@@ -12,6 +12,7 @@ interface DataItem {
 interface ChartProps {
     data: Array<DataItem>;
     title?: string;
+    orientation?: string;
 }
 
 function renderStratList(items: Array<DataItem>, orientation: string) {
@@ -39,7 +40,7 @@ function renderStratList(items: Array<DataItem>, orientation: string) {
                     {orientation === 'column' && item.title !== 'UZD Vault' && (
                         <div>
                             <div>{item.title.split('-')[0]}</div>
-                            <div>{item.title.split('-')[1]}</div>
+                            <div>{item.title.split('-')[1].replace(' pool', '')}</div>
                         </div>
                     )}
                     {orientation === 'column' && item.title === 'UZD Vault' && (
