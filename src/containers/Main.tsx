@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Suspense, lazy, useRef, useMemo } from 'react';
 import './Main.scss';
-import { getBalanceNumber } from '../utils/formatbalance';
+import { BIG_ZERO, getBalanceNumber, getFullDisplayBalance } from '../utils/formatbalance';
 import useLpPrice from '../hooks/useLpPrice';
 import useBalanceOf from '../hooks/useBalanceOf';
 import useCrossChainBalances from '../hooks/useCrossChainBalances';
@@ -38,6 +38,7 @@ import { StakingSummary } from '../components/StakingSummary/StakingSummary';
 import { DashboardCarousel } from '../components/DashboardCarousel/DashboardCarousel';
 import { ZunamiInfo, ZunamiInfoFetch, PoolsStats, Balance } from './Main.types';
 import useZapsLpBalance from '../hooks/useZapsLpBalance';
+import useUzdBalance from '../hooks/useUzdBalance';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -62,7 +63,7 @@ const Chart = lazy(() =>
 );
 
 function getNetworkByKey(key: string) {
-    if (key === 'UZD') {
+    if (key === 'UZD' || key === 'APS') {
         return {
             icon: (
                 <svg
@@ -99,7 +100,7 @@ function getNetworkByKey(key: string) {
                     </defs>
                 </svg>
             ),
-            value: 'UZD',
+            value: key,
         };
     }
     return networks.filter((network) => network.key === key)[0];
@@ -110,32 +111,35 @@ function renderBalances(balances: Array<Balance>, lpPrice: BigNumber) {
         <div className="">
             <div className="mb-3">Another balances</div>
             <div className="balances">
-                {balances.map((balance) => {
-                    return (
-                        balance.key && (
-                            <div className="balance" key={balance.key}>
-                                {getNetworkByKey(balance.key).icon}
-                                <div className="meta">
-                                    <div className="chain">
-                                        {getNetworkByKey(balance.key).value}
-                                    </div>
-                                    <div className="sum">
-                                        {balance.key !== 'UZD' &&
-                                            `$ ${getBalanceNumber(
-                                                balance.value.multipliedBy(lpPrice)
-                                            )
-                                                .toNumber()
-                                                .toLocaleString('en')}`}
-                                        {balance.key === 'UZD' &&
-                                            `$ ${getBalanceNumber(balance.value)
-                                                .toNumber()
-                                                .toLocaleString('en')}`}
+                {balances
+                    .filter((item) => item.value.toNumber() > 0)
+                    .map((balance) => {
+                        return (
+                            balance.key && (
+                                <div className="balance" key={balance.key}>
+                                    {getNetworkByKey(balance.key).icon}
+                                    <div className="meta">
+                                        <div className="chain">
+                                            {getNetworkByKey(balance.key).value}
+                                        </div>
+                                        <div className="sum">
+                                            {balance.key !== 'UZD' &&
+                                                balance.key !== 'APS' &&
+                                                `$ ${getBalanceNumber(
+                                                    balance.value.multipliedBy(lpPrice)
+                                                )
+                                                    .toNumber()
+                                                    .toLocaleString('en')}`}
+                                            {['UZD', 'APS'].indexOf(balance.key) !== -1 &&
+                                                `$ ${getBalanceNumber(balance.value)
+                                                    .toNumber()
+                                                    .toLocaleString('en')}`}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        )
-                    );
-                })}
+                            )
+                        );
+                    })}
             </div>
         </div>
     );
@@ -155,6 +159,7 @@ export const Main = (): JSX.Element => {
     const oldBscBalance = useOldBscBalance();
     const balances = useCrossChainBalances(lpPrice);
     const apsBalance = useZapsLpBalance();
+    const uzdBalance = useUzdBalance();
     const [stakingMode, setStakingMode] = useState('UZD');
     // total tvl (aps/zunami)
     const [tvl, setTvl] = useState('0');
@@ -342,8 +347,14 @@ export const Main = (): JSX.Element => {
     }, [uzdStatLoading, uzdStatData?.tvl]);
 
     const totalBalance = useMemo(() => {
-        return userMaxWithdraw.plus(apsBalance);
-    }, [userMaxWithdraw, apsBalance]);
+        let val = BIG_ZERO;
+
+        balances.forEach((bItem: Balance) => (val = val.plus(bItem.value.multipliedBy(lpPrice))));
+        val = val.plus(apsBalance);
+        val = val.plus(uzdBalance);
+
+        return val;
+    }, [apsBalance, balances, uzdBalance, lpPrice]);
 
     const apyPopover = (
         <Popover
@@ -390,7 +401,11 @@ export const Main = (): JSX.Element => {
         >
             <Popover.Body>
                 {renderBalances(
-                    [...balances, { chainId: '1', key: 'UZD', value: apsBalance }],
+                    [
+                        ...balances,
+                        { chainId: '1', key: 'APS', value: apsBalance },
+                        { chainId: '1', key: 'UZD', value: uzdBalance },
+                    ],
                     lpPrice
                 )}
             </Popover.Body>
