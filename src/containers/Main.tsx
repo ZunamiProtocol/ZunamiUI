@@ -199,18 +199,49 @@ export const Main = (): JSX.Element => {
     const poolBestAprDaily = zunamiInfo ? zunamiInfo.apr / 100 / 365 : 0;
     const poolBestAprMonthly = zunamiInfo ? (zunamiInfo.apr / 100 / 365) * 30 : 0;
     const poolBestApyYearly = zunamiInfo ? (zunamiInfo.apy / 100 / 365) * 30 * 12 : 0;
-    const dailyProfit =
-        userMaxWithdraw.toNumber() === -1
-            ? 0
-            : getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprDaily;
-    const monthlyProfit =
-        userMaxWithdraw.toNumber() === -1
-            ? 0
-            : getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprMonthly;
-    const yearlyProfit =
-        userMaxWithdraw.toNumber() === -1
-            ? 0
-            : getBalanceNumber(userMaxWithdraw).toNumber() * poolBestApyYearly;
+
+    const apsPoolBestAprDaily = uzdStatData ? uzdStatData.info.aps.apr / 100 / 365 : 0;
+    const apsPoolBestAprMonthly = uzdStatData ? (uzdStatData.info.aps.apr / 100 / 365) * 30 : 0;
+    const apsPoolBestApyYearly = uzdStatData ? (uzdStatData.info.aps.apr / 100 / 365) * 30 * 12 : 0;
+
+    const dailyProfit = useMemo(() => {
+        let profitVal =
+            userMaxWithdraw.toNumber() === -1
+                ? 0
+                : getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprDaily;
+
+        if (apsBalance.toNumber()) {
+            profitVal += getBalanceNumber(apsBalance).toNumber() * apsPoolBestAprDaily;
+        }
+
+        return profitVal;
+    }, [userMaxWithdraw, poolBestAprDaily, apsPoolBestAprDaily, apsBalance]);
+
+    const monthlyProfit = useMemo(() => {
+        let profitVal =
+            userMaxWithdraw.toNumber() === -1
+                ? 0
+                : getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprMonthly;
+
+        if (apsBalance.toNumber()) {
+            profitVal += getBalanceNumber(apsBalance).toNumber() * apsPoolBestAprMonthly;
+        }
+
+        return profitVal;
+    }, [userMaxWithdraw, poolBestAprMonthly, apsPoolBestAprMonthly, apsBalance]);
+
+    const yearlyProfit = useMemo(() => {
+        let profitVal =
+            userMaxWithdraw.toNumber() === -1
+                ? 0
+                : getBalanceNumber(userMaxWithdraw).toNumber() * poolBestApyYearly;
+
+        if (apsBalance.toNumber()) {
+            profitVal += getBalanceNumber(apsBalance).toNumber() * apsPoolBestApyYearly;
+        }
+
+        return profitVal;
+    }, [userMaxWithdraw, poolBestApyYearly, apsPoolBestApyYearly, apsBalance]);
 
     const [totalIncomeDetailed, setTotalIncomeDetailed] = useState([]);
     const [totalIncome, setTotalIncome] = useState('0');
@@ -221,16 +252,20 @@ export const Main = (): JSX.Element => {
             return;
         }
 
-        if (activeBalance.plus(apsBalance).toNumber() <= 0) {
+        let totalLpTokens = BIG_ZERO;
+        balances.forEach((bItem: Balance) => (totalLpTokens = totalLpTokens.plus(bItem.value)));
+
+        if (totalLpTokens.plus(apsBalance).toNumber() <= 0) {
             log('Skipping total income (both zeros) update...');
             return;
         }
 
         const getTotalIncome = async () => {
             let response = null;
+
             const apsTotalIncomeUrl = getApsTotalIncomeUrl(
                 account,
-                activeBalance.toString(),
+                totalLpTokens.toString(),
                 apsBalance.toString()
             );
 
@@ -261,7 +296,7 @@ export const Main = (): JSX.Element => {
         };
 
         getTotalIncome();
-    }, [account, chainId, activeBalance, apsBalance]);
+    }, [account, chainId, activeBalance, apsBalance, balances]);
 
     const chartData = useMemo(() => {
         if (!poolStats) {
