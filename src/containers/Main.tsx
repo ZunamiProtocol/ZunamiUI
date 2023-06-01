@@ -387,13 +387,13 @@ export const Main = (): JSX.Element => {
         let val = BIG_ZERO;
 
         balances.forEach((bItem: Balance) => (val = val.plus(bItem.value.multipliedBy(lpPrice))));
-        val = val.plus(apsBalance);
+        val = val.plus(apsBalance.multipliedBy(apsLpPrice));
         val = val.plus(uzdBalance);
 
         log(`Total balance is: ${val.toString()}`);
 
         return val;
-    }, [apsBalance, balances, uzdBalance, lpPrice]);
+    }, [apsBalance, balances, uzdBalance, lpPrice, apsLpPrice]);
 
     const apyPopover = (
         <Popover
@@ -442,7 +442,7 @@ export const Main = (): JSX.Element => {
                 {renderBalances(
                     [
                         ...balances,
-                        { chainId: '1', key: 'APS', value: apsBalance },
+                        { chainId: '1', key: 'APS', value: apsBalance.multipliedBy(apsLpPrice) },
                         { chainId: '1', key: 'UZD', value: uzdBalance },
                     ],
                     lpPrice
