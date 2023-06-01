@@ -1,14 +1,15 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState, useMemo } from 'react';
-import { getBalanceNumber } from '../utils/formatbalance';
+import { BIG_ZERO, getBalanceNumber } from '../utils/formatbalance';
 import useWallet from './useWallet';
 import useSushi from './useSushi';
 import { log } from '../utils/logger';
 import { contractAddresses } from '../sushi/lib/constants';
 
 const useZapsLpBalance = (address: string | undefined = undefined) => {
-    const [balance, setBalance] = useState(new BigNumber(-1));
+    const [balance, setBalance] = useState(BIG_ZERO);
     const { account, ethereum } = useWallet();
+    // const account = '0x860A40904BDfdc6dfF82b382872AE7Aea3175529';
 
     const chainId = useMemo(() => {
         return parseInt(ethereum?.chainId, 16);
@@ -25,26 +26,22 @@ const useZapsLpBalance = (address: string | undefined = undefined) => {
             const contract = sushi.getApsContract();
             contract.options.address = address || contractAddresses.aps[1];
 
-            const lpPrice = new BigNumber(await contract.methods.lpPrice().call());
-            log(`🔄 APS LP Price: ${getBalanceNumber(lpPrice)} (${lpPrice.toString()})`);
-
             const value = await contract.methods.balanceOf(account).call();
-            if (value) {
-                log(
-                    `🔄 APS Balance (contract ${contract.options.address}) for wallet ${account} set to ${value}`
-                );
 
-                const newVal = new BigNumber(value).multipliedBy(new BigNumber(lpPrice));
+            if (value) {
+                log(`🔄 APS raw balance: ${getBalanceNumber(value)} (${value})`);
+
+                const newVal = new BigNumber(value);
 
                 if (newVal.toString() !== balance.toString()) {
-                    setBalance(new BigNumber(value));
+                    setBalance(newVal);
                 }
             }
         };
 
         getBalance();
 
-        let refreshInterval = setInterval(getBalance, 5000);
+        let refreshInterval = setInterval(getBalance, 30000);
         return () => clearInterval(refreshInterval);
     }, [account, chainId, sushi, address, balance]);
 

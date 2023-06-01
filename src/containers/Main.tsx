@@ -39,6 +39,7 @@ import { DashboardCarousel } from '../components/DashboardCarousel/DashboardCaro
 import { ZunamiInfo, ZunamiInfoFetch, PoolsStats, Balance } from './Main.types';
 import useZapsLpBalance from '../hooks/useZapsLpBalance';
 import useUzdBalance from '../hooks/useUzdBalance';
+import useApsLpPrice from '../hooks/useApsLpPrice';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -159,6 +160,7 @@ export const Main = (): JSX.Element => {
     const oldBscBalance = useOldBscBalance();
     const balances = useCrossChainBalances(lpPrice);
     const apsBalance = useZapsLpBalance();
+    const apsLpPrice = useApsLpPrice();
     const uzdBalance = useUzdBalance();
     const [stakingMode, setStakingMode] = useState('UZD');
     // total tvl (aps/zunami)
@@ -296,7 +298,7 @@ export const Main = (): JSX.Element => {
         };
 
         getTotalIncome();
-    }, [account, chainId, activeBalance, apsBalance, balances]);
+    }, [account, chainId, apsBalance, balances]);
 
     const chartData = useMemo(() => {
         if (!poolStats) {
@@ -387,6 +389,8 @@ export const Main = (): JSX.Element => {
         balances.forEach((bItem: Balance) => (val = val.plus(bItem.value.multipliedBy(lpPrice))));
         val = val.plus(apsBalance);
         val = val.plus(uzdBalance);
+
+        log(`Total balance is: ${val.toString()}`);
 
         return val;
     }, [apsBalance, balances, uzdBalance, lpPrice]);
@@ -738,7 +742,7 @@ export const Main = (): JSX.Element => {
                                 logo="UZD"
                                 selected={stakingMode === 'UZD'}
                                 baseApy={uzdStatLoading ? 0 : uzdStatData.info.aps.apy.toFixed(2)}
-                                deposit={getBalanceNumber(apsBalance)
+                                deposit={getBalanceNumber(apsBalance.multipliedBy(apsLpPrice))
                                     .toNumber()
                                     .toLocaleString('en')}
                                 tvl={
