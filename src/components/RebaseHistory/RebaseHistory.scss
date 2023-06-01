@@ -1,21 +1,14 @@
 @import 'src/variables';
 
 .RebaseHistory {
-    background: #fffaf3;
-    border-radius: $border-radius;
-    padding: 25px;
-    border-radius: $border-radius;
-
     @media screen and (min-width: $media375) {
         margin-top: 16px;
-        background: linear-gradient(67.75deg, #f3f3f3 25.38%, #f7f7f7 94.59%);
         margin-bottom: 20px;
     }
 
     @media screen and (min-width: $media1024) {
         margin-bottom: 0;
         margin-top: 16px;
-        background: linear-gradient(69.07deg, #f0f0f0 8.53%, #f2f2f2 91.72%);
     }
 
     @media screen and (min-width: $media1440) {
@@ -47,174 +40,39 @@
         }
     }
 
+    .header {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        gap: 10px;
+
+        > div {
+            width: 33.3%;
+            text-align: center;
+        }
+    }
+
     &__List {
-        height: calc(100% - 35px);
+        height: 110px;
         overflow: hidden;
         overflow-y: auto;
-
-        @media screen and (min-width: $media375) {
-            margin-top: 18px;
-        }
-
-        @media screen and (min-width: $media1024) {
-            margin-top: 18px;
-        }
-
-        @media screen and (min-width: $media1440) {
-            margin-top: 20px;
-        }
+        margin-top: 10px;
 
         &-Item {
-            background: #ebebeb;
-            border-radius: $border-radius;
+            border-bottom: solid 1px rgba(0, 0, 0, 0.2);
+            font-size: 13px;
+            line-height: 17px;
 
             @media screen and (min-width: $media375) {
-                padding: 12px 20px;
-                margin-bottom: 20px;
+                padding: 12px 0;
             }
 
-            @media screen and (min-width: $media1024) {
-                padding: 9px 17px;
-                margin-bottom: 9px;
-            }
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
 
-            @media screen and (min-width: $media1440) {
-                padding: 10px 20px;
-                margin-bottom: 12px;
-            }
-
-            &:last-child {
-                margin-bottom: 0;
-            }
-
-            .first-row {
-                display: flex;
-                justify-content: space-between;
-
-                .type {
-                    text-transform: lowercase;
-                    color: #5b5959;
-
-                    @media screen and (min-width: $media375) {
-                        font-size: 14px;
-                        line-height: 18px;
-                    }
-
-                    @media screen and (min-width: $media1024) {
-                        font-size: 12px;
-                        line-height: 15px;
-                    }
-
-                    @media screen and (min-width: $media1440) {
-                        font-size: 12px;
-                        line-height: 15px;
-                    }
-
-                    &::first-letter {
-                        text-transform: capitalize;
-                    }
-                }
-
-                .date {
-                    @media screen and (min-width: $media375) {
-                        font-size: 12px;
-                        line-height: 15px;
-                    }
-
-                    @media screen and (min-width: $media1024) {
-                        font-size: 10px;
-                        line-height: 13px;
-                    }
-
-                    @media screen and (min-width: $media1440) {
-                        font-size: 10px;
-                        line-height: 13px;
-                    }
-
-                    text-align: right;
-                    color: #636363;
-                }
-            }
-
-            .second-row {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-
-                @media screen and (min-width: $media375) {
-                    margin-top: 5px;
-                }
-
-                @media screen and (min-width: $media1024) {
-                    margin-top: 5px;
-                }
-
-                @media screen and (min-width: $media1440) {
-                    margin-top: 10px;
-                }
-
-                .sum {
-                    color: #000;
-                    width: 100%;
-
-                    @media screen and (min-width: $media375) {
-                        font-size: 14px;
-                        line-height: 19px;
-                    }
-
-                    @media screen and (min-width: $media1024) {
-                        font-size: 13px;
-                        line-height: 18px;
-                    }
-
-                    @media screen and (min-width: $media1440) {
-                        font-size: 14px;
-                        line-height: 19px;
-                    }
-                }
-
-                .status {
-                    text-align: right;
-                    font-weight: 600;
-
-                    @media screen and (min-width: $media375) {
-                        font-size: 11px;
-                        line-height: 13px;
-                    }
-
-                    @media screen and (min-width: $media1024) {
-                        font-size: 11px;
-                        line-height: 13px;
-                    }
-
-                    @media screen and (min-width: $media1440) {
-                        font-size: 11px;
-                        line-height: 13px;
-                    }
-
-                    &.COMPLETED {
-                        color: #85b900;
-                    }
-
-                    &.PENDING {
-                        color: #ffb100;
-                    }
-
-                    &.REMOVED {
-                        color: #f13308;
-                    }
-                }
-
-                .trans-link {
-                    margin-left: 7px;
-                    display: block;
-                    line-height: 1px;
-
-                    svg {
-                        width: 10px;
-                        height: 10px;
-                    }
-                }
+            > div {
+                width: 33.3%;
             }
         }
     }

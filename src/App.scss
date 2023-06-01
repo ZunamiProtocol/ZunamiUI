@@ -560,11 +560,25 @@ body.dark {
 
     .WithdrawOptions,
     .TransactionHistory,
-    .RebaseHistory,
     .Slippage {
         background-color: #2a2a2a;
         border-color: #333333;
         color: #fff;
+    }
+
+    .RebaseHistory,
+    .PieChart__StratList__Item .strat-desc {
+        color: #c8c8c8;
+    }
+
+    .RebaseHistory {
+        .header {
+            div {
+                background: #333333;
+                border-radius: 20px;
+                padding: 6px 0;
+            }
+        }
     }
 
     .EthMergeWarningModal {
@@ -1137,12 +1151,6 @@ body.dark {
     .InfoBar .values .block .name,
     .InfoBar .values .block .value,
     .card-body > .title,
-    .RebaseHistory__List-Item .type,
-    .RebaseHistory__List-Item .date,
-    .RebaseHistory__List-Item .sum,
-    .RebaseHistory__List-Item .type,
-    .RebaseHistory__List-Item .date,
-    .RebaseHistory__List-Item .sum,
     .Deposit__RightBlock .title,
     .UzdContainer__Actions .InfoBars .InfoBar .title,
     .UzdContainer__Actions .InfoBars .InfoBar .values .block span.name,
@@ -1454,7 +1462,6 @@ body.dark {
     .card,
     .Deposit__RightBlock,
     .TransactionHistory,
-    .RebaseHistory,
     .ThemeSwitcher,
     .Input .max,
     label.coin,
@@ -1480,6 +1487,10 @@ body.dark {
                 color: #fff;
             }
         }
+    }
+
+    .soon {
+        color: #fff;
     }
 
     .card.mint-card {
@@ -1570,8 +1581,7 @@ body.dark {
         border-color: transparent;
     }
 
-    .TransactionHistory__List-Item,
-    .RebaseHistory__List-Item {
+    .TransactionHistory__List-Item {
         background: linear-gradient(132deg, #181818 10.02%, #272727 93.49%) !important;
     }
 
@@ -1589,6 +1599,12 @@ body.dark {
             circle {
                 fill: #fff;
             }
+        }
+    }
+
+    .link-icon {
+        path {
+            fill: #fff;
         }
     }
 

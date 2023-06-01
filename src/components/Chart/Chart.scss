@@ -61,14 +61,14 @@
 
         &.column {
             flex-direction: row;
-            gap: 20px;
+            column-gap: 10px;
 
             @media (min-width: $media375) {
                 flex-wrap: wrap;
             }
 
             @media (min-width: $media1440) {
-                flex-wrap: nowrap;
+                flex-wrap: wrap;
             }
 
             .PieChart__StratList__Item {
@@ -77,7 +77,7 @@
                 }
 
                 @media (min-width: $media1440) {
-                    width: 50%;
+                    width: calc(50% - 5px);
                 }
             }
         }

@@ -26,13 +26,13 @@ import {
     getActiveStratsUrl,
     getUzdStratsUrl,
     uzdStakingInfoUrl,
+    getRebaseHistoryUrl,
 } from '../api/api';
 import useFetch from 'react-fetch-hook';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
 import { UzdMigrationModal } from '../components/UzdMigrationModal/UzdMigrationModal';
 import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar';
 import { networks } from '../components/NetworkSelector/NetworkSelector';
-import { TransactionHistory } from '../components/TransactionHistory/TransactionHistory';
 import { ActionSelector } from '../components/Form/ActionSelector/ActionSelector';
 import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
 import { SupportersBar } from '../components/SupportersBar/SupportersBar';
@@ -262,9 +262,7 @@ export const Uzd = (): JSX.Element => {
         uzdStakingInfoUrl
     ) as ZunamiInfoFetch;
 
-    const { data: activeStratsStat } = useFetch(
-        stakingMode === 'USD' ? getActiveStratsUrl() : getUzdStratsUrl()
-    );
+    const { data: activeStratsStat } = useFetch(getActiveStratsUrl());
     const poolStats = activeStratsStat as PoolsStats;
 
     const chartData = useMemo(() => {
@@ -307,51 +305,27 @@ export const Uzd = (): JSX.Element => {
 
     const [transactionList, setTransactionList] = useState([]);
     const [transHistoryPage, setTransHistoryPage] = useState(0);
+    const [loadingHistory, setLoadingHistory] = useState(false);
 
     useEffect(() => {
-        if (!account || transHistoryPage === -1) {
+        if (!account || transHistoryPage === -1 || loadingHistory) {
             return;
         }
 
         const getTransactionHistory = async () => {
             try {
-                let mintResponse = await fetch(
-                    getTransHistoryUrl(account, 'MINT', transHistoryPage, 100, chainId, 'UZD')
-                );
+                setLoadingHistory(true);
+                let historyResponse = await fetch(getRebaseHistoryUrl(0, 70));
+                const items = await historyResponse.json();
 
-                let redeemResponse = await fetch(
-                    getTransHistoryUrl(account, 'REDEEM', transHistoryPage, 100, chainId, 'UZD')
-                );
-
-                let mintData = await mintResponse.json();
-                let redeemData = await redeemResponse.json();
-
-                mintData = mintData.uzdTransfers.map((item: any) => {
-                    return {
-                        ...item,
-                        type: 'MINT',
-                        status: 'COMPLETED',
-                    };
-                });
-
-                redeemData = redeemData.uzdTransfers.map((item: any) => {
-                    return {
-                        ...item,
-                        type: 'REDEEM',
-                        status: 'COMPLETED',
-                    };
-                });
-
-                const data = mintData.concat(redeemData);
-
-                if (!data.length) {
+                if (!items.uzdRebases.length) {
                     setTransHistoryPage(-1);
                     return;
                 }
 
                 setTransactionList(
                     transactionList
-                        .concat(data)
+                        .concat(items.uzdRebases)
                         .sort((a: iHistoryTransaction, b: iHistoryTransaction | undefined) => {
                             if (!b) {
                                 return 0;
@@ -362,8 +336,11 @@ export const Uzd = (): JSX.Element => {
                                 : 1;
                         })
                 );
+
+                setLoadingHistory(false);
             } catch (error) {
                 setTransactionList([]);
+                setLoadingHistory(false);
             }
         };
 
@@ -521,7 +498,7 @@ export const Uzd = (): JSX.Element => {
                             logo="UZD"
                             selected={stakingMode === 'UZD'}
                             baseApy={'0'}
-                            deposit={'0'}
+                            deposit={formatUzd(uzdBalance)}
                             className="mt-3"
                             onSelect={() => {
                                 setStakingMode('UZD');
@@ -532,7 +509,7 @@ export const Uzd = (): JSX.Element => {
                             selected={stakingMode === 'ZETH'}
                             baseApy={'0'}
                             deposit={'0'}
-                            className="mt-3"
+                            className="mt-3 disabled"
                             onSelect={() => {
                                 setStakingMode('ZETH');
                             }}
@@ -554,17 +531,28 @@ export const Uzd = (): JSX.Element => {
                                                         </span>
                                                     </div>
                                                     <div className="vela-sans value mt-1">
-                                                        500 000
+                                                        $
+                                                        {Number(
+                                                            getFullDisplayBalance(uzdTotalSupply)
+                                                        ).toLocaleString('en', {
+                                                            maximumFractionDigits: 0,
+                                                        })}
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="col-6 col-md-4">
                                                 <div className="gray-block small-block align-items-start stablecoin mb-3 mb-lg-2 ps-3 me-0 me-lg-2">
                                                     <div>
-                                                        <span className="name">Liquidity</span>
+                                                        <span className="name">Collateral</span>
                                                     </div>
                                                     <div className="vela-sans value mt-1">
-                                                        500 000
+                                                        {zunamiInfo
+                                                            ? `$${Number(
+                                                                  getBalanceNumber(zunamiInfo.tvl)
+                                                              ).toLocaleString('en', {
+                                                                  maximumFractionDigits: 0,
+                                                              })}`
+                                                            : 'n/a'}
                                                     </div>
                                                 </div>
                                             </div>
@@ -577,7 +565,7 @@ export const Uzd = (): JSX.Element => {
                                                     </div>
                                                     <div className="value mt-1">
                                                         <a
-                                                            href="https://google.com"
+                                                            href="https://etherscan.io/address/0xb40b6608B2743E691C9B54DdBDEe7bf03cd79f1c"
                                                             target="_blank"
                                                             rel="noreferrer"
                                                             className="d-flex align-items-center text-black"
@@ -588,7 +576,7 @@ export const Uzd = (): JSX.Element => {
                                                                 viewBox="0 0 13 13"
                                                                 fill="none"
                                                                 xmlns="http://www.w3.org/2000/svg"
-                                                                className="me-1"
+                                                                className="me-1 link-icon"
                                                             >
                                                                 <path
                                                                     d="M8.29475 5.74391C8.11403 5.93511 7.95744 6.13257 7.76908 6.29267C7.48083 6.53769 7.05959 6.50603 6.77493 6.23894C6.56704 6.04387 6.33233 5.90221 6.05279 5.83982C5.4991 5.71623 5.0125 5.84624 4.60887 6.2449C3.95652 6.88922 3.3112 7.54066 2.66289 8.18907C2.43882 8.41318 2.21232 8.63492 1.9911 8.8618C1.57658 9.28691 1.43185 9.79315 1.59453 10.3637C1.75747 10.9352 2.14735 11.2948 2.72735 11.4241C3.25105 11.5407 3.71523 11.3996 4.10432 11.0313C4.33441 10.8136 4.55389 10.5846 4.77801 10.3605C5.12464 10.014 5.47147 9.66764 5.81718 9.32017C5.84682 9.29038 5.8687 9.25286 5.89755 9.21444C6.53377 9.45776 7.17371 9.52066 7.85641 9.43314C7.81496 9.48238 7.79378 9.51164 7.76857 9.53687C6.91429 10.3916 6.06228 11.2487 5.20414 12.0996C4.55322 12.745 3.76191 13.0363 2.84886 12.9903C1.47935 12.9214 0.276548 11.8487 0.0503072 10.4948C-0.121376 9.46743 0.144843 8.56375 0.87241 7.81854C1.75788 6.9116 2.65648 6.01718 3.56198 5.13018C4.24886 4.45733 5.08631 4.17686 6.04072 4.28964C6.99286 4.40215 7.74262 4.85631 8.25748 5.67667C8.2687 5.69455 8.27971 5.71259 8.28999 5.73103C8.294 5.73821 8.29571 5.74667 8.29475 5.74391Z"
@@ -747,7 +735,10 @@ export const Uzd = (): JSX.Element => {
                                                         </div>
                                                     </div>
                                                     <div className="col-6 d-flex align-items-center pe-3 ps-3">
-                                                        <button className="zun-button w-100">
+                                                        <button
+                                                            className="zun-button w-100"
+                                                            onClick={() => {}}
+                                                        >
                                                             Stake
                                                         </button>
                                                     </div>
@@ -760,7 +751,9 @@ export const Uzd = (): JSX.Element => {
                                                     <div>
                                                         <span className="name">Base APY now</span>
                                                     </div>
-                                                    <div className="vela-sans value mt-1">16%</div>
+                                                    <div className="vela-sans value mt-1">
+                                                        18.92%
+                                                    </div>
                                                 </div>
                                                 <div className="gray-block small-block align-items-start stablecoin mb-2 col-6">
                                                     <div>
@@ -784,21 +777,33 @@ export const Uzd = (): JSX.Element => {
                             <div className="col-xxl-7 col-xs-12 d-flex flex-column mt-3 mt-xxl-0">
                                 <div className="card">
                                     <div className="card-body">
-                                        <div className="title">UZD collateral</div>
-                                        <Chart
-                                            data={chartData || []}
-                                            className="flex-grow-1 mt-3 mt-xxl-0"
-                                            orientation="column"
-                                        />
+                                        <div className="title">
+                                            {stakingMode === 'UZD' && 'UZD collateral'}
+                                            {stakingMode !== 'UZD' && 'zETH collateral'}
+                                        </div>
+                                        {stakingMode === 'UZD' && (
+                                            <Chart
+                                                data={chartData || []}
+                                                className="flex-grow-1 mt-3 mt-xxl-0"
+                                                orientation="column"
+                                            />
+                                        )}
+                                        {stakingMode !== 'UZD' && <div className="soon">soon</div>}
                                     </div>
                                 </div>
                                 <div className="card mt-3 mb-3 mb-xxl-0 flex-fill">
                                     <div className="card-body">
                                         <div className="title">UZD Rebase History</div>
                                         <RebaseHistory
-                                            items={[]}
+                                            items={transactionList}
                                             emptyText="No rebase history"
                                             className=""
+                                            onPageEnd={() => {
+                                                if (transHistoryPage !== -1) {
+                                                    setLoadingHistory(true);
+                                                    setTransHistoryPage(transHistoryPage + 1);
+                                                }
+                                            }}
                                         />
                                     </div>
                                 </div>

@@ -13,6 +13,7 @@ export const testnetUrl = `${root}/feature`;
 export const totalIncomeUrl = `${root}/transfers/total-income`;
 export const transHistoryUrl = `${root}/transfers/history`;
 export const uzdTransHistoryUrl = `${root}/uzd/transfers/history`;
+export const uzdRebaseHistoryUrl = `${root}/uzd/rebase/history`;
 
 export const curvePoolsApyUrl = 'https://api.curve.fi/api/getFactoryAPYs?version=2';
 
@@ -60,6 +61,10 @@ export const getTotalIncomeUrl = (
     }
 
     return `${totalIncomeUrl}?address=${address.toLowerCase()}&lpTokens=${lpTokens}&chain=${chain}`;
+};
+
+export const getRebaseHistoryUrl = (page: number = 0, size: number = 20): string => {
+    return `${uzdRebaseHistoryUrl}?page=${page}&size=${size}`;
 };
 
 export const getTransHistoryUrl = (
