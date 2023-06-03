@@ -124,6 +124,9 @@ function getPoolIcon(type: string) {
         case 'CLEVUSD_FRAXBP':
             result = 'clever.svg';
             break;
+        case 'EUSD_FRAXBP':
+            result = 'eusd.svg';
+            break;
     }
 
     return result;

@@ -29,42 +29,44 @@ function renderStratHeader(item: Strategy) {
             icon = '/convex.svg';
             title = 'Convex finance';
             desc = 'XAI/FRAXBP Pool';
-        break;
+            break;
         case 'CLEVUSD_FRAXBP':
             icon = '/convex.svg';
             title = 'Convex finance';
             desc = 'clevUSD/FRAXBP Pool';
-        break;
+            break;
+        case 'EUSD_FRAXBP':
+            icon = '/eusd.svg';
+            title = 'Convex Finance';
+            desc = 'eUSD/FRAXBP Pool';
+            break;
         case 'STAKE_DAO_MIM':
             icon = '/stake-dao.svg';
             title = 'Stake DAO';
             desc = 'MIM pool';
-        break;
+            break;
         case 'ALUSD_FRAXBP':
             icon = '/convex.svg';
             title = 'Convex finance';
             desc = 'ALUSD/FRAXBP Pool';
-        break;
+            break;
     }
 
     const stratIcon = item.analytics.data.coinsMarketData.stableCoin
-    ? item.analytics.data.coinsMarketData.stableCoin.image
-    : '/clever.svg';
+        ? item.analytics.data.coinsMarketData.stableCoin.image
+        : '/clever.svg';
 
     return (
         <div className="d-flex gap-2 header">
-            { 
+            {
                 <div className="new-coin">
                     <div className="wrapper">
-                        <img
-                            src={stratIcon}
-                            alt={item.title}
-                        />
+                        <img src={stratIcon} alt={item.title} />
                         <div className="coin">
                             <img src={icon} alt={item.title} />
                         </div>
                         <div className="coin">
-                            <img src='/curve-icon.svg' alt={item.title} />
+                            <img src="/curve-icon.svg" alt={item.title} />
                         </div>
                     </div>
                 </div>
@@ -75,46 +77,48 @@ function renderStratHeader(item: Strategy) {
     );
 }
 
-export const StrategiesList: React.FC<StrategiesListProps & React.HTMLProps<HTMLDivElement>> = (
-    { className, title, items, tvl }
-) => {
-    const totalTvl = items?.map(item => item.tvlInZunami).reduce((partialSum, a) => partialSum + a, 0);
+export const StrategiesList: React.FC<StrategiesListProps & React.HTMLProps<HTMLDivElement>> = ({
+    className,
+    title,
+    items,
+    tvl,
+}) => {
+    const totalTvl = items
+        ?.map((item) => item.tvlInZunami)
+        .reduce((partialSum, a) => partialSum + a, 0);
     return (
         <div className={`StrategiesList ${className}`}>
             <div className="StrategiesList__Title">{title}</div>
             <div className="StrategiesList__List">
-                {
-                    items?.map((item, itemIndex: number) =>
-                        <div
-                            className="StrategiesList__List-Item"
-                            key={itemIndex}
-                        >
-                            {renderStratHeader(item)}
-                            <div className="d-flex props">
-                                <div className="block">
-                                    <div className="title">Amount, $</div>
-                                    <div className="value">
-                                        {
-                                            Number(
-                                                (item.tvlInZunami / totalTvl * 100).toFixed(2) * getFullDisplayBalance(tvl) / 100
-                                            ).toLocaleString('en', {
-                                                maximumFractionDigits: 0,
-                                            })
-                                        }
-                                    </div>
-                                </div>
-                                <div className="block">
-                                    <div className="title">Share, %</div>
-                                    <div className="value">{(item.tvlInZunami / totalTvl * 100).toFixed(2)}</div>
-                                </div>
-                                <div className="block">
-                                    <div className="title">APR, %</div>
-                                    <div className="value">{item.apr.toFixed(2)}</div>
+                {items?.map((item, itemIndex: number) => (
+                    <div className="StrategiesList__List-Item" key={itemIndex}>
+                        {renderStratHeader(item)}
+                        <div className="d-flex props">
+                            <div className="block">
+                                <div className="title">Amount, $</div>
+                                <div className="value">
+                                    {Number(
+                                        (((item.tvlInZunami / totalTvl) * 100).toFixed(2) *
+                                            getFullDisplayBalance(tvl)) /
+                                            100
+                                    ).toLocaleString('en', {
+                                        maximumFractionDigits: 0,
+                                    })}
                                 </div>
                             </div>
+                            <div className="block">
+                                <div className="title">Share, %</div>
+                                <div className="value">
+                                    {((item.tvlInZunami / totalTvl) * 100).toFixed(2)}
+                                </div>
+                            </div>
+                            <div className="block">
+                                <div className="title">APR, %</div>
+                                <div className="value">{item.apr.toFixed(2)}</div>
+                            </div>
                         </div>
-                    )
-                }
+                    </div>
+                ))}
             </div>
         </div>
     );
