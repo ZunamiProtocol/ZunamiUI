@@ -425,10 +425,6 @@ export const Analytics = (): JSX.Element => {
                                                             pool.type === selectedStrat?.type
                                                                 ? 'selected'
                                                                 : ''
-                                                        } ${
-                                                            pool.type === 'EUSD_FRAXBP'
-                                                                ? 'disabled'
-                                                                : ''
                                                         }`}
                                                         onClick={() => {
                                                             setSelectedStrat(pool);
