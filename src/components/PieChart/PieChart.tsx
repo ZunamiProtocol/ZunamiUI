@@ -25,21 +25,24 @@ function renderStratList(items: Array<DataItem>) {
                 style={{ background: item.color }}
             />
             <div className={'PieChart__StratList__Item__Name d-flex align-items-center new-coin'}>
-                {
-                    item.icon && 
-                        <div className="wrapper">
-                            <img
-                                src={item.analytics.coinsMarketData.stableCoin ? item.analytics.coinsMarketData.stableCoin.image : '/clever_analytics.png'}
-                                alt={item.title}
-                            />
-                            <div className="coin">
-                                <img src={item.icon} alt={item.title} />
-                            </div>
-                            <div className="coin">
-                                <img src='/curve-icon.svg' alt={item.title} />
-                            </div>
+                {item.icon && (
+                    <div className="wrapper">
+                        <img
+                            src={
+                                item.analytics && item.analytics.coinsMarketData.stableCoin
+                                    ? item.analytics.coinsMarketData.stableCoin.image
+                                    : '/clever_analytics.png'
+                            }
+                            alt={item.title}
+                        />
+                        <div className="coin">
+                            <img src={item.icon} alt={item.title} />
                         </div>
-                }
+                        <div className="coin">
+                            <img src="/curve-icon.svg" alt={item.title} />
+                        </div>
+                    </div>
+                )}
                 <a target="blank" href={item.link}>
                     <div>{item.title.split(' - ')[0]}</div>
                     <div>{item.title.split(' - ')[1]}</div>
@@ -61,20 +64,22 @@ function makeTooltipContent(entry) {
         <div className="d-flex justify-content-center">
             <div className="circle" style={{ backgroundColor: entry.color }}></div>
             <div>
-                <div className="platform">{nameParts[0]} - {`${entry.value.toFixed(2)}%`}</div>
+                <div className="platform">
+                    {nameParts[0]} - {`${entry.value.toFixed(2)}%`}
+                </div>
                 <div className="pool">{nameParts[1]}</div>
             </div>
         </div>
     );
-  }
+}
 
 export const PieChart2 = (props: ChartProps): JSX.Element => {
     const [width, setWidth] = useState(screenWidthToChartWidth());
     const [hovered, setHovered] = useState<number | null>(null);
     const data = props.data.map(({ title, ...entry }) => {
         return {
-          ...entry,
-          tooltip: title,
+            ...entry,
+            tooltip: title,
         };
     });
 
@@ -96,8 +101,8 @@ export const PieChart2 = (props: ChartProps): JSX.Element => {
                     className={'PieChart__Chart'}
                     onMouseOver={(_, index) => {
                         setHovered(index);
-                      }}
-                      onMouseOut={() => {
+                    }}
+                    onMouseOut={() => {
                         setHovered(null);
                     }}
                 />
@@ -118,7 +123,9 @@ export const PieChart2 = (props: ChartProps): JSX.Element => {
                 <div className={'PieChart__StratList'}>{renderStratList(props.data)}</div>
             )}
             {
-                <div className="PieChart__Tooltip">{typeof hovered === 'number' ? makeTooltipContent(data[hovered]) : ''}</div>
+                <div className="PieChart__Tooltip">
+                    {typeof hovered === 'number' ? makeTooltipContent(data[hovered]) : ''}
+                </div>
             }
         </div>
     );

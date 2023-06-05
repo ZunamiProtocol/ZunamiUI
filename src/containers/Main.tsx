@@ -906,7 +906,7 @@ export const Main = (): JSX.Element => {
                                     />
                                 </div>
                             </div>
-                            <SupportersBar section="dashboard" />
+                            {/* <SupportersBar section="dashboard" /> */}
                         </div>
                     </div>
                 </div>

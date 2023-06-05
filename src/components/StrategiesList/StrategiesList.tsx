@@ -52,9 +52,10 @@ function renderStratHeader(item: Strategy) {
             break;
     }
 
-    const stratIcon = item.analytics.data.coinsMarketData.stableCoin
-        ? item.analytics.data.coinsMarketData.stableCoin.image
-        : '/clever.svg';
+    const stratIcon =
+        item.analytics && item.analytics.data.coinsMarketData.stableCoin
+            ? item.analytics.data.coinsMarketData.stableCoin.image
+            : '/clever.svg';
 
     return (
         <div className="d-flex gap-2 header">
