@@ -11,6 +11,7 @@ export const historicalApyUrl = `${root}/zunami/apy-chart`;
 export const apsHistoricalApyUrl = `${root}/zunami/aps-apy-chart`;
 export const testnetUrl = `${root}/feature`;
 export const totalIncomeUrl = `${root}/transfers/total-income`;
+export const apsTotalIncomeUrl = `${root}/v2/transfers/total-income`;
 export const transHistoryUrl = `${root}/transfers/history`;
 export const uzdTransHistoryUrl = `${root}/uzd/transfers/history`;
 export const uzdRebaseHistoryUrl = `${root}/uzd/rebase/history`;
@@ -42,6 +43,14 @@ export const getApsHistoricalApyUrl = (period: string): string => {
 
 export const getTestnetStatusUrl = (address: string): string => {
     return `${testnetUrl}?address=${address}`;
+};
+
+export const getApsTotalIncomeUrl = (
+    address: string,
+    lpTokens: string,
+    apsLpTokens: string
+): string => {
+    return `${apsTotalIncomeUrl}?address=${address.toLowerCase()}&lpTokens=${lpTokens}&apsLpTokens=${apsLpTokens}`;
 };
 
 export const getTotalIncomeUrl = (

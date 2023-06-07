@@ -15,6 +15,24 @@ interface ChartProps {
     orientation?: string;
 }
 
+function getSecondIcon(item): string {
+    let result = 'convex.svg';
+
+    switch (item.type) {
+        case 'FRAX_STAKEDAO':
+            result = 'stake-dao.svg';
+            break;
+        case 'CONVEX_FRAX':
+            result = 'convex.svg';
+            break;
+        default:
+            result = item.icon;
+            break;
+    }
+
+    return result;
+}
+
 function renderStratList(items: Array<DataItem>, orientation: string) {
     return items.map((item, index) => (
         <div key={index} className={'PieChart__StratList__Item'}>
@@ -23,10 +41,7 @@ function renderStratList(items: Array<DataItem>, orientation: string) {
                     <img src={item.icon} alt={item.title} />
                     {item.type !== 'VAULT' && (
                         <div className="coin">
-                            <img
-                                src={item.type === 'FRAX_STAKEDAO' ? '/stake-dao.svg' : item.icon}
-                                alt={item.title}
-                            />
+                            <img src={getSecondIcon(item)} alt={item.title} />
                         </div>
                     )}
                     {item.type !== 'VAULT' && (

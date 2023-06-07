@@ -168,6 +168,8 @@ export const Uzd = (): JSX.Element => {
             });
     }, [histApyPeriod, stakingMode]);
 
+    const [showApproveUzdBtn, setShowApproveUzdBtn] = useState(false);
+
     const {
         isLoading,
         data: zunData,
@@ -247,6 +249,10 @@ export const Uzd = (): JSX.Element => {
     useEffect(() => {
         let show = false;
 
+        if (mode !== 'mint') {
+            return;
+        }
+
         if (zlpAllowance.toNumber() === 0 && mode === 'mint') {
             show = true;
         }
@@ -279,6 +285,24 @@ export const Uzd = (): JSX.Element => {
               )
             : [];
     }, [stakingMode, uzdStatData, zunamiInfo, poolStats]);
+
+    useEffect(() => {
+        let show = false;
+
+        if (mode !== 'redeem') {
+            return;
+        }
+
+        if (uzdAllowance.toNumber() === 0 && mode === 'redeem') {
+            show = true;
+        }
+
+        if (uzdAllowance.toNumber() < Number(uzdValue)) {
+            show = true;
+        }
+
+        setShowApproveUzdBtn(show);
+    }, [mode, uzdAllowance, uzdValue]);
 
     const depositDisabled =
         Number(zunLpValue) <= 0 ||

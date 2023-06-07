@@ -88,6 +88,11 @@ export const poolsChartdata: { [key: string]: any } = {
         value: 0,
         icon: '/convex.svg',
     },
+    EUSD_FRAXBP: {
+        title: 'Convex Finance - eUSD/FRAXBP',
+        value: 0,
+        icon: '/eusd.svg',
+    },
     // UZD strats
     VAULT: {
         title: 'UZD Vault',
@@ -96,6 +101,11 @@ export const poolsChartdata: { [key: string]: any } = {
     },
     FRAX_STAKEDAO: {
         title: 'Stake DAO - UZD / FRAXBP pool',
+        value: 0,
+        icon: '/uzd.svg',
+    },
+    CONVEX_FRAX: {
+        title: 'Convex Finance - UZD/FRAXBP pool',
         value: 0,
         icon: '/uzd.svg',
     },

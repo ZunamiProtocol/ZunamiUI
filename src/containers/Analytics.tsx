@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Header } from '../components/Header/Header';
-import { SideBar, ZunamiInfo, ZunamiInfoFetch } from '../components/SideBar/SideBar';
+import { SideBar } from '../components/SideBar/SideBar';
 import './Analytics.scss';
 import { useWallet } from 'use-wallet';
 import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar';
@@ -9,7 +9,6 @@ import { getActiveStratsUrl, zunamiInfoUrl } from '../api/api';
 import { PoolInfo, poolDataToChartData } from '../functions/pools';
 import { CollateralsPieChart } from '../components/CollateralsPieChart/CollateralsPieChart';
 import { getBalanceNumber, toFixed } from '../utils/formatbalance';
-import { TwitterTimelineEmbed } from 'react-twitter-embed';
 import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
 import { format } from 'date-fns';
 import { SupportersBar } from '../components/SupportersBar/SupportersBar';
@@ -124,6 +123,9 @@ function getPoolIcon(type: string) {
         case 'CLEVUSD_FRAXBP':
             result = 'clever.svg';
             break;
+        case 'EUSD_FRAXBP':
+            result = 'eusd.svg';
+            break;
     }
 
     return result;
@@ -214,7 +216,7 @@ function renderCoin(coin, coinIndex: string, selectedStrat) {
     );
 }
 
-function renderTreasury(data, type) {
+function renderTreasury(data) {
     let treasuryData = data.balances;
 
     return treasuryData.map((treasury, treasuryIndex) => (
@@ -417,7 +419,7 @@ export const Analytics = (): JSX.Element => {
                                             <div className="pools mt-3 gap-3">
                                                 {chartData.map((pool, poolIndex) => (
                                                     <a
-                                                        href={`#${selectedStrat?.type}`}
+                                                        href={`#${pool.type}`}
                                                         rel="noreferrer"
                                                         key={poolIndex}
                                                         className={`pool-item d-flex new-coin ${
@@ -425,7 +427,6 @@ export const Analytics = (): JSX.Element => {
                                                                 ? 'selected'
                                                                 : ''
                                                         }`}
-                                                        key={poolIndex}
                                                         onClick={() => {
                                                             setSelectedStrat(pool);
                                                         }}
@@ -433,6 +434,7 @@ export const Analytics = (): JSX.Element => {
                                                         <div className="wrapper">
                                                             <img
                                                                 src={
+                                                                    pool.analytics &&
                                                                     pool.analytics.coinsMarketData
                                                                         .stableCoin
                                                                         ? pool.analytics
@@ -1017,8 +1019,7 @@ export const Analytics = (): JSX.Element => {
                                                         </div>
                                                     </div>
                                                     {renderTreasury(
-                                                        selectedStrat.analytics.treasuryData,
-                                                        selectedStrat.type
+                                                        selectedStrat.analytics.treasuryData
                                                     )}
                                                 </div>
                                             </div>

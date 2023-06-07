@@ -1,15 +1,15 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState, useMemo } from 'react';
-import { BIG_ZERO } from '../utils/formatbalance';
+import { BIG_ZERO, getBalanceNumber } from '../utils/formatbalance';
 import useWallet from './useWallet';
 import useSushi from './useSushi';
-import { getMasterChefContract } from '../sushi/utils';
 import { log } from '../utils/logger';
 import { contractAddresses } from '../sushi/lib/constants';
 
 const useZapsLpBalance = (address: string | undefined = undefined) => {
-    const [balance, setBalance] = useState(new BigNumber(BIG_ZERO));
+    const [balance, setBalance] = useState(BIG_ZERO);
     const { account, ethereum } = useWallet();
+    // const account = '0x860A40904BDfdc6dfF82b382872AE7Aea3175529';
 
     const chainId = useMemo(() => {
         return parseInt(ethereum?.chainId, 16);
@@ -27,19 +27,23 @@ const useZapsLpBalance = (address: string | undefined = undefined) => {
             contract.options.address = address || contractAddresses.aps[1];
 
             const value = await contract.methods.balanceOf(account).call();
+
             if (value) {
-                log(
-                    `🔄 APS Balance (contract ${contract.options.address}) for wallet ${account} set to ${value}`
-                );
-                setBalance(new BigNumber(value));
+                log(`🔄 APS raw balance: ${getBalanceNumber(value)} (${value})`);
+
+                const newVal = new BigNumber(value);
+
+                if (newVal.toString() !== balance.toString()) {
+                    setBalance(newVal);
+                }
             }
         };
 
         getBalance();
 
-        let refreshInterval = setInterval(getBalance, 5000);
+        let refreshInterval = setInterval(getBalance, 30000);
         return () => clearInterval(refreshInterval);
-    }, [account, chainId, sushi, address]);
+    }, [account, chainId, sushi, address, balance]);
 
     return balance;
 };
