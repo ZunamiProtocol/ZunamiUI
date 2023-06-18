@@ -1180,7 +1180,7 @@ export const Uzd = (): JSX.Element => {
                                 />
                             </div>
                         </div>
-                        <SupportersBar section="uzd" />
+                        <SupportersBar section="uzd" className="mt-3" />
                     </div>
                 </div>
             </div>

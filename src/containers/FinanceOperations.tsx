@@ -587,7 +587,7 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                 />
                             </Col>
                         )}
-                        <SupportersBar section="deposit" />
+                        <SupportersBar section="deposit" className="mt-0" />
                     </div>
 
                     <div

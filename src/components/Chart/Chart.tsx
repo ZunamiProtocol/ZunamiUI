@@ -32,12 +32,37 @@ function getSecondIcon(item): string {
     return result;
 }
 
+function getPrimaryIcon(item): string {
+    let result = 'convex.svg';
+
+    switch (item.type) {
+        case 'EUSD_FRAXBP':
+            result = 'eusd.png';
+            break;
+        case 'ALUSD_FRAXBP':
+            result = 'alUSD.png';
+            break;
+        case 'XAI_FRAXBP':
+            result = 'frax.png';
+            break;
+        case 'CLEVUSD_FRAXBP':
+            result = 'clever_analytics.png';
+            break;
+        default:
+            result = item.icon;
+            break;
+    }
+
+    return result;
+}
+
 function renderStratList(items: Array<DataItem>) {
+    console.log(items);
     return items.map((item, index) => (
         <div key={index} className={'PieChart__StratList__Item'}>
             <div className="d-flex">
                 <div className="wrapper me-2">
-                    <img src={item.icon} alt={item.title} />
+                    <img src={getPrimaryIcon(item)} alt={item.title} />
                     {item.type !== 'VAULT' && (
                         <div className="coin">
                             <img src={getSecondIcon(item)} alt={item.title} />
