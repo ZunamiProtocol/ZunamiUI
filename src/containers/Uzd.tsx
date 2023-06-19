@@ -163,7 +163,7 @@ export const Uzd = (): JSX.Element => {
         const url =
             stakingMode === 'ZETH'
                 ? getZethHistoricalApyUrl(histApyPeriod)
-                : getHistoricalApyUrl(histApyPeriod);
+                : getApsHistoricalApyUrl(histApyPeriod);
 
         fetch(url)
             .then((response) => {
@@ -208,7 +208,9 @@ export const Uzd = (): JSX.Element => {
         return poolStats && zunamiInfo && uzdStatData
             ? poolDataToChartData(
                   stratsData,
-                  stakingMode === 'USD' ? zunamiInfo.tvl : uzdStatData.info.aps.tvl
+                  stakingMode === 'UZD'
+                      ? uzdStatData.info.omnipool.tvl
+                      : uzdStatData.info.zethOmnipool.tvl
               )
             : [];
     }, [stakingMode, uzdStatData, zunamiInfo, poolStats]);
@@ -750,7 +752,7 @@ export const Uzd = (): JSX.Element => {
                                         {stakingMode === 'ZETH' && (
                                             <div className="d-flex mt-3 gap-3 me-3">
                                                 <a
-                                                    className="gray-block small-block align-items-start stablecoin mb-2 mb-md-0 col-6 bg-white"
+                                                    className="gray-block small-block align-items-start stablecoin mb-2 mb-md-0 col-6 bg-white disabled"
                                                     href="https://curve.fi/#/ethereum/pools/factory-v2-284/deposit"
                                                     target="_blank"
                                                     rel="noreferrer"
