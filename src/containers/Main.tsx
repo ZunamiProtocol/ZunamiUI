@@ -773,7 +773,7 @@ export const Main = (): JSX.Element => {
                                     setStakingMode('UZD');
                                 }}
                             />
-                            <StakingSummary
+                            {/* <StakingSummary
                                 logo="USD"
                                 selected={stakingMode === 'USD'}
                                 baseApy={
@@ -802,7 +802,7 @@ export const Main = (): JSX.Element => {
                                 onSelect={() => {
                                     setStakingMode('USD');
                                 }}
-                            />
+                            /> */}
                         </SideBar>
                         <div className="col content-col dashboard-col">
                             <Header section="dashboard" />
@@ -920,7 +920,7 @@ export const Main = (): JSX.Element => {
                                     />
                                 </div>
                             </div>
-                            {/* <SupportersBar section="dashboard" /> */}
+                            <SupportersBar section="dashboard" className="mt-2" />
                         </div>
                     </div>
                 </div>

@@ -14,6 +14,7 @@
     &[data-section='deposit'] {
         padding-top: 0;
         position: absolute;
+        bottom: 5px;
 
         .supporters-links {
             padding-right: 0;
@@ -34,7 +35,7 @@
             }
 
             @media screen and (min-width: $media1024) {
-                padding-right: 60px;
+                padding-right: 0;
             }
         }
     }
