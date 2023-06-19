@@ -7,6 +7,7 @@ import polygonAbi from '../../actions/abi/zunami_polygon.json';
 import uzdAbi from '../../actions/abi/zunami_uzd.json';
 import fraxAbi from '../../actions/abi/zunami_frax.json';
 import ApsAbi from '../../actions/abi/aps.json';
+import zethAbi from '../../actions/abi/zeth.json';
 
 import WETHAbi from './abi/weth.json';
 import { contractAddresses, SUBTRACT_GAS_LIMIT } from './constants.js';
@@ -28,6 +29,7 @@ export class Contracts {
         this.busdContract = new this.web3.eth.Contract(busdAbi);
         this.polygonContract = new this.web3.eth.Contract(polygonAbi);
         this.uzdContract = new this.web3.eth.Contract(uzdAbi);
+        this.zethContract = new this.web3.eth.Contract(zethAbi);
         this.fraxContract = new this.web3.eth.Contract(fraxAbi);
         this.apsContract = new this.web3.eth.Contract(ApsAbi);
 

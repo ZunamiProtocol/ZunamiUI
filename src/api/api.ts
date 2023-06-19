@@ -4,6 +4,7 @@ const root = 'https://zunami-reward-api.herokuapp.com/api';
 export const poolStatsUrl = `${root}/pool/stats`;
 export const activeStratsUrl = `${root}/pool/active-pools-stats`;
 export const uzdStratsUrl = `${root}/aps/strategy/active-strategies-stats`;
+export const zethStratsUrl = `${root}/zeth-omnipool/strategy/active-strategies-stats`;
 export const zunamiInfoUrl = `${root}/zunami/info`;
 export const uzdStakingInfoUrl = `${root}/v2/zunami/info`;
 
@@ -14,6 +15,8 @@ export const totalIncomeUrl = `${root}/transfers/total-income`;
 export const apsTotalIncomeUrl = `${root}/v2/transfers/total-income`;
 export const transHistoryUrl = `${root}/transfers/history`;
 export const uzdTransHistoryUrl = `${root}/uzd/transfers/history`;
+export const uzdRebaseHistoryUrl = `${root}/uzd/rebase/history`;
+export const zethRebaseHistoryUrl = `${root}/zeth/rebase/history`;
 
 export const curvePoolsApyUrl = 'https://api.curve.fi/api/getFactoryAPYs?version=2';
 
@@ -28,6 +31,10 @@ export const getUzdStratsUrl = (): string => {
     return uzdStratsUrl;
 };
 
+export const getZethStratsUrl = (): string => {
+    return zethStratsUrl;
+};
+
 export const getPoolStatsUrl = (poolTypes: string): string => {
     return poolStatsUrl + '?types=' + poolTypes;
 };
@@ -38,6 +45,10 @@ export const getHistoricalApyUrl = (period: string): string => {
 
 export const getApsHistoricalApyUrl = (period: string): string => {
     return `${apsHistoricalApyUrl}?period=${period.toUpperCase()}`;
+};
+
+export const getZethHistoricalApyUrl = (period: string): string => {
+    return `${root}/zunami/zeth-omnipool-apy-chart?period=${period.toUpperCase()}`;
 };
 
 export const getTestnetStatusUrl = (address: string): string => {
@@ -69,6 +80,14 @@ export const getTotalIncomeUrl = (
     }
 
     return `${totalIncomeUrl}?address=${address.toLowerCase()}&lpTokens=${lpTokens}&chain=${chain}`;
+};
+
+export const getRebaseHistoryUrl = (page: number = 0, size: number = 20): string => {
+    return `${uzdRebaseHistoryUrl}?page=${page}&size=${size}`;
+};
+
+export const getZethRebaseHistoryUrl = (page: number = 0, size: number = 20): string => {
+    return `${zethRebaseHistoryUrl}?page=${page}&size=${size}`;
 };
 
 export const getTransHistoryUrl = (

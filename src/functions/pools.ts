@@ -9,6 +9,8 @@ export interface PoolInfo {
     tvlInZunami: number;
     type: string;
     address: string;
+    title?: string;
+    analytics: Object;
 }
 
 export interface ChartDataElement {
@@ -49,12 +51,12 @@ export const poolsChartdata: { [key: string]: any } = {
         icon: '/convex.svg',
     },
     XAI_FRAXBP: {
-        title: 'Convex Finance - XAI/FRAXBP Pool',
+        title: 'Convex Finance - XAI/FRAXBP pool',
         value: 0,
         icon: '/convex.svg',
     },
     ALUSD_FRAXBP: {
-        title: 'Convex Finance - ALUSD/FRAXBP Pool',
+        title: 'Convex Finance - ALUSD/FRAXBP pool',
         value: 0,
         icon: '/convex.svg',
     },
@@ -84,7 +86,7 @@ export const poolsChartdata: { [key: string]: any } = {
         icon: '/stake-dao.svg',
     },
     CLEVUSD_FRAXBP: {
-        title: 'Convex Finance - clevUSD/FRAXBP Pool',
+        title: 'Convex Finance - clevUSD/FRAXBP pool',
         value: 0,
         icon: '/convex.svg',
     },
@@ -100,7 +102,7 @@ export const poolsChartdata: { [key: string]: any } = {
         icon: '/uzd.svg',
     },
     FRAX_STAKEDAO: {
-        title: 'Stake DAO - UZD / FRAXBP Pool',
+        title: 'Stake DAO - UZD / FRAXBP pool',
         value: 0,
         icon: '/uzd.svg',
     },
@@ -108,6 +110,16 @@ export const poolsChartdata: { [key: string]: any } = {
         title: 'Convex Finance - UZD/FRAXBP pool',
         value: 0,
         icon: '/uzd.svg',
+    },
+    ALETH_FRAXETH: {
+        title: 'Convex Finance - alETHfrxETH pool',
+        value: 0,
+        icon: '/convex.svg',
+    },
+    SETH_FRAXETH: {
+        title: 'Convex Finance - sETH/frxETH pool',
+        value: 0,
+        icon: '/convex.svg',
     },
 };
 

@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react';
 import { BIG_ZERO } from '../utils/formatbalance';
 import useWallet from './useWallet';
 import useSushi from './useSushi';
+import { contractAddresses } from '../sushi/lib/constants';
 
-const useUzdTotalSupply = () => {
+const useTotalSupply = (address) => {
     const { account } = useWallet();
     const [totalSupply, setTotalSupply] = useState(new BigNumber(BIG_ZERO));
     const sushi = useSushi();
@@ -15,7 +16,10 @@ const useUzdTotalSupply = () => {
         }
 
         const getTotalSupply = async () => {
-            const contract = sushi.getUzdContract(account);
+            const contract =
+                address === contractAddresses.uzd[1]
+                    ? sushi.getUzdContract(account)
+                    : sushi.getZETHContract(account);
             setTotalSupply(new BigNumber(await contract.methods.totalSupply().call()));
         };
 
@@ -25,4 +29,4 @@ const useUzdTotalSupply = () => {
     return totalSupply;
 };
 
-export default useUzdTotalSupply;
+export default useTotalSupply;

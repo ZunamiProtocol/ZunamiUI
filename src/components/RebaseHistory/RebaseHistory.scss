@@ -1,0 +1,95 @@
+@import 'src/variables';
+
+.RebaseHistory {
+    @media screen and (min-width: $media375) {
+        margin-top: 16px;
+        margin-bottom: 20px;
+    }
+
+    @media screen and (min-width: $media1024) {
+        margin-bottom: 0;
+        margin-top: 16px;
+    }
+
+    @media screen and (min-width: $media1440) {
+        margin-top: 15px;
+    }
+
+    @media screen and (min-width: $media1920) {
+    }
+
+    &__Title {
+        @media screen and (min-width: $media375) {
+            font-size: 14px;
+            line-height: 18px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            font-size: 11px;
+            line-height: 15px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-size: 13px;
+            line-height: 17px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            font-size: 14px;
+            line-height: 18px;
+        }
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        gap: 10px;
+
+        > div {
+            width: 33.3%;
+            text-align: center;
+            border-radius: 20px;
+            padding: 3px 0;
+            background-color: #e4e4e4;
+        }
+    }
+
+    &__List {
+        height: 110px;
+        overflow: hidden;
+        overflow-y: auto;
+        margin-top: 10px;
+
+        &-Item {
+            border-bottom: solid 1px rgba(0, 0, 0, 0.2);
+            font-size: 13px;
+            line-height: 17px;
+
+            @media screen and (min-width: $media375) {
+                padding: 10px 0;
+            }
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            > div {
+                width: 33.3%;
+            }
+        }
+    }
+
+    .empty {
+        font-size: 14px;
+        line-height: 18px;
+        text-align: center;
+        color: #b4b4b4;
+        width: 200px;
+        margin: 20px auto 0 auto;
+
+        svg {
+            margin-bottom: 20px;
+        }
+    }
+}

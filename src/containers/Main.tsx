@@ -40,6 +40,7 @@ import { ZunamiInfo, ZunamiInfoFetch, PoolsStats, Balance } from './Main.types';
 import useZapsLpBalance from '../hooks/useZapsLpBalance';
 import useUzdBalance from '../hooks/useUzdBalance';
 import useApsLpPrice from '../hooks/useApsLpPrice';
+import { LpMigrationModal } from '../components/LpMigrationModal/LpMigrationModal';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -350,10 +351,16 @@ export const Main = (): JSX.Element => {
     const [showMigrationModal2, setShowMigrationModal2] = useState(false);
     // ETH merge modal
     const [showMergeModal, setShowMergeModal] = useState(false);
+    // LP to UZD migration modal
+    const [showLpMigrationModal, setShowLpMigrationModal] = useState(false);
 
     useEffect(() => {
         setShowMergeModal(isContractPaused);
     }, [isContractPaused]);
+
+    useEffect(() => {
+        setShowLpMigrationModal(balance.toNumber() > 0);
+    }, [balance]);
 
     // migration modal
     useEffect(() => {
@@ -478,6 +485,13 @@ export const Main = (): JSX.Element => {
                     {!supportedChain && (
                         <UnsupportedChain text="You're using unsupported chain. Please, switch either to Ethereum or Binance network." />
                     )}
+                    <LpMigrationModal
+                        show={showLpMigrationModal}
+                        balance={balance}
+                        onHide={() => {
+                            console.log('Modal close');
+                        }}
+                    />
                     <BscMigrationModal
                         show={showMigrationModal}
                         balance={oldBscBalance[0]}
@@ -656,7 +670,7 @@ export const Main = (): JSX.Element => {
                                                             fillRule="evenodd"
                                                             clipRule="evenodd"
                                                             d="M6.5 13C10.0899 13 13 10.0899 13 6.5C13 2.91015 10.0899 0 6.5 0C2.91015 0 0 2.91015 0 6.5C0 10.0899 2.91015 13 6.5 13ZM6.23296 9.97261H4.98638L5.79002 7.12336H3.02741V5.87679H6.14162L6.94529 3.02741H8.19186L7.38819 5.87679L9.97261 5.87679V7.12336H7.03659L6.23296 9.97261Z"
-                                                            fill="white"
+                                                            fill="000000"
                                                         />
                                                     </svg>
                                                 </OverlayTrigger>
@@ -897,7 +911,7 @@ export const Main = (): JSX.Element => {
                                     )}
                                     <Chart
                                         data={chartData || []}
-                                        className="flex-grow-1 mt-3 mt-lg-0"
+                                        className="p-4 flex-grow-1 mt-3 mt-lg-0"
                                         title={
                                             stakingMode === 'USD'
                                                 ? 'DAO Stablecoin diversification strategies'

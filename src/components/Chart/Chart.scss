@@ -5,29 +5,17 @@
     border-radius: $border-radius;
 
     @media (min-width: $media375) {
-        padding: 20px;
-        // margin-top: 21px;
-        // margin-bottom: 20px;
     }
 
     @media (min-width: $media1024) {
-        // width: 275px;
-        // height: 245px;
-        padding: 20px;
-        // margin-top: 21px;
         margin-bottom: 0;
     }
 
     @media (min-width: $media1440) {
-        // width: 353px;
-        padding: 25px;
-        // margin-top: 21px;
     }
 
     @media (min-width: $media1920) {
-        // width: 610px;
         height: 375px;
-        padding: 25px;
         margin-top: 21px;
     }
 
@@ -67,6 +55,33 @@
         @media (min-width: $media1920) {
         }
 
+        &.list {
+            flex-direction: column;
+        }
+
+        &.column {
+            flex-direction: row;
+            column-gap: 10px;
+
+            @media (min-width: $media375) {
+                flex-wrap: wrap;
+            }
+
+            @media (min-width: $media1440) {
+                flex-wrap: wrap;
+            }
+
+            .PieChart__StratList__Item {
+                @media (min-width: $media375) {
+                    width: 100%;
+                }
+
+                @media (min-width: $media1440) {
+                    width: calc(50% - 5px);
+                }
+            }
+        }
+
         .PieChart__StratList__Item {
             @media (min-width: $media375) {
                 margin-top: 20px;
@@ -91,7 +106,7 @@
                 font-family: 'Space Grotesk';
                 font-style: normal;
                 font-weight: 500;
-                padding-top: 4px;
+                // padding-top: 4px;
 
                 @media (min-width: $media1024) {
                     font-size: 12px;

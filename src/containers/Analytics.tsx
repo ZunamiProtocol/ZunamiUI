@@ -131,13 +131,14 @@ function getPoolIcon(type: string) {
     return result;
 }
 
-function renderCoin(coin, coinIndex, selectedStrat) {
+function renderCoin(coin, coinIndex: string, selectedStrat) {
     return (
         <div className="gray-block small-block align-items-start stablecoin mb-2" key={coinIndex}>
             <div>
                 <img
                     src={`https://cdn.jsdelivr.net/gh/curvefi/curve-assets/images/assets/${coin.address.toLowerCase()}.png`}
                     alt=""
+                    className="me-1"
                 />
                 <span className="name">{coin.symbol}</span>
             </div>

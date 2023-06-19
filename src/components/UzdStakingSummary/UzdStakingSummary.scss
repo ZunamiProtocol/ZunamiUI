@@ -1,0 +1,60 @@
+@import 'src/variables';
+
+.UzdStakingSummary {
+    background: linear-gradient(83.41deg, #e1e1e1 8.37%, #ebebeb 93.28%);
+    border-radius: $border-radius;
+    padding: 25px 20px;
+    border: solid 1px transparent;
+    cursor: pointer;
+
+    .btn-secondary {
+        color: #fff;
+        background-color: #000;
+        font-size: 12px;
+        line-height: 15px;
+        padding: 4px 14px;
+        border: none;
+        border-radius: $border-radius;
+        width: 77px;
+    }
+
+    &__Selected {
+        border-color: #fe9002;
+
+        .btn-secondary {
+            pointer-events: none;
+            color: #858585;
+            background-color: #d8d8d8;
+        }
+    }
+
+    .staking-icon {
+        &.uzd {
+            // transform: translateY(-10px);
+            margin-top: -10px;
+        }
+    }
+
+    .values {
+        gap: 10px;
+
+        .block {
+            background: #d4d4d4;
+            border-radius: 15px;
+            padding: 9px 12px;
+
+            .title {
+                font-size: 13px;
+                line-height: 17px;
+                color: #626262;
+            }
+
+            .value {
+                font-size: 14px;
+                line-height: 19px;
+                font-size: 14px;
+                line-height: 19px;
+            }
+        }
+    }
+}

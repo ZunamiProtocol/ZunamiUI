@@ -120,6 +120,8 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
             setActiveNetwork(defaultNetwork);
         }
 
+        // console.log(defaultNetwork);
+
         setChainSupported(supportedChainIds.indexOf(parseInt(activeNetwork.key, 16)) !== -1);
     }, [chainId, activeNetwork, hideActiveNetwork]);
 

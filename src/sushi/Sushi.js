@@ -10,6 +10,7 @@ import bscAbi from '../actions/abi/zunami_bsc.json';
 import uzdAbi from '../actions/abi/zunami_uzd.json';
 import fraxAbi from '../actions/abi/zunami_frax.json';
 import ApsAbi from '../actions/abi/aps.json';
+import zethAbi from '../actions/abi/zeth.json';
 import { getZunamiAddress } from '../utils/zunami';
 
 export class Sushi {
@@ -65,6 +66,7 @@ export class Sushi {
         this.bscContracts = new Contracts(bscProvider, 56, this.bscWeb3, options);
         this.busdContracts = new Contracts(bscProvider, 56, this.bscWeb3, options);
         this.uzdContracts = new Contracts(ethProvider, 1, this.web3, options);
+        this.zEthContracts = new Contracts(ethProvider, 1, this.web3, options);
         this.plgContracts = new Contracts(this.getPolygonProvider(), 137, this.plgWeb3, options);
         this.fraxContracts = new Contracts(ethProvider, 1, this.web3, options);
 
@@ -74,6 +76,7 @@ export class Sushi {
 
         this.busdContracts = contractAddresses.busd[56];
         this.uzdContracts = contractAddresses.uzd[1];
+        this.zEthContracts = contractAddresses.zeth[1];
         this.fraxContracts = contractAddresses.frax[1];
         this.wethAddress = contractAddresses.weth[networkId];
     }
@@ -88,6 +91,7 @@ export class Sushi {
         this.accounts.push(new Account(this.busdContracts, address, number));
         this.accounts.push(new Account(this.ethContracts, address, number));
         this.accounts.push(new Account(this.uzdContracts, address, number));
+        this.accounts.push(new Account(this.zEthContracts, address, number));
         this.accounts.push(new Account(this.fraxContracts, address, number));
         this.accounts.push(new Account(this.plgContracts, address, number));
     }
@@ -178,6 +182,14 @@ export class Sushi {
         const contract = new web3.eth.Contract(uzdAbi);
         contract.options.from = account;
         contract.options.address = contractAddresses.uzd[1];
+        return contract;
+    }
+
+    getZETHContract(account) {
+        const web3 = new Web3(this.getEthProvider(account));
+        const contract = new web3.eth.Contract(zethAbi);
+        contract.options.from = account;
+        contract.options.address = contractAddresses.zeth[1];
         return contract;
     }
 
