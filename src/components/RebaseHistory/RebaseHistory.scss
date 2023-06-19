@@ -12,7 +12,7 @@
     }
 
     @media screen and (min-width: $media1440) {
-        margin-top: 17px;
+        margin-top: 15px;
     }
 
     @media screen and (min-width: $media1920) {
@@ -49,6 +49,9 @@
         > div {
             width: 33.3%;
             text-align: center;
+            border-radius: 20px;
+            padding: 3px 0;
+            background-color: #e4e4e4;
         }
     }
 

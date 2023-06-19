@@ -66,6 +66,7 @@ export const RebaseHistory: React.FC<TransactionHistoryProps & React.HTMLProps<H
     items,
     onPageEnd,
     emptyText,
+    type,
 }) => {
     const { chainId } = useWallet();
 
@@ -85,7 +86,7 @@ export const RebaseHistory: React.FC<TransactionHistoryProps & React.HTMLProps<H
         <div className={`RebaseHistory ${className}`}>
             <div className="d-flex header">
                 <div>Date</div>
-                <div>ZLP price</div>
+                <div>{type} price</div>
                 <div>Change</div>
             </div>
             <div className="RebaseHistory__List" onScroll={onScroll}>

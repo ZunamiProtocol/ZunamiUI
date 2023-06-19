@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Header } from '../components/Header/Header';
 import './Uzd.scss';
-import { OverlayTrigger, Toast, ToastContainer } from 'react-bootstrap';
+import { OverlayTrigger, Toast, ToastContainer, Tooltip } from 'react-bootstrap';
 import { useWallet } from 'use-wallet';
 import useBalanceOf from '../hooks/useBalanceOf';
 import useUzdBalance from '../hooks/useUzdBalance';
@@ -25,6 +25,7 @@ import {
     getRebaseHistoryUrl,
     getZethRebaseHistoryUrl,
     getZethStratsUrl,
+    getHistoricalApyUrl,
 } from '../api/api';
 import useFetch from 'react-fetch-hook';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
@@ -42,6 +43,7 @@ import { poolDataToChartData } from '../functions/pools';
 import { RebaseHistory } from '../components/RebaseHistory/RebaseHistory';
 import { Link } from 'react-router-dom';
 import useZapsLpBalance from '../hooks/useZapsLpBalance';
+import { SupportersBar } from '../components/SupportersBar/SupportersBar';
 
 interface CurvePoolInfo {
     apy: number;
@@ -93,7 +95,8 @@ const addToken = async (
     tokenDecimals: Number,
     tokenImage: string
 ) => {
-    const tokenAddress = contractAddresses.uzd[1];
+    const tokenAddress =
+        tokenSymbol === 'UZD' ? contractAddresses.uzd[1] : contractAddresses.zeth[1];
 
     try {
         const wasAdded = await ethereum.request({
@@ -121,6 +124,8 @@ const addToken = async (
 
 export const Uzd = (): JSX.Element => {
     const { account, connect, ethereum, chainId } = useWallet();
+    useEagerConnect(account ? account : '', connect, ethereum);
+
     const sushi = useSushi();
     const masterChefContract = getMasterChefContract(sushi);
     const uzdBalance = useUzdBalance();
@@ -136,12 +141,12 @@ export const Uzd = (): JSX.Element => {
     const balances = useMemo(() => {
         return [
             {
-                chainId: 1,
+                chainId: '1',
                 value: apsBalance,
                 key: 'APS',
             },
             {
-                chainId: 1,
+                chainId: '1',
                 value: zethBalance,
                 key: 'ZETH',
             },
@@ -158,7 +163,7 @@ export const Uzd = (): JSX.Element => {
         const url =
             stakingMode === 'ZETH'
                 ? getZethHistoricalApyUrl(histApyPeriod)
-                : getApsHistoricalApyUrl(histApyPeriod);
+                : getHistoricalApyUrl(histApyPeriod);
 
         fetch(url)
             .then((response) => {
@@ -179,8 +184,6 @@ export const Uzd = (): JSX.Element => {
     } = useFetch(zunamiInfoUrl) as ZunamiInfoFetch;
 
     const zunamiInfo = zunData as ZunamiInfo;
-
-    useEagerConnect(account ? account : '', connect, ethereum);
 
     useEffect(() => {
         setSupportedChain(chainId === 1);
@@ -221,6 +224,7 @@ export const Uzd = (): JSX.Element => {
         }
     }, [deprecatedUzdBalance]);
 
+    const [transactionsType, setTransactionsType] = useState('UZD');
     const [transactionList, setTransactionList] = useState([]);
     const [transHistoryPage, setTransHistoryPage] = useState(0);
     const [loadingHistory, setLoadingHistory] = useState(false);
@@ -233,6 +237,7 @@ export const Uzd = (): JSX.Element => {
         const getTransactionHistory = async () => {
             try {
                 setLoadingHistory(true);
+
                 const url =
                     stakingMode === 'UZD'
                         ? getRebaseHistoryUrl(0, 70)
@@ -240,23 +245,45 @@ export const Uzd = (): JSX.Element => {
                 let historyResponse = await fetch(url);
                 const items = await historyResponse.json();
 
-                if (!items.uzdRebases.length) {
+                if (!items.uzdRebases?.length && !items.zethRebases?.length) {
                     setTransHistoryPage(-1);
                     return;
                 }
 
-                setTransactionList(
-                    transactionList
-                        .concat(items.uzdRebases)
-                        .sort((a: iHistoryTransaction, b: iHistoryTransaction | undefined) => {
-                            if (!b) {
-                                return 0;
-                            }
+                if (items.uzdRebases?.length) {
+                    items.uzdRebases.forEach((item) => {
+                        item.type = 'uzd';
+                    });
+                }
 
-                            return new Date(a.dateTime).getTime() > new Date(b.dateTime).getTime()
-                                ? -1
-                                : 1;
-                        })
+                if (items.zethRebases?.length) {
+                    items.zethRebases.forEach((item) => {
+                        item.type = 'zeth';
+                    });
+                }
+
+                let finalData = [];
+
+                if (transactionsType !== stakingMode) {
+                    setTransactionsType(stakingMode);
+                } else {
+                    finalData = transactionList;
+                }
+
+                finalData = finalData.concat(
+                    items.uzdRebases ? items.uzdRebases : items.zethRebases
+                );
+
+                setTransactionList(
+                    finalData.sort((a: iHistoryTransaction, b: iHistoryTransaction | undefined) => {
+                        if (!b) {
+                            return 0;
+                        }
+
+                        return new Date(a.dateTime).getTime() > new Date(b.dateTime).getTime()
+                            ? -1
+                            : 1;
+                    })
                 );
 
                 setLoadingHistory(false);
@@ -410,7 +437,7 @@ export const Uzd = (): JSX.Element => {
                             account={account}
                             lpPrice={lpPrice}
                             balances={balances}
-                            userMaxWithdraw={'$0'}
+                            userMaxWithdraw={getFullDisplayBalance(apsBalance.plus(zethBalance))}
                             totalIncome="$0"
                             dailyProfit={0}
                             monthlyProfit={0}
@@ -420,7 +447,7 @@ export const Uzd = (): JSX.Element => {
                             logo="UZD"
                             selected={stakingMode === 'UZD'}
                             baseApy={!uzdStatLoading ? uzdStatData.info.aps.apy.toFixed(2) : '-'}
-                            deposit={formatUzd(uzdBalance)}
+                            deposit={formatUzd(apsBalance)}
                             className="mt-3"
                             onSelect={() => {
                                 setStakingMode('UZD');
@@ -444,7 +471,7 @@ export const Uzd = (): JSX.Element => {
                         <div className="row ms-md-4">
                             <div className="col-xxl-7 col-xs-12">
                                 <div className="card m-xxl-3 mt-xxl-0">
-                                    <div className="card-body">
+                                    <div className="card-body p-3">
                                         <div className="title">Info bar</div>
                                         <div className="row mt-3">
                                             <div className="col-6 col-md-4">
@@ -496,7 +523,7 @@ export const Uzd = (): JSX.Element => {
                                                             Contract address
                                                         </span>
                                                     </div>
-                                                    <div className="value mt-1">
+                                                    <div className="value mt-1 d-flex">
                                                         <a
                                                             href={`https://etherscan.io/address/${
                                                                 stakingMode === 'UZD'
@@ -526,6 +553,49 @@ export const Uzd = (): JSX.Element => {
                                                             </svg>
                                                             <span>Link</span>
                                                         </a>
+                                                        <div className="buttons position-static m-0 ms-2 p-0">
+                                                            <div
+                                                                onClick={async () => {
+                                                                    navigator.clipboard
+                                                                        .writeText(
+                                                                            stakingMode === 'UZD'
+                                                                                ? contractAddresses
+                                                                                      .uzd[1]
+                                                                                : contractAddresses
+                                                                                      .zeth[1]
+                                                                        )
+                                                                        .then(function () {
+                                                                            alert(
+                                                                                'Address copied to the clipboard'
+                                                                            );
+                                                                        });
+                                                                }}
+                                                            >
+                                                                <img
+                                                                    src="/copy-icon.svg"
+                                                                    alt="Copy token address"
+                                                                />
+                                                            </div>
+                                                            <div
+                                                                onClick={async () => {
+                                                                    addToken(
+                                                                        ethereum,
+                                                                        stakingMode === 'UZD'
+                                                                            ? 'UZD'
+                                                                            : 'ethZLP',
+                                                                        UZD_DECIMALS,
+                                                                        stakingMode === 'UZD'
+                                                                            ? 'https://app.zunami.io/uzd-token.png'
+                                                                            : 'https://app.zunami.io/eth-zlp-coin.svg'
+                                                                    );
+                                                                }}
+                                                            >
+                                                                <img
+                                                                    src="/metamask-icon.svg"
+                                                                    alt="Add token to Metamask"
+                                                                />
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -535,7 +605,7 @@ export const Uzd = (): JSX.Element => {
                             </div>
                             <div className="col-xxl-5 col-xs-12 d-flex flex-column mt-3 mt-xxl-0">
                                 <div className="card buy-uzd">
-                                    <div className="card-body">
+                                    <div className="card-body p-3">
                                         <svg
                                             width="134"
                                             height="154"
@@ -566,99 +636,162 @@ export const Uzd = (): JSX.Element => {
                                                 </linearGradient>
                                             </defs>
                                         </svg>
-                                        <div className="title">
-                                            <svg
-                                                width="22"
-                                                height="23"
-                                                viewBox="0 0 22 23"
-                                                fill="none"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                className="me-2"
-                                            >
-                                                <circle cx="11" cy="11.5" r="11" fill="white" />
-                                                <path
-                                                    d="M17.3021 13.238L16.9621 12.6341C16.9268 12.5714 16.8787 12.5159 16.8204 12.4707C16.7621 12.4255 16.695 12.3916 16.6227 12.3708C16.5504 12.3497 16.4745 12.3421 16.3991 12.3486C16.3238 12.3551 16.2505 12.3754 16.1836 12.4085L13.0156 13.974L11.5037 11.2875L13.8709 5.93732C13.9086 5.85285 13.9221 5.76061 13.9101 5.66974C13.9063 5.59093 13.8841 5.51386 13.845 5.44401L13.5052 4.84022C13.4699 4.77755 13.4217 4.72204 13.3635 4.67686C13.3052 4.63169 13.238 4.59776 13.1657 4.57702C13.0935 4.55592 13.0175 4.5484 12.9422 4.55485C12.8669 4.56131 12.7937 4.58163 12.7267 4.61465L8.83163 6.53949L8.04548 5.1426C8.01019 5.07994 7.96202 5.02443 7.90378 4.97925C7.84553 4.93406 7.77836 4.9001 7.70607 4.87932C7.63386 4.85813 7.55788 4.85056 7.48253 4.85703C7.40717 4.86351 7.33393 4.88389 7.26703 4.91703L6.62267 5.23539C6.5558 5.26848 6.49655 5.31361 6.44834 5.3682C6.40012 5.42279 6.36388 5.48577 6.34169 5.55351C6.31916 5.62118 6.31108 5.69236 6.31797 5.76296C6.32487 5.83355 6.34659 5.90218 6.38186 5.9649L7.16801 7.36155L4.93845 8.46327C4.87158 8.49631 4.81232 8.54141 4.76411 8.59598C4.71591 8.65055 4.67971 8.7135 4.65756 8.78123C4.63498 8.84891 4.6269 8.92011 4.6338 8.99073C4.64069 9.06134 4.66241 9.12998 4.69772 9.1927L5.03756 9.79649C5.07283 9.85916 5.12097 9.91468 5.17922 9.95985C5.23747 10.005 5.30467 10.039 5.37697 10.0597C5.44919 10.0808 5.52513 10.0884 5.60047 10.0819C5.67581 10.0754 5.74907 10.0551 5.81601 10.0221L8.0453 8.92041L9.42795 11.3773L6.93602 17.0093C6.90334 17.0867 6.88902 17.1698 6.89404 17.2529C6.89933 17.3361 6.92388 17.4173 6.96597 17.4907C6.97419 17.5049 6.98051 17.5165 6.98701 17.5284L7.34208 18.1597C7.37734 18.2224 7.42546 18.2779 7.48369 18.3231C7.54193 18.3682 7.60912 18.4022 7.6814 18.4229C7.73689 18.4391 7.79468 18.4473 7.85279 18.4473C7.94608 18.4473 8.03795 18.426 8.12053 18.3853L12.2293 16.3549L12.7055 17.201C12.7408 17.2637 12.7889 17.3192 12.8472 17.3644C12.9054 17.4095 12.9726 17.4435 13.0449 17.4642C13.1171 17.4853 13.1931 17.4929 13.2684 17.4864C13.3438 17.48 13.417 17.4596 13.4839 17.4266L14.1284 17.1081C14.1952 17.075 14.2545 17.0299 14.3026 16.9753C14.3508 16.9208 14.387 16.8578 14.4092 16.7901C14.4317 16.7224 14.4398 16.6512 14.4329 16.5806C14.426 16.5101 14.4043 16.4414 14.369 16.3787L13.8929 15.5328L17.0612 13.9673C17.128 13.9342 17.1873 13.8891 17.2355 13.8345C17.2837 13.7799 17.32 13.717 17.3422 13.6492C17.3647 13.5816 17.3727 13.5105 17.3659 13.4399C17.359 13.3693 17.3373 13.3007 17.3021 13.238ZM9.70892 8.09836L11.206 7.35863L10.3638 9.26197L9.70892 8.09836ZM11.352 14.7961L9.55943 15.6818L10.5678 13.4027L11.352 14.7961Z"
-                                                    fill="#FB7303"
-                                                />
-                                            </svg>
-                                            <span>Buy UZD on</span>
-                                        </div>
-                                        <div className="d-flex mt-3 gap-3 me-3">
-                                            <a
-                                                className="gray-block small-block align-items-start stablecoin mb-2 mb-md-0 col-6 bg-white"
-                                                href="https://curve.fi/#/ethereum/pools/factory-v2-284/deposit"
-                                                target="_blank"
-                                                rel="noreferrer"
-                                            >
-                                                <div>
-                                                    <img
-                                                        src="/curve-icon.svg"
-                                                        alt=""
-                                                        className="me-2"
-                                                    />
-                                                    <span className="name">Curve</span>
-                                                </div>
-                                                <div className="value mt-1">UZD / FRAXBP Pool</div>
+                                        {stakingMode === 'UZD' && (
+                                            <div className="title">
                                                 <svg
-                                                    width="8"
-                                                    height="8"
-                                                    viewBox="0 0 8 8"
+                                                    width="22"
+                                                    height="23"
+                                                    viewBox="0 0 22 23"
                                                     fill="none"
                                                     xmlns="http://www.w3.org/2000/svg"
-                                                    className="external-icon"
+                                                    className="me-2"
                                                 >
+                                                    <circle cx="11" cy="11.5" r="11" fill="white" />
                                                     <path
-                                                        d="M0.799805 1H6.7998V7"
-                                                        stroke="#959595"
-                                                    />
-                                                    <path
-                                                        d="M6.79901 1L1.00488 6.79545"
-                                                        stroke="#959595"
+                                                        d="M17.3021 13.238L16.9621 12.6341C16.9268 12.5714 16.8787 12.5159 16.8204 12.4707C16.7621 12.4255 16.695 12.3916 16.6227 12.3708C16.5504 12.3497 16.4745 12.3421 16.3991 12.3486C16.3238 12.3551 16.2505 12.3754 16.1836 12.4085L13.0156 13.974L11.5037 11.2875L13.8709 5.93732C13.9086 5.85285 13.9221 5.76061 13.9101 5.66974C13.9063 5.59093 13.8841 5.51386 13.845 5.44401L13.5052 4.84022C13.4699 4.77755 13.4217 4.72204 13.3635 4.67686C13.3052 4.63169 13.238 4.59776 13.1657 4.57702C13.0935 4.55592 13.0175 4.5484 12.9422 4.55485C12.8669 4.56131 12.7937 4.58163 12.7267 4.61465L8.83163 6.53949L8.04548 5.1426C8.01019 5.07994 7.96202 5.02443 7.90378 4.97925C7.84553 4.93406 7.77836 4.9001 7.70607 4.87932C7.63386 4.85813 7.55788 4.85056 7.48253 4.85703C7.40717 4.86351 7.33393 4.88389 7.26703 4.91703L6.62267 5.23539C6.5558 5.26848 6.49655 5.31361 6.44834 5.3682C6.40012 5.42279 6.36388 5.48577 6.34169 5.55351C6.31916 5.62118 6.31108 5.69236 6.31797 5.76296C6.32487 5.83355 6.34659 5.90218 6.38186 5.9649L7.16801 7.36155L4.93845 8.46327C4.87158 8.49631 4.81232 8.54141 4.76411 8.59598C4.71591 8.65055 4.67971 8.7135 4.65756 8.78123C4.63498 8.84891 4.6269 8.92011 4.6338 8.99073C4.64069 9.06134 4.66241 9.12998 4.69772 9.1927L5.03756 9.79649C5.07283 9.85916 5.12097 9.91468 5.17922 9.95985C5.23747 10.005 5.30467 10.039 5.37697 10.0597C5.44919 10.0808 5.52513 10.0884 5.60047 10.0819C5.67581 10.0754 5.74907 10.0551 5.81601 10.0221L8.0453 8.92041L9.42795 11.3773L6.93602 17.0093C6.90334 17.0867 6.88902 17.1698 6.89404 17.2529C6.89933 17.3361 6.92388 17.4173 6.96597 17.4907C6.97419 17.5049 6.98051 17.5165 6.98701 17.5284L7.34208 18.1597C7.37734 18.2224 7.42546 18.2779 7.48369 18.3231C7.54193 18.3682 7.60912 18.4022 7.6814 18.4229C7.73689 18.4391 7.79468 18.4473 7.85279 18.4473C7.94608 18.4473 8.03795 18.426 8.12053 18.3853L12.2293 16.3549L12.7055 17.201C12.7408 17.2637 12.7889 17.3192 12.8472 17.3644C12.9054 17.4095 12.9726 17.4435 13.0449 17.4642C13.1171 17.4853 13.1931 17.4929 13.2684 17.4864C13.3438 17.48 13.417 17.4596 13.4839 17.4266L14.1284 17.1081C14.1952 17.075 14.2545 17.0299 14.3026 16.9753C14.3508 16.9208 14.387 16.8578 14.4092 16.7901C14.4317 16.7224 14.4398 16.6512 14.4329 16.5806C14.426 16.5101 14.4043 16.4414 14.369 16.3787L13.8929 15.5328L17.0612 13.9673C17.128 13.9342 17.1873 13.8891 17.2355 13.8345C17.2837 13.7799 17.32 13.717 17.3422 13.6492C17.3647 13.5816 17.3727 13.5105 17.3659 13.4399C17.359 13.3693 17.3373 13.3007 17.3021 13.238ZM9.70892 8.09836L11.206 7.35863L10.3638 9.26197L9.70892 8.09836ZM11.352 14.7961L9.55943 15.6818L10.5678 13.4027L11.352 14.7961Z"
+                                                        fill="#FB7303"
                                                     />
                                                 </svg>
-                                            </a>
-                                            <a
-                                                className="gray-block small-block align-items-start stablecoin mb-2 mb-md-0 col-6 bg-white"
-                                                href="https://app.balancer.fi/#/ethereum/pool/0xec3626fee40ef95e7c0cbb1d495c8b67b34d398300000000000000000000053d"
-                                                target="_"
-                                                rel="noreferrer"
-                                            >
-                                                <div>
-                                                    <img
-                                                        src="/balancer.svg"
-                                                        alt=""
-                                                        className="me-2"
-                                                    />
-                                                    <span className="name">Balancer</span>
-                                                </div>
-                                                <div className="value mt-1">UZD/bb-a-USD</div>
+                                                <span>Buy UZD on</span>
+                                            </div>
+                                        )}
+                                        {stakingMode === 'ZETH' && (
+                                            <div className="title">
                                                 <svg
-                                                    width="8"
-                                                    height="8"
-                                                    viewBox="0 0 8 8"
+                                                    width="22"
+                                                    height="22"
+                                                    viewBox="0 0 22 22"
                                                     fill="none"
                                                     xmlns="http://www.w3.org/2000/svg"
-                                                    className="external-icon"
+                                                    className="me-2"
                                                 >
                                                     <path
-                                                        d="M0.799805 1H6.7998V7"
-                                                        stroke="#959595"
-                                                    />
-                                                    <path
-                                                        d="M6.79901 1L1.00488 6.79545"
-                                                        stroke="#959595"
+                                                        fillRule="evenodd"
+                                                        clipRule="evenodd"
+                                                        d="M11 22C17.0751 22 22 17.0751 22 11C22 4.92487 17.0751 0 11 0C4.92487 0 0 4.92487 0 11C0 17.0751 4.92487 22 11 22ZM10.282 18.8223C10.4727 18.9408 10.6865 19 10.9004 19C11.1144 19 11.3282 18.9408 11.5189 18.8223L17.6679 15.0022C17.8901 14.8642 18.0238 14.6035 17.9965 14.3337C17.9353 13.7308 17.3515 13.4712 16.9242 13.7362L11.3261 17.2141C11.0636 17.3772 10.7375 17.3772 10.475 17.2142L6.00953 14.4401C5.72383 14.2626 5.63058 13.8744 5.80189 13.5756L10.5688 5.26266C10.7194 5.00007 11.0817 5.00007 11.2323 5.26267L11.6844 6.05117C11.9403 6.4978 12.5719 6.55971 12.8984 6.06051C13.0444 5.83719 13.0446 5.54127 12.9115 5.30918L11.9416 3.61785C11.7952 3.3625 11.5727 3.15726 11.3024 3.06684C10.7241 2.87342 10.1495 3.1127 9.85946 3.61797L4.17479 13.5318C4.00618 13.8258 3.95761 14.171 4.03757 14.5037C4.11733 14.8365 4.31616 15.1159 4.59731 15.2907L10.282 18.8223ZM16.2415 12.0339L11.9958 14.7963C11.8812 14.8708 11.7521 14.9076 11.6236 14.9076C11.4183 14.9076 11.2143 14.814 11.0719 14.6308C10.9108 14.4234 10.8821 14.1342 10.9678 13.882L12.1083 10.5254C12.181 10.3115 11.9596 10.119 11.7733 10.2342L10.5669 10.98C10.1893 11.2139 9.68821 11.0363 9.53644 10.5748C9.42607 10.2392 9.57436 9.86805 9.86559 9.68799L13.2864 7.57307C13.5979 7.38029 14.0073 7.46206 14.2283 7.79118C14.3631 7.99208 14.3825 8.25522 14.3039 8.48675L13.1919 11.7594C13.1183 11.976 13.3454 12.1689 13.5314 12.0479L15.4809 10.7794C15.768 10.5926 16.1494 10.6276 16.3804 10.8865C16.6983 11.2426 16.6147 11.791 16.2415 12.0339Z"
+                                                        fill="white"
                                                     />
                                                 </svg>
-                                            </a>
-                                        </div>
+                                                <span>Buy zETH on</span>
+                                            </div>
+                                        )}
+                                        {stakingMode === 'UZD' && (
+                                            <div className="d-flex mt-3 gap-3 me-3">
+                                                <a
+                                                    className="gray-block small-block align-items-start stablecoin mb-2 mb-md-0 col-6 bg-white"
+                                                    href="https://curve.fi/#/ethereum/pools/factory-v2-284/deposit"
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                >
+                                                    <div>
+                                                        <img
+                                                            src="/curve-icon.svg"
+                                                            alt=""
+                                                            className="me-2"
+                                                        />
+                                                        <span className="name">Curve</span>
+                                                    </div>
+                                                    <div className="value mt-1">
+                                                        UZD / FRAXBP Pool
+                                                    </div>
+                                                    <svg
+                                                        width="8"
+                                                        height="8"
+                                                        viewBox="0 0 8 8"
+                                                        fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        className="external-icon"
+                                                    >
+                                                        <path
+                                                            d="M0.799805 1H6.7998V7"
+                                                            stroke="#959595"
+                                                        />
+                                                        <path
+                                                            d="M6.79901 1L1.00488 6.79545"
+                                                            stroke="#959595"
+                                                        />
+                                                    </svg>
+                                                </a>
+                                                <a
+                                                    className="gray-block small-block align-items-start stablecoin mb-2 mb-md-0 col-6 bg-white"
+                                                    href="https://app.balancer.fi/#/ethereum/pool/0xec3626fee40ef95e7c0cbb1d495c8b67b34d398300000000000000000000053d"
+                                                    target="_"
+                                                    rel="noreferrer"
+                                                >
+                                                    <div>
+                                                        <img
+                                                            src="/balancer.svg"
+                                                            alt=""
+                                                            className="me-2"
+                                                        />
+                                                        <span className="name">Balancer</span>
+                                                    </div>
+                                                    <div className="value mt-1">UZD/bb-a-USD</div>
+                                                    <svg
+                                                        width="8"
+                                                        height="8"
+                                                        viewBox="0 0 8 8"
+                                                        fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        className="external-icon"
+                                                    >
+                                                        <path
+                                                            d="M0.799805 1H6.7998V7"
+                                                            stroke="#959595"
+                                                        />
+                                                        <path
+                                                            d="M6.79901 1L1.00488 6.79545"
+                                                            stroke="#959595"
+                                                        />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        )}
+                                        {stakingMode === 'ZETH' && (
+                                            <div className="d-flex mt-3 gap-3 me-3">
+                                                <a
+                                                    className="gray-block small-block align-items-start stablecoin mb-2 mb-md-0 col-6 bg-white"
+                                                    href="https://curve.fi/#/ethereum/pools/factory-v2-284/deposit"
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                >
+                                                    <div>
+                                                        <img
+                                                            src="/curve-icon.svg"
+                                                            alt=""
+                                                            className="me-2"
+                                                        />
+                                                        <span className="name">Curve</span>
+                                                    </div>
+                                                    <div className="value mt-1">zETH / frxETH</div>
+                                                    <svg
+                                                        width="8"
+                                                        height="8"
+                                                        viewBox="0 0 8 8"
+                                                        fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        className="external-icon"
+                                                    >
+                                                        <path
+                                                            d="M0.799805 1H6.7998V7"
+                                                            stroke="#959595"
+                                                        />
+                                                        <path
+                                                            d="M6.79901 1L1.00488 6.79545"
+                                                            stroke="#959595"
+                                                        />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className="row ms-md-4">
-                            <div className="col-xxl-5 col-xs-12 mt-3 mt-xxl-0 h-100">
+                            <div className="col-xxl-6 col-xs-12 mt-3 mt-xxl-0 h-100">
                                 <div className="card m-xxl-3 mt-xxl-0 h-100">
-                                    <div className="card-body">
+                                    <div className="card-body pb-0">
                                         <div className="title">APY bar</div>
                                         {stakingMode === 'UZD' && (
                                             <div className="mt-3">
@@ -667,7 +800,7 @@ export const Uzd = (): JSX.Element => {
                                                         <div className="text-white">
                                                             Stake and Boost
                                                         </div>
-                                                        <div className="text-white">
+                                                        <div className="text-white d-flex align-items-center">
                                                             APY to{' '}
                                                             {!uzdStatLoading
                                                                 ? uzdStatData.info.aps.apy.toFixed(
@@ -675,9 +808,43 @@ export const Uzd = (): JSX.Element => {
                                                                   )
                                                                 : '0'}
                                                             % !
+                                                            <OverlayTrigger
+                                                                placement="top"
+                                                                overlay={
+                                                                    <Tooltip>
+                                                                        You can stake UZD and earn
+                                                                        higher yields by providing
+                                                                        liquidity to the most
+                                                                        profitable UZD pools. With
+                                                                        UZD Staking (APS), your
+                                                                        liquidity provision rewards
+                                                                        will be automatically
+                                                                        reinvested.
+                                                                    </Tooltip>
+                                                                }
+                                                                trigger={['hover', 'focus']}
+                                                            >
+                                                                <div className="hint">
+                                                                    <svg
+                                                                        width="13"
+                                                                        height="13"
+                                                                        viewBox="0 0 13 13"
+                                                                        fill="none"
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        className="ms-1 mb-1"
+                                                                    >
+                                                                        <path
+                                                                            fillRule="evenodd"
+                                                                            clipRule="evenodd"
+                                                                            d="M6.5 13C10.0899 13 13 10.0899 13 6.5C13 2.91015 10.0899 0 6.5 0C2.91015 0 0 2.91015 0 6.5C0 10.0899 2.91015 13 6.5 13ZM5.355 7.7464H6.49705C6.57884 7.40033 6.67637 7.15808 6.78963 7.01965C6.91548 6.86234 7.24268 6.60751 7.77122 6.25514C8.43191 5.82098 8.81573 5.3522 8.9227 4.84882C9.06742 4.23219 8.95102 3.75712 8.57348 3.42363C8.18966 3.09014 7.64852 2.9234 6.95009 2.9234C6.18243 2.9234 5.57523 3.10273 5.12848 3.46139C4.68803 3.82004 4.39229 4.3832 4.24128 5.15085H5.43995C5.54692 4.72298 5.70737 4.41466 5.92131 4.22589C6.14153 4.03713 6.44041 3.94274 6.81795 3.94274C7.49751 3.94274 7.77437 4.23848 7.64852 4.82995C7.61077 4.99984 7.52268 5.154 7.38425 5.29243C7.25211 5.43086 7.03818 5.59131 6.74244 5.77378C6.34603 6.0066 6.03457 6.27402 5.80804 6.57604C5.60669 6.83403 5.45568 7.22414 5.355 7.7464ZM4.83589 9.79452H6.21389L6.50648 8.44484H5.11904L4.83589 9.79452Z"
+                                                                            fill="#ffffff"
+                                                                        ></path>
+                                                                    </svg>
+                                                                </div>
+                                                            </OverlayTrigger>
                                                         </div>
                                                     </div>
-                                                    <div className="col-6 d-flex align-items-center pe-3 ps-3">
+                                                    <div className="col-6 d-flex align-items-center pe-3 ps-3 justify-content-end">
                                                         <Link to="/">
                                                             <button
                                                                 className={`zun-button w-100 ${
@@ -727,7 +894,7 @@ export const Uzd = (): JSX.Element => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-xxl-7 col-xs-12 d-flex flex-column mt-3 mt-xxl-0">
+                            <div className="col-xxl-6 col-xs-12 d-flex flex-column mt-3 mt-xxl-0">
                                 <div className="card">
                                     <div className="card-body">
                                         <div className="title">
@@ -749,7 +916,8 @@ export const Uzd = (): JSX.Element => {
                                         <RebaseHistory
                                             items={transactionList}
                                             emptyText="No rebase history"
-                                            className=""
+                                            className="mt-2"
+                                            type={stakingMode}
                                             onPageEnd={() => {
                                                 if (transHistoryPage !== -1) {
                                                     setLoadingHistory(true);
@@ -761,7 +929,7 @@ export const Uzd = (): JSX.Element => {
                                 </div>
                             </div>
                         </div>
-                        {/* <SupportersBar section="uzd" /> */}
+                        <SupportersBar section="uzd" className="row" />
                     </div>
                 </div>
             </div>

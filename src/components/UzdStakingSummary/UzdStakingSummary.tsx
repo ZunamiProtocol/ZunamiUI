@@ -139,7 +139,9 @@ export const UzdStakingSummary: React.FC<
             <div className="d-flex values w-100">
                 <div className="block flex-fill d-flex flex-column col-7 gap-1">
                     <div className="title">{`${logo === 'UZD' ? 'UZD' : 'zETH'} Balance`}</div>
-                    <div className="value vela-sans">{`$${deposit}`}</div>
+                    <div className="value vela-sans">
+                        {logo === 'UZD' ? `$${deposit}` : deposit}
+                    </div>
                 </div>
                 <div className="block flex-fill d-flex flex-column col-5 gap-1">
                     <div className="title">APY</div>
