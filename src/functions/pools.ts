@@ -9,6 +9,8 @@ export interface PoolInfo {
     tvlInZunami: number;
     type: string;
     address: string;
+    title?: string;
+    analytics: Object;
 }
 
 export interface ChartDataElement {
@@ -109,10 +111,15 @@ export const poolsChartdata: { [key: string]: any } = {
         value: 0,
         icon: '/uzd.svg',
     },
-    CONVEX_FRAX: {
-        title: 'Convex Finance - UZD/FRAXBP pool',
+    ALETH_FRAXETH: {
+        title: 'Convex Finance - alETHfrxETH pool',
         value: 0,
-        icon: '/uzd.svg',
+        icon: '/convex.svg',
+    },
+    SETH_FRAXETH: {
+        title: 'Convex Finance - sETH/frxETH pool',
+        value: 0,
+        icon: '/convex.svg',
     },
 };
 

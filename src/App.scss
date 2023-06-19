@@ -319,13 +319,12 @@ footer {
 }
 
 .panel {
-    background: #fffaf3;
-    border: 1px solid #f4efe1;
-    border-radius: 5px;
+    background: #f8f8f8;
+    border-radius: 20px;
 
     .panel-body {
-        padding: 10px;
-        font-size: 12px;
+        padding: 21px 26px;
+        font-size: 14px;
     }
 }
 
@@ -571,6 +570,14 @@ body.dark {
         color: #c8c8c8;
     }
 
+    .panel {
+        background-color: #494949;
+
+        a[href^='http'] {
+            color: red !important;
+        }
+    }
+
     .RebaseHistory {
         .header {
             div {
@@ -681,7 +688,6 @@ body.dark {
         }
     }
 
-    .panel,
     .supporters-links a {
         background: #161616;
     }

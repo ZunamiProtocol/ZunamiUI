@@ -40,6 +40,7 @@ import { ZunamiInfo, ZunamiInfoFetch, PoolsStats, Balance } from './Main.types';
 import useZapsLpBalance from '../hooks/useZapsLpBalance';
 import useUzdBalance from '../hooks/useUzdBalance';
 import useApsLpPrice from '../hooks/useApsLpPrice';
+import { LpMigrationModal } from '../components/LpMigrationModal/LpMigrationModal';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -350,10 +351,16 @@ export const Main = (): JSX.Element => {
     const [showMigrationModal2, setShowMigrationModal2] = useState(false);
     // ETH merge modal
     const [showMergeModal, setShowMergeModal] = useState(false);
+    // LP to UZD migration modal
+    const [showLpMigrationModal, setShowLpMigrationModal] = useState(false);
 
     useEffect(() => {
         setShowMergeModal(isContractPaused);
     }, [isContractPaused]);
+
+    useEffect(() => {
+        setShowLpMigrationModal(balance.toNumber() > 0);
+    }, [balance]);
 
     // migration modal
     useEffect(() => {
@@ -478,6 +485,13 @@ export const Main = (): JSX.Element => {
                     {!supportedChain && (
                         <UnsupportedChain text="You're using unsupported chain. Please, switch either to Ethereum or Binance network." />
                     )}
+                    <LpMigrationModal
+                        show={showLpMigrationModal}
+                        balance={balance}
+                        onHide={() => {
+                            console.log('Modal close');
+                        }}
+                    />
                     <BscMigrationModal
                         show={showMigrationModal}
                         balance={oldBscBalance[0]}

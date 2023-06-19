@@ -6,36 +6,32 @@ import { useWallet } from 'use-wallet';
 import useBalanceOf from '../hooks/useBalanceOf';
 import useUzdBalance from '../hooks/useUzdBalance';
 import useSushi from '../hooks/useSushi';
-import useUzdTotalSupply from '../hooks/useUzdTotalSupply';
+import useTotalSupply from '../hooks/useTotalSupply';
 import useEagerConnect from '../hooks/useEagerConnect';
 import { BIG_TEN, BIG_ZERO, getBalanceNumber, UZD_DECIMALS } from '../utils/formatbalance';
 import useUzdLpPrice from '../hooks/useUzdLpPrice';
 import BigNumber from 'bignumber.js';
 import { getAllowance } from '../utils/erc20';
 import { contractAddresses } from '../sushi/lib/constants';
-import { approve, APPROVE_SUM, getMasterChefContract } from '../sushi/utils';
-import { Preloader } from '../components/Preloader/Preloader';
+import { approve, APPROVE_SUM, getMasterChefContract, stakeAPS } from '../sushi/utils';
 import { log } from '../utils/logger';
 import { SideBar, ZunamiInfo, ZunamiInfoFetch } from '../components/SideBar/SideBar';
 import {
     zunamiInfoUrl,
-    curvePoolsApyUrl,
-    getTransHistoryUrl,
-    getHistoricalApyUrl,
+    getZethHistoricalApyUrl,
     getApsHistoricalApyUrl,
     getActiveStratsUrl,
-    getUzdStratsUrl,
     uzdStakingInfoUrl,
     getRebaseHistoryUrl,
+    getZethRebaseHistoryUrl,
+    getZethStratsUrl,
 } from '../api/api';
 import useFetch from 'react-fetch-hook';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
 import { UzdMigrationModal } from '../components/UzdMigrationModal/UzdMigrationModal';
 import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar';
 import { networks } from '../components/NetworkSelector/NetworkSelector';
-import { ActionSelector } from '../components/Form/ActionSelector/ActionSelector';
 import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
-import { SupportersBar } from '../components/SupportersBar/SupportersBar';
 import { YourData } from '../components/YourData/YourData';
 import useCrossChainBalances from '../hooks/useCrossChainBalances';
 import { UzdStakingSummary } from '../components/UzdStakingSummary/UzdStakingSummary';
@@ -44,6 +40,8 @@ import { Chart } from '../components/Chart/Chart';
 import { PoolsStats } from './Main.types';
 import { poolDataToChartData } from '../functions/pools';
 import { RebaseHistory } from '../components/RebaseHistory/RebaseHistory';
+import { Link } from 'react-router-dom';
+import useZapsLpBalance from '../hooks/useZapsLpBalance';
 
 interface CurvePoolInfo {
     apy: number;
@@ -125,25 +123,31 @@ export const Uzd = (): JSX.Element => {
     const { account, connect, ethereum, chainId } = useWallet();
     const sushi = useSushi();
     const masterChefContract = getMasterChefContract(sushi);
-    const zlpBalance = useBalanceOf(undefined, true);
     const uzdBalance = useUzdBalance();
+    const zethBalance = useUzdBalance(contractAddresses.zeth[1]);
     const deprecatedUzdBalance = useUzdBalance(contractAddresses.deprecated.v_1_1_uzd);
-    const uzdTotalSupply = useUzdTotalSupply();
-    const [zunLpValue, setZunLpValue] = useState('');
-    const [uzdValue, setUzdValue] = useState('');
+    const uzdTotalSupply = useTotalSupply(contractAddresses.uzd[1]);
+    const zethTotalSupply = useTotalSupply(contractAddresses.zeth[1]);
     const lpPrice = useUzdLpPrice();
-    const [zlpAllowance, setZlpAllowance] = useState(BIG_ZERO);
-    const [uzdAllowance, setUzdAllowance] = useState(BIG_ZERO);
-    const [pendingTx, setPendingTx] = useState(false);
-    // const [transactionError, setTransactionError] = useState<string | boolean | undefined>(false);
-    // const [transactionId, setTransactionId] = useState<string | undefined>(undefined);
-    const [mode, setMode] = useState('mint');
-    const [ltvValue, setLtvValue] = useState('0');
     const [supportedChain, setSupportedChain] = useState(true);
-    // const [withdrawAll, setWithdrawAll] = useState(false);
     const [hideMigrationModal, setHideMigrationModal] = useState(false);
-    const [showApproveBtn, setShowApproveBtn] = useState(false);
-    const balances = useCrossChainBalances(lpPrice);
+
+    const apsBalance = useZapsLpBalance();
+    const balances = useMemo(() => {
+        return [
+            {
+                chainId: 1,
+                value: apsBalance,
+                key: 'APS',
+            },
+            {
+                chainId: 1,
+                value: zethBalance,
+                key: 'ZETH',
+            },
+        ];
+    }, [apsBalance, zethBalance]);
+
     const [stakingMode, setStakingMode] = useState('UZD');
 
     const [histApyPeriod, setHistApyPeriod] = useState('week');
@@ -152,8 +156,8 @@ export const Uzd = (): JSX.Element => {
     // historical APY chart data
     useEffect(() => {
         const url =
-            stakingMode === 'USD'
-                ? getHistoricalApyUrl(histApyPeriod)
+            stakingMode === 'ZETH'
+                ? getZethHistoricalApyUrl(histApyPeriod)
                 : getApsHistoricalApyUrl(histApyPeriod);
 
         fetch(url)
@@ -168,8 +172,6 @@ export const Uzd = (): JSX.Element => {
             });
     }, [histApyPeriod, stakingMode]);
 
-    const [showApproveUzdBtn, setShowApproveUzdBtn] = useState(false);
-
     const {
         isLoading,
         data: zunData,
@@ -178,97 +180,19 @@ export const Uzd = (): JSX.Element => {
 
     const zunamiInfo = zunData as ZunamiInfo;
 
-    const { isLoading: isCurveLoading, data: curvePoolData } = useFetch(
-        curvePoolsApyUrl
-    ) as CurveInfoFetch;
-
-    const uzdCurvePool =
-        !isCurveLoading &&
-        curvePoolData.data.poolDetails.filter(
-            (pool: CurvePoolInfo) => pool.poolAddress === contractAddresses.curve.uzdPool
-        )[0];
-
     useEagerConnect(account ? account : '', connect, ethereum);
 
     useEffect(() => {
         setSupportedChain(chainId === 1);
     }, [chainId]);
 
-    // GZLP apprival
-    useEffect(() => {
-        let refreshInterval: NodeJS.Timeout | undefined = undefined;
-
-        if (!account || !ethereum) {
-            return;
-        }
-
-        const getZlpApprove = async () => {
-            const allowance = new BigNumber(
-                await getAllowance(
-                    ethereum,
-                    contractAddresses.zunami[1],
-                    sushi.contracts.uzdContract,
-                    // @ts-ignore
-                    account
-                )
-            );
-
-            setZlpAllowance(allowance);
-
-            const uzdAllowance = new BigNumber(
-                await getAllowance(
-                    ethereum,
-                    contractAddresses.uzd[1],
-                    sushi.contracts.uzdContract,
-                    // @ts-ignore
-                    account
-                )
-            );
-
-            setUzdAllowance(uzdAllowance);
-        };
-
-        getZlpApprove();
-
-        refreshInterval = setInterval(getZlpApprove, 10000);
-        return () => clearInterval(refreshInterval);
-    }, [account, ethereum, masterChefContract, sushi?.contracts.uzdContract]);
-
-    // LTV
-    useEffect(() => {
-        if (uzdTotalSupply.toNumber() > 0 && zunamiInfo) {
-            const val =
-                (Number(getFullDisplayBalance(uzdTotalSupply)) /
-                    Number(getBalanceNumber(zunamiInfo.tvl))) *
-                100;
-            setLtvValue(val.toFixed(2).toString());
-        }
-    }, [uzdTotalSupply, zunamiInfo]);
-
-    // Allowance button
-    useEffect(() => {
-        let show = false;
-
-        if (mode !== 'mint') {
-            return;
-        }
-
-        if (zlpAllowance.toNumber() === 0 && mode === 'mint') {
-            show = true;
-        }
-
-        if (zlpAllowance.toNumber() < Number(zunLpValue)) {
-            show = true;
-        }
-
-        setShowApproveBtn(show);
-    }, [mode, zlpAllowance, zunLpValue]);
-
     const { isLoading: uzdStatLoading, data: uzdStatData } = useFetch(
         uzdStakingInfoUrl
     ) as ZunamiInfoFetch;
 
-    const { data: activeStratsStat } = useFetch(getActiveStratsUrl());
+    const { data: activeStratsStat } = useFetch(
+        stakingMode === 'UZD' ? getActiveStratsUrl() : getZethStratsUrl()
+    );
     const poolStats = activeStratsStat as PoolsStats;
 
     const chartData = useMemo(() => {
@@ -285,36 +209,6 @@ export const Uzd = (): JSX.Element => {
               )
             : [];
     }, [stakingMode, uzdStatData, zunamiInfo, poolStats]);
-
-    useEffect(() => {
-        let show = false;
-
-        if (mode !== 'redeem') {
-            return;
-        }
-
-        if (uzdAllowance.toNumber() === 0 && mode === 'redeem') {
-            show = true;
-        }
-
-        if (uzdAllowance.toNumber() < Number(uzdValue)) {
-            show = true;
-        }
-
-        setShowApproveUzdBtn(show);
-    }, [mode, uzdAllowance, uzdValue]);
-
-    const depositDisabled =
-        Number(zunLpValue) <= 0 ||
-        isNaN(Number(zunLpValue)) ||
-        pendingTx ||
-        parseFloat(zunLpValue) > zlpBalance.dividedBy(BIG_TEN.pow(UZD_DECIMALS)).toNumber();
-
-    const withdrawDisabled =
-        Number(uzdValue) <= 0 ||
-        isNaN(Number(uzdValue)) ||
-        pendingTx ||
-        parseFloat(uzdValue) > uzdBalance.dividedBy(BIG_TEN.pow(UZD_DECIMALS)).toNumber();
 
     // v1.1 migration modal
     const [showMigrationModal, setShowMigrationModal] = useState(false);
@@ -339,7 +233,11 @@ export const Uzd = (): JSX.Element => {
         const getTransactionHistory = async () => {
             try {
                 setLoadingHistory(true);
-                let historyResponse = await fetch(getRebaseHistoryUrl(0, 70));
+                const url =
+                    stakingMode === 'UZD'
+                        ? getRebaseHistoryUrl(0, 70)
+                        : getZethRebaseHistoryUrl(0, 70);
+                let historyResponse = await fetch(url);
                 const items = await historyResponse.json();
 
                 if (!items.uzdRebases.length) {
@@ -369,7 +267,7 @@ export const Uzd = (): JSX.Element => {
         };
 
         getTransactionHistory();
-    }, [account, transHistoryPage, chainId]);
+    }, [account, transHistoryPage, chainId, stakingMode]);
 
     return (
         <React.Fragment>
@@ -521,7 +419,7 @@ export const Uzd = (): JSX.Element => {
                         <UzdStakingSummary
                             logo="UZD"
                             selected={stakingMode === 'UZD'}
-                            baseApy={'0'}
+                            baseApy={!uzdStatLoading ? uzdStatData.info.aps.apy.toFixed(2) : '-'}
                             deposit={formatUzd(uzdBalance)}
                             className="mt-3"
                             onSelect={() => {
@@ -531,9 +429,11 @@ export const Uzd = (): JSX.Element => {
                         <UzdStakingSummary
                             logo="ZETH"
                             selected={stakingMode === 'ZETH'}
-                            baseApy={'0'}
-                            deposit={'0'}
-                            className="mt-3 disabled"
+                            baseApy={
+                                !uzdStatLoading ? uzdStatData.info.zethOmnipool.apy.toFixed(2) : '-'
+                            }
+                            deposit={formatUzd(zethBalance)}
+                            className="mt-3"
                             onSelect={() => {
                                 setStakingMode('ZETH');
                             }}
@@ -548,7 +448,7 @@ export const Uzd = (): JSX.Element => {
                                         <div className="title">Info bar</div>
                                         <div className="row mt-3">
                                             <div className="col-6 col-md-4">
-                                                <div className="gray-block small-block align-items-start stablecoin mb-2 ps-3 me-3 me-lg-2">
+                                                <div className="gray-block small-block align-items-start stablecoin mb-2 mb-md-0 ps-3 me-3 me-lg-2">
                                                     <div>
                                                         <span className="name">
                                                             Total Circulating
@@ -557,7 +457,11 @@ export const Uzd = (): JSX.Element => {
                                                     <div className="vela-sans value mt-1">
                                                         $
                                                         {Number(
-                                                            getFullDisplayBalance(uzdTotalSupply)
+                                                            getFullDisplayBalance(
+                                                                stakingMode === 'UZD'
+                                                                    ? uzdTotalSupply
+                                                                    : zethTotalSupply
+                                                            )
                                                         ).toLocaleString('en', {
                                                             maximumFractionDigits: 0,
                                                         })}
@@ -565,23 +469,28 @@ export const Uzd = (): JSX.Element => {
                                                 </div>
                                             </div>
                                             <div className="col-6 col-md-4">
-                                                <div className="gray-block small-block align-items-start stablecoin mb-3 mb-lg-2 ps-3 me-0 me-lg-2">
+                                                <div className="gray-block small-block align-items-start stablecoin mb-3 mb-md-0 ps-3 me-0 me-lg-2">
                                                     <div>
                                                         <span className="name">Collateral</span>
                                                     </div>
                                                     <div className="vela-sans value mt-1">
                                                         {zunamiInfo
                                                             ? `$${Number(
-                                                                  getBalanceNumber(zunamiInfo.tvl)
+                                                                  getBalanceNumber(
+                                                                      stakingMode === 'UZD'
+                                                                          ? zunamiInfo.tvl
+                                                                          : uzdStatData.info
+                                                                                .zethOmnipool.tvl
+                                                                  )
                                                               ).toLocaleString('en', {
-                                                                  maximumFractionDigits: 0,
+                                                                  maximumFractionDigits: 2,
                                                               })}`
                                                             : 'n/a'}
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="col-12 col-md-4">
-                                                <div className="gray-block small-block align-items-start stablecoin mb-2 ps-3">
+                                                <div className="gray-block small-block align-items-start stablecoin mb-2 mb-md-0 ps-3">
                                                     <div>
                                                         <span className="name">
                                                             Contract address
@@ -589,7 +498,11 @@ export const Uzd = (): JSX.Element => {
                                                     </div>
                                                     <div className="value mt-1">
                                                         <a
-                                                            href="https://etherscan.io/address/0xb40b6608B2743E691C9B54DdBDEe7bf03cd79f1c"
+                                                            href={`https://etherscan.io/address/${
+                                                                stakingMode === 'UZD'
+                                                                    ? contractAddresses.uzd[1]
+                                                                    : contractAddresses.zeth[1]
+                                                            }`}
                                                             target="_blank"
                                                             rel="noreferrer"
                                                             className="d-flex align-items-center text-black"
@@ -672,7 +585,7 @@ export const Uzd = (): JSX.Element => {
                                         </div>
                                         <div className="d-flex mt-3 gap-3 me-3">
                                             <a
-                                                className="gray-block small-block align-items-start stablecoin mb-2 col-6 bg-white"
+                                                className="gray-block small-block align-items-start stablecoin mb-2 mb-md-0 col-6 bg-white"
                                                 href="https://curve.fi/#/ethereum/pools/factory-v2-284/deposit"
                                                 target="_blank"
                                                 rel="noreferrer"
@@ -705,7 +618,7 @@ export const Uzd = (): JSX.Element => {
                                                 </svg>
                                             </a>
                                             <a
-                                                className="gray-block small-block align-items-start stablecoin mb-2 col-6 bg-white"
+                                                className="gray-block small-block align-items-start stablecoin mb-2 mb-md-0 col-6 bg-white"
                                                 href="https://app.balancer.fi/#/ethereum/pool/0xec3626fee40ef95e7c0cbb1d495c8b67b34d398300000000000000000000053d"
                                                 target="_"
                                                 rel="noreferrer"
@@ -755,16 +668,27 @@ export const Uzd = (): JSX.Element => {
                                                             Stake and Boost
                                                         </div>
                                                         <div className="text-white">
-                                                            APY to 24% !
+                                                            APY to{' '}
+                                                            {!uzdStatLoading
+                                                                ? uzdStatData.info.aps.apy.toFixed(
+                                                                      2
+                                                                  )
+                                                                : '0'}
+                                                            % !
                                                         </div>
                                                     </div>
                                                     <div className="col-6 d-flex align-items-center pe-3 ps-3">
-                                                        <button
-                                                            className="zun-button w-100"
-                                                            onClick={() => {}}
-                                                        >
-                                                            Stake
-                                                        </button>
+                                                        <Link to="/">
+                                                            <button
+                                                                className={`zun-button w-100 ${
+                                                                    uzdBalance.toNumber() <= 0
+                                                                        ? 'disabled'
+                                                                        : ''
+                                                                }`}
+                                                            >
+                                                                Stake
+                                                            </button>
+                                                        </Link>
                                                     </div>
                                                 </div>
                                             </div>
@@ -775,9 +699,14 @@ export const Uzd = (): JSX.Element => {
                                                     <div>
                                                         <span className="name">Base APY now</span>
                                                     </div>
-                                                    <div className="vela-sans value mt-1">
-                                                        18.92%
-                                                    </div>
+                                                    {!uzdStatLoading && (
+                                                        <div className="vela-sans value mt-1">
+                                                            {stakingMode === 'UZD'
+                                                                ? uzdStatData.info.aps.apy
+                                                                : uzdStatData.info.zethOmnipool.apy}
+                                                            %
+                                                        </div>
+                                                    )}
                                                 </div>
                                                 <div className="gray-block small-block align-items-start stablecoin mb-2 col-6">
                                                     <div>
@@ -805,19 +734,18 @@ export const Uzd = (): JSX.Element => {
                                             {stakingMode === 'UZD' && 'UZD collateral'}
                                             {stakingMode !== 'UZD' && 'zETH collateral'}
                                         </div>
-                                        {stakingMode === 'UZD' && (
-                                            <Chart
-                                                data={chartData || []}
-                                                className="flex-grow-1 mt-3 mt-xxl-0"
-                                                orientation="column"
-                                            />
-                                        )}
-                                        {stakingMode !== 'UZD' && <div className="soon">soon</div>}
+                                        <Chart
+                                            data={chartData || []}
+                                            className="flex-grow-1 mt-3 mt-xxl-0"
+                                            orientation="column"
+                                        />
                                     </div>
                                 </div>
                                 <div className="card mt-3 mb-3 mb-xxl-0 flex-fill">
                                     <div className="card-body">
-                                        <div className="title">UZD Rebase History</div>
+                                        <div className="title">
+                                            {stakingMode === 'UZD' ? 'UZD' : 'zETH'} Rebase History
+                                        </div>
                                         <RebaseHistory
                                             items={transactionList}
                                             emptyText="No rebase history"

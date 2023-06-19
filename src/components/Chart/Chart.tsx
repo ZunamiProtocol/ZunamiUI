@@ -25,6 +25,12 @@ function getSecondIcon(item): string {
         case 'CONVEX_FRAX':
             result = 'convex.svg';
             break;
+        case 'ALETH_FRAXETH':
+            result = 'frx_eth.png';
+            break;
+        case 'SETH_FRAXETH':
+            result = 'seth.png';
+            break;
         default:
             result = item.icon;
             break;
