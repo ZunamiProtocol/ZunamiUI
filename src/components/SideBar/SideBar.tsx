@@ -103,7 +103,7 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                     <span className="ms-4 badge badge-pill badge-light d-none d-lg-flex align-items-center">
                         <span className="me-2">TVL</span>
                         <span className="text-primary me-2 vela-sans">
-                            {`${`$${Number(getBalanceNumber(tvl)).toLocaleString('en', {
+                            {`${`$${Number(tvl).toLocaleString('en', {
                                 maximumFractionDigits: 0,
                             })}`}`}
                         </span>
