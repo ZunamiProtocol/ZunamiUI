@@ -25,7 +25,7 @@ export const NavMenu = (props: NavMenuProps): JSX.Element => {
         // },
         {
             title: 'UZD & zETH',
-            urls: ['/uzd'],
+            urls: ['/zstables'],
             icon: <UzdIcon />,
         },
         {

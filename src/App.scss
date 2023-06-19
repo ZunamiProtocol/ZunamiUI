@@ -570,6 +570,21 @@ body.dark {
         color: #c8c8c8;
     }
 
+    .buttons {
+        > div,
+        > a {
+            background: #555555 !important;
+        }
+    }
+
+    .contract-buttons {
+        svg {
+            path {
+                fill: #fff;
+            }
+        }
+    }
+
     .panel {
         background-color: #494949;
 

@@ -77,8 +77,8 @@ function renderNotifications(notifications: Array<any>) {
                                 {notification.type === 'withdraw' && (
                                     <a href="/withdraw">Deposit & Withdraw &gt;</a>
                                 )}
-                                {notification.type === 'mint' && <a href="/uzd">UZD &gt;</a>}
-                                {notification.type === 'redeem' && <a href="/uzd">UZD &gt;</a>}
+                                {notification.type === 'mint' && <a href="/zstables">UZD &gt;</a>}
+                                {notification.type === 'redeem' && <a href="/zstables">UZD &gt;</a>}
                             </div>
                         </div>
                     </div>

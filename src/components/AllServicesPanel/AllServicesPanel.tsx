@@ -13,7 +13,7 @@ export const AllServicesPanel = (props: AllServicesPanelProps): JSX.Element => {
                             <span>Deposit & Withdraw</span>
                             <img src="/fast-menu-1.png" alt="" />
                         </a>
-                        <a href="/uzd" target="_blank" rel="noreferrer">
+                        <a href="/zstables" target="_blank" rel="noreferrer">
                             <span>UZD</span>
                             <img src="/fast-menu-2.png" alt="" />
                         </a>

@@ -35,7 +35,7 @@ function App() {
                         path="/withdraw"
                         component={() => <FinanceOperations operationName="withdraw" />}
                     />
-                    <Route path="/uzd" component={Uzd} />
+                    <Route path="/zstables" component={Uzd} />
                     <Route path="/analytics" component={Analytics} />
                 </Router>
             </Providers>

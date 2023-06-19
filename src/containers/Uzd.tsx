@@ -1,25 +1,21 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Header } from '../components/Header/Header';
 import './Uzd.scss';
-import { OverlayTrigger, Toast, ToastContainer, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Popover, Tooltip } from 'react-bootstrap';
 import { useWallet } from 'use-wallet';
-import useBalanceOf from '../hooks/useBalanceOf';
 import useUzdBalance from '../hooks/useUzdBalance';
 import useSushi from '../hooks/useSushi';
 import useTotalSupply from '../hooks/useTotalSupply';
 import useEagerConnect from '../hooks/useEagerConnect';
-import { BIG_TEN, BIG_ZERO, getBalanceNumber, UZD_DECIMALS } from '../utils/formatbalance';
+import { BIG_TEN, getBalanceNumber, UZD_DECIMALS } from '../utils/formatbalance';
 import useUzdLpPrice from '../hooks/useUzdLpPrice';
 import BigNumber from 'bignumber.js';
-import { getAllowance } from '../utils/erc20';
 import { contractAddresses } from '../sushi/lib/constants';
-import { approve, APPROVE_SUM, getMasterChefContract, stakeAPS } from '../sushi/utils';
 import { log } from '../utils/logger';
 import { SideBar, ZunamiInfo, ZunamiInfoFetch } from '../components/SideBar/SideBar';
 import {
     zunamiInfoUrl,
     getZethHistoricalApyUrl,
-    getApsHistoricalApyUrl,
     getActiveStratsUrl,
     uzdStakingInfoUrl,
     getRebaseHistoryUrl,
@@ -34,7 +30,6 @@ import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar
 import { networks } from '../components/NetworkSelector/NetworkSelector';
 import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
 import { YourData } from '../components/YourData/YourData';
-import useCrossChainBalances from '../hooks/useCrossChainBalances';
 import { UzdStakingSummary } from '../components/UzdStakingSummary/UzdStakingSummary';
 import { ApyChart } from '../components/ApyChart/ApyChart';
 import { Chart } from '../components/Chart/Chart';
@@ -68,18 +63,10 @@ interface iHistoryTransaction {
     value: number;
 }
 
-function convertZlpToUzd(zlpAmount: BigNumber, lpPrice: BigNumber): BigNumber {
-    return zlpAmount.multipliedBy(lpPrice);
-}
-
 const getFullDisplayBalance = (balance: BigNumber, decimals = 18, roundDown = false) => {
     const newNumber = new BigNumber(balance);
     return newNumber.dividedBy(BIG_TEN.pow(decimals)).decimalPlaces(2, 1).toString();
 };
-
-function convertUzdToZlp(uzdAmount: BigNumber, lpPrice: BigNumber): BigNumber {
-    return uzdAmount.dividedBy(lpPrice);
-}
 
 function formatUzd(sum: BigNumber) {
     return sum.dividedBy(BIG_TEN.pow(UZD_DECIMALS)).decimalPlaces(2, 1).toString();
@@ -125,10 +112,6 @@ const addToken = async (
 export const Uzd = (): JSX.Element => {
     const { account, connect, ethereum, chainId } = useWallet();
     useEagerConnect(account ? account : '', connect, ethereum);
-
-    const sushi = useSushi();
-    const masterChefContract = getMasterChefContract(sushi);
-    const uzdBalance = useUzdBalance();
     const zethBalance = useUzdBalance(contractAddresses.zeth[1]);
     const deprecatedUzdBalance = useUzdBalance(contractAddresses.deprecated.v_1_1_uzd);
     const uzdTotalSupply = useTotalSupply(contractAddresses.uzd[1]);
@@ -163,7 +146,7 @@ export const Uzd = (): JSX.Element => {
         const url =
             stakingMode === 'ZETH'
                 ? getZethHistoricalApyUrl(histApyPeriod)
-                : getApsHistoricalApyUrl(histApyPeriod);
+                : getHistoricalApyUrl(histApyPeriod);
 
         fetch(url)
             .then((response) => {
@@ -298,6 +281,52 @@ export const Uzd = (): JSX.Element => {
         getTransactionHistory();
     }, [account, transHistoryPage, chainId, stakingMode]);
 
+    const apyHintTarget = useRef(null);
+    const [showApyHint, setShowApyHint] = useState(false);
+
+    const apyBarMonthlyApy =
+        stakingMode === 'UZD'
+            ? isLoading || !zunamiInfo
+                ? 'n/a'
+                : `${zunamiInfo.monthlyAvgApy.toFixed(2)}%`
+            : uzdStatLoading
+            ? 0
+            : `${uzdStatData.info.zethOmnipool.monthlyAvgApy.toFixed(2)}%`;
+
+    const apyPopover = (
+        <Popover
+            onMouseEnter={() => setShowApyHint(true)}
+            onMouseLeave={() => setShowApyHint(false)}
+        >
+            <Popover.Body>
+                <div className="">
+                    <span>Average APY in 30 days: </span>
+                    <span className="text-primary">
+                        {stakingMode === 'UZD'
+                            ? isLoading || !zunamiInfo
+                                ? 'n/a'
+                                : `${zunamiInfo.monthlyAvgApy.toFixed(2)}%`
+                            : uzdStatLoading
+                            ? 0
+                            : `${uzdStatData.info.zethOmnipool.monthlyAvgApy.toFixed(2)}%`}
+                    </span>
+                </div>
+                <div className="">
+                    <span>Average APY in 90 days: </span>
+                    <span className="text-primary">
+                        {stakingMode === 'UZD'
+                            ? isLoading || !zunamiInfo
+                                ? 'n/a'
+                                : `${zunamiInfo.threeMonthAvgApy.toFixed(2)}%`
+                            : uzdStatLoading
+                            ? 0
+                            : `${uzdStatData.info.zethOmnipool.threeMonthAvgApy.toFixed(2)}%`}
+                    </span>
+                </div>
+            </Popover.Body>
+        </Popover>
+    );
+
     return (
         <React.Fragment>
             <MobileSidebar />
@@ -414,7 +443,7 @@ export const Uzd = (): JSX.Element => {
                                 <span className="text-muted mt-2">Deposit&Withdraw</span>
                             </a>
                             <a
-                                href="/uzd"
+                                href="/zstables"
                                 className="text-center d-flex flex-column text-decoration-none selected"
                             >
                                 <img src="/uzd.png" alt="" />
@@ -448,7 +477,9 @@ export const Uzd = (): JSX.Element => {
                         <UzdStakingSummary
                             logo="UZD"
                             selected={stakingMode === 'UZD'}
-                            baseApy={!uzdStatLoading ? uzdStatData.info.aps.apy.toFixed(2) : '-'}
+                            baseApy={
+                                !uzdStatLoading ? uzdStatData.info.omnipool.apy.toFixed(2) : '-'
+                            }
                             deposit={formatUzd(apsBalance)}
                             className="mt-3"
                             onSelect={() => {
@@ -484,7 +515,7 @@ export const Uzd = (): JSX.Element => {
                                                         </span>
                                                     </div>
                                                     <div className="vela-sans value mt-1">
-                                                        $
+                                                        {stakingMode === 'UZD' ? '$' : ''}
                                                         {Number(
                                                             getFullDisplayBalance(
                                                                 stakingMode === 'UZD'
@@ -503,8 +534,9 @@ export const Uzd = (): JSX.Element => {
                                                         <span className="name">Collateral</span>
                                                     </div>
                                                     <div className="vela-sans value mt-1">
+                                                        {stakingMode === 'UZD' ? '$' : ''}
                                                         {zunamiInfo
-                                                            ? `$${Number(
+                                                            ? `${Number(
                                                                   getBalanceNumber(
                                                                       stakingMode === 'UZD'
                                                                           ? zunamiInfo.tvl
@@ -555,7 +587,7 @@ export const Uzd = (): JSX.Element => {
                                                             </svg>
                                                             <span>Link</span>
                                                         </a>
-                                                        <div className="buttons position-static m-0 ms-2 p-0">
+                                                        <div className="buttons position-static m-0 ms-2 p-0 contract-buttons">
                                                             <div
                                                                 onClick={async () => {
                                                                     navigator.clipboard
@@ -573,10 +605,22 @@ export const Uzd = (): JSX.Element => {
                                                                         });
                                                                 }}
                                                             >
-                                                                <img
-                                                                    src="/copy-icon.svg"
-                                                                    alt="Copy token address"
-                                                                />
+                                                                <svg
+                                                                    width="13"
+                                                                    height="12"
+                                                                    viewBox="0 0 13 12"
+                                                                    fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                >
+                                                                    <path
+                                                                        d="M12.4983 4.3615C12.5002 4.16476 12.463 3.9696 12.3888 3.78739C12.3145 3.60519 12.2048 3.43958 12.0659 3.30022C11.927 3.16086 11.7618 3.05054 11.5798 2.97568C11.3979 2.90083 11.2028 2.86294 11.0061 2.86422C9.37233 2.86048 7.7113 2.86143 6.10492 2.86247L4.85633 2.86313C4.63953 2.86025 4.42502 2.90785 4.22979 3.00218C3.65913 3.28538 3.36796 3.7507 3.36437 4.38518C3.36035 5.09815 3.36123 5.82294 3.36208 6.52385C3.36243 6.82185 3.36267 7.11987 3.36279 7.4179C3.36279 7.72653 3.36261 8.03517 3.36224 8.34381C3.36163 9.04614 3.36097 9.77235 3.3638 10.4867C3.36721 11.3474 4.01923 11.9968 4.88049 11.9973C6.04261 11.9979 7.07618 11.9982 8.02996 11.9982C9.09537 11.9982 10.0612 11.9978 10.9938 11.9971C11.1915 11.9993 11.3877 11.9621 11.5708 11.8876C11.754 11.8132 11.9204 11.703 12.0605 11.5635C12.2006 11.424 12.3114 11.2579 12.3866 11.0751C12.4618 10.8922 12.4997 10.6962 12.4983 10.4986C12.5011 8.46527 12.5011 6.40045 12.4983 4.3615ZM11.3385 4.83339C11.3386 6.69732 11.3384 8.56121 11.3381 10.4251L11.3381 10.4466C11.3402 10.4946 11.3372 10.5427 11.3289 10.59C11.3127 10.6627 11.2713 10.7273 11.212 10.7725C11.1527 10.8176 11.0793 10.8403 11.0049 10.8365C10.7208 10.8383 10.4316 10.8381 10.1519 10.8377L7.22293 10.8374C6.45032 10.8373 5.67771 10.8375 4.9051 10.8381C4.82441 10.8459 4.74331 10.8278 4.6736 10.7864C4.62917 10.7593 4.59224 10.7215 4.5662 10.6764C4.54016 10.6314 4.52583 10.5805 4.52453 10.5285C4.52321 10.5027 4.52339 10.4769 4.52354 10.4511L4.52361 10.4259L4.52358 9.96893C4.52354 8.12424 4.52368 6.27953 4.52401 4.43478L4.52396 4.41185C4.52184 4.36421 4.52486 4.31648 4.53294 4.26949C4.54909 4.20053 4.58775 4.13892 4.64282 4.09439C4.6979 4.04986 4.76623 4.02495 4.83704 4.02359C4.85546 4.02283 4.87392 4.02269 4.89238 4.02269H4.91085L4.92867 4.02274L5.69842 4.02269C7.44309 4.02269 9.18777 4.02304 10.9325 4.02373C10.9966 4.02154 11.0607 4.02843 11.1229 4.0442C11.1841 4.06368 11.2377 4.1018 11.2762 4.15323C11.3147 4.20466 11.3361 4.26683 11.3375 4.33105C11.3388 4.35785 11.3386 4.38471 11.3385 4.41151L11.3385 4.43397L11.3385 4.83339Z"
+                                                                        fill="#000000"
+                                                                    />
+                                                                    <path
+                                                                        d="M2.44244 7.98377L2.4009 7.98122C2.37013 7.97923 2.34159 7.97748 2.31294 7.9772C2.27259 7.97687 2.23226 7.9772 2.19191 7.97762C2.12248 7.97819 2.0569 7.97885 1.99128 7.97587C1.94734 7.97659 1.9037 7.96856 1.8629 7.95223C1.8221 7.9359 1.78497 7.91161 1.75366 7.88078C1.72235 7.84994 1.69749 7.81318 1.68054 7.77264C1.66359 7.73209 1.65489 7.68858 1.65494 7.64464C1.65349 7.62336 1.65378 7.60199 1.65394 7.58062L1.65406 7.55613C1.65402 5.56285 1.65404 3.56956 1.65413 1.57628L1.65406 1.5542C1.65334 1.52564 1.65417 1.49705 1.65654 1.46858C1.66056 1.3865 1.69525 1.30893 1.75375 1.25122C1.81225 1.19352 1.89029 1.15989 1.97242 1.15701C1.99913 1.1545 2.02842 1.15493 2.05946 1.15521L2.09409 1.1555C2.61827 1.15621 3.14226 1.15643 3.66607 1.15616C5.0913 1.1571 6.56505 1.15809 8.01468 1.15119C8.18725 1.15167 8.3132 1.191 8.3891 1.27199C8.45858 1.34608 8.48865 1.45837 8.47844 1.60564C8.47342 1.67812 8.47472 1.75008 8.47598 1.81962C8.47654 1.85073 8.47714 1.88208 8.47714 1.91366C8.47714 1.92956 8.48026 1.9453 8.48635 1.95998C8.49243 1.97467 8.50134 1.98801 8.51258 1.99925C8.52382 2.01049 8.53717 2.0194 8.55185 2.02549C8.56653 2.03157 8.58228 2.0347 8.59817 2.0347H9.50742C9.53952 2.0347 9.5703 2.02194 9.593 1.99925C9.6157 1.97655 9.62845 1.94576 9.62845 1.91366C9.62845 1.86265 9.62883 1.81234 9.62923 1.76247C9.63011 1.65046 9.63096 1.5447 9.62758 1.43582C9.62384 1.24014 9.58013 1.04729 9.49914 0.86912C9.41815 0.69095 9.30158 0.53122 9.15661 0.399744C8.86953 0.130773 8.51146 0 8.06198 0H8.0569C6.612 0.00302586 5.14288 0.00260021 3.72212 0.00236395C3.25571 0.00222226 2.78932 0.00214222 2.32294 0.00212608C2.18697 0.00217449 2.05095 0.000518698 1.91509 0.00557745C1.56923 0.016238 1.23912 0.152667 0.986649 0.389294C0.662929 0.685545 0.499154 1.0747 0.499911 1.54588C0.502156 3.00061 0.501874 4.47969 0.501613 5.91011L0.501424 7.58592C0.501448 7.62776 0.502677 7.66956 0.504284 7.71135C0.515783 8.04331 0.640116 8.36142 0.856763 8.6132C1.07341 8.86497 1.36942 9.03536 1.69595 9.09624C1.86265 9.12019 2.03116 9.12907 2.19945 9.12277C2.26914 9.1222 2.34119 9.12163 2.41001 9.12348C2.41138 9.12353 2.41272 9.12353 2.4141 9.12353C2.44972 9.1228 2.48368 9.1083 2.50884 9.08305C2.5238 9.07178 2.53594 9.05718 2.5443 9.04041C2.55266 9.02364 2.55702 9.00515 2.55702 8.98642V8.10462C2.55702 8.07363 2.54515 8.04383 2.52383 8.02134C2.50251 7.99886 2.47338 7.98541 2.44244 7.98377Z"
+                                                                        fill="#000000"
+                                                                    />
+                                                                </svg>
                                                             </div>
                                                             <div
                                                                 onClick={async () => {
@@ -584,7 +628,7 @@ export const Uzd = (): JSX.Element => {
                                                                         ethereum,
                                                                         stakingMode === 'UZD'
                                                                             ? 'UZD'
-                                                                            : 'ethZLP',
+                                                                            : 'ZETH',
                                                                         UZD_DECIMALS,
                                                                         stakingMode === 'UZD'
                                                                             ? 'https://app.zunami.io/uzd-token.png'
@@ -752,8 +796,8 @@ export const Uzd = (): JSX.Element => {
                                         {stakingMode === 'ZETH' && (
                                             <div className="d-flex mt-3 gap-3 me-3">
                                                 <a
-                                                    className="gray-block small-block align-items-start stablecoin mb-2 mb-md-0 col-6 bg-white disabled"
-                                                    href="https://curve.fi/#/ethereum/pools/factory-v2-284/deposit"
+                                                    className="gray-block small-block align-items-start stablecoin mb-2 mb-md-0 col-6 bg-white"
+                                                    href="https://curve.fi/#/ethereum/pools/factory-v2-318/deposit"
                                                     target="_blank"
                                                     rel="noreferrer"
                                                 >
@@ -791,7 +835,7 @@ export const Uzd = (): JSX.Element => {
                             </div>
                         </div>
                         <div className="row ms-md-4">
-                            <div className="col-xxl-6 col-xs-12 mt-3 mt-xxl-0 h-100">
+                            <div className="col-xxl-6 col-xs-12 mt-3 mt-xxl-0 h-md-100">
                                 <div className="card m-xxl-3 mt-xxl-0 h-100">
                                     <div className="card-body pb-0">
                                         <div className="title">APY bar</div>
@@ -848,13 +892,7 @@ export const Uzd = (): JSX.Element => {
                                                     </div>
                                                     <div className="col-6 d-flex align-items-center pe-3 ps-3 justify-content-end">
                                                         <Link to="/">
-                                                            <button
-                                                                className={`zun-button w-100 ${
-                                                                    uzdBalance.toNumber() <= 0
-                                                                        ? 'disabled'
-                                                                        : ''
-                                                                }`}
-                                                            >
+                                                            <button className="zun-button w-100">
                                                                 Stake
                                                             </button>
                                                         </Link>
@@ -871,18 +909,54 @@ export const Uzd = (): JSX.Element => {
                                                     {!uzdStatLoading && (
                                                         <div className="vela-sans value mt-1">
                                                             {stakingMode === 'UZD'
-                                                                ? uzdStatData.info.aps.apy
+                                                                ? uzdStatData.info.omnipool.apy
                                                                 : uzdStatData.info.zethOmnipool.apy}
                                                             %
                                                         </div>
                                                     )}
                                                 </div>
                                                 <div className="gray-block small-block align-items-start stablecoin mb-2 col-6">
-                                                    <div>
+                                                    <div className="d-flex">
                                                         <span className="name">Average APY</span>
+                                                        <div
+                                                            ref={apyHintTarget}
+                                                            onClick={() =>
+                                                                setShowApyHint(!showApyHint)
+                                                            }
+                                                            className={'hint'}
+                                                        >
+                                                            <OverlayTrigger
+                                                                trigger={['hover', 'focus']}
+                                                                placement="right"
+                                                                overlay={apyPopover}
+                                                                show={showApyHint}
+                                                            >
+                                                                <svg
+                                                                    width="13"
+                                                                    height="13"
+                                                                    viewBox="0 0 13 13"
+                                                                    fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    className="ms-2 mb-1"
+                                                                    onMouseEnter={() =>
+                                                                        setShowApyHint(true)
+                                                                    }
+                                                                    onMouseLeave={() =>
+                                                                        setShowApyHint(false)
+                                                                    }
+                                                                >
+                                                                    <path
+                                                                        fillRule="evenodd"
+                                                                        clipRule="evenodd"
+                                                                        d="M6.5 13C10.0899 13 13 10.0899 13 6.5C13 2.91015 10.0899 0 6.5 0C2.91015 0 0 2.91015 0 6.5C0 10.0899 2.91015 13 6.5 13ZM6.23296 9.97261H4.98638L5.79002 7.12336H3.02741V5.87679H6.14162L6.94529 3.02741H8.19186L7.38819 5.87679L9.97261 5.87679V7.12336H7.03659L6.23296 9.97261Z"
+                                                                        fill="black"
+                                                                    />
+                                                                </svg>
+                                                            </OverlayTrigger>
+                                                        </div>
                                                     </div>
-                                                    <div className="vela-sans value mt-1">
-                                                        in 30, 90 days
+                                                    <div className="vela-sans value">
+                                                        {apyBarMonthlyApy}
                                                     </div>
                                                 </div>
                                             </div>
@@ -918,7 +992,7 @@ export const Uzd = (): JSX.Element => {
                                         <RebaseHistory
                                             items={transactionList}
                                             emptyText="No rebase history"
-                                            className="mt-2"
+                                            className="mt-3 mt-md-2"
                                             type={stakingMode}
                                             onPageEnd={() => {
                                                 if (transHistoryPage !== -1) {
