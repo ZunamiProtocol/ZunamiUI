@@ -356,13 +356,6 @@ export const FinanceOperations = (props: FinanceOperationsProps): JSX.Element =>
                                 <span className="text-muted mt-2">Dashboard</span>
                             </a>
                             <a
-                                href="/deposit"
-                                className="text-center d-flex flex-column text-decoration-none selected"
-                            >
-                                <img src="/deposit.png" alt="" />
-                                <span className="text-muted mt-2">Deposit&Withdraw</span>
-                            </a>
-                            <a
                                 href="/zstables"
                                 className="text-center d-flex flex-column text-decoration-none"
                             >

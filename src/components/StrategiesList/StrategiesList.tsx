@@ -37,8 +37,8 @@ function renderStratHeader(item: Strategy) {
             break;
         case 'EUSD_FRAXBP':
             icon = '/eusd.svg';
-            title = 'Convex Finance';
-            desc = 'eUSD/FRAXBP Pool';
+            title = 'Convex Frax Booster';
+            desc = 'eUSD/FRAXBP';
             break;
         case 'STAKE_DAO_MIM':
             icon = '/stake-dao.svg';
@@ -47,8 +47,8 @@ function renderStratHeader(item: Strategy) {
             break;
         case 'ALUSD_FRAXBP':
             icon = '/convex.svg';
-            title = 'Convex finance';
-            desc = 'ALUSD/FRAXBP Pool';
+            title = 'Convex Frax Booster';
+            desc = 'alUSD/FRAXBP';
             break;
     }
 
