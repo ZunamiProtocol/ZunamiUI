@@ -412,7 +412,7 @@ export const Analytics = (): JSX.Element => {
                             <div className="ps-md-4">
                                 <div className="container-md md-p-0">
                                     <div className="row">
-                                        <div className="col-md-6">
+                                        <div className="col-md-7">
                                             <div className="title">
                                                 Choose the pool to get more info
                                             </div>
@@ -469,7 +469,7 @@ export const Analytics = (): JSX.Element => {
                                                 ))}
                                             </div>
                                         </div>
-                                        <div className="col-md-6">
+                                        <div className="col-md-5">
                                             <div className="title mt-3 mt-md-0">Other sources</div>
                                             <div className="d-flex flex-wrap gap-3 mt-3">
                                                 <a href="#dune" className="gray-block disabled">

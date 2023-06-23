@@ -525,6 +525,7 @@ export const Uzd = (): JSX.Element => {
                                                         ).toLocaleString('en', {
                                                             maximumFractionDigits: 0,
                                                         })}
+                                                        {stakingMode !== 'UZD' ? ' ETH' : ''}
                                                     </div>
                                                 </div>
                                             </div>
@@ -547,6 +548,7 @@ export const Uzd = (): JSX.Element => {
                                                                   maximumFractionDigits: 2,
                                                               })}`
                                                             : 'n/a'}
+                                                        {stakingMode !== 'UZD' ? ' ETH' : ''}
                                                     </div>
                                                 </div>
                                             </div>

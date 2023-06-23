@@ -12,9 +12,9 @@
     }
 
     @media screen and (min-width: 1280px) {
-        width: 720px !important;
-        max-width: 720px !important;
-        min-width: 720px !important;
+        width: 650px !important;
+        max-width: 650px !important;
+        min-width: 650px !important;
     }
 
     @media screen and (min-width: $media1440) {
@@ -427,7 +427,7 @@
         gap: 10px;
 
         > .wrapper {
-            margin-right: 19px;
+            margin-right: 6px;
 
             > img {
                 width: 30px;
@@ -509,12 +509,12 @@
             cursor: pointer;
             background: #f0f0f0;
             border-radius: $border-radius;
-            padding: 15px 20px;
+            padding: 15px 18px 15px 20px;
             display: flex;
             align-items: center;
             justify-content: flex-start;
             gap: 10px;
-            width: 210px;
+            width: 215px;
             height: 66px;
             position: relative;
             text-decoration: none;

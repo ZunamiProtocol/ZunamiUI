@@ -203,11 +203,14 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
                     }
                 }}
             >
-                {availableNetworks.map((network) => (
+                {/* {availableNetworks.map((network) => (
                     <option key={network.key} value={network.key}>
                         {network.value}
                     </option>
-                ))}
+                ))} */}
+                <option key={networks[0].key} value={networks[0].key}>
+                    {networks[0].value}
+                </option>
             </select>
         </div>
     );
