@@ -121,6 +121,7 @@ export const Uzd = (): JSX.Element => {
     const [hideMigrationModal, setHideMigrationModal] = useState(false);
 
     const apsBalance = useZapsLpBalance();
+    const uzdBalance = useUzdBalance();
     const balances = useMemo(() => {
         return [
             {
@@ -473,7 +474,7 @@ export const Uzd = (): JSX.Element => {
                             baseApy={
                                 !uzdStatLoading ? uzdStatData.info.omnipool.apy.toFixed(2) : '-'
                             }
-                            deposit={formatUzd(apsBalance)}
+                            deposit={formatUzd(uzdBalance)}
                             className="mt-3"
                             onSelect={() => {
                                 setStakingMode('UZD');
@@ -988,7 +989,7 @@ export const Uzd = (): JSX.Element => {
                                             items={transactionList}
                                             emptyText="No rebase history"
                                             className="mt-3 mt-md-2"
-                                            type={stakingMode}
+                                            type={stakingMode === 'UZD' ? 'ZLP' : 'zETH'}
                                             onPageEnd={() => {
                                                 if (transHistoryPage !== -1) {
                                                     setLoadingHistory(true);

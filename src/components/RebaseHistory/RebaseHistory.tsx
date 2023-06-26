@@ -19,48 +19,6 @@ interface TransactionItem {
     type: string;
 }
 
-/**
- * Returns an icon for transaction
- * @param transaction
- * @returns
- */
-function getIconFromTransaction(transaction: TransactionItem) {
-    let icon = 'USDT';
-    let coinsCount = 0;
-
-    ['dai', 'usdc', 'usdt'].forEach((coin) => {
-        if (transaction[coin] > 0) {
-            coinsCount++;
-        }
-    });
-
-    if (transaction.dai > 0) {
-        icon = 'DAI';
-    } else if (transaction.usdc > 0) {
-        icon = 'USDC';
-    } else if (transaction.busd > 0) {
-        icon = 'BUSD';
-    }
-
-    if (transaction.lpAmount !== null) {
-        icon = 'LP';
-    }
-
-    if (['RECEIVED', 'SENT'].indexOf(transaction.type) !== -1) {
-        icon = 'uzd';
-    }
-
-    if (transaction.hasOwnProperty('type') && transaction.type === 'MINT') {
-        icon = 'UZD';
-    }
-
-    if (transaction.hasOwnProperty('type') && transaction.type === 'REDEEM') {
-        icon = 'LP';
-    }
-
-    return icon;
-}
-
 export const RebaseHistory: React.FC<TransactionHistoryProps & React.HTMLProps<HTMLDivElement>> = ({
     className,
     items,
@@ -68,8 +26,6 @@ export const RebaseHistory: React.FC<TransactionHistoryProps & React.HTMLProps<H
     emptyText,
     type,
 }) => {
-    const { chainId } = useWallet();
-
     const onScroll = (e: any) => {
         const areaHeight = e.target.offsetHeight;
         const totalScroll = e.target.scrollTop + areaHeight;
