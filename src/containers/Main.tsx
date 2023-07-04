@@ -1,12 +1,11 @@
 import React, { useEffect, useState, Suspense, lazy, useRef, useMemo } from 'react';
 import './Main.scss';
-import { BIG_ZERO, getBalanceNumber, getFullDisplayBalance } from '../utils/formatbalance';
+import { BIG_ZERO, getBalanceNumber } from '../utils/formatbalance';
 import useLpPrice from '../hooks/useLpPrice';
 import useBalanceOf from '../hooks/useBalanceOf';
 import useCrossChainBalances from '../hooks/useCrossChainBalances';
 import useFetch from 'react-fetch-hook';
 import {
-    zunamiInfoUrl,
     getHistoricalApyUrl,
     getActiveStratsUrl,
     uzdStakingInfoUrl,
@@ -36,7 +35,7 @@ import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPane
 import { SupportersBar } from '../components/SupportersBar/SupportersBar';
 import { StakingSummary } from '../components/StakingSummary/StakingSummary';
 import { DashboardCarousel } from '../components/DashboardCarousel/DashboardCarousel';
-import { ZunamiInfo, ZunamiInfoFetch, PoolsStats, Balance } from './Main.types';
+import { ZunamiInfoFetch, PoolsStats, Balance } from './Main.types';
 import useZapsLpBalance from '../hooks/useZapsLpBalance';
 import useUzdBalance from '../hooks/useUzdBalance';
 import useApsLpPrice from '../hooks/useApsLpPrice';
@@ -187,21 +186,22 @@ export const Main = (): JSX.Element => {
             : new BigNumber(-1);
     }, [lpPrice, balance, activeBalance]);
 
-    const { isLoading: isZunLoading, data: zunData } = useFetch(zunamiInfoUrl) as ZunamiInfoFetch;
     const { isLoading: uzdStatLoading, data: uzdStatData } = useFetch(
         uzdStakingInfoUrl
     ) as ZunamiInfoFetch;
-
-    const zunamiInfo = zunData as ZunamiInfo;
 
     const { data: activeStratsStat } = useFetch(
         stakingMode === 'USD' ? getActiveStratsUrl() : getUzdStratsUrl()
     );
     const poolStats = activeStratsStat as PoolsStats;
 
-    const poolBestAprDaily = zunamiInfo ? zunamiInfo.apr / 100 / 365 : 0;
-    const poolBestAprMonthly = zunamiInfo ? (zunamiInfo.apr / 100 / 365) * 30 : 0;
-    const poolBestApyYearly = zunamiInfo ? (zunamiInfo.apy / 100 / 365) * 30 * 12 : 0;
+    const poolBestAprDaily = !uzdStatLoading ? uzdStatData.info.omnipool.apr / 100 / 365 : 0;
+    const poolBestAprMonthly = !uzdStatLoading
+        ? (uzdStatData.info.omnipool.apr / 100 / 365) * 30
+        : 0;
+    const poolBestApyYearly = !uzdStatLoading
+        ? (uzdStatData.info.omnipool.apy / 100 / 365) * 30 * 12
+        : 0;
 
     const apsPoolBestAprDaily = uzdStatData ? uzdStatData.info.aps.apr / 100 / 365 : 0;
     const apsPoolBestAprMonthly = uzdStatData ? (uzdStatData.info.aps.apr / 100 / 365) * 30 : 0;
@@ -308,13 +308,13 @@ export const Main = (): JSX.Element => {
 
         const stratsData = poolStats.pools ? poolStats.pools : poolStats.strategies;
 
-        return poolStats && zunamiInfo && uzdStatData
+        return poolStats && uzdStatData
             ? poolDataToChartData(
                   stratsData,
-                  stakingMode === 'USD' ? zunamiInfo.tvl : uzdStatData.info.aps.tvl
+                  stakingMode === 'USD' ? uzdStatData.omnipool.tvl : uzdStatData.info.aps.tvl
               )
             : [];
-    }, [stakingMode, uzdStatData, zunamiInfo, poolStats]);
+    }, [stakingMode, uzdStatData, poolStats]);
 
     const [histApyPeriod, setHistApyPeriod] = useState('week');
     const [histApyData, setHistApyData] = useState([]);
@@ -412,9 +412,9 @@ export const Main = (): JSX.Element => {
                     <span>Average APY in 30 days: </span>
                     <span className="text-primary">
                         {stakingMode === 'USD'
-                            ? isZunLoading || !zunamiInfo
+                            ? uzdStatLoading || !uzdStatData
                                 ? 'n/a'
-                                : `${zunamiInfo.monthlyAvgApy.toFixed(2)}%`
+                                : `${uzdStatData.info.omnipool.monthlyAvgApy.toFixed(2)}%`
                             : uzdStatLoading
                             ? 0
                             : `${uzdStatData.info.aps.monthlyAvgApy.toFixed(2)}%`}
@@ -424,9 +424,9 @@ export const Main = (): JSX.Element => {
                     <span>Average APY in 90 days: </span>
                     <span className="text-primary">
                         {stakingMode === 'USD'
-                            ? isZunLoading || !zunamiInfo
+                            ? uzdStatLoading || !uzdStatData
                                 ? 'n/a'
-                                : `${zunamiInfo.threeMonthAvgApy.toFixed(2)}%`
+                                : `${uzdStatData.info.omnipool.threeMonthAvgApy.toFixed(2)}%`
                             : uzdStatLoading
                             ? 0
                             : `${uzdStatData.info.aps.threeMonthAvgApy.toFixed(2)}%`}
@@ -460,7 +460,7 @@ export const Main = (): JSX.Element => {
 
     const apyBarApy =
         stakingMode === 'USD'
-            ? isZunLoading || !zunamiInfo
+            ? uzdStatLoading || !uzdStatData
                 ? 'n/a'
                 : `${uzdStatData.info.omnipool.apy.toFixed(2)}%`
             : uzdStatLoading
@@ -469,9 +469,9 @@ export const Main = (): JSX.Element => {
 
     const apyBarMonthlyApy =
         stakingMode === 'USD'
-            ? isZunLoading || !zunamiInfo
+            ? uzdStatLoading || !uzdStatData
                 ? 'n/a'
-                : `${zunamiInfo.monthlyAvgApy.toFixed(2)}%`
+                : `${uzdStatData.info.omnipool.monthlyAvgApy.toFixed(2)}%`
             : uzdStatLoading
             ? 0
             : `${uzdStatData.info.aps.monthlyAvgApy.toFixed(2)}%`;
@@ -766,36 +766,6 @@ export const Main = (): JSX.Element => {
                                     setStakingMode('UZD');
                                 }}
                             />
-                            {/* <StakingSummary
-                                logo="USD"
-                                selected={stakingMode === 'USD'}
-                                baseApy={
-                                    uzdStatLoading || !uzdStatData
-                                        ? '0'
-                                        : uzdStatData.info.omnipool.apy.toFixed(2)
-                                }
-                                deposit={
-                                    account && userMaxWithdraw.toNumber() !== -1
-                                        ? getBalanceNumber(userMaxWithdraw)
-                                              .toNumber()
-                                              .toLocaleString('en')
-                                        : '0'
-                                }
-                                tvl={
-                                    zunamiInfo
-                                        ? Number(getBalanceNumber(zunamiInfo.tvl)).toLocaleString(
-                                              'en',
-                                              {
-                                                  maximumFractionDigits: 0,
-                                              }
-                                          )
-                                        : 'n/a'
-                                }
-                                className="mt-3"
-                                onSelect={() => {
-                                    setStakingMode('USD');
-                                }}
-                            /> */}
                         </SideBar>
                         <div className="col content-col dashboard-col">
                             <Header section="dashboard" />

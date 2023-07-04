@@ -5,8 +5,8 @@ import './Analytics.scss';
 import { useWallet } from 'use-wallet';
 import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar';
 import useEagerConnect from '../hooks/useEagerConnect';
-import { getActiveStratsUrl, zunamiInfoUrl } from '../api/api';
-import { PoolInfo, poolDataToChartData } from '../functions/pools';
+import { getActiveStratsUrl, uzdStakingInfoUrl } from '../api/api';
+import { poolDataToChartData } from '../functions/pools';
 import { CollateralsPieChart } from '../components/CollateralsPieChart/CollateralsPieChart';
 import { getBalanceNumber, toFixed } from '../utils/formatbalance';
 import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
@@ -15,10 +15,6 @@ import { SupportersBar } from '../components/SupportersBar/SupportersBar';
 import { PieChart2 } from '../components/PieChart/PieChart';
 import { StrategiesList } from '../components/StrategiesList/StrategiesList';
 import { WalletStatus } from '../components/WalletStatus_Analytics/WalletStatus';
-
-interface PoolsStats {
-    pools: Array<PoolInfo>;
-}
 
 interface PoolResponse {
     analytics: {
@@ -230,7 +226,7 @@ function renderTreasury(data) {
 }
 
 export const Analytics = (): JSX.Element => {
-    const { account, connect, ethereum, chainId } = useWallet();
+    const { account, connect, ethereum } = useWallet();
     useEagerConnect(account ? account : '', connect, ethereum);
     const [selectedStrat, setSelectedStrat] = useState<PoolResponse | null>(null);
     const [lastUpdateDt, setLastUpdateDt] = useState(new Date());
@@ -287,7 +283,7 @@ export const Analytics = (): JSX.Element => {
     const [selectedTabIndex, setSelectedTabIndex] = useState(2);
     const [chartData, setChartData] = useState([]);
     const [pools, setPools] = useState([]);
-    const [tvl, setTvl] = useState(0);
+    const [tvl, setTvl] = useState('0');
     const mainCoin = useMemo(() => {
         let coin = null;
 
@@ -307,13 +303,13 @@ export const Analytics = (): JSX.Element => {
     useEffect(() => {
         const getData = async () => {
             try {
-                const response = await fetch(zunamiInfoUrl);
+                const response = await fetch(uzdStakingInfoUrl);
                 const zunamiInfo = await response.json();
                 const stratsResponse = await fetch(getActiveStratsUrl());
                 const poolStats = await stratsResponse.json();
                 const chartItems =
                     poolStats && poolStats.pools && zunamiInfo
-                        ? poolDataToChartData(poolStats.pools, zunamiInfo.tvl)
+                        ? poolDataToChartData(poolStats.pools, zunamiInfo.info.omnipool.tvl)
                         : ([] as Array<PoolResponse>);
 
                 setChartData(chartItems);
@@ -343,7 +339,7 @@ export const Analytics = (): JSX.Element => {
             <AllServicesPanel />
             <div className="container">
                 <div className="row main-row h-100 AnalyticsContainer">
-                    <SideBar isMainPage={false}>
+                    <SideBar isMainPage={false} tvl={tvl}>
                         <div className="mobile-menu-title d-block d-lg-none">Menu</div>
                         <div
                             className="d-flex d-lg-none gap-3 mt-4 pb-3 mobile-menu"

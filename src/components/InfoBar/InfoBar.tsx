@@ -1,5 +1,5 @@
 import useFetch from 'react-fetch-hook';
-import { getActiveStratsUrl, zunamiInfoUrl } from '../../api/api';
+import { getActiveStratsUrl, uzdStakingInfoUrl } from '../../api/api';
 import './InfoBar.scss';
 import { BigNumber } from 'bignumber.js';
 import useSushi from '../../hooks/useSushi';
@@ -14,10 +14,20 @@ interface InfoBarProps {
 }
 
 interface ZunamiInfo {
-    tvl: BigNumber;
-    apy: number;
-    apr: number;
-    monthlyAvgApy: number;
+    info: {
+        aps: {
+            apy: number;
+            apr: number;
+            tvl: BigNumber;
+        };
+        omnipool: {
+            tvl: BigNumber;
+            apy: number;
+            apr: number;
+            monthlyAvgApy: number;
+        };
+        tvl: BigNumber;
+    };
 }
 
 interface ZunamiInfoFetch {
@@ -33,9 +43,11 @@ interface PoolsStats {
 export const InfoBar = (props: InfoBarProps): JSX.Element => {
     const sushi = useSushi();
     const { account, chainId } = useWallet();
-    const { isLoading: isZunLoading, data: zunData } = useFetch(zunamiInfoUrl) as ZunamiInfoFetch;
+    const { isLoading: isZunLoading, data: zunData } = useFetch(
+        uzdStakingInfoUrl
+    ) as ZunamiInfoFetch;
     const zunamiInfo = zunData as ZunamiInfo;
-    
+
     const { data: activeStratsStat } = useFetch(getActiveStratsUrl());
     const poolStat = activeStratsStat as PoolsStats;
     const [defaultPool, setDefautPool] = useState<PoolInfo>();
@@ -58,7 +70,6 @@ export const InfoBar = (props: InfoBarProps): JSX.Element => {
                 const poolInfo = poolsChartdata[pool[0].type];
                 setDefautPool(poolInfo);
             }
-            // debugger;
         };
 
         getDefaultPool();
@@ -93,7 +104,7 @@ export const InfoBar = (props: InfoBarProps): JSX.Element => {
                             <span className="value vela-sans">
                                 {isZunLoading
                                     ? 'n/a'
-                                    : `${zunamiInfo.monthlyAvgApy.toPrecision(3)}%`}
+                                    : `${zunamiInfo.info.omnipool.monthlyAvgApy.toPrecision(3)}%`}
                             </span>
                         </div>
                     </div>

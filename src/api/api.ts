@@ -5,7 +5,6 @@ export const poolStatsUrl = `${root}/pool/stats`;
 export const activeStratsUrl = `${root}/pool/active-pools-stats`;
 export const uzdStratsUrl = `${root}/aps/strategy/active-strategies-stats`;
 export const zethStratsUrl = `${root}/zeth-omnipool/strategy/active-strategies-stats`;
-export const zunamiInfoUrl = `${root}/zunami/info`;
 export const uzdStakingInfoUrl = `${root}/v2/zunami/info`;
 
 export const historicalApyUrl = `${root}/zunami/apy-chart`;

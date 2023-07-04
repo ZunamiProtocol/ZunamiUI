@@ -6,7 +6,6 @@ import useSushi from './useSushi';
 import { getMasterChefContract } from '../sushi/utils';
 import { log } from '../utils/logger';
 import { isETH } from '../utils/zunami';
-import { contractAddresses } from '../sushi/lib/constants';
 
 const useUzdLpPrice = () => {
     const { chainId, account } = useWallet();

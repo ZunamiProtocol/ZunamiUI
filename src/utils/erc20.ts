@@ -6,7 +6,6 @@ import ERC20 from '../actions/abi/erc20.abi.json';
 import { contractAddresses } from '../sushi/lib/constants';
 import { log } from '../utils/logger';
 import { daiAddress, fraxAddress, usdcAddress, usdtAddress } from './formatbalance';
-import { isPLG } from './zunami';
 
 export const getContract = (provider: Provider, address: string) => {
     const web3 = new Web3(provider);

@@ -4,7 +4,6 @@ import './Uzd.scss';
 import { OverlayTrigger, Popover, Tooltip } from 'react-bootstrap';
 import { useWallet } from 'use-wallet';
 import useUzdBalance from '../hooks/useUzdBalance';
-import useSushi from '../hooks/useSushi';
 import useTotalSupply from '../hooks/useTotalSupply';
 import useEagerConnect from '../hooks/useEagerConnect';
 import { BIG_TEN, getBalanceNumber, UZD_DECIMALS } from '../utils/formatbalance';
@@ -12,9 +11,8 @@ import useUzdLpPrice from '../hooks/useUzdLpPrice';
 import BigNumber from 'bignumber.js';
 import { contractAddresses } from '../sushi/lib/constants';
 import { log } from '../utils/logger';
-import { SideBar, ZunamiInfo, ZunamiInfoFetch } from '../components/SideBar/SideBar';
+import { SideBar, ZunamiInfoFetch } from '../components/SideBar/SideBar';
 import {
-    zunamiInfoUrl,
     getZethHistoricalApyUrl,
     getActiveStratsUrl,
     uzdStakingInfoUrl,
@@ -39,15 +37,6 @@ import { RebaseHistory } from '../components/RebaseHistory/RebaseHistory';
 import { Link } from 'react-router-dom';
 import useZapsLpBalance from '../hooks/useZapsLpBalance';
 import { SupportersBar } from '../components/SupportersBar/SupportersBar';
-
-interface CurvePoolInfo {
-    apy: number;
-    apyFormatted: string;
-    apyWeekly: number;
-    index: number;
-    poolAddress: string;
-    poolSymbol: string;
-}
 
 export interface CurveInfoFetch {
     data: any;
@@ -161,14 +150,6 @@ export const Uzd = (): JSX.Element => {
             });
     }, [histApyPeriod, stakingMode]);
 
-    const {
-        isLoading,
-        data: zunData,
-        error: zunError,
-    } = useFetch(zunamiInfoUrl) as ZunamiInfoFetch;
-
-    const zunamiInfo = zunData as ZunamiInfo;
-
     useEffect(() => {
         setSupportedChain(chainId === 1);
     }, [chainId]);
@@ -189,7 +170,7 @@ export const Uzd = (): JSX.Element => {
 
         const stratsData = poolStats.pools ? poolStats.pools : poolStats.strategies;
 
-        return poolStats && zunamiInfo && uzdStatData
+        return poolStats && uzdStatData
             ? poolDataToChartData(
                   stratsData,
                   stakingMode === 'UZD'
@@ -197,7 +178,7 @@ export const Uzd = (): JSX.Element => {
                       : uzdStatData.info.zethOmnipool.tvl
               )
             : [];
-    }, [stakingMode, uzdStatData, zunamiInfo, poolStats]);
+    }, [stakingMode, uzdStatData, poolStats]);
 
     // v1.1 migration modal
     const [showMigrationModal, setShowMigrationModal] = useState(false);
@@ -287,9 +268,9 @@ export const Uzd = (): JSX.Element => {
 
     const apyBarMonthlyApy =
         stakingMode === 'UZD'
-            ? isLoading || !zunamiInfo
+            ? uzdStatLoading || !uzdStatData
                 ? 'n/a'
-                : `${zunamiInfo.monthlyAvgApy.toFixed(2)}%`
+                : `${uzdStatData.info.omnipool.monthlyAvgApy.toFixed(2)}%`
             : uzdStatLoading
             ? 0
             : `${uzdStatData.info.zethOmnipool.monthlyAvgApy.toFixed(2)}%`;
@@ -304,9 +285,9 @@ export const Uzd = (): JSX.Element => {
                     <span>Average APY in 30 days: </span>
                     <span className="text-primary">
                         {stakingMode === 'UZD'
-                            ? isLoading || !zunamiInfo
+                            ? uzdStatLoading || !uzdStatData
                                 ? 'n/a'
-                                : `${zunamiInfo.monthlyAvgApy.toFixed(2)}%`
+                                : `${uzdStatData.info.omnipool.monthlyAvgApy.toFixed(2)}%`
                             : uzdStatLoading
                             ? 0
                             : `${uzdStatData.info.zethOmnipool.monthlyAvgApy.toFixed(2)}%`}
@@ -316,9 +297,9 @@ export const Uzd = (): JSX.Element => {
                     <span>Average APY in 90 days: </span>
                     <span className="text-primary">
                         {stakingMode === 'UZD'
-                            ? isLoading || !zunamiInfo
+                            ? uzdStatLoading || !uzdStatData
                                 ? 'n/a'
-                                : `${zunamiInfo.threeMonthAvgApy.toFixed(2)}%`
+                                : `${uzdStatData.info.omnipool.threeMonthAvgApy.toFixed(2)}%`
                             : uzdStatLoading
                             ? 0
                             : `${uzdStatData.info.zethOmnipool.threeMonthAvgApy.toFixed(2)}%`}
@@ -327,6 +308,15 @@ export const Uzd = (): JSX.Element => {
             </Popover.Body>
         </Popover>
     );
+
+    const [tvl, setTvl] = useState('0');
+
+    // TVL
+    useEffect(() => {
+        if (!uzdStatLoading && uzdStatData.tvl) {
+            setTvl(uzdStatData.tvl);
+        }
+    }, [uzdStatLoading, uzdStatData?.tvl]);
 
     return (
         <React.Fragment>
@@ -348,7 +338,7 @@ export const Uzd = (): JSX.Element => {
                             setHideMigrationModal(true);
                         }}
                     />
-                    <SideBar isMainPage={false}>
+                    <SideBar isMainPage={false} tvl={tvl}>
                         <div className="row">
                             <div className="col sidebar-links mt-3 d-none d-xxl-flex">
                                 <button
@@ -530,11 +520,12 @@ export const Uzd = (): JSX.Element => {
                                                     </div>
                                                     <div className="vela-sans value mt-1">
                                                         {stakingMode === 'UZD' ? '$' : ''}
-                                                        {zunamiInfo
+                                                        {uzdStatData
                                                             ? `${Number(
                                                                   getBalanceNumber(
                                                                       stakingMode === 'UZD'
-                                                                          ? zunamiInfo.tvl
+                                                                          ? uzdStatData.info
+                                                                                .omnipool.tvl
                                                                           : uzdStatData.info
                                                                                 .zethOmnipool.tvl
                                                                   )

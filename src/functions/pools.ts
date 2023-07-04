@@ -1,6 +1,5 @@
 import { BigNumber } from 'bignumber.js';
 import { getBalanceNumber } from '../utils/formatbalance';
-import { debug } from 'console';
 
 export interface PoolInfo {
     pid: number;

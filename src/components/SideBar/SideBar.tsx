@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Col } from 'react-bootstrap';
 import './SideBar.scss';
-import { getBalanceNumber } from '../../utils/formatbalance';
-import useFetch from 'react-fetch-hook';
 import { BigNumber } from 'bignumber.js';
-import { uzdStakingInfoUrl, zunamiInfoUrl } from '../../api/api';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 
 export interface ZunamiInfo {
@@ -27,18 +24,7 @@ interface SideBarProps {
 }
 
 export const SideBar = (props: SideBarProps): JSX.Element => {
-    const {
-        isLoading: isZunLoading,
-        data: zunData,
-        error: zunError,
-    } = useFetch(zunamiInfoUrl) as ZunamiInfoFetch;
-
-    const { isLoading: uzdStatLoading, data: uzdStatData } = useFetch(
-        uzdStakingInfoUrl
-    ) as ZunamiInfoFetch;
-
     const [tvl, setTvl] = useState('0');
-
     const [open, setOpen] = useState(false);
     const [gasPrice, setGasPrice] = useState('');
 
@@ -56,12 +42,8 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
 
         if (props.tvl) {
             setTvl(props.tvl);
-        } else {
-            if (!uzdStatLoading) {
-                setTvl(uzdStatData.tvl);
-            }
         }
-    }, [zunData, props.tvl, uzdStatLoading, uzdStatData]);
+    }, [props.tvl]);
 
     return (
         <Col id="sidebar-col" className={'SidebarColumn'}>
@@ -149,7 +131,7 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                         <span className="badge badge-pill badge-light d-flex align-items-center">
                             <span className="me-2">TVL</span>
                             <span className="text-primary me-2 vela-sans">
-                                {`${`$${Number(getBalanceNumber(tvl)).toLocaleString('en', {
+                                {`${`$${Number(tvl).toLocaleString('en', {
                                     maximumFractionDigits: 0,
                                 })}`}`}
                             </span>

@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { ethers } from 'ethers';
+
 import { contractAddresses } from './lib/constants';
 import { getContract } from '../utils/erc20';
 import {
@@ -98,12 +98,16 @@ export const getFarms = (sushi) => {
 // 10M
 export const APPROVE_SUM = '10000000000000000000000000000';
 
+const MaxUint256 = new BigNumber(
+    '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+);
+
 export const approve = async (
     provider,
     tokenAddress,
     masterChefContract,
     account,
-    apprSum = ethers.constants.MaxUint256,
+    apprSum = MaxUint256,
     spenderAddress = false
 ) => {
     debugger;
