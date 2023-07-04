@@ -557,7 +557,6 @@ input[type='checkbox'] {
 body.dark {
     background-color: #000 !important;
 
-    .WithdrawOptions,
     .TransactionHistory,
     .Slippage {
         background-color: #2a2a2a;
@@ -1209,14 +1208,6 @@ body.dark {
         }
     }
 
-    .WithdrawOptions {
-        background: linear-gradient(57.3deg, #141414 -9.62%, #171717 99.29%);
-
-        &__LiquidityBlock {
-            background: #222222 !important;
-        }
-    }
-
     .InfoBars {
         .InfoBar:first-child {
             background: linear-gradient(80.09deg, #141414 10.29%, #171717 96.88%) !important;
@@ -1565,11 +1556,6 @@ body.dark {
 
     .divider {
         background-color: #242424;
-    }
-
-    .WithdrawOptions__LiquidityBlock input[type='text'] {
-        border-color: transparent;
-        background-color: #292929 !important;
     }
 
     .CoinSelector,
