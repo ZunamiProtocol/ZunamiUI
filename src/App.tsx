@@ -13,12 +13,6 @@ import TransactionProvider from './contexts/Transactions';
 import ModalsProvider from './contexts/Modals';
 import config from './config';
 
-const FinanceOperations = React.lazy(() =>
-    import('./containers/FinanceOperations').then((module) => ({
-        default: module.FinanceOperations,
-    }))
-);
-
 const { INFURA_URL, CHAIN_ID } = config;
 
 function App() {
@@ -27,14 +21,6 @@ function App() {
             <Providers>
                 <Router>
                     <Route exact path="/" component={Main} />
-                    <Route
-                        path="/deposit"
-                        component={() => <FinanceOperations operationName="Deposit" />}
-                    />
-                    <Route
-                        path="/withdraw"
-                        component={() => <FinanceOperations operationName="withdraw" />}
-                    />
                     <Route path="/zstables" component={Uzd} />
                     <Route path="/analytics" component={Analytics} />
                 </Router>
