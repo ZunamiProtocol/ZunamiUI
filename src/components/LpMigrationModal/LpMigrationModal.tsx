@@ -6,11 +6,11 @@ import { useWallet } from 'use-wallet';
 import useSushi from './../../hooks/useSushi';
 import { isETH } from '../../utils/zunami';
 import { log } from '../../utils/logger';
+import { GAS_LIMIT_THRESHOLD } from '../../sushi/utils';
 
 interface LpMigrationModalProps {
     balance: BigNumber;
     show: boolean;
-    onWalletConnected?: Function;
     onHide?: Function;
 }
 
@@ -41,9 +41,21 @@ export const LpMigrationModal = (props: LpMigrationModalProps): JSX.Element => {
                 `Calling deposit('${fullBalance}', '${account}') of UZD contract ${zunamiContract.options.address}. LP → UZD migration.`
             );
 
+            const transactionParams = {
+                from: account,
+                maxPriorityFeePerGas: null,
+                maxFeePerGas: null,
+            };
+
+            const estimate = await zunamiContract.methods
+                .deposit(fullBalance, account)
+                .estimateGas({ from: account });
+
+            transactionParams.gas = Math.floor(estimate + estimate * GAS_LIMIT_THRESHOLD);
+
             await zunamiContract.methods
                 .deposit(fullBalance, account)
-                .send({ from: account })
+                .send(transactionParams)
                 .on('transactionHash', (transactionHash: string) => {
                     return transactionHash;
                 });

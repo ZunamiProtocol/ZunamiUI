@@ -13,7 +13,6 @@ import { log } from '../../utils/logger';
 interface UzdMigrationModalProps {
     balance: BigNumber;
     show: boolean;
-    onWalletConnected?: Function;
     onHide?: Function;
 }
 

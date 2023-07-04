@@ -17,7 +17,6 @@ interface BscMigrationModalProps {
     balance: BigNumber;
     lpPrice: BigNumber;
     show: boolean;
-    onWalletConnected?: Function;
     onHide?: Function;
 }
 
@@ -107,9 +106,7 @@ export const BscMigrationModal2 = (props: BscMigrationModalProps): JSX.Element =
                     return transactionHash;
                 });
 
-            setResult(
-                `Funds successfully migrated. Page will be reloaded in 7 seconds...`
-            );
+            setResult(`Funds successfully migrated. Page will be reloaded in 7 seconds...`);
 
             setTimeout(() => {
                 window.location.reload();
@@ -144,9 +141,9 @@ export const BscMigrationModal2 = (props: BscMigrationModalProps): JSX.Element =
                     v1.2
                 </h3>
                 <p className="text-center">
-                We apologize, but in order to continue using the protocol, you will need to migrate your funds
-                from the outdated version and to the new one. Don’t worry!
-                Your funds and income are saved. Funds will be migrated immediately.
+                    We apologize, but in order to continue using the protocol, you will need to
+                    migrate your funds from the outdated version and to the new one. Don’t worry!
+                    Your funds and income are saved. Funds will be migrated immediately.
                 </p>
                 <InfoBlock
                     title="Balance"

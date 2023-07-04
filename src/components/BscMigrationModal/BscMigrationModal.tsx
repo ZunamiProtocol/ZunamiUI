@@ -14,7 +14,6 @@ interface BscMigrationModalProps {
     balance: BigNumber;
     lpPrice: BigNumber;
     show: boolean;
-    onWalletConnected?: Function;
     onHide?: Function;
 }
 
