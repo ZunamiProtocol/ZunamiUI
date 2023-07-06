@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js/bignumber';
+import BigNumber from 'bignumber.js';
 
 import ethAbi from '../../actions/abi/Zunami.json';
 import bscAbi from '../../actions/abi/zunami_bsc.json';
