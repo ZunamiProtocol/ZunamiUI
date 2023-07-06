@@ -98,13 +98,10 @@ export const StrategiesList: React.FC<StrategiesListProps & React.HTMLProps<HTML
                             <div className="block">
                                 <div className="title">Amount, $</div>
                                 <div className="value">
-                                    {Number(
-                                        (((item.tvlInZunami / totalTvl) * 100).toFixed(2) *
-                                            getFullDisplayBalance(tvl)) /
-                                            100
-                                    ).toLocaleString('en', {
-                                        maximumFractionDigits: 0,
-                                    })}
+                                    {Number(getFullDisplayBalance(item.tvlInZunami)).toLocaleString(
+                                        'en',
+                                        { maximumFractionDigits: 0 }
+                                    )}
                                 </div>
                             </div>
                             <div className="block">

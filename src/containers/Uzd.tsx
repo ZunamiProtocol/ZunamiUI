@@ -431,7 +431,7 @@ export const Uzd = (): JSX.Element => {
                                 className="text-center d-flex flex-column text-decoration-none selected"
                             >
                                 <img src="/uzd.png" alt="" />
-                                <span className="text-muted mt-2">UZD</span>
+                                <span className="text-muted mt-2">UZD & zETH</span>
                             </a>
                             <a
                                 href="/analytics"

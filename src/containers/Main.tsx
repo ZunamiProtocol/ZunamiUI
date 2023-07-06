@@ -602,7 +602,7 @@ export const Main = (): JSX.Element => {
                                     className="text-center d-flex flex-column text-decoration-none"
                                 >
                                     <img src="/uzd.png" alt="" />
-                                    <span className="text-muted mt-2">UZD</span>
+                                    <span className="text-muted mt-2">UZD & zETH</span>
                                 </a>
                                 <a
                                     href="/analytics"
