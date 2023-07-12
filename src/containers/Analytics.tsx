@@ -286,7 +286,7 @@ export const Analytics = (): JSX.Element => {
     const [tvl, setTvl] = useState('0');
     const mainCoin = useMemo(() => {
         let coin = null;
-        const coins = selectedStrat.analytics.curveData.data.coins;
+        const coins = selectedStrat && selectedStrat.analytics.curveData.data.coins;
         const underlyingCoins =
             selectedStrat && selectedStrat.analytics.curveData.data.underlyingCoins;
 
