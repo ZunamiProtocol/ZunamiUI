@@ -1014,9 +1014,10 @@ export const Analytics = (): JSX.Element => {
                                                             }
                                                         </div>
                                                     </div>
-                                                    {renderTreasury(
-                                                        selectedStrat.analytics.treasuryData
-                                                    )}
+                                                    {selectedStrat.analytics.treasuryData &&
+                                                        renderTreasury(
+                                                            selectedStrat.analytics.treasuryData
+                                                        )}
                                                 </div>
                                             </div>
                                         </div>
