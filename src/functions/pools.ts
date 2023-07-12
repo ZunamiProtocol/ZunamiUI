@@ -105,6 +105,11 @@ export const poolsChartdata: { [key: string]: any } = {
         value: 0,
         icon: '/uzd.svg',
     },
+    STAKEDAO_CRVUSD_USDT: {
+        title: 'Stake DAO - crvUSD / USDT pool',
+        value: 0,
+        icon: '/stake-dao.svg',
+    },
     CONVEX_FRAX: {
         title: 'Convex Finance - UZD/FRAXBP pool',
         value: 0,

@@ -286,15 +286,22 @@ export const Analytics = (): JSX.Element => {
     const [tvl, setTvl] = useState('0');
     const mainCoin = useMemo(() => {
         let coin = null;
+        const coins = selectedStrat.analytics.curveData.data.coins;
+        const underlyingCoins =
+            selectedStrat && selectedStrat.analytics.curveData.data.underlyingCoins;
 
-        if (selectedStrat) {
-            selectedStrat.analytics.curveData.data.underlyingCoins.forEach((item) => {
+        if (selectedStrat && underlyingCoins) {
+            underlyingCoins.forEach((item) => {
                 selectedStrat.analytics.curveData.data.coins.forEach((item2) => {
                     if (item.address === item2.address) {
                         coin = item2;
                     }
                 });
             });
+        }
+
+        if (!coin && selectedStrat && coins) {
+            coin = coins[0];
         }
 
         return coin;

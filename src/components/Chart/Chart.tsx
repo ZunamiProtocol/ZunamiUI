@@ -22,6 +22,9 @@ function getSecondIcon(item): string {
         case 'FRAX_STAKEDAO':
             result = 'stake-dao.svg';
             break;
+        case 'STAKEDAO_CRVUSD_USDT':
+            result = 'stake-dao.svg';
+            break;
         case 'CONVEX_FRAX':
             result = 'convex.svg';
             break;
