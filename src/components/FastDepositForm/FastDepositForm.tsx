@@ -5,7 +5,6 @@ import { Input } from './Input/Input';
 import { Preloader } from '../Preloader/Preloader';
 import { useUserBalances } from '../../hooks/useUserBalances';
 import { WalletStatus } from '../WalletStatus/WalletStatus';
-import { DirectAction } from '../Form/DirectAction/DirectAction';
 import { useAllowanceStables } from '../../hooks/useAllowance';
 import useApprove from '../../hooks/useApprove';
 import useStake from '../../hooks/useStake';
@@ -22,15 +21,14 @@ import {
     UZD_DECIMALS,
 } from '../../utils/formatbalance';
 import { getFullDisplayBalance } from '../../utils/formatbalance';
-import { Link } from 'react-router-dom';
-import { useWallet } from 'use-wallet';
 import { log } from '../../utils/logger';
 import { isBSC, isETH, isPLG } from '../../utils/zunami';
 import { ActionSelector } from '../Form/ActionSelector/ActionSelector';
 import useApproveUzd from '../../hooks/useApproveUzd';
 import { contractAddresses } from '../../sushi/lib/constants';
-import useZapsLpBalance from '../../hooks/useZapsLpBalance';
 import BigNumber from 'bignumber.js';
+import { useAccount, useNetwork } from 'wagmi';
+import useBalanceOf from '../../hooks/useBalanceOf';
 
 function coinNameToAddress(coinName: string, chainId: number): string {
     if (chainId === 56 && coinName === 'USDT') {
@@ -116,7 +114,10 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     className,
 }) => {
     const userBalanceList = useUserBalances();
-    const { chainId, account } = useWallet();
+    const { chain } = useNetwork();
+    const chainId = chain && chain.id;
+    const { address: account } = useAccount();
+
     const [optimized, setOptimized] = useState(true);
     const [pendingApproval, setPendingApproval] = useState(false);
     const [coin, setCoin] = useState(stakingMode === 'UZD' ? 'UZD' : 'USDC');
@@ -127,7 +128,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const [transactionError, setTransactionError] = useState(false);
     const [coinIndex, setCoinIndex] = useState(-1);
     const approveList = useAllowanceStables();
-    const apsBalance = useZapsLpBalance();
+    const apsBalance = useBalanceOf(contractAddresses.aps[1]);
     const approvedTokens = useMemo(() => {
         return [
             approveList ? approveList[0].toNumber() > 0 : false,
@@ -397,75 +398,6 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                             </defs>
                         </svg>
                     )}
-                    {stakingMode === 'USD' && (
-                        <svg
-                            width="122"
-                            height="25"
-                            viewBox="0 0 122 25"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                d="M66.7179 4.5728L67.3246 3.96607C67.3904 3.90028 67.4685 3.84809 67.5545 3.81248C67.6405 3.77687 67.7326 3.75854 67.8256 3.75854C67.9187 3.75854 68.0108 3.77687 68.0968 3.81248C68.1827 3.84809 68.2608 3.90028 68.3266 3.96607L68.9334 4.5728C68.9992 4.6386 69.0514 4.7167 69.087 4.80266C69.1226 4.88863 69.1409 4.98076 69.1409 5.0738C69.1409 5.16685 69.1226 5.25898 69.087 5.34494C69.0514 5.43091 68.9992 5.50901 68.9334 5.57481L68.3266 6.18154C68.2608 6.24733 68.1827 6.29952 68.0968 6.33513C68.0108 6.37074 67.9187 6.38906 67.8256 6.38906C67.7326 6.38906 67.6405 6.37074 67.5545 6.33513C67.4685 6.29952 67.3904 6.24733 67.3246 6.18154L66.7179 5.57481C66.585 5.44193 66.5104 5.26172 66.5104 5.0738C66.5104 4.88589 66.585 4.70568 66.7179 4.5728ZM66.6881 17.6905V7.45201H68.9632V17.6905H66.6881Z"
-                                fill="black"
-                                className="letter"
-                            />
-                            <path
-                                d="M60.6025 7.16431C59.1631 7.16431 57.8716 7.86769 56.986 8.98319C56.5337 8.41539 55.9591 7.95696 55.305 7.64204C54.651 7.32712 53.9343 7.16382 53.2084 7.16431C52.8375 7.16409 52.4682 7.21144 52.1094 7.30519C51.7846 7.39205 51.4835 7.5509 51.2284 7.76996C50.9734 7.98902 50.7709 8.26268 50.6359 8.57065V7.44685H49.5663V7.44857H48.3737V17.687H50.6488V12.5678C50.6488 10.6832 51.7946 9.15515 53.2084 9.15515C54.6219 9.15515 55.768 10.4286 55.768 11.9993V17.687H58.0431V12.5678C58.0431 10.6832 59.1889 9.15515 60.6025 9.15515C62.0162 9.15515 63.1621 10.4286 63.1621 11.9993V17.687H65.4372V11.9993C65.4372 11.3643 65.3122 10.7356 65.0693 10.149C64.8263 9.56236 64.4702 9.02934 64.0213 8.58037C63.5723 8.13139 63.0393 7.77524 62.4527 7.53228C61.8661 7.28931 61.2374 7.16427 60.6025 7.16431Z"
-                                fill="black"
-                                className="letter"
-                            />
-                            <path
-                                d="M45.7444 7.4486V7.44687H44.6748V8.78045C44.4345 8.30528 44.0356 7.92904 43.5472 7.71681C42.6973 7.34973 41.7808 7.16167 40.855 7.16433C37.4784 7.16433 34.7408 9.58332 34.7408 12.5678C34.7408 15.5518 36.9051 17.9713 39.5756 17.9713C42.2457 17.9713 44.2875 15.807 44.2875 13.1363H42.0122C42.0122 13.8597 41.9095 14.555 41.5092 15.0569C41.2778 15.3472 40.9835 15.5811 40.6486 15.7411C40.3136 15.9011 39.9467 15.9829 39.5756 15.9805C38.1618 15.9805 37.0159 14.4524 37.0159 12.5678C37.0159 10.6833 38.7353 9.15518 40.855 9.15518C42.9754 9.15518 44.6945 10.6833 44.6945 12.5678V17.687H46.9696V7.4486H45.7444Z"
-                                fill="black"
-                                className="letter"
-                            />
-                            <path
-                                d="M29.0961 7.16445C28.1509 7.15827 27.215 7.35112 26.3492 7.73047C25.8666 7.94583 25.4752 8.32425 25.2437 8.79937V7.44699H24.1741V7.44872H22.9581V17.6872H25.2332V12.5679C25.2332 10.6834 26.9526 9.15529 29.0723 9.15529C30.4858 9.15529 31.6316 10.4287 31.6316 11.9994V17.6872H33.9067V12.014C33.9088 10.7339 33.4039 9.50503 32.5024 8.59624C31.6009 7.68744 30.3762 7.17265 29.0961 7.16445Z"
-                                fill="black"
-                                className="letter"
-                            />
-                            <path
-                                d="M19.279 7.44946V12.5687C19.279 14.4532 17.5596 15.9813 15.4402 15.9813C14.0264 15.9813 12.8806 14.7079 12.8806 13.1372V7.44946H10.6055V13.1227C10.6035 14.4027 11.1084 15.6315 12.0099 16.5403C12.9114 17.4491 14.1361 17.9639 15.4161 17.9722C16.3613 17.9784 17.2972 17.7855 18.163 17.4061C18.6459 17.1904 19.0376 16.8116 19.2693 16.3361V17.6879H21.5541V7.44946H19.279Z"
-                                fill="black"
-                                className="letter"
-                            />
-                            <path
-                                d="M0 8.55684V9.46551H6.19105L0 15.6211V17.6788H9.40386V15.6211H8.83835V15.6208H3.4169L3.75526 15.2317C3.77746 15.2083 3.79939 15.1847 3.82063 15.1604L4.43238 14.4613L9.40386 9.37047V7.4541H0V8.55684Z"
-                                fill="black"
-                                className="letter"
-                            />
-                            <path
-                                d="M121.999 12.0243L122 11.5219C122.002 7.68815 122.004 4.65992 120.566 2.71316C120.054 2.02784 119.388 1.46499 118.617 1.0681C117.498 0.458027 116.403 0.306795 115.437 0.173287L115.359 0.16295C114.476 0.0478633 113.586 -0.00672431 112.695 0.000660269H85.4619C84.5712 -0.00672431 83.6813 0.0478648 82.7981 0.162948L82.7203 0.173286C81.754 0.306794 80.6592 0.458025 79.5401 1.0681C78.7697 1.46499 78.1033 2.02784 77.5918 2.71316C76.1527 4.65992 76.1549 7.68815 76.1576 11.5219L76.1578 12.0243L76.1576 12.5267C76.1549 16.3605 76.1527 19.3887 77.5919 21.3355C78.1033 22.0208 78.7697 22.5836 79.5401 22.9805C80.6592 23.5906 81.754 23.7418 82.7203 23.8753L82.7981 23.8857C83.6813 24.0007 84.5712 24.0553 85.4619 24.048H112.695C113.586 24.0553 114.476 24.0007 115.359 23.8857L115.437 23.8753C116.403 23.7418 117.498 23.5906 118.617 22.9805C119.388 22.5836 120.054 22.0208 120.566 21.3355C122.004 19.3887 122.002 16.3605 122 12.5267L121.999 12.0243Z"
-                                fill="url(#paint0_linear_3_98048)"
-                            />
-                            <path
-                                d="M102.146 12.6543C101.299 12.1179 100.147 12.0463 98.8442 11.7855C97.5739 11.5316 96.4986 11.3187 96.4986 10.7432C96.4986 10.1677 97.5489 9.70067 98.8442 9.70067C100.14 9.70067 101.19 10.1677 101.19 10.7432H103.274C103.274 9.16014 101.291 7.87646 98.8442 7.87646C96.3973 7.87646 94.4139 9.16014 94.4139 10.7432C94.4139 11.477 94.8406 12.1469 95.5417 12.6543C96.3529 13.2408 97.557 13.3524 98.8442 13.6099C100.147 13.8705 101.45 14.1352 101.45 14.7823C101.45 15.4298 100.283 15.9553 98.8442 15.9553C97.4049 15.9553 96.2381 15.4298 96.2381 14.7823C96.2381 14.7385 96.2437 14.6953 96.2541 14.6522H94.1582C94.1546 14.6953 94.1533 14.7385 94.1533 14.7823C94.1533 16.4375 96.2533 17.7795 98.8442 17.7795C101.435 17.7795 103.535 16.4375 103.535 14.7823C103.535 13.9502 103.004 13.197 102.146 12.6543Z"
-                                fill="white"
-                            />
-                            <path
-                                d="M91.1946 12.8222C91.1946 14.55 89.6047 15.9511 87.6449 15.9511C86.3375 15.9511 85.278 14.7835 85.278 13.3434V8.12866H83.1742V13.3301C83.1723 14.5037 83.6393 15.6303 84.4729 16.4635C85.3065 17.2967 86.4389 17.7687 87.6226 17.7763C88.4966 17.782 89.3621 17.6052 90.1626 17.2574C90.6052 17.0433 90.9751 16.7319 91.1893 16.2692V17.5117H91.1946V17.5157H93.2984V8.12866H91.1946V12.8222Z"
-                                fill="white"
-                            />
-                            <path
-                                d="M113.139 5.00781V5.00818H113.136V9.38751C112.883 8.95327 112.496 8.61162 112.031 8.4134C111.264 8.06668 110.432 7.88347 109.589 7.87563C106.467 7.87563 103.936 10.0931 103.936 12.829C103.936 15.5645 105.937 17.7824 108.406 17.7824C108.993 17.7825 109.575 17.6678 110.117 17.4451C110.66 17.2223 111.152 16.8959 111.567 16.4843C111.982 16.0727 112.311 15.5841 112.536 15.0464C112.761 14.5086 112.876 13.9322 112.876 13.3502H110.773C110.773 14.7901 109.713 15.9574 108.406 15.9574C107.099 15.9574 106.04 14.5566 106.04 12.829C106.04 11.1014 107.63 9.70062 109.589 9.70062C111.55 9.70062 113.139 11.1015 113.139 12.829V17.5219H115.243V5.00781H113.139Z"
-                                fill="white"
-                            />
-                            <defs>
-                                <linearGradient
-                                    id="paint0_linear_3_98048"
-                                    x1="81.7937"
-                                    y1="21.4183"
-                                    x2="98.3272"
-                                    y2="1.19994e-06"
-                                    gradientUnits="userSpaceOnUse"
-                                >
-                                    <stop stopColor="#FE9604" />
-                                    <stop offset="1" stopColor="#FE9F04" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
-                    )}
                 </div>
             </div>
             <div className="FastDepositForm__MobileToggle">
@@ -606,8 +538,6 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
 
                                                 if (coin === 'UZD') {
                                                     tx = await onStake();
-                                                } else {
-                                                    tx = await onStake();
                                                 }
 
                                                 log(
@@ -683,21 +613,6 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                     Withdraw
                                 </button>
                             )}
-                        {/* {!pendingTx && (
-                            <DirectAction
-                                actionName="deposit"
-                                checked={optimized}
-                                disabled={chainId !== 1 || coinIndex === 4}
-                                hint={`${
-                                    chainId === 1
-                                        ? 'When using optimized deposit funds will be deposited within 24 hours and many times cheaper'
-                                        : 'When using deposit funds will be deposited within 24 hours, because users’ funds accumulate in one batch and distribute to the ETH network in Zunami App.'
-                                }`}
-                                onChange={(state: boolean) => {
-                                    setOptimized(state);
-                                }}
-                            />
-                        )} */}
                         {pendingTx && <Preloader className="ms-2" />}
                     </div>
                 )}

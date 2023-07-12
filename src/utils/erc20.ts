@@ -6,6 +6,8 @@ import ERC20 from '../actions/abi/erc20.abi.json';
 import { contractAddresses } from '../sushi/lib/constants';
 import { log } from '../utils/logger';
 import { daiAddress, fraxAddress, usdcAddress, usdtAddress } from './formatbalance';
+import { erc20ABI, Address } from 'wagmi';
+import { getContract as getContractWagmi, readContract } from '@wagmi/core';
 
 export const getContract = (provider: Provider, address: string) => {
     const web3 = new Web3(provider);
@@ -35,21 +37,21 @@ export const getUzdAllowance = async (
 };
 
 export const getAllowance = async (
-    provider: Provider,
-    tokenAddress: string,
+    tokenAddress: Address,
     masterChefContract: Contract,
-    account: string
-): Promise<string> => {
-    const lpContract = getContract(provider, tokenAddress);
+    account: Address
+): Promise<bigint> => {
     try {
-        // debugger;
-        const allowance: string = await lpContract.methods
-            .allowance(account, masterChefContract.options.address)
-            .call();
+        const allowance: bigint = await readContract({
+            address: tokenAddress,
+            abi: erc20ABI,
+            functionName: 'allowance',
+            args: [account, masterChefContract.options.address],
+        });
 
-        let debugName = lpContract.options.address;
+        let debugName: Address | string = tokenAddress;
 
-        switch (debugName.toLowerCase()) {
+        switch (tokenAddress.toLowerCase()) {
             case daiAddress.toLowerCase():
                 debugName = '(DAI)';
                 break;
@@ -71,97 +73,27 @@ export const getAllowance = async (
             `Executing of contract ${debugName} - allowance(${account}, ${masterChefContract.options.address}). Result: ${allowance}`
         );
         return allowance;
-    } catch (e) {
-        // debugger;
-        return '0';
-    }
-};
-
-/**
- * Calculates how many coins user will get in exchange to lp tokens
- * @param zunamiContract contract
- * @param lpBalance string Balance in LP tokens
- * @param coinIndex number Coin index (0 - DAI, 1 - USDC, 2 - USDT)
- * @returns string
- */
-export const calcWithdrawOneCoin = async (
-    lpBalance: string,
-    coinIndex: number,
-    account: string | null
-): Promise<string> => {
-    const contract = sushi.getEthContract();
-    contract.options.from = account;
-    log(
-        `ETH contract (${contract.options.address}) - calcWithdrawOneCoin(${lpBalance}, ${coinIndex}).`
-    );
-    let sum: string = 'Error';
-
-    try {
-        sum = await contract.methods.calcWithdrawOneCoin(lpBalance, coinIndex).call();
-        log(`ETH contract (${contract.options.address}) - calcWithdrawOneCoin result ${sum}`);
-    } catch {
-        const whaleWalletAccount = '0x9a9f10c8d28faf74358434ec7916acc25dbb41ca';
-        contract.options.from = whaleWalletAccount;
-        sum = await contract.methods.calcWithdrawOneCoin(lpBalance, coinIndex).call();
+    } catch (e: any) {
         log(
-            `ETH contract (${contract.options.address}) - calcWithdrawOneCoin result ${sum}. From address - ${whaleWalletAccount}`
+            `Error while getting allowance(${account}, ${masterChefContract.options.address}}): ${e.message}`
         );
+        return 0n;
     }
-
-    return sum;
 };
 
-/**
- * Calculates how many coins user will get in exchange to lp tokens
- * @param zunamiContract contract
- * @param lpBalance string Balance in LP tokens
- * @returns string
- */
-export const calcWithdrawOneCoinFrax = async (
-    lpBalance: string,
-    account: string | null
-): Promise<string> => {
-    const contract = sushi.getFraxContract();
-    contract.options.from = account;
-    log(`FRAX contract (${contract.options.address}) - calcWithdraw(${lpBalance}).`);
-    let sum: string = 'Error';
+export const getBalance = async (tokenAddress: Address, userAddress: Address): Promise<bigint> => {
     try {
-        sum = await contract.methods.calcWithdraw(lpBalance).call();
-    } catch {
-        const whaleWalletAccount = '0xc288540f761179dfcf5e64514282463515839df4';
-        contract.options.from = whaleWalletAccount;
-        sum = await contract.methods.calcWithdraw(lpBalance).call();
-    }
-    log(`FRAX contract (${contract.options.address}) - calcWithdraw result ${sum}`);
-    return sum;
-};
+        const balance: bigint = await readContract({
+            address: tokenAddress,
+            abi: erc20ABI,
+            functionName: 'balanceOf',
+            args: [userAddress],
+        });
 
-export const getBalance = async (
-    provider: Provider,
-    tokenAddress: string,
-    userAddress: string
-): Promise<string> => {
-    const lpContract = getContract(provider, tokenAddress);
-    try {
-        const balance: string = await lpContract.methods.balanceOf(userAddress).call();
+        log(`Balance for address ${tokenAddress} is ${balance}`);
         return balance;
-    } catch (e) {
-        return '0';
-    }
-};
-
-export const getLpPrice = async (masterChefContract: Contract): Promise<string> => {
-    return await masterChefContract.methods.lpPrice().call();
-};
-
-export const getUserLpAmount = async (
-    masterChefContract: Contract,
-    userAddress: string
-): Promise<string> => {
-    try {
-        const lpAmount: string = await masterChefContract.methods.balanceOf(userAddress).call();
-        return lpAmount;
-    } catch (e) {
-        return '0';
+    } catch (e: any) {
+        log(`Balance for address ${tokenAddress} is 0. Error: ${e.message}`);
+        return 0n;
     }
 };

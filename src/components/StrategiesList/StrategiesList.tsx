@@ -1,5 +1,3 @@
-import { format } from 'date-fns';
-import { useWallet } from 'use-wallet';
 import './StrategiesList.scss';
 import BigNumber from 'bignumber.js';
 import { getFullDisplayBalance } from '../../utils/formatbalance';

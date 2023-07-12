@@ -4,7 +4,7 @@ import { ReactComponent as ETHLogo } from './eth_logo.svg';
 import { ReactComponent as BSCLogo } from './bsc_logo.svg';
 import { ReactComponent as PLGLogo } from './polygon_logo.svg';
 import { log } from '../../utils/logger';
-import { useWallet } from 'use-wallet';
+import { useNetwork } from 'wagmi';
 
 interface NetworkSelectorProps extends React.HTMLProps<HTMLDivElement> {
     onNetworkChange?: Function;
@@ -98,7 +98,9 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
 }) => {
     const [activeNetwork, setActiveNetwork] = useState<Network>(networks[0]);
     const eth = window.ethereum;
-    const { chainId } = useWallet();
+    const { chain } = useNetwork();
+    const chainId = chain && chain.id;
+
     const [chainSupported, setChainSupported] = useState(false);
     const networksList = customNetworksList ? customNetworksList : networks;
     const availableNetworks = networksList.filter(
@@ -119,8 +121,6 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
         if (!hideActiveNetwork) {
             setActiveNetwork(defaultNetwork);
         }
-
-        // console.log(defaultNetwork);
 
         setChainSupported(supportedChainIds.indexOf(parseInt(activeNetwork.key, 16)) !== -1);
     }, [chainId, activeNetwork, hideActiveNetwork]);

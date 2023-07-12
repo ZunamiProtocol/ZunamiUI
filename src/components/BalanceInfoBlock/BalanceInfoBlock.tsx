@@ -29,8 +29,9 @@ interface InfoBlockProps {
 function renderBalances(balances: Array<Balance>, lpPrice: BigNumber) {
     return (
         <div className="BalanceInfoBlock__Balances">
-            {balances.map((balance) => (
-                <div className="balance" key={balance.chainId}>
+            {balances.map((balance, index) => (
+                // eslint-disable-next-line
+                <div className="balance" key={index}>
                     <div className="chain">{balance.chainId}</div>
                     <div className="sum">
                         {`$ ${getBalanceNumber(balance.value.multipliedBy(lpPrice))

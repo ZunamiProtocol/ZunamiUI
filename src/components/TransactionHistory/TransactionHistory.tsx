@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
-import { useWallet } from 'use-wallet';
 import './TransactionHistory.scss';
 import { getScanAddressByChainId } from '../../utils/zunami';
+import { useNetwork } from 'wagmi';
 
 interface TransactionHistoryProps {
     title: any;
@@ -65,7 +65,8 @@ function getIconFromTransaction(transaction: TransactionItem) {
 export const TransactionHistory: React.FC<
     TransactionHistoryProps & React.HTMLProps<HTMLDivElement>
 > = ({ className, title, items, onPageEnd, emptyText }) => {
-    const { chainId } = useWallet();
+    const { chain } = useNetwork();
+    const chainId = chain && chain.id;
 
     const onScroll = (e: any) => {
         const areaHeight = e.target.offsetHeight;

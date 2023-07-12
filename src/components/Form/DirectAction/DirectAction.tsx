@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import './DirectAction.scss';
-import { useWallet } from 'use-wallet';
+import { useNetwork } from 'wagmi';
 
 interface DirectActionProps {
     actionName: string;
@@ -11,7 +11,7 @@ interface DirectActionProps {
     disabled: boolean;
 }
 
-function getHintByProps(actionName: string, chainId: number) {
+function getHintByProps(actionName: string, chainId: number | undefined) {
     let hint =
         'When using optimized withdrawal funds will be withdrawn within 24 hours and many times cheaper. Optimized withdraw available only in all coins.';
 
@@ -35,7 +35,8 @@ function getHintByProps(actionName: string, chainId: number) {
 export const DirectAction = (props: DirectActionProps): JSX.Element => {
     const target = useRef(null);
     const [showHint, setShowHint] = useState(false);
-    const { chainId } = useWallet();
+    const { chain } = useNetwork();
+    const chainId = chain && chain.id;
     const hint = getHintByProps(props.actionName, chainId);
 
     return (

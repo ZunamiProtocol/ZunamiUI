@@ -1,12 +1,15 @@
 import { useState, useCallback, useEffect } from 'react';
 import './WalletStatus.scss';
-import { useWallet } from 'use-wallet';
 import { WalletsModal } from '../WalletsModal/WalletsModal';
 import { log } from '../../utils/logger';
 import { networks, Network } from '../NetworkSelector/NetworkSelector';
+import { useAccount, useDisconnect, useNetwork } from 'wagmi';
 
 export const WalletStatus = (): JSX.Element => {
-    const { account, reset, chainId } = useWallet();
+    const { chain } = useNetwork();
+    const chainId = chain && chain.id;
+    const { address: account } = useAccount();
+    const { disconnect } = useDisconnect();
     const [activeNetwork, setActiveNetwork] = useState<Network>(networks[0]);
     const [open, setOpen] = useState(false);
     const eth = window.ethereum;
@@ -29,9 +32,9 @@ export const WalletStatus = (): JSX.Element => {
     }, [chainId, activeNetwork]);
 
     const handleSignOutClick = useCallback(() => {
-        reset();
+        disconnect();
         window.localStorage.clear();
-    }, [reset]);
+    }, []);
 
     const [show, setShow] = useState(false);
 
@@ -219,7 +222,7 @@ export const WalletStatus = (): JSX.Element => {
                                                             method: 'wallet_addEthereumChain',
                                                             params: [chainParams],
                                                         })
-                                                        .catch((error) => {
+                                                        .catch((error: any) => {
                                                             log(error);
                                                         });
                                                 }

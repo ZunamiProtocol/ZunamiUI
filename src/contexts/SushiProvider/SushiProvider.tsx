@@ -3,8 +3,42 @@ import { useWallet } from 'use-wallet';
 import useEthExplorer from '../../hooks/useEthExplorer';
 import { Sushi } from '../../sushi';
 
+interface Contract {
+    defaultAccount: String;
+    options: {
+        address: String;
+    };
+    methods: {
+        pendingWithdrawals: Function;
+        pendingDeposits: Function;
+        balanceOf: Function;
+    };
+}
+
 export interface SushiContext {
-    sushi?: typeof Sushi;
+    // sushi?: typeof Sushi;
+    sushi?: {
+        contracts: {
+            fraxContract: Contract;
+            busdContract: Contract;
+            polygonContract: Contract;
+            apsContract: Contract;
+            masterChef: Contract;
+        };
+        plgContracts: {
+            polygonContract: Contract;
+        };
+        bscContracts: {
+            bscMasterChef: Contract;
+        };
+        getFraxContract: Function;
+        getEthContract: Function;
+        getApsContract: Function;
+        getUzdContract: Function;
+        getZETHContract: Function;
+        getBscContract: Function;
+        getPolygonContract: Function;
+    };
 }
 
 export const Context = createContext<SushiContext>({

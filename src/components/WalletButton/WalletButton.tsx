@@ -1,69 +1,47 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import './WalletButton.scss';
-import { useWallet } from 'use-wallet';
 import { networks, Network } from '../NetworkSelector/NetworkSelector';
 import { WalletsModal } from '../WalletsModal/WalletsModal';
+import { useAccount, useNetwork, useDisconnect } from 'wagmi';
 
 interface WalletButtonProps {}
 
 export const WalletButton = (
     props: WalletButtonProps & React.HTMLProps<HTMLButtonElement>
 ): JSX.Element => {
-    const { account, reset, chainId } = useWallet();
+    const { disconnect } = useDisconnect();
+    const { address: account, isDisconnected, isConnected } = useAccount();
+    const { chain } = useNetwork();
     const [activeNetwork, setActiveNetwork] = useState<Network>(networks[0]);
-    const [open, setOpen] = useState(false);
-    const eth = window.ethereum;
-    const [chainSupported, setChainSupported] = useState(false);
-    const networksList = networks;
-    const availableNetworks = networksList.filter(
-        (item) => [1, 56, 137].indexOf(parseInt(item.key, 16)) !== -1
-    );
 
     useEffect(() => {
-        if (!chainId) {
+        if (!chain) {
             return;
         }
 
         const defaultNetwork = networks.filter(
-            (network) => parseInt(network.key, 16) === chainId
+            (network) => parseInt(network.key, 16) === chain.id
         )[0];
 
         setActiveNetwork(defaultNetwork);
-    }, [chainId, activeNetwork]);
+    }, [chain, activeNetwork]);
 
     const handleSignOutClick = useCallback(() => {
-        reset();
+        disconnect();
         window.localStorage.clear();
-    }, [reset]);
+    }, []);
 
     const [show, setShow] = useState(false);
-
-    useEffect(() => {
-        if (!chainId) {
-            return;
-        }
-
-        const supportedChainIds = [1, 56, 137];
-
-        const defaultNetwork = networks.filter(
-            (network) => parseInt(network.key, 16) === chainId
-        )[0];
-
-        // if (!hideActiveNetwork) {
-        setActiveNetwork(defaultNetwork);
-        // }
-
-        if (!activeNetwork) {
-            setChainSupported(false);
-            return;
-        }
-
-        setChainSupported(supportedChainIds.indexOf(parseInt(activeNetwork.key, 16)) !== -1);
-    }, [chainId, activeNetwork]);
 
     const shortAddress = account
         ? `${account.substring(0, 6)}...${account.substring(account.length - 4)}`
         : '';
+
+    useEffect(() => {
+        if (isConnected) {
+            setShow(false);
+        }
+    }, [isConnected]);
 
     return (
         <React.Fragment>

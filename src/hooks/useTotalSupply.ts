@@ -1,12 +1,12 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 import { BIG_ZERO } from '../utils/formatbalance';
-import useWallet from './useWallet';
 import useSushi from './useSushi';
 import { contractAddresses } from '../sushi/lib/constants';
+import { useAccount } from 'wagmi';
 
-const useTotalSupply = (address) => {
-    const { account } = useWallet();
+const useTotalSupply = (address: string) => {
+    const { address: account } = useAccount();
     const [totalSupply, setTotalSupply] = useState(new BigNumber(BIG_ZERO));
     const sushi = useSushi();
 

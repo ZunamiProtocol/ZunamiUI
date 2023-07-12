@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useWallet } from 'use-wallet';
 import useSushi from './useSushi';
 import { log } from '../utils/logger';
+import { useAccount } from 'wagmi';
 
 const usePausedContract = (): boolean => {
     const [paused, setPaused] = useState(false);
-    const { isConnected } = useWallet();
+    const { isConnected } = useAccount();
     const sushi = useSushi();
 
     useEffect(() => {
@@ -14,11 +14,11 @@ const usePausedContract = (): boolean => {
         }
 
         const getContractState = async () => {
-            const contract = sushi.getEthContract()
+            const contract = sushi.getEthContract();
             const status = await contract.methods.paused().call();
             log(`Contract paused: ${status}`);
             setPaused(status);
-        }
+        };
 
         getContractState();
     }, [isConnected, sushi]);

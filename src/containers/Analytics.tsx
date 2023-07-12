@@ -2,9 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Header } from '../components/Header/Header';
 import { SideBar } from '../components/SideBar/SideBar';
 import './Analytics.scss';
-import { useWallet } from 'use-wallet';
 import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar';
-import useEagerConnect from '../hooks/useEagerConnect';
 import { getActiveStratsUrl, uzdStakingInfoUrl } from '../api/api';
 import { poolDataToChartData } from '../functions/pools';
 import { CollateralsPieChart } from '../components/CollateralsPieChart/CollateralsPieChart';
@@ -226,8 +224,6 @@ function renderTreasury(data) {
 }
 
 export const Analytics = (): JSX.Element => {
-    const { account, connect, ethereum } = useWallet();
-    useEagerConnect(account ? account : '', connect, ethereum);
     const [selectedStrat, setSelectedStrat] = useState<PoolResponse | null>(null);
     const [lastUpdateDt, setLastUpdateDt] = useState(new Date());
 

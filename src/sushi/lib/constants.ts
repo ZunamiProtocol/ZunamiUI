@@ -1,6 +1,48 @@
+import { Address } from 'wagmi';
 export const SUBTRACT_GAS_LIMIT = 100000;
 
-export const contractAddresses = {
+interface zunAddresses {
+    zunami: {
+        1: Address;
+        56: Address;
+        137: Address;
+    };
+    zunami_bsc_migrator: {
+        v1_1_to_1_2: Address;
+    };
+    weth: {
+        1: Address;
+    };
+    usdc: {
+        1: Address;
+    };
+    busd: {
+        56: Address;
+    };
+    uzd: {
+        1: Address;
+    };
+    frax: {
+        1: Address;
+    };
+    aps: {
+        1: Address;
+    };
+    zeth: {
+        1: Address;
+    };
+    deprecated: {
+        v_1_0_bsc: Address;
+        v_1_1_bsc: Address;
+        v_1_0_uzd: Address;
+        v_1_1_uzd: Address;
+    };
+    curve: {
+        uzdPool: Address;
+    };
+}
+
+export const contractAddresses: zunAddresses = {
     zunami: {
         // ETH
         1: '0x2ffCC661011beC72e1A9524E12060983E74D14ce',

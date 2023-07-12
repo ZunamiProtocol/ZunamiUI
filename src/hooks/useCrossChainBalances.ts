@@ -1,12 +1,12 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 import { BIG_ZERO } from '../utils/formatbalance';
-import { useWallet } from 'use-wallet';
 import useSushi from './useSushi';
 import { log } from '../utils/logger';
+import { useAccount } from 'wagmi';
 
 const useCrossChainBalances = (lpPrice: BigNumber) => {
-    const { account } = useWallet();
+    const { address: account } = useAccount();
     const sushi = useSushi();
 
     const [balances, setBalances] = useState([
@@ -51,7 +51,7 @@ const useCrossChainBalances = (lpPrice: BigNumber) => {
                 return;
             }
 
-            setBalances([
+            const result = [
                 {
                     chainId: 'eth',
                     key: '0x1',
@@ -67,7 +67,11 @@ const useCrossChainBalances = (lpPrice: BigNumber) => {
                     key: '0x89',
                     value: new BigNumber(plgBalance),
                 },
-            ]);
+            ];
+
+            log(`Crosschain balances: ${result}`);
+
+            setBalances(result);
         };
 
         getBalances();

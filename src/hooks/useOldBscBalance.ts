@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 import { BIG_ZERO } from '../utils/formatbalance';
-import useWallet from './useWallet';
 import useSushi from './useSushi';
 import { getMasterChefContract } from '../sushi/utils';
 import Web3 from 'web3';
@@ -9,9 +8,11 @@ import bscAbi from '../actions/abi/zunami_bsc.json';
 import { isETH } from '../utils/zunami';
 import { log } from '../utils/logger';
 import { contractAddresses } from '../sushi/lib/constants';
+import { useAccount, useNetwork, Address, erc20ABI } from 'wagmi';
 
-async function getDeprecatedBalance(address: string, account: string) : Promise<string> {
+async function getDeprecatedBalance(address: string, account: string): Promise<string> {
     const web3 = new Web3(new Web3.providers.HttpProvider('https://bscrpc.com'));
+    // eslint-disable-next-line
     const contract = new web3.eth.Contract(bscAbi);
     contract.options.from = account;
     contract.options.address = address;
@@ -27,24 +28,28 @@ const useOldBscBalance = () => {
         new BigNumber(BIG_ZERO), // 1.1
     ]);
 
-    const { chainId, account } = useWallet();
+    const { chain } = useNetwork();
+    const { address: account } = useAccount();
+    const chainId = chain && chain.id;
+
     const isEth = isETH(chainId);
     const sushi = useSushi();
     const masterChefContract = getMasterChefContract(sushi);
 
     useEffect(() => {
         if (!account || !chainId || !masterChefContract) {
-            setBalance([
-                BIG_ZERO,
-                BIG_ZERO
-            ]);
+            setBalance([BIG_ZERO, BIG_ZERO]);
             return;
         }
 
         const getBalance = async () => {
             setBalance([
-                new BigNumber(await getDeprecatedBalance(contractAddresses.deprecated.v_1_0_bsc, account)),
-                new BigNumber(await getDeprecatedBalance(contractAddresses.deprecated.v_1_1_bsc, account)),
+                new BigNumber(
+                    await getDeprecatedBalance(contractAddresses.deprecated.v_1_0_bsc, account)
+                ),
+                new BigNumber(
+                    await getDeprecatedBalance(contractAddresses.deprecated.v_1_1_bsc, account)
+                ),
             ]);
         };
 

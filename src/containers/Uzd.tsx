@@ -2,10 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Header } from '../components/Header/Header';
 import './Uzd.scss';
 import { OverlayTrigger, Popover, Tooltip } from 'react-bootstrap';
-import { useWallet } from 'use-wallet';
-import useUzdBalance from '../hooks/useUzdBalance';
 import useTotalSupply from '../hooks/useTotalSupply';
-import useEagerConnect from '../hooks/useEagerConnect';
 import { BIG_TEN, getBalanceNumber, UZD_DECIMALS } from '../utils/formatbalance';
 import useUzdLpPrice from '../hooks/useUzdLpPrice';
 import BigNumber from 'bignumber.js';
@@ -35,8 +32,9 @@ import { PoolsStats } from './Main.types';
 import { poolDataToChartData } from '../functions/pools';
 import { RebaseHistory } from '../components/RebaseHistory/RebaseHistory';
 import { Link } from 'react-router-dom';
-import useZapsLpBalance from '../hooks/useZapsLpBalance';
 import { SupportersBar } from '../components/SupportersBar/SupportersBar';
+import useBalanceOf from '../hooks/useBalanceOf';
+import { useAccount, useNetwork } from 'wagmi';
 
 export interface CurveInfoFetch {
     data: any;
@@ -99,18 +97,20 @@ const addToken = async (
 };
 
 export const Uzd = (): JSX.Element => {
-    const { account, connect, ethereum, chainId } = useWallet();
-    useEagerConnect(account ? account : '', connect, ethereum);
-    const zethBalance = useUzdBalance(contractAddresses.zeth[1]);
-    const deprecatedUzdBalance = useUzdBalance(contractAddresses.deprecated.v_1_1_uzd);
+    const { address: account } = useAccount();
+    const { chain } = useNetwork();
+    const chainId = chain && chain.id;
+
+    const zethBalance = useBalanceOf(contractAddresses.zeth[1]);
+    const deprecatedUzdBalance = useBalanceOf(contractAddresses.deprecated.v_1_1_uzd);
     const uzdTotalSupply = useTotalSupply(contractAddresses.uzd[1]);
     const zethTotalSupply = useTotalSupply(contractAddresses.zeth[1]);
     const lpPrice = useUzdLpPrice();
     const [supportedChain, setSupportedChain] = useState(true);
     const [hideMigrationModal, setHideMigrationModal] = useState(false);
 
-    const apsBalance = useZapsLpBalance();
-    const uzdBalance = useUzdBalance();
+    const apsBalance = useBalanceOf(contractAddresses.aps[1]);
+    const uzdBalance = useBalanceOf(contractAddresses.uzd[1]);
     const balances = useMemo(() => {
         return [
             {

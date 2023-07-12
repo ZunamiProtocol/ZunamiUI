@@ -33,7 +33,7 @@ export const BscMigrationModal2 = (props: BscMigrationModalProps): JSX.Element =
     const eth = window.ethereum;
 
     useEffect(() => {
-        if (!account || chainId !== 56 || !props.show) {
+        if (!account || chainId !== 56 || !props.show || !sushi) {
             return;
         }
 
@@ -69,8 +69,8 @@ export const BscMigrationModal2 = (props: BscMigrationModalProps): JSX.Element =
             const tx = zunamiContract.methods
                 .approve(contractAddresses.zunami_bsc_migrator.v1_1_to_1_2, ALLOWANCE_SUM)
                 .send({ from: account })
-                .on('transactionHash', (tx) => {
-                    return tx.transactionHash;
+                .on('transactionHash', (transactionHash: string) => {
+                    return transactionHash;
                 });
             if (!tx) {
                 setPendingGZLP(false);

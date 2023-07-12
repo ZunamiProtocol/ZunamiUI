@@ -31,7 +31,7 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
     const eth = window.ethereum;
 
     useEffect(() => {
-        if (!account || chainId !== 56 || !props.show) {
+        if (!account || chainId !== 56 || !props.show || !sushi) {
             return;
         }
 
@@ -67,8 +67,8 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
             const tx = zunamiContract.methods
                 .approve(OLD_BSC_GATE_ADDRESS, ALLOWANCE_SUM)
                 .send({ from: account })
-                .on('transactionHash', (tx) => {
-                    return tx.transactionHash;
+                .on('transactionHash', (transactionHash: string) => {
+                    return transactionHash;
                 });
             if (!tx) {
                 setPendingGZLP(false);
@@ -100,7 +100,7 @@ export const BscMigrationModal = (props: BscMigrationModalProps): JSX.Element =>
             await zunamiContract.methods
                 .delegateWithdrawal(props.balance.toFixed(0).toString())
                 .send({ from: account })
-                .on('transactionHash', (transactionHash) => {
+                .on('transactionHash', (transactionHash: string) => {
                     return transactionHash;
                 });
 

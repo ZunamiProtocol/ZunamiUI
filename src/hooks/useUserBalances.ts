@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
-import { useWallet } from 'use-wallet';
 import { getBalance } from '../utils/erc20';
 import {
     BIG_ZERO,
@@ -15,6 +14,7 @@ import {
 import { log } from '../utils/logger';
 import { isBSC, isETH, isPLG } from '../utils/zunami';
 import { contractAddresses } from '../sushi/lib/constants';
+import { useAccount, useNetwork } from 'wagmi';
 
 export const useUserBalances = () => {
     const [balance, setbalance] = useState([
@@ -25,38 +25,24 @@ export const useUserBalances = () => {
         BIG_ZERO,
         BIG_ZERO,
     ]);
-    const { account, ethereum, chainId } = useWallet();
+
+    const { chain } = useNetwork();
+    const chainId = chain && chain.id;
+    const { address: account } = useAccount();
 
     useEffect(() => {
+        if (!account) {
+            return;
+        }
+
         const fetchbalanceStables = async () => {
             log(`fetchbalanceStables, chain ID: ${chainId}`);
             if (isETH(chainId)) {
-                const balanceDai = await getBalance(
-                    ethereum,
-                    daiAddress,
-                    // @ts-ignore
-                    account
-                );
-                const balanceUsdc = await getBalance(
-                    ethereum,
-                    usdcAddress,
-                    // @ts-ignore
-                    account
-                );
-                const balanceUsdt = await getBalance(
-                    ethereum,
-                    usdtAddress,
-                    // @ts-ignore
-                    account
-                );
-                const balanceFrax = await getBalance(
-                    ethereum,
-                    fraxAddress,
-                    // @ts-ignore
-                    account
-                );
+                const balanceDai = await getBalance(daiAddress, account);
+                const balanceUsdc = await getBalance(usdcAddress, account);
+                const balanceUsdt = await getBalance(usdtAddress, account);
+                const balanceFrax = await getBalance(fraxAddress, account);
                 const balanceUzd = await getBalance(
-                    ethereum,
                     contractAddresses.uzd[1],
                     // @ts-ignore
                     account
@@ -73,14 +59,12 @@ export const useUserBalances = () => {
                 setbalance(data);
             } else if (isBSC(chainId)) {
                 const usdtBalance = await getBalance(
-                    ethereum,
                     bscUsdtAddress,
                     // @ts-ignore
                     account
                 );
 
                 const busdBalance = await getBalance(
-                    ethereum,
                     busdAddress,
                     // @ts-ignore
                     account
@@ -95,7 +79,6 @@ export const useUserBalances = () => {
                 ]);
             } else if (isPLG(chainId)) {
                 const balanceUsdt = await getBalance(
-                    ethereum,
                     plgUsdtAddress,
                     // @ts-ignore
                     account
@@ -111,7 +94,7 @@ export const useUserBalances = () => {
         }
         let refreshInterval = setInterval(fetchbalanceStables, 60000);
         return () => clearInterval(refreshInterval);
-    }, [account, ethereum, chainId]);
+    }, [account, chainId]);
 
     return balance;
 };

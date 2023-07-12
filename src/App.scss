@@ -1061,14 +1061,6 @@ body.dark {
         }
     }
 
-    .LinkBlock__title {
-        color: rgba(255, 255, 255, 0.53);
-    }
-
-    .LinkBlock__active .LinkBlock__title {
-        color: rgba(249, 84, 4, 0.53);
-    }
-
     input[type='text'],
     .Input .coin {
         background: #1d1d1d !important;
@@ -1429,19 +1421,6 @@ body.dark {
         color: $primary-color;
     }
 
-    .TestnetPlaceholder__Content__Logo {
-        path:nth-child(0),
-        path:nth-child(1),
-        path:nth-child(2),
-        path:nth-child(3),
-        path:nth-child(4),
-        path:nth-child(5),
-        path:nth-child(6),
-        path:nth-child(7) {
-            fill: #fff;
-        }
-    }
-
     .Sidebar {
         .TestnetLabel {
             background: linear-gradient(262.84deg, #1e1e1e -27.39%, #2c2c2c 71.59%);
@@ -1592,13 +1571,6 @@ body.dark {
 
     .TransactionHistory__List-Item {
         background: linear-gradient(132deg, #181818 10.02%, #272727 93.49%) !important;
-    }
-
-    .TestnetPlaceholder {
-        h1,
-        a {
-            color: #fff;
-        }
     }
 
     button {

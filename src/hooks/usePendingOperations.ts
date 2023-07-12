@@ -1,10 +1,10 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
-import { useWallet } from 'use-wallet';
 import useSushi from './useSushi';
 import { BIG_TEN, DAI_DECIMALS } from '../utils/formatbalance';
 import { log } from '../utils/logger';
 import { isBSC, isETH, isPLG } from '../utils/zunami';
+import { useAccount, useNetwork } from 'wagmi';
 
 export interface PendingOperations {
     deposit: BigNumber;
@@ -12,7 +12,10 @@ export interface PendingOperations {
 }
 
 const usePendingOperations = () => {
-    const { chainId, account } = useWallet();
+    const { chain } = useNetwork();
+    const chainId = chain && chain.id;
+    const { address: account } = useAccount();
+
     const sushi = useSushi();
     const [pendingDeposit, setPendingDeposit] = useState(new BigNumber(0));
     const [pendingWithdraw, setPendingWithdraw] = useState(new BigNumber(0));

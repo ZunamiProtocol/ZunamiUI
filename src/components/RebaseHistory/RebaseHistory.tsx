@@ -1,7 +1,5 @@
 import { format } from 'date-fns';
-import { useWallet } from 'use-wallet';
 import './RebaseHistory.scss';
-import { getScanAddressByChainId } from '../../utils/zunami';
 
 interface TransactionHistoryProps {
     items?: Array<any>;

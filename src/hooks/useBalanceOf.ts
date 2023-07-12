@@ -1,43 +1,36 @@
 import BigNumber from 'bignumber.js';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { BIG_ZERO } from '../utils/formatbalance';
-import useWallet from './useWallet';
-import useSushi from './useSushi';
-import { getMasterChefContract } from '../sushi/utils';
 import { log } from '../utils/logger';
+import { useAccount, Address, erc20ABI } from 'wagmi';
+import { readContract } from '@wagmi/core';
 
-const useBalanceOf = (contractAddress: string | undefined = undefined, autoRefresh = false) => {
+const useBalanceOf = (contractAddress: Address, autoRefresh = false) => {
     const [balance, setBalance] = useState(new BigNumber(BIG_ZERO));
-    const { account, ethereum } = useWallet();
-
-    const chainId = useMemo(() => {
-        return parseInt(ethereum?.chainId, 16);
-    }, [ethereum?.chainId]);
-
-    const sushi = useSushi();
-    const masterChefContract = getMasterChefContract(sushi);
+    const { address: account } = useAccount();
 
     useEffect(() => {
-        if (!account || !chainId || !masterChefContract) {
+        if (!account) {
             return;
         }
 
         const getBalance = async () => {
-            let contract = sushi.getEthContract();
-            
-            switch (chainId) {
-                case 56: contract = sushi.getBscContract();  break;
-                case 137: contract = sushi.getPolygonContract();  break;
-            }
+            try {
+                const value = await readContract({
+                    address: contractAddress,
+                    abi: erc20ABI,
+                    functionName: 'balanceOf',
+                    args: [account],
+                });
 
-            if (contractAddress) {
-                contract.options.address = contractAddress;
-            }
-
-            const value = await contract.methods.balanceOf(account).call();
-            if (value) {
-                log(`🔄 Balance set to ${value}`);
-                setBalance(new BigNumber(value));
+                if (value) {
+                    log(`🔄 Balance set to ${value}`);
+                    setBalance(new BigNumber(value.toString()));
+                }
+            } catch (e) {
+                log(
+                    `Error while executing balanceOf(${account}) for ${contractAddress}: ${e.message}`
+                );
             }
         };
 
@@ -47,7 +40,7 @@ const useBalanceOf = (contractAddress: string | undefined = undefined, autoRefre
             let refreshInterval = setInterval(getBalance, 5000);
             return () => clearInterval(refreshInterval);
         }
-    }, [account, chainId, masterChefContract, sushi, contractAddress, autoRefresh]);
+    }, [account, contractAddress, autoRefresh]);
 
     return balance;
 };

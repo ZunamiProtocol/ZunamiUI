@@ -1,7 +1,7 @@
 import './Pendings.scss';
 import { useRef, useState } from 'react';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
-import useWallet from '../../hooks/useWallet';
+import { useNetwork } from 'wagmi';
 
 interface PendingsProps {
     deposit: string;
@@ -15,7 +15,9 @@ export const Pendings: React.FC<PendingsProps & React.HTMLProps<HTMLDivElement>>
 }) => {
     const target = useRef(null);
     const [showHint, setShowHint] = useState(false);
-    const { chainId } = useWallet();
+    const { chain } = useNetwork();
+    const chainId = chain && chain.id;
+
     const popover = (
         <Popover onMouseEnter={() => setShowHint(true)} onMouseLeave={() => setShowHint(false)}>
             <Popover.Body>

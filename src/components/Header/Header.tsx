@@ -3,19 +3,14 @@ import './Header.scss';
 import { Navbar, OverlayTrigger, Popover } from 'react-bootstrap';
 import useOnlineState from '../../hooks/useOnlineState';
 import { ErrorToast } from '../ErrorToast/ErrorToast';
-// import { WalletStatus } from '../WalletStatus/WalletStatus';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 import { NavMenu } from './NavMenu/NavMenu';
-// import { NetworkSelector } from '../NetworkSelector/NetworkSelector';
-import { useWallet } from 'use-wallet';
 import { getTransHistoryUrl } from '../../api/api';
 import { format } from 'date-fns';
 import { log } from '../../utils/logger';
-
-import { isETH } from '../../utils/zunami';
-import { useGasPrice } from '../../hooks/useGasPrice';
 import { WalletButton } from '../WalletButton/WalletButton';
 import { Network, NetworkSelector, networks } from '../NetworkSelector/NetworkSelector';
+import { useAccount, useNetwork } from 'wagmi';
 
 function chainNameToTooltip(chainId: number) {
     if (chainId === 1 || !chainId) {
@@ -111,12 +106,11 @@ interface HeaderProps extends React.HTMLProps<HTMLDivElement> {
 
 export const Header: React.FC<HeaderProps> = ({ section }) => {
     const isOnline = useOnlineState();
-    const { chainId, account } = useWallet();
+    const { chain } = useNetwork();
+    const chainId = chain && chain.id;
+    const { address: account } = useAccount();
     const [gasPrice, setGasPrice] = useState('');
-
     const notificationsTarget = useRef(null);
-    const [showServices, setShowServices] = useState(false);
-
     const [showNotifications, setNotificationsState] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const notificationsPopover = (
@@ -129,7 +123,6 @@ export const Header: React.FC<HeaderProps> = ({ section }) => {
         </Popover>
     );
 
-    const eth = window.ethereum;
     const [activeNetwork, setActiveNetwork] = useState<Network>(networks[0]);
     const networksList = networks; //props.customNetworksList ? props.customNetworksList : undefined;
 

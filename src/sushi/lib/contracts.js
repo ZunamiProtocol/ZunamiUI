@@ -10,7 +10,7 @@ import ApsAbi from '../../actions/abi/aps.json';
 import zethAbi from '../../actions/abi/zeth.json';
 
 import WETHAbi from './abi/weth.json';
-import { contractAddresses, SUBTRACT_GAS_LIMIT } from './constants.js';
+import { contractAddresses, SUBTRACT_GAS_LIMIT } from './constants.ts';
 import * as Types from './types.js';
 
 export class Contracts {

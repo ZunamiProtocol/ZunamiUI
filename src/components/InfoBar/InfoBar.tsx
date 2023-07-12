@@ -4,8 +4,8 @@ import './InfoBar.scss';
 import { BigNumber } from 'bignumber.js';
 import useSushi from '../../hooks/useSushi';
 import { useEffect, useState } from 'react';
-import useWallet from '../../hooks/useWallet';
 import { PoolInfo, poolsChartdata } from '../../functions/pools';
+import { useAccount, useNetwork } from 'wagmi';
 
 interface InfoBarProps {
     // onClick: any;
@@ -42,7 +42,10 @@ interface PoolsStats {
 
 export const InfoBar = (props: InfoBarProps): JSX.Element => {
     const sushi = useSushi();
-    const { account, chainId } = useWallet();
+    const { chain } = useNetwork();
+    const chainId = chain && chain.id;
+    const { address: account } = useAccount();
+
     const { isLoading: isZunLoading, data: zunData } = useFetch(
         uzdStakingInfoUrl
     ) as ZunamiInfoFetch;

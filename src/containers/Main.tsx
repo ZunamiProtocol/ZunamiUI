@@ -17,8 +17,6 @@ import { BigNumber } from 'bignumber.js';
 import usePendingOperations from '../hooks/usePendingOperations';
 import { poolDataToChartData } from '../functions/pools';
 import { Preloader } from '../components/Preloader/Preloader';
-import { useWallet } from 'use-wallet';
-import useEagerConnect from '../hooks/useEagerConnect';
 import { BscMigrationModal } from '../components/BscMigrationModal/BscMigrationModal';
 import { BscMigrationModal2 } from '../components/BscMigrationModal2/BscMigrationModal2';
 import useOldBscBalance from '../hooks/useOldBscBalance';
@@ -36,10 +34,9 @@ import { SupportersBar } from '../components/SupportersBar/SupportersBar';
 import { StakingSummary } from '../components/StakingSummary/StakingSummary';
 import { DashboardCarousel } from '../components/DashboardCarousel/DashboardCarousel';
 import { ZunamiInfoFetch, PoolsStats, Balance } from './Main.types';
-import useZapsLpBalance from '../hooks/useZapsLpBalance';
-import useUzdBalance from '../hooks/useUzdBalance';
-import useApsLpPrice from '../hooks/useApsLpPrice';
 import { LpMigrationModal } from '../components/LpMigrationModal/LpMigrationModal';
+import { useAccount, useNetwork } from 'wagmi';
+import { contractAddresses } from '../sushi/lib/constants';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -151,17 +148,18 @@ export const Main = (): JSX.Element => {
         log(`🏁 Session started ${new Date().toString()}`);
     }, []);
 
-    const { account, connect, ethereum, chainId } = useWallet();
-    useEagerConnect(account ? account : '', connect, ethereum);
+    const { chain } = useNetwork();
+    const { address: account } = useAccount();
+    const chainId = chain && chain.id;
 
     const isContractPaused = usePausedContract();
-    const lpPrice = useLpPrice();
-    const balance = useBalanceOf();
+    const lpPrice = useLpPrice(contractAddresses.zunami[1]);
+    const balance = useBalanceOf(contractAddresses.zunami[1]);
     const oldBscBalance = useOldBscBalance();
     const balances = useCrossChainBalances(lpPrice);
-    const apsBalance = useZapsLpBalance();
-    const apsLpPrice = useApsLpPrice();
-    const uzdBalance = useUzdBalance();
+    const apsBalance = useBalanceOf(contractAddresses.aps[1]);
+    const apsLpPrice = useLpPrice(contractAddresses.aps[1]);
+    const uzdBalance = useBalanceOf(contractAddresses.uzd[1]);
     const [stakingMode, setStakingMode] = useState('UZD');
     // total tvl (aps/zunami)
     const [tvl, setTvl] = useState('0');

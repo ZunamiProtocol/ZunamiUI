@@ -1,6 +1,5 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
-import { useWallet } from 'use-wallet';
 import { getMasterChefContract } from '../sushi/utils';
 import useSushi from './useSushi';
 import { getAllowance, getContract } from '../utils/erc20';
@@ -17,23 +16,24 @@ import {
 import { log } from '../utils/logger';
 import { contractAddresses } from '../sushi/lib/constants';
 import { isBSC, isPLG } from '../utils/zunami';
+import { Address, useAccount, useNetwork } from 'wagmi';
 
-const useAllowance = (tokenAddress: string, contract: Contract) => {
+const useAllowance = (tokenAddress: Address, contract: Contract) => {
+    const { address: account } = useAccount();
     const [allowance, setAllowance] = useState(BIG_ZERO);
-    const { account, ethereum } = useWallet();
+
     const sushi = useSushi();
     const masterChefContract = contract ? contract : getMasterChefContract(sushi);
 
     useEffect(() => {
         const fetchAllowance = async () => {
             const allowance = await getAllowance(
-                ethereum,
                 tokenAddress,
                 masterChefContract,
                 // @ts-ignore
                 account
             );
-            setAllowance(new BigNumber(allowance));
+            setAllowance(new BigNumber(allowance.toString()));
         };
 
         if (account && masterChefContract) {
@@ -41,7 +41,7 @@ const useAllowance = (tokenAddress: string, contract: Contract) => {
         }
         let refreshInterval = setInterval(fetchAllowance, 10000);
         return () => clearInterval(refreshInterval);
-    }, [account, ethereum, tokenAddress, masterChefContract]);
+    }, [account, tokenAddress, masterChefContract]);
 
     return allowance;
 };
@@ -57,7 +57,11 @@ export const useAllowanceStables = () => {
         BIG_ZERO,
         BIG_ZERO,
     ]);
-    const { account, ethereum, chainId } = useWallet();
+
+    const { chain } = useNetwork();
+    const chainId = chain && chain.id;
+    const { address: account } = useAccount();
+
     const sushi = useSushi();
 
     useEffect(() => {
@@ -71,49 +75,27 @@ export const useAllowanceStables = () => {
             if (chainId === 1) {
                 masterChefContract.options.address = contractAddresses.zunami[1];
 
-                const allowanceDai = await getAllowance(
-                    ethereum,
-                    daiAddress,
-                    masterChefContract,
-                    // @ts-ignore
-                    account
-                );
-                const allowanceUsdc = await getAllowance(
-                    ethereum,
-                    usdcAddress,
-                    masterChefContract,
-                    // @ts-ignore
-                    account
-                );
-                const allowanceUsdt = await getAllowance(
-                    ethereum,
-                    usdtAddress,
-                    masterChefContract,
-                    // @ts-ignore
-                    account
-                );
+                const allowanceDai = await getAllowance(daiAddress, masterChefContract, account);
+                const allowanceUsdc = await getAllowance(usdcAddress, masterChefContract, account);
+                const allowanceUsdt = await getAllowance(usdtAddress, masterChefContract, account);
                 // debugger;
                 const allowanceFrax = await getAllowance(
-                    ethereum,
                     fraxAddress,
                     sushi.getFraxContract(account),
-                    // @ts-ignore
                     account
                 );
                 const allowanceUzd = await getAllowance(
-                    ethereum,
                     contractAddresses.uzd[1],
                     sushi.getApsContract(account),
-                    // @ts-ignore
                     account
                 );
                 const data = [
-                    new BigNumber(allowanceDai),
-                    new BigNumber(allowanceUsdc),
-                    new BigNumber(allowanceUsdt),
+                    new BigNumber(allowanceDai.toString()),
+                    new BigNumber(allowanceUsdc.toString()),
+                    new BigNumber(allowanceUsdt.toString()),
                     BIG_ZERO,
-                    new BigNumber(allowanceFrax),
-                    new BigNumber(allowanceUzd),
+                    new BigNumber(allowanceFrax.toString()),
+                    new BigNumber(allowanceUzd.toString()),
                 ];
                 // @ts-ignore
                 setAllowance(data);
@@ -182,7 +164,7 @@ export const useAllowanceStables = () => {
         }
         let refreshInterval = setInterval(fetchAllowanceStables, 10000);
         return () => clearInterval(refreshInterval);
-    }, [account, ethereum, chainId, sushi]);
+    }, [account, chainId, sushi]);
 
     return allowance;
 };

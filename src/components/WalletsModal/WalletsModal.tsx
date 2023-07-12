@@ -1,8 +1,6 @@
 import { Modal } from 'react-bootstrap';
-import config from '../../config';
-import { useWallet } from 'use-wallet';
 import './WalletsModal.scss';
-import { log } from '../../utils/logger';
+import { useConnect, useNetwork } from 'wagmi';
 
 export const LS_ACCOUNT_KEY = 'WALLET_ACCOUNT';
 export const LS_WALLET_TYPE_KEY = 'WALLET_TYPE';
@@ -27,63 +25,9 @@ interface WalletModalProps {
 }
 
 export const WalletsModal = (props: WalletModalProps): JSX.Element => {
-    const { ethereum, connect } = useWallet();
-    const eth = window.ethereum || ethereum;
-    const isEth = eth && eth.chainId !== '0x1';
-    const onConnect = async (providerId = 'injected') => {
-        try {
-            log(`🔑 Attempt to connect wallet (provider ID is "${providerId}")`);
-            await connect(providerId);
-        } catch (connectionError: any) {
-            log(`❗️ Error connecting wallet: ${connectionError.message}`);
-        }
-
-        window.localStorage.setItem(LS_WALLET_TYPE_KEY, providerId);
-        let walletAddress = '';
-
-        switch (providerId) {
-            case 'injected':
-                walletAddress = window.localStorage.getItem('LAST_ACTIVE_ACCOUNT') || '';
-                break;
-            case 'walletlink':
-                walletAddress =
-                    window.localStorage.getItem(
-                        '-walletlink:https://www.walletlink.org:Addresses'
-                    ) || '';
-                break;
-            case 'walletconnect':
-                const wcStorage = JSON.parse(window.localStorage.getItem('walletconnect') || '{}');
-                if (wcStorage?.accounts && wcStorage.accounts[0]) {
-                    walletAddress = wcStorage.accounts[0];
-                }
-                break;
-        }
-
-        window.localStorage.setItem(LS_ACCOUNT_KEY, walletAddress);
-
-        // @ts-ignore
-        const eth = window.ethereum || ethereum;
-
-        if (!eth && providerId === 'injected') {
-            alert(NO_METAMASK_WARNING);
-        }
-
-        // @ts-ignore
-        if (window.dataLayer) {
-            window.dataLayer.push({
-                event: 'login',
-                userID: getActiveWalletAddress(),
-                type: getActiveWalletName(),
-            });
-        }
-
-        if (props.onWalletConnected) {
-            props.onWalletConnected({
-                type: getActiveWalletName(),
-                address: getActiveWalletAddress(),
-            });
-        }
-    };
+    const { chain } = useNetwork();
+    const isEth = chain && chain.id === 1;
+    const { connect, connectors } = useConnect();
 
     return (
         <Modal
@@ -100,7 +44,7 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
             </Modal.Header>
             <Modal.Body className="d-flex gap-3 flex-row flex-wrap WalletsModal  justify-content-center align-items-center">
                 <button
-                    onClick={() => onConnect('injected')}
+                    onClick={() => connect({ connector: connectors[0] })}
                     className="d-inline-flex flex-column bg-transparent metamask"
                 >
                     <img src="/metamask.svg" alt="" />
@@ -108,7 +52,7 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
                     <span className="connect">Connect</span>
                 </button>
                 <button
-                    onClick={() => onConnect('walletconnect')}
+                    onClick={() => connect({ connector: connectors[2] })}
                     className="d-inline-flex flex-column bg-transparent walletconnect"
                 >
                     <img src="/wallet-connect.svg" alt="" />
@@ -116,7 +60,7 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
                     <span className="connect">Connect</span>
                 </button>
                 <button
-                    onClick={() => onConnect('walletlink')}
+                    onClick={() => connect({ connector: connectors[2] })}
                     className={`d-inline-flex flex-column bg-transparent coinbase ${
                         isEth ? 'disabled' : ''
                     }`}
@@ -127,7 +71,7 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
                     {!isEth && <span className="connect">Connect</span>}
                 </button>
                 <button
-                    onClick={() => onConnect('walletconnect')}
+                    onClick={() => connect({ connector: connectors[2] })}
                     className={`d-inline-flex flex-column bg-transparent zerion ${
                         isEth ? 'disabled' : ''
                     }`}
