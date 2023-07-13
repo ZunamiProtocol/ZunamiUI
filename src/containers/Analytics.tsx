@@ -122,6 +122,9 @@ function getPoolIcon(type: string) {
         case 'EUSD_FRAXBP':
             result = 'eusd.svg';
             break;
+        case 'STAKEDAO_CRVUSD_USDT':
+            result = 'stake-dao.svg';
+            break;
     }
 
     return result;
