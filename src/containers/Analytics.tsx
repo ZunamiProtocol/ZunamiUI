@@ -1196,49 +1196,57 @@ export const Analytics = (): JSX.Element => {
                                                             <div className="circle"></div>
                                                         </button>
                                                     </li>
-                                                    <li className="nav-item" role="presentation">
-                                                        <button
-                                                            className={`nav-link ${
-                                                                selectedTabIndex === 4
-                                                                    ? 'active'
-                                                                    : ''
-                                                            }`}
-                                                            id="incentive-risk-tab"
-                                                            data-bs-toggle="tab"
-                                                            data-bs-target="#incentive-risk-tab-pane"
-                                                            type="button"
-                                                            role="tab"
-                                                            onClick={() => setSelectedTabIndex(4)}
+                                                    {selectedStrat.analytics.protocolInfo.info
+                                                        .riskAssessment.values[4] && (
+                                                        <li
+                                                            className="nav-item"
+                                                            role="presentation"
                                                         >
-                                                            <svg
-                                                                width="30"
-                                                                height="30"
-                                                                viewBox="0 0 30 30"
-                                                                fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg"
+                                                            <button
+                                                                className={`nav-link ${
+                                                                    selectedTabIndex === 4
+                                                                        ? 'active'
+                                                                        : ''
+                                                                }`}
+                                                                id="incentive-risk-tab"
+                                                                data-bs-toggle="tab"
+                                                                data-bs-target="#incentive-risk-tab-pane"
+                                                                type="button"
+                                                                role="tab"
+                                                                onClick={() =>
+                                                                    setSelectedTabIndex(4)
+                                                                }
                                                             >
-                                                                <circle
-                                                                    cx="15"
-                                                                    cy="15"
-                                                                    r="13.65"
-                                                                    stroke="#090909"
-                                                                    strokeWidth="1.3"
-                                                                />
-                                                                <rect
-                                                                    x="11.35"
-                                                                    y="11.35"
-                                                                    width="7.3"
-                                                                    height="7.3"
-                                                                    stroke="#090909"
-                                                                    strokeWidth="1.3"
-                                                                />
-                                                            </svg>
-                                                            <span>
-                                                                Risk of stop incentivization
-                                                            </span>
-                                                            <div className="circle"></div>
-                                                        </button>
-                                                    </li>
+                                                                <svg
+                                                                    width="30"
+                                                                    height="30"
+                                                                    viewBox="0 0 30 30"
+                                                                    fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                >
+                                                                    <circle
+                                                                        cx="15"
+                                                                        cy="15"
+                                                                        r="13.65"
+                                                                        stroke="#090909"
+                                                                        strokeWidth="1.3"
+                                                                    />
+                                                                    <rect
+                                                                        x="11.35"
+                                                                        y="11.35"
+                                                                        width="7.3"
+                                                                        height="7.3"
+                                                                        stroke="#090909"
+                                                                        strokeWidth="1.3"
+                                                                    />
+                                                                </svg>
+                                                                <span>
+                                                                    Risk of stop incentivization
+                                                                </span>
+                                                                <div className="circle"></div>
+                                                            </button>
+                                                        </li>
+                                                    )}
                                                 </ul>
                                             </div>
                                             <div className="col-md-8">

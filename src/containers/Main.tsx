@@ -385,6 +385,8 @@ export const Main = (): JSX.Element => {
     const [showApyHint, setShowApyHint] = useState(false);
 
     useEffect(() => {
+        log(`${new Date().toLocaleTimeString()} TVL - ${uzdStatLoading ? 'loading...' : 'loaded'}`);
+
         if (!uzdStatLoading && uzdStatData.tvl) {
             setTvl(uzdStatData.tvl);
         }

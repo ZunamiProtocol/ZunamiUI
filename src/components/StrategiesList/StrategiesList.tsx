@@ -50,6 +50,11 @@ function renderStratHeader(item: Strategy) {
             title = 'Convex Frax Booster';
             desc = 'alUSD/FRAXBP';
             break;
+        case 'STAKEDAO_CRVUSD_USDT':
+            icon = '/stake-dao.svg';
+            title = 'Stake DAO';
+            desc = 'crvUSD/USDT pool';
+            break;
     }
 
     const stratIcon =
