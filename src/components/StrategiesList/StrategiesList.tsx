@@ -1,8 +1,7 @@
-import { format } from 'date-fns';
-import { useWallet } from 'use-wallet';
 import './StrategiesList.scss';
 import BigNumber from 'bignumber.js';
 import { getFullDisplayBalance } from '../../utils/formatbalance';
+import { getPoolPrimaryIcon } from '../../containers/Analytics';
 
 interface StrategiesListProps {
     title: any;
@@ -57,10 +56,7 @@ function renderStratHeader(item: Strategy) {
             break;
     }
 
-    const stratIcon =
-        item.analytics && item.analytics.data.coinsMarketData.stableCoin
-            ? item.analytics.data.coinsMarketData.stableCoin.image
-            : '/clever.svg';
+    const stratIcon = getPoolPrimaryIcon(item);
 
     return (
         <div className="d-flex gap-2 header">

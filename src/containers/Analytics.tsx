@@ -24,11 +24,12 @@ interface PoolResponse {
     };
 }
 
-function getPoolPrimaryIcon(pool) {
+export function getPoolPrimaryIcon(pool) {
     let result = '/clever_analytics.png';
+    const analytics = pool.analytics.data ? pool.analytics.data : pool.analytics;
 
-    if (pool.analytics && pool.analytics.coinsMarketData.stableCoin) {
-        result = pool.analytics.coinsMarketData.stableCoin.image;
+    if (analytics && analytics.coinsMarketData.stableCoin) {
+        result = analytics.coinsMarketData.stableCoin.image;
     }
 
     if (pool.type === 'STAKEDAO_CRVUSD_USDT') {
@@ -519,16 +520,9 @@ export const Analytics = (): JSX.Element => {
                                                         <div className="d-flex mt-0 new-coin pool-info-coin">
                                                             <div className="wrapper">
                                                                 <img
-                                                                    src={
-                                                                        selectedStrat.analytics
-                                                                            .coinsMarketData
-                                                                            .stableCoin
-                                                                            ? selectedStrat
-                                                                                  .analytics
-                                                                                  .coinsMarketData
-                                                                                  .stableCoin.image
-                                                                            : '/clever_analytics.png'
-                                                                    }
+                                                                    src={getPoolPrimaryIcon(
+                                                                        selectedStrat
+                                                                    )}
                                                                     alt={selectedStrat.title}
                                                                 />
                                                                 <div className="coin">

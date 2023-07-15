@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { PieChart } from 'react-minimal-pie-chart';
 import './PieChart.scss';
+import { getPoolPrimaryIcon } from '../../containers/Analytics';
 // import 'react-tooltip/dist/';
 
 interface DataItem {
@@ -27,14 +28,7 @@ function renderStratList(items: Array<DataItem>) {
             <div className={'PieChart__StratList__Item__Name d-flex align-items-center new-coin'}>
                 {item.icon && (
                     <div className="wrapper">
-                        <img
-                            src={
-                                item.analytics && item.analytics.coinsMarketData.stableCoin
-                                    ? item.analytics.coinsMarketData.stableCoin.image
-                                    : '/clever_analytics.png'
-                            }
-                            alt={item.title}
-                        />
+                        {item && <img src={getPoolPrimaryIcon(item)} alt={item.title} />}
                         <div className="coin">
                             <img src={item.icon} alt={item.title} />
                         </div>
