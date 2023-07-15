@@ -24,6 +24,20 @@ interface PoolResponse {
     };
 }
 
+function getPoolPrimaryIcon(pool) {
+    let result = '/clever_analytics.png';
+
+    if (pool.analytics && pool.analytics.coinsMarketData.stableCoin) {
+        result = pool.analytics.coinsMarketData.stableCoin.image;
+    }
+
+    if (pool.type === 'STAKEDAO_CRVUSD_USDT') {
+        result = '/0xf939e0a03fb07f59a73314e73794be0e57ac1b4e.png';
+    }
+
+    return result;
+}
+
 function renderBribes(data, gaugeData) {
     const lastRound = data.votiumBribesData[0]; // current bribe
     const prevRound = data.votiumBribesData[1]; // last (previous) bribe
@@ -432,15 +446,7 @@ export const Analytics = (): JSX.Element => {
                                                     >
                                                         <div className="wrapper">
                                                             <img
-                                                                src={
-                                                                    pool.analytics &&
-                                                                    pool.analytics.coinsMarketData
-                                                                        .stableCoin
-                                                                        ? pool.analytics
-                                                                              .coinsMarketData
-                                                                              .stableCoin.image
-                                                                        : '/clever_analytics.png'
-                                                                }
+                                                                src={getPoolPrimaryIcon(pool)}
                                                                 alt={pool.title}
                                                             />
                                                             <div className="coin">
