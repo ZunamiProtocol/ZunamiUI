@@ -469,89 +469,6 @@ input[type='checkbox'] {
             margin-left: 15px;
         }
     }
-
-    .TestnetLabel {
-        color: $primary-color;
-
-        @media (min-width: $media375) {
-            width: 136px;
-            height: 29px;
-            margin-left: 13px;
-            margin-top: 0;
-            background: #fff;
-        }
-
-        @media (min-width: $media1024) {
-            background: linear-gradient(262.84deg, #fff3e9 -27.39%, #fef5e8 71.59%);
-            width: 108px;
-            height: 24px;
-            margin-left: 13px;
-            margin-top: 0;
-        }
-
-        @media (min-width: $media1440) {
-            width: 115px;
-            height: 25px;
-            margin-left: 16px;
-        }
-
-        @media (min-width: $media1920) {
-            width: 138px;
-            height: 29px;
-            margin-left: 16px;
-            margin-top: 1px;
-        }
-
-        span {
-            @media (min-width: $media375) {
-                font-size: 12px;
-                line-height: 16px;
-            }
-
-            @media (min-width: $media1024) {
-                font-size: 9px;
-                line-height: 12px;
-            }
-
-            @media (min-width: $media1440) {
-                font-size: 10px;
-                line-height: 14px;
-            }
-
-            @media (min-width: $media1920) {
-                font-size: 12px;
-                line-height: 16px;
-            }
-        }
-
-        svg {
-            path {
-                fill: rgba(246, 74, 0, 0.53);
-            }
-
-            @media (min-width: $media375) {
-                width: 11.2px;
-                height: 11.2px;
-                margin-right: 10px;
-            }
-
-            @media (min-width: $media1024) {
-                width: 9.5px;
-                height: 9.5px;
-                margin-right: 7px;
-            }
-
-            @media (min-width: $media1440) {
-                margin-right: 7px;
-            }
-
-            @media (min-width: $media1920) {
-                margin-right: 9px;
-                width: 13px;
-                height: 13px;
-            }
-        }
-    }
 }
 
 body.dark {
@@ -1419,37 +1336,9 @@ body.dark {
         }
     }
 
-    .Disclaimer,
-    .TestnetLabel {
+    .Disclaimer {
         background: linear-gradient(262.84deg, #1e1e1e -27.39%, #2c2c2c 71.59%);
         color: #fff;
-    }
-
-    .TestnetLabel span {
-        color: $primary-color;
-    }
-
-    .TestnetPlaceholder__Content__Logo {
-        path:nth-child(0),
-        path:nth-child(1),
-        path:nth-child(2),
-        path:nth-child(3),
-        path:nth-child(4),
-        path:nth-child(5),
-        path:nth-child(6),
-        path:nth-child(7) {
-            fill: #fff;
-        }
-    }
-
-    .Sidebar {
-        .TestnetLabel {
-            background: linear-gradient(262.84deg, #1e1e1e -27.39%, #2c2c2c 71.59%);
-
-            span {
-                color: $primary-color;
-            }
-        }
     }
 
     .InfoBlock_colorful {
@@ -1592,13 +1481,6 @@ body.dark {
 
     .TransactionHistory__List-Item {
         background: linear-gradient(132deg, #181818 10.02%, #272727 93.49%) !important;
-    }
-
-    .TestnetPlaceholder {
-        h1,
-        a {
-            color: #fff;
-        }
     }
 
     button {

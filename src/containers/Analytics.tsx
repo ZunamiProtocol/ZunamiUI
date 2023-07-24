@@ -138,7 +138,7 @@ function getPoolIcon(type: string) {
             result = 'eusd.svg';
             break;
         case 'STAKEDAO_CRVUSD_USDT':
-            result = 'stake-dao.svg';
+            result = 'curve-icon.svg';
             break;
     }
 

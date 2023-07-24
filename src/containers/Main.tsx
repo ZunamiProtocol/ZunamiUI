@@ -19,9 +19,6 @@ import { poolDataToChartData } from '../functions/pools';
 import { Preloader } from '../components/Preloader/Preloader';
 import { useWallet } from 'use-wallet';
 import useEagerConnect from '../hooks/useEagerConnect';
-import { BscMigrationModal } from '../components/BscMigrationModal/BscMigrationModal';
-import { BscMigrationModal2 } from '../components/BscMigrationModal2/BscMigrationModal2';
-import useOldBscBalance from '../hooks/useOldBscBalance';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
 import useSupportedChain from '../hooks/useSupportedChain';
 import { log, copyLogs } from '../utils/logger';
@@ -157,7 +154,6 @@ export const Main = (): JSX.Element => {
     const isContractPaused = usePausedContract();
     const lpPrice = useLpPrice();
     const balance = useBalanceOf();
-    const oldBscBalance = useOldBscBalance();
     const balances = useCrossChainBalances(lpPrice);
     const apsBalance = useZapsLpBalance();
     const apsLpPrice = useApsLpPrice();
@@ -345,10 +341,6 @@ export const Main = (): JSX.Element => {
             ? lpPrice.multipliedBy(pendingOperations.withdraw)
             : new BigNumber(0);
 
-    // v1.1 migration modal
-    const [showMigrationModal, setShowMigrationModal] = useState(false);
-    // v1.2 migration modal
-    const [showMigrationModal2, setShowMigrationModal2] = useState(false);
     // ETH merge modal
     const [showMergeModal, setShowMergeModal] = useState(false);
     // LP to UZD migration modal
@@ -361,24 +353,6 @@ export const Main = (): JSX.Element => {
     useEffect(() => {
         setShowLpMigrationModal(balance.toNumber() > 0);
     }, [balance]);
-
-    // migration modal
-    useEffect(() => {
-        if (oldBscBalance[0].toNumber() > 0) {
-            setShowMigrationModal(true);
-        } else {
-            setShowMigrationModal(false);
-        }
-
-        if (oldBscBalance[1].toNumber() > 0) {
-            log(
-                `Migration from BSC gateway 1.1 to 1.2 needed. Old balance is ${oldBscBalance[1].toNumber()}`
-            );
-            setShowMigrationModal2(true);
-        } else {
-            setShowMigrationModal2(false);
-        }
-    }, [oldBscBalance, chainId, account]);
 
     const supportedChain = useSupportedChain();
     const apyHintTarget = useRef(null);
@@ -492,22 +466,6 @@ export const Main = (): JSX.Element => {
                         balance={balance}
                         onHide={() => {
                             console.log('Modal close');
-                        }}
-                    />
-                    <BscMigrationModal
-                        show={showMigrationModal}
-                        balance={oldBscBalance[0]}
-                        lpPrice={lpPrice}
-                        onHide={() => {
-                            setShowMigrationModal(false);
-                        }}
-                    />
-                    <BscMigrationModal2
-                        show={showMigrationModal2}
-                        balance={oldBscBalance[0].plus(oldBscBalance[1])}
-                        lpPrice={lpPrice}
-                        onHide={() => {
-                            setShowMigrationModal2(false);
                         }}
                     />
                     <div className="row main-row h-100">
