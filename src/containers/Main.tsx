@@ -361,8 +361,13 @@ export const Main = (): JSX.Element => {
     useEffect(() => {
         log(`${new Date().toLocaleTimeString()} TVL - ${uzdStatLoading ? 'loading...' : 'loaded'}`);
 
+        // TODO: Remove temp fix
         if (!uzdStatLoading && uzdStatData.tvl) {
-            setTvl(uzdStatData.tvl);
+            const fixedTvl = new BigNumber(uzdStatData.info.aps.tvl).plus(
+                new BigNumber(uzdStatData.info.omnipool.tvl)
+            );
+
+            setTvl(getBalanceNumber(fixedTvl).toString());
         }
     }, [uzdStatLoading, uzdStatData?.tvl]);
 
