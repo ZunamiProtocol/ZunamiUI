@@ -63,6 +63,49 @@ function getPrimaryIcon(item): string {
             break;
     }
 
+    if (item.type === 'VAULT' && item.address === '0xDc0B52c04CdC0099aeFcCa8B0675A00cF8f6d7dC') {
+        result = 'zeth-vault.svg';
+    }
+    return result;
+}
+
+function renderStratName(orientation, item) {
+    let result = item.title;
+    const isZethVault = item.address === '0xDc0B52c04CdC0099aeFcCa8B0675A00cF8f6d7dC';
+
+    if (orientation === 'column') {
+        if (item.title !== 'UZD Vault') {
+            result = (
+                <div>
+                    <div>{item.title.split('-')[0]}</div>
+                    <div className="strat-desc">
+                        {item.title.split('-')[1].replace(' pool', '')}
+                    </div>
+                </div>
+            );
+        } else {
+            if (!isZethVault) {
+                result = (
+                    <div>
+                        <div>{item.title}</div>
+                        <div>-</div>
+                    </div>
+                );
+            } else {
+                result = (
+                    <div>
+                        <div>Vault</div>
+                        <div>-</div>
+                    </div>
+                );
+            }
+        }
+    } else {
+        if (isZethVault) {
+            result = 'Vault';
+        }
+    }
+
     return result;
 }
 
@@ -84,21 +127,7 @@ function renderStratList(items: Array<DataItem>, orientation: string) {
                     )}
                 </div>
                 <a target="blank" href={item.link}>
-                    {orientation === 'list' && item.title}
-                    {orientation === 'column' && item.title !== 'UZD Vault' && (
-                        <div>
-                            <div>{item.title.split('-')[0]}</div>
-                            <div className="strat-desc">
-                                {item.title.split('-')[1].replace(' pool', '')}
-                            </div>
-                        </div>
-                    )}
-                    {orientation === 'column' && item.title === 'UZD Vault' && (
-                        <div>
-                            <div>{item.title}</div>
-                            <div>-</div>
-                        </div>
-                    )}
+                    {renderStratName(orientation, item)}
                 </a>
                 <span className="size">{`${item.value.toFixed(1)}%`}</span>
             </div>
@@ -132,6 +161,7 @@ export const Chart: React.FC<ChartProps & React.HTMLProps<HTMLDivElement>> = ({
                 </div>
             )}
             <div className={`d-flex PieChart__StratList ${orientation}`}>
+                {!data.length && <div className="text-muted mt-3">no strategies yet</div>}
                 {renderStratList(data, orientation)}
             </div>
         </div>

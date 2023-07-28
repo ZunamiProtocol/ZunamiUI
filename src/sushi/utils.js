@@ -301,7 +301,7 @@ export const stakeFRAX = async (contract, account, frax) => {
 export const stakeAPS = async (contract, account, uzd) => {
     const depositSum = new BigNumber(uzd).times(USDT_BSC_TOKEN_DECIMAL).toString();
 
-    log(`Exection [APS]: deposit("${depositSum}", "0")`);
+    log(`Exection ${contract.options.address}: deposit("${depositSum}", "0")`);
 
     return contract.methods
         .deposit(depositSum)

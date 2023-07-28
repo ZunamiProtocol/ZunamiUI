@@ -50,12 +50,12 @@ function getNetworkByKey(key: string) {
                             y2="15.2224"
                             gradientUnits="userSpaceOnUse"
                         >
-                            <stop stop-color="#FFB515" />
-                            <stop offset="0.19046" stop-color="#FF931C" />
-                            <stop offset="0.41364" stop-color="#FF7322" />
-                            <stop offset="0.62821" stop-color="#FF5B26" />
-                            <stop offset="0.82823" stop-color="#FF4D29" />
-                            <stop offset="0.99932" stop-color="#FF482A" />
+                            <stop stopColor="#FFB515" />
+                            <stop offset="0.19046" stopColor="#FF931C" />
+                            <stop offset="0.41364" stopColor="#FF7322" />
+                            <stop offset="0.62821" stopColor="#FF5B26" />
+                            <stop offset="0.82823" stopColor="#FF4D29" />
+                            <stop offset="0.99932" stopColor="#FF482A" />
                         </linearGradient>
                     </defs>
                 </svg>
@@ -91,12 +91,12 @@ function getNetworkByKey(key: string) {
                             y2="15.2224"
                             gradientUnits="userSpaceOnUse"
                         >
-                            <stop stop-color="#FFB515" />
-                            <stop offset="0.19046" stop-color="#FF931C" />
-                            <stop offset="0.41364" stop-color="#FF7322" />
-                            <stop offset="0.62821" stop-color="#FF5B26" />
-                            <stop offset="0.82823" stop-color="#FF4D29" />
-                            <stop offset="0.99932" stop-color="#FF482A" />
+                            <stop stopColor="#FFB515" />
+                            <stop offset="0.19046" stopColor="#FF931C" />
+                            <stop offset="0.41364" stopColor="#FF7322" />
+                            <stop offset="0.62821" stopColor="#FF5B26" />
+                            <stop offset="0.82823" stopColor="#FF4D29" />
+                            <stop offset="0.99932" stopColor="#FF482A" />
                         </linearGradient>
                     </defs>
                 </svg>

@@ -65,6 +65,9 @@ export const getAllowance = async (
             case contractAddresses.uzd[1].toLowerCase():
                 debugName = '(UZD)';
                 break;
+            case contractAddresses.zeth[1].toLowerCase():
+                debugName = '(ZETH)';
+                break;
         }
 
         log(

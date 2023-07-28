@@ -32,6 +32,7 @@ const useStake = (coins: Coins, direct: boolean = false) => {
     const busd = coins.filter((coin) => coin.name === 'BUSD')[0]?.value;
     const frax = coins.filter((coin) => coin.name === 'FRAX')[0]?.value;
     const uzd = coins.filter((coin) => coin.name === 'UZD')[0]?.value;
+    const zeth = coins.filter((coin) => coin.name === 'ZETH')[0]?.value;
 
     const handleStake = useCallback(async () => {
         log('Calling deposit...');
@@ -58,6 +59,13 @@ const useStake = (coins: Coins, direct: boolean = false) => {
             return await stakeAPS(contract, account, uzd);
         }
 
+        if (chainId === 1 && zeth && Number(zeth) > 0) {
+            const contract = sushi.contracts.zethApsContract;
+            contract.options.address = contractAddresses.zethAPS[1];
+            contract.defaultAccount = account;
+            return await stakeAPS(contract, account, zeth);
+        }
+
         if (isPLG(chainId)) {
             const contract = sushi.contracts.polygonContract;
             contract.options.address = contractAddresses.zunami[137];
@@ -73,6 +81,7 @@ const useStake = (coins: Coins, direct: boolean = false) => {
         busd,
         frax,
         uzd,
+        zeth,
         zunamiContract,
         // sushi.contracts.busdContract, sushi.contracts.fraxContract, sushi.contracts.polygonContract,
         direct,

@@ -100,6 +100,11 @@ export const poolsChartdata: { [key: string]: any } = {
         value: 0,
         icon: '/uzd.svg',
     },
+    ZETH_VAULT: {
+        title: 'Vault',
+        value: 0,
+        icon: '/zeth_vault.svg',
+    },
     FRAX_STAKEDAO: {
         title: 'Stake DAO - UZD / FRAXBP pool',
         value: 0,

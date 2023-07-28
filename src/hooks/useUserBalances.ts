@@ -24,6 +24,7 @@ export const useUserBalances = () => {
         BIG_ZERO,
         BIG_ZERO,
         BIG_ZERO,
+        BIG_ZERO,
     ]);
     const { account, ethereum, chainId } = useWallet();
 
@@ -61,6 +62,14 @@ export const useUserBalances = () => {
                     // @ts-ignore
                     account
                 );
+
+                const balanceZeth = await getBalance(
+                    ethereum,
+                    contractAddresses.zeth[1],
+                    // @ts-ignore
+                    account
+                );
+
                 const data = [
                     new BigNumber(balanceDai),
                     new BigNumber(balanceUsdc),
@@ -68,6 +77,7 @@ export const useUserBalances = () => {
                     BIG_ZERO,
                     new BigNumber(balanceFrax),
                     new BigNumber(balanceUzd),
+                    new BigNumber(balanceZeth),
                 ];
                 // @ts-ignore
                 setbalance(data);

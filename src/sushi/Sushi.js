@@ -209,6 +209,14 @@ export class Sushi {
         return contract;
     }
 
+    getZethApsContract(account) {
+        const web3 = new Web3(this.getEthProvider(account));
+        const contract = new web3.eth.Contract(ApsAbi);
+        contract.options.from = account;
+        contract.options.address = contractAddresses.zethAPS[1];
+        return contract;
+    }
+
     setProvider(provider, networkId) {
         if (networkId === 1) {
             this.web3.setProvider(provider);
