@@ -33,7 +33,7 @@ export const Input = (props: InputProps): JSX.Element => {
             decimals = 18;
         }
 
-        return getFullDisplayBalance(props.max, decimals);
+        return getFullDisplayBalance(props.max, decimals, 18);
     }, [props.max, props.name, props.action, props.chainId]);
 
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {

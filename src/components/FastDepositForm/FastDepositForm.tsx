@@ -22,7 +22,6 @@ import {
     UZD_DECIMALS,
 } from '../../utils/formatbalance';
 import { getFullDisplayBalance } from '../../utils/formatbalance';
-import { Link } from 'react-router-dom';
 import { useWallet } from 'use-wallet';
 import { log } from '../../utils/logger';
 import { isBSC, isETH, isPLG } from '../../utils/zunami';
@@ -32,6 +31,7 @@ import useApproveZeth from '../../hooks/useApproveZeth';
 import { contractAddresses } from '../../sushi/lib/constants';
 import useZapsLpBalance from '../../hooks/useZapsLpBalance';
 import BigNumber from 'bignumber.js';
+import useZethApsBalance from '../../hooks/useZethApsBalance';
 
 function coinNameToAddress(coinName: string, chainId: number): string {
     if (chainId === 56 && coinName === 'USDT') {
@@ -129,6 +129,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const [coinIndex, setCoinIndex] = useState(-1);
     const approveList = useAllowanceStables();
     const apsBalance = useZapsLpBalance();
+    const zethApsBalance = useZethApsBalance();
     const approvedTokens = useMemo(() => {
         return [
             approveList ? approveList[0].toNumber() > 0 : false,
@@ -211,7 +212,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             if (coin === 'UZD') {
                 return getFullDisplayBalance(userBalanceList[coinIndex], 18);
             } else if (coin === 'ZETH') {
-                return getFullDisplayBalance(userBalanceList[coinIndex], 18);
+                return getFullDisplayBalance(userBalanceList[coinIndex], 18, 18);
             }
 
             return getFullDisplayBalance(userBalanceList[coinIndex], isDaiOrFrax ? 18 : 6);
@@ -220,15 +221,38 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         }
     }, [userBalanceList, coin, coinIndex, chainId]);
 
+    const coinApproved = useMemo(() => {
+        return approvedTokens[coinIndex];
+    }, [approvedTokens, coinIndex]);
+
     const depositEnabled = useMemo(() => {
         let result =
-            approvedTokens[coinIndex] &&
+            coinApproved &&
             Number(depositSum) > 0 &&
             !pendingApproval &&
             Number(depositSum) <= Number(fullBalance);
 
         return result;
-    }, [approvedTokens, depositSum, pendingApproval, fullBalance, coinIndex]);
+    }, [coinApproved, depositSum, pendingApproval, fullBalance]);
+
+    const depositValidationError = useMemo(() => {
+        let message = '';
+
+        if (Number(depositSum) >= Number(fullBalance)) {
+            // debugger;
+            message = "You're trying to deposit more than you have";
+        }
+
+        if (pendingApproval) {
+            message = 'Please, wait for transaction to finish...';
+        }
+
+        if (Number(depositSum) === 0) {
+            message = 'Please, enter a value more than a zero';
+        }
+
+        return message;
+    }, [depositSum, fullBalance, pendingApproval]);
 
     // set default input to max
     useEffect(() => {
@@ -243,9 +267,15 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
 
     useEffect(() => {
         if (action === 'withdraw' && withdrawSum === '') {
-            setWithdrawSum(getFullDisplayBalance(apsBalance, 18));
+            if (stakingMode === 'UZD') {
+                setWithdrawSum(getFullDisplayBalance(apsBalance, 18, 18));
+            }
+
+            if (stakingMode === 'ZETH') {
+                setWithdrawSum(getFullDisplayBalance(zethApsBalance, 18, 18));
+            }
         }
-    }, [action, apsBalance, withdrawSum]);
+    }, [action, apsBalance, zethApsBalance, withdrawSum, stakingMode]);
 
     return (
         <div className={`FastDepositForm ${className} mode-${stakingMode}`}>
@@ -258,33 +288,6 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             )}
             <div className="d-flex justify-content-between align-items-center">
                 <span className="FastDepositForm__Title">
-                    {stakingMode === 'USD' && (
-                        <svg
-                            width="37"
-                            height="38"
-                            viewBox="0 0 37 38"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                d="M15.5741 20.8429C14.1291 19.8035 12.798 18.846 11.4669 17.8886C10.3324 17.0726 9.19815 16.2566 8.06397 15.4403C7.24073 14.8458 7.3196 13.8823 8.2317 13.4343C17.1096 9.07393 25.9881 4.71462 34.8671 0.356412C35.0415 0.270808 35.212 0.1762 35.3905 0.100563C35.9264 -0.126441 36.4588 0.0374595 36.7973 0.525649C36.9506 0.741125 37.0207 1.00499 36.9947 1.26832C36.9686 1.53165 36.8481 1.77657 36.6555 1.95767C35.7524 2.84275 34.8364 3.71464 33.9248 4.591C30.515 7.86898 27.1047 11.1464 23.6937 14.4232C23.5968 14.5053 23.4956 14.5822 23.3906 14.6537C23.5517 14.7772 23.6507 14.8574 23.754 14.9316C25.9242 16.4923 28.0952 18.0519 30.267 19.6104C30.5996 19.8486 30.8472 20.1253 30.863 20.557C30.8817 21.0662 30.6304 21.4025 30.1979 21.6377C28.8541 22.3684 27.5121 23.1024 26.1719 23.8396C18.0664 28.2724 9.96078 32.7049 1.85495 37.1371C1.72913 37.2102 1.59816 37.2741 1.46307 37.3282C1.24523 37.4095 1.0069 37.4179 0.783915 37.352C0.56093 37.286 0.365332 37.1494 0.226514 36.9625C-0.0652715 36.5703 -0.0795695 36.0621 0.209292 35.6709C0.330421 35.5188 0.463784 35.377 0.60805 35.2467C5.46236 30.5414 10.3179 25.8373 15.1747 21.1345C15.278 21.0344 15.4085 20.9624 15.5741 20.8429Z"
-                                fill="url(#paint0_linear_101_847)"
-                            />
-                            <defs>
-                                <linearGradient
-                                    id="paint0_linear_101_847"
-                                    x1="2.5"
-                                    y1="33"
-                                    x2="45"
-                                    y2="-11"
-                                    gradientUnits="userSpaceOnUse"
-                                >
-                                    <stop stopColor="#E2E2E2" />
-                                    <stop offset="1" stopColor="#ECECEC" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
-                    )}
                     <div className="">
                         <ActionSelector
                             value={action}
@@ -585,7 +588,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                 Approve
                             </button>
                         )}
-                        {approvedTokens[coinIndex] && action === 'deposit' && (
+                        {coinApproved && action === 'deposit' && (
                             <button
                                 className={`zun-button ${depositEnabled ? '' : 'disabled'}`}
                                 onClick={async () => {
@@ -629,6 +632,11 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                 Deposit
                             </button>
                         )}
+                        {action === 'deposit' && coinApproved && !depositEnabled && (
+                            <div className="text-muted text-danger ms-3">
+                                {depositValidationError}
+                            </div>
+                        )}
                         {action === 'withdraw' && approvedTokens[coinIndex] && (
                             <button
                                 className={`zun-button`}
@@ -649,11 +657,21 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                                 .toString()}', '${account}', '${account}'')`
                                         );
 
-                                        tx = await sushi.contracts.apsContract.methods
-                                            .withdraw(sumToWithdraw, '0')
-                                            .send({
-                                                from: account,
-                                            });
+                                        if (stakingMode === 'UZD') {
+                                            tx = await sushi.contracts.apsContract.methods
+                                                .withdraw(sumToWithdraw, '0')
+                                                .send({
+                                                    from: account,
+                                                });
+                                        }
+
+                                        if (stakingMode === 'ZETH') {
+                                            tx = await sushi.contracts.zethApsContract.methods
+                                                .withdraw(sumToWithdraw, '0')
+                                                .send({
+                                                    from: account,
+                                                });
+                                        }
 
                                         setTransactionId(tx.transactionHash);
                                     } catch (error: any) {
