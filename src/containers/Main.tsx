@@ -329,7 +329,15 @@ export const Main = (): JSX.Element => {
                 return response.json();
             })
             .then((items) => {
-                setHistApyData(items.data);
+                setHistApyData(
+                    items.data.map((item) => {
+                        if (item.apy > 500) {
+                            item.apy = 500;
+                        }
+
+                        return item;
+                    })
+                );
             })
             .catch((error) => {
                 setHistApyData([]);

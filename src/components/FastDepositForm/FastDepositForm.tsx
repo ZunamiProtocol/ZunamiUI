@@ -20,6 +20,7 @@ import {
     fraxAddress,
     BIG_TEN,
     UZD_DECIMALS,
+    BIG_ZERO,
 } from '../../utils/formatbalance';
 import { getFullDisplayBalance } from '../../utils/formatbalance';
 import { useWallet } from 'use-wallet';
@@ -307,6 +308,28 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         }
     }, [action, apsBalance, zethApsBalance, withdrawSum, stakingMode]);
 
+    const maxInputSum = useMemo(() => {
+        let result = BIG_ZERO;
+
+        if (stakingMode === 'UZD') {
+            if (action === 'deposit') {
+                result = userBalanceList[coinIndex];
+            } else {
+                result = apsBalance;
+            }
+        }
+
+        if (stakingMode === 'ZETH') {
+            if (action === 'deposit') {
+                result = userBalanceList[coinIndex];
+            } else {
+                result = zethApsBalance;
+            }
+        }
+
+        return result;
+    }, [action, stakingMode, coinIndex, userBalanceList, zethApsBalance, apsBalance]);
+
     return (
         <div className={`FastDepositForm ${className} mode-${stakingMode}`}>
             {renderToasts(
@@ -567,7 +590,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                         console.log(`Withdraw sum set to ${sum}`);
                     }
                 }}
-                max={action === 'deposit' ? userBalanceList[coinIndex] : zethApsBalance}
+                max={maxInputSum}
                 onCoinChange={(coin: string) => {
                     setCoin(coin);
                     setCoinIndex(['DAI', 'USDC', 'USDT', 'BUSD', 'FRAX', 'UZD'].indexOf(coin));
