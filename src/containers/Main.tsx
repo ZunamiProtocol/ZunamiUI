@@ -143,6 +143,16 @@ function renderBalances(balances: Array<Balance>, lpPrice: BigNumber) {
     );
 }
 
+function formatPoolApy(rawValue: number) {
+    let result = rawValue.toFixed(2);
+
+    if (rawValue > 500) {
+        result = '500+';
+    }
+
+    return result;
+}
+
 export const Main = (): JSX.Element => {
     useEffect(() => {
         log(`🏁 Session started ${new Date().toString()}`);
@@ -732,7 +742,7 @@ export const Main = (): JSX.Element => {
                                 logo="ZETH"
                                 selected={stakingMode === 'ZETH'}
                                 baseApy={
-                                    uzdStatLoading ? 0 : uzdStatData.info.zethAps.apy.toFixed(2)
+                                    uzdStatLoading ? 0 : formatPoolApy(uzdStatData.info.zethAps.apy)
                                 }
                                 deposit={`${getBalanceNumber(zethBalance)
                                     .toNumber()

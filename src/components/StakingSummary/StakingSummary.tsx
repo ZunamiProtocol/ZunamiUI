@@ -1,11 +1,9 @@
 import './StakingSummary.scss';
-import BigNumber from 'bignumber.js';
-import { getFullDisplayBalance } from '../../utils/formatbalance';
 
 interface StakingSummaryProps {
     logo: string;
     selected: boolean;
-    baseApy: string;
+    baseApy: string | number;
     tvl: string;
     deposit: string;
     onSelect?: Function;
