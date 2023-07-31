@@ -202,17 +202,25 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         }
     }, [stakingMode, coins]);
 
+    const [action, setAction] = useState('deposit');
+
     // get user max balance
     const fullBalance = useMemo(() => {
+        let decimalPlaces = 18;
+
+        if (userBalanceList[coinIndex] && !userBalanceList[coinIndex].toNumber()) {
+            decimalPlaces = 0;
+        }
+
         if (isBSC(chainId)) {
-            return getFullDisplayBalance(userBalanceList[coinIndex], 18);
+            return getFullDisplayBalance(userBalanceList[coinIndex], decimalPlaces);
         } else if (isETH(chainId)) {
             const isDaiOrFrax = ['DAI', 'FRAX'].indexOf(coin) !== -1;
 
             if (coin === 'UZD') {
-                return getFullDisplayBalance(userBalanceList[coinIndex], 18);
+                return getFullDisplayBalance(userBalanceList[coinIndex], decimalPlaces);
             } else if (coin === 'ZETH') {
-                return getFullDisplayBalance(userBalanceList[coinIndex], 18, 18);
+                return getFullDisplayBalance(userBalanceList[coinIndex], 18, decimalPlaces);
             }
 
             return getFullDisplayBalance(userBalanceList[coinIndex], isDaiOrFrax ? 18 : 6);
@@ -234,6 +242,20 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
 
         return result;
     }, [coinApproved, depositSum, pendingApproval, fullBalance]);
+
+    const withdrawEnabled = useMemo(() => {
+        let result = true;
+
+        if (coin === 'UZD' && !apsBalance.toNumber()) {
+            result = false;
+        }
+
+        if (!Number(withdrawSum)) {
+            result = false;
+        }
+
+        return result;
+    }, [apsBalance, coin, withdrawSum]);
 
     const depositValidationError = useMemo(() => {
         let message = '';
@@ -263,16 +285,24 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         setDepositSum(fullBalance.toString());
     }, [fullBalance]);
 
-    const [action, setAction] = useState('deposit');
-
     useEffect(() => {
         if (action === 'withdraw' && withdrawSum === '') {
+            let decimalPlaces = 18;
+
             if (stakingMode === 'UZD') {
-                setWithdrawSum(getFullDisplayBalance(apsBalance, 18, 18));
+                if (!apsBalance.toNumber()) {
+                    decimalPlaces = 0;
+                }
+
+                setWithdrawSum(getFullDisplayBalance(apsBalance, 18, decimalPlaces));
             }
 
             if (stakingMode === 'ZETH') {
-                setWithdrawSum(getFullDisplayBalance(zethApsBalance, 18, 18));
+                if (!zethApsBalance.toNumber()) {
+                    decimalPlaces = 0;
+                }
+
+                setWithdrawSum(getFullDisplayBalance(zethApsBalance, 18, decimalPlaces));
             }
         }
     }, [action, apsBalance, zethApsBalance, withdrawSum, stakingMode]);
@@ -506,24 +536,22 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                     </defs>
                 </svg>
                 <div className="FastDepositForm__MobileToggle__Title">
-                    {stakingMode === 'UZD' && (
-                        <ActionSelector
-                            value={action}
-                            actions={[
-                                {
-                                    name: 'deposit',
-                                    title: 'Deposit',
-                                },
-                                {
-                                    name: 'withdraw',
-                                    title: 'Withdraw',
-                                },
-                            ]}
-                            onChange={(action: string) => {
-                                setAction(action);
-                            }}
-                        />
-                    )}
+                    <ActionSelector
+                        value={action}
+                        actions={[
+                            {
+                                name: 'deposit',
+                                title: 'Deposit',
+                            },
+                            {
+                                name: 'withdraw',
+                                title: 'Withdraw',
+                            },
+                        ]}
+                        onChange={(action: string) => {
+                            setAction(action);
+                        }}
+                    />
                 </div>
             </div>
             <Input
@@ -539,7 +567,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                         console.log(`Withdraw sum set to ${sum}`);
                     }
                 }}
-                max={userBalanceList[coinIndex]}
+                max={action === 'deposit' ? userBalanceList[coinIndex] : zethApsBalance}
                 onCoinChange={(coin: string) => {
                     setCoin(coin);
                     setCoinIndex(['DAI', 'USDC', 'USDT', 'BUSD', 'FRAX', 'UZD'].indexOf(coin));
@@ -639,7 +667,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                         )}
                         {action === 'withdraw' && approvedTokens[coinIndex] && (
                             <button
-                                className={`zun-button`}
+                                className={`zun-button ${withdrawEnabled ? '' : 'disabled'}`}
                                 onClick={async () => {
                                     setPendingTx(true);
                                     let tx = null;

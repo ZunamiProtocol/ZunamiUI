@@ -474,7 +474,9 @@ export const Uzd = (): JSX.Element => {
                             logo="ZETH"
                             selected={stakingMode === 'ZETH'}
                             baseApy={
-                                !uzdStatLoading ? uzdStatData.info.zethOmnipool.apy.toFixed(2) : '-'
+                                !uzdStatLoading
+                                    ? uzdStatData.info.zethOmnipool.apy.toString().substr(0, 4)
+                                    : '-'
                             }
                             deposit={formatUzd(zethBalance)}
                             className="mt-3"
@@ -896,8 +898,12 @@ export const Uzd = (): JSX.Element => {
                                                     {!uzdStatLoading && (
                                                         <div className="vela-sans value mt-1">
                                                             {stakingMode === 'UZD'
-                                                                ? uzdStatData.info.omnipool.apy
-                                                                : uzdStatData.info.zethOmnipool.apy}
+                                                                ? uzdStatData.info.omnipool.apy.toFixed(
+                                                                      2
+                                                                  )
+                                                                : uzdStatData.info.zethOmnipool.apy.toFixed(
+                                                                      2
+                                                                  )}
                                                             %
                                                         </div>
                                                     )}

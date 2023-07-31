@@ -309,7 +309,7 @@ export const Main = (): JSX.Element => {
         return poolStats && uzdStatData
             ? poolDataToChartData(
                   stratsData,
-                  stakingMode === 'ZETH' ? uzdStatData.info.omnipool.tvl : uzdStatData.info.aps.tvl
+                  stakingMode === 'ZETH' ? uzdStatData.info.zethAps.tvl : uzdStatData.info.aps.tvl
               )
             : [];
     }, [stakingMode, uzdStatData, poolStats]);

@@ -12,7 +12,8 @@
         padding-top: 70px;
         margin-top: 50px;
 
-        &.mode-UZD {
+        &.mode-UZD,
+        &.mode-ZETH {
             padding-top: 110px;
         }
     }
@@ -23,7 +24,8 @@
         height: 171px;
         margin-top: 0;
 
-        &.mode-UZD {
+        &.mode-UZD,
+        &.mode-ZETH {
             padding-top: 20px;
         }
     }
