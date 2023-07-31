@@ -175,3 +175,13 @@ export function poolDataToChartData(poolData: Array<PoolInfo>, TVL: BigNumber) {
         .filter((el) => el.value > 0)
         .sort((a, b) => (a.tvlInZunami > b.tvlInZunami ? -1 : 1));
 }
+
+export function formatPoolApy(rawValue: number) {
+    let result = rawValue.toFixed(2);
+
+    if (rawValue > 500) {
+        result = '500+';
+    }
+
+    return result;
+}

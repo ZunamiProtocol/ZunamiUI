@@ -32,7 +32,7 @@ import { UzdStakingSummary } from '../components/UzdStakingSummary/UzdStakingSum
 import { ApyChart } from '../components/ApyChart/ApyChart';
 import { Chart } from '../components/Chart/Chart';
 import { PoolsStats } from './Main.types';
-import { poolDataToChartData } from '../functions/pools';
+import { formatPoolApy, poolDataToChartData } from '../functions/pools';
 import { RebaseHistory } from '../components/RebaseHistory/RebaseHistory';
 import { Link } from 'react-router-dom';
 import useZapsLpBalance from '../hooks/useZapsLpBalance';
@@ -475,7 +475,7 @@ export const Uzd = (): JSX.Element => {
                             selected={stakingMode === 'ZETH'}
                             baseApy={
                                 !uzdStatLoading
-                                    ? uzdStatData.info.zethOmnipool.apy.toString().substr(0, 4)
+                                    ? formatPoolApy(uzdStatData.info.zethOmnipool.apy)
                                     : '-'
                             }
                             deposit={formatUzd(zethBalance)}

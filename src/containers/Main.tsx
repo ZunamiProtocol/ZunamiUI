@@ -15,7 +15,7 @@ import {
 } from '../api/api';
 import { BigNumber } from 'bignumber.js';
 import usePendingOperations from '../hooks/usePendingOperations';
-import { poolDataToChartData } from '../functions/pools';
+import { formatPoolApy, poolDataToChartData } from '../functions/pools';
 import { Preloader } from '../components/Preloader/Preloader';
 import { useWallet } from 'use-wallet';
 import useEagerConnect from '../hooks/useEagerConnect';
@@ -141,16 +141,6 @@ function renderBalances(balances: Array<Balance>, lpPrice: BigNumber) {
             </div>
         </div>
     );
-}
-
-function formatPoolApy(rawValue: number) {
-    let result = rawValue.toFixed(2);
-
-    if (rawValue > 500) {
-        result = '500+';
-    }
-
-    return result;
 }
 
 export const Main = (): JSX.Element => {
