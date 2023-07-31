@@ -292,39 +292,52 @@ export const Uzd = (): JSX.Element => {
         return `${result}%`;
     }, [stakingMode, uzdStatData]);
 
-    const apyPopover = (
-        <Popover
-            onMouseEnter={() => setShowApyHint(true)}
-            onMouseLeave={() => setShowApyHint(false)}
-        >
-            <Popover.Body>
-                <div className="">
-                    <span>Average APY in 30 days: </span>
-                    <span className="text-primary">
-                        {stakingMode === 'UZD'
-                            ? uzdStatLoading || !uzdStatData
-                                ? 'n/a'
-                                : `${uzdStatData.info.omnipool.monthlyAvgApy.toFixed(2)}%`
-                            : uzdStatLoading
-                            ? 0
-                            : `${uzdStatData.info.zethOmnipool.monthlyAvgApy.toFixed(2)}%`}
-                    </span>
-                </div>
-                <div className="">
-                    <span>Average APY in 90 days: </span>
-                    <span className="text-primary">
-                        {stakingMode === 'UZD'
-                            ? uzdStatLoading || !uzdStatData
-                                ? 'n/a'
-                                : `${uzdStatData.info.omnipool.threeMonthAvgApy.toFixed(2)}%`
-                            : uzdStatLoading
-                            ? 0
-                            : `${uzdStatData.info.zethOmnipool.threeMonthAvgApy.toFixed(2)}%`}
-                    </span>
-                </div>
-            </Popover.Body>
-        </Popover>
-    );
+    const apyPopover = useMemo(() => {
+        let apy30 = 0;
+        let apy90 = 0;
+
+        if (uzdStatData) {
+            apy30 =
+                stakingMode === 'ZETH'
+                    ? uzdStatData.info.zethAps.monthlyAvgApy
+                    : uzdStatData.info.aps.monthlyAvgApy;
+
+            apy90 =
+                stakingMode === 'ZETH'
+                    ? uzdStatData.info.zethAps.threeMonthAvgApy
+                    : uzdStatData.info.aps.threeMonthAvgApy;
+        }
+
+        if (apy30 > 500) {
+            apy30 = '500+';
+        } else {
+            apy30 = apy30.toFixed(2);
+        }
+
+        if (apy90 > 500) {
+            apy90 = '500+';
+        } else {
+            apy90 = apy90.toFixed(2);
+        }
+
+        return (
+            <Popover
+                onMouseEnter={() => setShowApyHint(true)}
+                onMouseLeave={() => setShowApyHint(false)}
+            >
+                <Popover.Body>
+                    <div className="">
+                        <span>Average APY in 30 days: </span>
+                        <span className="text-primary">{apy30}%</span>
+                    </div>
+                    <div className="">
+                        <span>Average APY in 90 days: </span>
+                        <span className="text-primary">{apy90}%</span>
+                    </div>
+                </Popover.Body>
+            </Popover>
+        );
+    }, [stakingMode, uzdStatData]);
 
     const [tvl, setTvl] = useState('0');
 

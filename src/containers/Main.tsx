@@ -393,39 +393,52 @@ export const Main = (): JSX.Element => {
         return val;
     }, [apsBalance, balances, uzdBalance, lpPrice, apsLpPrice]);
 
-    const apyPopover = (
-        <Popover
-            onMouseEnter={() => setShowApyHint(true)}
-            onMouseLeave={() => setShowApyHint(false)}
-        >
-            <Popover.Body>
-                <div className="">
-                    <span>Average APY in 30 days: </span>
-                    <span className="text-primary">
-                        {stakingMode === 'ZETH'
-                            ? uzdStatLoading || !uzdStatData
-                                ? 'n/a'
-                                : `${uzdStatData.info.zethAps.monthlyAvgApy.toFixed(2)}%`
-                            : uzdStatLoading
-                            ? 0
-                            : `${uzdStatData.info.aps.monthlyAvgApy.toFixed(2)}%`}
-                    </span>
-                </div>
-                <div className="">
-                    <span>Average APY in 90 days: </span>
-                    <span className="text-primary">
-                        {stakingMode === 'ZETH'
-                            ? uzdStatLoading || !uzdStatData
-                                ? 'n/a'
-                                : `${uzdStatData.info.zethAps.threeMonthAvgApy.toFixed(2)}%`
-                            : uzdStatLoading
-                            ? 0
-                            : `${uzdStatData.info.aps.threeMonthAvgApy.toFixed(2)}%`}
-                    </span>
-                </div>
-            </Popover.Body>
-        </Popover>
-    );
+    const apyPopover = useMemo(() => {
+        let apy30 = 0;
+        let apy90 = 0;
+
+        if (uzdStatData) {
+            apy30 =
+                stakingMode === 'ZETH'
+                    ? uzdStatData.info.zethAps.monthlyAvgApy
+                    : uzdStatData.info.aps.monthlyAvgApy;
+
+            apy90 =
+                stakingMode === 'ZETH'
+                    ? uzdStatData.info.zethAps.threeMonthAvgApy
+                    : uzdStatData.info.aps.threeMonthAvgApy;
+        }
+
+        if (apy30 > 500) {
+            apy30 = '500+';
+        } else {
+            apy30 = apy30.toFixed(2);
+        }
+
+        if (apy90 > 500) {
+            apy90 = '500+';
+        } else {
+            apy90 = apy90.toFixed(2);
+        }
+
+        return (
+            <Popover
+                onMouseEnter={() => setShowApyHint(true)}
+                onMouseLeave={() => setShowApyHint(false)}
+            >
+                <Popover.Body>
+                    <div className="">
+                        <span>Average APY in 30 days: </span>
+                        <span className="text-primary">{apy30}%</span>
+                    </div>
+                    <div className="">
+                        <span>Average APY in 90 days: </span>
+                        <span className="text-primary">{apy90}%</span>
+                    </div>
+                </Popover.Body>
+            </Popover>
+        );
+    }, [stakingMode, uzdStatData]);
 
     const balanceTarget = useRef(null);
     const [showBalanceHint, setShowBalanceHint] = useState(false);
@@ -458,14 +471,26 @@ export const Main = (): JSX.Element => {
             ? 0
             : `${uzdStatData.info.aps.apy.toFixed(2)}%`;
 
-    const apyBarMonthlyApy =
-        stakingMode === 'ZETH'
-            ? uzdStatLoading || !uzdStatData
-                ? 'n/a'
-                : `${uzdStatData.info.zethAps.monthlyAvgApy.toFixed(2)}%`
-            : uzdStatLoading
-            ? 0
-            : `${uzdStatData.info.aps.monthlyAvgApy.toFixed(2)}%`;
+    const apyBarMonthlyApy = useMemo(() => {
+        let result = '0%';
+
+        if (!uzdStatData) {
+            return result;
+        }
+
+        result =
+            stakingMode === 'ZETH'
+                ? uzdStatData.info.zethAps.monthlyAvgApy
+                : uzdStatData.info.aps.monthlyAvgApy;
+
+        if (result > 500) {
+            result = '500+%';
+        } else {
+            result = `${result.toFixed(2)}%`;
+        }
+
+        return result;
+    }, [stakingMode, uzdStatData]);
 
     return (
         <Suspense fallback={<Preloader onlyIcon={true} />}>
