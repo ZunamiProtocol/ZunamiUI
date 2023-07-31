@@ -114,7 +114,11 @@ export const LpMigrationModal = (props: LpMigrationModalProps): JSX.Element => {
                 >
                     Migrate
                 </button>
-                {result && <div className="alert alert-info">{result}</div>}
+                {result && (
+                    <div className="alert alert-info" style={{ maxWidth: '350px' }}>
+                        {result}
+                    </div>
+                )}
             </Modal.Body>
         </Modal>
     );

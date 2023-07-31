@@ -100,6 +100,16 @@ export const poolsChartdata: { [key: string]: any } = {
         value: 0,
         icon: '/uzd.svg',
     },
+    ZETH_VAULT: {
+        title: 'Vault',
+        value: 0,
+        icon: '/zeth_vault.svg',
+    },
+    FRAXETH: {
+        title: 'frxETH pool',
+        value: 0,
+        icon: '/frx_eth.svg',
+    },
     FRAX_STAKEDAO: {
         title: 'Stake DAO - UZD / FRAXBP pool',
         value: 0,
@@ -164,4 +174,14 @@ export function poolDataToChartData(poolData: Array<PoolInfo>, TVL: BigNumber) {
         })
         .filter((el) => el.value > 0)
         .sort((a, b) => (a.tvlInZunami > b.tvlInZunami ? -1 : 1));
+}
+
+export function formatPoolApy(rawValue: number) {
+    let result = rawValue.toFixed(2);
+
+    if (rawValue > 500) {
+        result = '500+';
+    }
+
+    return result;
 }

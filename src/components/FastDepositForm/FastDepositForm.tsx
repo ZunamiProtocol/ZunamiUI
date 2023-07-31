@@ -20,17 +20,19 @@ import {
     fraxAddress,
     BIG_TEN,
     UZD_DECIMALS,
+    BIG_ZERO,
 } from '../../utils/formatbalance';
 import { getFullDisplayBalance } from '../../utils/formatbalance';
-import { Link } from 'react-router-dom';
 import { useWallet } from 'use-wallet';
 import { log } from '../../utils/logger';
 import { isBSC, isETH, isPLG } from '../../utils/zunami';
 import { ActionSelector } from '../Form/ActionSelector/ActionSelector';
 import useApproveUzd from '../../hooks/useApproveUzd';
+import useApproveZeth from '../../hooks/useApproveZeth';
 import { contractAddresses } from '../../sushi/lib/constants';
 import useZapsLpBalance from '../../hooks/useZapsLpBalance';
 import BigNumber from 'bignumber.js';
+import useZethApsBalance from '../../hooks/useZethApsBalance';
 
 function coinNameToAddress(coinName: string, chainId: number): string {
     if (chainId === 56 && coinName === 'USDT') {
@@ -119,7 +121,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const { chainId, account } = useWallet();
     const [optimized, setOptimized] = useState(true);
     const [pendingApproval, setPendingApproval] = useState(false);
-    const [coin, setCoin] = useState(stakingMode === 'UZD' ? 'UZD' : 'USDC');
+    const [coin, setCoin] = useState(stakingMode === 'UZD' ? 'UZD' : 'ZETH');
     const [depositSum, setDepositSum] = useState('');
     const [withdrawSum, setWithdrawSum] = useState('');
     const [transactionId, setTransactionId] = useState<string | undefined>(undefined);
@@ -128,6 +130,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const [coinIndex, setCoinIndex] = useState(-1);
     const approveList = useAllowanceStables();
     const apsBalance = useZapsLpBalance();
+    const zethApsBalance = useZethApsBalance();
     const approvedTokens = useMemo(() => {
         return [
             approveList ? approveList[0].toNumber() > 0 : false,
@@ -136,15 +139,17 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             approveList ? approveList[3].toNumber() > 0 : false,
             approveList ? approveList[4].toNumber() > 0 : false,
             approveList ? approveList[5].toNumber() > 0 : false,
+            approveList ? approveList[6].toNumber() > 0 : false,
         ];
     }, [approveList]);
 
     const coins = useMemo(() => {
-        return ['DAI', 'USDC', 'USDT', 'BUSD', 'FRAX', 'UZD'];
+        return ['DAI', 'USDC', 'USDT', 'BUSD', 'FRAX', 'UZD', 'ZETH'];
     }, []);
 
-    const { onApprove } = useApprove();
+    // const { onApprove } = useApprove();
     const { onUzdApprove } = useApproveUzd();
+    const { onZethApprove } = useApproveZeth();
     const { onStake } = useStake(
         [
             {
@@ -171,6 +176,10 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                 name: 'UZD',
                 value: coin === 'UZD' ? depositSum : '0',
             },
+            {
+                name: 'ZETH',
+                value: coin === 'ZETH' ? depositSum : '0',
+            },
         ],
         !optimized
     );
@@ -182,20 +191,10 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             setCoinIndex(coins.indexOf(preselectedCoin));
             console.log(`Set to ${preselectedCoin}`);
         }
-
-        if (chainId === 56 && coinIndex !== 3) {
-            setCoin('USDT');
-            setCoinIndex(coins.indexOf(coin));
-        }
-
-        if (isPLG(chainId) && coinIndex !== 3) {
-            setCoin('USDT');
-            setCoinIndex(coins.indexOf(coin));
-        }
     }, [chainId, coin, coinIndex, coins]);
 
     useEffect(() => {
-        const preselectedCoin = stakingMode === 'UZD' ? 'UZD' : 'USDT';
+        const preselectedCoin = stakingMode === 'UZD' ? 'UZD' : 'ZETH';
         setCoin(preselectedCoin);
         setCoinIndex(coins.indexOf(preselectedCoin));
 
@@ -204,15 +203,25 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         }
     }, [stakingMode, coins]);
 
+    const [action, setAction] = useState('deposit');
+
     // get user max balance
     const fullBalance = useMemo(() => {
+        let decimalPlaces = 18;
+
+        if (userBalanceList[coinIndex] && !userBalanceList[coinIndex].toNumber()) {
+            decimalPlaces = 0;
+        }
+
         if (isBSC(chainId)) {
-            return getFullDisplayBalance(userBalanceList[coinIndex], 18);
+            return getFullDisplayBalance(userBalanceList[coinIndex], decimalPlaces);
         } else if (isETH(chainId)) {
             const isDaiOrFrax = ['DAI', 'FRAX'].indexOf(coin) !== -1;
 
             if (coin === 'UZD') {
-                return getFullDisplayBalance(userBalanceList[coinIndex], 18);
+                return getFullDisplayBalance(userBalanceList[coinIndex], decimalPlaces);
+            } else if (coin === 'ZETH') {
+                return getFullDisplayBalance(userBalanceList[coinIndex], 18, decimalPlaces);
             }
 
             return getFullDisplayBalance(userBalanceList[coinIndex], isDaiOrFrax ? 18 : 6);
@@ -221,15 +230,52 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         }
     }, [userBalanceList, coin, coinIndex, chainId]);
 
+    const coinApproved = useMemo(() => {
+        return approvedTokens[coinIndex];
+    }, [approvedTokens, coinIndex]);
+
     const depositEnabled = useMemo(() => {
         let result =
-            approvedTokens[coinIndex] &&
+            coinApproved &&
             Number(depositSum) > 0 &&
             !pendingApproval &&
             Number(depositSum) <= Number(fullBalance);
 
         return result;
-    }, [approvedTokens, depositSum, pendingApproval, fullBalance, coinIndex]);
+    }, [coinApproved, depositSum, pendingApproval, fullBalance]);
+
+    const withdrawEnabled = useMemo(() => {
+        let result = true;
+
+        if (coin === 'UZD' && !apsBalance.toNumber()) {
+            result = false;
+        }
+
+        if (!Number(withdrawSum)) {
+            result = false;
+        }
+
+        return result;
+    }, [apsBalance, coin, withdrawSum]);
+
+    const depositValidationError = useMemo(() => {
+        let message = '';
+
+        if (Number(depositSum) >= Number(fullBalance)) {
+            // debugger;
+            message = "You're trying to deposit more than you have";
+        }
+
+        if (pendingApproval) {
+            message = 'Please, wait for transaction to finish...';
+        }
+
+        if (Number(depositSum) === 0) {
+            message = 'Please, enter a value more than a zero';
+        }
+
+        return message;
+    }, [depositSum, fullBalance, pendingApproval]);
 
     // set default input to max
     useEffect(() => {
@@ -240,32 +286,49 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         setDepositSum(fullBalance.toString());
     }, [fullBalance]);
 
-    const [action, setAction] = useState('deposit');
-
     useEffect(() => {
         if (action === 'withdraw' && withdrawSum === '') {
-            setWithdrawSum(getFullDisplayBalance(apsBalance, 18));
-        }
-    }, [action, apsBalance, withdrawSum]);
+            let decimalPlaces = 18;
 
-    const depositBlockHint = useMemo(() => {
-        const notEth = !isETH(chainId);
-        let result = notEth
-            ? 'We have temporarily halted deposits on Binance Smart Chain and Polygon due to the surge in gas prices. However, withdrawals are functioning as usual. We will resume deposits shortly. Deposits on Ethereum are operational without any issues. Thank you!'
-            : 'We have temporarily halted optimized deposits & withdrawals option due to the surge in gas prices. However, direct deposits & withdrawals are functioning as usual. Thank you!';
+            if (stakingMode === 'UZD') {
+                if (!apsBalance.toNumber()) {
+                    decimalPlaces = 0;
+                }
+
+                setWithdrawSum(getFullDisplayBalance(apsBalance, 18, decimalPlaces));
+            }
+
+            if (stakingMode === 'ZETH') {
+                if (!zethApsBalance.toNumber()) {
+                    decimalPlaces = 0;
+                }
+
+                setWithdrawSum(getFullDisplayBalance(zethApsBalance, 18, decimalPlaces));
+            }
+        }
+    }, [action, apsBalance, zethApsBalance, withdrawSum, stakingMode]);
+
+    const maxInputSum = useMemo(() => {
+        let result = BIG_ZERO;
 
         if (stakingMode === 'UZD') {
-            result = '';
+            if (action === 'deposit') {
+                result = userBalanceList[coinIndex];
+            } else {
+                result = apsBalance;
+            }
         }
 
-        if (stakingMode === 'UZD' && notEth) {
-            result = 'Currently APS staking available only on Ethereum network';
+        if (stakingMode === 'ZETH') {
+            if (action === 'deposit') {
+                result = userBalanceList[coinIndex];
+            } else {
+                result = zethApsBalance;
+            }
         }
 
         return result;
-    }, [chainId, stakingMode]);
-    const depositBlockHintRef = useRef(null);
-    const [showHint, setShowHint] = useState(false);
+    }, [action, stakingMode, coinIndex, userBalanceList, zethApsBalance, apsBalance]);
 
     return (
         <div className={`FastDepositForm ${className} mode-${stakingMode}`}>
@@ -278,54 +341,24 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             )}
             <div className="d-flex justify-content-between align-items-center">
                 <span className="FastDepositForm__Title">
-                    {stakingMode === 'USD' && (
-                        <svg
-                            width="37"
-                            height="38"
-                            viewBox="0 0 37 38"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                d="M15.5741 20.8429C14.1291 19.8035 12.798 18.846 11.4669 17.8886C10.3324 17.0726 9.19815 16.2566 8.06397 15.4403C7.24073 14.8458 7.3196 13.8823 8.2317 13.4343C17.1096 9.07393 25.9881 4.71462 34.8671 0.356412C35.0415 0.270808 35.212 0.1762 35.3905 0.100563C35.9264 -0.126441 36.4588 0.0374595 36.7973 0.525649C36.9506 0.741125 37.0207 1.00499 36.9947 1.26832C36.9686 1.53165 36.8481 1.77657 36.6555 1.95767C35.7524 2.84275 34.8364 3.71464 33.9248 4.591C30.515 7.86898 27.1047 11.1464 23.6937 14.4232C23.5968 14.5053 23.4956 14.5822 23.3906 14.6537C23.5517 14.7772 23.6507 14.8574 23.754 14.9316C25.9242 16.4923 28.0952 18.0519 30.267 19.6104C30.5996 19.8486 30.8472 20.1253 30.863 20.557C30.8817 21.0662 30.6304 21.4025 30.1979 21.6377C28.8541 22.3684 27.5121 23.1024 26.1719 23.8396C18.0664 28.2724 9.96078 32.7049 1.85495 37.1371C1.72913 37.2102 1.59816 37.2741 1.46307 37.3282C1.24523 37.4095 1.0069 37.4179 0.783915 37.352C0.56093 37.286 0.365332 37.1494 0.226514 36.9625C-0.0652715 36.5703 -0.0795695 36.0621 0.209292 35.6709C0.330421 35.5188 0.463784 35.377 0.60805 35.2467C5.46236 30.5414 10.3179 25.8373 15.1747 21.1345C15.278 21.0344 15.4085 20.9624 15.5741 20.8429Z"
-                                fill="url(#paint0_linear_101_847)"
-                            />
-                            <defs>
-                                <linearGradient
-                                    id="paint0_linear_101_847"
-                                    x1="2.5"
-                                    y1="33"
-                                    x2="45"
-                                    y2="-11"
-                                    gradientUnits="userSpaceOnUse"
-                                >
-                                    <stop stopColor="#E2E2E2" />
-                                    <stop offset="1" stopColor="#ECECEC" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
-                    )}
-                    {stakingMode === 'USD' && <span>Fast deposit</span>}
-                    {stakingMode === 'UZD' && (
-                        <div className="">
-                            <ActionSelector
-                                value={action}
-                                actions={[
-                                    {
-                                        name: 'deposit',
-                                        title: 'Deposit',
-                                    },
-                                    {
-                                        name: 'withdraw',
-                                        title: 'Withdraw',
-                                    },
-                                ]}
-                                onChange={(action: string) => {
-                                    setAction(action);
-                                }}
-                            />
-                        </div>
-                    )}
+                    <div className="">
+                        <ActionSelector
+                            value={action}
+                            actions={[
+                                {
+                                    name: 'deposit',
+                                    title: 'Deposit',
+                                },
+                                {
+                                    name: 'withdraw',
+                                    title: 'Withdraw',
+                                },
+                            ]}
+                            onChange={(action: string) => {
+                                setAction(action);
+                            }}
+                        />
+                    </div>
                 </span>
                 <div className="FastDepositForm__Description">
                     {stakingMode === 'UZD' && (
@@ -397,11 +430,11 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                             </defs>
                         </svg>
                     )}
-                    {stakingMode === 'USD' && (
+                    {stakingMode === 'ZETH' && (
                         <svg
-                            width="122"
-                            height="25"
-                            viewBox="0 0 122 25"
+                            width="124"
+                            height="23"
+                            viewBox="0 0 124 23"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
                         >
@@ -436,32 +469,62 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                 className="letter"
                             />
                             <path
-                                d="M121.999 12.0243L122 11.5219C122.002 7.68815 122.004 4.65992 120.566 2.71316C120.054 2.02784 119.388 1.46499 118.617 1.0681C117.498 0.458027 116.403 0.306795 115.437 0.173287L115.359 0.16295C114.476 0.0478633 113.586 -0.00672431 112.695 0.000660269H85.4619C84.5712 -0.00672431 83.6813 0.0478648 82.7981 0.162948L82.7203 0.173286C81.754 0.306794 80.6592 0.458025 79.5401 1.0681C78.7697 1.46499 78.1033 2.02784 77.5918 2.71316C76.1527 4.65992 76.1549 7.68815 76.1576 11.5219L76.1578 12.0243L76.1576 12.5267C76.1549 16.3605 76.1527 19.3887 77.5919 21.3355C78.1033 22.0208 78.7697 22.5836 79.5401 22.9805C80.6592 23.5906 81.754 23.7418 82.7203 23.8753L82.7981 23.8857C83.6813 24.0007 84.5712 24.0553 85.4619 24.048H112.695C113.586 24.0553 114.476 24.0007 115.359 23.8857L115.437 23.8753C116.403 23.7418 117.498 23.5906 118.617 22.9805C119.388 22.5836 120.054 22.0208 120.566 21.3355C122.004 19.3887 122.002 16.3605 122 12.5267L121.999 12.0243Z"
-                                fill="url(#paint0_linear_3_98048)"
+                                d="M123.218 11.5L123.219 11.0195C123.221 7.35292 123.223 4.45673 121.847 2.59485C121.357 1.93942 120.72 1.40111 119.983 1.02153C118.913 0.438055 117.866 0.293418 116.942 0.165731L116.867 0.155845C116.023 0.0457763 115.172 -0.0064311 114.32 0.000631479H84.8988C84.047 -0.0064311 83.1958 0.0457777 82.3512 0.155843L82.2768 0.16573C81.3526 0.293416 80.3055 0.438053 79.2353 1.02152C78.4984 1.40111 77.8611 1.93941 77.3719 2.59485C75.9956 4.45673 75.9976 7.35292 76.0002 11.0195L76.0004 11.5L76.0002 11.9805C75.9976 15.6471 75.9956 18.5433 77.372 20.4051C77.8611 21.0606 78.4984 21.5989 79.2353 21.9785C80.3055 22.5619 81.3526 22.7066 82.2768 22.8343L82.3512 22.8442C83.1958 22.9542 84.047 23.0064 84.8988 22.9994H114.32C115.172 23.0064 116.023 22.9542 116.867 22.8442L116.942 22.8343C117.866 22.7066 118.913 22.5619 119.983 21.9785C120.72 21.5989 121.357 21.0606 121.847 20.4051C123.223 18.5433 123.221 15.6471 123.219 11.9805L123.218 11.5Z"
+                                fill="url(#paint0_linear_0_4)"
                             />
                             <path
-                                d="M102.146 12.6543C101.299 12.1179 100.147 12.0463 98.8442 11.7855C97.5739 11.5316 96.4986 11.3187 96.4986 10.7432C96.4986 10.1677 97.5489 9.70067 98.8442 9.70067C100.14 9.70067 101.19 10.1677 101.19 10.7432H103.274C103.274 9.16014 101.291 7.87646 98.8442 7.87646C96.3973 7.87646 94.4139 9.16014 94.4139 10.7432C94.4139 11.477 94.8406 12.1469 95.5417 12.6543C96.3529 13.2408 97.557 13.3524 98.8442 13.6099C100.147 13.8705 101.45 14.1352 101.45 14.7823C101.45 15.4298 100.283 15.9553 98.8442 15.9553C97.4049 15.9553 96.2381 15.4298 96.2381 14.7823C96.2381 14.7385 96.2437 14.6953 96.2541 14.6522H94.1582C94.1546 14.6953 94.1533 14.7385 94.1533 14.7823C94.1533 16.4375 96.2533 17.7795 98.8442 17.7795C101.435 17.7795 103.535 16.4375 103.535 14.7823C103.535 13.9502 103.004 13.197 102.146 12.6543Z"
+                                d="M82 6.54921V7.1973H88.0398L83.6241 11.5877V13.0553H91.9553V11.5877H91.552V11.5875H86.0611L86.3025 11.3099C86.3183 11.2933 86.3339 11.2765 86.3491 11.2591L86.7854 10.7605L90.3313 7.12951V5.7627H82V6.54921Z"
+                                fill="url(#paint1_linear_0_5)"
+                            />
+                            <path
+                                d="M102.836 14.5501V13.1584L102.861 9.43691H104.81V7.94259H102.871L102.891 5.01686H102.836V5.00732H100.878V7.94259H100.39V7.94347H100.389V9.41163H100.39V9.43691H100.878V14.5501C100.878 15.9015 102.193 16.9971 103.815 16.9971H105.038V15.2843H103.815C103.275 15.2843 102.836 14.9553 102.836 14.5501Z"
                                 fill="white"
                             />
                             <path
-                                d="M91.1946 12.8222C91.1946 14.55 89.6047 15.9511 87.6449 15.9511C86.3375 15.9511 85.278 14.7835 85.278 13.3434V8.12866H83.1742V13.3301C83.1723 14.5037 83.6393 15.6303 84.4729 16.4635C85.3065 17.2967 86.4389 17.7687 87.6226 17.7763C88.4966 17.782 89.3621 17.6052 90.1626 17.2574C90.6052 17.0433 90.9751 16.7319 91.1893 16.2692V17.5117H91.1946V17.5157H93.2984V8.12866H91.1946V12.8222Z"
+                                d="M111.247 7.76292C110.382 7.76003 109.53 7.91429 108.841 8.25877C108.557 8.38495 108.106 8.76188 107.884 9.17458V5H105.861V17H107.884V12.1659C108.069 10.6705 109.495 9.50673 111.226 9.50673C112.465 9.50673 113.468 10.6221 113.468 11.998V16.9803H115.461V12.0111C115.461 9.67831 113.58 7.77081 111.247 7.76292Z"
                                 fill="white"
                             />
                             <path
-                                d="M113.139 5.00781V5.00818H113.136V9.38751C112.883 8.95327 112.496 8.61162 112.031 8.4134C111.264 8.06668 110.432 7.88347 109.589 7.87563C106.467 7.87563 103.936 10.0931 103.936 12.829C103.936 15.5645 105.937 17.7824 108.406 17.7824C108.993 17.7825 109.575 17.6678 110.117 17.4451C110.66 17.2223 111.152 16.8959 111.567 16.4843C111.982 16.0727 112.311 15.5841 112.536 15.0464C112.761 14.5086 112.876 13.9322 112.876 13.3502H110.773C110.773 14.7901 109.713 15.9574 108.406 15.9574C107.099 15.9574 106.04 14.5566 106.04 12.829C106.04 11.1014 107.63 9.70062 109.589 9.70062C111.55 9.70062 113.139 11.1015 113.139 12.829V17.5219H115.243V5.00781H113.139Z"
+                                d="M94.7353 7.70068C91.8292 7.70068 89.4735 9.78242 89.4735 12.3503C89.4735 14.9183 91.8292 17 94.7353 17C96.8496 17 98.6723 15.8977 99.5081 14.3081H97.1974C96.5925 14.9091 95.7134 15.287 94.7353 15.287C93.1958 15.287 91.9024 14.3512 91.5349 13.0846H99.9311C99.9742 12.8457 99.9963 12.6003 99.9963 12.3503C99.9963 12.1003 99.9742 11.8551 99.9311 11.6163C99.533 9.39673 97.358 7.70068 94.7353 7.70068ZM94.7353 9.41369C96.265 9.41369 97.5519 10.3388 97.9279 11.5942H91.6094C91.6094 11.4424 91.6896 11.2222 91.7808 11.0365C92.3237 10.0744 93.4422 9.41369 94.7353 9.41369Z"
                                 fill="white"
                             />
                             <defs>
                                 <linearGradient
-                                    id="paint0_linear_3_98048"
-                                    x1="81.7937"
-                                    y1="21.4183"
-                                    x2="98.3272"
-                                    y2="1.19994e-06"
+                                    id="paint0_linear_0_4"
+                                    x1="81.3906"
+                                    y1="20.4844"
+                                    x2="97.2031"
+                                    y2="-1.14914e-06"
                                     gradientUnits="userSpaceOnUse"
                                 >
-                                    <stop stopColor="#FE9604" />
-                                    <stop offset="1" stopColor="#FE9F04" />
+                                    <stop stopColor="#575757" />
+                                    <stop offset="1" stopColor="#878787" />
+                                </linearGradient>
+                                <linearGradient
+                                    id="paint1_linear_0_5"
+                                    x1="82.4625"
+                                    y1="6.36983"
+                                    x2="91.2139"
+                                    y2="12.2604"
+                                    gradientUnits="userSpaceOnUse"
+                                >
+                                    <stop stopColor="white" />
+                                    <stop
+                                        offset="0.48479"
+                                        stopColor="#FDFDFD"
+                                        stopOpacity="0.99393"
+                                    />
+                                    <stop
+                                        offset="0.65189"
+                                        stopColor="#FCFCFC"
+                                        stopOpacity="0.98669"
+                                    />
+                                    <stop
+                                        offset="0.87254"
+                                        stopColor="#595959"
+                                        stopOpacity="0.41453"
+                                    />
+                                    <stop offset="1" stopOpacity="0.1" />
                                 </linearGradient>
                             </defs>
                         </svg>
@@ -496,25 +559,22 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                     </defs>
                 </svg>
                 <div className="FastDepositForm__MobileToggle__Title">
-                    {stakingMode === 'USD' ? 'Fast Deposit' : ''}
-                    {stakingMode === 'UZD' && (
-                        <ActionSelector
-                            value={action}
-                            actions={[
-                                {
-                                    name: 'deposit',
-                                    title: 'Deposit',
-                                },
-                                {
-                                    name: 'withdraw',
-                                    title: 'Withdraw',
-                                },
-                            ]}
-                            onChange={(action: string) => {
-                                setAction(action);
-                            }}
-                        />
-                    )}
+                    <ActionSelector
+                        value={action}
+                        actions={[
+                            {
+                                name: 'deposit',
+                                title: 'Deposit',
+                            },
+                            {
+                                name: 'withdraw',
+                                title: 'Withdraw',
+                            },
+                        ]}
+                        onChange={(action: string) => {
+                            setAction(action);
+                        }}
+                    />
                 </div>
             </div>
             <Input
@@ -530,7 +590,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                         console.log(`Withdraw sum set to ${sum}`);
                     }
                 }}
-                max={userBalanceList[coinIndex]}
+                max={maxInputSum}
                 onCoinChange={(coin: string) => {
                     setCoin(coin);
                     setCoinIndex(['DAI', 'USDC', 'USDT', 'BUSD', 'FRAX', 'UZD'].indexOf(coin));
@@ -559,11 +619,11 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                     }
 
                                     try {
-                                        if (coin !== 'UZD') {
-                                            await onApprove(coinNameToAddress(coin, chainId));
-                                            log(`${coin} approved!`);
-                                        } else {
+                                        if (coin === 'UZD') {
                                             await onUzdApprove(coinNameToAddress(coin, chainId));
+                                            log(`${coin} approved!`);
+                                        } else if (coin === 'ZETH') {
+                                            await onZethApprove(coinNameToAddress(coin, chainId));
                                             log(`${coin} approved!`);
                                         }
                                     } catch (error: any) {
@@ -579,110 +639,103 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                 Approve
                             </button>
                         )}
-                        {approvedTokens[coinIndex] && action === 'deposit' && (
-                            <div
-                                ref={depositBlockHintRef}
-                                onMouseEnter={() => setShowHint(true)}
-                                onMouseLeave={() => setShowHint(false)}
+                        {coinApproved && action === 'deposit' && (
+                            <button
+                                className={`zun-button ${depositEnabled ? '' : 'disabled'}`}
+                                onClick={async () => {
+                                    if (stakingMode === 'UZD' && !isETH(chainId)) {
+                                        log('Trying to deposit UZD on non-ETH network');
+                                        return false;
+                                    }
+
+                                    setPendingTx(true);
+
+                                    try {
+                                        let tx = null;
+                                        tx = await onStake();
+
+                                        log(`Deposit executed. Tx ID: ${tx.transactionHash}`);
+                                        setTransactionId(tx.transactionHash);
+                                        setDepositSum('0');
+                                        log('Deposit success');
+                                        log(JSON.stringify(tx));
+
+                                        // @ts-ignore
+                                        if (window.dataLayer) {
+                                            // @ts-ignore
+                                            window.dataLayer.push({
+                                                event: 'deposit',
+                                                userID: account,
+                                                type: getActiveWalletName(),
+                                                value: depositSum,
+                                            });
+                                        }
+                                    } catch (error: any) {
+                                        setPendingTx(false);
+                                        setTransactionError(true);
+                                        log(`❗️ Deposit error: ${error.message}`);
+                                        log(JSON.stringify(error));
+                                    }
+
+                                    setPendingTx(false);
+                                }}
                             >
-                                <OverlayTrigger
-                                    placement="top"
-                                    overlay={<Tooltip>{depositBlockHint}</Tooltip>}
-                                    trigger={['hover', 'focus']}
-                                    show={showHint}
-                                >
-                                    <button
-                                        className={`zun-button ${depositEnabled ? '' : 'disabled'}`}
-                                        onClick={async () => {
-                                            if (stakingMode === 'UZD' && !isETH(chainId)) {
-                                                log('Trying to deposit UZD on non-ETH network');
-                                                return false;
-                                            }
-
-                                            setPendingTx(true);
-
-                                            try {
-                                                let tx = null;
-
-                                                if (coin === 'UZD') {
-                                                    tx = await onStake();
-                                                } else {
-                                                    tx = await onStake();
-                                                }
-
-                                                log(
-                                                    `Deposit executed. Tx ID: ${tx.transactionHash}`
-                                                );
-                                                setTransactionId(tx.transactionHash);
-                                                setDepositSum('0');
-                                                log('Deposit success');
-                                                log(JSON.stringify(tx));
-
-                                                // @ts-ignore
-                                                if (window.dataLayer) {
-                                                    // @ts-ignore
-                                                    window.dataLayer.push({
-                                                        event: 'deposit',
-                                                        userID: account,
-                                                        type: getActiveWalletName(),
-                                                        value: depositSum,
-                                                    });
-                                                }
-                                            } catch (error: any) {
-                                                setPendingTx(false);
-                                                setTransactionError(true);
-                                                log(`❗️ Deposit error: ${error.message}`);
-                                                log(JSON.stringify(error));
-                                            }
-
-                                            setPendingTx(false);
-                                        }}
-                                    >
-                                        Deposit
-                                    </button>
-                                </OverlayTrigger>
+                                Deposit
+                            </button>
+                        )}
+                        {action === 'deposit' && coinApproved && !depositEnabled && (
+                            <div className="text-muted text-danger ms-3">
+                                {depositValidationError}
                             </div>
                         )}
-                        {stakingMode === 'UZD' &&
-                            action === 'withdraw' &&
-                            approvedTokens[coinIndex] && (
-                                <button
-                                    className={`zun-button`}
-                                    onClick={async () => {
-                                        setPendingTx(true);
-                                        let tx = null;
+                        {action === 'withdraw' && approvedTokens[coinIndex] && (
+                            <button
+                                className={`zun-button ${withdrawEnabled ? '' : 'disabled'}`}
+                                onClick={async () => {
+                                    setPendingTx(true);
+                                    let tx = null;
 
-                                        try {
-                                            const sumToWithdraw = new BigNumber(withdrawSum)
+                                    try {
+                                        const sumToWithdraw = new BigNumber(withdrawSum)
+                                            .multipliedBy(BIG_TEN.pow(UZD_DECIMALS))
+                                            .toString();
+
+                                        log(
+                                            `APS contract (ETH): withdraw('${new BigNumber(
+                                                withdrawSum
+                                            )
                                                 .multipliedBy(BIG_TEN.pow(UZD_DECIMALS))
-                                                .toString();
+                                                .toString()}', '${account}', '${account}'')`
+                                        );
 
-                                            log(
-                                                `APS contract (ETH): withdraw('${new BigNumber(
-                                                    withdrawSum
-                                                )
-                                                    .multipliedBy(BIG_TEN.pow(UZD_DECIMALS))
-                                                    .toString()}', '${account}', '${account}'')`
-                                            );
-
+                                        if (stakingMode === 'UZD') {
                                             tx = await sushi.contracts.apsContract.methods
                                                 .withdraw(sumToWithdraw, '0')
                                                 .send({
                                                     from: account,
                                                 });
-
-                                            setTransactionId(tx.transactionHash);
-                                        } catch (error: any) {
-                                            setTransactionError(true);
-                                            log(`❗️ Error while redeeming ZLP: ${error.message}`);
                                         }
 
-                                        setPendingTx(false);
-                                    }}
-                                >
-                                    Withdraw
-                                </button>
-                            )}
+                                        if (stakingMode === 'ZETH') {
+                                            tx = await sushi.contracts.zethApsContract.methods
+                                                .withdraw(sumToWithdraw, '0')
+                                                .send({
+                                                    from: account,
+                                                });
+                                        }
+
+                                        setTransactionId(tx.transactionHash);
+                                    } catch (error: any) {
+                                        setTransactionError(true);
+                                        log(`❗️ Error while redeeming ZLP: ${error.message}`);
+                                    }
+
+                                    setPendingTx(false);
+                                }}
+                            >
+                                Withdraw
+                            </button>
+                        )}
                         {/* {!pendingTx && (
                             <DirectAction
                                 actionName="deposit"

@@ -32,6 +32,7 @@ export class Contracts {
         this.zethContract = new this.web3.eth.Contract(zethAbi);
         this.fraxContract = new this.web3.eth.Contract(fraxAbi);
         this.apsContract = new this.web3.eth.Contract(ApsAbi);
+        this.zethApsContract = new this.web3.eth.Contract(ApsAbi);
 
         this.weth = new this.web3.eth.Contract(WETHAbi);
         this.usdc = new this.web3.eth.Contract(WETHAbi);
@@ -49,6 +50,7 @@ export class Contracts {
         this.uzdContract.options.from = defaultAccount;
         this.fraxContract.options.from = defaultAccount;
         this.apsContract.options.from = defaultAccount;
+        this.zethApsContract.options.from = defaultAccount;
     }
 
     setDefaultAccount(account) {
@@ -69,6 +71,7 @@ export class Contracts {
         setProviderParams(this.uzdContract, contractAddresses.uzd[1]);
         setProviderParams(this.fraxContract, contractAddresses.frax[1]);
         setProviderParams(this.apsContract, contractAddresses.aps[1]);
+        setProviderParams(this.zethApsContract, contractAddresses.zethAPS[1]);
 
         if (networkId === 56) {
             setProviderParams(this.bscMasterChef, contractAddresses.zunami[56]);

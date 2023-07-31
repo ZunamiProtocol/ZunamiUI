@@ -20,6 +20,7 @@ export const Input = (props: InputProps): JSX.Element => {
 
     const fullBalance = useMemo(() => {
         let decimals = props.name === 'DAI' ? 18 : 6;
+        let decimalPlaces = 18;
 
         if (props.action === 'withdraw') {
             decimals = 18;
@@ -29,11 +30,15 @@ export const Input = (props: InputProps): JSX.Element => {
             decimals = 18;
         }
 
-        if (props.name === 'FRAX' || props.name === 'UZD') {
+        if (props.name === 'FRAX' || props.name === 'UZD' || props.name === 'ZETH') {
             decimals = 18;
         }
 
-        return getFullDisplayBalance(props.max, decimals);
+        if (props.max && !props.max.toNumber()) {
+            decimalPlaces = 0;
+        }
+
+        return getFullDisplayBalance(props.max, decimals, decimalPlaces);
     }, [props.max, props.name, props.action, props.chainId]);
 
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {

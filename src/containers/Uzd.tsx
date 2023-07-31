@@ -32,7 +32,7 @@ import { UzdStakingSummary } from '../components/UzdStakingSummary/UzdStakingSum
 import { ApyChart } from '../components/ApyChart/ApyChart';
 import { Chart } from '../components/Chart/Chart';
 import { PoolsStats } from './Main.types';
-import { poolDataToChartData } from '../functions/pools';
+import { formatPoolApy, poolDataToChartData } from '../functions/pools';
 import { RebaseHistory } from '../components/RebaseHistory/RebaseHistory';
 import { Link } from 'react-router-dom';
 import useZapsLpBalance from '../hooks/useZapsLpBalance';
@@ -143,7 +143,15 @@ export const Uzd = (): JSX.Element => {
                 return response.json();
             })
             .then((items) => {
-                setHistApyData(items.data);
+                setHistApyData(
+                    items.data.map((item) => {
+                        if (item.apy > 500) {
+                            item.apy = 500;
+                        }
+
+                        return item;
+                    })
+                );
             })
             .catch((error) => {
                 setHistApyData([]);
@@ -266,14 +274,23 @@ export const Uzd = (): JSX.Element => {
     const apyHintTarget = useRef(null);
     const [showApyHint, setShowApyHint] = useState(false);
 
-    const apyBarMonthlyApy =
-        stakingMode === 'UZD'
-            ? uzdStatLoading || !uzdStatData
-                ? 'n/a'
-                : `${uzdStatData.info.omnipool.monthlyAvgApy.toFixed(2)}%`
-            : uzdStatLoading
-            ? 0
-            : `${uzdStatData.info.zethOmnipool.monthlyAvgApy.toFixed(2)}%`;
+    const apyBarMonthlyApy = useMemo(() => {
+        let result = '0';
+
+        if (!uzdStatData) {
+            return result;
+        }
+
+        result =
+            stakingMode === 'UZD'
+                ? uzdStatData.info.omnipool.monthlyAvgApy
+                : uzdStatData.info.zethOmnipool.monthlyAvgApy;
+
+        if (result > 500) {
+            result = '500+';
+        }
+        return `${result}%`;
+    }, [stakingMode, uzdStatData]);
 
     const apyPopover = (
         <Popover
@@ -317,6 +334,30 @@ export const Uzd = (): JSX.Element => {
             setTvl(uzdStatData.tvl);
         }
     }, [uzdStatLoading, uzdStatData?.tvl]);
+
+    const baseApy = useMemo(() => {
+        let result = '0';
+
+        if (!uzdStatData) {
+            return result;
+        }
+
+        if (stakingMode === 'UZD') {
+            result = uzdStatData.info.omnipool.apy;
+        }
+
+        if (stakingMode === 'ZETH') {
+            result = uzdStatData.info.zethOmnipool.apy;
+        }
+
+        if (Number(result) > 500) {
+            result = '500';
+        } else {
+            result = result.toFixed(2);
+        }
+
+        return result;
+    }, [stakingMode, uzdStatData]);
 
     return (
         <React.Fragment>
@@ -474,7 +515,9 @@ export const Uzd = (): JSX.Element => {
                             logo="ZETH"
                             selected={stakingMode === 'ZETH'}
                             baseApy={
-                                !uzdStatLoading ? uzdStatData.info.zethOmnipool.apy.toFixed(2) : '-'
+                                !uzdStatLoading
+                                    ? formatPoolApy(uzdStatData.info.zethOmnipool.apy)
+                                    : '-'
                             }
                             deposit={formatUzd(zethBalance)}
                             className="mt-3"
@@ -826,67 +869,67 @@ export const Uzd = (): JSX.Element => {
                                 <div className="card m-xxl-3 mt-xxl-0 h-100">
                                     <div className="card-body pb-0">
                                         <div className="title">APY bar</div>
-                                        {stakingMode === 'UZD' && (
-                                            <div className="mt-3">
-                                                <div className="stake-and-boost rounded-4 d-flex">
-                                                    <div className="col-6 pt-3 pb-3 ps-4">
-                                                        <div className="text-white">
-                                                            Stake and Boost
-                                                        </div>
-                                                        <div className="text-white d-flex align-items-center">
-                                                            APY to{' '}
-                                                            {!uzdStatLoading
-                                                                ? uzdStatData.info.aps.apy.toFixed(
-                                                                      2
-                                                                  )
-                                                                : '0'}
-                                                            % !
-                                                            <OverlayTrigger
-                                                                placement="top"
-                                                                overlay={
-                                                                    <Tooltip>
-                                                                        You can stake UZD and earn
-                                                                        higher yields by providing
-                                                                        liquidity to the most
-                                                                        profitable UZD pools. With
-                                                                        UZD Staking (APS), your
-                                                                        liquidity provision rewards
-                                                                        will be automatically
-                                                                        reinvested.
-                                                                    </Tooltip>
-                                                                }
-                                                                trigger={['hover', 'focus']}
-                                                            >
-                                                                <div className="hint">
-                                                                    <svg
-                                                                        width="13"
-                                                                        height="13"
-                                                                        viewBox="0 0 13 13"
-                                                                        fill="none"
-                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                        className="ms-1 mb-1"
-                                                                    >
-                                                                        <path
-                                                                            fillRule="evenodd"
-                                                                            clipRule="evenodd"
-                                                                            d="M6.5 13C10.0899 13 13 10.0899 13 6.5C13 2.91015 10.0899 0 6.5 0C2.91015 0 0 2.91015 0 6.5C0 10.0899 2.91015 13 6.5 13ZM5.355 7.7464H6.49705C6.57884 7.40033 6.67637 7.15808 6.78963 7.01965C6.91548 6.86234 7.24268 6.60751 7.77122 6.25514C8.43191 5.82098 8.81573 5.3522 8.9227 4.84882C9.06742 4.23219 8.95102 3.75712 8.57348 3.42363C8.18966 3.09014 7.64852 2.9234 6.95009 2.9234C6.18243 2.9234 5.57523 3.10273 5.12848 3.46139C4.68803 3.82004 4.39229 4.3832 4.24128 5.15085H5.43995C5.54692 4.72298 5.70737 4.41466 5.92131 4.22589C6.14153 4.03713 6.44041 3.94274 6.81795 3.94274C7.49751 3.94274 7.77437 4.23848 7.64852 4.82995C7.61077 4.99984 7.52268 5.154 7.38425 5.29243C7.25211 5.43086 7.03818 5.59131 6.74244 5.77378C6.34603 6.0066 6.03457 6.27402 5.80804 6.57604C5.60669 6.83403 5.45568 7.22414 5.355 7.7464ZM4.83589 9.79452H6.21389L6.50648 8.44484H5.11904L4.83589 9.79452Z"
-                                                                            fill="#ffffff"
-                                                                        ></path>
-                                                                    </svg>
-                                                                </div>
-                                                            </OverlayTrigger>
-                                                        </div>
+                                        <div className="mt-3">
+                                            <div className="stake-and-boost rounded-4 d-flex">
+                                                <div className="col-6 pt-3 pb-3 ps-4">
+                                                    <div className="text-white">
+                                                        Stake and Boost
                                                     </div>
-                                                    <div className="col-6 d-flex align-items-center pe-3 ps-3 justify-content-end">
-                                                        <Link to="/">
-                                                            <button className="zun-button w-100">
-                                                                Stake
-                                                            </button>
-                                                        </Link>
+                                                    <div className="text-white d-flex align-items-center">
+                                                        APY to{' '}
+                                                        {!uzdStatLoading
+                                                            ? uzdStatData.info[
+                                                                  stakingMode === 'UZD'
+                                                                      ? 'aps'
+                                                                      : 'zethAps'
+                                                              ].apy.toFixed(2)
+                                                            : '0'}
+                                                        % !
+                                                        <OverlayTrigger
+                                                            placement="top"
+                                                            overlay={
+                                                                <Tooltip>
+                                                                    You can stake {stakingMode} and
+                                                                    earn higher yields by providing
+                                                                    liquidity to the most profitable
+                                                                    {stakingMode} pools. With{' '}
+                                                                    {stakingMode}
+                                                                    &nbsp;Staking (APS), your
+                                                                    liquidity provision rewards will
+                                                                    be automatically reinvested.
+                                                                </Tooltip>
+                                                            }
+                                                            trigger={['hover', 'focus']}
+                                                        >
+                                                            <div className="hint">
+                                                                <svg
+                                                                    width="13"
+                                                                    height="13"
+                                                                    viewBox="0 0 13 13"
+                                                                    fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    className="ms-1 mb-1"
+                                                                >
+                                                                    <path
+                                                                        fillRule="evenodd"
+                                                                        clipRule="evenodd"
+                                                                        d="M6.5 13C10.0899 13 13 10.0899 13 6.5C13 2.91015 10.0899 0 6.5 0C2.91015 0 0 2.91015 0 6.5C0 10.0899 2.91015 13 6.5 13ZM5.355 7.7464H6.49705C6.57884 7.40033 6.67637 7.15808 6.78963 7.01965C6.91548 6.86234 7.24268 6.60751 7.77122 6.25514C8.43191 5.82098 8.81573 5.3522 8.9227 4.84882C9.06742 4.23219 8.95102 3.75712 8.57348 3.42363C8.18966 3.09014 7.64852 2.9234 6.95009 2.9234C6.18243 2.9234 5.57523 3.10273 5.12848 3.46139C4.68803 3.82004 4.39229 4.3832 4.24128 5.15085H5.43995C5.54692 4.72298 5.70737 4.41466 5.92131 4.22589C6.14153 4.03713 6.44041 3.94274 6.81795 3.94274C7.49751 3.94274 7.77437 4.23848 7.64852 4.82995C7.61077 4.99984 7.52268 5.154 7.38425 5.29243C7.25211 5.43086 7.03818 5.59131 6.74244 5.77378C6.34603 6.0066 6.03457 6.27402 5.80804 6.57604C5.60669 6.83403 5.45568 7.22414 5.355 7.7464ZM4.83589 9.79452H6.21389L6.50648 8.44484H5.11904L4.83589 9.79452Z"
+                                                                        fill="#ffffff"
+                                                                    ></path>
+                                                                </svg>
+                                                            </div>
+                                                        </OverlayTrigger>
                                                     </div>
                                                 </div>
+                                                <div className="col-6 d-flex align-items-center pe-3 ps-3 justify-content-end">
+                                                    <Link to="/">
+                                                        <button className="zun-button w-100">
+                                                            Stake
+                                                        </button>
+                                                    </Link>
+                                                </div>
                                             </div>
-                                        )}
+                                        </div>
                                         <div className="mt-3">
                                             <div className="d-flex mt-3 gap-3 me-3">
                                                 <div className="gray-block small-block align-items-start stablecoin mb-2 col-6">
@@ -895,10 +938,7 @@ export const Uzd = (): JSX.Element => {
                                                     </div>
                                                     {!uzdStatLoading && (
                                                         <div className="vela-sans value mt-1">
-                                                            {stakingMode === 'UZD'
-                                                                ? uzdStatData.info.omnipool.apy
-                                                                : uzdStatData.info.zethOmnipool.apy}
-                                                            %
+                                                            {baseApy}%
                                                         </div>
                                                     )}
                                                 </div>

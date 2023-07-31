@@ -16,6 +16,7 @@ export const transHistoryUrl = `${root}/transfers/history`;
 export const uzdTransHistoryUrl = `${root}/uzd/transfers/history`;
 export const uzdRebaseHistoryUrl = `${root}/uzd/rebase/history`;
 export const zethRebaseHistoryUrl = `${root}/zeth/rebase/history`;
+export const zethApsHistoryUrl = `${root}/zeth-aps/strategy/active-strategies-stats`;
 
 export const curvePoolsApyUrl = 'https://api.curve.fi/api/getFactoryAPYs?version=2';
 
@@ -24,6 +25,10 @@ const POLYGON_NETWORK_ID = 137;
 
 export const getActiveStratsUrl = (): string => {
     return activeStratsUrl;
+};
+
+export const getZethAPsStratsUrl = (): string => {
+    return zethApsHistoryUrl;
 };
 
 export const getUzdStratsUrl = (): string => {
@@ -48,6 +53,10 @@ export const getApsHistoricalApyUrl = (period: string): string => {
 
 export const getZethHistoricalApyUrl = (period: string): string => {
     return `${root}/zunami/zeth-omnipool-apy-chart?period=${period.toUpperCase()}`;
+};
+
+export const getZethApsHistoricalApyUrl = (period: string): string => {
+    return `${root}/zunami/zeth-aps-apy-chart?period=${period.toUpperCase()}`;
 };
 
 export const getTestnetStatusUrl = (address: string): string => {

@@ -56,6 +56,7 @@ export const useAllowanceStables = () => {
         BIG_ZERO,
         BIG_ZERO,
         BIG_ZERO,
+        BIG_ZERO,
     ]);
     const { account, ethereum, chainId } = useWallet();
     const sushi = useSushi();
@@ -107,6 +108,15 @@ export const useAllowanceStables = () => {
                     // @ts-ignore
                     account
                 );
+
+                const allowanceZeth = await getAllowance(
+                    ethereum,
+                    contractAddresses.zeth[1],
+                    sushi.getZethApsContract(account),
+                    // @ts-ignore
+                    account
+                );
+
                 const data = [
                     new BigNumber(allowanceDai),
                     new BigNumber(allowanceUsdc),
@@ -114,6 +124,7 @@ export const useAllowanceStables = () => {
                     BIG_ZERO,
                     new BigNumber(allowanceFrax),
                     new BigNumber(allowanceUzd),
+                    new BigNumber(allowanceZeth),
                 ];
                 // @ts-ignore
                 setAllowance(data);
@@ -122,6 +133,7 @@ export const useAllowanceStables = () => {
                 log(`Allowance USDT: ${allowanceUsdt}`);
                 log(`Allowance FRAX: ${allowanceFrax}`);
                 log(`Allowance UZD: ${allowanceUzd}`);
+                log(`Allowance ZETH: ${allowanceZeth}`);
             } else if (isBSC(chainId)) {
                 const lpContract = getContract(
                     sushi.bscContracts.bscMasterChef.currentProvider,

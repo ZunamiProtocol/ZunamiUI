@@ -6,8 +6,8 @@ import useBalanceOf from '../hooks/useBalanceOf';
 import useCrossChainBalances from '../hooks/useCrossChainBalances';
 import useFetch from 'react-fetch-hook';
 import {
-    getHistoricalApyUrl,
-    getActiveStratsUrl,
+    getZethApsHistoricalApyUrl,
+    getZethAPsStratsUrl,
     uzdStakingInfoUrl,
     getUzdStratsUrl,
     getApsHistoricalApyUrl,
@@ -15,7 +15,7 @@ import {
 } from '../api/api';
 import { BigNumber } from 'bignumber.js';
 import usePendingOperations from '../hooks/usePendingOperations';
-import { poolDataToChartData } from '../functions/pools';
+import { formatPoolApy, poolDataToChartData } from '../functions/pools';
 import { Preloader } from '../components/Preloader/Preloader';
 import { useWallet } from 'use-wallet';
 import useEagerConnect from '../hooks/useEagerConnect';
@@ -23,9 +23,8 @@ import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChai
 import useSupportedChain from '../hooks/useSupportedChain';
 import { log, copyLogs } from '../utils/logger';
 import usePausedContract from '../hooks/usePausedContract';
-import { isBSC, isETH, isPLG } from '../utils/zunami';
+import { isBSC, isPLG } from '../utils/zunami';
 import { FastDepositForm } from '../components/FastDepositForm/FastDepositForm';
-import { Pendings } from '../components/Pendings/Pendings';
 import { OverlayTrigger, Popover, Tooltip } from 'react-bootstrap';
 import { networks } from '../components/NetworkSelector/NetworkSelector';
 import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
@@ -37,6 +36,7 @@ import useZapsLpBalance from '../hooks/useZapsLpBalance';
 import useUzdBalance from '../hooks/useUzdBalance';
 import useApsLpPrice from '../hooks/useApsLpPrice';
 import { LpMigrationModal } from '../components/LpMigrationModal/LpMigrationModal';
+import { contractAddresses } from '../sushi/lib/constants';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -158,6 +158,8 @@ export const Main = (): JSX.Element => {
     const apsBalance = useZapsLpBalance();
     const apsLpPrice = useApsLpPrice();
     const uzdBalance = useUzdBalance();
+    const zethBalance = useZapsLpBalance(contractAddresses.zethAPS[1]);
+
     const [stakingMode, setStakingMode] = useState('UZD');
     // total tvl (aps/zunami)
     const [tvl, setTvl] = useState('0');
@@ -187,7 +189,7 @@ export const Main = (): JSX.Element => {
     ) as ZunamiInfoFetch;
 
     const { data: activeStratsStat } = useFetch(
-        stakingMode === 'USD' ? getActiveStratsUrl() : getUzdStratsUrl()
+        stakingMode === 'ZETH' ? getZethAPsStratsUrl() : getUzdStratsUrl()
     );
     const poolStats = activeStratsStat as PoolsStats;
 
@@ -307,7 +309,7 @@ export const Main = (): JSX.Element => {
         return poolStats && uzdStatData
             ? poolDataToChartData(
                   stratsData,
-                  stakingMode === 'USD' ? uzdStatData.omnipool.tvl : uzdStatData.info.aps.tvl
+                  stakingMode === 'ZETH' ? uzdStatData.info.zethAps.tvl : uzdStatData.info.aps.tvl
               )
             : [];
     }, [stakingMode, uzdStatData, poolStats]);
@@ -318,8 +320,8 @@ export const Main = (): JSX.Element => {
     // historical APY chart data
     useEffect(() => {
         const url =
-            stakingMode === 'USD'
-                ? getHistoricalApyUrl(histApyPeriod)
+            stakingMode === 'ZETH'
+                ? getZethApsHistoricalApyUrl(histApyPeriod)
                 : getApsHistoricalApyUrl(histApyPeriod);
 
         fetch(url)
@@ -327,7 +329,15 @@ export const Main = (): JSX.Element => {
                 return response.json();
             })
             .then((items) => {
-                setHistApyData(items.data);
+                setHistApyData(
+                    items.data.map((item) => {
+                        if (item.apy > 500) {
+                            item.apy = 500;
+                        }
+
+                        return item;
+                    })
+                );
             })
             .catch((error) => {
                 setHistApyData([]);
@@ -392,10 +402,10 @@ export const Main = (): JSX.Element => {
                 <div className="">
                     <span>Average APY in 30 days: </span>
                     <span className="text-primary">
-                        {stakingMode === 'USD'
+                        {stakingMode === 'ZETH'
                             ? uzdStatLoading || !uzdStatData
                                 ? 'n/a'
-                                : `${uzdStatData.info.omnipool.monthlyAvgApy.toFixed(2)}%`
+                                : `${uzdStatData.info.zethAps.monthlyAvgApy.toFixed(2)}%`
                             : uzdStatLoading
                             ? 0
                             : `${uzdStatData.info.aps.monthlyAvgApy.toFixed(2)}%`}
@@ -404,10 +414,10 @@ export const Main = (): JSX.Element => {
                 <div className="">
                     <span>Average APY in 90 days: </span>
                     <span className="text-primary">
-                        {stakingMode === 'USD'
+                        {stakingMode === 'ZETH'
                             ? uzdStatLoading || !uzdStatData
                                 ? 'n/a'
-                                : `${uzdStatData.info.omnipool.threeMonthAvgApy.toFixed(2)}%`
+                                : `${uzdStatData.info.zethAps.threeMonthAvgApy.toFixed(2)}%`
                             : uzdStatLoading
                             ? 0
                             : `${uzdStatData.info.aps.threeMonthAvgApy.toFixed(2)}%`}
@@ -440,19 +450,19 @@ export const Main = (): JSX.Element => {
     );
 
     const apyBarApy =
-        stakingMode === 'USD'
+        stakingMode === 'ZETH'
             ? uzdStatLoading || !uzdStatData
                 ? 'n/a'
-                : `${uzdStatData.info.omnipool.apy.toFixed(2)}%`
+                : `${uzdStatData.info.zethAps.apy.toFixed(2)}%`
             : uzdStatLoading
             ? 0
             : `${uzdStatData.info.aps.apy.toFixed(2)}%`;
 
     const apyBarMonthlyApy =
-        stakingMode === 'USD'
+        stakingMode === 'ZETH'
             ? uzdStatLoading || !uzdStatData
                 ? 'n/a'
-                : `${uzdStatData.info.omnipool.monthlyAvgApy.toFixed(2)}%`
+                : `${uzdStatData.info.zethAps.monthlyAvgApy.toFixed(2)}%`
             : uzdStatLoading
             ? 0
             : `${uzdStatData.info.aps.monthlyAvgApy.toFixed(2)}%`;
@@ -714,21 +724,42 @@ export const Main = (): JSX.Element => {
                                 logo="UZD"
                                 selected={stakingMode === 'UZD'}
                                 baseApy={uzdStatLoading ? 0 : uzdStatData.info.aps.apy.toFixed(2)}
-                                deposit={getBalanceNumber(apsBalance.multipliedBy(apsLpPrice))
+                                deposit={`$${getBalanceNumber(apsBalance.multipliedBy(apsLpPrice))
                                     .toNumber()
-                                    .toLocaleString('en')}
+                                    .toLocaleString('en')}`}
                                 tvl={
                                     uzdStatLoading
                                         ? '0'
-                                        : Number(
+                                        : `$${Number(
                                               getBalanceNumber(uzdStatData.info.aps.tvl)
                                           ).toLocaleString('en', {
                                               maximumFractionDigits: 0,
-                                          })
+                                          })}`
                                 }
                                 className="mt-3"
                                 onSelect={() => {
                                     setStakingMode('UZD');
+                                }}
+                            />
+                            <StakingSummary
+                                logo="ZETH"
+                                selected={stakingMode === 'ZETH'}
+                                baseApy={
+                                    uzdStatLoading ? 0 : formatPoolApy(uzdStatData.info.zethAps.apy)
+                                }
+                                deposit={`${getBalanceNumber(zethBalance)
+                                    .toNumber()
+                                    .toLocaleString('en')} ZETH`}
+                                tvl={
+                                    uzdStatLoading
+                                        ? '0'
+                                        : `${getBalanceNumber(uzdStatData.info.zethAps.tvl)
+                                              .toNumber()
+                                              .toLocaleString('en')} ZETH`
+                                }
+                                className="mt-3"
+                                onSelect={() => {
+                                    setStakingMode('ZETH');
                                 }}
                             />
                         </SideBar>
@@ -818,31 +849,17 @@ export const Main = (): JSX.Element => {
                                 </div>
                                 <div className="col-lg-5 col-xs-12 d-flex flex-column">
                                     <DashboardCarousel
-                                        className={`features-slider mb-3 mt-3 mt-lg-0 order-2 order-lg-0 ${
-                                            stakingMode !== 'UZD' ? 'slim' : ''
-                                        }`}
+                                        className={`features-slider mb-3 mt-3 mt-lg-0 order-2 order-lg-0`}
                                         style={{
-                                            height: stakingMode !== 'UZD' ? '127px' : '222px',
+                                            height: '222px',
                                         }}
                                     />
-                                    {stakingMode !== 'UZD' && (
-                                        <Pendings
-                                            deposit={`$${getBalanceNumber(
-                                                pendingOperations.deposit,
-                                                isETH(chainId) || isPLG(chainId) ? 6 : 18
-                                            ).toFixed(2)}`}
-                                            withdraw={`$${getBalanceNumber(pendingWithdraw).toFixed(
-                                                2
-                                            )}`}
-                                            className="mb-3"
-                                        />
-                                    )}
                                     <Chart
                                         data={chartData || []}
                                         className="p-4 flex-grow-1 mt-3 mt-lg-0"
                                         title={
-                                            stakingMode === 'USD'
-                                                ? 'DAO Stablecoin diversification strategies'
+                                            stakingMode === 'ZETH'
+                                                ? 'APS diversification strategies'
                                                 : 'APS diversification strategies'
                                         }
                                     />
