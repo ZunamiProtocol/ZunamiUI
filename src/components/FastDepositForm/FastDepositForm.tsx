@@ -580,6 +580,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             <Input
                 action="deposit"
                 name={coin}
+                mode={action}
                 value={action === 'deposit' ? depositSum : withdrawSum}
                 handler={(sum) => {
                     if (action === 'deposit') {

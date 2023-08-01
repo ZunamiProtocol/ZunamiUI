@@ -1,12 +1,9 @@
-import BigNumber from 'bignumber.js';
-import { useRef, useState } from 'react';
-import { OverlayTrigger, Popover } from 'react-bootstrap';
-import { getBalanceNumber } from '../../utils/formatbalance';
+import { useState } from 'react';
 import '../InfoBlock/InfoBlock.scss';
 import './CoinSelector.scss';
 
 interface CoinSelectorProps {
-    // coins: Array<any>;
+    mode: string;
     name: string;
     chainId: number | undefined;
     onCoinSelect?: Function;
@@ -22,15 +19,23 @@ function renderCoinItem(coinName: string, onCoinSelect: Function) {
     );
 }
 
-function getCoinName(name: string) {
+function getCoinName(name: string, mode: string) {
     let result = name;
 
     if (name === 'UZD') {
         result = 'Zunami UZD';
+
+        if (mode === 'withdraw') {
+            result = 'ZAPSLP';
+        }
     }
 
     if (name === 'ZETH') {
         result = 'Zunami zETH';
+
+        if (mode === 'withdraw') {
+            result = 'ethZAPSLP';
+        }
     }
 
     return result;
@@ -56,7 +61,7 @@ export const CoinSelector = (
     return (
         <div className="CoinSelector" onClick={onToggle}>
             <img src={`${props.name}.svg`} alt="" />
-            <div className={'coinName'}>{getCoinName(props.name)}</div>
+            <div className={'coinName'}>{getCoinName(props.name, props.mode)}</div>
             {props.name !== 'UZD' && props.name !== 'ZETH' && (
                 <svg
                     width="14"

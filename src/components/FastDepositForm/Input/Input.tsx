@@ -13,6 +13,7 @@ interface InputProps {
     disabled?: boolean;
     onCoinChange?: Function;
     chainId: number | undefined;
+    mode: string;
 }
 
 export const Input = (props: InputProps): JSX.Element => {
@@ -57,6 +58,7 @@ export const Input = (props: InputProps): JSX.Element => {
                 <CoinSelector
                     name={props.name}
                     chainId={props.chainId}
+                    mode={props.mode}
                     onCoinSelect={(coinName: string) => {
                         if (props.onCoinChange) {
                             props.onCoinChange(coinName);
