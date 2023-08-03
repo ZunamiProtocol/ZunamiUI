@@ -31,7 +31,7 @@ export const Input = (props: InputProps): JSX.Element => {
             decimals = 18;
         }
 
-        if (props.name === 'FRAX' || props.name === 'UZD' || props.name === 'ZETH') {
+        if (props.name === 'FRAX' || props.name === 'UZD' || props.name === 'ZETH' || props.name === 'ethZAPSLP') {
             decimals = 18;
         }
 

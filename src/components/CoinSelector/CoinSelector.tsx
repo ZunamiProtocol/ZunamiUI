@@ -24,18 +24,14 @@ function getCoinName(name: string, mode: string) {
 
     if (name === 'UZD') {
         result = 'Zunami UZD';
-
-        if (mode === 'withdraw') {
-            result = 'ZAPSLP';
-        }
     }
 
     if (name === 'ZETH') {
         result = 'Zunami zETH';
+    }
 
-        if (mode === 'withdraw') {
-            result = 'ethZAPSLP';
-        }
+    if (name === 'ethZAPSLP') {
+        result = 'Zunami APS LP';
     }
 
     return result;

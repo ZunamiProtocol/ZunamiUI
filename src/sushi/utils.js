@@ -112,24 +112,8 @@ export const approve = async (
 ) => {
     debugger;
     const lpContract = getContract(provider, tokenAddress);
-    let sum = apprSum;
+    let sum = APPROVE_SUM;
     const isZerionWallet = window.ethereum?.walletMeta?.name === 'Zerion';
-
-    if (tokenAddress === bscUsdtAddress || tokenAddress === busdAddress) {
-        sum = APPROVE_SUM;
-    }
-
-    if (tokenAddress === getZunamiAddress(56)) {
-        sum = APPROVE_SUM;
-    }
-
-    if (tokenAddress === contractAddresses.uzd[1]) {
-        sum = APPROVE_SUM;
-    }
-
-    if ([plgDaiAddress, plgUsdcAddress, plgUsdtAddress].indexOf(tokenAddress) !== -1) {
-        sum = APPROVE_SUM;
-    }
 
     const funcParams = {
         from: account,
