@@ -106,7 +106,7 @@ const chartOptions = {
             },
         },
         y: {
-            display: false,
+            // display: false,
             grid: {
                 display: false,
             },
