@@ -68,7 +68,7 @@ function getPrimaryIcon(item): string {
             result = 'frx_eth.png';
             break;
         case 'STETH_FRAXETH':
-            result = 'frx_eth';
+            result = 'frx_eth.png';
             break;
         default:
             result = item.icon;
@@ -84,15 +84,18 @@ function getPrimaryIcon(item): string {
 function renderStratName(orientation, item) {
     let result = item.title;
     const isZethVault = item.address === '0xDc0B52c04CdC0099aeFcCa8B0675A00cF8f6d7dC';
+    const titleParts = item.title.split('-');
+
+    if (titleParts.length >= 2) {
+        titleParts[1].replace(' pool', '');
+    }
 
     if (orientation === 'column') {
         if (item.title !== 'UZD Vault') {
             result = (
                 <div>
-                    <div>{item.title.split('-')[0]}</div>
-                    <div className="strat-desc">
-                        {item.title.split('-')[1].replace(' pool', '')}
-                    </div>
+                    <div>{titleParts[0]}</div>
+                    <div className="strat-desc">{titleParts[1]}</div>
                 </div>
             );
         } else {

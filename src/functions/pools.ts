@@ -111,7 +111,7 @@ export const poolsChartdata: { [key: string]: any } = {
         icon: '/frx_eth.svg',
     },
     STETH_FRAXETH: {
-        title: 'stETH/frxETH pool',
+        title: 'Convex Finance - stETH/frxETH pool',
         value: 0,
         icon: '/frx_eth.svg',
     },
