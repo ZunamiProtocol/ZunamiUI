@@ -37,6 +37,9 @@ function getSecondIcon(item): string {
         case 'FRAXETH':
             result = 'frax.svg';
             break;
+        case 'STETH_FRAXETH':
+            result = 'steth.png';
+            break;
         default:
             result = item.icon;
             break;
@@ -63,6 +66,9 @@ function getPrimaryIcon(item): string {
             break;
         case 'FRAXETH':
             result = 'frx_eth.png';
+            break;
+        case 'STETH_FRAXETH':
+            result = 'frx_eth';
             break;
         default:
             result = item.icon;

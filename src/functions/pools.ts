@@ -110,6 +110,11 @@ export const poolsChartdata: { [key: string]: any } = {
         value: 0,
         icon: '/frx_eth.svg',
     },
+    STETH_FRAXETH: {
+        title: 'stETH/frxETH pool',
+        value: 0,
+        icon: '/frx_eth.svg',
+    },
     FRAX_STAKEDAO: {
         title: 'Stake DAO - UZD / FRAXBP pool',
         value: 0,
