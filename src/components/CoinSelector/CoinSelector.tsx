@@ -42,8 +42,8 @@ export const CoinSelector = (
 ): JSX.Element => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const onToggle = (e) => {
-        if (props.name !== 'UZD' && props.name !== 'ZETH') {
+    const onToggle = () => {
+        if (props.name !== 'UZD' && props.name !== 'ZETH' && props.name !== 'ethZAPSLP') {
             setIsOpen(!isOpen);
         }
     };
