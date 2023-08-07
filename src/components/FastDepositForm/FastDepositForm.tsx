@@ -58,7 +58,7 @@ function coinNameToAddress(coinName: string, chainId: number): string {
             break;
         case 'ethZAPSLP':
             address = contractAddresses.zethAPS[1];
-            break;            
+            break;
     }
 
     return address;
@@ -204,8 +204,6 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         }
     }, [stakingMode, coins, action]);
 
-    
-
     // get user max balance
     const fullBalance = useMemo(() => {
         let decimalPlaces = 18;
@@ -220,7 +218,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             const isDaiOrFrax = ['DAI', 'FRAX'].indexOf(coin) !== -1;
 
             if (coin === 'UZD') {
-                return getFullDisplayBalance(userBalanceList[coinIndex], decimalPlaces);
+                return getFullDisplayBalance(userBalanceList[coinIndex], 18, decimalPlaces);
             } else if (coin === 'ZETH') {
                 return getFullDisplayBalance(userBalanceList[coinIndex], 18, decimalPlaces);
             }
@@ -235,7 +233,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         if (action === 'deposit') {
             return approvedTokens[coinIndex];
         } else {
-            return approvedTokens[7]; // 
+            return approvedTokens[7]; //
         }
     }, [approvedTokens, coinIndex, action]);
 
@@ -647,8 +645,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                 Approve
                             </button>
                         )}
-                        {
-                            action === 'deposit' && coinApproved &&
+                        {action === 'deposit' && coinApproved && (
                             <button
                                 className={`zun-button ${depositEnabled ? '' : 'disabled'}`}
                                 onClick={async () => {
@@ -691,7 +688,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                             >
                                 Deposit
                             </button>
-                        }
+                        )}
                         {action === 'deposit' && coinApproved && !depositEnabled && (
                             <div className="text-muted text-danger ms-3">
                                 {depositValidationError}
