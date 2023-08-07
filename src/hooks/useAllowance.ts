@@ -149,53 +149,57 @@ export const useAllowanceStables = () => {
                 log(`Allowance ZETH: ${allowanceZeth}`);
                 log(`Allowance ethZAPSLP: ${allowanceEthZAPSLP}`);
             } else if (isBSC(chainId)) {
-                const lpContract = getContract(
-                    sushi.bscContracts.bscMasterChef.currentProvider,
-                    bscUsdtAddress
-                );
+                // const lpContract = getContract(
+                //     sushi.bscContracts.bscMasterChef.currentProvider,
+                //     bscUsdtAddress
+                // );
 
-                const allowanceUsdt = await lpContract.methods
-                    .allowance(account, sushi.bscMasterChefAddress)
-                    .call();
+                // const allowanceUsdt = await lpContract.methods
+                //     .allowance(account, sushi.bscMasterChefAddress)
+                //     .call();
 
-                const busdContract = getContract(
-                    sushi.bscContracts.bscMasterChef.currentProvider,
-                    bscUsdtAddress
-                );
+                // const busdContract = getContract(
+                //     sushi.bscContracts.bscMasterChef.currentProvider,
+                //     bscUsdtAddress
+                // );
 
-                busdContract.options.address = busdAddress;
+                // busdContract.options.address = busdAddress;
 
-                const allowanceBUSD = await busdContract.methods
-                    .allowance(account, contractAddresses.busd[56])
-                    .call();
+                // const allowanceBUSD = await busdContract.methods
+                //     .allowance(account, contractAddresses.busd[56])
+                //     .call();
 
-                log(`BSC USDT allowance for address (${account}) is: ${allowanceUsdt}`);
-                log(`BSC BUSD allowance for address (${account}) is: ${allowanceBUSD}`);
+                // log(`BSC USDT allowance for address (${account}) is: ${allowanceUsdt}`);
+                // log(`BSC BUSD allowance for address (${account}) is: ${allowanceBUSD}`);
 
                 setAllowance([
                     BIG_ZERO,
                     BIG_ZERO,
-                    new BigNumber(allowanceUsdt),
-                    new BigNumber(allowanceBUSD),
+                    BIG_ZERO,
+                    BIG_ZERO,
+                    BIG_ZERO,
+                    BIG_ZERO,
                     BIG_ZERO,
                     BIG_ZERO,
                 ]);
             } else if (isPLG(chainId)) {
-                const lpContract = getContract(
-                    sushi.plgContracts.polygonContract.currentProvider,
-                    plgUsdtAddress
-                );
+                // const lpContract = getContract(
+                //     sushi.plgContracts.polygonContract.currentProvider,
+                //     plgUsdtAddress
+                // );
 
-                const allowanceUsdt = await lpContract.methods
-                    .allowance(account, sushi.polygonMasterChefAddress)
-                    .call();
+                // const allowanceUsdt = await lpContract.methods
+                //     .allowance(account, sushi.polygonMasterChefAddress)
+                //     .call();
 
-                log(`PLG USDT allowance for address (${account}) is: ${allowanceUsdt}`);
+                // log(`PLG USDT allowance for address (${account}) is: ${allowanceUsdt}`);
 
                 setAllowance([
                     BIG_ZERO,
                     BIG_ZERO,
-                    new BigNumber(allowanceUsdt),
+                    BIG_ZERO,
+                    BIG_ZERO,
+                    BIG_ZERO,
                     BIG_ZERO,
                     BIG_ZERO,
                     BIG_ZERO,

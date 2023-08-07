@@ -213,7 +213,8 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         }
 
         if (isBSC(chainId)) {
-            return getFullDisplayBalance(userBalanceList[coinIndex], decimalPlaces);
+            return BIG_ZERO;
+            // return getFullDisplayBalance(userBalanceList[coinIndex], decimalPlaces);
         } else if (isETH(chainId)) {
             const isDaiOrFrax = ['DAI', 'FRAX'].indexOf(coin) !== -1;
 
@@ -225,7 +226,8 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
 
             return getFullDisplayBalance(userBalanceList[coinIndex], isDaiOrFrax ? 18 : 6);
         } else if (isPLG(chainId)) {
-            return getFullDisplayBalance(userBalanceList[coinIndex], coin === 'DAI' ? 18 : 6);
+            return BIG_ZERO;
+            // return getFullDisplayBalance(userBalanceList[coinIndex], coin === 'DAI' ? 18 : 6);
         }
     }, [userBalanceList, coin, coinIndex, chainId]);
 
@@ -314,6 +316,10 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const maxInputSum = useMemo(() => {
         let result = BIG_ZERO;
 
+        if (!isETH(chainId)) {
+            return BIG_ZERO;
+        }
+
         if (stakingMode === 'UZD') {
             if (action === 'deposit') {
                 result = userBalanceList[coinIndex];
@@ -331,7 +337,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         }
 
         return result;
-    }, [action, stakingMode, coinIndex, userBalanceList, zethApsBalance, apsBalance]);
+    }, [action, stakingMode, coinIndex, userBalanceList, zethApsBalance, apsBalance, chainId]);
 
     return (
         <div className={`FastDepositForm ${className} mode-${stakingMode}`}>
@@ -611,7 +617,10 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                 )}
                 {account && (
                     <div className="d-flex align-items-center FastDepositForm__Actions">
-                        {!coinApproved && (
+                        {!isETH(chainId) && (
+                            <div className="text-danger">Please, switch to Ethereum network</div>
+                        )}
+                        {!coinApproved && isETH(chainId) && (
                             <button
                                 className="zun-button approve-usd"
                                 onClick={async () => {
@@ -645,7 +654,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                 Approve
                             </button>
                         )}
-                        {action === 'deposit' && coinApproved && (
+                        {action === 'deposit' && coinApproved && isETH(chainId) && (
                             <button
                                 className={`zun-button ${depositEnabled ? '' : 'disabled'}`}
                                 onClick={async () => {

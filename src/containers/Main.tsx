@@ -20,7 +20,6 @@ import { Preloader } from '../components/Preloader/Preloader';
 import { useWallet } from 'use-wallet';
 import useEagerConnect from '../hooks/useEagerConnect';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
-import useSupportedChain from '../hooks/useSupportedChain';
 import { log, copyLogs } from '../utils/logger';
 import usePausedContract from '../hooks/usePausedContract';
 import { isBSC, isPLG } from '../utils/zunami';
@@ -152,6 +151,7 @@ export const Main = (): JSX.Element => {
     useEagerConnect(account ? account : '', connect, ethereum);
 
     const isContractPaused = usePausedContract();
+    const [supportedChain, setSupportedChain] = useState(true);
     const lpPrice = useLpPrice();
     const balance = useBalanceOf();
     const balances = useCrossChainBalances(lpPrice);
@@ -364,7 +364,6 @@ export const Main = (): JSX.Element => {
         setShowLpMigrationModal(balance.toNumber() > 0);
     }, [balance]);
 
-    const supportedChain = useSupportedChain();
     const apyHintTarget = useRef(null);
     const [showApyHint, setShowApyHint] = useState(false);
 
@@ -487,15 +486,22 @@ export const Main = (): JSX.Element => {
         return result;
     }, [stakingMode, uzdStatData]);
 
+    useEffect(() => {
+        setSupportedChain(chainId === 1);
+    }, [chainId]);
+
     return (
         <Suspense fallback={<Preloader onlyIcon={true} />}>
             <React.Fragment>
                 <MobileSidebar />
                 <AllServicesPanel />
+                {!supportedChain && (
+                    <UnsupportedChain
+                        text="You're using unsupported chain. Please, switch to Ethereum network."
+                        customNetworksList={[networks[0]]}
+                    />
+                )}
                 <div className="container">
-                    {!supportedChain && (
-                        <UnsupportedChain text="You're using unsupported chain. Please, switch either to Ethereum or Binance network." />
-                    )}
                     <LpMigrationModal
                         show={showLpMigrationModal}
                         balance={balance}
