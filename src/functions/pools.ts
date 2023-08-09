@@ -106,7 +106,7 @@ export const poolsChartdata: { [key: string]: any } = {
         icon: '/zeth_vault.svg',
     },
     FRAXETH: {
-        title: 'frxETH pool',
+        title: 'Convex Finance - zETH/frxETH',
         value: 0,
         icon: '/frx_eth.svg',
     },
@@ -143,7 +143,7 @@ export const poolsChartdata: { [key: string]: any } = {
     CONVEX_FRAX_STAKING: {
         title: 'Convex Frax Booster - UZD/FRAXBP',
         value: 0,
-        icon: '/convex.svg',
+        icon: '/uzd.svg',
     },
 };
 
