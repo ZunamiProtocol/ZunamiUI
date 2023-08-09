@@ -9,12 +9,8 @@ export const AllServicesPanel = (props: AllServicesPanelProps): JSX.Element => {
                 <div className="col">
                     <div className="title mt-4 mb-4">Zunami Protocol Menu</div>
                     <div className="d-flex gap-4 flex-wrap fast-menu">
-                        <a href="/deposit">
-                            <span>Deposit & Withdraw</span>
-                            <img src="/fast-menu-1.png" alt="" />
-                        </a>
                         <a href="/zstables" target="_blank" rel="noreferrer">
-                            <span>UZD</span>
+                            <span>UZD & zETH</span>
                             <img src="/fast-menu-2.png" alt="" />
                         </a>
                         <a href="https://snapshot.org/#/zunamidao.eth">
