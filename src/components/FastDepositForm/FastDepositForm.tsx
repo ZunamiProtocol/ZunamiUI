@@ -625,7 +625,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                         {!isETH(chainId) && (
                             <div className="text-danger">Please, switch to Ethereum network</div>
                         )}
-                        {coinApproved && isETH(chainId) && (
+                        {!coinApproved && isETH(chainId) && (
                             <button
                                 className="zun-button approve-usd"
                                 onClick={async () => {
