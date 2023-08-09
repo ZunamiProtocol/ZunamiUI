@@ -288,8 +288,10 @@ export const Uzd = (): JSX.Element => {
 
         if (result > 500) {
             result = '500+';
+            return result;
         }
-        return `${result}%`;
+
+        return `${Number(result).toFixed(2)}%`;
     }, [stakingMode, uzdStatData]);
 
     const apyPopover = useMemo(() => {
