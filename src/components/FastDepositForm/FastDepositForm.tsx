@@ -251,8 +251,12 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             !pendingApproval &&
             Number(depositSum) <= Number(fullBalance);
 
+        if (stakingMode === 'ZETH') {
+            return false;
+        }
+
         return result;
-    }, [coinApproved, depositSum, pendingApproval, fullBalance]);
+    }, [coinApproved, depositSum, pendingApproval, fullBalance, stakingMode]);
 
     const withdrawEnabled = useMemo(() => {
         let result = true;
