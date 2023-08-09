@@ -243,6 +243,17 @@ function renderTreasury(data) {
     ));
 }
 
+function renderSecondaryCoins(selectedStrat, mainCoin) {
+    let coins = selectedStrat.analytics.curveData.data.underlyingCoins.filter(
+        (item) => item.address !== mainCoin.address
+    );
+
+    if (selectedStrat.type === 'STAKEDAO_CRVUSD_USDT') {
+        coins = [selectedStrat.analytics.curveData.data.coins[1]];
+    }
+    return coins.map((coin, coinIndex) => renderCoin(coin, coinIndex, selectedStrat));
+}
+
 export const Analytics = (): JSX.Element => {
     const { account, connect, ethereum } = useWallet();
     useEagerConnect(account ? account : '', connect, ethereum);
@@ -667,19 +678,10 @@ export const Analytics = (): JSX.Element => {
                                                 <div className="col-md-8 gap-3 mb-2 d-flex align-items-start">
                                                     {renderCoin(mainCoin, 0, selectedStrat)}
                                                     <div>
-                                                        {selectedStrat.analytics.curveData.data.underlyingCoins
-                                                            .filter(
-                                                                (item) =>
-                                                                    item.address !==
-                                                                    mainCoin.address
-                                                            )
-                                                            .map((coin, coinIndex) =>
-                                                                renderCoin(
-                                                                    coin,
-                                                                    coinIndex,
-                                                                    selectedStrat
-                                                                )
-                                                            )}
+                                                        {renderSecondaryCoins(
+                                                            selectedStrat,
+                                                            mainCoin
+                                                        )}
                                                     </div>
                                                 </div>
                                                 <div className="col-md-4">
