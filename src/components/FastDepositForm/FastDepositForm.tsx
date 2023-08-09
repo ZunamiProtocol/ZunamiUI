@@ -32,6 +32,7 @@ import useZapsLpBalance from '../../hooks/useZapsLpBalance';
 import BigNumber from 'bignumber.js';
 import useZethApsBalance from '../../hooks/useZethApsBalance';
 import useApproveZAPSLP from '../../hooks/useApproveZAPSLP';
+import useApproveLP from '../../hooks/useApproveLP';
 
 function coinNameToAddress(coinName: string, chainId: number): string {
     if (chainId === 56 && coinName === 'USDT') {
@@ -55,6 +56,9 @@ function coinNameToAddress(coinName: string, chainId: number): string {
             break;
         case 'UZD':
             address = contractAddresses.uzd[1];
+            break;
+        case 'LP':
+            address = contractAddresses.aps[1];
             break;
         case 'ethZAPSLP':
             address = contractAddresses.zethAPS[1];
@@ -152,6 +156,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
 
     const { onUzdApprove } = useApproveUzd();
     const { onZethApprove } = useApproveZeth();
+    const { onLPApprove } = useApproveLP();
     const { onZAPSLPApprove } = useApproveZAPSLP();
     const { onStake } = useStake(
         [
@@ -620,7 +625,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                         {!isETH(chainId) && (
                             <div className="text-danger">Please, switch to Ethereum network</div>
                         )}
-                        {!coinApproved && isETH(chainId) && (
+                        {coinApproved && isETH(chainId) && (
                             <button
                                 className="zun-button approve-usd"
                                 onClick={async () => {
@@ -633,7 +638,13 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
 
                                     try {
                                         if (coin === 'UZD') {
-                                            await onUzdApprove(coinNameToAddress(coin, chainId));
+                                            if (action === 'withdraw') {
+                                                await onLPApprove(coinNameToAddress('LP', chainId));
+                                            } else {
+                                                await onUzdApprove(
+                                                    coinNameToAddress(coin, chainId)
+                                                );
+                                            }
                                         } else if (coin === 'ZETH') {
                                             await onZethApprove(coinNameToAddress(coin, chainId));
                                         } else if (coin === 'ethZAPSLP') {

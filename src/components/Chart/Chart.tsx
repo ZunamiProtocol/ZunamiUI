@@ -65,7 +65,7 @@ function getPrimaryIcon(item): string {
             result = 'clever_analytics.png';
             break;
         case 'FRAXETH':
-            result = 'frx_eth.png';
+            result = 'uzd.svg';
             break;
         case 'STETH_FRAXETH':
             result = 'frx_eth.png';
