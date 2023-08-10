@@ -35,7 +35,8 @@ export const contractAddresses = {
         1: '0xe47f1CD2A37c6FE69e3501AE45ECA263c5A87b2b',
     },
     zethAPS: {
-        1: '0x0b49D1Dd3F045c986F7816c2Ad56F01D8FB29C82',
+        1: '0x8fc72dcfbf39FE686c96f47C697663EE08C78380',
+        // 1: '0x0b49D1Dd3F045c986F7816c2Ad56F01D8FB29C82',
     },
     deprecated: {
         v_1_0_bsc: '0x02a228D826Cbb1C0E8765A6DB6E7AB64EAA80BFD',
