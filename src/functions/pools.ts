@@ -24,31 +24,6 @@ export interface ChartDataElement {
 const colors = ['#FC6505', '#12A0FE', '#8EEA19', '#2cd5db', '#1C77F2', '#323232', '#5856d6'];
 
 export const poolsChartdata: { [key: string]: any } = {
-    DUSD: {
-        title: 'Convex finance - DUSD pool',
-        value: 0,
-        icon: '/convex.svg',
-    },
-    USDN: {
-        title: 'Convex finance - USDN pool',
-        value: 0,
-        icon: '/convex.svg',
-    },
-    LUSD: {
-        title: 'Convex finance - LUSD pool',
-        value: 0,
-        icon: '/convex.svg',
-    },
-    ANCHOR: {
-        title: 'Anchor Protocol - UST pool',
-        value: 0,
-        icon: '/anchor.svg',
-    },
-    MIM: {
-        title: 'Convex finance - MIM pool',
-        value: 0,
-        icon: '/convex.svg',
-    },
     XAI_FRAXBP: {
         title: 'Convex Frax Booster - XAI/FRAXBP',
         value: 0,
@@ -61,16 +36,6 @@ export const poolsChartdata: { [key: string]: any } = {
     },
     PUSD: {
         title: 'Convex finance - PUSD pool',
-        value: 0,
-        icon: '/convex.svg',
-    },
-    USDD: {
-        title: 'Convex finance - USDD pool',
-        value: 0,
-        icon: '/convex.svg',
-    },
-    DOLA: {
-        title: 'Convex finance - DOLA pool',
         value: 0,
         icon: '/convex.svg',
     },
@@ -114,6 +79,11 @@ export const poolsChartdata: { [key: string]: any } = {
         title: 'Convex Finance - stETH/frxETH pool',
         value: 0,
         icon: '/frx_eth.svg',
+    },
+    CONCENTRATOR_FRAX: {
+        title: 'Concentrator UZD/FRAXBP pool',
+        value: 0,
+        icon: '/uzd.svg',
     },
     FRAX_STAKEDAO: {
         title: 'Stake DAO - UZD / FRAXBP pool',

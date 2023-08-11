@@ -40,6 +40,9 @@ function getSecondIcon(item): string {
         case 'STETH_FRAXETH':
             result = 'steth.png';
             break;
+        case 'CONCENTRATOR_FRAX':
+            result = 'frax.svg';
+            break;
         case 'CONVEX_FRAX_STAKING':
             result = 'convex.svg';
             break;
@@ -72,6 +75,9 @@ function getPrimaryIcon(item): string {
             break;
         case 'STETH_FRAXETH':
             result = 'frx_eth.png';
+            break;
+        case 'CONCENTRATOR_FRAX':
+            result = 'frax.svg';
             break;
         default:
             result = item.icon;

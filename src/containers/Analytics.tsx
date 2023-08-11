@@ -140,6 +140,9 @@ function getPoolIcon(type: string) {
         case 'STAKEDAO_CRVUSD_USDT':
             result = 'curve-icon.svg';
             break;
+        case 'CONCENTRATOR_FRAX':
+            result = 'frax.svg';
+            break;
     }
 
     return result;
