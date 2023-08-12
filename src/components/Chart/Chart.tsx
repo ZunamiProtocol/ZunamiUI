@@ -77,7 +77,7 @@ function getPrimaryIcon(item): string {
             result = 'frx_eth.png';
             break;
         case 'CONCENTRATOR_FRAX':
-            result = 'frax.svg';
+            result = 'uzd.svg';
             break;
         default:
             result = item.icon;
