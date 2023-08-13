@@ -135,7 +135,9 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const [transactionError, setTransactionError] = useState(false);
     const [coinIndex, setCoinIndex] = useState(-1);
     const approveList = useAllowanceStables();
+    // APS balance
     const apsBalance = useZapsLpBalance();
+    // ZETH APS balance
     const zethApsBalance = useZethApsBalance();
     const approvedTokens = useMemo(() => {
         return [
@@ -144,14 +146,15 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             approveList ? approveList[2].toNumber() > 0 : false,
             approveList ? approveList[3].toNumber() > 0 : false,
             approveList ? approveList[4].toNumber() > 0 : false,
-            approveList ? approveList[5].toNumber() > 0 : false,
-            approveList ? approveList[6].toNumber() > 0 : false,
+            approveList ? approveList[5].toNumber() > 0 : false, // UZD
+            approveList ? approveList[6].toNumber() > 0 : false, // ZETH
             approveList ? approveList[7].toNumber() > 0 : false, // ethZAPSLP
+            approveList ? approveList[8].toNumber() > 0 : false, // APSLP
         ];
     }, [approveList]);
 
     const coins = useMemo(() => {
-        return ['DAI', 'USDC', 'USDT', 'BUSD', 'FRAX', 'UZD', 'ZETH'];
+        return ['DAI', 'USDC', 'USDT', 'BUSD', 'FRAX', 'UZD', 'ZETH', 'ethZAPSLP', 'ZAPSLP'];
     }, []);
 
     const { onUzdApprove } = useApproveUzd();
@@ -195,10 +198,20 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const [action, setAction] = useState('deposit');
 
     useEffect(() => {
+        if (action === 'withdraw') {
+            setWithdrawSum('');
+        }
+    }, [stakingMode, action]);
+
+    useEffect(() => {
         let preselectedCoin = stakingMode === 'UZD' ? 'UZD' : 'ZETH';
 
         if (action === 'withdraw' && stakingMode === 'ZETH') {
             preselectedCoin = 'ethZAPSLP';
+        }
+
+        if (action === 'withdraw' && stakingMode === 'UZD') {
+            preselectedCoin = 'ZAPSLP';
         }
 
         setCoin(preselectedCoin);
@@ -240,9 +253,33 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         if (action === 'deposit') {
             return approvedTokens[coinIndex];
         } else {
-            return approvedTokens[7]; //
+            return approvedTokens[coinIndex];
         }
     }, [approvedTokens, coinIndex, action]);
+
+    const showApproveBtn = useMemo(() => {
+        let result = !coinApproved;
+
+        if (!isETH(chainId)) {
+            result = false;
+        }
+
+        return result;
+    }, [chainId, coinApproved]);
+
+    const approveEnabled = useMemo(() => {
+        let result = true;
+
+        if (action === 'deposit' && !Number(depositSum)) {
+            return false;
+        }
+
+        if (action === 'withdraw' && !Number(withdrawSum)) {
+            return false;
+        }
+
+        return result;
+    }, [action, withdrawSum, depositSum]);
 
     const depositEnabled = useMemo(() => {
         let result =
@@ -625,9 +662,11 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                         {!isETH(chainId) && (
                             <div className="text-danger">Please, switch to Ethereum network</div>
                         )}
-                        {!coinApproved && isETH(chainId) && (
+                        {showApproveBtn && (
                             <button
-                                className="zun-button approve-usd"
+                                className={`zun-button approve-usd ${
+                                    !approveEnabled ? 'disabled' : ''
+                                }`}
                                 onClick={async () => {
                                     setPendingApproval(true);
                                     setPendingTx(true);
@@ -638,13 +677,9 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
 
                                     try {
                                         if (coin === 'UZD') {
-                                            if (action === 'withdraw') {
-                                                await onLPApprove(coinNameToAddress('LP', chainId));
-                                            } else {
-                                                await onUzdApprove(
-                                                    coinNameToAddress(coin, chainId)
-                                                );
-                                            }
+                                            await onUzdApprove(coinNameToAddress(coin, chainId));
+                                        } else if (coin === 'ZAPSLP') {
+                                            await onLPApprove(coinNameToAddress('LP', chainId));
                                         } else if (coin === 'ZETH') {
                                             await onZethApprove(coinNameToAddress(coin, chainId));
                                         } else if (coin === 'ethZAPSLP') {

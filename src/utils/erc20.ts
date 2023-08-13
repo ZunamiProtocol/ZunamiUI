@@ -71,6 +71,9 @@ export const getAllowance = async (
             case contractAddresses.zethAPS[1].toLowerCase():
                 debugName = '(ethZAPSLP)';
                 break;
+            case contractAddresses.aps[1].toLowerCase():
+                debugName = '(ZAPSLP)';
+                break;
         }
 
         log(

@@ -55,10 +55,12 @@ export const useAllowanceStables = () => {
         BIG_ZERO,
         BIG_ZERO,
         BIG_ZERO,
-        BIG_ZERO,
-        BIG_ZERO,
-        BIG_ZERO,
+        BIG_ZERO, // UZD
+        BIG_ZERO, // ZETH
+        BIG_ZERO, // ETHZAPSLP
+        BIG_ZERO, // ZAPSLP
     ]);
+
     const { account, ethereum, chainId } = useWallet();
     const sushi = useSushi();
 
@@ -73,35 +75,6 @@ export const useAllowanceStables = () => {
             if (chainId === 1) {
                 masterChefContract.options.address = contractAddresses.zunami[1];
 
-                // const allowanceDai = await getAllowance(
-                //     ethereum,
-                //     daiAddress,
-                //     masterChefContract,
-                //     // @ts-ignore
-                //     account
-                // );
-                // const allowanceUsdc = await getAllowance(
-                //     ethereum,
-                //     usdcAddress,
-                //     masterChefContract,
-                //     // @ts-ignore
-                //     account
-                // );
-                // const allowanceUsdt = await getAllowance(
-                //     ethereum,
-                //     usdtAddress,
-                //     masterChefContract,
-                //     // @ts-ignore
-                //     account
-                // );
-                // // debugger;
-                // const allowanceFrax = await getAllowance(
-                //     ethereum,
-                //     fraxAddress,
-                //     sushi.getFraxContract(account),
-                //     // @ts-ignore
-                //     account
-                // );
                 const allowanceUzd = await getAllowance(
                     ethereum,
                     contractAddresses.uzd[1],
@@ -126,27 +99,31 @@ export const useAllowanceStables = () => {
                     account
                 );
 
+                const allowanceZAPSLP = await getAllowance(
+                    ethereum,
+                    contractAddresses.aps[1],
+                    sushi.getApsContract(account),
+                    // @ts-ignore
+                    account
+                );
+
                 const data = [
                     BIG_ZERO,
                     BIG_ZERO,
                     BIG_ZERO,
-                    // new BigNumber(allowanceDai),
-                    // new BigNumber(allowanceUsdc),
-                    // new BigNumber(allowanceUsdt),
                     BIG_ZERO,
-                    BIG_ZERO, // new BigNumber(allowanceFrax),
+                    BIG_ZERO,
                     new BigNumber(allowanceUzd),
                     new BigNumber(allowanceZeth),
                     new BigNumber(allowanceEthZAPSLP),
+                    new BigNumber(allowanceZAPSLP),
                 ];
                 // @ts-ignore
                 setAllowance(data);
-                // log(`Allowance DAI: ${allowanceDai}`);
-                // log(`Allowance USDC: ${allowanceUsdc}`);
-                // log(`Allowance USDT: ${allowanceUsdt}`);
-                // log(`Allowance FRAX: ${allowanceFrax}`);
+
                 log(`Allowance UZD: ${allowanceUzd}`);
                 log(`Allowance ZETH: ${allowanceZeth}`);
+                log(`Allowance ZAPSLP: ${allowanceZAPSLP}`);
                 log(`Allowance ethZAPSLP: ${allowanceEthZAPSLP}`);
             } else if (isBSC(chainId)) {
                 // const lpContract = getContract(

@@ -31,6 +31,10 @@ function getCoinName(name: string, mode: string) {
     }
 
     if (name === 'ethZAPSLP') {
+        result = 'Zunami ZAPS LP';
+    }
+
+    if (name === 'ZAPSLP') {
         result = 'Zunami APS LP';
     }
 
