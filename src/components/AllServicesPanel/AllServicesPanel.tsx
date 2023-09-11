@@ -5,7 +5,7 @@ interface AllServicesPanelProps {}
 export const AllServicesPanel = (props: AllServicesPanelProps): JSX.Element => {
     return (
         <div id="all-services" className="all-services-panel container">
-            <div className="row">
+            {/* <div className="row">
                 <div className="col">
                     <div className="title mt-4 mb-4">Zunami Protocol Menu</div>
                     <div className="d-flex gap-4 flex-wrap fast-menu">
@@ -23,7 +23,7 @@ export const AllServicesPanel = (props: AllServicesPanelProps): JSX.Element => {
                         </a>
                     </div>
                 </div>
-            </div>
+            </div> */}
             <div className="row mt-5">
                 <div className="col">
                     <div className="title">About Zunami Protocol</div>

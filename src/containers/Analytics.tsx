@@ -379,9 +379,9 @@ export const Analytics = (): JSX.Element => {
             <div className="container">
                 <div className="row main-row h-100 AnalyticsContainer">
                     <SideBar isMainPage={false} tvl={tvl}>
-                        <div className="mobile-menu-title d-block d-lg-none">Menu</div>
+                        <div className="mobile-menu-title d-block d-lg-none d-none">Menu</div>
                         <div
-                            className="d-flex d-lg-none gap-3 mt-4 pb-3 mobile-menu"
+                            className="d-flex d-lg-none gap-3 mt-4 pb-3 mobile-menu d-none"
                             style={{
                                 fontSize: '13px',
                                 overflowX: 'scroll',

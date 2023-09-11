@@ -13,24 +13,24 @@ interface NavMenuProps {
 export const NavMenu = (props: NavMenuProps): JSX.Element => {
     const history = useHistory();
     const items = [
-        {
-            title: 'Dashboard',
-            urls: ['/'],
-            icon: <DashboardIcon />,
-        },
+        // {
+        //     title: 'Dashboard',
+        //     urls: ['/'],
+        //     icon: <DashboardIcon />,
+        // },
         // {
         //     title: 'Deposit & Withdraw',
         //     urls: ['/deposit', '/withdraw'],
         //     icon: <DepositIcon />,
         // },
-        {
-            title: 'UZD & zETH',
-            urls: ['/zstables'],
-            icon: <UzdIcon />,
-        },
+        // {
+        //     title: 'UZD & zETH',
+        //     urls: ['/zstables'],
+        //     icon: <UzdIcon />,
+        // },
         {
             title: 'Analytics',
-            urls: ['/analytics'],
+            urls: ['/'],
             icon: <UzdIcon />,
         },
         {

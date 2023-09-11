@@ -591,7 +591,7 @@ export const Main = (): JSX.Element => {
                                     overflowX: 'scroll',
                                 }}
                             >
-                                <a
+                                {/* <a
                                     href="/"
                                     className="text-center d-flex flex-column text-decoration-none selected"
                                 >
@@ -604,9 +604,9 @@ export const Main = (): JSX.Element => {
                                 >
                                     <img src="/uzd.png" alt="" />
                                     <span className="text-muted mt-2">UZD & zETH</span>
-                                </a>
+                                </a> */}
                                 <a
-                                    href="/analytics"
+                                    href="/"
                                     className="text-center d-flex flex-column text-decoration-none"
                                 >
                                     <img src="/analytics.png" alt="" />
