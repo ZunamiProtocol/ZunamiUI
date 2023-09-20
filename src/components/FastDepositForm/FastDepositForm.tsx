@@ -33,6 +33,7 @@ import BigNumber from 'bignumber.js';
 import useZethApsBalance from '../../hooks/useZethApsBalance';
 import useApproveZAPSLP from '../../hooks/useApproveZAPSLP';
 import useApproveLP from '../../hooks/useApproveLP';
+import { DirectAction } from '../Form/DirectAction/DirectAction';
 
 function coinNameToAddress(coinName: string, chainId: number): string {
     if (chainId === 56 && coinName === 'USDT') {
@@ -125,7 +126,8 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
 }) => {
     const userBalanceList = useUserBalances();
     const { chainId, account } = useWallet();
-    const [optimized, setOptimized] = useState(true);
+    const [lockAndBoost, setLockAndBoost] = useState(true);
+    const [autoRelock, setAutoRelock] = useState(true);
     const [pendingApproval, setPendingApproval] = useState(false);
     const [coin, setCoin] = useState(stakingMode === 'UZD' ? 'UZD' : 'ZETH');
     const [depositSum, setDepositSum] = useState('');
@@ -154,7 +156,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     }, [approveList]);
 
     const coins = useMemo(() => {
-        return ['DAI', 'USDC', 'USDT', 'BUSD', 'FRAX', 'UZD', 'ZETH', 'ethZAPSLP', 'ZAPSLP'];
+        return ['DAI', 'USDC', 'USDT', 'BUSD', 'FRAX', 'UZD', 'ZETH', 'ethZAPSLP', 'ZAPSLP', 'ZUN'];
     }, []);
 
     const { onUzdApprove } = useApproveUzd();
@@ -192,7 +194,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                 value: coin === 'ZETH' ? depositSum : '0',
             },
         ],
-        !optimized
+        false
     );
 
     const [action, setAction] = useState('deposit');
@@ -214,12 +216,12 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             preselectedCoin = 'ZAPSLP';
         }
 
+        if (action === 'claim') {
+            preselectedCoin = 'ZUN';
+        }
+
         setCoin(preselectedCoin);
         setCoinIndex(coins.indexOf(preselectedCoin));
-
-        if (preselectedCoin === 'UZD') {
-            setOptimized(false);
-        }
     }, [stakingMode, coins, action]);
 
     // get user max balance
@@ -264,8 +266,12 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             result = false;
         }
 
+        if (action === 'claim') {
+            return false;
+        }
+
         return result;
-    }, [chainId, coinApproved]);
+    }, [chainId, coinApproved, action]);
 
     const approveEnabled = useMemo(() => {
         let result = true;
@@ -403,6 +409,10 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                 {
                                     name: 'withdraw',
                                     title: 'Withdraw',
+                                },
+                                {
+                                    name: 'claim',
+                                    title: 'Claim',
                                 },
                             ]}
                             onChange={(action: string) => {
@@ -621,6 +631,10 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                 name: 'withdraw',
                                 title: 'Withdraw',
                             },
+                            {
+                                name: 'claim',
+                                title: 'Claim',
+                            },
                         ]}
                         onChange={(action: string) => {
                             setAction(action);
@@ -646,7 +660,6 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                 onCoinChange={(coin: string) => {
                     setCoin(coin);
                     setCoinIndex(['DAI', 'USDC', 'USDT', 'BUSD', 'FRAX', 'UZD'].indexOf(coin));
-                    setOptimized(false);
                 }}
                 chainId={chainId}
             />
@@ -658,161 +671,174 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                     </div>
                 )}
                 {account && (
-                    <div className="d-flex align-items-center FastDepositForm__Actions">
-                        {!isETH(chainId) && (
-                            <div className="text-danger">Please, switch to Ethereum network</div>
-                        )}
-                        {showApproveBtn && (
-                            <button
-                                className={`zun-button approve-usd ${
-                                    !approveEnabled ? 'disabled' : ''
-                                }`}
-                                onClick={async () => {
-                                    setPendingApproval(true);
-                                    setPendingTx(true);
-
-                                    if (!chainId) {
-                                        return;
-                                    }
-
-                                    try {
-                                        if (coin === 'UZD') {
-                                            await onUzdApprove(coinNameToAddress(coin, chainId));
-                                        } else if (coin === 'ZAPSLP') {
-                                            await onLPApprove(coinNameToAddress('LP', chainId));
-                                        } else if (coin === 'ZETH') {
-                                            await onZethApprove(coinNameToAddress(coin, chainId));
-                                        } else if (coin === 'ethZAPSLP') {
-                                            await onZAPSLPApprove(coinNameToAddress(coin, chainId));
-                                        }
-
-                                        log(`${coin} approved!`);
-                                    } catch (error: any) {
-                                        log(`Error while approving ${coin}: ${error.message}`);
-                                        setPendingApproval(false);
-                                        setPendingTx(false);
-                                    }
-
-                                    setPendingApproval(false);
-                                    setPendingTx(false);
-                                }}
-                            >
-                                Approve
-                            </button>
-                        )}
-                        {action === 'deposit' && coinApproved && isETH(chainId) && (
-                            <button
-                                className={`zun-button ${depositEnabled ? '' : 'disabled'}`}
-                                onClick={async () => {
-                                    if (stakingMode === 'UZD' && !isETH(chainId)) {
-                                        log('Trying to deposit UZD on non-ETH network');
-                                        return false;
-                                    }
-
-                                    setPendingTx(true);
-
-                                    try {
-                                        let tx = null;
-                                        tx = await onStake();
-
-                                        log(`Deposit executed. Tx ID: ${tx.transactionHash}`);
-                                        setTransactionId(tx.transactionHash);
-                                        setDepositSum('0');
-                                        log('Deposit success');
-                                        log(JSON.stringify(tx));
-
-                                        // @ts-ignore
-                                        if (window.dataLayer) {
-                                            // @ts-ignore
-                                            window.dataLayer.push({
-                                                event: 'deposit',
-                                                userID: account,
-                                                type: getActiveWalletName(),
-                                                value: depositSum,
-                                            });
-                                        }
-                                    } catch (error: any) {
-                                        setPendingTx(false);
-                                        setTransactionError(true);
-                                        log(`❗️ Deposit error: ${error.message}`);
-                                        log(JSON.stringify(error));
-                                    }
-
-                                    setPendingTx(false);
-                                }}
-                            >
-                                Deposit
-                            </button>
-                        )}
-                        {action === 'deposit' && coinApproved && !depositEnabled && (
-                            <div className="text-muted text-danger ms-3">
-                                {depositValidationError}
-                            </div>
-                        )}
-                        {action === 'withdraw' && coinApproved && (
-                            <button
-                                className={`zun-button ${withdrawEnabled ? '' : 'disabled'}`}
-                                onClick={async () => {
-                                    setPendingTx(true);
-                                    let tx = null;
-
-                                    try {
-                                        const sumToWithdraw = new BigNumber(withdrawSum)
-                                            .multipliedBy(BIG_TEN.pow(UZD_DECIMALS))
-                                            .toString();
-
-                                        log(
-                                            `APS contract (ETH): withdraw('${new BigNumber(
-                                                withdrawSum
-                                            )
-                                                .multipliedBy(BIG_TEN.pow(UZD_DECIMALS))
-                                                .toString()}', '${account}', '${account}'')`
-                                        );
-
-                                        if (stakingMode === 'UZD') {
-                                            tx = await sushi.contracts.apsContract.methods
-                                                .withdraw(sumToWithdraw, '0')
-                                                .send({
-                                                    from: account,
-                                                });
-                                        }
-
-                                        if (stakingMode === 'ZETH') {
-                                            tx = await sushi.contracts.zethApsContract.methods
-                                                .withdraw(sumToWithdraw, '0')
-                                                .send({
-                                                    from: account,
-                                                });
-                                        }
-
-                                        setTransactionId(tx.transactionHash);
-                                    } catch (error: any) {
-                                        setTransactionError(true);
-                                        log(`❗️ Error while redeeming ZLP: ${error.message}`);
-                                    }
-
-                                    setPendingTx(false);
-                                }}
-                            >
-                                Withdraw
-                            </button>
-                        )}
-                        {/* {!pendingTx && (
-                            <DirectAction
-                                actionName="deposit"
-                                checked={optimized}
-                                disabled={chainId !== 1 || coinIndex === 4}
-                                hint={`${
-                                    chainId === 1
-                                        ? 'When using optimized deposit funds will be deposited within 24 hours and many times cheaper'
-                                        : 'When using deposit funds will be deposited within 24 hours, because users’ funds accumulate in one batch and distribute to the ETH network in Zunami App.'
-                                }`}
-                                onChange={(state: boolean) => {
-                                    setOptimized(state);
-                                }}
-                            />
-                        )} */}
-                        {pendingTx && <Preloader className="ms-2" />}
+                    <div>
+                        <div className="">
+                            {!isETH(chainId) && (
+                                <div className="text-danger">
+                                    Please, switch to Ethereum network
+                                </div>
+                            )}
+                            {showApproveBtn && (
+                                <button
+                                    className={`zun-button approve-usd ${
+                                        !approveEnabled ? 'disabled' : ''
+                                    }`}
+                                    onClick={async () => {
+                                        // setPendingApproval(true);
+                                        // setPendingTx(true);
+                                        // if (!chainId) {
+                                        //     return;
+                                        // }
+                                        // try {
+                                        //     if (coin === 'UZD') {
+                                        //         await onUzdApprove(
+                                        //             coinNameToAddress(coin, chainId)
+                                        //         );
+                                        //     } else if (coin === 'ZAPSLP') {
+                                        //         await onLPApprove(coinNameToAddress('LP', chainId));
+                                        //     } else if (coin === 'ZETH') {
+                                        //         await onZethApprove(
+                                        //             coinNameToAddress(coin, chainId)
+                                        //         );
+                                        //     } else if (coin === 'ethZAPSLP') {
+                                        //         await onZAPSLPApprove(
+                                        //             coinNameToAddress(coin, chainId)
+                                        //         );
+                                        //     }
+                                        //     log(`${coin} approved!`);
+                                        // } catch (error: any) {
+                                        //     log(`Error while approving ${coin}: ${error.message}`);
+                                        //     setPendingApproval(false);
+                                        //     setPendingTx(false);
+                                        // }
+                                        // setPendingApproval(false);
+                                        // setPendingTx(false);
+                                    }}
+                                >
+                                    Approve
+                                </button>
+                            )}
+                            {action === 'deposit' && coinApproved && isETH(chainId) && (
+                                <div className="">
+                                    <div className="d-flex gap-4 mb-3">
+                                        {!pendingTx && (
+                                            <DirectAction
+                                                actionName="deposit"
+                                                checked={lockAndBoost}
+                                                title={'Lock and boost APY to 25%'}
+                                                disabled={chainId !== 1}
+                                                hint={'Example tooltip text'}
+                                                onChange={(state: boolean) => {
+                                                    setLockAndBoost(state);
+                                                }}
+                                            />
+                                        )}
+                                        {!pendingTx && (
+                                            <DirectAction
+                                                actionName="deposit"
+                                                checked={autoRelock}
+                                                title={'Auto-relock'}
+                                                disabled={chainId !== 1}
+                                                hint={'Example tooltip text'}
+                                                onChange={(state: boolean) => {
+                                                    setAutoRelock(state);
+                                                }}
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                            {action === 'withdraw' && coinApproved && (
+                                <button
+                                    className={`zun-button ${withdrawEnabled ? '' : 'disabled'}`}
+                                    onClick={async () => {
+                                        // setPendingTx(true);
+                                        // let tx = null;
+                                        // try {
+                                        //     const sumToWithdraw = new BigNumber(withdrawSum)
+                                        //         .multipliedBy(BIG_TEN.pow(UZD_DECIMALS))
+                                        //         .toString();
+                                        //     log(
+                                        //         `APS contract (ETH): withdraw('${new BigNumber(
+                                        //             withdrawSum
+                                        //         )
+                                        //             .multipliedBy(BIG_TEN.pow(UZD_DECIMALS))
+                                        //             .toString()}', '${account}', '${account}'')`
+                                        //     );
+                                        //     if (stakingMode === 'UZD') {
+                                        //         tx = await sushi.contracts.apsContract.methods
+                                        //             .withdraw(sumToWithdraw, '0')
+                                        //             .send({
+                                        //                 from: account,
+                                        //             });
+                                        //     }
+                                        //     if (stakingMode === 'ZETH') {
+                                        //         tx = await sushi.contracts.zethApsContract.methods
+                                        //             .withdraw(sumToWithdraw, '0')
+                                        //             .send({
+                                        //                 from: account,
+                                        //             });
+                                        //     }
+                                        //     setTransactionId(tx.transactionHash);
+                                        // } catch (error: any) {
+                                        //     setTransactionError(true);
+                                        //     log(`❗️ Error while redeeming ZLP: ${error.message}`);
+                                        // }
+                                        // setPendingTx(false);
+                                    }}
+                                >
+                                    Withdraw
+                                </button>
+                            )}
+                            {pendingTx && <Preloader className="ms-2" />}
+                        </div>
+                        <div className="d-flex gap-3 align-items-center mt-4">
+                            {action === 'deposit' && coinApproved && isETH(chainId) && (
+                                <button
+                                    className={`zun-button ${depositEnabled ? '' : 'disabled'}`}
+                                    onClick={async () => {
+                                        // if (stakingMode === 'UZD' && !isETH(chainId)) {
+                                        //     log('Trying to deposit UZD on non-ETH network');
+                                        //     return false;
+                                        // }
+                                        // setPendingTx(true);
+                                        // try {
+                                        //     let tx = null;
+                                        //     tx = await onStake();
+                                        //     log(`Deposit executed. Tx ID: ${tx.transactionHash}`);
+                                        //     setTransactionId(tx.transactionHash);
+                                        //     setDepositSum('0');
+                                        //     log('Deposit success');
+                                        //     log(JSON.stringify(tx));
+                                        //     // @ts-ignore
+                                        //     if (window.dataLayer) {
+                                        //         // @ts-ignore
+                                        //         window.dataLayer.push({
+                                        //             event: 'deposit',
+                                        //             userID: account,
+                                        //             type: getActiveWalletName(),
+                                        //             value: depositSum,
+                                        //         });
+                                        //     }
+                                        // } catch (error: any) {
+                                        //     setPendingTx(false);
+                                        //     setTransactionError(true);
+                                        //     log(`❗️ Deposit error: ${error.message}`);
+                                        //     log(JSON.stringify(error));
+                                        // }
+                                        // setPendingTx(false);
+                                    }}
+                                >
+                                    Deposit
+                                </button>
+                            )}
+                            {action === 'deposit' && coinApproved && !depositEnabled && (
+                                <div className="text-muted text-danger ms-3">
+                                    {depositValidationError}
+                                </div>
+                            )}
+                            {action === 'claim' && <button className={`zun-button`}>Claim</button>}
+                        </div>
                     </div>
                 )}
             </div>

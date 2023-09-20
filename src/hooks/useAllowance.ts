@@ -158,6 +158,7 @@ export const useAllowanceStables = () => {
                     BIG_ZERO,
                     BIG_ZERO,
                     BIG_ZERO,
+                    BIG_ZERO,
                 ]);
             } else if (isPLG(chainId)) {
                 // const lpContract = getContract(
@@ -172,6 +173,7 @@ export const useAllowanceStables = () => {
                 // log(`PLG USDT allowance for address (${account}) is: ${allowanceUsdt}`);
 
                 setAllowance([
+                    BIG_ZERO,
                     BIG_ZERO,
                     BIG_ZERO,
                     BIG_ZERO,

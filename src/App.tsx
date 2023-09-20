@@ -20,8 +20,8 @@ function App() {
         <Suspense fallback={<Preloader onlyIcon={true} />}>
             <Providers>
                 <Router>
-                    {/* <Route exact path="/" component={Main} />
-                    <Route path="/zstables" component={Uzd} /> */}
+                    <Route exact path="/" component={Main} />
+                    <Route path="/zstables" component={Uzd} />
                     <Route path="/" component={Analytics} />
                 </Router>
             </Providers>

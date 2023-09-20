@@ -9,6 +9,7 @@ interface DirectActionProps {
     onChange?: Function;
     checked?: boolean;
     disabled: boolean;
+    title: string;
 }
 
 function getHintByProps(actionName: string, chainId: number) {
@@ -50,9 +51,9 @@ export const DirectAction = (props: DirectActionProps): JSX.Element => {
                     }
                 }}
             />
-            {<span>Optimized</span>}
+            {<span>{props.title}</span>}
             <div ref={target} onClick={() => setShowHint(!showHint)}>
-                <OverlayTrigger placement="right" overlay={<Tooltip>{hint}</Tooltip>}>
+                <OverlayTrigger placement="right" overlay={<Tooltip>{props.hint}</Tooltip>}>
                     <svg
                         width="13"
                         height="13"

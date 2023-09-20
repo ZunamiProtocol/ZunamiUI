@@ -8,13 +8,14 @@ import useEagerConnect from '../hooks/useEagerConnect';
 import { getActiveStratsUrl, uzdStakingInfoUrl } from '../api/api';
 import { poolDataToChartData } from '../functions/pools';
 import { CollateralsPieChart } from '../components/CollateralsPieChart/CollateralsPieChart';
-import { getBalanceNumber, toFixed } from '../utils/formatbalance';
+import { BIG_ZERO, getBalanceNumber, getFullDisplayBalance, toFixed } from '../utils/formatbalance';
 import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
 import { format } from 'date-fns';
 import { SupportersBar } from '../components/SupportersBar/SupportersBar';
 import { PieChart2 } from '../components/PieChart/PieChart';
 import { StrategiesList } from '../components/StrategiesList/StrategiesList';
 import { WalletStatus } from '../components/WalletStatus_Analytics/WalletStatus';
+import BigNumber from 'bignumber.js';
 
 interface PoolResponse {
     analytics: {
@@ -346,9 +347,21 @@ export const Analytics = (): JSX.Element => {
                 const zunamiInfo = await response.json();
                 const stratsResponse = await fetch(getActiveStratsUrl());
                 const poolStats = await stratsResponse.json();
+                let customTvl = BIG_ZERO;
+
+                if (poolStats) {
+                    for (let pool of poolStats.pools) {
+                        customTvl = customTvl.plus(new BigNumber(pool.tvlInZunami));
+                    }
+                }
+
                 const chartItems =
                     poolStats && poolStats.pools && zunamiInfo
-                        ? poolDataToChartData(poolStats.pools, zunamiInfo.info.omnipool.tvl)
+                        ? poolDataToChartData(
+                              poolStats.pools,
+                              customTvl
+                              // zunamiInfo.info.omnipool.tvl
+                          )
                         : ([] as Array<PoolResponse>);
 
                 setChartData(chartItems);
@@ -403,7 +416,7 @@ export const Analytics = (): JSX.Element => {
                             </a>
                             <a
                                 href="/analytics"
-                                className="text-center d-flex flex-column text-decoration-none selected"
+                                className="text-center d-flex flex-column text-decoration-none"
                             >
                                 <img src="/analytics.png" alt="" />
                                 <span className="text-muted mt-2">Analytics</span>

@@ -36,6 +36,7 @@ import useUzdBalance from '../hooks/useUzdBalance';
 import useApsLpPrice from '../hooks/useApsLpPrice';
 import { LpMigrationModal } from '../components/LpMigrationModal/LpMigrationModal';
 import { contractAddresses } from '../sushi/lib/constants';
+import { ApyDetailsModal } from '../components/ApyDetailsModal/ApyDetailsModal';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -355,6 +356,8 @@ export const Main = (): JSX.Element => {
     const [showMergeModal, setShowMergeModal] = useState(false);
     // LP to UZD migration modal
     const [showLpMigrationModal, setShowLpMigrationModal] = useState(false);
+    // APY details modal
+    const [showApyDetailsModal, setShowApyDetailsModal] = useState(false);
 
     useEffect(() => {
         setShowMergeModal(isContractPaused);
@@ -509,6 +512,12 @@ export const Main = (): JSX.Element => {
                             console.log('Modal close');
                         }}
                     />
+                    <ApyDetailsModal
+                        show={showApyDetailsModal}
+                        onHide={() => {
+                            setShowApyDetailsModal(false);
+                        }}
+                    />
                     <div className="row main-row h-100">
                         <SideBar isMainPage={true} tvl={tvl}>
                             <div className="row">
@@ -591,7 +600,7 @@ export const Main = (): JSX.Element => {
                                     overflowX: 'scroll',
                                 }}
                             >
-                                {/* <a
+                                <a
                                     href="/"
                                     className="text-center d-flex flex-column text-decoration-none selected"
                                 >
@@ -604,7 +613,7 @@ export const Main = (): JSX.Element => {
                                 >
                                     <img src="/uzd.png" alt="" />
                                     <span className="text-muted mt-2">UZD & zETH</span>
-                                </a> */}
+                                </a>
                                 <a
                                     href="/"
                                     className="text-center d-flex flex-column text-decoration-none"
@@ -800,19 +809,33 @@ export const Main = (): JSX.Element => {
                                         />
                                     </div>
                                     <div className="ApyBar ms-lg-3 me-lg-3 mt-3 mt-lg-0">
-                                        {/* {stakingMode === 'UZD' && (
-                                            <div className="soon">
-                                                <span>soon</span>
-                                            </div>
-                                        )} */}
                                         <div className="ApyBar__title">APY Bar</div>
                                         <div className="ApyBar__counters">
                                             <div className="ApyBar__Counter">
-                                                <div className="ApyBar__Counter__Title">
+                                                <div className="ApyBar__Counter__Title d-flex align-items-start gap-2">
                                                     <span>Base APY</span>
+                                                    <div className="hint">
+                                                        <svg
+                                                            width="13"
+                                                            height="13"
+                                                            viewBox="0 0 13 13"
+                                                            fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            onClick={() =>
+                                                                setShowApyDetailsModal(true)
+                                                            }
+                                                        >
+                                                            <path
+                                                                fillRule="evenodd"
+                                                                clipRule="evenodd"
+                                                                d="M6.5 13C10.0899 13 13 10.0899 13 6.5C13 2.91015 10.0899 0 6.5 0C2.91015 0 0 2.91015 0 6.5C0 10.0899 2.91015 13 6.5 13ZM6.23296 9.97261H4.98638L5.79002 7.12336H3.02741V5.87679H6.14162L6.94529 3.02741H8.19186L7.38819 5.87679L9.97261 5.87679V7.12336H7.03659L6.23296 9.97261Z"
+                                                                fill="black"
+                                                            />
+                                                        </svg>
+                                                    </div>
                                                 </div>
                                                 <div className="ApyBar__Counter__Value ApyBar__Counter__Value--primary vela-sans">
-                                                    {apyBarApy}
+                                                    <div>{apyBarApy}</div>
                                                 </div>
                                             </div>
                                             <div className="ApyBar__Counter">

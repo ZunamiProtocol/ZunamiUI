@@ -31,11 +31,11 @@ function getCoinName(name: string, mode: string) {
     }
 
     if (name === 'ethZAPSLP') {
-        result = 'Zunami ZAPS LP';
+        result = 'Zunami UZD';
     }
 
     if (name === 'ZAPSLP') {
-        result = 'Zunami APS LP';
+        result = 'Zunami UZD';
     }
 
     return result;
@@ -47,7 +47,8 @@ export const CoinSelector = (
     const [isOpen, setIsOpen] = useState(false);
 
     const onToggle = () => {
-        if (props.name !== 'UZD' && props.name !== 'ZETH' && props.name !== 'ethZAPSLP') {
+        const disabledCoins = ['UZD', 'ZETH', 'ethZAPSLP'];
+        if (disabledCoins.indexOf(props.name) !== -1) {
             setIsOpen(!isOpen);
         }
     };
@@ -62,7 +63,7 @@ export const CoinSelector = (
         <div className="CoinSelector" onClick={onToggle}>
             <img src={`${props.name}.svg`} alt="" />
             <div className={'coinName'}>{getCoinName(props.name, props.mode)}</div>
-            {props.name !== 'UZD' && props.name !== 'ZETH' && (
+            {props.name !== 'UZD' && props.name !== 'ZETH' && props.name !== 'ZUN' && (
                 <svg
                     width="14"
                     height="5"
