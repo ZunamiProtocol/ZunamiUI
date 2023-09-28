@@ -1,6 +1,10 @@
 @import 'src/variables';
 
 .ApyDetailsModal {
+    .modal-dialog {
+        max-width: 650px;
+    }
+
     .modal-content {
         border-radius: 60px;
         border: 1px solid #d6d6d6;
@@ -12,6 +16,25 @@
         font-style: normal;
         font-weight: 500;
         line-height: normal;
+    }
+
+    .accordion-header {
+        border-radius: 15px;
+        overflow: hidden;
+
+        .accordion-button {
+            background-color: #e6e6e6;
+            color: #000;
+        }
+    }
+
+    .accordion-body {
+        font-size: 13px;
+    }
+
+    .accordion-item {
+        border: none;
+        background-color: transparent;
     }
 
     .accordion-button:not(.collapsed)::after {

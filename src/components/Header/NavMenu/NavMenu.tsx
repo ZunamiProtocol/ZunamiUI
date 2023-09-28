@@ -24,8 +24,8 @@ export const NavMenu = (props: NavMenuProps): JSX.Element => {
         //     icon: <DepositIcon />,
         // },
         {
-            title: 'UZD & zETH',
-            urls: ['/zstables'],
+            title: 'ZUN Staking',
+            urls: ['/zun'],
             icon: <UzdIcon />,
         },
         {

@@ -35,11 +35,9 @@
 
         @media screen and (min-width: $media375) {
             font-size: 16px;
-            // background-color: #eaeaea;
-            border-radius: $border-radius;
-            padding: 23px 37px;
+            padding: 23px 0;
             border: none;
-            width: 50%;
+            width: 33%;
         }
 
         @media screen and (min-width: $media1024) {
@@ -61,14 +59,7 @@
 
         &__Active {
             border-bottom-color: transparent;
-
-            @media screen and (min-width: $media375) {
-                border: solid 1px $primary-color;
-            }
-
-            @media screen and (min-width: $media1024) {
-                border: solid 1px transparent;
-            }
+            border: solid 1px transparent;
 
             span {
                 color: $primary-color !important;

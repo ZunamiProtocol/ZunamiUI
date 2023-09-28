@@ -97,34 +97,50 @@
         }
     }
 
-    .card.buy-uzd {
-        background: linear-gradient(80.76deg, #fa6c02 9.68%, #fe9d02 91.15%) !important;
-        overflow: hidden;
-
-        .title {
-            color: #fff;
-        }
-
-        .bg {
-            pointer-events: none;
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-45%);
-        }
-    }
-
-    .stake-and-boost {
-        background: linear-gradient(83.54deg, #3e02d9 15.01%, #4f04ff 88.01%) !important;
-
-        .title {
-            color: #fff;
-        }
-    }
-
     .external-icon {
         position: absolute;
         right: 20px;
         top: 13px;
+    }
+
+    .zun-token-card {
+        .text {
+            font-size: 13px;
+        }
+
+        .btns {
+            div,
+            a {
+                width: 29px;
+                height: 26px;
+                border-radius: 8px;
+                padding: 4px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #fff;
+
+                svg,
+                img {
+                    width: 15px;
+                    height: auto;
+                }
+            }
+        }
+
+        .balance {
+            .gray-block {
+                background: linear-gradient(0deg, #f96802 0%, #fea002 93.75%) !important;
+                padding: 15px 25px;
+
+                .title {
+                    font-size: 13px;
+                }
+
+                .value {
+                    font-size: 16px;
+                }
+            }
+        }
     }
 }

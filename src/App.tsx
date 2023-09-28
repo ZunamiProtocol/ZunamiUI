@@ -21,8 +21,8 @@ function App() {
             <Providers>
                 <Router>
                     <Route exact path="/" component={Main} />
-                    <Route path="/zstables" component={Uzd} />
-                    <Route path="/" component={Analytics} />
+                    <Route path="/zun" component={Uzd} />
+                    <Route path="/analytics" component={Analytics} />
                 </Router>
             </Providers>
         </Suspense>

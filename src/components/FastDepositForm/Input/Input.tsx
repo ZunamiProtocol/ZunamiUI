@@ -14,6 +14,7 @@ interface InputProps {
     onCoinChange?: Function;
     chainId: number | undefined;
     mode: string;
+    className: string;
 }
 
 export const Input = (props: InputProps): JSX.Element => {
@@ -59,7 +60,11 @@ export const Input = (props: InputProps): JSX.Element => {
     }, [fullBalance, props]);
 
     return (
-        <div className={`FastDepositInput ${props.disabled ? 'disabled' : ''}`}>
+        <div
+            className={`FastDepositInput ${props.disabled ? 'disabled' : ''} ${
+                props.className ? props.className : ''
+            }`}
+        >
             <div className="selector-wrapper">
                 <CoinSelector
                     name={props.name}

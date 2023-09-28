@@ -608,14 +608,14 @@ export const Main = (): JSX.Element => {
                                     <span className="text-muted mt-2">Dashboard</span>
                                 </a>
                                 <a
-                                    href="/zstables"
+                                    href="/zun"
                                     className="text-center d-flex flex-column text-decoration-none"
                                 >
                                     <img src="/uzd.png" alt="" />
-                                    <span className="text-muted mt-2">UZD & zETH</span>
+                                    <span className="text-muted mt-2">ZUN Staking</span>
                                 </a>
                                 <a
-                                    href="/"
+                                    href="/analytics"
                                     className="text-center d-flex flex-column text-decoration-none"
                                 >
                                     <img src="/analytics.png" alt="" />
@@ -627,6 +627,13 @@ export const Main = (): JSX.Element => {
                                 >
                                     <img src="/dao.png" alt="" />
                                     <span className="text-muted mt-2">DAO</span>
+                                </a>
+                                <a
+                                    href="/zun-staking"
+                                    className="text-center d-flex flex-column text-decoration-none"
+                                >
+                                    <img src="/zun-staking.png" alt="" />
+                                    <span className="text-muted mt-2">ZUN Staking</span>
                                 </a>
                             </div>
                             <div className="Sidebar__Content__Data">
@@ -839,6 +846,14 @@ export const Main = (): JSX.Element => {
                                                 </div>
                                             </div>
                                             <div className="ApyBar__Counter">
+                                                <div className="ApyBar__Counter__Title">
+                                                    <span>Projected APY</span>
+                                                </div>
+                                                <div className="ApyBar__Counter__Value vela-sans">
+                                                    0%
+                                                </div>
+                                            </div>
+                                            <div className="ApyBar__Counter">
                                                 <div className="ApyBar__Counter__Title d-flex align-items-start gap-2">
                                                     <span>Average APY</span>
                                                     <div
@@ -877,14 +892,6 @@ export const Main = (): JSX.Element => {
                                                 </div>
                                                 <div className="ApyBar__Counter__Value vela-sans">
                                                     {apyBarMonthlyApy}
-                                                </div>
-                                            </div>
-                                            <div className="ApyBar__Counter">
-                                                <div className="ApyBar__Counter__Title">
-                                                    <span>Reward APY</span>
-                                                </div>
-                                                <div className="ApyBar__Counter__Value vela-sans">
-                                                    soon
                                                 </div>
                                             </div>
                                         </div>

@@ -4,9 +4,10 @@ import './RebaseHistory.scss';
 import { getScanAddressByChainId } from '../../utils/zunami';
 
 interface TransactionHistoryProps {
-    items?: Array<any>;
+    items: Array<any>;
     onPageEnd?: Function;
     emptyText: string;
+    columns: Array<string>;
 }
 
 interface TransactionItem {
@@ -24,7 +25,7 @@ export const RebaseHistory: React.FC<TransactionHistoryProps & React.HTMLProps<H
     items,
     onPageEnd,
     emptyText,
-    type,
+    columns,
 }) => {
     const onScroll = (e: any) => {
         const areaHeight = e.target.offsetHeight;
@@ -41,9 +42,9 @@ export const RebaseHistory: React.FC<TransactionHistoryProps & React.HTMLProps<H
     return (
         <div className={`RebaseHistory ${className}`}>
             <div className="d-flex header">
-                <div>Date</div>
-                <div>{type} price</div>
-                <div>Change</div>
+                {columns.map((column: string, key: number) => (
+                    <div key={key}>{column}</div>
+                ))}
             </div>
             <div className="RebaseHistory__List" onScroll={onScroll}>
                 {items &&

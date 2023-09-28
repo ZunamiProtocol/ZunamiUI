@@ -5,12 +5,12 @@ interface AllServicesPanelProps {}
 export const AllServicesPanel = (props: AllServicesPanelProps): JSX.Element => {
     return (
         <div id="all-services" className="all-services-panel container">
-            {/* <div className="row">
+            <div className="row">
                 <div className="col">
                     <div className="title mt-4 mb-4">Zunami Protocol Menu</div>
                     <div className="d-flex gap-4 flex-wrap fast-menu">
-                        <a href="/zstables" target="_blank" rel="noreferrer">
-                            <span>UZD & zETH</span>
+                        <a href="/zun" target="_blank" rel="noreferrer">
+                            <span>ZUN Staking</span>
                             <img src="/fast-menu-2.png" alt="" />
                         </a>
                         <a href="https://snapshot.org/#/zunamidao.eth">
@@ -23,7 +23,7 @@ export const AllServicesPanel = (props: AllServicesPanelProps): JSX.Element => {
                         </a>
                     </div>
                 </div>
-            </div> */}
+            </div>
             <div className="row mt-5">
                 <div className="col">
                     <div className="title">About Zunami Protocol</div>

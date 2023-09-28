@@ -719,8 +719,8 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                 </button>
                             )}
                             {action === 'deposit' && coinApproved && isETH(chainId) && (
-                                <div className="">
-                                    <div className="d-flex gap-4 mb-3">
+                                <div className="checkboxes">
+                                    <div className="d-flex gap-4 mb-3 flex-column flex-md-row">
                                         {!pendingTx && (
                                             <DirectAction
                                                 actionName="deposit"
@@ -792,7 +792,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                             )}
                             {pendingTx && <Preloader className="ms-2" />}
                         </div>
-                        <div className="d-flex gap-3 align-items-center mt-4">
+                        <div className="d-flex gap-3 align-items-center mt-4 flex-column flex-md-row">
                             {action === 'deposit' && coinApproved && isETH(chainId) && (
                                 <button
                                     className={`zun-button ${depositEnabled ? '' : 'disabled'}`}

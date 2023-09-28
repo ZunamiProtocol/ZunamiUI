@@ -486,18 +486,11 @@ body.dark {
         }
 
         .accordion-item {
-            border: none;
-            background-color: transparent;
             color: #fff;
 
             // &:has(div.collapse.show) {
             //     background-color: #2e2e2e;
             // }
-        }
-
-        .accordion-header {
-            border-radius: 15px;
-            overflow: hidden;
         }
 
         .accordion-button:not(.collapsed)::after {
@@ -574,6 +567,17 @@ body.dark {
                 fill: #646464;
             }
         }
+    }
+
+    .pending-icon,
+    .zun-icon {
+        path {
+            fill: #fff;
+        }
+    }
+
+    .text {
+        color: #fff;
     }
 
     .FastDepositForm__MobileToggle__Icon {
@@ -1864,6 +1868,13 @@ body.overflow {
             .zeth-logo {
                 position: absolute;
 
+                @media (min-width: $media375) {
+                    width: 130px;
+                    height: auto;
+                    left: 60px;
+                    top: 70px;
+                }
+
                 @media (min-width: $media1440) {
                     width: 130px;
                     height: auto;
@@ -1874,6 +1885,13 @@ body.overflow {
 
             .big-logo {
                 position: absolute;
+
+                @media (min-width: $media375) {
+                    width: 100px;
+                    height: auto;
+                    right: 50px;
+                    top: 40px;
+                }
 
                 @media (min-width: $media1440) {
                     width: 130px;
@@ -1888,6 +1906,12 @@ body.overflow {
                 line-height: 15px;
                 font-size: 13px;
                 color: #fff;
+
+                @media (min-width: $media375) {
+                    left: 60px;
+                    top: 130px;
+                    width: 180px;
+                }
 
                 @media (min-width: $media1440) {
                     left: 60px;
@@ -2166,7 +2190,7 @@ body.overflow {
             }
 
             @media (min-width: $media1920) {
-                width: 174px;
+                width: calc(33% - 5px);
                 height: 75px;
                 margin-bottom: 0;
             }

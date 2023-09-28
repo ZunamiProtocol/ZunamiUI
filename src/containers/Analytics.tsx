@@ -408,11 +408,11 @@ export const Analytics = (): JSX.Element => {
                                 <span className="text-muted mt-2">Dashboard</span>
                             </a>
                             <a
-                                href="/zstables"
+                                href="/zun"
                                 className="text-center d-flex flex-column text-decoration-none"
                             >
                                 <img src="/uzd.png" alt="" />
-                                <span className="text-muted mt-2">UZD & zETH</span>
+                                <span className="text-muted mt-2">ZUN Staking</span>
                             </a>
                             <a
                                 href="/analytics"
@@ -427,6 +427,13 @@ export const Analytics = (): JSX.Element => {
                             >
                                 <img src="/dao.png" alt="" />
                                 <span className="text-muted mt-2">DAO</span>
+                            </a>
+                            <a
+                                href="/zun-staking"
+                                className="text-center d-flex flex-column text-decoration-none"
+                            >
+                                <img src="/zun-staking.png" alt="" />
+                                <span className="text-muted mt-2">ZUN Staking</span>
                             </a>
                         </div>
                         <WalletStatus />
