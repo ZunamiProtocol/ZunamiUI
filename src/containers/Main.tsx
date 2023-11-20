@@ -245,61 +245,6 @@ export const Main = (): JSX.Element => {
         return profitVal;
     }, [userMaxWithdraw, poolBestApyYearly, apsPoolBestApyYearly, apsBalance]);
 
-    const [totalIncomeDetailed, setTotalIncomeDetailed] = useState([]);
-    const [totalIncome, setTotalIncome] = useState('0');
-
-    useEffect(() => {
-        if (!account || !chainId) {
-            console.log(`Skipping total income due to initialization progress...`);
-            return;
-        }
-
-        let totalLpTokens = BIG_ZERO;
-        balances.forEach((bItem: Balance) => (totalLpTokens = totalLpTokens.plus(bItem.value)));
-
-        if (totalLpTokens.plus(apsBalance).toNumber() <= 0) {
-            log('Skipping total income (both zeros) update...');
-            return;
-        }
-
-        const getTotalIncome = async () => {
-            let response = null;
-
-            const apsTotalIncomeUrl = getApsTotalIncomeUrl(
-                account,
-                totalLpTokens.toString(),
-                apsBalance.toString()
-            );
-
-            try {
-                let totalValue = 0;
-                log(`Total income (APS). Requesting (${apsTotalIncomeUrl})`);
-                response = await fetch(apsTotalIncomeUrl);
-                const data = await response.json();
-
-                setTotalIncomeDetailed([
-                    {
-                        type: 'Omnipool',
-                        value: data.omnipoolTotalIncome,
-                    },
-                    {
-                        type: 'UZD',
-                        value: data.apsTotalIncome,
-                    },
-                ]);
-
-                totalValue = data.apsTotalIncome + data.omnipoolTotalIncome;
-                setTotalIncome(totalValue.toFixed(2));
-                log(`Total income. Value set to: ${totalValue}`);
-            } catch (error: any) {
-                log(`❗️ Error fetching total income: ${error.message}`);
-                setTotalIncome('n/a');
-            }
-        };
-
-        getTotalIncome();
-    }, [account, chainId, apsBalance, balances]);
-
     const chartData = useMemo(() => {
         if (!poolStats) {
             return [];
@@ -695,50 +640,7 @@ export const Main = (): JSX.Element => {
                                                     .toLocaleString('en')}`}
                                         </div>
                                     </div>
-                                    <div className="total-income col-6">
-                                        <div className="title d-flex gap-2 justify-content-between">
-                                            <span>Total income</span>
-                                            <OverlayTrigger
-                                                placement="right"
-                                                overlay={
-                                                    <Tooltip>
-                                                        {totalIncomeDetailed.length > 0 &&
-                                                            totalIncomeDetailed.map((item) => (
-                                                                <div
-                                                                    className="text-start fs-6 mt-2 mb-2"
-                                                                    key={item.type}
-                                                                >
-                                                                    {item.type}:{' '}
-                                                                    {`$${item.value.toFixed(2)}`}
-                                                                </div>
-                                                            ))}
-                                                        {totalIncomeDetailed.length === 0 &&
-                                                            'No income yet'}
-                                                    </Tooltip>
-                                                }
-                                                trigger={['hover', 'focus']}
-                                            >
-                                                <svg
-                                                    width="13"
-                                                    height="13"
-                                                    viewBox="0 0 13 13"
-                                                    fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        clipRule="evenodd"
-                                                        d="M6.5 13C10.0899 13 13 10.0899 13 6.5C13 2.91015 10.0899 0 6.5 0C2.91015 0 0 2.91015 0 6.5C0 10.0899 2.91015 13 6.5 13ZM6.23296 9.97261H4.98638L5.79002 7.12336H3.02741V5.87679H6.14162L6.94529 3.02741H8.19186L7.38819 5.87679L9.97261 5.87679V7.12336H7.03659L6.23296 9.97261Z"
-                                                        fill="white"
-                                                    />
-                                                </svg>
-                                            </OverlayTrigger>
-                                        </div>
-                                        <div className="value">
-                                            {!account && 'n/a'}
-                                            {account && `$${totalIncome}`}
-                                        </div>
-                                    </div>
+                                    <div className="total-income col-6"></div>
                                 </div>
                                 <div className="divider"></div>
                                 <div className="profits">

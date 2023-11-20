@@ -485,8 +485,8 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                     y2="-5.89455"
                                     gradientUnits="userSpaceOnUse"
                                 >
-                                    <stop />
-                                    <stop offset="1" stopColor="#FF6102" />
+                                    <stop offset="0" stopColor="#FA6E03" />
+                                    <stop offset="1" stopColor="#FF9A03" />
                                 </linearGradient>
                             </defs>
                         </svg>
@@ -678,47 +678,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                     Please, switch to Ethereum network
                                 </div>
                             )}
-                            {showApproveBtn && (
-                                <button
-                                    className={`zun-button approve-usd ${
-                                        !approveEnabled ? 'disabled' : ''
-                                    }`}
-                                    onClick={async () => {
-                                        // setPendingApproval(true);
-                                        // setPendingTx(true);
-                                        // if (!chainId) {
-                                        //     return;
-                                        // }
-                                        // try {
-                                        //     if (coin === 'UZD') {
-                                        //         await onUzdApprove(
-                                        //             coinNameToAddress(coin, chainId)
-                                        //         );
-                                        //     } else if (coin === 'ZAPSLP') {
-                                        //         await onLPApprove(coinNameToAddress('LP', chainId));
-                                        //     } else if (coin === 'ZETH') {
-                                        //         await onZethApprove(
-                                        //             coinNameToAddress(coin, chainId)
-                                        //         );
-                                        //     } else if (coin === 'ethZAPSLP') {
-                                        //         await onZAPSLPApprove(
-                                        //             coinNameToAddress(coin, chainId)
-                                        //         );
-                                        //     }
-                                        //     log(`${coin} approved!`);
-                                        // } catch (error: any) {
-                                        //     log(`Error while approving ${coin}: ${error.message}`);
-                                        //     setPendingApproval(false);
-                                        //     setPendingTx(false);
-                                        // }
-                                        // setPendingApproval(false);
-                                        // setPendingTx(false);
-                                    }}
-                                >
-                                    Approve
-                                </button>
-                            )}
-                            {action === 'deposit' && coinApproved && isETH(chainId) && (
+                            {action === 'deposit' && (
                                 <div className="checkboxes">
                                     <div className="d-flex gap-4 mb-3 flex-column flex-md-row">
                                         {!pendingTx && (
@@ -726,7 +686,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                                 actionName="deposit"
                                                 checked={lockAndBoost}
                                                 title={'Lock and boost APY to 25%'}
-                                                disabled={chainId !== 1}
+                                                disabled={!coinApproved || !isETH(chainId)}
                                                 hint={'Example tooltip text'}
                                                 onChange={(state: boolean) => {
                                                     setLockAndBoost(state);
@@ -738,7 +698,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                                 actionName="deposit"
                                                 checked={autoRelock}
                                                 title={'Auto-relock'}
-                                                disabled={chainId !== 1}
+                                                disabled={!coinApproved || !isETH(chainId)}
                                                 hint={'Example tooltip text'}
                                                 onChange={(state: boolean) => {
                                                     setAutoRelock(state);
@@ -790,9 +750,49 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                     Withdraw
                                 </button>
                             )}
+                            {showApproveBtn && (
+                                <button
+                                    className={`zun-button approve-usd ${
+                                        !approveEnabled ? 'disabled' : ''
+                                    }`}
+                                    onClick={async () => {
+                                        // setPendingApproval(true);
+                                        // setPendingTx(true);
+                                        // if (!chainId) {
+                                        //     return;
+                                        // }
+                                        // try {
+                                        //     if (coin === 'UZD') {
+                                        //         await onUzdApprove(
+                                        //             coinNameToAddress(coin, chainId)
+                                        //         );
+                                        //     } else if (coin === 'ZAPSLP') {
+                                        //         await onLPApprove(coinNameToAddress('LP', chainId));
+                                        //     } else if (coin === 'ZETH') {
+                                        //         await onZethApprove(
+                                        //             coinNameToAddress(coin, chainId)
+                                        //         );
+                                        //     } else if (coin === 'ethZAPSLP') {
+                                        //         await onZAPSLPApprove(
+                                        //             coinNameToAddress(coin, chainId)
+                                        //         );
+                                        //     }
+                                        //     log(`${coin} approved!`);
+                                        // } catch (error: any) {
+                                        //     log(`Error while approving ${coin}: ${error.message}`);
+                                        //     setPendingApproval(false);
+                                        //     setPendingTx(false);
+                                        // }
+                                        // setPendingApproval(false);
+                                        // setPendingTx(false);
+                                    }}
+                                >
+                                    Approve
+                                </button>
+                            )}
                             {pendingTx && <Preloader className="ms-2" />}
                         </div>
-                        <div className="d-flex gap-3 align-items-center mt-4 flex-column flex-md-row">
+                        <div className="d-flex gap-3 align-items-center mt-3 flex-column flex-md-row">
                             {action === 'deposit' && coinApproved && isETH(chainId) && (
                                 <button
                                     className={`zun-button ${depositEnabled ? '' : 'disabled'}`}

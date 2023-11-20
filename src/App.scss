@@ -1291,10 +1291,8 @@ body.dark {
     }
 
     .hint {
-        svg {
-            path {
-                fill: #fff;
-            }
+        path {
+            fill: #fff;
         }
     }
 
@@ -1492,6 +1490,14 @@ body.dark {
     .ApyBar__Counter,
     .Counter__Title__Buttons > div {
         background: #333333;
+    }
+
+    .Coin-Selector__Items.big {
+        border: 1px solid #353535;
+    }
+
+    .CoinSelector .selector path {
+        stroke: #7d7d7d;
     }
 
     .Counter__Title__Buttons > div {

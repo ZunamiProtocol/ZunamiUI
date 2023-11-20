@@ -462,7 +462,7 @@ export const Uzd = (): JSX.Element => {
                                     earn income from the protocol.
                                 </div>
                                 <div className="balance">
-                                    <div className="d-flex flex-row gray-block small-block align-items-center stablecoin mb-3 ps-3 me-3 me-lg-2 mt-3 justify-content-between">
+                                    <div className="d-flex flex-row small-block align-items-center stablecoin mb-3 ps-3 me-3 me-lg-2 mt-3 justify-content-between">
                                         <div>
                                             <div>
                                                 <span className="name">ZUN Balance</span>
@@ -704,7 +704,7 @@ export const Uzd = (): JSX.Element => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-xxl-6 col-xs-12 d-flex flex-column mt-xxl-0">
+                            <div className="col-xxl-6 col-xs-12 d-flex flex-column mt-xxl-0 apy-bar-card">
                                 <div className="card mt-3 h-100">
                                     <div className="card-body pb-0">
                                         <div className="title">APY bar</div>

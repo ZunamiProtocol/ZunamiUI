@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import '../InfoBlock/InfoBlock.scss';
 import './CoinSelector.scss';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { ReactComponent as HintIcon } from '../../assets/info.svg';
 
 interface CoinSelectorProps {
     mode: string;
@@ -9,12 +11,31 @@ interface CoinSelectorProps {
     onCoinSelect?: Function;
 }
 
-function renderCoinItem(coinName: string, onCoinSelect: Function) {
+interface CoinProps {
+    coinName: string;
+    onCoinSelect: Function;
+}
+
+function displayCoinName(coinCode: string) {
+    let result = coinCode;
+
+    switch (coinCode) {
+        case 'UZD':
+            result = 'Zunami USD';
+            break;
+    }
+
+    return result;
+}
+
+function renderCoinItem(props: CoinProps & React.HTMLProps<HTMLButtonElement>) {
     return (
-        <div className="coin-item" onClick={() => onCoinSelect(coinName)}>
-            <img src={`${coinName}.svg`} alt="" />
-            <div className={'coinName'}>{coinName === 'UZD' ? 'Zunami UZD' : coinName}</div>
-            <div className={'coinName'}>{coinName === 'ZETH' ? 'Zunami zETH' : coinName}</div>
+        <div
+            className={`coin-item ${props.className}`}
+            onClick={() => props.onCoinSelect(props.coinName)}
+        >
+            <img src={`${props.coinName}.svg`} alt="" />
+            <div className={'coinName'}>{displayCoinName(props.coinName)}</div>
         </div>
     );
 }
@@ -23,19 +44,19 @@ function getCoinName(name: string, mode: string) {
     let result = name;
 
     if (name === 'UZD') {
-        result = 'Zunami UZD';
+        result = 'Zunami USD';
     }
 
     if (name === 'ZETH') {
-        result = 'Zunami zETH';
+        result = 'Zunami ETH';
     }
 
     if (name === 'ethZAPSLP') {
-        result = 'Zunami UZD';
+        result = 'Zunami USD';
     }
 
     if (name === 'ZAPSLP') {
-        result = 'Zunami UZD';
+        result = 'Zunami USD';
     }
 
     return result;
@@ -45,12 +66,14 @@ export const CoinSelector = (
     props: CoinSelectorProps & React.HTMLProps<HTMLButtonElement>
 ): JSX.Element => {
     const [isOpen, setIsOpen] = useState(false);
+    const target = useRef(null);
+    const [showHint, setShowHint] = useState(false);
 
     const onToggle = () => {
-        const disabledCoins = ['UZD', 'ZETH', 'ethZAPSLP'];
-        if (disabledCoins.indexOf(props.name) !== -1) {
-            setIsOpen(!isOpen);
-        }
+        // const disabledCoins = ['UZD', 'ZETH', 'ethZAPSLP'];
+        // if (disabledCoins.indexOf(props.name) !== -1) {
+        setIsOpen(!isOpen);
+        // }
     };
 
     const onCoinSelect = (coinName: string) => {
@@ -63,35 +86,75 @@ export const CoinSelector = (
         <div className="CoinSelector" onClick={onToggle}>
             <img src={`${props.name}.svg`} alt="" />
             <div className={'coinName'}>{getCoinName(props.name, props.mode)}</div>
-            {props.name !== 'UZD' && props.name !== 'ZETH' && props.name !== 'ZUN' && (
-                <svg
-                    width="14"
-                    height="5"
-                    viewBox="0 0 14 5"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="selector"
-                >
-                    <path
-                        d="M1 1L7 4L13 1"
-                        stroke="#404040"
-                        strokeWidth="1.1"
-                        strokeLinecap="round"
-                    />
-                </svg>
-            )}
-            {isOpen && (
+            {/* {props.name !== 'UZD' && props.name !== 'ZETH' && props.name !== 'ZUN' && ( */}
+            <svg
+                width="14"
+                height="5"
+                viewBox="0 0 14 5"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="selector"
+            >
+                <path d="M1 1L7 4L13 1" stroke="#404040" strokeWidth="1.1" strokeLinecap="round" />
+            </svg>
+            {/* )} */}
+            {/* {isOpen && props.mode == 'deposit' && (
                 <div
                     className="Coin-Selector__Items"
                     onBlur={(e) => {
                         debugger;
                     }}
                 >
-                    {/* {props.chainId === 1 && renderCoinItem('DAI', onCoinSelect)}
-                    {props.chainId === 1 && renderCoinItem('USDC', onCoinSelect)}
-                    {props.chainId === 56 && renderCoinItem('BUSD', onCoinSelect)} */}
-                    {renderCoinItem('USDT', onCoinSelect)}
-                    {/* {props.chainId === 1 && renderCoinItem('FRAX', onCoinSelect)} */}
+                    {renderCoinItem({ coinName: 'USDT', onCoinSelect })}
+                </div>
+            )} */}
+            {isOpen && props.mode === 'deposit' && (
+                <div className="Coin-Selector__Items big">
+                    <div className="row">
+                        <div className="col-xs-12 col-md-6">
+                            <div className="h-100 d-flex flex-column">
+                                <div className="title">Native</div>
+                                <div className="flex-grow-1 d-flex align-items-center">
+                                    {renderCoinItem({
+                                        coinName: 'UZD',
+                                        onCoinSelect,
+                                        className: 'mt-4',
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-xs-12 col-md-6">
+                            <div className="d-flex gap-1 align-items-center mt-4 mt-md-0">
+                                <span className="title me-1">ZAP (Swap + Deposit)</span>
+                                <div ref={target} onClick={() => setShowHint(!showHint)}>
+                                    <OverlayTrigger
+                                        placement="right"
+                                        overlay={<Tooltip>QWEQWEQWE</Tooltip>}
+                                    >
+                                        <HintIcon />
+                                    </OverlayTrigger>
+                                </div>
+                            </div>
+                            <div className="row mt-3 mt-md-2">
+                                <div className="col-6">
+                                    {renderCoinItem({
+                                        coinName: 'USDC',
+                                        onCoinSelect,
+                                        className: 'mt-2 mb-3',
+                                    })}
+                                    {renderCoinItem({ coinName: 'DAI', onCoinSelect })}
+                                </div>
+                                <div className="col-6">
+                                    {renderCoinItem({
+                                        coinName: 'USDT',
+                                        onCoinSelect,
+                                        className: 'mt-2 mb-3',
+                                    })}
+                                    {renderCoinItem({ coinName: 'FRAX', onCoinSelect })}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

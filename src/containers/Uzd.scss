@@ -129,18 +129,44 @@
         }
 
         .balance {
-            .gray-block {
+            .stablecoin {
+                width: 238px;
                 background: linear-gradient(0deg, #f96802 0%, #fea002 93.75%) !important;
                 padding: 15px 25px;
-
-                .title {
-                    font-size: 13px;
-                }
-
-                .value {
-                    font-size: 16px;
-                }
+                border-radius: 20px;
+                font-size: 13px;
+                line-height: 18px;
+                min-height: 59px;
             }
+
+            .name,
+            .value {
+                color: #fff;
+            }
+
+            .title {
+                font-size: 13px;
+            }
+
+            .value {
+                font-size: 16px;
+            }
+        }
+    }
+
+    .apy-bar-card {
+        @media screen and (min-width: $media1024) {
+            height: 352px;
+        }
+    }
+
+    .CoinSelector {
+        @media screen and (min-width: $media1024) {
+            width: 96px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            width: 157px;
         }
     }
 }

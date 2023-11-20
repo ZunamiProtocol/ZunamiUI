@@ -59,7 +59,7 @@ export const RebaseHistory: React.FC<TransactionHistoryProps & React.HTMLProps<H
                     ))}
                 {!items.length && (
                     <div className="text-center empty">
-                        <svg
+                        {/* <svg
                             width="130"
                             height="24"
                             viewBox="0 0 130 24"
@@ -67,7 +67,7 @@ export const RebaseHistory: React.FC<TransactionHistoryProps & React.HTMLProps<H
                             xmlns="http://www.w3.org/2000/svg"
                         >
                             <rect width="130" height="24" rx="12" fill="#E4E4E4" />
-                        </svg>
+                        </svg> */}
                         <div className="">{emptyText}</div>
                     </div>
                 )}

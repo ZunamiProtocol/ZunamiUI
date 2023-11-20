@@ -99,8 +99,41 @@
         padding: 15px 15px 15px 15px;
         z-index: 2;
 
+        @media screen and (min-width: $media375) {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        @media screen and (min-width: $media1440) {
+            left: 0;
+            transform: none;
+        }
+
         .coin-item {
             display: flex;
+            cursor: pointer;
+        }
+
+        &.big {
+            border: 1px solid #e6e6e6;
+
+            @media screen and (min-width: $media375) {
+                width: 355px;
+                height: auto;
+                padding: 37px 40px 40px 40px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                width: 426px;
+                height: 152px;
+                padding: 22px 25px 25px 25px;
+            }
+
+            .title {
+                font-size: 13px;
+                font-weight: 500;
+                line-height: 17px;
+            }
         }
     }
 }
