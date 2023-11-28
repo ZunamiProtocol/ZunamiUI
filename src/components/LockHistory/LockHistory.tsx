@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 // import { useWallet } from 'use-wallet';
-import './RebaseHistory.scss';
+import './LockHistory.scss';
 import { getScanAddressByChainId } from '../../utils/zunami';
 
 interface TransactionHistoryProps {
@@ -20,7 +20,7 @@ interface TransactionItem {
     type: string;
 }
 
-export const RebaseHistory: React.FC<TransactionHistoryProps & React.HTMLProps<HTMLDivElement>> = ({
+export const LockHistory: React.FC<TransactionHistoryProps & React.HTMLProps<HTMLDivElement>> = ({
     className,
     items,
     onPageEnd,
@@ -40,16 +40,16 @@ export const RebaseHistory: React.FC<TransactionHistoryProps & React.HTMLProps<H
     };
 
     return (
-        <div className={`RebaseHistory ${className}`}>
+        <div className={`LockHistory ${className}`}>
             <div className="d-flex header">
                 {columns.map((column: string, key: number) => (
                     <div key={key}>{column}</div>
                 ))}
             </div>
-            <div className="RebaseHistory__List" onScroll={onScroll}>
+            <div className="LockHistory__List" onScroll={onScroll}>
                 {items &&
                     items.map((item, index) => (
-                        <div className="RebaseHistory__List-Item d-flex" key={index}>
+                        <div className="LockHistory__List-Item d-flex" key={index}>
                             <div className="date text-center">
                                 {format(new Date(item.dateTime), 'd MMM yyyy, h:mm')}
                             </div>

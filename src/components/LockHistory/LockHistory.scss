@@ -1,0 +1,106 @@
+@import 'src/variables';
+
+.LockHistory {
+    width: 100%;
+
+    @media screen and (min-width: $media375) {
+        margin-bottom: 20px;
+    }
+
+    @media screen and (min-width: $media1024) {
+        margin-bottom: 0;
+    }
+
+    @media screen and (min-width: $media1440) {
+    }
+
+    @media screen and (min-width: $media1920) {
+    }
+
+    &__Title {
+        @media screen and (min-width: $media375) {
+            font-size: 14px;
+            line-height: 18px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            font-size: 11px;
+            line-height: 15px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            font-size: 13px;
+            line-height: 17px;
+        }
+
+        @media screen and (min-width: $media1920) {
+            font-size: 14px;
+            line-height: 18px;
+        }
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        gap: 10px;
+
+        > div {
+            // text-align: center;
+            font-size: 13px;
+
+            &:first-child {
+                width: 25%;
+            }
+
+            &:last-child {
+                width: 75%;
+            }
+        }
+    }
+
+    &__List {
+        overflow: hidden;
+        overflow-y: auto;
+        margin-top: 10px;
+
+        @media screen and (min-width: $media375) {
+            height: 200px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            height: 40px;
+        }
+
+        &-Item {
+            border-bottom: solid 1px rgba(0, 0, 0, 0.2);
+            font-size: 13px;
+            line-height: 17px;
+
+            @media screen and (min-width: $media375) {
+                padding: 10px 0;
+            }
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            > div {
+                width: 33.3%;
+            }
+        }
+    }
+
+    .empty {
+        font-size: 14px;
+        line-height: 18px;
+        text-align: center;
+        color: #b4b4b4;
+        // width: 200px;
+        margin: 10px auto 0 auto;
+
+        svg {
+            margin-bottom: 10px;
+        }
+    }
+}

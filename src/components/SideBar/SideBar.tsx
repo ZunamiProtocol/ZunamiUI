@@ -34,9 +34,9 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
         )
             .then((response) => response.json())
             .then((data) => {
-                setGasPrice(Number(data.result.ProposeGasPrice));
+                setGasPrice(data.result.ProposeGasPrice);
             })
-            .catch((error) => {
+            .catch(() => {
                 setGasPrice('n/a');
             });
 
@@ -171,7 +171,9 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                             className="nav-menu"
                             onClick={() => {
                                 // setOpen(!open);
-                                document.getElementById('MobileSidebar').classList.toggle('active');
+                                document
+                                    .getElementById('MobileSidebar')
+                                    ?.classList.toggle('active');
                                 document.body.classList.toggle('overflow');
                             }}
                         >

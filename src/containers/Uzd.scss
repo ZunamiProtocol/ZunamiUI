@@ -103,6 +103,22 @@
         top: 13px;
     }
 
+    .buttons-row {
+        @media screen and (min-width: $media375) {
+            flex-direction: column-reverse;
+            align-items: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            margin-top: 0;
+            flex-direction: row;
+            align-items: center;
+            gap: 0;
+        }
+    }
+
     .zun-token-card {
         .text {
             font-size: 13px;

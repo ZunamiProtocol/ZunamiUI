@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import './WalletButton.scss';
-import { useWallet } from 'use-wallet';
+import { useConnect, useAccount, useNetwork, useDisconnect } from 'wagmi';
 import { networks, Network } from '../NetworkSelector/NetworkSelector';
 import { WalletsModal } from '../WalletsModal/WalletsModal';
 
@@ -9,7 +9,9 @@ interface WalletButtonProps {}
 export const WalletButton = (
     props: WalletButtonProps & React.HTMLProps<HTMLButtonElement>
 ): JSX.Element => {
-    const { account, reset, chainId } = useWallet();
+    const { connect, connectors } = useConnect();
+    const { disconnect } = useDisconnect();
+    const { address: account, isConnected } = useAccount();
     const [activeNetwork, setActiveNetwork] = useState<Network>(networks[0]);
     const [open, setOpen] = useState(false);
     const eth = window.ethereum;
@@ -18,6 +20,8 @@ export const WalletButton = (
     const availableNetworks = networksList.filter(
         (item) => [1, 56, 137].indexOf(parseInt(item.key, 16)) !== -1
     );
+    const { chain } = useNetwork();
+    const chainId = chain ? chain.id : 1;
 
     useEffect(() => {
         if (!chainId) {
@@ -32,9 +36,9 @@ export const WalletButton = (
     }, [chainId, activeNetwork]);
 
     const handleSignOutClick = useCallback(() => {
-        reset();
         window.localStorage.clear();
-    }, [reset]);
+        disconnect();
+    }, []);
 
     const [show, setShow] = useState(false);
 

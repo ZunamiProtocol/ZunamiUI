@@ -17,10 +17,10 @@ export const AllServicesPanel = (props: AllServicesPanelProps): JSX.Element => {
                             <span>DAO</span>
                             <img src="/fast-menu-3.png" alt="" />
                         </a>
-                        <a href="/analytics">
+                        {/* <a href="/analytics">
                             <span>Analytics</span>
                             <img src="/fast-menu-4.png" alt="" />
-                        </a>
+                        </a> */}
                     </div>
                 </div>
             </div>

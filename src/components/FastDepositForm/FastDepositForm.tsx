@@ -21,7 +21,6 @@ import {
     BIG_ZERO,
 } from '../../utils/formatbalance';
 import { getFullDisplayBalance } from '../../utils/formatbalance';
-import { useWallet } from 'use-wallet';
 import { log } from '../../utils/logger';
 import { isBSC, isETH, isPLG } from '../../utils/zunami';
 import { ActionSelector } from '../Form/ActionSelector/ActionSelector';
@@ -34,6 +33,11 @@ import useZethApsBalance from '../../hooks/useZethApsBalance';
 import useApproveZAPSLP from '../../hooks/useApproveZAPSLP';
 import useApproveLP from '../../hooks/useApproveLP';
 import { DirectAction } from '../Form/DirectAction/DirectAction';
+import { useAccount, useNetwork, Address } from 'wagmi';
+import { WalletButton } from '../WalletButton/WalletButton';
+import { ApproveButton } from '../ApproveButton/ApproveButton';
+import { TransactionReceipt } from 'viem';
+import sepoliaAbi from '../../actions/abi/sepolia/ZunamiPool.json';
 
 function coinNameToAddress(coinName: string, chainId: number): string {
     if (chainId === 56 && coinName === 'USDT') {
@@ -87,7 +91,7 @@ function getScanAddressByChainId(chainId: number) {
 function renderToasts(
     transactionError: boolean,
     setTransactionError: Function,
-    chainId: number | undefined,
+    chainId: number,
     transactionId: string | undefined,
     setTransactionId: Function
 ) {
@@ -120,12 +124,18 @@ interface FastDepositFormProps {
     stakingMode: string;
 }
 
+function coinToAbi(coin: string) {
+    //
+}
+
 export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HTMLDivElement>> = ({
     stakingMode,
     className,
 }) => {
     const userBalanceList = useUserBalances();
-    const { chainId, account } = useWallet();
+    const { address: account, isConnected } = useAccount();
+    const { chain } = useNetwork();
+    const chainId = chain ? chain.id : 1;
     const [lockAndBoost, setLockAndBoost] = useState(true);
     const [autoRelock, setAutoRelock] = useState(true);
     const [pendingApproval, setPendingApproval] = useState(false);
@@ -386,6 +396,17 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
 
         return result;
     }, [action, stakingMode, coinIndex, userBalanceList, zethApsBalance, apsBalance, chainId]);
+
+    // ABI
+    const abi = useMemo(() => {
+        return stakingMode ? sepoliaAbi : sepoliaAbi;
+    }, [stakingMode]);
+
+    // const contract
+    const contractAddress = useMemo(() => {
+        const adress: Address = '0x0';
+        return adress;
+    }, [stakingMode]);
 
     return (
         <div className={`FastDepositForm ${className} mode-${stakingMode}`}>
@@ -662,52 +683,47 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                     setCoinIndex(['DAI', 'USDC', 'USDT', 'BUSD', 'FRAX', 'UZD'].indexOf(coin));
                 }}
                 chainId={chainId}
+                className=""
             />
             <div>
-                {!account && (
-                    <div className="d-flex align-items-center FastDepositForm__Actions">
-                        <WalletStatus />
-                        <span className="FastDepositForm__Slogan">Make your first Deposit!</span>
-                    </div>
-                )}
-                {account && (
-                    <div>
-                        <div className="">
-                            {!isETH(chainId) && (
-                                <div className="text-danger">
-                                    Please, switch to Ethereum network
+                <div>
+                    <div className="">
+                        {!isETH(chainId) && (
+                            <div className="text-danger">Please, switch to Ethereum network</div>
+                        )}
+                        {action === 'deposit' && (
+                            <div className="checkboxes">
+                                <div className="d-flex gap-4 mb-3 flex-column flex-md-row">
+                                    {!pendingTx && (
+                                        <DirectAction
+                                            actionName="deposit"
+                                            checked={lockAndBoost}
+                                            title={'Lock and boost APY to 25%'}
+                                            disabled={!coinApproved || !isETH(chainId)}
+                                            hint={'Example tooltip text'}
+                                            onChange={(state: boolean) => {
+                                                setLockAndBoost(state);
+                                            }}
+                                            chainId={chainId}
+                                        />
+                                    )}
+                                    {!pendingTx && (
+                                        <DirectAction
+                                            actionName="deposit"
+                                            checked={autoRelock}
+                                            title={'Auto-relock'}
+                                            disabled={!coinApproved || !isETH(chainId)}
+                                            hint={'Example tooltip text'}
+                                            onChange={(state: boolean) => {
+                                                setAutoRelock(state);
+                                            }}
+                                            chainId={chainId}
+                                        />
+                                    )}
                                 </div>
-                            )}
-                            {action === 'deposit' && (
-                                <div className="checkboxes">
-                                    <div className="d-flex gap-4 mb-3 flex-column flex-md-row">
-                                        {!pendingTx && (
-                                            <DirectAction
-                                                actionName="deposit"
-                                                checked={lockAndBoost}
-                                                title={'Lock and boost APY to 25%'}
-                                                disabled={!coinApproved || !isETH(chainId)}
-                                                hint={'Example tooltip text'}
-                                                onChange={(state: boolean) => {
-                                                    setLockAndBoost(state);
-                                                }}
-                                            />
-                                        )}
-                                        {!pendingTx && (
-                                            <DirectAction
-                                                actionName="deposit"
-                                                checked={autoRelock}
-                                                title={'Auto-relock'}
-                                                disabled={!coinApproved || !isETH(chainId)}
-                                                hint={'Example tooltip text'}
-                                                onChange={(state: boolean) => {
-                                                    setAutoRelock(state);
-                                                }}
-                                            />
-                                        )}
-                                    </div>
-                                </div>
-                            )}
+                            </div>
+                        )}
+                        <div className="buttons">
                             {action === 'withdraw' && coinApproved && (
                                 <button
                                     className={`zun-button ${withdrawEnabled ? '' : 'disabled'}`}
@@ -751,96 +767,109 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                 </button>
                             )}
                             {showApproveBtn && (
-                                <button
-                                    className={`zun-button approve-usd ${
-                                        !approveEnabled ? 'disabled' : ''
-                                    }`}
-                                    onClick={async () => {
-                                        // setPendingApproval(true);
-                                        // setPendingTx(true);
-                                        // if (!chainId) {
-                                        //     return;
-                                        // }
-                                        // try {
-                                        //     if (coin === 'UZD') {
-                                        //         await onUzdApprove(
-                                        //             coinNameToAddress(coin, chainId)
-                                        //         );
-                                        //     } else if (coin === 'ZAPSLP') {
-                                        //         await onLPApprove(coinNameToAddress('LP', chainId));
-                                        //     } else if (coin === 'ZETH') {
-                                        //         await onZethApprove(
-                                        //             coinNameToAddress(coin, chainId)
-                                        //         );
-                                        //     } else if (coin === 'ethZAPSLP') {
-                                        //         await onZAPSLPApprove(
-                                        //             coinNameToAddress(coin, chainId)
-                                        //         );
-                                        //     }
-                                        //     log(`${coin} approved!`);
-                                        // } catch (error: any) {
-                                        //     log(`Error while approving ${coin}: ${error.message}`);
-                                        //     setPendingApproval(false);
-                                        //     setPendingTx(false);
-                                        // }
-                                        // setPendingApproval(false);
-                                        // setPendingTx(false);
+                                <ApproveButton
+                                    abi={abi}
+                                    contractAddress={contractAddress}
+                                    account={account || '0x0'}
+                                    // disabled={!approveEnabled}
+                                    onApprove={(data: TransactionReceipt) => {
+                                        debugger;
                                     }}
-                                >
-                                    Approve
-                                </button>
-                            )}
-                            {pendingTx && <Preloader className="ms-2" />}
-                        </div>
-                        <div className="d-flex gap-3 align-items-center mt-3 flex-column flex-md-row">
-                            {action === 'deposit' && coinApproved && isETH(chainId) && (
-                                <button
-                                    className={`zun-button ${depositEnabled ? '' : 'disabled'}`}
-                                    onClick={async () => {
-                                        // if (stakingMode === 'UZD' && !isETH(chainId)) {
-                                        //     log('Trying to deposit UZD on non-ETH network');
-                                        //     return false;
-                                        // }
-                                        // setPendingTx(true);
-                                        // try {
-                                        //     let tx = null;
-                                        //     tx = await onStake();
-                                        //     log(`Deposit executed. Tx ID: ${tx.transactionHash}`);
-                                        //     setTransactionId(tx.transactionHash);
-                                        //     setDepositSum('0');
-                                        //     log('Deposit success');
-                                        //     log(JSON.stringify(tx));
-                                        //     // @ts-ignore
-                                        //     if (window.dataLayer) {
-                                        //         // @ts-ignore
-                                        //         window.dataLayer.push({
-                                        //             event: 'deposit',
-                                        //             userID: account,
-                                        //             type: getActiveWalletName(),
-                                        //             value: depositSum,
-                                        //         });
-                                        //     }
-                                        // } catch (error: any) {
-                                        //     setPendingTx(false);
-                                        //     setTransactionError(true);
-                                        //     log(`❗️ Deposit error: ${error.message}`);
-                                        //     log(JSON.stringify(error));
-                                        // }
-                                        // setPendingTx(false);
+                                    onReject={(data: any) => {
+                                        debugger;
                                     }}
-                                >
-                                    Deposit
-                                </button>
+                                    disabled={!account}
+                                />
+                                // <button
+                                //     className={`zun-button approve-usd ${
+                                //         !approveEnabled ? 'disabled' : ''
+                                //     }`}
+                                //     onClick={async () => {
+                                //         // setPendingApproval(true);
+                                //         // setPendingTx(true);
+                                //         // if (!chainId) {
+                                //         //     return;
+                                //         // }
+                                //         // try {
+                                //         //     if (coin === 'UZD') {
+                                //         //         await onUzdApprove(
+                                //         //             coinNameToAddress(coin, chainId)
+                                //         //         );
+                                //         //     } else if (coin === 'ZAPSLP') {
+                                //         //         await onLPApprove(coinNameToAddress('LP', chainId));
+                                //         //     } else if (coin === 'ZETH') {
+                                //         //         await onZethApprove(
+                                //         //             coinNameToAddress(coin, chainId)
+                                //         //         );
+                                //         //     } else if (coin === 'ethZAPSLP') {
+                                //         //         await onZAPSLPApprove(
+                                //         //             coinNameToAddress(coin, chainId)
+                                //         //         );
+                                //         //     }
+                                //         //     log(`${coin} approved!`);
+                                //         // } catch (error: any) {
+                                //         //     log(`Error while approving ${coin}: ${error.message}`);
+                                //         //     setPendingApproval(false);
+                                //         //     setPendingTx(false);
+                                //         // }
+                                //         // setPendingApproval(false);
+                                //         // setPendingTx(false);
+                                //     }}
+                                // >
+                                //     Approve
+                                // </button>
                             )}
-                            {action === 'deposit' && coinApproved && !depositEnabled && (
-                                <div className="text-muted text-danger ms-3">
-                                    {depositValidationError}
-                                </div>
-                            )}
-                            {action === 'claim' && <button className={`zun-button`}>Claim</button>}
                         </div>
+                        {pendingTx && <Preloader className="ms-2" />}
                     </div>
-                )}
+                    <div className="d-flex gap-3 align-items-center mt-3 flex-column flex-md-row">
+                        {action === 'deposit' && coinApproved && isETH(chainId) && (
+                            <button
+                                className={`zun-button ${depositEnabled ? '' : 'disabled'}`}
+                                onClick={async () => {
+                                    // if (stakingMode === 'UZD' && !isETH(chainId)) {
+                                    //     log('Trying to deposit UZD on non-ETH network');
+                                    //     return false;
+                                    // }
+                                    // setPendingTx(true);
+                                    // try {
+                                    //     let tx = null;
+                                    //     tx = await onStake();
+                                    //     log(`Deposit executed. Tx ID: ${tx.transactionHash}`);
+                                    //     setTransactionId(tx.transactionHash);
+                                    //     setDepositSum('0');
+                                    //     log('Deposit success');
+                                    //     log(JSON.stringify(tx));
+                                    //     // @ts-ignore
+                                    //     if (window.dataLayer) {
+                                    //         // @ts-ignore
+                                    //         window.dataLayer.push({
+                                    //             event: 'deposit',
+                                    //             userID: account,
+                                    //             type: getActiveWalletName(),
+                                    //             value: depositSum,
+                                    //         });
+                                    //     }
+                                    // } catch (error: any) {
+                                    //     setPendingTx(false);
+                                    //     setTransactionError(true);
+                                    //     log(`❗️ Deposit error: ${error.message}`);
+                                    //     log(JSON.stringify(error));
+                                    // }
+                                    // setPendingTx(false);
+                                }}
+                            >
+                                Deposit
+                            </button>
+                        )}
+                        {action === 'deposit' && coinApproved && !depositEnabled && (
+                            <div className="text-muted text-danger ms-3">
+                                {depositValidationError}
+                            </div>
+                        )}
+                        {action === 'claim' && <button className={`zun-button`}>Claim</button>}
+                    </div>
+                </div>
             </div>
         </div>
     );

@@ -2,10 +2,12 @@ import useFetch from 'react-fetch-hook';
 import { getActiveStratsUrl, uzdStakingInfoUrl } from '../../api/api';
 import './InfoBar.scss';
 import { BigNumber } from 'bignumber.js';
-import useSushi from '../../hooks/useSushi';
 import { useEffect, useState } from 'react';
-import useWallet from '../../hooks/useWallet';
+// import useWallet from '../../hooks/useWallet';
 import { PoolInfo, poolsChartdata } from '../../functions/pools';
+import { contractAddresses } from '../../sushi/lib/constants';
+import zunAbi from '../../actions/abi/Zunami.json';
+import { useConnect, useAccount, useNetwork, useDisconnect } from 'wagmi';
 
 interface InfoBarProps {
     // onClick: any;
@@ -41,8 +43,10 @@ interface PoolsStats {
 }
 
 export const InfoBar = (props: InfoBarProps): JSX.Element => {
-    const sushi = useSushi();
-    const { account, chainId } = useWallet();
+    const { address: account, isConnected } = useAccount();
+    const { chain } = useNetwork();
+    const chainId = chain ? chain.id : 1;
+
     const { isLoading: isZunLoading, data: zunData } = useFetch(
         uzdStakingInfoUrl
     ) as ZunamiInfoFetch;
@@ -52,28 +56,40 @@ export const InfoBar = (props: InfoBarProps): JSX.Element => {
     const poolStat = activeStratsStat as PoolsStats;
     const [defaultPool, setDefautPool] = useState<PoolInfo>();
 
-    useEffect(() => {
-        if (!account || !chainId || !poolStat) {
-            return;
-        }
+    // const { data, isError, isLoading }: any = useContractRead({
+    //     address: contractAddresses.zunami[1],
+    //     abi: zunAbi,
+    //     functionName: props.section === 'withdraw' ? 'defaultWithdrawPid' : 'defaultDepositPid',
+    //     args: [],
+    //     onError(error) {
+    //         console.log('Error while retrieving default strategy ID:');
+    //         console.log(error);
+    //     },
+    // });
 
-        const contract = sushi.getEthContract();
+    const poolInfo = poolsChartdata[poolStat.pools[0].type];
+    setDefautPool(poolInfo);
 
-        const getDefaultPool = async () => {
-            const defaultPoolId =
-                props.section === 'withdraw'
-                    ? await contract.methods.defaultWithdrawPid().call()
-                    : await contract.methods.defaultDepositPid().call();
-            const pool = poolStat.pools.filter((item) => item.pid === parseInt(defaultPoolId, 10));
+    // useEffect(() => {
+    //     if (!account || !chainId || !poolStat) {
+    //         return;
+    //     }
 
-            if (pool.length) {
-                const poolInfo = poolsChartdata[pool[0].type];
-                setDefautPool(poolInfo);
-            }
-        };
+    //     const getDefaultPool = async () => {
+    //         const defaultPoolId =
+    //             props.section === 'withdraw'
+    //                 ? await contract.methods.defaultWithdrawPid().call()
+    //                 : await contract.methods.defaultDepositPid().call();
+    //         const pool = poolStat.pools.filter((item) => item.pid === parseInt(defaultPoolId, 10));
 
-        getDefaultPool();
-    }, [chainId, account, poolStat, props.section, sushi]);
+    //         if (pool.length) {
+    //             const poolInfo = poolsChartdata[pool[0].type];
+    //             setDefautPool(poolInfo);
+    //         }
+    //     };
+
+    //     getDefaultPool();
+    // }, [chainId, account, poolStat, props.section]);
     return (
         <div className="card InfoBar">
             <div className="card-body">

@@ -18,7 +18,7 @@ interface ChartProps {
 }
 
 function renderStratList(items: Array<DataItem>, expanded: boolean) {
-    if (!items.length >= 5) {
+    if (items.length <= 5) {
         return;
     }
 
@@ -46,9 +46,9 @@ function screenWidthToChartWidth() {
     return width;
 }
 
-function makeTooltipContent(entry) {
+function makeTooltipContent(entry: any) {
     return `${entry.tooltip} - ${entry.value.toFixed(2)}%`;
-  }
+}
 
 export const CollateralsPieChart = (props: ChartProps): JSX.Element => {
     const [width, setWidth] = useState(screenWidthToChartWidth());
@@ -57,8 +57,8 @@ export const CollateralsPieChart = (props: ChartProps): JSX.Element => {
     const [expanded, setExpanded] = useState(false);
     const data = props.data.map(({ title, ...entry }) => {
         return {
-          ...entry,
-          tooltip: title,
+            ...entry,
+            tooltip: title,
         };
     });
 
@@ -82,8 +82,8 @@ export const CollateralsPieChart = (props: ChartProps): JSX.Element => {
                         // debugger;
                         setTooltipPos([e.pageX + 10, e.pageY + 10]);
                         setHovered(index);
-                      }}
-                      onMouseOut={() => {
+                    }}
+                    onMouseOut={() => {
                         setHovered(null);
                         setTooltipPos([-99999, -99999]);
                     }}
@@ -92,28 +92,38 @@ export const CollateralsPieChart = (props: ChartProps): JSX.Element => {
             {!props.hideSummary && (
                 <div className={'PieChart__StratList'}>
                     {renderStratList(props.data, expanded)}
-                    {
-                        props.data.length > 0 && (
-                            <div>
-                                {
-                                    expanded &&
-                                        <button className="CollateralChart__more" onClick={() => {setExpanded(false)}}>less</button>
-                                }
-                                {
-                                    !expanded &&
-                                        <button className="CollateralChart__more" onClick={() => {setExpanded(true)}}>more</button>
-                                }
-                            </div>
-                        )
-                    }
-                    {
-                        props.data.length === 0 &&
-                            <div className="text-left">no data</div>
-                    }
+                    {props.data.length > 0 && (
+                        <div>
+                            {expanded && (
+                                <button
+                                    className="CollateralChart__more"
+                                    onClick={() => {
+                                        setExpanded(false);
+                                    }}
+                                >
+                                    less
+                                </button>
+                            )}
+                            {!expanded && (
+                                <button
+                                    className="CollateralChart__more"
+                                    onClick={() => {
+                                        setExpanded(true);
+                                    }}
+                                >
+                                    more
+                                </button>
+                            )}
+                        </div>
+                    )}
+                    {props.data.length === 0 && <div className="text-left">no data</div>}
                 </div>
             )}
             {
-                <div className="PieChart__Tooltip" style={{ left: tooltipPos[0], top: tooltipPos[1] }}>
+                <div
+                    className="PieChart__Tooltip"
+                    style={{ left: tooltipPos[0], top: tooltipPos[1] }}
+                >
                     {typeof hovered === 'number' ? makeTooltipContent(data[hovered]) : ''}
                 </div>
             }

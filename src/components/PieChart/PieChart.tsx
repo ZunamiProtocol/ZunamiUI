@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { PieChart } from 'react-minimal-pie-chart';
 import './PieChart.scss';
-import { getPoolPrimaryIcon } from '../../containers/Analytics';
+import { getPoolPrimaryIcon } from '../../functions/pools';
+// import { getPoolPrimaryIcon } from '../../containers/Analytics';
 // import 'react-tooltip/dist/';
 
 interface DataItem {
@@ -51,7 +52,7 @@ function screenWidthToChartWidth() {
     return width;
 }
 
-function makeTooltipContent(entry) {
+function makeTooltipContent(entry: any) {
     const nameParts = entry.tooltip.split(' - ');
 
     return (

@@ -9,6 +9,7 @@ interface CoinSelectorProps {
     name: string;
     chainId: number | undefined;
     onCoinSelect?: Function;
+    hideToggler?: boolean;
 }
 
 interface CoinProps {
@@ -21,7 +22,7 @@ function displayCoinName(coinCode: string) {
 
     switch (coinCode) {
         case 'UZD':
-            result = 'Zunami USD';
+            result = 'zunUSD';
             break;
     }
 
@@ -34,7 +35,7 @@ function renderCoinItem(props: CoinProps & React.HTMLProps<HTMLButtonElement>) {
             className={`coin-item ${props.className}`}
             onClick={() => props.onCoinSelect(props.coinName)}
         >
-            <img src={`${props.coinName}.svg`} alt="" />
+            <img src={`${props.coinName.toLowerCase()}.svg`} alt="" />
             <div className={'coinName'}>{displayCoinName(props.coinName)}</div>
         </div>
     );
@@ -44,19 +45,19 @@ function getCoinName(name: string, mode: string) {
     let result = name;
 
     if (name === 'UZD') {
-        result = 'Zunami USD';
+        result = 'zunUSD';
     }
 
     if (name === 'ZETH') {
-        result = 'Zunami ETH';
+        result = 'zunETH';
     }
 
     if (name === 'ethZAPSLP') {
-        result = 'Zunami USD';
+        result = 'zunUSD';
     }
 
     if (name === 'ZAPSLP') {
-        result = 'Zunami USD';
+        result = 'zunUSD';
     }
 
     return result;
@@ -84,30 +85,25 @@ export const CoinSelector = (
 
     return (
         <div className="CoinSelector" onClick={onToggle}>
-            <img src={`${props.name}.svg`} alt="" />
+            <img src={`${props.name.toLowerCase()}.svg`} alt="" />
             <div className={'coinName'}>{getCoinName(props.name, props.mode)}</div>
-            {/* {props.name !== 'UZD' && props.name !== 'ZETH' && props.name !== 'ZUN' && ( */}
-            <svg
-                width="14"
-                height="5"
-                viewBox="0 0 14 5"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="selector"
-            >
-                <path d="M1 1L7 4L13 1" stroke="#404040" strokeWidth="1.1" strokeLinecap="round" />
-            </svg>
-            {/* )} */}
-            {/* {isOpen && props.mode == 'deposit' && (
-                <div
-                    className="Coin-Selector__Items"
-                    onBlur={(e) => {
-                        debugger;
-                    }}
+            {props.mode === 'deposit' && !props.hideToggler && (
+                <svg
+                    width="14"
+                    height="5"
+                    viewBox="0 0 14 5"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="selector"
                 >
-                    {renderCoinItem({ coinName: 'USDT', onCoinSelect })}
-                </div>
-            )} */}
+                    <path
+                        d="M1 1L7 4L13 1"
+                        stroke="#404040"
+                        strokeWidth="1.1"
+                        strokeLinecap="round"
+                    />
+                </svg>
+            )}
             {isOpen && props.mode === 'deposit' && (
                 <div className="Coin-Selector__Items big">
                     <div className="row">

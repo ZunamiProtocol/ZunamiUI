@@ -3,10 +3,18 @@
 .WalletButton {
     position: relative;
     overflow: hidden;
-    padding: 0.5rem 0.75rem 0.5rem 35px !important;
     font-size: 13px !important;
     line-height: 17px !important;
     text-align: center;
+    padding: 0.5rem 0.75rem 0.5rem 35px !important;
+
+    @media screen and (min-width: $media1024) {
+        padding: 0.35rem 0.75rem 0.35rem 35px !important;
+    }
+
+    @media screen and (min-width: $media1440) {
+        padding: 0.5rem 0.75rem 0.5rem 35px !important;
+    }
 
     &:active {
         border-color: transparent;

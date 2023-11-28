@@ -1,7 +1,8 @@
+// @ts-nocheck
 import './StrategiesList.scss';
 import BigNumber from 'bignumber.js';
 import { getFullDisplayBalance } from '../../utils/formatbalance';
-import { getPoolPrimaryIcon } from '../../containers/Analytics';
+import { getPoolPrimaryIcon } from '../../functions/pools';
 
 interface StrategiesListProps {
     title: any;
@@ -16,6 +17,7 @@ interface Strategy {
     apr: number;
     tvlInZunami: number;
     type: string;
+    title: string;
 }
 
 function renderStratHeader(item: Strategy) {
@@ -88,6 +90,8 @@ export const StrategiesList: React.FC<StrategiesListProps & React.HTMLProps<HTML
     const totalTvl = items
         ?.map((item) => item.tvlInZunami)
         .reduce((partialSum, a) => partialSum + a, 0);
+
+    // @ts-ignore
     return (
         <div className={`StrategiesList ${className}`}>
             <div className="StrategiesList__Title">{title}</div>

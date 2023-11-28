@@ -10,6 +10,8 @@ export interface PoolInfo {
     address: string;
     title?: string;
     analytics: Object;
+    icon: string;
+    tvl: string;
 }
 
 export interface ChartDataElement {
@@ -142,6 +144,7 @@ export function poolDataToChartData(poolData: Array<PoolInfo>, TVL: BigNumber) {
                 // address: pool.address,
                 color: colors[index],
                 ...pool,
+                // @ts-ignore
                 analytics: pool.analytics?.data,
             };
 
@@ -156,6 +159,21 @@ export function formatPoolApy(rawValue: number) {
 
     if (rawValue > 500) {
         result = '500+';
+    }
+
+    return result;
+}
+
+export function getPoolPrimaryIcon(pool: any) {
+    let result = '/clever_analytics.png';
+    const analytics = pool.analytics.data ? pool.analytics.data : pool.analytics;
+
+    if (analytics && analytics.coinsMarketData.stableCoin) {
+        result = analytics.coinsMarketData.stableCoin.image;
+    }
+
+    if (pool.type === 'STAKEDAO_CRVUSD_USDT') {
+        result = '/0xf939e0a03fb07f59a73314e73794be0e57ac1b4e.png';
     }
 
     return result;

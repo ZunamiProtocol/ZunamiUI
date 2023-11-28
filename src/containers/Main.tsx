@@ -11,20 +11,17 @@ import {
     uzdStakingInfoUrl,
     getUzdStratsUrl,
     getApsHistoricalApyUrl,
-    getApsTotalIncomeUrl,
 } from '../api/api';
 import { BigNumber } from 'bignumber.js';
 import usePendingOperations from '../hooks/usePendingOperations';
 import { formatPoolApy, poolDataToChartData } from '../functions/pools';
 import { Preloader } from '../components/Preloader/Preloader';
-import { useWallet } from 'use-wallet';
-import useEagerConnect from '../hooks/useEagerConnect';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
 import { log, copyLogs } from '../utils/logger';
 import usePausedContract from '../hooks/usePausedContract';
 import { isBSC, isPLG } from '../utils/zunami';
 import { FastDepositForm } from '../components/FastDepositForm/FastDepositForm';
-import { OverlayTrigger, Popover, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { networks } from '../components/NetworkSelector/NetworkSelector';
 import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
 import { SupportersBar } from '../components/SupportersBar/SupportersBar';
@@ -34,9 +31,11 @@ import { ZunamiInfoFetch, PoolsStats, Balance } from './Main.types';
 import useZapsLpBalance from '../hooks/useZapsLpBalance';
 import useUzdBalance from '../hooks/useUzdBalance';
 import useApsLpPrice from '../hooks/useApsLpPrice';
-import { LpMigrationModal } from '../components/LpMigrationModal/LpMigrationModal';
 import { contractAddresses } from '../sushi/lib/constants';
 import { ApyDetailsModal } from '../components/ApyDetailsModal/ApyDetailsModal';
+import { useConnect, useAccount, useNetwork } from 'wagmi';
+import type { Chain } from 'wagmi';
+import type { DataItem } from '../components/Chart/Chart';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -148,42 +147,49 @@ export const Main = (): JSX.Element => {
         log(`🏁 Session started ${new Date().toString()}`);
     }, []);
 
-    const { account, connect, ethereum, chainId } = useWallet();
-    useEagerConnect(account ? account : '', connect, ethereum);
+    const { connect, connectors } = useConnect();
+    const { address: account, isConnected } = useAccount();
+    const { chain } = useNetwork();
+    const chainId = chain ? parseInt(window.ethereum?.chainId, 16) : 1;
 
-    const isContractPaused = usePausedContract();
+    // const isContractPaused = usePausedContract();
     const [supportedChain, setSupportedChain] = useState(true);
-    const lpPrice = useLpPrice();
-    const balance = useBalanceOf();
-    const balances = useCrossChainBalances(lpPrice);
-    const apsBalance = useZapsLpBalance();
-    const apsLpPrice = useApsLpPrice();
-    const uzdBalance = useUzdBalance();
-    const zethBalance = useZapsLpBalance(contractAddresses.zethAPS[1]);
+
+    const apsBalance = BIG_ZERO;
+    const apsLpPrice = BIG_ZERO;
+    const zethBalance = BIG_ZERO;
+
+    // const lpPrice = useLpPrice();
+    // const balance = useBalanceOf();
+    // const balances = useCrossChainBalances(lpPrice);
+    // const apsBalance = useZapsLpBalance();
+    // const apsLpPrice = useApsLpPrice();
+    // const uzdBalance = useUzdBalance();
+    // const zethBalance = useZapsLpBalance(contractAddresses.zethAPS[1]);
 
     const [stakingMode, setStakingMode] = useState('UZD');
-    // total tvl (aps/zunami)
+    // // total tvl (aps/zunami)
     const [tvl, setTvl] = useState('0');
 
-    const activeBalance = useMemo(() => {
-        let result = balances[0];
+    // const activeBalance = useMemo(() => {
+    //     let result = balances[0];
 
-        if (isBSC(chainId)) {
-            result = balances[1];
-        }
+    //     if (isBSC(chainId)) {
+    //         result = balances[1];
+    //     }
 
-        if (isPLG(chainId)) {
-            result = balances[2];
-        }
+    //     if (isPLG(chainId)) {
+    //         result = balances[2];
+    //     }
 
-        return result.value;
-    }, [chainId, balances]);
+    //     return result.value;
+    // }, [chainId, balances]);
 
-    const userMaxWithdraw = useMemo(() => {
-        return lpPrice.toNumber() > 0 && balance.toNumber() !== -1
-            ? lpPrice.multipliedBy(activeBalance)
-            : new BigNumber(-1);
-    }, [lpPrice, balance, activeBalance]);
+    // const userMaxWithdraw = useMemo(() => {
+    //     return lpPrice.toNumber() > 0 && balance.toNumber() !== -1
+    //         ? lpPrice.multipliedBy(activeBalance)
+    //         : new BigNumber(-1);
+    // }, [lpPrice, balance, activeBalance]);
 
     const { isLoading: uzdStatLoading, data: uzdStatData } = useFetch(
         uzdStakingInfoUrl
@@ -206,64 +212,66 @@ export const Main = (): JSX.Element => {
     const apsPoolBestAprMonthly = uzdStatData ? (uzdStatData.info.aps.apr / 100 / 365) * 30 : 0;
     const apsPoolBestApyYearly = uzdStatData ? (uzdStatData.info.aps.apr / 100 / 365) * 30 * 12 : 0;
 
-    const dailyProfit = useMemo(() => {
-        let profitVal =
-            userMaxWithdraw.toNumber() === -1
-                ? 0
-                : getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprDaily;
+    const dailyProfit = Number(0);
+    const monthlyProfit = Number(0);
+    const yearlyProfit = Number(0);
 
-        if (apsBalance.toNumber()) {
-            profitVal += getBalanceNumber(apsBalance).toNumber() * apsPoolBestAprDaily;
-        }
+    // const dailyProfit = useMemo(() => {
+    //     let profitVal =
+    //         userMaxWithdraw.toNumber() === -1
+    //             ? 0
+    //             : getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprDaily;
 
-        return profitVal;
-    }, [userMaxWithdraw, poolBestAprDaily, apsPoolBestAprDaily, apsBalance]);
+    //     if (apsBalance.toNumber()) {
+    //         profitVal += getBalanceNumber(apsBalance).toNumber() * apsPoolBestAprDaily;
+    //     }
 
-    const monthlyProfit = useMemo(() => {
-        let profitVal =
-            userMaxWithdraw.toNumber() === -1
-                ? 0
-                : getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprMonthly;
+    //     return profitVal;
+    // }, [userMaxWithdraw, poolBestAprDaily, apsPoolBestAprDaily, apsBalance]);
 
-        if (apsBalance.toNumber()) {
-            profitVal += getBalanceNumber(apsBalance).toNumber() * apsPoolBestAprMonthly;
-        }
+    // const monthlyProfit = useMemo(() => {
+    //     let profitVal =
+    //         userMaxWithdraw.toNumber() === -1
+    //             ? 0
+    //             : getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprMonthly;
 
-        return profitVal;
-    }, [userMaxWithdraw, poolBestAprMonthly, apsPoolBestAprMonthly, apsBalance]);
+    //     if (apsBalance.toNumber()) {
+    //         profitVal += getBalanceNumber(apsBalance).toNumber() * apsPoolBestAprMonthly;
+    //     }
 
-    const yearlyProfit = useMemo(() => {
-        let profitVal =
-            userMaxWithdraw.toNumber() === -1
-                ? 0
-                : getBalanceNumber(userMaxWithdraw).toNumber() * poolBestApyYearly;
+    //     return profitVal;
+    // }, [userMaxWithdraw, poolBestAprMonthly, apsPoolBestAprMonthly, apsBalance]);
 
-        if (apsBalance.toNumber()) {
-            profitVal += getBalanceNumber(apsBalance).toNumber() * apsPoolBestApyYearly;
-        }
+    // const yearlyProfit = useMemo(() => {
+    //     let profitVal =
+    //         userMaxWithdraw.toNumber() === -1
+    //             ? 0
+    //             : getBalanceNumber(userMaxWithdraw).toNumber() * poolBestApyYearly;
 
-        return profitVal;
-    }, [userMaxWithdraw, poolBestApyYearly, apsPoolBestApyYearly, apsBalance]);
+    //     if (apsBalance.toNumber()) {
+    //         profitVal += getBalanceNumber(apsBalance).toNumber() * apsPoolBestApyYearly;
+    //     }
 
-    const chartData = useMemo(() => {
-        if (!poolStats) {
+    //     return profitVal;
+    // }, [userMaxWithdraw, poolBestApyYearly, apsPoolBestApyYearly, apsBalance]);
+
+    const chartData: Array<DataItem> = useMemo(() => {
+        if (!poolStats || !uzdStatData) {
             return [];
         }
 
         const stratsData = poolStats.pools ? poolStats.pools : poolStats.strategies;
 
-        return poolStats && uzdStatData
-            ? poolDataToChartData(
-                  stratsData,
-                  stakingMode === 'ZETH' ? uzdStatData.info.zethAps.tvl : uzdStatData.info.aps.tvl
-              )
-            : [];
+        return poolDataToChartData(
+            stratsData,
+            stakingMode === 'ZETH' ? uzdStatData.info.zethAps.tvl : uzdStatData.info.aps.tvl
+        );
     }, [stakingMode, uzdStatData, poolStats]);
 
     const [histApyPeriod, setHistApyPeriod] = useState('week');
     const [histApyData, setHistApyData] = useState([]);
 
-    // historical APY chart data
+    // // historical APY chart data
     useEffect(() => {
         const url =
             stakingMode === 'ZETH'
@@ -276,7 +284,7 @@ export const Main = (): JSX.Element => {
             })
             .then((items) => {
                 setHistApyData(
-                    items.data.map((item) => {
+                    items.data.map((item: any) => {
                         if (item.apy > 500) {
                             item.apy = 500;
                         }
@@ -290,54 +298,55 @@ export const Main = (): JSX.Element => {
             });
     }, [histApyPeriod, stakingMode]);
 
-    const pendingOperations = usePendingOperations();
+    // const pendingOperations = usePendingOperations();
 
-    const pendingWithdraw =
-        lpPrice.toNumber() > 0 && pendingOperations.withdraw.toNumber() !== -1
-            ? lpPrice.multipliedBy(pendingOperations.withdraw)
-            : new BigNumber(0);
+    // const pendingWithdraw =
+    //     lpPrice.toNumber() > 0 && pendingOperations.withdraw.toNumber() !== -1
+    //         ? lpPrice.multipliedBy(pendingOperations.withdraw)
+    //         : new BigNumber(0);
 
-    // ETH merge modal
-    const [showMergeModal, setShowMergeModal] = useState(false);
-    // LP to UZD migration modal
-    const [showLpMigrationModal, setShowLpMigrationModal] = useState(false);
-    // APY details modal
+    // // ETH merge modal
+    // const [showMergeModal, setShowMergeModal] = useState(false);
+    // // LP to UZD migration modal
+    // const [showLpMigrationModal, setShowLpMigrationModal] = useState(false);
+    // // APY details modal
     const [showApyDetailsModal, setShowApyDetailsModal] = useState(false);
 
-    useEffect(() => {
-        setShowMergeModal(isContractPaused);
-    }, [isContractPaused]);
+    // useEffect(() => {
+    //     setShowMergeModal(isContractPaused);
+    // }, [isContractPaused]);
 
-    useEffect(() => {
-        setShowLpMigrationModal(balance.toNumber() > 0);
-    }, [balance]);
+    // useEffect(() => {
+    //     setShowLpMigrationModal(balance.toNumber() > 0);
+    // }, [balance]);
 
     const apyHintTarget = useRef(null);
     const [showApyHint, setShowApyHint] = useState(false);
 
-    useEffect(() => {
-        log(`${new Date().toLocaleTimeString()} TVL - ${uzdStatLoading ? 'loading...' : 'loaded'}`);
+    // useEffect(() => {
+    //     log(`${new Date().toLocaleTimeString()} TVL - ${uzdStatLoading ? 'loading...' : 'loaded'}`);
 
-        if (!uzdStatLoading && uzdStatData.tvl) {
-            setTvl(uzdStatData.tvl);
-        }
-    }, [uzdStatLoading, uzdStatData?.tvl]);
+    //     if (!uzdStatLoading && uzdStatData.tvl) {
+    //         setTvl(uzdStatData.tvl);
+    //     }
+    // }, [uzdStatLoading, uzdStatData?.tvl]);
 
     const totalBalance = useMemo(() => {
         let val = BIG_ZERO;
 
-        balances.forEach((bItem: Balance) => (val = val.plus(bItem.value.multipliedBy(lpPrice))));
-        val = val.plus(apsBalance.multipliedBy(apsLpPrice));
-        val = val.plus(uzdBalance);
+        // balances.forEach((bItem: Balance) => (val = val.plus(bItem.value.multipliedBy(lpPrice))));
+        // val = val.plus(apsBalance.multipliedBy(apsLpPrice));
+        // val = val.plus(uzdBalance);
 
         log(`Total balance is: ${val.toString()}`);
 
         return val;
-    }, [apsBalance, balances, uzdBalance, lpPrice, apsLpPrice]);
+    }, []);
+    // }, [apsBalance, balances, uzdBalance, lpPrice, apsLpPrice]);
 
     const apyPopover = useMemo(() => {
-        let apy30 = 0;
-        let apy90 = 0;
+        let apy30 = '0';
+        let apy90 = '0';
 
         if (uzdStatData) {
             apy30 =
@@ -351,16 +360,16 @@ export const Main = (): JSX.Element => {
                     : uzdStatData.info.aps.threeMonthAvgApy;
         }
 
-        if (apy30 > 500) {
+        if (Number(apy30) > 500) {
             apy30 = '500+';
         } else {
-            apy30 = apy30.toFixed(2);
+            apy30 = Number(apy30).toFixed(2);
         }
 
-        if (apy90 > 500) {
+        if (Number(apy90) > 500) {
             apy90 = '500+';
         } else {
-            apy90 = apy90.toFixed(2);
+            apy90 = Number(apy90).toFixed(2);
         }
 
         return (
@@ -392,14 +401,14 @@ export const Main = (): JSX.Element => {
             onMouseLeave={() => setShowBalanceHint(false)}
         >
             <Popover.Body>
-                {renderBalances(
+                {/* {renderBalances(
                     [
                         ...balances,
                         { chainId: '1', key: 'APS', value: apsBalance.multipliedBy(apsLpPrice) },
                         { chainId: '1', key: 'UZD', value: uzdBalance },
                     ],
                     lpPrice
-                )}
+                )} */}
             </Popover.Body>
         </Popover>
     );
@@ -425,10 +434,10 @@ export const Main = (): JSX.Element => {
                 ? uzdStatData.info.zethAps.monthlyAvgApy
                 : uzdStatData.info.aps.monthlyAvgApy;
 
-        if (result > 500) {
+        if (Number(result) > 500) {
             result = '500+%';
         } else {
-            result = `${result.toFixed(2)}%`;
+            result = `${Number(result).toFixed(2)}%`;
         }
 
         return result;
@@ -450,13 +459,6 @@ export const Main = (): JSX.Element => {
                     />
                 )}
                 <div className="container">
-                    <LpMigrationModal
-                        show={showLpMigrationModal}
-                        balance={balance}
-                        onHide={() => {
-                            console.log('Modal close');
-                        }}
-                    />
                     <ApyDetailsModal
                         show={showApyDetailsModal}
                         onHide={() => {
@@ -813,7 +815,7 @@ export const Main = (): JSX.Element => {
                                         }}
                                     />
                                     <Chart
-                                        data={chartData || []}
+                                        items={chartData}
                                         className="p-4 flex-grow-1 mt-3 mt-lg-0"
                                         title={
                                             stakingMode === 'ZETH'

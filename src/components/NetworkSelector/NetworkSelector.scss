@@ -18,7 +18,7 @@
 
     @media screen and (min-width: $media1024) {
         width: 55px;
-        height: 45px;
+        height: 31px;
         margin-left: 0;
         margin-right: 13px;
     }
@@ -57,6 +57,11 @@
         @media screen and (min-width: $media375) {
             width: 16px;
             height: 23px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            width: auto;
+            height: 17px;
         }
 
         @media screen and (min-width: $media1440) {

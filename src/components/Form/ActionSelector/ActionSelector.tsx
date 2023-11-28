@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './ActionSelector.scss';
 
 interface ActionSelectorProps {
@@ -9,7 +9,7 @@ interface ActionSelectorProps {
 
 export const ActionSelector = (props: ActionSelectorProps): JSX.Element => {
     const action = props.value || 'deposit';
-    const history = useHistory();
+    const navigate = useNavigate();
     const actions = props.actions;
 
     return (
@@ -22,7 +22,7 @@ export const ActionSelector = (props: ActionSelectorProps): JSX.Element => {
                     }`}
                     onClick={(e) => {
                         if (item.hasOwnProperty('url')) {
-                            history.push(`/${item.name}`);
+                            navigate(`/${item.name}`);
                         }
 
                         if (props.onChange) {

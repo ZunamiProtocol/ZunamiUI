@@ -545,6 +545,32 @@ body.dark {
         }
     }
 
+    .LockHistory {
+        .header {
+            div {
+                color: #c8c8c8;
+            }
+        }
+    }
+
+    .zun-staking-logo {
+        .zun-logo,
+        .zun-text {
+            path {
+                fill: #fff;
+            }
+        }
+
+        .staking-text {
+            rect {
+                fill: #525252;
+            }
+            path {
+                fill: #fff;
+            }
+        }
+    }
+
     .EthMergeWarningModal {
         span,
         h3,
@@ -587,6 +613,7 @@ body.dark {
     .badge.bg-secondary {
         background: #1d1d1d !important;
         text-decoration: none;
+        color: #fff !important;
     }
 
     .btn-secondary {
@@ -653,6 +680,10 @@ body.dark {
         .subtitle,
         .value {
             color: #fff !important;
+        }
+
+        .name {
+            color: #c8c8c8 !important;
         }
     }
 
@@ -1928,83 +1959,92 @@ body.overflow {
         }
 
         &.uzd {
-            background: linear-gradient(82.46deg, #ff6202 7.33%, #ffa402 92.02%);
+            background: linear-gradient(45deg, #0607ff 7.33%, #0203ba 92.02%);
 
-            .uzd-logo {
+            .logo {
                 @media (min-width: $media375) {
                     position: absolute;
-                    left: calc(50% - 100px);
-                    top: calc(50%);
-                    transform: translate(-50%, -50%);
+                    transform: translateY(-50%);
                     position: absolute;
-                    width: 89px;
-                    height: 102px;
+                    width: 78px;
+                    height: 78px;
+                    left: calc(50% - 120px);
+                    top: calc(50%);
                 }
 
                 @media (min-width: $media1024) {
-                    left: 36px;
+                    width: 45px;
+                    height: 45px;
+                    left: calc(50% - 90px);
                     top: calc(50%);
-                    transform: translateY(-50%);
-                    position: absolute;
-                    width: 89px;
-                    height: 102px;
                 }
 
                 @media (min-width: $media1440) {
-                    left: 36px;
+                    width: 78px;
+                    height: 78px;
+                    left: calc(50% - 140px);
                     top: calc(50%);
-                    transform: translateY(-50%);
-                    position: absolute;
-                    width: 89px;
-                    height: 102px;
                 }
 
                 @media (min-width: $media1920) {
                 }
             }
 
-            .uzd {
+            .zun {
                 @media (min-width: $media375) {
                     position: absolute;
                     display: flex;
                     align-items: baseline;
-                    top: calc(50% - 20px);
-                    transform: translate(-50%, -50%);
-                    left: 50%;
-                    width: 147px;
+                    top: calc(50% - 25px);
+                    left: calc(50% - 25px);
+                    width: 50px;
+                    height: 16px;
+                }
+
+                @media (min-width: $media1024) {
+                    top: calc(50% - 25px);
+                    left: calc(50% - 35px);
+                    width: 40px;
+                    height: auto;
+                }
+
+                @media (min-width: $media1440) {
+                    top: calc(50% - 25px);
+                    left: calc(50% - 45px);
+                    width: 50px;
+                    height: 16px;
+                }
+
+                @media (min-width: $media1920) {
+                }
+            }
+
+            .staking {
+                @media (min-width: $media375) {
+                    position: absolute;
+                    display: flex;
+                    align-items: baseline;
+                    top: calc(50% - 5px);
+                    left: calc(50% - 30px);
+                    width: 160px;
                     height: 40px;
                 }
 
                 @media (min-width: $media1024) {
-                    top: calc(50% - 20px);
-                    transform: translateY(-50%);
-                    left: 85px;
-                    width: 97px;
-                    height: 40px;
-                    position: absolute;
-                    display: flex;
-                    align-items: baseline;
+                    top: calc(50% - 5px);
+                    left: calc(50% - 35px);
+                    width: 120px;
+                    height: auto;
                 }
 
                 @media (min-width: $media1440) {
-                    top: calc(50%);
-                    transform: translateY(-50%);
-                    left: 85px;
-                    width: 97px;
+                    top: calc(50% - 5px);
+                    left: calc(50% - 50px);
+                    width: 160px;
                     height: 40px;
-                    position: absolute;
-                    display: flex;
-                    align-items: baseline;
                 }
 
                 @media (min-width: $media1920) {
-                    top: 86px;
-                    left: 276px;
-                    width: 157px;
-                    height: 66px;
-                    position: absolute;
-                    display: flex;
-                    align-items: baseline;
                 }
             }
 
@@ -2023,39 +2063,12 @@ body.overflow {
                 }
 
                 @media (min-width: $media1024) {
-                    left: 85px;
-                    top: calc(50% + 25px);
-                    transform: translateY(-50%);
-                    color: #fff;
-                    font-family: 'Space Grotesk';
-                    font-weight: 600;
-                    font-size: 12px;
-                    line-height: 14px;
-                    width: 143px;
                 }
 
                 @media (min-width: $media1440) {
-                    left: 195px;
-                    top: calc(50% + 5px);
-                    transform: translateY(-50%);
-                    color: #fff;
-                    font-family: 'Space Grotesk';
-                    font-weight: 600;
-                    font-size: 12px;
-                    line-height: 14px;
-                    width: 143px;
                 }
 
                 @media (min-width: $media1920) {
-                    left: 276px;
-                    top: 164px;
-                    position: absolute;
-                    color: #fff;
-                    font-family: 'Space Grotesk';
-                    font-weight: 600;
-                    font-size: 14px;
-                    line-height: 17px;
-                    width: 169px;
                 }
             }
         }

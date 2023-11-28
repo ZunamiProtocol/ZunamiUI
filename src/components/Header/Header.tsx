@@ -3,45 +3,16 @@ import './Header.scss';
 import { Navbar, OverlayTrigger, Popover } from 'react-bootstrap';
 import useOnlineState from '../../hooks/useOnlineState';
 import { ErrorToast } from '../ErrorToast/ErrorToast';
-// import { WalletStatus } from '../WalletStatus/WalletStatus';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 import { NavMenu } from './NavMenu/NavMenu';
-// import { NetworkSelector } from '../NetworkSelector/NetworkSelector';
-import { useWallet } from 'use-wallet';
 import { getTransHistoryUrl } from '../../api/api';
 import { format } from 'date-fns';
 import { log } from '../../utils/logger';
-
+import { useConnect, useAccount, useNetwork } from 'wagmi';
 import { isETH } from '../../utils/zunami';
 import { useGasPrice } from '../../hooks/useGasPrice';
 import { WalletButton } from '../WalletButton/WalletButton';
 import { Network, NetworkSelector, networks } from '../NetworkSelector/NetworkSelector';
-
-function chainNameToTooltip(chainId: number) {
-    if (chainId === 1 || !chainId) {
-        return (
-            <div>
-                Please note. The contract{' '}
-                <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href="https://github.com/ZunamiLab/ZunamiProtocol/tree/main/audit"
-                >
-                    has been audited
-                </a>
-                , <br />
-                but it's still a beta version. Use it at your own risk
-            </div>
-        );
-    } else {
-        return (
-            <div>
-                Please note. This is the alpha version of the BSC cross-chain gateway. Use it at
-                your own risk!
-            </div>
-        );
-    }
-}
 
 function renderNotifications(notifications: Array<any>) {
     return (
@@ -111,7 +82,10 @@ interface HeaderProps extends React.HTMLProps<HTMLDivElement> {
 
 export const Header: React.FC<HeaderProps> = ({ section }) => {
     const isOnline = useOnlineState();
-    const { chainId, account } = useWallet();
+    const { connect, connectors } = useConnect();
+    const { address: account, isConnected } = useAccount();
+    const { chain } = useNetwork();
+    const chainId = chain ? chain.id : 1;
     const [gasPrice, setGasPrice] = useState('');
 
     const notificationsTarget = useRef(null);
@@ -139,7 +113,7 @@ export const Header: React.FC<HeaderProps> = ({ section }) => {
         )
             .then((response) => response.json())
             .then((data) => {
-                setGasPrice(Number(data.result.ProposeGasPrice));
+                setGasPrice(data.result.ProposeGasPrice);
             })
             .catch((error) => {
                 setGasPrice('n/a');
@@ -155,7 +129,7 @@ export const Header: React.FC<HeaderProps> = ({ section }) => {
             log('Notifications update started');
 
             let finishedNotification =
-                JSON.parse(window.localStorage.getItem('FINISHED_NOTIFICATIONS')) || [];
+                JSON.parse(window.localStorage.getItem('FINISHED_NOTIFICATIONS') || '{}') || [];
 
             let deposits = await getTransactionHistory(
                 account,
@@ -164,7 +138,7 @@ export const Header: React.FC<HeaderProps> = ({ section }) => {
                 'DEPOSIT_WITHDRAW'
             );
 
-            deposits = deposits.map((item) => {
+            deposits = deposits.map((item: any) => {
                 return { ...item, type: 'deposit' };
             });
 
@@ -175,15 +149,15 @@ export const Header: React.FC<HeaderProps> = ({ section }) => {
                 'DEPOSIT_WITHDRAW'
             );
 
-            withdrawals = withdrawals.map((item) => {
+            withdrawals = withdrawals.map((item: any) => {
                 return { ...item, type: 'withdraw' };
             });
 
-            let mint = await getTransactionHistory(account, 'MINT', chainId, 'MINT');
+            // let mint = await getTransactionHistory(account, 'MINT', chainId, 'MINT');
 
-            mint = mint.map((item) => {
-                return { ...item, type: 'mint' };
-            });
+            // mint = mint.map((item: any) => {
+            //     return { ...item, type: 'mint' };
+            // });
 
             const fullList = deposits.concat(withdrawals);
 

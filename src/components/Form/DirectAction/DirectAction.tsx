@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import './DirectAction.scss';
-import { useWallet } from 'use-wallet';
 
 interface DirectActionProps {
     actionName: string;
@@ -10,6 +9,7 @@ interface DirectActionProps {
     checked?: boolean;
     disabled: boolean;
     title: string;
+    chainId: number;
 }
 
 function getHintByProps(actionName: string, chainId: number) {
@@ -36,8 +36,8 @@ function getHintByProps(actionName: string, chainId: number) {
 export const DirectAction = (props: DirectActionProps): JSX.Element => {
     const target = useRef(null);
     const [showHint, setShowHint] = useState(false);
-    const { chainId } = useWallet();
-    const hint = getHintByProps(props.actionName, chainId);
+
+    const hint = getHintByProps(props.actionName, props.chainId);
 
     return (
         <div className={'DirectAction'}>

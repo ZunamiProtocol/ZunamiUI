@@ -15,6 +15,7 @@ interface InputProps {
     chainId: number | undefined;
     mode: string;
     className: string;
+    hideToggler?: boolean;
 }
 
 export const Input = (props: InputProps): JSX.Element => {
@@ -70,6 +71,7 @@ export const Input = (props: InputProps): JSX.Element => {
                     name={props.name}
                     chainId={props.chainId}
                     mode={props.mode}
+                    hideToggler={props.hideToggler}
                     onCoinSelect={(coinName: string) => {
                         if (props.onCoinChange) {
                             props.onCoinChange(coinName);

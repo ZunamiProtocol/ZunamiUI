@@ -4,7 +4,7 @@ import { ReactComponent as ETHLogo } from './eth_logo.svg';
 import { ReactComponent as BSCLogo } from './bsc_logo.svg';
 import { ReactComponent as PLGLogo } from './polygon_logo.svg';
 import { log } from '../../utils/logger';
-import { useWallet } from 'use-wallet';
+import { useConnect, useAccount, useNetwork } from 'wagmi';
 
 interface NetworkSelectorProps extends React.HTMLProps<HTMLDivElement> {
     onNetworkChange?: Function;
@@ -98,7 +98,9 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
 }) => {
     const [activeNetwork, setActiveNetwork] = useState<Network>(networks[0]);
     const eth = window.ethereum;
-    const { chainId } = useWallet();
+    const { chain } = useNetwork();
+    const chainId = chain ? chain.id : 1;
+
     const [chainSupported, setChainSupported] = useState(false);
     const networksList = customNetworksList ? customNetworksList : networks;
     const availableNetworks = networksList.filter(
@@ -134,73 +136,58 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
             {chainSupported && activeNetwork.icon}
             {!chainSupported && <span>?</span>}
             <span>{activeNetwork.value}</span>
-            {/* <svg
-                className="NetworkSelector__Toggler"
-                width="16"
-                height="5"
-                viewBox="0 0 16 5"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <path d="M1 1L8 4L15 1" stroke="#404040" strokeWidth="1.1" strokeLinecap="round" />
-            </svg> */}
             <select
                 value={activeNetwork.key}
                 onChange={async (e) => {
-                    const selectedValue = e?.nativeEvent?.target?.value;
-                    const network = networks.filter((network) => network.key === selectedValue)[0];
-
-                    setActiveNetwork(network);
-
-                    log(`Network switch to ${selectedValue} (select onChange)`);
-
-                    if (eth && eth.request && autoChange) {
-                        try {
-                            await eth.request({
-                                method: 'wallet_switchEthereumChain',
-                                params: [{ chainId: selectedValue }],
-                            });
-                        } catch (e) {
-                            let chainParams = {
-                                chainId: '0x38',
-                                chainName: 'Binance Smart Chain Mainnet',
-                                nativeCurrency: {
-                                    name: 'Binance Coin',
-                                    symbol: 'BNB',
-                                    decimals: 18,
-                                },
-                                rpcUrls: ['https://bsc-dataseed1.ninicoin.io'],
-                                blockExplorerUrls: ['https://bscscan.com'],
-                            };
-
-                            if (selectedValue === '0x89') {
-                                chainParams = {
-                                    chainId: '0x89',
-                                    chainName: 'Polygon Mainnet',
-                                    nativeCurrency: {
-                                        name: 'MATIC',
-                                        symbol: 'MATIC',
-                                        decimals: 18,
-                                    },
-                                    rpcUrls: ['https://polygon-rpc.com'],
-                                    blockExplorerUrls: ['https://polygonscan.com'],
-                                };
-                            }
-
-                            window.ethereum
-                                .request({
-                                    method: 'wallet_addEthereumChain',
-                                    params: [chainParams],
-                                })
-                                .catch((error) => {
-                                    log(error);
-                                });
-                        }
-                    }
-
-                    if (onNetworkChange) {
-                        onNetworkChange(network);
-                    }
+                    // ts-ignore
+                    // const selectedValue = e?.nativeEvent?.target?.value;
+                    // const network = networks.filter((network) => network.key === selectedValue)[0];
+                    // setActiveNetwork(network);
+                    // log(`Network switch to ${selectedValue} (select onChange)`);
+                    // if (eth && eth.request && autoChange) {
+                    //     try {
+                    //         await eth.request({
+                    //             method: 'wallet_switchEthereumChain',
+                    //             params: [{ chainId: selectedValue }],
+                    //         });
+                    //     } catch (e) {
+                    //         let chainParams = {
+                    //             chainId: '0x38',
+                    //             chainName: 'Binance Smart Chain Mainnet',
+                    //             nativeCurrency: {
+                    //                 name: 'Binance Coin',
+                    //                 symbol: 'BNB',
+                    //                 decimals: 18,
+                    //             },
+                    //             rpcUrls: ['https://bsc-dataseed1.ninicoin.io'],
+                    //             blockExplorerUrls: ['https://bscscan.com'],
+                    //         };
+                    //         if (selectedValue === '0x89') {
+                    //             chainParams = {
+                    //                 chainId: '0x89',
+                    //                 chainName: 'Polygon Mainnet',
+                    //                 nativeCurrency: {
+                    //                     name: 'MATIC',
+                    //                     symbol: 'MATIC',
+                    //                     decimals: 18,
+                    //                 },
+                    //                 rpcUrls: ['https://polygon-rpc.com'],
+                    //                 blockExplorerUrls: ['https://polygonscan.com'],
+                    //             };
+                    //         }
+                    //         window.ethereum
+                    //             .request({
+                    //                 method: 'wallet_addEthereumChain',
+                    //                 params: [chainParams],
+                    //             })
+                    //             .catch((error: any) => {
+                    //                 log(error);
+                    //             });
+                    //     }
+                    // }
+                    // if (onNetworkChange) {
+                    //     onNetworkChange(network);
+                    // }
                 }}
             >
                 {/* {availableNetworks.map((network) => (

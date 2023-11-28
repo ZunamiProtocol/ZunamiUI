@@ -1,12 +1,14 @@
 import { useState, useCallback, useEffect } from 'react';
 import './WalletStatus.scss';
-import { useWallet } from 'use-wallet';
 import { WalletsModal } from '../WalletsModal/WalletsModal';
 import { log } from '../../utils/logger';
 import { networks, Network } from '../NetworkSelector/NetworkSelector';
+import { useConnect, useAccount, useNetwork, useDisconnect } from 'wagmi';
 
 export const WalletStatus = (): JSX.Element => {
-    const { account, reset, chainId } = useWallet();
+    const { connect, connectors } = useConnect();
+    const { disconnect } = useDisconnect();
+    const { address: account, isConnected } = useAccount();
     const [activeNetwork, setActiveNetwork] = useState<Network>(networks[0]);
     const [open, setOpen] = useState(false);
     const eth = window.ethereum;
@@ -15,6 +17,9 @@ export const WalletStatus = (): JSX.Element => {
     const availableNetworks = networksList.filter(
         (item) => [1, 56, 137].indexOf(parseInt(item.key, 16)) !== -1
     );
+
+    const { chain } = useNetwork();
+    const chainId = chain ? chain.id : 1;
 
     useEffect(() => {
         if (!chainId) {
@@ -29,9 +34,9 @@ export const WalletStatus = (): JSX.Element => {
     }, [chainId, activeNetwork]);
 
     const handleSignOutClick = useCallback(() => {
-        reset();
+        disconnect();
         window.localStorage.clear();
-    }, [reset]);
+    }, []);
 
     const [show, setShow] = useState(false);
 
@@ -219,7 +224,7 @@ export const WalletStatus = (): JSX.Element => {
                                                             method: 'wallet_addEthereumChain',
                                                             params: [chainParams],
                                                         })
-                                                        .catch((error) => {
+                                                        .catch((error: any) => {
                                                             log(error);
                                                         });
                                                 }

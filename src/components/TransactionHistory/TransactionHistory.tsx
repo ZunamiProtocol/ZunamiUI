@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
-import { useWallet } from 'use-wallet';
 import './TransactionHistory.scss';
 import { getScanAddressByChainId } from '../../utils/zunami';
+import { useNetwork } from 'wagmi';
 
 interface TransactionHistoryProps {
     title: any;
@@ -11,9 +11,11 @@ interface TransactionHistoryProps {
 }
 
 interface TransactionItem {
-    dai: Number;
-    usdc: Number;
-    usdt: Number;
+    dai: number;
+    usdc: number;
+    usdt: number;
+    busd: number;
+    lpAmount: number;
     dateTime: String;
     transactionHash: String;
     status: String;
@@ -30,6 +32,7 @@ function getIconFromTransaction(transaction: TransactionItem) {
     let coinsCount = 0;
 
     ['dai', 'usdc', 'usdt'].forEach((coin) => {
+        // @ts-ignore
         if (transaction[coin] > 0) {
             coinsCount++;
         }
@@ -65,7 +68,8 @@ function getIconFromTransaction(transaction: TransactionItem) {
 export const TransactionHistory: React.FC<
     TransactionHistoryProps & React.HTMLProps<HTMLDivElement>
 > = ({ className, title, items, onPageEnd, emptyText }) => {
-    const { chainId } = useWallet();
+    const { chain } = useNetwork();
+    const chainId = chain ? chain.id : 1;
 
     const onScroll = (e: any) => {
         const areaHeight = e.target.offsetHeight;
@@ -127,7 +131,7 @@ export const TransactionHistory: React.FC<
                             </div>
                         </div>
                     ))}
-                {!items.length && (
+                {!items?.length && (
                     <div className="text-center empty">
                         <svg
                             width="130"

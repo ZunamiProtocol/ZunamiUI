@@ -1,5 +1,5 @@
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './NavMenu.scss';
 import { ReactComponent as DashboardIcon } from './dashboard-icon.svg';
 import { ReactComponent as DepositIcon } from './deposit-icon.svg';
@@ -11,12 +11,13 @@ interface NavMenuProps {
 }
 
 export const NavMenu = (props: NavMenuProps): JSX.Element => {
-    const history = useHistory();
+    const navigate = useNavigate();
     const items = [
         {
             title: 'Dashboard',
             urls: ['/'],
             icon: <DashboardIcon />,
+            disabled: false,
         },
         // {
         //     title: 'Deposit & Withdraw',
@@ -27,16 +28,19 @@ export const NavMenu = (props: NavMenuProps): JSX.Element => {
             title: 'ZUN Staking',
             urls: ['/zun'],
             icon: <UzdIcon />,
+            disabled: false,
         },
-        {
-            title: 'Analytics',
-            urls: ['/analytics'],
-            icon: <UzdIcon />,
-        },
+        // {
+        //     title: 'Analytics',
+        //     urls: ['/analytics'],
+        //     icon: <UzdIcon />,
+        //     disabled: false,
+        // },
         {
             title: 'DAO',
             urls: ['https://snapshot.org/#/zunamidao.eth'],
             icon: <DaoIcon />,
+            disabled: false,
         },
     ];
 
@@ -53,12 +57,10 @@ export const NavMenu = (props: NavMenuProps): JSX.Element => {
             return;
         }
 
-        history.push(new URL(url).pathname);
+        navigate(new URL(url).pathname);
     };
 
-    const activeElement = items.filter(
-        (el) => el.urls.indexOf(history.location.pathname) !== -1
-    )[0];
+    const activeElement = items.filter((el) => el.urls.indexOf(window.location.pathname) !== -1)[0];
 
     const activeElementTitle = activeElement.title;
 

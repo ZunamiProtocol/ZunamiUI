@@ -1,6 +1,6 @@
 import './Chart.scss';
 
-interface DataItem {
+export interface DataItem {
     color: string;
     value: number;
     title: string;
@@ -10,12 +10,12 @@ interface DataItem {
 }
 
 interface ChartProps {
-    data: Array<DataItem>;
+    items: Array<DataItem>;
     title?: string;
     orientation?: string;
 }
 
-function getSecondIcon(item): string {
+function getSecondIcon(item: any): string {
     let result = 'convex.svg';
 
     switch (item.type) {
@@ -54,7 +54,7 @@ function getSecondIcon(item): string {
     return result;
 }
 
-function getPrimaryIcon(item): string {
+function getPrimaryIcon(item: any): string {
     let result = 'convex.svg';
 
     switch (item.type) {
@@ -90,7 +90,7 @@ function getPrimaryIcon(item): string {
     return result;
 }
 
-function renderStratName(orientation, item) {
+function renderStratName(orientation: string, item: any) {
     let result = item.title;
     const isZethVault = item.address === '0xDc0B52c04CdC0099aeFcCa8B0675A00cF8f6d7dC';
     const titleParts = item.title.split('-');
@@ -172,7 +172,7 @@ function renderStratList(items: Array<DataItem>, orientation: string) {
 }
 
 export const Chart: React.FC<ChartProps & React.HTMLProps<HTMLDivElement>> = ({
-    data,
+    items,
     className,
     title,
     orientation = 'list',
@@ -185,8 +185,8 @@ export const Chart: React.FC<ChartProps & React.HTMLProps<HTMLDivElement>> = ({
                 </div>
             )}
             <div className={`d-flex PieChart__StratList ${orientation}`}>
-                {!data.length && <div className="text-muted mt-3">no strategies yet</div>}
-                {renderStratList(data, orientation)}
+                {!items.length && <div className="text-muted mt-3">no strategies yet</div>}
+                {renderStratList(items, orientation)}
             </div>
         </div>
     );

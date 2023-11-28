@@ -11,7 +11,7 @@ interface InputProps {
     action: string;
     max: BigNumber;
     disabled?: boolean;
-    chainId: number | null;
+    chainId: number | undefined;
 }
 
 export const Input = (props: InputProps): JSX.Element => {

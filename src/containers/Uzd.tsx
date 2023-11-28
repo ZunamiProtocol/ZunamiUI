@@ -2,10 +2,8 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Header } from '../components/Header/Header';
 import './Uzd.scss';
 import { OverlayTrigger, Popover, Tooltip } from 'react-bootstrap';
-import { useWallet } from 'use-wallet';
 import useUzdBalance from '../hooks/useUzdBalance';
 import useTotalSupply from '../hooks/useTotalSupply';
-import useEagerConnect from '../hooks/useEagerConnect';
 import { BIG_TEN, BIG_ZERO, getBalanceNumber, UZD_DECIMALS } from '../utils/formatbalance';
 import useUzdLpPrice from '../hooks/useUzdLpPrice';
 import BigNumber from 'bignumber.js';
@@ -23,7 +21,7 @@ import {
 } from '../api/api';
 import useFetch from 'react-fetch-hook';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
-import { UzdMigrationModal } from '../components/UzdMigrationModal/UzdMigrationModal';
+// import { UzdMigrationModal } from '../components/UzdMigrationModal/UzdMigrationModal';
 import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar';
 import { networks } from '../components/NetworkSelector/NetworkSelector';
 import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
@@ -40,6 +38,8 @@ import { SupportersBar } from '../components/SupportersBar/SupportersBar';
 import { Input } from '../components/FastDepositForm/Input/Input';
 import { DirectAction } from '../components/Form/DirectAction/DirectAction';
 import { StakingSummary } from '../components/StakingSummary/StakingSummary';
+import { useConnect, useAccount, useNetwork } from 'wagmi';
+import { LockHistory } from '../components/LockHistory/LockHistory';
 
 export interface CurveInfoFetch {
     data: any;
@@ -102,8 +102,11 @@ const addToken = async (
 };
 
 export const Uzd = (): JSX.Element => {
-    const { account, connect, ethereum, chainId } = useWallet();
-    useEagerConnect(account ? account : '', connect, ethereum);
+    const { connect, connectors } = useConnect();
+    const { address: account, isConnected } = useAccount();
+    const { chain } = useNetwork();
+    const chainId = chain ? parseInt(window.ethereum?.chainId, 16) : 1;
+
     const zethBalance = useUzdBalance(contractAddresses.zeth[1]);
     const deprecatedUzdBalance = useUzdBalance(contractAddresses.deprecated.v_1_1_uzd);
     const uzdTotalSupply = useTotalSupply(contractAddresses.uzd[1]);
@@ -147,7 +150,7 @@ export const Uzd = (): JSX.Element => {
             })
             .then((items) => {
                 setHistApyData(
-                    items.data.map((item) => {
+                    items.data.map((item: any) => {
                         if (item.apy > 500) {
                             item.apy = 500;
                         }
@@ -222,7 +225,7 @@ export const Uzd = (): JSX.Element => {
                 ? uzdStatData.info.omnipool.monthlyAvgApy
                 : uzdStatData.info.zethOmnipool.monthlyAvgApy;
 
-        if (result > 500) {
+        if (Number(result) > 500) {
             result = '500+';
             return result;
         }
@@ -231,8 +234,8 @@ export const Uzd = (): JSX.Element => {
     }, [stakingMode, uzdStatData]);
 
     const apyPopover = useMemo(() => {
-        let apy30 = 0;
-        let apy90 = 0;
+        let apy30 = '0';
+        let apy90 = '0';
 
         if (uzdStatData) {
             apy30 =
@@ -246,16 +249,16 @@ export const Uzd = (): JSX.Element => {
                     : uzdStatData.info.aps.threeMonthAvgApy;
         }
 
-        if (apy30 > 500) {
+        if (Number(apy30) > 500) {
             apy30 = '500+';
         } else {
-            apy30 = apy30.toFixed(2);
+            apy30 = Number(apy30).toFixed(2);
         }
 
-        if (apy90 > 500) {
+        if (Number(apy90) > 500) {
             apy90 = '500+';
         } else {
-            apy90 = apy90.toFixed(2);
+            apy90 = Number(apy90).toFixed(2);
         }
 
         return (
@@ -304,7 +307,7 @@ export const Uzd = (): JSX.Element => {
         if (Number(result) > 500) {
             result = '500';
         } else {
-            result = result.toFixed(2);
+            result = Number(result).toFixed(2);
         }
 
         return result;
@@ -467,18 +470,21 @@ export const Uzd = (): JSX.Element => {
                                             <div>
                                                 <span className="name">ZUN Balance</span>
                                             </div>
-                                            <div className="vela-sans value mt-1">2000</div>
+                                            <div className="vela-sans value mt-1 d-flex align-items-center">
+                                                <img src="/zun.svg" alt="" className="me-2" />
+                                                <span>2000</span>
+                                            </div>
                                         </div>
                                         <div className="btns d-flex flex-row gap-2 align-items-center justify-content-center">
                                             <div
                                                 onClick={async () => {
-                                                    navigator.clipboard
-                                                        .writeText(coin.address)
-                                                        .then(function () {
-                                                            alert(
-                                                                'Coin address copied to the clipboard'
-                                                            );
-                                                        });
+                                                    // navigator.clipboard
+                                                    //     .writeText(coin.address)
+                                                    //     .then(function () {
+                                                    //         alert(
+                                                    //             'Coin address copied to the clipboard'
+                                                    //         );
+                                                    //     });
                                                 }}
                                             >
                                                 <svg
@@ -548,7 +554,7 @@ export const Uzd = (): JSX.Element => {
                                                 </div>
                                             </div>
                                             <div className="col-6 col-md-6">
-                                                <div className="gray-block small-block align-items-start stablecoin mb-3 mb-md-0 ps-3 me-0 me-lg-2">
+                                                <div className="gray-block small-block align-items-start stablecoin mb-3 mb-md-0 ps-3 me-3 me-lg-2">
                                                     <div>
                                                         <span className="name">FDV</span>
                                                     </div>
@@ -594,7 +600,7 @@ export const Uzd = (): JSX.Element => {
                                             <span>Your current ZUN locks</span>
                                         </div>
                                         <div className="row mt-3">
-                                            <div className="col-6 col-md-5">
+                                            <div className="col-12 col-md-5">
                                                 <div className="gray-block small-block align-items-start stablecoin ps-3 me-3 me-lg-2">
                                                     <div>
                                                         <span className="name">
@@ -604,9 +610,9 @@ export const Uzd = (): JSX.Element => {
                                                     <div className="vela-sans value mt-1">$109</div>
                                                 </div>
                                             </div>
-                                            <div className="col-6 col-md-7">
+                                            <div className="col-12 col-md-7 mt-3 mt-md-0">
                                                 <div>
-                                                    <div className="d-flex flex-row justify-content-between gray-block small-block align-items-start stablecoin ps-3 me-3 me-lg-2">
+                                                    <div className="d-flex flex-row justify-content-between gray-block small-block align-items-center stablecoin ps-3 me-3 me-lg-0">
                                                         <div>
                                                             <div>
                                                                 <span className="name">
@@ -626,26 +632,34 @@ export const Uzd = (): JSX.Element => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="row">
-                                            <div className="col">
-                                                <RebaseHistory
-                                                    items={transactionList}
-                                                    emptyText="No history"
-                                                    className=""
-                                                    columns={[
-                                                        'ZUN locked',
-                                                        'Current vote weight',
-                                                        'Time remaining',
-                                                    ]}
-                                                    onPageEnd={() => {
-                                                        if (transHistoryPage !== -1) {
-                                                            setLoadingHistory(true);
-                                                            setTransHistoryPage(
-                                                                transHistoryPage + 1
-                                                            );
-                                                        }
-                                                    }}
-                                                />
+                                        <div className="row mt-3">
+                                            <div className="col-12 col-md-3">
+                                                <div className="h-100 gray-block small-block align-items-start stablecoin ps-3 me-3 me-lg-2">
+                                                    <div>
+                                                        <span className="name">
+                                                            Current vote weight
+                                                        </span>
+                                                    </div>
+                                                    <div className="vela-sans value mt-1">75</div>
+                                                </div>
+                                            </div>
+                                            <div className="col-12 col-md-9 mt-3 mt-md-0">
+                                                <div className="gray-block small-block align-items-start stablecoin ps-3 me-3 me-lg-0">
+                                                    <LockHistory
+                                                        items={transactionList}
+                                                        emptyText="No history"
+                                                        className=""
+                                                        columns={['ZUN Locked', 'Time remaining']}
+                                                        onPageEnd={() => {
+                                                            if (transHistoryPage !== -1) {
+                                                                setLoadingHistory(true);
+                                                                setTransHistoryPage(
+                                                                    transHistoryPage + 1
+                                                                );
+                                                            }
+                                                        }}
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -669,14 +683,27 @@ export const Uzd = (): JSX.Element => {
                                                 onCoinChange={(coin: string) => {}}
                                                 chainId={chainId}
                                                 className={''}
+                                                hideToggler={true}
                                             />
                                         </div>
-                                        <div className="d-flex">
+                                        <div className="d-flex buttons-row">
                                             <button className="zun-button me-3">Lock</button>
                                             <DirectAction
+                                                chainId={chainId}
                                                 actionName="lock"
                                                 checked={false}
                                                 title={'Auto-relock'}
+                                                disabled={chainId !== 1}
+                                                hint={'Example tooltip text'}
+                                                onChange={(state: boolean) => {
+                                                    // setLockAndBoost(state);
+                                                }}
+                                            />
+                                            <DirectAction
+                                                chainId={chainId}
+                                                actionName="recap"
+                                                checked={false}
+                                                title={'Recapitalization'}
                                                 disabled={chainId !== 1}
                                                 hint={'Example tooltip text'}
                                                 onChange={(state: boolean) => {

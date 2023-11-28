@@ -119,6 +119,7 @@ export const UzdStakingSummary: React.FC<
             }`}
             onClick={() => {
                 if (onSelect) {
+                    // @ts-ignore
                     onSelect(logo);
                 }
             }}
@@ -129,6 +130,7 @@ export const UzdStakingSummary: React.FC<
                     className={`btn-secondary mt-2 ${selected ? 'disabled' : ''}`}
                     onClick={() => {
                         if (onSelect) {
+                            // @ts-ignore
                             onSelect(logo);
                         }
                     }}

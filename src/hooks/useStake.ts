@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import useSushi from './useSushi';
-import { useWallet } from 'use-wallet';
+// import useSushi from './useSushi';
+// import { useWallet } from 'use-wallet';
 import { stake, getMasterChefContract, stakeBUSD, stakeFRAX, stakeAPS } from '../sushi/utils';
 import { contractAddresses } from '../sushi/lib/constants';
 import { isBSC, isPLG } from '../utils/zunami';
@@ -14,81 +14,81 @@ interface Coin {
 type Coins = Array<Coin>;
 
 const useStake = (coins: Coins, direct: boolean = false) => {
-    const { account, chainId } = useWallet();
-    const sushi = useSushi();
-    let zunamiContract = getMasterChefContract(sushi);
+    // const { account, chainId } = useWallet();
+    // const sushi = useSushi();
+    // let zunamiContract = getMasterChefContract(sushi);
 
-    if (isBSC(chainId)) {
-        zunamiContract = getMasterChefContract(sushi, chainId);
-    }
+    // if (isBSC(chainId)) {
+    //     zunamiContract = getMasterChefContract(sushi, chainId);
+    // }
 
-    if (isPLG(chainId)) {
-        zunamiContract = getMasterChefContract(sushi, chainId);
-    }
+    // if (isPLG(chainId)) {
+    //     zunamiContract = getMasterChefContract(sushi, chainId);
+    // }
 
-    const dai = coins.filter((coin) => coin.name === 'DAI')[0]?.value;
-    const usdc = coins.filter((coin) => coin.name === 'USDC')[0]?.value;
-    const usdt = coins.filter((coin) => coin.name === 'USDT')[0]?.value;
-    const busd = coins.filter((coin) => coin.name === 'BUSD')[0]?.value;
-    const frax = coins.filter((coin) => coin.name === 'FRAX')[0]?.value;
-    const uzd = coins.filter((coin) => coin.name === 'UZD')[0]?.value;
-    const zeth = coins.filter((coin) => coin.name === 'ZETH')[0]?.value;
+    // const dai = coins.filter((coin) => coin.name === 'DAI')[0]?.value;
+    // const usdc = coins.filter((coin) => coin.name === 'USDC')[0]?.value;
+    // const usdt = coins.filter((coin) => coin.name === 'USDT')[0]?.value;
+    // const busd = coins.filter((coin) => coin.name === 'BUSD')[0]?.value;
+    // const frax = coins.filter((coin) => coin.name === 'FRAX')[0]?.value;
+    // const uzd = coins.filter((coin) => coin.name === 'UZD')[0]?.value;
+    // const zeth = coins.filter((coin) => coin.name === 'ZETH')[0]?.value;
 
-    const handleStake = useCallback(async () => {
-        log('Calling deposit...');
+    // const handleStake = useCallback(async () => {
+    //     log('Calling deposit...');
 
-        if (chainId === 56 && busd && Number(usdt) === 0) {
-            const contract = sushi.contracts.busdContract;
-            contract.options.address = contractAddresses.busd[56];
-            contract.defaultAccount = account;
-            return await stakeBUSD(contract, account, busd);
-        }
+    //     if (chainId === 56 && busd && Number(usdt) === 0) {
+    //         const contract = sushi.contracts.busdContract;
+    //         contract.options.address = contractAddresses.busd[56];
+    //         contract.defaultAccount = account;
+    //         return await stakeBUSD(contract, account, busd);
+    //     }
 
-        if (chainId === 1 && frax && Number(frax) > 0) {
-            const contract = sushi.contracts.fraxContract;
-            contract.options.address = contractAddresses.frax[1];
-            contract.defaultAccount = account;
-            debugger;
-            return await stakeFRAX(contract, account, frax);
-        }
+    //     if (chainId === 1 && frax && Number(frax) > 0) {
+    //         const contract = sushi.contracts.fraxContract;
+    //         contract.options.address = contractAddresses.frax[1];
+    //         contract.defaultAccount = account;
+    //         debugger;
+    //         return await stakeFRAX(contract, account, frax);
+    //     }
 
-        if (chainId === 1 && uzd && Number(uzd) > 0) {
-            const contract = sushi.contracts.apsContract;
-            contract.options.address = contractAddresses.aps[1];
-            contract.defaultAccount = account;
-            return await stakeAPS(contract, account, uzd);
-        }
+    //     if (chainId === 1 && uzd && Number(uzd) > 0) {
+    //         const contract = sushi.contracts.apsContract;
+    //         contract.options.address = contractAddresses.aps[1];
+    //         contract.defaultAccount = account;
+    //         return await stakeAPS(contract, account, uzd);
+    //     }
 
-        if (chainId === 1 && zeth && Number(zeth) > 0) {
-            const contract = sushi.contracts.zethApsContract;
-            contract.options.address = contractAddresses.zethAPS[1];
-            contract.defaultAccount = account;
-            return await stakeAPS(contract, account, zeth);
-        }
+    //     if (chainId === 1 && zeth && Number(zeth) > 0) {
+    //         const contract = sushi.contracts.zethApsContract;
+    //         contract.options.address = contractAddresses.zethAPS[1];
+    //         contract.defaultAccount = account;
+    //         return await stakeAPS(contract, account, zeth);
+    //     }
 
-        if (isPLG(chainId)) {
-            const contract = sushi.contracts.polygonContract;
-            contract.options.address = contractAddresses.zunami[137];
-            contract.defaultAccount = account;
-        }
+    //     if (isPLG(chainId)) {
+    //         const contract = sushi.contracts.polygonContract;
+    //         contract.options.address = contractAddresses.zunami[137];
+    //         contract.defaultAccount = account;
+    //     }
 
-        return await stake(zunamiContract, account, dai, usdc, usdt, direct, chainId);
-    }, [
-        account,
-        dai,
-        usdc,
-        usdt,
-        busd,
-        frax,
-        uzd,
-        zeth,
-        zunamiContract,
-        // sushi.contracts.busdContract, sushi.contracts.fraxContract, sushi.contracts.polygonContract,
-        direct,
-        chainId,
-    ]);
+    //     return await stake(zunamiContract, account, dai, usdc, usdt, direct, chainId);
+    // }, [
+    //     account,
+    //     dai,
+    //     usdc,
+    //     usdt,
+    //     busd,
+    //     frax,
+    //     uzd,
+    //     zeth,
+    //     zunamiContract,
+    //     // sushi.contracts.busdContract, sushi.contracts.fraxContract, sushi.contracts.polygonContract,
+    //     direct,
+    //     chainId,
+    // ]);
 
-    return { onStake: handleStake };
+    return { onStake: () => {} };
 };
 
 export default useStake;

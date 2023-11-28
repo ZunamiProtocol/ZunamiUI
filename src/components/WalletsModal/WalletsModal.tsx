@@ -1,6 +1,6 @@
 import { Modal } from 'react-bootstrap';
 import config from '../../config';
-import { useWallet } from 'use-wallet';
+import { useConnect, useAccount, useNetwork } from 'wagmi';
 import './WalletsModal.scss';
 import { log } from '../../utils/logger';
 
@@ -27,35 +27,27 @@ interface WalletModalProps {
 }
 
 export const WalletsModal = (props: WalletModalProps): JSX.Element => {
-    const { ethereum, connect } = useWallet();
-    const eth = window.ethereum || ethereum;
-    const isEth = eth && eth.chainId !== '0x1';
-    const onConnect = async (providerId = 'injected') => {
-        try {
-            log(`🔑 Attempt to connect wallet (provider ID is "${providerId}")`);
-            await connect(providerId);
-        } catch (connectionError: any) {
-            log(`❗️ Error connecting wallet: ${connectionError.message}`);
-        }
+    const { connect, connectors } = useConnect();
+    const { address, isConnected } = useAccount();
+    const { chain } = useNetwork();
+    const chainId = chain ? parseInt(window.ethereum?.chainId, 16) : 1;
+    const isEth = chainId === 1;
 
-        window.localStorage.setItem(LS_WALLET_TYPE_KEY, providerId);
+    const onConnect = async (providerId = 'injected') => {
         let walletAddress = '';
 
         switch (providerId) {
             case 'injected':
-                walletAddress = window.localStorage.getItem('LAST_ACTIVE_ACCOUNT') || '';
-                break;
-            case 'walletlink':
-                walletAddress =
-                    window.localStorage.getItem(
-                        '-walletlink:https://www.walletlink.org:Addresses'
-                    ) || '';
+                connect({ connector: connectors[3] });
                 break;
             case 'walletconnect':
-                const wcStorage = JSON.parse(window.localStorage.getItem('walletconnect') || '{}');
-                if (wcStorage?.accounts && wcStorage.accounts[0]) {
-                    walletAddress = wcStorage.accounts[0];
-                }
+                connect({ connector: connectors[2] });
+                break;
+            case 'coinbase':
+                connect({ connector: connectors[1] });
+                break;
+            case 'zerion':
+                connect({ connector: connectors[2] });
                 break;
         }
 
@@ -70,6 +62,7 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
 
         // @ts-ignore
         if (window.dataLayer) {
+            // @ts-ignore
             window.dataLayer.push({
                 event: 'login',
                 userID: getActiveWalletAddress(),
@@ -88,7 +81,11 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
     return (
         <Modal
             show={props.show}
-            onHide={props.onHide}
+            onHide={() => {
+                if (props.onHide) {
+                    props.onHide();
+                }
+            }}
             backdrop="static"
             animation={false}
             keyboard={false}
@@ -116,26 +113,26 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
                     <span className="connect">Connect</span>
                 </button>
                 <button
-                    onClick={() => onConnect('walletlink')}
+                    onClick={() => onConnect('coinbase')}
                     className={`d-inline-flex flex-column bg-transparent coinbase ${
-                        isEth ? 'disabled' : ''
+                        !isEth ? 'disabled' : ''
                     }`}
                 >
                     <img src="/wallet-link.svg" alt="" />
                     <span className="name">Coinbase Wallet</span>
-                    {isEth && <span className="badge bg-secondary">only ETH</span>}
-                    {!isEth && <span className="connect">Connect</span>}
+                    {/* {isEth && <span className="badge bg-secondary">only ETH</span>} */}
+                    {isEth && <span className="connect">Connect</span>}
                 </button>
                 <button
-                    onClick={() => onConnect('walletconnect')}
+                    onClick={() => onConnect('zerion')}
                     className={`d-inline-flex flex-column bg-transparent zerion ${
-                        isEth ? 'disabled' : ''
+                        !isEth ? 'disabled' : ''
                     }`}
                 >
                     <img src="/zerion-wallet.svg" alt="" />
                     <span className="name">Zerion Wallet</span>
-                    {isEth && <span className="badge bg-secondary">only ETH</span>}
-                    {!isEth && <span className="connect">Connect</span>}
+                    {/* {isEth && <span className="badge bg-secondary">only ETH</span>} */}
+                    {isEth && <span className="connect">Connect</span>}
                 </button>
             </Modal.Body>
         </Modal>

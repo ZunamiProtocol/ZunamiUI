@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
-import { useWallet } from 'use-wallet';
+// import { useWallet } from 'use-wallet';
 import { getMasterChefContract } from '../sushi/utils';
-import useSushi from './useSushi';
+// import useSushi from './useSushi';
 import { getAllowance, getContract } from '../utils/erc20';
 import {
     BIG_ZERO,
@@ -18,30 +18,30 @@ import { log } from '../utils/logger';
 import { contractAddresses } from '../sushi/lib/constants';
 import { isBSC, isPLG } from '../utils/zunami';
 
-const useAllowance = (tokenAddress: string, contract: Contract) => {
+const useAllowance = (tokenAddress: string, contract: any) => {
     const [allowance, setAllowance] = useState(BIG_ZERO);
-    const { account, ethereum } = useWallet();
-    const sushi = useSushi();
-    const masterChefContract = contract ? contract : getMasterChefContract(sushi);
+    // const { account, ethereum } = useWallet();
+    // const sushi = useSushi();
+    // const masterChefContract = contract ? contract : getMasterChefContract(sushi);
 
-    useEffect(() => {
-        const fetchAllowance = async () => {
-            const allowance = await getAllowance(
-                ethereum,
-                tokenAddress,
-                masterChefContract,
-                // @ts-ignore
-                account
-            );
-            setAllowance(new BigNumber(allowance));
-        };
+    // useEffect(() => {
+    //     const fetchAllowance = async () => {
+    //         const allowance = await getAllowance(
+    //             ethereum,
+    //             tokenAddress,
+    //             masterChefContract,
+    //             // @ts-ignore
+    //             account
+    //         );
+    //         setAllowance(new BigNumber(allowance));
+    //     };
 
-        if (account && masterChefContract) {
-            fetchAllowance();
-        }
-        let refreshInterval = setInterval(fetchAllowance, 10000);
-        return () => clearInterval(refreshInterval);
-    }, [account, ethereum, tokenAddress, masterChefContract]);
+    //     if (account && masterChefContract) {
+    //         fetchAllowance();
+    //     }
+    //     let refreshInterval = setInterval(fetchAllowance, 10000);
+    //     return () => clearInterval(refreshInterval);
+    // }, [account, ethereum, tokenAddress, masterChefContract]);
 
     return allowance;
 };
@@ -61,137 +61,137 @@ export const useAllowanceStables = () => {
         BIG_ZERO, // ZAPSLP
     ]);
 
-    const { account, ethereum, chainId } = useWallet();
-    const sushi = useSushi();
+    // const { account, ethereum, chainId } = useWallet();
+    // const sushi = useSushi();
 
-    useEffect(() => {
-        const masterChefContract = getMasterChefContract(sushi);
+    // useEffect(() => {
+    //     const masterChefContract = getMasterChefContract(sushi);
 
-        const fetchAllowanceStables = async () => {
-            if (!account) {
-                return;
-            }
+    //     const fetchAllowanceStables = async () => {
+    //         if (!account) {
+    //             return;
+    //         }
 
-            if (chainId === 1) {
-                masterChefContract.options.address = contractAddresses.zunami[1];
+    //         if (chainId === 1) {
+    //             masterChefContract.options.address = contractAddresses.zunami[1];
 
-                const allowanceUzd = await getAllowance(
-                    ethereum,
-                    contractAddresses.uzd[1],
-                    sushi.getApsContract(account),
-                    // @ts-ignore
-                    account
-                );
+    //             const allowanceUzd = await getAllowance(
+    //                 ethereum,
+    //                 contractAddresses.uzd[1],
+    //                 sushi.getApsContract(account),
+    //                 // @ts-ignore
+    //                 account
+    //             );
 
-                const allowanceZeth = await getAllowance(
-                    ethereum,
-                    contractAddresses.zeth[1],
-                    sushi.getZethApsContract(account),
-                    // @ts-ignore
-                    account
-                );
+    //             const allowanceZeth = await getAllowance(
+    //                 ethereum,
+    //                 contractAddresses.zeth[1],
+    //                 sushi.getZethApsContract(account),
+    //                 // @ts-ignore
+    //                 account
+    //             );
 
-                const allowanceEthZAPSLP = await getAllowance(
-                    ethereum,
-                    contractAddresses.zethAPS[1],
-                    sushi.getZethApsContract(account),
-                    // @ts-ignore
-                    account
-                );
+    //             const allowanceEthZAPSLP = await getAllowance(
+    //                 ethereum,
+    //                 contractAddresses.zethAPS[1],
+    //                 sushi.getZethApsContract(account),
+    //                 // @ts-ignore
+    //                 account
+    //             );
 
-                const allowanceZAPSLP = await getAllowance(
-                    ethereum,
-                    contractAddresses.aps[1],
-                    sushi.getApsContract(account),
-                    // @ts-ignore
-                    account
-                );
+    //             const allowanceZAPSLP = await getAllowance(
+    //                 ethereum,
+    //                 contractAddresses.aps[1],
+    //                 sushi.getApsContract(account),
+    //                 // @ts-ignore
+    //                 account
+    //             );
 
-                const data = [
-                    BIG_ZERO,
-                    BIG_ZERO,
-                    BIG_ZERO,
-                    BIG_ZERO,
-                    BIG_ZERO,
-                    new BigNumber(allowanceUzd),
-                    new BigNumber(allowanceZeth),
-                    new BigNumber(allowanceEthZAPSLP),
-                    new BigNumber(allowanceZAPSLP),
-                ];
-                // @ts-ignore
-                setAllowance(data);
+    //             const data = [
+    //                 BIG_ZERO,
+    //                 BIG_ZERO,
+    //                 BIG_ZERO,
+    //                 BIG_ZERO,
+    //                 BIG_ZERO,
+    //                 new BigNumber(allowanceUzd),
+    //                 new BigNumber(allowanceZeth),
+    //                 new BigNumber(allowanceEthZAPSLP),
+    //                 new BigNumber(allowanceZAPSLP),
+    //             ];
+    //             // @ts-ignore
+    //             setAllowance(data);
 
-                log(`Allowance UZD: ${allowanceUzd}`);
-                log(`Allowance ZETH: ${allowanceZeth}`);
-                log(`Allowance ZAPSLP: ${allowanceZAPSLP}`);
-                log(`Allowance ethZAPSLP: ${allowanceEthZAPSLP}`);
-            } else if (isBSC(chainId)) {
-                // const lpContract = getContract(
-                //     sushi.bscContracts.bscMasterChef.currentProvider,
-                //     bscUsdtAddress
-                // );
+    //             log(`Allowance UZD: ${allowanceUzd}`);
+    //             log(`Allowance ZETH: ${allowanceZeth}`);
+    //             log(`Allowance ZAPSLP: ${allowanceZAPSLP}`);
+    //             log(`Allowance ethZAPSLP: ${allowanceEthZAPSLP}`);
+    //         } else if (isBSC(chainId)) {
+    //             // const lpContract = getContract(
+    //             //     sushi.bscContracts.bscMasterChef.currentProvider,
+    //             //     bscUsdtAddress
+    //             // );
 
-                // const allowanceUsdt = await lpContract.methods
-                //     .allowance(account, sushi.bscMasterChefAddress)
-                //     .call();
+    //             // const allowanceUsdt = await lpContract.methods
+    //             //     .allowance(account, sushi.bscMasterChefAddress)
+    //             //     .call();
 
-                // const busdContract = getContract(
-                //     sushi.bscContracts.bscMasterChef.currentProvider,
-                //     bscUsdtAddress
-                // );
+    //             // const busdContract = getContract(
+    //             //     sushi.bscContracts.bscMasterChef.currentProvider,
+    //             //     bscUsdtAddress
+    //             // );
 
-                // busdContract.options.address = busdAddress;
+    //             // busdContract.options.address = busdAddress;
 
-                // const allowanceBUSD = await busdContract.methods
-                //     .allowance(account, contractAddresses.busd[56])
-                //     .call();
+    //             // const allowanceBUSD = await busdContract.methods
+    //             //     .allowance(account, contractAddresses.busd[56])
+    //             //     .call();
 
-                // log(`BSC USDT allowance for address (${account}) is: ${allowanceUsdt}`);
-                // log(`BSC BUSD allowance for address (${account}) is: ${allowanceBUSD}`);
+    //             // log(`BSC USDT allowance for address (${account}) is: ${allowanceUsdt}`);
+    //             // log(`BSC BUSD allowance for address (${account}) is: ${allowanceBUSD}`);
 
-                setAllowance([
-                    BIG_ZERO,
-                    BIG_ZERO,
-                    BIG_ZERO,
-                    BIG_ZERO,
-                    BIG_ZERO,
-                    BIG_ZERO,
-                    BIG_ZERO,
-                    BIG_ZERO,
-                    BIG_ZERO,
-                ]);
-            } else if (isPLG(chainId)) {
-                // const lpContract = getContract(
-                //     sushi.plgContracts.polygonContract.currentProvider,
-                //     plgUsdtAddress
-                // );
+    //             setAllowance([
+    //                 BIG_ZERO,
+    //                 BIG_ZERO,
+    //                 BIG_ZERO,
+    //                 BIG_ZERO,
+    //                 BIG_ZERO,
+    //                 BIG_ZERO,
+    //                 BIG_ZERO,
+    //                 BIG_ZERO,
+    //                 BIG_ZERO,
+    //             ]);
+    //         } else if (isPLG(chainId)) {
+    //             // const lpContract = getContract(
+    //             //     sushi.plgContracts.polygonContract.currentProvider,
+    //             //     plgUsdtAddress
+    //             // );
 
-                // const allowanceUsdt = await lpContract.methods
-                //     .allowance(account, sushi.polygonMasterChefAddress)
-                //     .call();
+    //             // const allowanceUsdt = await lpContract.methods
+    //             //     .allowance(account, sushi.polygonMasterChefAddress)
+    //             //     .call();
 
-                // log(`PLG USDT allowance for address (${account}) is: ${allowanceUsdt}`);
+    //             // log(`PLG USDT allowance for address (${account}) is: ${allowanceUsdt}`);
 
-                setAllowance([
-                    BIG_ZERO,
-                    BIG_ZERO,
-                    BIG_ZERO,
-                    BIG_ZERO,
-                    BIG_ZERO,
-                    BIG_ZERO,
-                    BIG_ZERO,
-                    BIG_ZERO,
-                    BIG_ZERO,
-                ]);
-            }
-        };
+    //             setAllowance([
+    //                 BIG_ZERO,
+    //                 BIG_ZERO,
+    //                 BIG_ZERO,
+    //                 BIG_ZERO,
+    //                 BIG_ZERO,
+    //                 BIG_ZERO,
+    //                 BIG_ZERO,
+    //                 BIG_ZERO,
+    //                 BIG_ZERO,
+    //             ]);
+    //         }
+    //     };
 
-        if (account && masterChefContract) {
-            fetchAllowanceStables();
-        }
-        let refreshInterval = setInterval(fetchAllowanceStables, 10000);
-        return () => clearInterval(refreshInterval);
-    }, [account, ethereum, chainId, sushi]);
+    //     if (account && masterChefContract) {
+    //         fetchAllowanceStables();
+    //     }
+    //     let refreshInterval = setInterval(fetchAllowanceStables, 10000);
+    //     return () => clearInterval(refreshInterval);
+    // }, [account, ethereum, chainId, sushi]);
 
     return allowance;
 };

@@ -96,10 +96,11 @@ export const getAllowance = async (
 export const calcWithdrawOneCoin = async (
     lpBalance: string,
     coinIndex: number,
-    account: string | null
+    account: string | null,
+    contract: any
 ): Promise<string> => {
-    const contract = sushi.getEthContract();
     contract.options.from = account;
+
     log(
         `ETH contract (${contract.options.address}) - calcWithdrawOneCoin(${lpBalance}, ${coinIndex}).`
     );
@@ -128,10 +129,11 @@ export const calcWithdrawOneCoin = async (
  */
 export const calcWithdrawOneCoinFrax = async (
     lpBalance: string,
-    account: string | null
+    account: string | null,
+    contract: any
 ): Promise<string> => {
-    const contract = sushi.getFraxContract();
     contract.options.from = account;
+
     log(`FRAX contract (${contract.options.address}) - calcWithdraw(${lpBalance}).`);
     let sum: string = 'Error';
     try {

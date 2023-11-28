@@ -16,6 +16,7 @@ export interface ZunamiInfoFetch {
 
 export interface PoolsStats {
     pools: Array<PoolInfo>;
+    strategies: any;
 }
 
 export interface Balance {

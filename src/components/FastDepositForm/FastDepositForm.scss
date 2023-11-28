@@ -21,7 +21,7 @@
     @media screen and (min-width: $media1024) {
         padding-top: 0;
         padding: 16px;
-        height: 171px;
+        height: 222px;
         margin-top: 0;
 
         &.mode-UZD,
@@ -243,6 +243,15 @@
                 width: 15px;
                 height: 15px;
             }
+        }
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: center;
+
+        @media screen and (min-width: $media1024) {
+            justify-content: flex-start;
         }
     }
 }
