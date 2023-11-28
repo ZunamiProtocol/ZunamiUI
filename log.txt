@@ -1,0 +1,30 @@
+Total balance is: 0
+🏁 Session started Tue Nov 28 2023 19:21:10 GMT+0300 (Moscow Standard Time)
+19:21:10 TVL - loading...
+Contract paused: true
+19:21:11 TVL - loaded
+fetchbalanceStables, chain ID: 1
+Total balance is: 0
+🏁 Session started Tue Nov 28 2023 19:24:54 GMT+0300 (Moscow Standard Time)
+19:24:54 TVL - loading...
+Contract paused: true
+19:24:59 TVL - loaded
+🔑 Attempt to connect wallet (provider ID is "injected")
+Notifications update started
+fetchbalanceStables, chain ID: 1
+Skipping total income (both zeros) update...
+ETH pending deposits: 0
+🔄 ZETH APS raw balance: 0 (0)
+🔄 UZD Balance (contract 0xb40b6608B2743E691C9B54DdBDEe7bf03cd79f1c) for wallet 0xaeE0Cbb0F1b484F60b5B197f232BA104505B56c2 set to 0
+🔄 APS raw balance: 0 (0)
+🔄 APS raw balance: 3.062295142428580778 (3062295142428580778)
+lpPrice execution (1). Result: 16553386674884156
+🔄 APS LP Price: 1.549095240408105522 (1549095240408105522)
+🔄 Balance set to 0
+Total balance is: 4743786829860976080.774177026124856116
+Total income (APS). Requesting (https://zunami-reward-api.herokuapp.com/api/v2/transfers/total-income?address=0xaee0cbb0f1b484f60b5b197f232ba104505b56c2&lpTokens=0&apsLpTokens=3062295142428580778)
+ETH pending withdrawals: 0
+Executing of contract (UZD) - allowance(0xaeE0Cbb0F1b484F60b5B197f232BA104505B56c2, 0xCaB49182aAdCd843b037bBF885AD56A3162698Bd). Result: 35361690348505229169211166525
+Raw ETH balance is: 0
+Total income. Value set to: 1.74379
+Executing of contract (ZETH) - allowance(0xaeE0Cbb0F1b484F60b5B197f232BA104505B56c2, 0x8fc72dcfbf39FE686c96f47C697663EE08C78380). Result: 0

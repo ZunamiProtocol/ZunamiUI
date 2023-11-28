@@ -17,6 +17,7 @@ import {
     plgUsdtAddress,
     fraxAddress,
     BIG_TEN,
+    NULL_ADDRESS,
     UZD_DECIMALS,
     BIG_ZERO,
 } from '../../utils/formatbalance';
@@ -33,45 +34,12 @@ import useZethApsBalance from '../../hooks/useZethApsBalance';
 import useApproveZAPSLP from '../../hooks/useApproveZAPSLP';
 import useApproveLP from '../../hooks/useApproveLP';
 import { DirectAction } from '../Form/DirectAction/DirectAction';
-import { useAccount, useNetwork, Address } from 'wagmi';
+import { useAccount, useNetwork, Address, useContractRead } from 'wagmi';
 import { WalletButton } from '../WalletButton/WalletButton';
 import { ApproveButton } from '../ApproveButton/ApproveButton';
 import { TransactionReceipt } from 'viem';
-import sepoliaAbi from '../../actions/abi/sepolia/ZunamiPool.json';
-
-function coinNameToAddress(coinName: string, chainId: number): string {
-    if (chainId === 56 && coinName === 'USDT') {
-        return bscUsdtAddress;
-    }
-
-    let address = daiAddress;
-
-    switch (coinName) {
-        case 'USDC':
-            address = usdcAddress;
-            break;
-        case 'USDT':
-            address = isPLG(chainId) ? plgUsdtAddress : usdtAddress;
-            break;
-        case 'BUSD':
-            address = busdAddress;
-            break;
-        case 'FRAX':
-            address = fraxAddress;
-            break;
-        case 'UZD':
-            address = contractAddresses.uzd[1];
-            break;
-        case 'LP':
-            address = contractAddresses.aps[1];
-            break;
-        case 'ethZAPSLP':
-            address = contractAddresses.zethAPS[1];
-            break;
-    }
-
-    return address;
-}
+// import sepoliaAbi from '../../actions/abi/sepolia/ZunamiPool.json';
+import sepoliaAbi from '../../actions/abi/Zunami.json';
 
 function getScanAddressByChainId(chainId: number) {
     let address = 'etherscan.io';
@@ -272,9 +240,9 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const showApproveBtn = useMemo(() => {
         let result = !coinApproved;
 
-        if (!isETH(chainId)) {
-            result = false;
-        }
+        // if (!isETH(chainId)) {
+        //     result = false;
+        // }
 
         if (action === 'claim') {
             return false;
@@ -403,10 +371,17 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     }, [stakingMode]);
 
     // const contract
-    const contractAddress = useMemo(() => {
-        const adress: Address = '0x0';
-        return adress;
-    }, [stakingMode]);
+    const contractAddress = '0xCaB49182aAdCd843b037bBF885AD56A3162698Bd'; // '0x83287Da602f0C32f6C9B09E2F1b2951767ebF239';
+
+    //
+    const { data: allowance, refetch } = useContractRead({
+        address: contractAddress,
+        abi: abi,
+        functionName: 'allowance',
+        args: [account, contractAddress],
+    });
+
+    console.log(allowance, typeof allowance);
 
     return (
         <div className={`FastDepositForm ${className} mode-${stakingMode}`}>
@@ -688,9 +663,6 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             <div>
                 <div>
                     <div className="">
-                        {!isETH(chainId) && (
-                            <div className="text-danger">Please, switch to Ethereum network</div>
-                        )}
                         {action === 'deposit' && (
                             <div className="checkboxes">
                                 <div className="d-flex gap-4 mb-3 flex-column flex-md-row">
@@ -767,57 +739,44 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                 </button>
                             )}
                             {showApproveBtn && (
-                                <ApproveButton
-                                    abi={abi}
-                                    contractAddress={contractAddress}
-                                    account={account || '0x0'}
-                                    // disabled={!approveEnabled}
-                                    onApprove={(data: TransactionReceipt) => {
-                                        debugger;
+                                <button
+                                    className={`zun-button approve-usd ${
+                                        !approveEnabled ? 'disabled' : ''
+                                    }`}
+                                    onClick={async () => {
+                                        // setPendingApproval(true);
+                                        // setPendingTx(true);
+                                        // if (!chainId) {
+                                        //     return;
+                                        // }
+                                        // try {
+                                        //     if (coin === 'UZD') {
+                                        //         await onUzdApprove(
+                                        //             coinNameToAddress(coin, chainId)
+                                        //         );
+                                        //     } else if (coin === 'ZAPSLP') {
+                                        //         await onLPApprove(coinNameToAddress('LP', chainId));
+                                        //     } else if (coin === 'ZETH') {
+                                        //         await onZethApprove(
+                                        //             coinNameToAddress(coin, chainId)
+                                        //         );
+                                        //     } else if (coin === 'ethZAPSLP') {
+                                        //         await onZAPSLPApprove(
+                                        //             coinNameToAddress(coin, chainId)
+                                        //         );
+                                        //     }
+                                        //     log(`${coin} approved!`);
+                                        // } catch (error: any) {
+                                        //     log(`Error while approving ${coin}: ${error.message}`);
+                                        //     setPendingApproval(false);
+                                        //     setPendingTx(false);
+                                        // }
+                                        // setPendingApproval(false);
+                                        // setPendingTx(false);
                                     }}
-                                    onReject={(data: any) => {
-                                        debugger;
-                                    }}
-                                    disabled={!account}
-                                />
-                                // <button
-                                //     className={`zun-button approve-usd ${
-                                //         !approveEnabled ? 'disabled' : ''
-                                //     }`}
-                                //     onClick={async () => {
-                                //         // setPendingApproval(true);
-                                //         // setPendingTx(true);
-                                //         // if (!chainId) {
-                                //         //     return;
-                                //         // }
-                                //         // try {
-                                //         //     if (coin === 'UZD') {
-                                //         //         await onUzdApprove(
-                                //         //             coinNameToAddress(coin, chainId)
-                                //         //         );
-                                //         //     } else if (coin === 'ZAPSLP') {
-                                //         //         await onLPApprove(coinNameToAddress('LP', chainId));
-                                //         //     } else if (coin === 'ZETH') {
-                                //         //         await onZethApprove(
-                                //         //             coinNameToAddress(coin, chainId)
-                                //         //         );
-                                //         //     } else if (coin === 'ethZAPSLP') {
-                                //         //         await onZAPSLPApprove(
-                                //         //             coinNameToAddress(coin, chainId)
-                                //         //         );
-                                //         //     }
-                                //         //     log(`${coin} approved!`);
-                                //         // } catch (error: any) {
-                                //         //     log(`Error while approving ${coin}: ${error.message}`);
-                                //         //     setPendingApproval(false);
-                                //         //     setPendingTx(false);
-                                //         // }
-                                //         // setPendingApproval(false);
-                                //         // setPendingTx(false);
-                                //     }}
-                                // >
-                                //     Approve
-                                // </button>
+                                >
+                                    Approve
+                                </button>
                             )}
                         </div>
                         {pendingTx && <Preloader className="ms-2" />}

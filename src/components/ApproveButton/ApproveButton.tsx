@@ -31,28 +31,30 @@ export const ApproveButton = (props: ApproveButtonProps): JSX.Element => {
         args: [props.account, props.contractAddress],
     });
 
-    console.log(`Allowance: ${allowance}`);
+    console.log(
+        `Allowance (contract ${props.contractAddress}, args['${props.account}', '${props.contractAddress}']): ${allowance}`
+    );
 
-    // 2. (Only if no allowance): Write to ERC20, approve 0x Exchange Proxy to spend max integer
-    const { config } = usePrepareContractWrite({
-        address: props.contractAddress,
-        abi: props.abi,
-        functionName: 'approve',
-        args: [props.account, APPROVE_SUM],
-    });
+    // // 2. (Only if no allowance): Write to ERC20, approve 0x Exchange Proxy to spend max integer
+    // const { config } = usePrepareContractWrite({
+    //     address: props.contractAddress,
+    //     abi: props.abi,
+    //     functionName: 'approve',
+    //     args: [props.account, APPROVE_SUM],
+    // });
 
-    const { data: writeContractResult, writeAsync: approveAsync, error } = useContractWrite(config);
+    // const { data: writeContractResult, writeAsync: approveAsync, error } = useContractWrite(config);
 
-    const { isLoading: isApproving } = useWaitForTransaction({
-        hash: writeContractResult ? writeContractResult.hash : undefined,
-        onSuccess(data) {
-            refetch();
+    // const { isLoading: isApproving } = useWaitForTransaction({
+    //     hash: writeContractResult ? writeContractResult.hash : undefined,
+    //     onSuccess(data) {
+    //         refetch();
 
-            if (props.onApprove) {
-                props.onApprove(data);
-            }
-        },
-    });
+    //         if (props.onApprove) {
+    //             props.onApprove(data);
+    //         }
+    //     },
+    // });
 
     return (
         <button

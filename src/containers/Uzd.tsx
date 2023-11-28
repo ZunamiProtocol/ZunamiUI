@@ -108,7 +108,6 @@ export const Uzd = (): JSX.Element => {
     const chainId = chain ? parseInt(window.ethereum?.chainId, 16) : 1;
 
     const zethBalance = useUzdBalance(contractAddresses.zeth[1]);
-    const deprecatedUzdBalance = useUzdBalance(contractAddresses.deprecated.v_1_1_uzd);
     const uzdTotalSupply = useTotalSupply(contractAddresses.uzd[1]);
     const zethTotalSupply = useTotalSupply(contractAddresses.zeth[1]);
     const lpPrice = useUzdLpPrice();
@@ -193,17 +192,6 @@ export const Uzd = (): JSX.Element => {
               )
             : [];
     }, [stakingMode, uzdStatData, poolStats]);
-
-    // v1.1 migration modal
-    const [showMigrationModal, setShowMigrationModal] = useState(false);
-
-    useEffect(() => {
-        if (deprecatedUzdBalance.dividedBy(BIG_TEN.pow(UZD_DECIMALS)).toNumber() >= 1) {
-            setShowMigrationModal(true);
-        } else {
-            setShowMigrationModal(false);
-        }
-    }, [deprecatedUzdBalance]);
 
     const [transactionsType, setTransactionsType] = useState('UZD');
     const [transactionList, setTransactionList] = useState([]);

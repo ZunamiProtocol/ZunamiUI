@@ -452,12 +452,12 @@ export const Main = (): JSX.Element => {
             <React.Fragment>
                 <MobileSidebar />
                 <AllServicesPanel />
-                {!supportedChain && (
+                {/* {!supportedChain && (
                     <UnsupportedChain
                         text="You're using unsupported chain. Please, switch to Ethereum network."
                         customNetworksList={[networks[0]]}
                     />
-                )}
+                )} */}
                 <div className="container">
                     <ApyDetailsModal
                         show={showApyDetailsModal}

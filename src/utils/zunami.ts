@@ -12,12 +12,6 @@ export const getTotalHoldings = async (masterChefContract: Contract): Promise<st
 
 export const getZunamiAddress = (chainId: number | undefined): string => {
     let address = contractAddresses.zunami[1];
-
-    switch (chainId) {
-        case 56: address = contractAddresses.zunami[56]; break;
-        case 137: address = contractAddresses.zunami[137]; break;
-    }
-
     return address;
 };
 
@@ -38,4 +32,4 @@ export const getScanAddressByChainId = (chainId: number) => {
     }
 
     return address;
-}
+};
