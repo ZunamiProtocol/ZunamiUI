@@ -5,49 +5,41 @@ import { BIG_ZERO } from '../utils/formatbalance';
 // import useSushi from './useSushi';
 import { getMasterChefContract } from '../sushi/utils';
 import { log } from '../utils/logger';
+import { Address, useContractRead } from 'wagmi';
 
-const useBalanceOf = (contractAddress: string | undefined = undefined, autoRefresh = false) => {
+const useBalanceOf = (
+    contractAddress: Address,
+    account: Address,
+    abi: any,
+    autoRefresh = false
+) => {
     const [balance, setBalance] = useState(new BigNumber(BIG_ZERO));
-    // const { account, ethereum } = useWallet();
+    const { refetch, isRefetching } = useContractRead({
+        address: contractAddress,
+        abi: abi,
+        functionName: 'balanceOf',
+        args: [account],
+        staleTime: 10_000,
+        onError(error) {
+            log('[SMART] Error while retrieving balanceOf()');
+            log(JSON.stringify(error));
+            setBalance(BIG_ZERO);
+        },
+        onSuccess(value: BigInt) {
+            log(
+                `[SMART] balanceOf (contract ${contractAddress}) for address ${account}. Balance: ${value})`
+            );
 
-    // const chainId = useMemo(() => {
-    //     return parseInt(ethereum?.chainId, 16);
-    // }, [ethereum?.chainId]);
+            setBalance(new BigNumber(value.toString()));
 
-    // const sushi = useSushi();
-    // const masterChefContract = getMasterChefContract(sushi);
+            setTimeout(() => {
+                refetch();
+                log(`[SMART] balanceOf (contract ${contractAddress}) for address ${account}`);
+            }, 5000);
+        },
+    });
 
-    // useEffect(() => {
-    //     if (!account || !chainId || !masterChefContract) {
-    //         return;
-    //     }
-
-    //     const getBalance = async () => {
-    //         let contract = sushi.getEthContract();
-
-    //         switch (chainId) {
-    //             case 56: contract = sushi.getBscContract();  break;
-    //             case 137: contract = sushi.getPolygonContract();  break;
-    //         }
-
-    //         if (contractAddress) {
-    //             contract.options.address = contractAddress;
-    //         }
-
-    //         const value = await contract.methods.balanceOf(account).call();
-    //         if (value) {
-    //             log(`🔄 Balance set to ${value}`);
-    //             setBalance(new BigNumber(value));
-    //         }
-    //     };
-
-    //     getBalance();
-
-    //     if (autoRefresh) {
-    //         let refreshInterval = setInterval(getBalance, 5000);
-    //         return () => clearInterval(refreshInterval);
-    //     }
-    // }, [account, chainId, masterChefContract, sushi, contractAddress, autoRefresh]);
+    // console.log(isRefetching);
 
     return balance;
 };

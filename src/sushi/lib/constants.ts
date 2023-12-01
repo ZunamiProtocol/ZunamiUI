@@ -1,3 +1,9 @@
+import { Address } from 'wagmi';
+
+const apsAddress: Address = '0xCaB49182aAdCd843b037bBF885AD56A3162698Bd';
+const zethApsAddress: Address = '0xe47f1CD2A37c6FE69e3501AE45ECA263c5A87b2b';
+const zethAddress: Address = '0xe47f1CD2A37c6FE69e3501AE45ECA263c5A87b2b';
+
 export const SUBTRACT_GAS_LIMIT = 100000;
 
 export const contractAddresses = {
@@ -15,13 +21,13 @@ export const contractAddresses = {
         1: '0x3D8aBC464D5313a576e78706aC97F79fe1EB0b61',
     },
     aps: {
-        1: '0xCaB49182aAdCd843b037bBF885AD56A3162698Bd',
-    },
-    zeth: {
-        1: '0xe47f1CD2A37c6FE69e3501AE45ECA263c5A87b2b',
+        1: apsAddress,
     },
     zethAPS: {
-        1: '0x8fc72dcfbf39FE686c96f47C697663EE08C78380',
+        1: zethApsAddress,
+    },
+    zeth: {
+        1: zethAddress,
     },
     deprecated: {},
 };
