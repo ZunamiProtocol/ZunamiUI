@@ -2,10 +2,11 @@ import { log } from '../utils/logger';
 
 const root = 'https://zunami-reward-api.herokuapp.com/api';
 export const poolStatsUrl = `${root}/pool/stats`;
-export const activeStratsUrl = `${root}/pool/active-pools-stats`;
+export const activeStratsUrl = `${root}/strategy/zunUSD/active-stats`;
+
 export const uzdStratsUrl = `${root}/aps/strategy/active-strategies-stats`;
 export const zethStratsUrl = `${root}/zeth-omnipool/strategy/active-strategies-stats`;
-export const uzdStakingInfoUrl = `${root}/v2/zunami/info`;
+export const uzdStakingInfoUrl = `${root}/pool/aggregated-info`;
 
 export const historicalApyUrl = `${root}/zunami/apy-chart`;
 export const apsHistoricalApyUrl = `${root}/zunami/aps-apy-chart`;

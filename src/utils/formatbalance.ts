@@ -38,10 +38,8 @@ export const daiAddress = '0x6B175474E89094C44Da98b954EedeAC495271d0F';
 export const usdcAddress = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';
 export const usdtAddress = '0xdac17f958d2ee523a2206206994597c13d831ec7';
 export const fraxAddress = '0x853d955acef822db058eb8505911ed77f175b99e';
-// bsc
-export const bscUsdtAddress = '0x55d398326f99059ff775485246999027b3197955';
-export const busdAddress = '0xe9e7cea3dedca5984780bafc599bd69add087d56';
-// polygon
-export const plgDaiAddress = '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063';
-export const plgUsdcAddress = '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174';
-export const plgUsdtAddress = '0xc2132d05d31c914a87c6611c10748aeb04b58e8f';
+// sepolia
+export const sepDaiAddress = '0xdC30b3bdE2734A0Bc55AF01B38943ef04aaCB423';
+export const sepUsdcAddress = '0x2d691C2492e056ADCAE7cA317569af25910fC4cb';
+export const sepUsdtAddress = '0x8aaB454dFD2d3b483791698367fFEa8Cf3352Ee2';
+// export const sepFraxAddress = '0x853d955acef822db058eb8505911ed77f175b99e';

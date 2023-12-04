@@ -8,7 +8,7 @@ import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
-import { WagmiConfig, createConfig, configureChains, mainnet } from 'wagmi';
+import { WagmiConfig, createConfig, configureChains, mainnet, sepolia } from 'wagmi';
 import reportWebVitals from './reportWebVitals';
 
 const theme = getTheme();
@@ -18,7 +18,7 @@ if ([null, 'default'].indexOf(theme) === -1) {
 }
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-    [mainnet],
+    [mainnet, sepolia],
     [alchemyProvider({ apiKey: 'Yh5zNTgJkqrOIqLtfkZBGIPecNPDQ1ON' }), publicProvider()]
 );
 

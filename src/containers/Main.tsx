@@ -200,13 +200,12 @@ export const Main = (): JSX.Element => {
     );
     const poolStats = activeStratsStat as PoolsStats;
 
-    const poolBestAprDaily = !uzdStatLoading ? uzdStatData.info.omnipool.apr / 100 / 365 : 0;
-    const poolBestAprMonthly = !uzdStatLoading
-        ? (uzdStatData.info.omnipool.apr / 100 / 365) * 30
-        : 0;
-    const poolBestApyYearly = !uzdStatLoading
-        ? (uzdStatData.info.omnipool.apy / 100 / 365) * 30 * 12
-        : 0;
+    const poolBestAprDaily =
+        !uzdStatLoading && uzdStatData ? uzdStatData.info.omnipool.apr / 100 / 365 : 0;
+    const poolBestAprMonthly =
+        !uzdStatLoading && uzdStatData ? (uzdStatData.info.omnipool.apr / 100 / 365) * 30 : 0;
+    const poolBestApyYearly =
+        !uzdStatLoading && uzdStatData ? (uzdStatData.info.omnipool.apy / 100 / 365) * 30 * 12 : 0;
 
     const apsPoolBestAprDaily = uzdStatData ? uzdStatData.info.aps.apr / 100 / 365 : 0;
     const apsPoolBestAprMonthly = uzdStatData ? (uzdStatData.info.aps.apr / 100 / 365) * 30 : 0;
@@ -413,14 +412,20 @@ export const Main = (): JSX.Element => {
         </Popover>
     );
 
-    const apyBarApy =
-        stakingMode === 'ZETH'
-            ? uzdStatLoading || !uzdStatData
+    const apyBarApy = useMemo(() => {
+        // incorrect server response handler
+        if (!uzdStatLoading && !uzdStatData) {
+            return '0%';
+        }
+
+        if (stakingMode === 'ZETH') {
+            return uzdStatLoading || !uzdStatData
                 ? 'n/a'
-                : `${uzdStatData.info.zethAps.apy.toFixed(2)}%`
-            : uzdStatLoading
-            ? 0
-            : `${uzdStatData.info.aps.apy.toFixed(2)}%`;
+                : `${uzdStatData.info.zethAps.apy.toFixed(2)}%`;
+        } else {
+            return uzdStatLoading ? 0 : `${uzdStatData.info.aps.apy.toFixed(2)}%`;
+        }
+    }, [stakingMode, uzdStatData, uzdStatLoading]);
 
     const apyBarMonthlyApy = useMemo(() => {
         let result = '0%';
@@ -669,12 +674,16 @@ export const Main = (): JSX.Element => {
                             <StakingSummary
                                 logo="UZD"
                                 selected={stakingMode === 'UZD'}
-                                baseApy={uzdStatLoading ? 0 : uzdStatData.info.aps.apy.toFixed(2)}
+                                baseApy={
+                                    uzdStatLoading || !uzdStatData
+                                        ? 0
+                                        : uzdStatData.info.aps.apy.toFixed(2)
+                                }
                                 deposit={`$${getBalanceNumber(apsBalance.multipliedBy(apsLpPrice))
                                     .toNumber()
                                     .toLocaleString('en')}`}
                                 tvl={
-                                    uzdStatLoading
+                                    uzdStatLoading || !uzdStatData
                                         ? '0'
                                         : `$${Number(
                                               getBalanceNumber(uzdStatData.info.aps.tvl)
@@ -691,13 +700,15 @@ export const Main = (): JSX.Element => {
                                 logo="ZETH"
                                 selected={stakingMode === 'ZETH'}
                                 baseApy={
-                                    uzdStatLoading ? 0 : formatPoolApy(uzdStatData.info.zethAps.apy)
+                                    uzdStatLoading || !uzdStatData
+                                        ? 0
+                                        : formatPoolApy(uzdStatData.info.zethAps.apy)
                                 }
                                 deposit={`${getBalanceNumber(zethBalance)
                                     .toNumber()
                                     .toLocaleString('en')} ZETH`}
                                 tvl={
-                                    uzdStatLoading
+                                    uzdStatLoading || !uzdStatData
                                         ? '0'
                                         : `${getBalanceNumber(uzdStatData.info.zethAps.tvl)
                                               .toNumber()

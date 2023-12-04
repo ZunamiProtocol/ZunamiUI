@@ -1,8 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState, useMemo } from 'react';
 import { BIG_ZERO } from '../utils/formatbalance';
-// import useWallet from './useWallet';
-// import useSushi from './useSushi';
 import { getMasterChefContract } from '../sushi/utils';
 import { log } from '../utils/logger';
 import { Address, useContractRead } from 'wagmi';
@@ -21,20 +19,18 @@ const useBalanceOf = (
         args: [account],
         staleTime: 10_000,
         onError(error) {
-            log('[SMART] Error while retrieving balanceOf()');
+            log(`[${contractAddress}]->balanceOf() - ERROR: ${error}`);
             log(JSON.stringify(error));
             setBalance(BIG_ZERO);
         },
         onSuccess(value: BigInt) {
-            log(
-                `[SMART] balanceOf (contract ${contractAddress}) for address ${account}. Balance: ${value})`
-            );
+            log(`[${contractAddress}]->balanceOf(${account}). Result: ${value})`);
 
             setBalance(new BigNumber(value.toString()));
 
             setTimeout(() => {
                 refetch();
-                log(`[SMART] balanceOf (contract ${contractAddress}) for address ${account}`);
+                log(`[${contractAddress}]->balanceOf(${account}). Result: ${value})`);
             }, 5000);
         },
     });

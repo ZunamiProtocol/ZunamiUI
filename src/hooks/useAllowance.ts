@@ -9,17 +9,35 @@ import {
     daiAddress,
     usdcAddress,
     usdtAddress,
-    bscUsdtAddress,
-    busdAddress,
-    plgUsdtAddress,
     fraxAddress,
 } from '../utils/formatbalance';
 import { log } from '../utils/logger';
 import { contractAddresses } from '../sushi/lib/constants';
-import { isBSC, isPLG } from '../utils/zunami';
+import { Address, useContractRead } from 'wagmi';
 
-const useAllowance = (tokenAddress: string, contract: any) => {
+const useAllowance = (contractAddress: Address, abi: any, owner: Address, spender: Address) => {
     const [allowance, setAllowance] = useState(BIG_ZERO);
+    const { refetch, isRefetching } = useContractRead({
+        address: contractAddress,
+        abi: abi,
+        functionName: 'allowance',
+        args: [owner, spender],
+        onError(error) {
+            log(`[${contractAddress}]->allowance('${owner}', '${spender}') - ERROR: ${error}`);
+            log(JSON.stringify(error));
+            setAllowance(BIG_ZERO);
+        },
+        onSuccess(value: BigInt) {
+            log(`[${contractAddress}]->allowance('${owner}', '${spender}'). Result: ${value})`);
+
+            setAllowance(new BigNumber(value.toString()));
+
+            // setTimeout(() => {
+            //     refetch();
+            //     log(`[SMART] balanceOf (contract ${contractAddress}) for address ${account}`);
+            // }, 5000);
+        },
+    });
     // const { account, ethereum } = useWallet();
     // const sushi = useSushi();
     // const masterChefContract = contract ? contract : getMasterChefContract(sushi);

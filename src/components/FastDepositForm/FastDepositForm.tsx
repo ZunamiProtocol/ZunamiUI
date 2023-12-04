@@ -4,17 +4,16 @@ import { Input } from './Input/Input';
 import { Preloader } from '../Preloader/Preloader';
 import { useUserBalances } from '../../hooks/useUserBalances';
 import { WalletStatus } from '../WalletStatus/WalletStatus';
-import { useAllowanceStables } from '../../hooks/useAllowance';
+import useAllowance, { useAllowanceStables } from '../../hooks/useAllowance';
 import useStake from '../../hooks/useStake';
 import { getActiveWalletName } from '../WalletsModal/WalletsModal';
 import {
     daiAddress,
     usdcAddress,
     usdtAddress,
-    bscUsdtAddress,
-    busdAddress,
-    plgUsdtAddress,
-    fraxAddress,
+    sepDaiAddress,
+    sepUsdtAddress,
+    sepUsdcAddress,
     BIG_TEN,
     NULL_ADDRESS,
     UZD_DECIMALS,
@@ -33,7 +32,7 @@ import useZethApsBalance from '../../hooks/useZethApsBalance';
 import useApproveZAPSLP from '../../hooks/useApproveZAPSLP';
 import useApproveLP from '../../hooks/useApproveLP';
 import { DirectAction } from '../Form/DirectAction/DirectAction';
-import { useAccount, useNetwork, Address, useContractRead } from 'wagmi';
+import { useAccount, useNetwork, Address, useContractRead, sepolia } from 'wagmi';
 import { WalletButton } from '../WalletButton/WalletButton';
 import { ApproveButton } from '../ApproveButton/ApproveButton';
 import { TransactionReceipt } from 'viem';
@@ -44,6 +43,9 @@ import { ReactComponent as MobileToggleIcon } from './assets/mobile-toggle-icon.
 import sepoliaAbi from '../../actions/abi/Zunami.json';
 import { getScanAddressByChainId, renderToasts, FastDepositFormProps } from './types';
 import useBalanceOf from '../../hooks/useBalanceOf';
+import erc20TokenAbi from '../../actions/abi/sepolia/ERC20Token.json';
+// import controllerABI from '../../actions/abi/sepolia/controller.json';
+import { getPublicClient } from '@wagmi/core';
 
 export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HTMLDivElement>> = ({
     stakingMode,
@@ -62,18 +64,86 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const [transactionId, setTransactionId] = useState<string | undefined>(undefined);
     const [pendingTx, setPendingTx] = useState(false);
     const [transactionError, setTransactionError] = useState(false);
-    const [coinIndex, setCoinIndex] = useState(-1);
+    const [coinIndex, setCoinIndex] = useState(0);
     const approveList = useAllowanceStables();
     // ABI
     const abi = useMemo(() => {
         return stakingMode ? sepoliaAbi : sepoliaAbi;
     }, [stakingMode]);
     // Current contract address
-    const contractAddress = '0xCaB49182aAdCd843b037bBF885AD56A3162698Bd'; // '0x83287Da602f0C32f6C9B09E2F1b2951767ebF239';
+    const contractAddress = '0x83287Da602f0C32f6C9B09E2F1b2951767ebF239';
     // APS balance
-    const apsBalance = useBalanceOf(contractAddress, account || NULL_ADDRESS, abi);
+    const apsBalance = BIG_ZERO;
     // ZETH APS balance
-    const zethApsBalance = useBalanceOf(contractAddresses.zethAPS[1], account || NULL_ADDRESS, abi);
+    const zethApsBalance = BIG_ZERO;
+
+    // useEffect(() => {
+    //     if (!account || account === NULL_ADDRESS) {
+    //         return;
+    //     }
+
+    //     async function test() {
+    //         const data = await getPublicClient().readContract({
+    //             address: '0xdC30b3bdE2734A0Bc55AF01B38943ef04aaCB423',
+    //             abi: erc20TokenAbi,
+    //             functionName: 'balanceOf',
+    //             args: [account],
+    //         });
+
+    //         console.log(data);
+    //     }
+
+    //     test();
+    // }, [account]);
+
+    const selectedCoinAddress = useMemo(() => {
+        let address: Address = sepDaiAddress;
+
+        switch (coinIndex) {
+            case 0: // DAI
+                if (chainId === sepolia.id) {
+                    address = sepDaiAddress;
+                }
+                break;
+            case 1: // USDC
+                if (chainId === sepolia.id) {
+                    address = sepUsdcAddress;
+                }
+                break;
+            case 2:
+                if (chainId === sepolia.id) {
+                    address = sepUsdtAddress;
+                }
+                break;
+            case 3: // FRAX
+                break;
+            case 4: // zunUSD
+                if (chainId === sepolia.id) {
+                    address = sepDaiAddress;
+                }
+                break;
+            default:
+                address = usdtAddress;
+                break;
+        }
+
+        return address;
+    }, [chainId, coinIndex]);
+
+    const selectedCoinBalance = useBalanceOf(
+        selectedCoinAddress,
+        account || NULL_ADDRESS,
+        erc20TokenAbi
+    );
+
+    const selectedCoinAllowance = useAllowance(
+        selectedCoinAddress,
+        erc20TokenAbi,
+        account || NULL_ADDRESS,
+        contractAddress
+    );
+
+    // console.log(selectedCoinBalance);
 
     const approvedTokens = useMemo(() => {
         return [
@@ -82,15 +152,11 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             approveList ? approveList[2].toNumber() > 0 : false,
             approveList ? approveList[3].toNumber() > 0 : false,
             approveList ? approveList[4].toNumber() > 0 : false,
-            approveList ? approveList[5].toNumber() > 0 : false, // UZD
-            approveList ? approveList[6].toNumber() > 0 : false, // ZETH
-            approveList ? approveList[7].toNumber() > 0 : false, // ethZAPSLP
-            approveList ? approveList[8].toNumber() > 0 : false, // APSLP
         ];
     }, [approveList]);
 
     const coins = useMemo(() => {
-        return ['DAI', 'USDC', 'USDT', 'BUSD', 'FRAX', 'UZD', 'ZETH', 'ethZAPSLP', 'ZAPSLP', 'ZUN'];
+        return ['DAI', 'USDC', 'USDT', 'FRAX', 'UZD'];
     }, []);
 
     useEffect(() => {
@@ -126,24 +192,16 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             decimalPlaces = 0;
         }
 
-        if (isBSC(chainId)) {
-            return BIG_ZERO;
-            // return getFullDisplayBalance(userBalanceList[coinIndex], decimalPlaces);
-        } else if (isETH(chainId)) {
-            const isDaiOrFrax = ['DAI', 'FRAX'].indexOf(coin) !== -1;
+        const isDaiOrFrax = ['DAI', 'FRAX'].indexOf(coin) !== -1;
 
-            if (coin === 'UZD') {
-                return getFullDisplayBalance(userBalanceList[coinIndex], 18, decimalPlaces);
-            } else if (coin === 'ZETH') {
-                return getFullDisplayBalance(userBalanceList[coinIndex], 18, decimalPlaces);
-            }
-
-            return getFullDisplayBalance(userBalanceList[coinIndex], isDaiOrFrax ? 18 : 6);
-        } else if (isPLG(chainId)) {
-            return BIG_ZERO;
-            // return getFullDisplayBalance(userBalanceList[coinIndex], coin === 'DAI' ? 18 : 6);
+        if (coin === 'UZD') {
+            return getFullDisplayBalance(userBalanceList[coinIndex], 18, decimalPlaces);
+        } else if (coin === 'ZETH') {
+            return getFullDisplayBalance(userBalanceList[coinIndex], 18, decimalPlaces);
         }
-    }, [userBalanceList, coin, coinIndex, chainId]);
+
+        return getFullDisplayBalance(userBalanceList[coinIndex], isDaiOrFrax ? 18 : 6);
+    }, [userBalanceList, coin, coinIndex]);
 
     const coinApproved = useMemo(() => {
         if (action === 'deposit') {
@@ -313,6 +371,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                 {
                                     name: 'claim',
                                     title: 'Claim',
+                                    disabled: true,
                                 },
                             ]}
                             onChange={(action: string) => {
@@ -368,7 +427,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                 max={maxInputSum}
                 onCoinChange={(coin: string) => {
                     setCoin(coin);
-                    setCoinIndex(['DAI', 'USDC', 'USDT', 'BUSD', 'FRAX', 'UZD'].indexOf(coin));
+                    setCoinIndex(['DAI', 'USDC', 'USDT', 'FRAX', 'UZD'].indexOf(coin));
                 }}
                 chainId={chainId}
                 className=""
@@ -392,7 +451,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                             chainId={chainId}
                                         />
                                     )}
-                                    {!pendingTx && (
+                                    {/* {!pendingTx && (
                                         <DirectAction
                                             actionName="deposit"
                                             checked={autoRelock}
@@ -404,7 +463,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                             }}
                                             chainId={chainId}
                                         />
-                                    )}
+                                    )} */}
                                 </div>
                             </div>
                         )}

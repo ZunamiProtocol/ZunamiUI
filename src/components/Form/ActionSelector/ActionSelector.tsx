@@ -19,7 +19,7 @@ export const ActionSelector = (props: ActionSelectorProps): JSX.Element => {
                     key={item.name}
                     className={`ActionSelector__Action ${
                         action === item.name ? 'ActionSelector__Action__Active' : ''
-                    }`}
+                    } ${item.disabled ? 'disabled' : ''}`}
                     onClick={(e) => {
                         if (item.hasOwnProperty('url')) {
                             navigate(`/${item.name}`);

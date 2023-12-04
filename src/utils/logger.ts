@@ -7,17 +7,19 @@ const LOGS_THRESHOLD = 1000;
  * @param message
  */
 export function log(message: string): void {
-    if (logs.indexOf(message) === -1) {
-        logs.push(message);
-        appendLogs(message);
+    console.log(message);
 
-        if (
-            process.env.NODE_ENV === 'development' ||
-            window.location.hostname === 'test.zunami.io'
-        ) {
-            console.log(message);
-        }
-    }
+    // if (logs.indexOf(message) === -1) {
+    //     logs.push(message);
+    //     appendLogs(message);
+
+    //     if (
+    //         process.env.NODE_ENV === 'development' ||
+    //         window.location.hostname === 'test.zunami.io'
+    //     ) {
+    //         console.log(message);
+    //     }
+    // }
 }
 
 /**

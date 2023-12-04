@@ -7,9 +7,6 @@ import {
     daiAddress,
     usdcAddress,
     usdtAddress,
-    bscUsdtAddress,
-    busdAddress,
-    plgUsdtAddress,
     fraxAddress,
 } from '../utils/formatbalance';
 import { log } from '../utils/logger';
