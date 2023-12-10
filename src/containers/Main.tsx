@@ -6,11 +6,11 @@ import useBalanceOf from '../hooks/useBalanceOf';
 import useCrossChainBalances from '../hooks/useCrossChainBalances';
 import useFetch from 'react-fetch-hook';
 import {
-    getZethApsHistoricalApyUrl,
-    getZethAPsStratsUrl,
+    getZunEthStratsUrl,
     uzdStakingInfoUrl,
-    getUzdStratsUrl,
-    getApsHistoricalApyUrl,
+    getZunUsdStratsUrl,
+    getZunUsdHistoricalApyUrl,
+    getZunEthHistoricalApyUrl,
 } from '../api/api';
 import { BigNumber } from 'bignumber.js';
 import usePendingOperations from '../hooks/usePendingOperations';
@@ -196,20 +196,20 @@ export const Main = (): JSX.Element => {
     ) as ZunamiInfoFetch;
 
     const { data: activeStratsStat } = useFetch(
-        stakingMode === 'ZETH' ? getZethAPsStratsUrl() : getUzdStratsUrl()
+        stakingMode === 'ZETH' ? getZunEthStratsUrl() : getZunUsdStratsUrl()
     );
     const poolStats = activeStratsStat as PoolsStats;
 
-    const poolBestAprDaily =
-        !uzdStatLoading && uzdStatData ? uzdStatData.info.omnipool.apr / 100 / 365 : 0;
-    const poolBestAprMonthly =
-        !uzdStatLoading && uzdStatData ? (uzdStatData.info.omnipool.apr / 100 / 365) * 30 : 0;
-    const poolBestApyYearly =
-        !uzdStatLoading && uzdStatData ? (uzdStatData.info.omnipool.apy / 100 / 365) * 30 * 12 : 0;
+    // const poolBestAprDaily =
+    //     !uzdStatLoading && uzdStatData ? uzdStatData.info.omnipool.apr / 100 / 365 : 0;
+    // const poolBestAprMonthly =
+    //     !uzdStatLoading && uzdStatData ? (uzdStatData.info.omnipool.apr / 100 / 365) * 30 : 0;
+    // const poolBestApyYearly =
+    //     !uzdStatLoading && uzdStatData ? (uzdStatData.info.omnipool.apy / 100 / 365) * 30 * 12 : 0;
 
-    const apsPoolBestAprDaily = uzdStatData ? uzdStatData.info.aps.apr / 100 / 365 : 0;
-    const apsPoolBestAprMonthly = uzdStatData ? (uzdStatData.info.aps.apr / 100 / 365) * 30 : 0;
-    const apsPoolBestApyYearly = uzdStatData ? (uzdStatData.info.aps.apr / 100 / 365) * 30 * 12 : 0;
+    // const apsPoolBestAprDaily = uzdStatData ? uzdStatData.info.aps.apr / 100 / 365 : 0;
+    // const apsPoolBestAprMonthly = uzdStatData ? (uzdStatData.info.aps.apr / 100 / 365) * 30 : 0;
+    // const apsPoolBestApyYearly = uzdStatData ? (uzdStatData.info.aps.apr / 100 / 365) * 30 * 12 : 0;
 
     const dailyProfit = Number(0);
     const monthlyProfit = Number(0);
@@ -263,7 +263,7 @@ export const Main = (): JSX.Element => {
 
         return poolDataToChartData(
             stratsData,
-            stakingMode === 'ZETH' ? uzdStatData.info.zethAps.tvl : uzdStatData.info.aps.tvl
+            stakingMode === 'ZETH' ? uzdStatData.info.zunETH.tvl : uzdStatData.info.zunUSD.tvl
         );
     }, [stakingMode, uzdStatData, poolStats]);
 
@@ -274,8 +274,8 @@ export const Main = (): JSX.Element => {
     useEffect(() => {
         const url =
             stakingMode === 'ZETH'
-                ? getZethApsHistoricalApyUrl(histApyPeriod)
-                : getApsHistoricalApyUrl(histApyPeriod);
+                ? getZunEthHistoricalApyUrl(histApyPeriod)
+                : getZunUsdHistoricalApyUrl(histApyPeriod);
 
         fetch(url)
             .then((response) => {
@@ -350,13 +350,13 @@ export const Main = (): JSX.Element => {
         if (uzdStatData) {
             apy30 =
                 stakingMode === 'ZETH'
-                    ? uzdStatData.info.zethAps.monthlyAvgApy
-                    : uzdStatData.info.aps.monthlyAvgApy;
+                    ? uzdStatData.info.zunETH.monthlyAvgApy
+                    : uzdStatData.info.zunUSD.monthlyAvgApy;
 
             apy90 =
                 stakingMode === 'ZETH'
-                    ? uzdStatData.info.zethAps.threeMonthAvgApy
-                    : uzdStatData.info.aps.threeMonthAvgApy;
+                    ? uzdStatData.info.zunETH.threeMonthAvgApy
+                    : uzdStatData.info.zunUSD.threeMonthAvgApy;
         }
 
         if (Number(apy30) > 500) {
@@ -421,9 +421,9 @@ export const Main = (): JSX.Element => {
         if (stakingMode === 'ZETH') {
             return uzdStatLoading || !uzdStatData
                 ? 'n/a'
-                : `${uzdStatData.info.zethAps.apy.toFixed(2)}%`;
+                : `${uzdStatData.info.zunETH.apy.toFixed(2)}%`;
         } else {
-            return uzdStatLoading ? 0 : `${uzdStatData.info.aps.apy.toFixed(2)}%`;
+            return uzdStatLoading ? 0 : `${uzdStatData.info.zunUSD.apy.toFixed(2)}%`;
         }
     }, [stakingMode, uzdStatData, uzdStatLoading]);
 
@@ -436,8 +436,8 @@ export const Main = (): JSX.Element => {
 
         result =
             stakingMode === 'ZETH'
-                ? uzdStatData.info.zethAps.monthlyAvgApy
-                : uzdStatData.info.aps.monthlyAvgApy;
+                ? uzdStatData.info.zunETH.monthlyAvgApy
+                : uzdStatData.info.zunUSD.monthlyAvgApy;
 
         if (Number(result) > 500) {
             result = '500+%';
@@ -677,7 +677,7 @@ export const Main = (): JSX.Element => {
                                 baseApy={
                                     uzdStatLoading || !uzdStatData
                                         ? 0
-                                        : uzdStatData.info.aps.apy.toFixed(2)
+                                        : uzdStatData.info.zunUSD.apy.toFixed(2)
                                 }
                                 deposit={`$${getBalanceNumber(apsBalance.multipliedBy(apsLpPrice))
                                     .toNumber()
@@ -686,7 +686,7 @@ export const Main = (): JSX.Element => {
                                     uzdStatLoading || !uzdStatData
                                         ? '0'
                                         : `$${Number(
-                                              getBalanceNumber(uzdStatData.info.aps.tvl)
+                                              getBalanceNumber(uzdStatData.info.zunUSD.tvlUsd)
                                           ).toLocaleString('en', {
                                               maximumFractionDigits: 0,
                                           })}`
@@ -702,7 +702,7 @@ export const Main = (): JSX.Element => {
                                 baseApy={
                                     uzdStatLoading || !uzdStatData
                                         ? 0
-                                        : formatPoolApy(uzdStatData.info.zethAps.apy)
+                                        : formatPoolApy(uzdStatData.info.zunETH.apy)
                                 }
                                 deposit={`${getBalanceNumber(zethBalance)
                                     .toNumber()
@@ -710,7 +710,7 @@ export const Main = (): JSX.Element => {
                                 tvl={
                                     uzdStatLoading || !uzdStatData
                                         ? '0'
-                                        : `${getBalanceNumber(uzdStatData.info.zethAps.tvl)
+                                        : `${getBalanceNumber(uzdStatData.info.zunETH.tvl)
                                               .toNumber()
                                               .toLocaleString('en')} ZETH`
                                 }

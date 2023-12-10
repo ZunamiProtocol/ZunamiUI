@@ -4,12 +4,16 @@ const root = 'https://zunami-reward-api.herokuapp.com/api';
 export const poolStatsUrl = `${root}/pool/stats`;
 export const activeStratsUrl = `${root}/strategy/zunUSD/active-stats`;
 
-export const uzdStratsUrl = `${root}/aps/strategy/active-strategies-stats`;
+export const zunUsdStratsUrl = `${root}/strategy/zunUSD/active-stats`;
+export const zunEthHistoryUrl = `${root}/strategy/zunETH/active-stats`;
+
 export const zethStratsUrl = `${root}/zeth-omnipool/strategy/active-strategies-stats`;
+
 export const uzdStakingInfoUrl = `${root}/pool/aggregated-info`;
 
 export const historicalApyUrl = `${root}/zunami/apy-chart`;
-export const apsHistoricalApyUrl = `${root}/zunami/aps-apy-chart`;
+export const zunUsdHistoricalApyUrl = `${root}/pool/zun-usd/apy-chart`;
+
 export const testnetUrl = `${root}/feature`;
 export const totalIncomeUrl = `${root}/transfers/total-income`;
 export const apsTotalIncomeUrl = `${root}/v2/transfers/total-income`;
@@ -17,6 +21,7 @@ export const transHistoryUrl = `${root}/transfers/history`;
 export const uzdTransHistoryUrl = `${root}/uzd/transfers/history`;
 export const uzdRebaseHistoryUrl = `${root}/uzd/rebase/history`;
 export const zethRebaseHistoryUrl = `${root}/zeth/rebase/history`;
+
 export const zethApsHistoryUrl = `${root}/zeth-aps/strategy/active-strategies-stats`;
 
 export const curvePoolsApyUrl = 'https://api.curve.fi/api/getFactoryAPYs?version=2';
@@ -28,12 +33,12 @@ export const getActiveStratsUrl = (): string => {
     return activeStratsUrl;
 };
 
-export const getZethAPsStratsUrl = (): string => {
+export const getZunEthStratsUrl = (): string => {
     return zethApsHistoryUrl;
 };
 
-export const getUzdStratsUrl = (): string => {
-    return uzdStratsUrl;
+export const getZunUsdStratsUrl = (): string => {
+    return zunUsdStratsUrl;
 };
 
 export const getZethStratsUrl = (): string => {
@@ -48,16 +53,16 @@ export const getHistoricalApyUrl = (period: string): string => {
     return `${historicalApyUrl}?period=${period.toUpperCase()}`;
 };
 
-export const getApsHistoricalApyUrl = (period: string): string => {
-    return `${apsHistoricalApyUrl}?period=${period.toUpperCase()}`;
+export const getZunUsdHistoricalApyUrl = (period: string): string => {
+    return `${zunUsdHistoricalApyUrl}?period=${period.toUpperCase()}`;
 };
 
 export const getZethHistoricalApyUrl = (period: string): string => {
     return `${root}/zunami/zeth-omnipool-apy-chart?period=${period.toUpperCase()}`;
 };
 
-export const getZethApsHistoricalApyUrl = (period: string): string => {
-    return `${root}/zunami/zeth-aps-apy-chart?period=${period.toUpperCase()}`;
+export const getZunEthHistoricalApyUrl = (period: string): string => {
+    return `${root}/pool/zun-eth/apy-chart?period=${period.toUpperCase()}`;
 };
 
 export const getTestnetStatusUrl = (address: string): string => {

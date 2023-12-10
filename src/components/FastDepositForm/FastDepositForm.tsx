@@ -32,7 +32,7 @@ import useZethApsBalance from '../../hooks/useZethApsBalance';
 import useApproveZAPSLP from '../../hooks/useApproveZAPSLP';
 import useApproveLP from '../../hooks/useApproveLP';
 import { DirectAction } from '../Form/DirectAction/DirectAction';
-import { useAccount, useNetwork, Address, useContractRead, sepolia } from 'wagmi';
+import { useAccount, useNetwork, Address, useContractRead, useContractWrite, sepolia } from 'wagmi';
 import { WalletButton } from '../WalletButton/WalletButton';
 import { ApproveButton } from '../ApproveButton/ApproveButton';
 import { TransactionReceipt } from 'viem';
@@ -77,24 +77,34 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     // ZETH APS balance
     const zethApsBalance = BIG_ZERO;
 
-    // useEffect(() => {
-    //     if (!account || account === NULL_ADDRESS) {
-    //         return;
-    //     }
+    const { data, isLoading, isSuccess, write } = useContractWrite({
+        address: '0x2d691C2492e056ADCAE7cA317569af25910fC4cb',
+        abi: erc20TokenAbi,
+        functionName: 'mint',
+        args: [account, '100000000000000'],
+    });
 
-    //     async function test() {
-    //         const data = await getPublicClient().readContract({
-    //             address: '0xdC30b3bdE2734A0Bc55AF01B38943ef04aaCB423',
-    //             abi: erc20TokenAbi,
-    //             functionName: 'balanceOf',
-    //             args: [account],
-    //         });
+    useEffect(() => {
+        if (!account || account === NULL_ADDRESS) {
+            return;
+        }
 
-    //         console.log(data);
-    //     }
+        async function test() {
+            // setTimeout(() => {
+            //     write();
+            // }, 2000);
 
-    //     test();
-    // }, [account]);
+            const data = await getPublicClient().readContract({
+                address: '0x2d691C2492e056ADCAE7cA317569af25910fC4cb',
+                abi: erc20TokenAbi,
+                functionName: 'mint',
+                args: [account, '100000000000000'],
+            });
+            console.log(data);
+        }
+
+        test();
+    }, [account]);
 
     const selectedCoinAddress = useMemo(() => {
         let address: Address = sepDaiAddress;
