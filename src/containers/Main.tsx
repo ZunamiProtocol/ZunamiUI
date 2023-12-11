@@ -840,6 +840,9 @@ export const Main = (): JSX.Element => {
                                                 setHistApyPeriod(range);
                                             }}
                                         />
+                                        {uzdStatLoading && (
+                                            <Preloader onlyIcon={true} className="blocker round" />
+                                        )}
                                     </div>
                                 </div>
                                 <div className="col-lg-5 col-xs-12 d-flex flex-column">

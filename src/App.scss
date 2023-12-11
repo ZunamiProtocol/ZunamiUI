@@ -474,6 +474,12 @@ input[type='checkbox'] {
 body.dark {
     background-color: #000 !important;
 
+    .Preloader {
+        &.blocker {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+    }
+
     .ApyDetailsModal {
         .modal-content {
             border: 1px solid #484848;

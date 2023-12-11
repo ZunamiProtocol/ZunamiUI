@@ -1,4 +1,5 @@
 import { Address } from 'wagmi';
+import { NULL_ADDRESS } from '../../utils/formatbalance';
 
 const apsAddress: Address = '0xCaB49182aAdCd843b037bBF885AD56A3162698Bd';
 const zethApsAddress: Address = '0xe47f1CD2A37c6FE69e3501AE45ECA263c5A87b2b';
@@ -6,10 +7,15 @@ const zethAddress: Address = '0xe47f1CD2A37c6FE69e3501AE45ECA263c5A87b2b';
 
 export const SUBTRACT_GAS_LIMIT = 100000;
 
+const zunamiMainnetAddress: Address = NULL_ADDRESS;
+const zunamiSepoliaAddress: Address = '0x83287Da602f0C32f6C9B09E2F1b2951767ebF239';
+
 export const contractAddresses = {
     zunami: {
         // ETH
-        1: '0x2ffCC661011beC72e1A9524E12060983E74D14ce',
+        1: zunamiMainnetAddress,
+        // Sepolia
+        11155111: zunamiSepoliaAddress,
     },
     usdc: {
         1: '0xdac17f958d2ee523a2206206994597c13d831ec7',
