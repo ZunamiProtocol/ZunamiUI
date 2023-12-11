@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 // import { useWallet } from 'use-wallet';
-import { approve } from '../sushi/utils';
+// import { approve } from '../sushi/utils';
 // import useSushi from './useSushi';
 import { log } from '../utils/logger';
 import { contractAddresses } from '../sushi/lib/constants';

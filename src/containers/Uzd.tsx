@@ -672,6 +672,7 @@ export const Uzd = (): JSX.Element => {
                                                 chainId={chainId}
                                                 className={''}
                                                 hideToggler={true}
+                                                stakingMode="zunUSD"
                                             />
                                         </div>
                                         <div className="d-flex buttons-row">

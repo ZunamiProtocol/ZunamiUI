@@ -65,49 +65,33 @@ export const ApyDetailsModal = (props: ApyDetailsModalProps): JSX.Element => {
                     <Accordion.Item eventKey="1">
                         <Accordion.Header>Projected APY</Accordion.Header>
                         <Accordion.Body>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                            commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                            velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                            occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-                            mollit anim id est laborum.
+                            This is a yield indicator based on accumulated rewards that have not
+                            been harvested and auto-compounded yet. Current accumulated rewards:
                         </Accordion.Body>
                     </Accordion.Item>
                     <Accordion.Item eventKey="3">
                         <Accordion.Header>Where do rewards accrue?</Accordion.Header>
                         <Accordion.Body>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                            commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                            velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                            occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-                            mollit anim id est laborum.
+                            The yield is generated through rewards for providing liquidity on Curve
+                            Finance and staking LP tokens on Convex & StakeDAO. All rewards are
+                            automatically reinvested back into the pool, and you don't need to
+                            perform any claiming operations.
                         </Accordion.Body>
                     </Accordion.Item>
                     <Accordion.Item eventKey="4">
                         <Accordion.Header>Fees</Accordion.Header>
                         <Accordion.Body>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                            commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                            velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                            occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-                            mollit anim id est laborum.
+                            A 15% performance fee, garnered from the earnings of APS depositors
+                            utilizing auto-compounding strategies, contributes to ZUN stakers'
+                            revenue stream. APY in the interface already includes all fees.
                         </Accordion.Body>
                     </Accordion.Item>
                     <Accordion.Item eventKey="5">
                         <Accordion.Header>Contracts</Accordion.Header>
                         <Accordion.Body>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                            commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                            velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                            occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-                            mollit anim id est laborum.
+                            APS:
+                            <br />
+                            Reward Manager:
                         </Accordion.Body>
                     </Accordion.Item>
                 </Accordion>

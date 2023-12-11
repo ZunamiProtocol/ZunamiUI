@@ -21,7 +21,7 @@ import { log, copyLogs } from '../utils/logger';
 import usePausedContract from '../hooks/usePausedContract';
 import { isBSC, isPLG } from '../utils/zunami';
 import { FastDepositForm } from '../components/FastDepositForm/FastDepositForm';
-import { OverlayTrigger, Popover } from 'react-bootstrap';
+import { OverlayTrigger, Popover, Tooltip } from 'react-bootstrap';
 import { networks } from '../components/NetworkSelector/NetworkSelector';
 import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
 import { SupportersBar } from '../components/SupportersBar/SupportersBar';
@@ -36,6 +36,7 @@ import { ApyDetailsModal } from '../components/ApyDetailsModal/ApyDetailsModal';
 import { useConnect, useAccount, useNetwork } from 'wagmi';
 import type { Chain } from 'wagmi';
 import type { DataItem } from '../components/Chart/Chart';
+import { ReactComponent as HintIcon } from '../assets/info.svg';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -158,6 +159,9 @@ export const Main = (): JSX.Element => {
     const apsBalance = BIG_ZERO;
     const apsLpPrice = BIG_ZERO;
     const zethBalance = BIG_ZERO;
+
+    const target = useRef(null);
+    const [showHint, setShowHint] = useState(false);
 
     // const lpPrice = useLpPrice();
     // const balance = useBalanceOf();
@@ -761,8 +765,28 @@ export const Main = (): JSX.Element => {
                                                 </div>
                                             </div>
                                             <div className="ApyBar__Counter">
-                                                <div className="ApyBar__Counter__Title">
+                                                <div className="ApyBar__Counter__Title d-flex align-items-center hint gap-2">
                                                     <span>Projected APY</span>
+                                                    <div
+                                                        ref={target}
+                                                        onClick={() => setShowHint(!showHint)}
+                                                        className="hint gap-2"
+                                                    >
+                                                        <OverlayTrigger
+                                                            placement="right"
+                                                            overlay={
+                                                                <Tooltip>
+                                                                    This is a yield indicator based
+                                                                    on accumulated rewards that have
+                                                                    not been harvested and
+                                                                    auto-compounded yet. Current
+                                                                    accumulated rewards:
+                                                                </Tooltip>
+                                                            }
+                                                        >
+                                                            <HintIcon />
+                                                        </OverlayTrigger>
+                                                    </div>
                                                 </div>
                                                 <div className="ApyBar__Counter__Value vela-sans">
                                                     0%

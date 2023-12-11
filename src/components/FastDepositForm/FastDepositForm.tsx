@@ -2,26 +2,15 @@ import './FastDepositForm.scss';
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { Input } from './Input/Input';
 import { Preloader } from '../Preloader/Preloader';
-import { useUserBalances } from '../../hooks/useUserBalances';
+import { useUserBalances, coins, getCoinAddressByIndex } from '../../hooks/useUserBalances';
 import { WalletStatus } from '../WalletStatus/WalletStatus';
 import useAllowance, { useAllowanceStables } from '../../hooks/useAllowance';
 import useStake from '../../hooks/useStake';
 import { getActiveWalletName } from '../WalletsModal/WalletsModal';
-import {
-    daiAddress,
-    usdcAddress,
-    usdtAddress,
-    sepDaiAddress,
-    sepUsdtAddress,
-    sepUsdcAddress,
-    BIG_TEN,
-    NULL_ADDRESS,
-    UZD_DECIMALS,
-    BIG_ZERO,
-} from '../../utils/formatbalance';
+import { BIG_ZERO } from '../../utils/formatbalance';
 import { getFullDisplayBalance } from '../../utils/formatbalance';
 import { log } from '../../utils/logger';
-import { isBSC, isETH, isPLG } from '../../utils/zunami';
+import { getChainClient, isBSC, isETH, isPLG, isSEP } from '../../utils/zunami';
 import { ActionSelector } from '../Form/ActionSelector/ActionSelector';
 import useApproveUzd from '../../hooks/useApproveUzd';
 import useApproveZeth from '../../hooks/useApproveZeth';
@@ -32,7 +21,15 @@ import useZethApsBalance from '../../hooks/useZethApsBalance';
 import useApproveZAPSLP from '../../hooks/useApproveZAPSLP';
 import useApproveLP from '../../hooks/useApproveLP';
 import { DirectAction } from '../Form/DirectAction/DirectAction';
-import { useAccount, useNetwork, Address, useContractRead, useContractWrite, sepolia } from 'wagmi';
+import {
+    useAccount,
+    useNetwork,
+    Address,
+    useContractRead,
+    useContractWrite,
+    sepolia,
+    erc20ABI,
+} from 'wagmi';
 import { WalletButton } from '../WalletButton/WalletButton';
 import { ApproveButton } from '../ApproveButton/ApproveButton';
 import { TransactionReceipt } from 'viem';
@@ -46,128 +43,37 @@ import useBalanceOf from '../../hooks/useBalanceOf';
 import erc20TokenAbi from '../../actions/abi/sepolia/ERC20Token.json';
 // import controllerABI from '../../actions/abi/sepolia/controller.json';
 import { getPublicClient } from '@wagmi/core';
+import useApprove from '../../hooks/useApprove';
+import { APPROVE_SUM } from '../../sushi/utils';
 
 export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HTMLDivElement>> = ({
     stakingMode,
     className,
 }) => {
-    const userBalanceList = useUserBalances();
-    const { address: account } = useAccount();
     const { chain } = useNetwork();
-    const chainId = chain ? chain.id : 1;
+    const chainId = chain ? chain.id : undefined;
+    const { address: account } = useAccount();
+    const userBalanceList = useUserBalances(account, chainId);
+
     const [lockAndBoost, setLockAndBoost] = useState(true);
-    const [autoRelock, setAutoRelock] = useState(true);
     const [action, setAction] = useState('deposit');
-    const [coin, setCoin] = useState(stakingMode === 'UZD' ? 'UZD' : 'ZETH');
+    // const [coin, setCoin] = useState(stakingMode === 'UZD' ? 'UZD' : 'ZETH');
     const [depositSum, setDepositSum] = useState('');
     const [withdrawSum, setWithdrawSum] = useState('');
     const [transactionId, setTransactionId] = useState<string | undefined>(undefined);
     const [pendingTx, setPendingTx] = useState(false);
     const [transactionError, setTransactionError] = useState(false);
     const [coinIndex, setCoinIndex] = useState(0);
-    const approveList = useAllowanceStables();
-    // ABI
-    const abi = useMemo(() => {
-        return stakingMode ? sepoliaAbi : sepoliaAbi;
-    }, [stakingMode]);
+
     // Current contract address
-    const contractAddress = '0x83287Da602f0C32f6C9B09E2F1b2951767ebF239';
+    const contractAddress: Address = '0x83287Da602f0C32f6C9B09E2F1b2951767ebF239';
+
+    const allowance = useAllowanceStables(account, contractAddress, chainId);
+
     // APS balance
     const apsBalance = BIG_ZERO;
     // ZETH APS balance
     const zethApsBalance = BIG_ZERO;
-
-    const { data, isLoading, isSuccess, write } = useContractWrite({
-        address: '0x2d691C2492e056ADCAE7cA317569af25910fC4cb',
-        abi: erc20TokenAbi,
-        functionName: 'mint',
-        args: [account, '100000000000000'],
-    });
-
-    useEffect(() => {
-        if (!account || account === NULL_ADDRESS) {
-            return;
-        }
-
-        async function test() {
-            // setTimeout(() => {
-            //     write();
-            // }, 2000);
-
-            const data = await getPublicClient().readContract({
-                address: '0x2d691C2492e056ADCAE7cA317569af25910fC4cb',
-                abi: erc20TokenAbi,
-                functionName: 'mint',
-                args: [account, '100000000000000'],
-            });
-            console.log(data);
-        }
-
-        test();
-    }, [account]);
-
-    const selectedCoinAddress = useMemo(() => {
-        let address: Address = sepDaiAddress;
-
-        switch (coinIndex) {
-            case 0: // DAI
-                if (chainId === sepolia.id) {
-                    address = sepDaiAddress;
-                }
-                break;
-            case 1: // USDC
-                if (chainId === sepolia.id) {
-                    address = sepUsdcAddress;
-                }
-                break;
-            case 2:
-                if (chainId === sepolia.id) {
-                    address = sepUsdtAddress;
-                }
-                break;
-            case 3: // FRAX
-                break;
-            case 4: // zunUSD
-                if (chainId === sepolia.id) {
-                    address = sepDaiAddress;
-                }
-                break;
-            default:
-                address = usdtAddress;
-                break;
-        }
-
-        return address;
-    }, [chainId, coinIndex]);
-
-    const selectedCoinBalance = useBalanceOf(
-        selectedCoinAddress,
-        account || NULL_ADDRESS,
-        erc20TokenAbi
-    );
-
-    const selectedCoinAllowance = useAllowance(
-        selectedCoinAddress,
-        erc20TokenAbi,
-        account || NULL_ADDRESS,
-        contractAddress
-    );
-
-    // console.log(selectedCoinBalance);
-
-    const approvedTokens = useMemo(() => {
-        return [
-            approveList ? approveList[0].toNumber() > 0 : false,
-            approveList ? approveList[1].toNumber() > 0 : false,
-            approveList ? approveList[2].toNumber() > 0 : false,
-            approveList ? approveList[3].toNumber() > 0 : false,
-            approveList ? approveList[4].toNumber() > 0 : false,
-        ];
-    }, [approveList]);
-
-    const coins = useMemo(() => {
-        return ['DAI', 'USDC', 'USDT', 'FRAX', 'UZD'];
-    }, []);
 
     useEffect(() => {
         if (action === 'withdraw') {
@@ -176,7 +82,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     }, [stakingMode, action]);
 
     useEffect(() => {
-        let preselectedCoin = stakingMode === 'UZD' ? 'UZD' : 'ZETH';
+        let preselectedCoin = stakingMode === 'UZD' ? 'zunUSD' : 'zunETH';
 
         if (action === 'withdraw' && stakingMode === 'ZETH') {
             preselectedCoin = 'ethZAPSLP';
@@ -190,36 +96,47 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             preselectedCoin = 'ZUN';
         }
 
-        setCoin(preselectedCoin);
+        // setCoin(preselectedCoin);
         setCoinIndex(coins.indexOf(preselectedCoin));
-    }, [stakingMode, coins, action]);
+    }, [stakingMode, action]);
 
     // get user max balance
     const fullBalance = useMemo(() => {
         let decimalPlaces = 18;
+        let digits = 18;
 
         if (userBalanceList[coinIndex] && !userBalanceList[coinIndex].toNumber()) {
             decimalPlaces = 0;
         }
 
-        const isDaiOrFrax = ['DAI', 'FRAX'].indexOf(coin) !== -1;
+        // const isDaiOrFrax = coinIndex === 2 || coinIndex === 5;
 
-        if (coin === 'UZD') {
-            return getFullDisplayBalance(userBalanceList[coinIndex], 18, decimalPlaces);
-        } else if (coin === 'ZETH') {
-            return getFullDisplayBalance(userBalanceList[coinIndex], 18, decimalPlaces);
+        if (chainId === sepolia.id) {
+            decimalPlaces = 6;
         }
 
-        return getFullDisplayBalance(userBalanceList[coinIndex], isDaiOrFrax ? 18 : 6);
-    }, [userBalanceList, coin, coinIndex]);
+        if (!userBalanceList[coinIndex].toNumber()) {
+            digits = 0;
+        }
+
+        if (coinIndex === 0) {
+            // zunUSD
+            return getFullDisplayBalance(userBalanceList[coinIndex], decimalPlaces, digits);
+        } else if (coinIndex === 1) {
+            // zunETH
+            return getFullDisplayBalance(userBalanceList[coinIndex], decimalPlaces, digits);
+        }
+
+        return getFullDisplayBalance(userBalanceList[coinIndex], decimalPlaces);
+    }, [userBalanceList, coinIndex, chainId]);
 
     const coinApproved = useMemo(() => {
         if (action === 'deposit') {
-            return approvedTokens[coinIndex];
+            return allowance[coinIndex].toNumber() > 0;
         } else {
-            return approvedTokens[coinIndex];
+            return allowance[coinIndex].toNumber() > 0;
         }
-    }, [approvedTokens, coinIndex, action]);
+    }, [allowance, coinIndex, action]);
 
     const showApproveBtn = useMemo(() => {
         let result = !coinApproved;
@@ -233,7 +150,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         }
 
         return result;
-    }, [chainId, coinApproved, action]);
+    }, [coinApproved, action]);
 
     const approveEnabled = useMemo(() => {
         let result = true;
@@ -259,16 +176,16 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const withdrawEnabled = useMemo(() => {
         let result = true;
 
-        if (coin === 'UZD' && !apsBalance.toNumber()) {
-            result = false;
-        }
+        // if (coin === 'UZD' && !apsBalance.toNumber()) {
+        //     result = false;
+        // }
 
         if (!Number(withdrawSum)) {
             result = false;
         }
 
         return result;
-    }, [apsBalance, coin, withdrawSum]);
+    }, [withdrawSum]);
 
     const depositValidationError = useMemo(() => {
         let message = '';
@@ -293,6 +210,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         setDepositSum(fullBalance.toString());
     }, [fullBalance]);
 
+    // set deposit/withdraw maximum on coin change
     useEffect(() => {
         if (action === 'withdraw' && withdrawSum === '') {
             let decimalPlaces = 18;
@@ -318,7 +236,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const maxInputSum = useMemo(() => {
         let result = BIG_ZERO;
 
-        if (!isETH(chainId)) {
+        if (!isETH(chainId) && !isSEP(chainId)) {
             return BIG_ZERO;
         }
 
@@ -341,26 +259,26 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         return result;
     }, [action, stakingMode, coinIndex, userBalanceList, zethApsBalance, apsBalance, chainId]);
 
-    // allowance for selected token
-    // const { data: allowance, refetch } = useContractRead({
-    //     address: contractAddress,
-    //     abi: abi,
-    //     functionName: 'allowance',
-    //     args: [account || NULL_ADDRESS, contractAddress],
-    // });
+    const deposit = useCallback(() => {}, [stakingMode]);
+    const withdraw = useCallback(() => {}, [stakingMode]);
 
-    // console.log(allowance, typeof allowance);
+    const {
+        data: approveResult,
+        isLoading: isApproving,
+        isSuccess: approveSuccessful,
+        write: approve,
+    } = useApprove(getCoinAddressByIndex(coinIndex, chainId ?? 1), contractAddress, APPROVE_SUM);
 
-    const deposit = useCallback(() => {}, [stakingMode, coin]);
-    const withdraw = useCallback(() => {}, [stakingMode, coin]);
-    const approve = useCallback(() => {}, [stakingMode, coin]);
+    if (isApproving) {
+        console.log(approveResult, approveSuccessful);
+    }
 
     return (
         <div className={`FastDepositForm ${className} mode-${stakingMode}`}>
             {renderToasts(
                 transactionError,
                 setTransactionError,
-                chainId,
+                chainId ?? 1,
                 transactionId,
                 setTransactionId
             )}
@@ -422,8 +340,9 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             </div>
             <Input
                 action="deposit"
-                name={coin}
+                name={coins[coinIndex]}
                 mode={action}
+                stakingMode={stakingMode}
                 value={action === 'deposit' ? depositSum : withdrawSum}
                 handler={(sum) => {
                     if (action === 'deposit') {
@@ -436,8 +355,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                 }}
                 max={maxInputSum}
                 onCoinChange={(coin: string) => {
-                    setCoin(coin);
-                    setCoinIndex(['DAI', 'USDC', 'USDT', 'FRAX', 'UZD'].indexOf(coin));
+                    setCoinIndex(coins.indexOf(coin));
                 }}
                 chainId={chainId}
                 className=""
@@ -454,11 +372,13 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                             checked={lockAndBoost}
                                             title={'Lock and boost APY to 25%'}
                                             disabled={!coinApproved || !isETH(chainId)}
-                                            hint={'Example tooltip text'}
+                                            hint={
+                                                'You can lock your deposit for 4 months to receive additional rewards in ZUN tokens.'
+                                            }
                                             onChange={(state: boolean) => {
                                                 setLockAndBoost(state);
                                             }}
-                                            chainId={chainId}
+                                            chainId={chainId ?? 1}
                                         />
                                     )}
                                     {/* {!pendingTx && (
@@ -491,7 +411,9 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                     className={`zun-button approve-usd ${
                                         !approveEnabled ? 'disabled' : ''
                                     }`}
-                                    onClick={approve}
+                                    onClick={() => {
+                                        approve();
+                                    }}
                                 >
                                     Approve
                                 </button>
@@ -500,7 +422,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                         {pendingTx && <Preloader className="ms-2" />}
                     </div>
                     <div className="d-flex gap-3 align-items-center mt-3 flex-column flex-md-row">
-                        {action === 'deposit' && coinApproved && isETH(chainId) && (
+                        {action === 'deposit' && coinApproved && (
                             <button
                                 className={`zun-button ${depositEnabled ? '' : 'disabled'}`}
                                 onClick={deposit}

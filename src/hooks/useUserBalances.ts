@@ -8,117 +8,122 @@ import {
     usdcAddress,
     usdtAddress,
     fraxAddress,
+    NULL_ADDRESS,
+    sepDaiAddress,
+    sepUsdcAddress,
+    sepUsdtAddress,
 } from '../utils/formatbalance';
 import { log } from '../utils/logger';
-import { isBSC, isETH, isPLG } from '../utils/zunami';
+import { getAbiByChainId, getChainClient, isBSC, isETH, isPLG } from '../utils/zunami';
 import { contractAddresses } from '../sushi/lib/constants';
+import { Address } from 'viem';
+import { erc20ABI, mainnet, sepolia } from 'wagmi';
 
-export const useUserBalances = () => {
-    const [balance, setbalance] = useState([
-        BIG_ZERO,
-        BIG_ZERO,
-        BIG_ZERO,
-        BIG_ZERO,
-        BIG_ZERO,
-        BIG_ZERO,
-        BIG_ZERO,
+function getCoinBalance(coinAddress: Address, account: Address, chainId: number = 1) {
+    return getChainClient(chainId).readContract({
+        address: coinAddress,
+        abi: erc20ABI,
+        functionName: 'balanceOf',
+        args: [account],
+    });
+}
+
+export const coins = ['zunUSD', 'zunETH', 'DAI', 'USDC', 'USDT', 'FRAX'];
+
+export function getCoinAddressByIndex(index: number, chainId: number): Address {
+    let result: Address = NULL_ADDRESS;
+
+    switch (chainId) {
+        case mainnet.id:
+            break;
+        case sepolia.id:
+            switch (index) {
+                case 0:
+                    result = NULL_ADDRESS;
+                    break;
+                case 1:
+                    result = NULL_ADDRESS;
+                    break;
+                case 2:
+                    result = sepDaiAddress;
+                    break;
+                case 3:
+                    result = sepUsdcAddress;
+                    break;
+                case 4:
+                    result = sepUsdtAddress;
+                    break;
+            }
+            break;
+    }
+
+    return result;
+}
+
+export function coinAddressToHumanName(address: Address): string {
+    let result = 'UNKNOWN';
+
+    switch (address) {
+        case sepDaiAddress:
+            result = 'DAI(sepolia)';
+            break;
+        case sepUsdcAddress:
+            result = 'USDC(sepolia)';
+            break;
+        case sepUsdtAddress:
+            result = 'USDT(sepolia)';
+            break;
+    }
+
+    return result;
+}
+
+export const useUserBalances = (account: Address = NULL_ADDRESS, chainId: number | undefined) => {
+    const [balance, setBalance] = useState([
+        BIG_ZERO, // zunUSD
+        BIG_ZERO, // zunETH
+        BIG_ZERO, // DAI
+        BIG_ZERO, // USDC
+        BIG_ZERO, // USDT
+        BIG_ZERO, // FRAX
     ]);
-    // const { account, ethereum, chainId } = useWallet();
 
-    // useEffect(() => {
-    //     const fetchbalanceStables = async () => {
-    //         log(`fetchbalanceStables, chain ID: ${chainId}`);
-    //         if (isETH(chainId)) {
-    //             const balanceDai = await getBalance(
-    //                 ethereum,
-    //                 daiAddress,
-    //                 // @ts-ignore
-    //                 account
-    //             );
-    //             const balanceUsdc = await getBalance(
-    //                 ethereum,
-    //                 usdcAddress,
-    //                 // @ts-ignore
-    //                 account
-    //             );
-    //             const balanceUsdt = await getBalance(
-    //                 ethereum,
-    //                 usdtAddress,
-    //                 // @ts-ignore
-    //                 account
-    //             );
-    //             const balanceFrax = await getBalance(
-    //                 ethereum,
-    //                 fraxAddress,
-    //                 // @ts-ignore
-    //                 account
-    //             );
-    //             const balanceUzd = await getBalance(
-    //                 ethereum,
-    //                 contractAddresses.uzd[1],
-    //                 // @ts-ignore
-    //                 account
-    //             );
+    useEffect(() => {
+        const fetchbalanceStables = async () => {
+            if (account === NULL_ADDRESS || !chainId) {
+                return;
+            }
 
-    //             const balanceZeth = await getBalance(
-    //                 ethereum,
-    //                 contractAddresses.zeth[1],
-    //                 // @ts-ignore
-    //                 account
-    //             );
+            switch (chainId) {
+                case mainnet.id:
+                    break;
+                case sepolia.id:
+                    const result = [
+                        BigInt('0'),
+                        BigInt('0'),
+                        await getCoinBalance(sepDaiAddress, account, chainId),
+                        await getCoinBalance(sepUsdcAddress, account, chainId),
+                        await getCoinBalance(sepUsdtAddress, account, chainId),
+                        BigInt('0'),
+                    ].map((balance: BigInt) => new BigNumber(balance.toString()));
 
-    //             const data = [
-    //                 new BigNumber(balanceDai),
-    //                 new BigNumber(balanceUsdc),
-    //                 new BigNumber(balanceUsdt),
-    //                 BIG_ZERO,
-    //                 new BigNumber(balanceFrax),
-    //                 new BigNumber(balanceUzd),
-    //                 new BigNumber(balanceZeth),
-    //             ];
-    //             // @ts-ignore
-    //             setbalance(data);
-    //         } else if (isBSC(chainId)) {
-    //             const usdtBalance = await getBalance(
-    //                 ethereum,
-    //                 bscUsdtAddress,
-    //                 // @ts-ignore
-    //                 account
-    //             );
+                    log(
+                        `Balance (sepolia): DAI - ${result[2].toString()}, USDC - ${result[3].toString()}, USDT - ${result[4].toString()}`
+                    );
 
-    //             const busdBalance = await getBalance(
-    //                 ethereum,
-    //                 busdAddress,
-    //                 // @ts-ignore
-    //                 account
-    //             );
+                    setBalance(result);
 
-    //             setbalance([
-    //                 BIG_ZERO,
-    //                 BIG_ZERO,
-    //                 new BigNumber(usdtBalance),
-    //                 new BigNumber(busdBalance),
-    //                 BIG_ZERO,
-    //             ]);
-    //         } else if (isPLG(chainId)) {
-    //             const balanceUsdt = await getBalance(
-    //                 ethereum,
-    //                 plgUsdtAddress,
-    //                 // @ts-ignore
-    //                 account
-    //             );
-    //             const data = [BIG_ZERO, BIG_ZERO, new BigNumber(balanceUsdt), BIG_ZERO, BIG_ZERO];
-    //             // @ts-ignore
-    //             setbalance(data);
-    //         }
-    //     };
+                    break;
+            }
+        };
 
-    //     if (account) {
-    //         fetchbalanceStables();
-    //     }
-    //     let refreshInterval = setInterval(fetchbalanceStables, 60000);
-    //     return () => clearInterval(refreshInterval);
-    // }, [account, ethereum, chainId]);
+        if (account) {
+            fetchbalanceStables();
+        }
+
+        let refreshInterval = setInterval(fetchbalanceStables, 60000);
+        return () => clearInterval(refreshInterval);
+    }, [account, chainId]);
 
     return balance;
 };

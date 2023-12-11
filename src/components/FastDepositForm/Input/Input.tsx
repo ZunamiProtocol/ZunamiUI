@@ -16,6 +16,7 @@ interface InputProps {
     mode: string;
     className: string;
     hideToggler?: boolean;
+    stakingMode: string;
 }
 
 export const Input = (props: InputProps): JSX.Element => {
@@ -71,6 +72,7 @@ export const Input = (props: InputProps): JSX.Element => {
                     name={props.name}
                     chainId={props.chainId}
                     mode={props.mode}
+                    stakingMode={props.stakingMode}
                     hideToggler={props.hideToggler}
                     onCoinSelect={(coinName: string) => {
                         if (props.onCoinChange) {

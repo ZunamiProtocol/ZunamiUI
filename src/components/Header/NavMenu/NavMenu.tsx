@@ -24,12 +24,12 @@ export const NavMenu = (props: NavMenuProps): JSX.Element => {
         //     urls: ['/deposit', '/withdraw'],
         //     icon: <DepositIcon />,
         // },
-        {
-            title: 'ZUN Staking',
-            urls: ['/zun'],
-            icon: <UzdIcon />,
-            disabled: false,
-        },
+        // {
+        //     title: 'ZUN Staking',
+        //     urls: ['/zun'],
+        //     icon: <UzdIcon />,
+        //     disabled: false,
+        // },
         // {
         //     title: 'Analytics',
         //     urls: ['/analytics'],

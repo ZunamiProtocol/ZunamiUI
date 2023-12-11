@@ -1,10 +1,4 @@
-import { useCallback } from 'react';
-// import useSushi from './useSushi';
-// import { useWallet } from 'use-wallet';
-import { stake, getMasterChefContract, stakeBUSD, stakeFRAX, stakeAPS } from '../sushi/utils';
-import { contractAddresses } from '../sushi/lib/constants';
-import { isBSC, isPLG } from '../utils/zunami';
-import { log } from '../utils/logger';
+import { Address, erc20ABI, useContractWrite, usePrepareContractWrite } from 'wagmi';
 
 interface Coin {
     name: string;
@@ -13,7 +7,12 @@ interface Coin {
 
 type Coins = Array<Coin>;
 
-const useStake = (coins: Coins, direct: boolean = false) => {
+const useStake = (coinAddress: Address, direct: boolean = false) => {
+    //   const { data, isLoading, isSuccess, write } = useContractWrite({
+    //       address: '0xecb504d39723b0be0e3a9aa33d646642d1051ee1',
+    //       abi: erc20ABI,
+    //       functionName: 'feed',
+    //   });
     // const { account, chainId } = useWallet();
     // const sushi = useSushi();
     // let zunamiContract = getMasterChefContract(sushi);

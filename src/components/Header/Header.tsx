@@ -120,60 +120,60 @@ export const Header: React.FC<HeaderProps> = ({ section }) => {
             });
     }, []);
 
-    useEffect(() => {
-        if (!account || !chainId) {
-            return;
-        }
+    // useEffect(() => {
+    //     if (!account || !chainId) {
+    //         return;
+    //     }
 
-        const loadNotifications = async () => {
-            log('Notifications update started');
+    //     const loadNotifications = async () => {
+    //         log('Notifications update started');
 
-            let finishedNotification =
-                JSON.parse(window.localStorage.getItem('FINISHED_NOTIFICATIONS') || '{}') || [];
+    //         let finishedNotification =
+    //             JSON.parse(window.localStorage.getItem('FINISHED_NOTIFICATIONS') || '{}') || [];
 
-            // let deposits = await getTransactionHistory(
-            //     account,
-            //     'DEPOSIT',
-            //     chainId,
-            //     'DEPOSIT_WITHDRAW'
-            // );
+    //         // let deposits = await getTransactionHistory(
+    //         //     account,
+    //         //     'DEPOSIT',
+    //         //     chainId,
+    //         //     'DEPOSIT_WITHDRAW'
+    //         // );
 
-            // deposits = deposits.map((item: any) => {
-            //     return { ...item, type: 'deposit' };
-            // });
+    //         // deposits = deposits.map((item: any) => {
+    //         //     return { ...item, type: 'deposit' };
+    //         // });
 
-            // let withdrawals = await getTransactionHistory(
-            //     account,
-            //     'WITHDRAW',
-            //     chainId,
-            //     'DEPOSIT_WITHDRAW'
-            // );
+    //         // let withdrawals = await getTransactionHistory(
+    //         //     account,
+    //         //     'WITHDRAW',
+    //         //     chainId,
+    //         //     'DEPOSIT_WITHDRAW'
+    //         // );
 
-            // withdrawals = withdrawals.map((item: any) => {
-            //     return { ...item, type: 'withdraw' };
-            // });
+    //         // withdrawals = withdrawals.map((item: any) => {
+    //         //     return { ...item, type: 'withdraw' };
+    //         // });
 
-            // let mint = await getTransactionHistory(account, 'MINT', chainId, 'MINT');
+    //         // let mint = await getTransactionHistory(account, 'MINT', chainId, 'MINT');
 
-            // mint = mint.map((item: any) => {
-            //     return { ...item, type: 'mint' };
-            // });
+    //         // mint = mint.map((item: any) => {
+    //         //     return { ...item, type: 'mint' };
+    //         // });
 
-            // const fullList = deposits.concat(withdrawals);
+    //         // const fullList = deposits.concat(withdrawals);
 
-            // if (!finishedNotification.length) {
-            //     window.localStorage.setItem('FINISHED_NOTIFICATIONS', JSON.stringify(fullList));
-            // } else {
-            // }
+    //         // if (!finishedNotification.length) {
+    //         //     window.localStorage.setItem('FINISHED_NOTIFICATIONS', JSON.stringify(fullList));
+    //         // } else {
+    //         // }
 
-            // setNotifications(fullList);
-        };
+    //         // setNotifications(fullList);
+    //     };
 
-        loadNotifications();
+    //     loadNotifications();
 
-        let refreshInterval = setInterval(loadNotifications, 60000);
-        return () => clearInterval(refreshInterval);
-    }, [account, chainId]);
+    //     let refreshInterval = setInterval(loadNotifications, 60000);
+    //     return () => clearInterval(refreshInterval);
+    // }, [account, chainId]);
 
     return (
         <Navbar expand="lg" className={'Header'}>
