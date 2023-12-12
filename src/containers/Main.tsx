@@ -571,13 +571,6 @@ export const Main = (): JSX.Element => {
                                     <span className="text-muted mt-2">ZUN Staking</span>
                                 </a>
                                 <a
-                                    href="/analytics"
-                                    className="text-center d-flex flex-column text-decoration-none"
-                                >
-                                    <img src="/analytics.png" alt="" />
-                                    <span className="text-muted mt-2">Analytics</span>
-                                </a>
-                                <a
                                     href="https://snapshot.org/#/zunamidao.eth"
                                     className="text-center d-flex flex-column text-decoration-none"
                                 >

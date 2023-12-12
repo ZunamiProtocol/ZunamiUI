@@ -33,8 +33,8 @@ import {
 import { WalletButton } from '../WalletButton/WalletButton';
 import { ApproveButton } from '../ApproveButton/ApproveButton';
 import { TransactionReceipt, createPublicClient, createWalletClient, custom } from 'viem';
-import { ReactComponent as StakingUzdLogo } from './assets/uzd-logo.svg';
-import { ReactComponent as StakingZethLogo } from './assets/zeth-logo.svg';
+import { ReactComponent as StakingUzdLogo } from './assets/zun-usd-logo.svg';
+import { ReactComponent as StakingZethLogo } from './assets/zun-eth-logo.svg';
 import { ReactComponent as MobileToggleIcon } from './assets/mobile-toggle-icon.svg';
 // import sepoliaAbi from '../../actions/abi/sepolia/ZunamiPool.json';
 import sepoliaAbi from '../../actions/abi/Zunami.json';
@@ -87,15 +87,14 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             preselectedCoin = 'ethZAPSLP';
         }
 
-        if (action === 'withdraw' && stakingMode === 'UZD') {
-            preselectedCoin = 'ZAPSLP';
+        if (action === 'withdraw') {
+            preselectedCoin = 'ZUN';
         }
 
         if (action === 'claim') {
             preselectedCoin = 'ZUN';
         }
 
-        // setCoin(preselectedCoin);
         setCoinIndex(coins.indexOf(preselectedCoin));
     }, [stakingMode, action]);
 

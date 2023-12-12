@@ -1,0 +1,188 @@
+@import 'src/variables';
+
+.UzdContainer {
+    &__Content {
+        display: flex;
+        min-height: 100%;
+
+        @media screen and (min-width: $media375) {
+            flex-direction: column;
+        }
+
+        @media screen and (min-width: $media1024) {
+            flex-direction: row;
+        }
+    }
+
+    &__Sidebar {
+        @media screen and (min-width: $media375) {
+            width: 100%;
+            padding: 24px 30px 0 30px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            width: 350px;
+            padding: 44px 30px 0 30px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            width: 430px;
+            padding: 56px 30px 0 70px;
+        }
+
+        &_Title {
+            display: flex;
+            align-items: center;
+
+            h2 {
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 22px;
+                color: #636363;
+                margin: 0 0 0 10px;
+            }
+        }
+
+        &_Hero {
+            font-weight: 500;
+            font-size: 10px;
+            line-height: 138.1%;
+            color: #636363;
+
+            @media screen and (min-width: $media375) {
+                margin-top: 26px;
+            }
+
+            @media screen and (min-width: $media1024) {
+                margin-top: 26px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                margin-top: 40px;
+            }
+        }
+
+        .InfoBlock {
+            height: 82px;
+            // margin-top: 0;
+            // margin-bottom: 10px;
+            margin: 0 5px 10px 5px;
+
+            &__title {
+                padding: 20px 0 0 0px;
+                margin-top: 0;
+                display: flex;
+
+                .InfoBlock__buttons {
+                    margin-left: 10px;
+                    display: flex;
+                    cursor: pointer;
+
+                    img {
+                        width: 12px;
+                        height: auto;
+                        margin-left: 5px;
+                    }
+                }
+            }
+        }
+
+        > .row {
+            .col-6:first-child,
+            .col-sm-12 {
+                .InfoBlock {
+                    margin-left: 0;
+                }
+            }
+        }
+    }
+
+    .external-icon {
+        position: absolute;
+        right: 20px;
+        top: 13px;
+    }
+
+    .buttons-row {
+        @media screen and (min-width: $media375) {
+            flex-direction: column-reverse;
+            align-items: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        @media screen and (min-width: $media1024) {
+            margin-top: 0;
+            flex-direction: row;
+            align-items: center;
+            gap: 0;
+        }
+    }
+
+    .zun-token-card {
+        .text {
+            font-size: 13px;
+        }
+
+        .btns {
+            div,
+            a {
+                width: 29px;
+                height: 26px;
+                border-radius: 8px;
+                padding: 4px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #fff;
+
+                svg,
+                img {
+                    width: 15px;
+                    height: auto;
+                }
+            }
+        }
+
+        .balance {
+            .stablecoin {
+                width: 238px;
+                background: linear-gradient(0deg, #f96802 0%, #fea002 93.75%) !important;
+                padding: 15px 25px;
+                border-radius: 20px;
+                font-size: 13px;
+                line-height: 18px;
+                min-height: 59px;
+            }
+
+            .name,
+            .value {
+                color: #fff;
+            }
+
+            .title {
+                font-size: 13px;
+            }
+
+            .value {
+                font-size: 16px;
+            }
+        }
+    }
+
+    .apy-bar-card {
+        @media screen and (min-width: $media1024) {
+            height: 352px;
+        }
+    }
+
+    .CoinSelector {
+        @media screen and (min-width: $media1024) {
+            width: 96px;
+        }
+
+        @media screen and (min-width: $media1440) {
+            width: 157px;
+        }
+    }
+}

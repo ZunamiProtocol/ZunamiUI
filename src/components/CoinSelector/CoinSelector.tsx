@@ -75,10 +75,9 @@ export const CoinSelector = (
     const [showHint, setShowHint] = useState(false);
 
     const onToggle = () => {
-        // const disabledCoins = ['UZD', 'ZETH', 'ethZAPSLP'];
-        // if (disabledCoins.indexOf(props.name) !== -1) {
-        setIsOpen(!isOpen);
-        // }
+        if (!props.hideToggler) {
+            setIsOpen(!isOpen);
+        }
     };
 
     const onCoinSelect = (coinName: string) => {

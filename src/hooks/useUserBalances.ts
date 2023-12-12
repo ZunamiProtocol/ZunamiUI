@@ -28,7 +28,7 @@ function getCoinBalance(coinAddress: Address, account: Address, chainId: number 
     });
 }
 
-export const coins = ['zunUSD', 'zunETH', 'DAI', 'USDC', 'USDT', 'FRAX'];
+export const coins = ['zunUSD', 'zunETH', 'DAI', 'USDC', 'USDT', 'FRAX', 'ZUN'];
 
 export function getCoinAddressByIndex(index: number, chainId: number): Address {
     let result: Address = NULL_ADDRESS;
@@ -86,6 +86,7 @@ export const useUserBalances = (account: Address = NULL_ADDRESS, chainId: number
         BIG_ZERO, // USDC
         BIG_ZERO, // USDT
         BIG_ZERO, // FRAX
+        BIG_ZERO, // ZUN
     ]);
 
     useEffect(() => {
@@ -104,6 +105,7 @@ export const useUserBalances = (account: Address = NULL_ADDRESS, chainId: number
                         await getCoinBalance(sepDaiAddress, account, chainId),
                         await getCoinBalance(sepUsdcAddress, account, chainId),
                         await getCoinBalance(sepUsdtAddress, account, chainId),
+                        BigInt('0'),
                         BigInt('0'),
                     ].map((balance: BigInt) => new BigNumber(balance.toString()));
 

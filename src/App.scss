@@ -636,7 +636,13 @@ body.dark {
         color: #fff;
 
         .staking-icon {
-            .staking-text {
+            .zun {
+                fill: #fff;
+            }
+        }
+
+        .staking-text {
+            path {
                 fill: #fff;
             }
         }
@@ -653,7 +659,7 @@ body.dark {
             }
         }
 
-        .staking-icon.uzd {
+        .staking-icon.zun {
             path:nth-child(2),
             path:nth-child(3),
             path:nth-child(4) {

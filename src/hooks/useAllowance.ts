@@ -108,6 +108,7 @@ export const useAllowanceStables = (
         BIG_ZERO, // USDC
         BIG_ZERO, // USDT
         BIG_ZERO, // FRAX
+        BIG_ZERO, // ZUN
     ]);
 
     useEffect(() => {
@@ -122,6 +123,7 @@ export const useAllowanceStables = (
                         await getCoinAllowance(sepDaiAddress, account, spender, chainId),
                         await getCoinAllowance(sepUsdcAddress, account, spender, chainId),
                         await getCoinAllowance(sepUsdtAddress, account, spender, chainId),
+                        BigInt('0'),
                         BigInt('0'),
                     ].map(
                         (allowance: BigInt, index: number) => new BigNumber(allowance.toString())
