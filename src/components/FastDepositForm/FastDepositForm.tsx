@@ -7,7 +7,7 @@ import { WalletStatus } from '../WalletStatus/WalletStatus';
 import useAllowance, { useAllowanceStables } from '../../hooks/useAllowance';
 import useStake from '../../hooks/useStake';
 import { getActiveWalletName } from '../WalletsModal/WalletsModal';
-import { BIG_ZERO } from '../../utils/formatbalance';
+import { BIG_ZERO, NULL_ADDRESS } from '../../utils/formatbalance';
 import { getFullDisplayBalance } from '../../utils/formatbalance';
 import { log } from '../../utils/logger';
 import { getChainClient, isBSC, isETH, isPLG, isSEP } from '../../utils/zunami';
@@ -32,7 +32,7 @@ import {
 } from 'wagmi';
 import { WalletButton } from '../WalletButton/WalletButton';
 import { ApproveButton } from '../ApproveButton/ApproveButton';
-import { TransactionReceipt } from 'viem';
+import { TransactionReceipt, createPublicClient, createWalletClient, custom } from 'viem';
 import { ReactComponent as StakingUzdLogo } from './assets/uzd-logo.svg';
 import { ReactComponent as StakingZethLogo } from './assets/zeth-logo.svg';
 import { ReactComponent as MobileToggleIcon } from './assets/mobile-toggle-icon.svg';
@@ -41,8 +41,8 @@ import sepoliaAbi from '../../actions/abi/Zunami.json';
 import { getScanAddressByChainId, renderToasts, FastDepositFormProps } from './types';
 import useBalanceOf from '../../hooks/useBalanceOf';
 import erc20TokenAbi from '../../actions/abi/sepolia/ERC20Token.json';
-// import controllerABI from '../../actions/abi/sepolia/controller.json';
-import { getPublicClient } from '@wagmi/core';
+import controllerABI from '../../actions/abi/sepolia/controller.json';
+
 import useApprove from '../../hooks/useApprove';
 import { APPROVE_SUM } from '../../sushi/utils';
 
@@ -57,7 +57,6 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
 
     const [lockAndBoost, setLockAndBoost] = useState(true);
     const [action, setAction] = useState('deposit');
-    // const [coin, setCoin] = useState(stakingMode === 'UZD' ? 'UZD' : 'ZETH');
     const [depositSum, setDepositSum] = useState('');
     const [withdrawSum, setWithdrawSum] = useState('');
     const [transactionId, setTransactionId] = useState<string | undefined>(undefined);
@@ -130,6 +129,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         return getFullDisplayBalance(userBalanceList[coinIndex], decimalPlaces);
     }, [userBalanceList, coinIndex, chainId]);
 
+    // selected coin approved
     const coinApproved = useMemo(() => {
         if (action === 'deposit') {
             return allowance[coinIndex].toNumber() > 0;
@@ -138,12 +138,9 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         }
     }, [allowance, coinIndex, action]);
 
+    // show approve btn or not
     const showApproveBtn = useMemo(() => {
         let result = !coinApproved;
-
-        // if (!isETH(chainId)) {
-        //     result = false;
-        // }
 
         if (action === 'claim') {
             return false;
@@ -233,6 +230,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         }
     }, [action, apsBalance, zethApsBalance, withdrawSum, stakingMode]);
 
+    // max input sum update
     const maxInputSum = useMemo(() => {
         let result = BIG_ZERO;
 
@@ -259,19 +257,24 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         return result;
     }, [action, stakingMode, coinIndex, userBalanceList, zethApsBalance, apsBalance, chainId]);
 
-    const deposit = useCallback(() => {}, [stakingMode]);
+    // const deposit = useCallback(() => {}, [stakingMode]);
     const withdraw = useCallback(() => {}, [stakingMode]);
 
+    // deposit
+    const {
+        data: depositResult,
+        isLoading: isDepositing,
+        isSuccess: depositSuccessful,
+        write: deposit,
+    } = useStake(coinIndex, depositSum, account || NULL_ADDRESS);
+
+    // approve
     const {
         data: approveResult,
         isLoading: isApproving,
         isSuccess: approveSuccessful,
         write: approve,
     } = useApprove(getCoinAddressByIndex(coinIndex, chainId ?? 1), contractAddress, APPROVE_SUM);
-
-    if (isApproving) {
-        console.log(approveResult, approveSuccessful);
-    }
 
     return (
         <div className={`FastDepositForm ${className} mode-${stakingMode}`}>
@@ -381,19 +384,6 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                             chainId={chainId ?? 1}
                                         />
                                     )}
-                                    {/* {!pendingTx && (
-                                        <DirectAction
-                                            actionName="deposit"
-                                            checked={autoRelock}
-                                            title={'Auto-relock'}
-                                            disabled={!coinApproved || !isETH(chainId)}
-                                            hint={'Example tooltip text'}
-                                            onChange={(state: boolean) => {
-                                                setAutoRelock(state);
-                                            }}
-                                            chainId={chainId}
-                                        />
-                                    )} */}
                                 </div>
                             </div>
                         )}
@@ -425,7 +415,9 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                         {action === 'deposit' && coinApproved && (
                             <button
                                 className={`zun-button ${depositEnabled ? '' : 'disabled'}`}
-                                onClick={deposit}
+                                onClick={() => {
+                                    deposit();
+                                }}
                             >
                                 Deposit
                             </button>
