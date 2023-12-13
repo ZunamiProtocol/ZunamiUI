@@ -4,7 +4,7 @@ interface StakingSummaryProps {
     logo: string;
     selected: boolean;
     baseApy: string | number;
-    tvl: string;
+    tvl?: string;
     deposit: string;
     onSelect?: Function;
 }
@@ -420,10 +420,12 @@ export const StakingSummary: React.FC<StakingSummaryProps & React.HTMLProps<HTML
                     </div>
                     <div className="value vela-sans">{`${deposit}`}</div>
                 </div>
-                <div className="block flex-fill">
-                    <div className="title">TVL</div>
-                    <div className="value vela-sans">{tvl}</div>
-                </div>
+                {tvl && (
+                    <div className="block flex-fill">
+                        <div className="title">TVL</div>
+                        <div className="value vela-sans">{tvl}</div>
+                    </div>
+                )}
             </div>
         </div>
     );

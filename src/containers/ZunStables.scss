@@ -1,6 +1,6 @@
 @import 'src/variables';
 
-.UzdContainer {
+.ZunStablesContainer {
     &__Content {
         display: flex;
         min-height: 100%;
@@ -183,6 +183,72 @@
 
         @media screen and (min-width: $media1440) {
             width: 157px;
+        }
+    }
+
+    .card.buy-uzd {
+        background: linear-gradient(80.76deg, #fa6c02 9.68%, #fe9d02 91.15%) !important;
+        overflow: hidden;
+
+        .title {
+            color: #fff;
+        }
+
+        .bg {
+            pointer-events: none;
+            position: absolute;
+            right: 40px;
+            top: 40%;
+            transform: translateY(-45%);
+        }
+    }
+
+    #stake-and-boost {
+        background: linear-gradient(83.54deg, #3e02d9 15.01%, #4f04ff 88.01%) !important;
+        overflow: hidden;
+
+        .title {
+            color: #fff;
+        }
+
+        .bg {
+            pointer-events: none;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+
+    #collateral-block {
+        .gray-block {
+            max-width: 159px;
+        }
+    }
+
+    .ApyChart__Header {
+        margin-top: 0;
+    }
+
+    .gray-block {
+        .name {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    }
+
+    .ApyChart__Header {
+        position: absolute;
+        right: 40px;
+    }
+
+    .strategy {
+        border-radius: 20px;
+        padding: 15px;
+
+        &:hover {
+            background-color: #262626;
         }
     }
 }

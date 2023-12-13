@@ -1,0 +1,67 @@
+body.dark {
+    .btns {
+        > div,
+        > a:not(.link) {
+            background-color: #555555;
+
+            svg {
+                path {
+                    fill: #d2d2d2;
+                }
+            }
+        }
+
+        .link {
+            color: #fff;
+        }
+    }
+}
+
+.btns {
+    gap: 6px;
+
+    div:not(.link),
+    a:not(.link) {
+        width: 29px;
+        height: 26px;
+        border-radius: 8px;
+        padding: 4px;
+        width: 29px;
+        height: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        background-color: #c3c3c3;
+
+        svg,
+        img {
+            width: 15px;
+            height: auto;
+        }
+    }
+
+    .link {
+        color: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+
+        svg {
+            width: 13px;
+            height: 13px;
+
+            path {
+                fill: #d2d2d2;
+            }
+        }
+    }
+
+    &.inversed {
+        > div,
+        > a {
+            background-color: #fff !important;
+        }
+    }
+}

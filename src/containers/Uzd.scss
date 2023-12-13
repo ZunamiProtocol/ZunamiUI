@@ -124,26 +124,6 @@
             font-size: 13px;
         }
 
-        .btns {
-            div,
-            a {
-                width: 29px;
-                height: 26px;
-                border-radius: 8px;
-                padding: 4px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background-color: #fff;
-
-                svg,
-                img {
-                    width: 15px;
-                    height: auto;
-                }
-            }
-        }
-
         .balance {
             .stablecoin {
                 width: 238px;

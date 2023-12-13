@@ -37,6 +37,7 @@ import { useConnect, useAccount, useNetwork } from 'wagmi';
 import type { Chain } from 'wagmi';
 import type { DataItem } from '../components/Chart/Chart';
 import { ReactComponent as HintIcon } from '../assets/info.svg';
+import { MicroCard } from '../components/MicroCard/MicroCard';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -757,34 +758,16 @@ export const Main = (): JSX.Element => {
                                                     <div>{apyBarApy}</div>
                                                 </div>
                                             </div>
-                                            <div className="ApyBar__Counter">
-                                                <div className="ApyBar__Counter__Title d-flex align-items-center hint gap-2">
-                                                    <span>Projected APY</span>
-                                                    <div
-                                                        ref={target}
-                                                        onClick={() => setShowHint(!showHint)}
-                                                        className="hint gap-2"
-                                                    >
-                                                        <OverlayTrigger
-                                                            placement="right"
-                                                            overlay={
-                                                                <Tooltip>
-                                                                    This is a yield indicator based
+                                            <MicroCard
+                                                title="Projected APY"
+                                                hint="This is a yield indicator based
                                                                     on accumulated rewards that have
                                                                     not been harvested and
                                                                     auto-compounded yet. Current
-                                                                    accumulated rewards:
-                                                                </Tooltip>
-                                                            }
-                                                        >
-                                                            <HintIcon />
-                                                        </OverlayTrigger>
-                                                    </div>
-                                                </div>
-                                                <div className="ApyBar__Counter__Value vela-sans">
-                                                    0%
-                                                </div>
-                                            </div>
+                                                                    accumulated rewards:"
+                                                value="0%"
+                                                className="align-items-start stablecoin"
+                                            />
                                             <div className="ApyBar__Counter">
                                                 <div className="ApyBar__Counter__Title d-flex align-items-start gap-2">
                                                     <span>Average APY</span>
