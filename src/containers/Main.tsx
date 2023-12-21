@@ -568,8 +568,15 @@ export const Main = (): JSX.Element => {
                                     href="/zun"
                                     className="text-center d-flex flex-column text-decoration-none"
                                 >
-                                    <img src="/uzd.png" alt="" />
+                                    <img src="/zun-staking.png" alt="" />
                                     <span className="text-muted mt-2">ZUN Staking</span>
+                                </a>
+                                <a
+                                    href="/zun-stables"
+                                    className="text-center d-flex flex-column text-decoration-none"
+                                >
+                                    <img src="/uzd.png" alt="" />
+                                    <span className="text-muted mt-2">zunStables</span>
                                 </a>
                                 <a
                                     href="https://snapshot.org/#/zunamidao.eth"
@@ -577,13 +584,6 @@ export const Main = (): JSX.Element => {
                                 >
                                     <img src="/dao.png" alt="" />
                                     <span className="text-muted mt-2">DAO</span>
-                                </a>
-                                <a
-                                    href="/zun-staking"
-                                    className="text-center d-flex flex-column text-decoration-none"
-                                >
-                                    <img src="/zun-staking.png" alt="" />
-                                    <span className="text-muted mt-2">ZUN Staking</span>
                                 </a>
                             </div>
                             <div className="Sidebar__Content__Data">

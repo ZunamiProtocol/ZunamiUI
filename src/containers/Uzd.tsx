@@ -340,15 +340,15 @@ export const Uzd = (): JSX.Element => {
                                 href="/zun"
                                 className="text-center d-flex flex-column text-decoration-none selected"
                             >
-                                <img src="/uzd.png" alt="" />
+                                <img src="/zun-staking.png" alt="" />
                                 <span className="text-muted mt-2">ZUN Staking</span>
                             </a>
                             <a
-                                href="/analytics"
-                                className="text-center d-flex flex-column text-decoration-none"
+                                href="/zun-stables"
+                                className="text-center d-flex flex-column text-decoration-none "
                             >
-                                <img src="/analytics.png" alt="" />
-                                <span className="text-muted mt-2">Analytics</span>
+                                <img src="/uzd.png" alt="" />
+                                <span className="text-muted mt-2">zunStables</span>
                             </a>
                             <a
                                 href="https://snapshot.org/#/zunamidao.eth"
@@ -356,13 +356,6 @@ export const Uzd = (): JSX.Element => {
                             >
                                 <img src="/dao.png" alt="" />
                                 <span className="text-muted mt-2">DAO</span>
-                            </a>
-                            <a
-                                href="/zun-staking"
-                                className="text-center d-flex flex-column text-decoration-none"
-                            >
-                                <img src="/zun-staking.png" alt="" />
-                                <span className="text-muted mt-2">ZUN Staking</span>
                             </a>
                         </div>
                         <div className="card mt-3 zun-token-card">
@@ -491,7 +484,7 @@ export const Uzd = (): JSX.Element => {
                                         </div>
                                         <div className="row mt-3">
                                             <div className="col-12 col-md-5">
-                                                <div className="gray-block small-block align-items-start stablecoin ps-3 me-3 me-lg-2">
+                                                <div className="gray-block small-block align-items-start stablecoin ps-3 me-0 me-lg-2">
                                                     <div>
                                                         <span className="name">
                                                             Already claimed
@@ -502,7 +495,7 @@ export const Uzd = (): JSX.Element => {
                                             </div>
                                             <div className="col-12 col-md-7 mt-3 mt-md-0">
                                                 <div>
-                                                    <div className="d-flex flex-row justify-content-between gray-block small-block align-items-center stablecoin ps-3 me-3 me-lg-0">
+                                                    <div className="d-flex flex-row justify-content-between gray-block small-block align-items-center stablecoin ps-3">
                                                         <div>
                                                             <div>
                                                                 <span className="name">
@@ -524,7 +517,7 @@ export const Uzd = (): JSX.Element => {
                                         </div>
                                         <div className="row mt-3">
                                             <div className="col-12 col-md-3">
-                                                <div className="h-100 gray-block small-block align-items-start stablecoin ps-3 me-3 me-lg-2">
+                                                <div className="h-100 gray-block small-block align-items-start stablecoin ps-3 me-0 me-lg-2">
                                                     <div>
                                                         <span className="name">
                                                             Current vote weight
@@ -534,7 +527,7 @@ export const Uzd = (): JSX.Element => {
                                                 </div>
                                             </div>
                                             <div className="col-12 col-md-9 mt-3 mt-md-0">
-                                                <div className="gray-block small-block align-items-start stablecoin ps-3 me-3 me-lg-0">
+                                                <div className="gray-block small-block align-items-start stablecoin ps-3">
                                                     <LockHistory
                                                         items={transactionList}
                                                         emptyText="No history"
@@ -623,8 +616,8 @@ export const Uzd = (): JSX.Element => {
                                 </div>
                             </div>
                             <div className="col-xxl-6 col-xs-12 d-flex flex-column mt-xxl-0 apy-bar-card">
-                                <div className="card mt-3 h-100">
-                                    <div className="card-body pb-0">
+                                <div className="card mt-3 h-100 mb-3 mb-lg-0">
+                                    <div className="card-body pb-3 pb-lg-0">
                                         <div className="title">APY bar</div>
                                         <div className="mt-3">
                                             <div className="d-flex mt-3 gap-3 me-3">

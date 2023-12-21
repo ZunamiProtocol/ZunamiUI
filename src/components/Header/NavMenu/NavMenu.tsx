@@ -19,11 +19,6 @@ export const NavMenu = (props: NavMenuProps): JSX.Element => {
             icon: <DashboardIcon />,
             disabled: false,
         },
-        // {
-        //     title: 'Deposit & Withdraw',
-        //     urls: ['/deposit', '/withdraw'],
-        //     icon: <DepositIcon />,
-        // },
         {
             title: 'ZUN Staking',
             urls: ['/zun'],

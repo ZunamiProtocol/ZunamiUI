@@ -13,6 +13,12 @@ import { ApyChart } from '../components/ApyChart/ApyChart';
 import { MicroCard } from '../components/MicroCard/MicroCard';
 import { AddressButtons } from '../components/AddressButtons/AddressButtons';
 import { NULL_ADDRESS } from '../utils/formatbalance';
+import {
+    StrategyListItem,
+    StrategyListItemColor,
+} from '../components/StrategyListItem/StrategyListItem';
+import { Chart, DataItem } from '../components/Chart/Chart';
+import { PieChart2 } from '../components/PieChart/PieChart';
 
 function getRandomArbitrary(min: number, max: number) {
     return Math.random() * (max - min) + min;
@@ -26,6 +32,40 @@ export const ZunStables = (): JSX.Element => {
     const [tvl, setTvl] = useState('0');
     const [histApyPeriod, setHistApyPeriod] = useState('week');
     const [apyChartData, setApyChartData] = useState<any>([]);
+    const stratChartData: Array<DataItem> = [
+        {
+            title: 'Convex Finance',
+            type: 'FRAX_STAKEDAO',
+            link: '',
+            icon: '/convex.svg',
+            value: 25,
+            color: '#FFD118',
+        },
+        {
+            title: 'Convex Finance',
+            type: 'FRAX_STAKEDAO',
+            link: '',
+            icon: '/convex.svg',
+            value: 25,
+            color: '#12A0FE',
+        },
+        {
+            title: 'Convex Finance',
+            type: 'FRAX_STAKEDAO',
+            link: '',
+            icon: '/convex.svg',
+            value: 25,
+            color: '#B2FE12',
+        },
+        {
+            title: 'Convex Finance',
+            type: 'FRAX_STAKEDAO',
+            link: '',
+            icon: '/convex.svg',
+            value: 25,
+            color: '#FC6505',
+        },
+    ];
 
     useEffect(() => {
         const items = [];
@@ -68,31 +108,31 @@ export const ZunStables = (): JSX.Element => {
                             </a>
                             <a
                                 href="/zun"
-                                className="text-center d-flex flex-column text-decoration-none selected"
+                                className="text-center d-flex flex-column text-decoration-none"
                             >
-                                <img src="/uzd.png" alt="" />
+                                <img src="/zun-staking.png" alt="" />
                                 <span className="text-muted mt-2">ZUN Staking</span>
                             </a>
                             <a
+                                href="/zun-stables"
+                                className="text-center d-flex flex-column text-decoration-none selected"
+                            >
+                                <img src="/uzd.png" alt="" />
+                                <span className="text-muted mt-2">zunStables</span>
+                            </a>
+                            {/* <a
                                 href="/analytics"
                                 className="text-center d-flex flex-column text-decoration-none"
                             >
                                 <img src="/analytics.png" alt="" />
                                 <span className="text-muted mt-2">Analytics</span>
-                            </a>
+                            </a> */}
                             <a
                                 href="https://snapshot.org/#/zunamidao.eth"
                                 className="text-center d-flex flex-column text-decoration-none"
                             >
                                 <img src="/dao.png" alt="" />
                                 <span className="text-muted mt-2">DAO</span>
-                            </a>
-                            <a
-                                href="/zun-staking"
-                                className="text-center d-flex flex-column text-decoration-none"
-                            >
-                                <img src="/zun-staking.png" alt="" />
-                                <span className="text-muted mt-2">ZUN Staking</span>
                             </a>
                         </div>
                         <div className="card mt-3 zun-token-card">
@@ -139,7 +179,7 @@ export const ZunStables = (): JSX.Element => {
                                     <div className="card-body p-3">
                                         <div className="title">Info bar</div>
                                         <div className="row mt-3">
-                                            <div className="col-4 col-md-6 col-xxl-4">
+                                            <div className="col-6 col-md-6 col-xxl-4">
                                                 <MicroCard
                                                     title="Total circulating"
                                                     hint="Circulation demo text"
@@ -147,15 +187,15 @@ export const ZunStables = (): JSX.Element => {
                                                     className="align-items-start stablecoin mb-3 ps-3 me-3 me-lg-2"
                                                 />
                                             </div>
-                                            <div className="col-4 col-md-6 col-xxl-4">
+                                            <div className="col-6 col-md-6 col-xxl-4">
                                                 <MicroCard
                                                     title="Collateral"
                                                     hint="Collateral demo text"
                                                     value="500 000"
-                                                    className="align-items-start stablecoin mb-3 ps-3 me-3 me-lg-2"
+                                                    className="align-items-start stablecoin mb-3 ps-3 me-0 me-lg-2"
                                                 />
                                             </div>
-                                            <div className="col-4 col-md-6 col-xxl-4">
+                                            <div className="col-6 col-md-6 col-xxl-4">
                                                 <MicroCard
                                                     title="Contract address"
                                                     className="align-items-start stablecoin mb-3 ps-3 me-3 me-lg-2"
@@ -166,18 +206,18 @@ export const ZunStables = (): JSX.Element => {
                                                     />
                                                 </MicroCard>
                                             </div>
-                                            <div className="col-4 col-md-6 col-xxl-4">
+                                            <div className="col-6 col-md-6 col-xxl-4">
                                                 <MicroCard
                                                     title="zunUSD price"
                                                     hint="zunUSD demo text"
                                                     value="$ 10,000,000"
-                                                    className="align-items-start stablecoin mb-3 ps-3 me-3 me-lg-2"
+                                                    className="align-items-start stablecoin mb-3 ps-3 me-0 me-lg-2"
                                                 />
                                             </div>
                                             <div className="col-12 col-md-12 col-xxl-8">
                                                 <div
                                                     id="stake-and-boost"
-                                                    className="gray-block small-block align-items-start stablecoin mb-3 mb-md-0 ps-3 me-0 me-lg-2"
+                                                    className="gray-block small-block align-items-start stablecoin ps-3 me-0 me-lg-2"
                                                 >
                                                     <svg
                                                         width="69"
@@ -190,7 +230,7 @@ export const ZunStables = (): JSX.Element => {
                                                         <path
                                                             d="M28.5498 42.9343C23.9987 41.3666 19.8065 39.9224 15.6142 38.4784C12.0415 37.2478 8.46894 36.0167 4.89657 34.7851C2.30199 33.8859 1.75666 31.3292 3.77037 29.4594C23.3708 11.2599 42.9733 -6.93727 62.5782 -25.132C62.9632 -25.4893 63.3312 -25.867 63.7348 -26.2018C64.946 -27.2066 66.4524 -27.1963 67.7088 -26.1953C68.2735 -25.7565 68.6604 -25.1277 68.7977 -24.4254C68.935 -23.7231 68.8135 -22.9951 68.4555 -22.3762C66.8052 -19.3814 65.1112 -16.4107 63.4321 -13.4319C57.1514 -2.28968 50.8687 8.85143 44.5842 19.9914C44.3969 20.2795 44.1947 20.5576 43.9784 20.8244C44.4916 21.0188 44.8106 21.1494 45.1359 21.2614C51.9706 23.615 58.8064 25.9652 65.6434 28.3119C66.6901 28.67 67.5467 29.1941 67.9235 30.2998C68.3679 31.6039 67.9787 32.6704 67.0416 33.616C64.13 36.5539 61.2254 39.4988 58.3278 42.4507C40.7844 60.2369 23.2403 78.0224 5.69535 95.8071C5.42642 96.0944 5.13691 96.3617 4.8291 96.6068C4.32822 96.987 3.71748 97.1941 3.08868 97.1968C2.45988 97.1995 1.847 96.9977 1.34212 96.6218C0.281335 95.8331 -0.151054 94.5281 0.292686 93.2901C0.488085 92.802 0.723109 92.3308 0.99541 91.8813C9.90682 75.9186 18.8224 59.9583 27.7421 44.0003C27.9319 43.6607 28.214 43.3728 28.5498 42.9343Z"
                                                             fill="url(#paint0_linear_968_4725)"
-                                                            fill-opacity="0.47"
+                                                            fillOpacity="0.47"
                                                         />
                                                         <defs>
                                                             <linearGradient
@@ -202,13 +242,13 @@ export const ZunStables = (): JSX.Element => {
                                                                 gradientUnits="userSpaceOnUse"
                                                             >
                                                                 <stop
-                                                                    stop-color="white"
-                                                                    stop-opacity="0"
+                                                                    stopColor="white"
+                                                                    stopOpacity="0"
                                                                 />
                                                                 <stop
                                                                     offset="1"
-                                                                    stop-color="white"
-                                                                    stop-opacity="0.63"
+                                                                    stopColor="white"
+                                                                    stopOpacity="0.63"
                                                                 />
                                                             </linearGradient>
                                                         </defs>
@@ -280,11 +320,11 @@ export const ZunStables = (): JSX.Element => {
                                                     y2="110.745"
                                                     gradientUnits="userSpaceOnUse"
                                                 >
-                                                    <stop stop-color="white" stop-opacity="0.66" />
+                                                    <stop stopColor="white" stopOpacity="0.66" />
                                                     <stop
                                                         offset="1"
-                                                        stop-color="white"
-                                                        stop-opacity="0"
+                                                        stopColor="white"
+                                                        stopOpacity="0"
                                                     />
                                                 </linearGradient>
                                             </defs>
@@ -409,44 +449,56 @@ export const ZunStables = (): JSX.Element => {
                                             </div>
                                         </div>
                                         <div className="row mt-3">
-                                            <div className="col col-xs-12 col-lg-5">QWE</div>
+                                            <div className="col col-xs-12 col-lg-5">
+                                                <PieChart2
+                                                    data={stratChartData}
+                                                    hideList
+                                                    hideSummary
+                                                />
+                                            </div>
                                             <div className="col col-xs-12 col-lg-7">
                                                 <div className="row">
-                                                    <div className="col-xs-12 col-sm-6">
-                                                        <div className="strategy">
-                                                            <div className="f2irst-row"></div>
-                                                            <div className="s2econd-row row">
-                                                                <MicroCard
-                                                                    title="Amount"
-                                                                    value="500 000"
-                                                                    className="align-items-start col-xs-12 col-xxl-6"
-                                                                />
-                                                                <MicroCard
-                                                                    title="APR"
-                                                                    value="16%"
-                                                                    className="align-items-start col-xs-12 col-xxl-6"
-                                                                />
-                                                            </div>
-                                                            <div className="t2hird-row">
-                                                                <div
-                                                                    className="progress"
-                                                                    style={{
-                                                                        width: '100%',
-                                                                        height: '4px',
-                                                                    }}
-                                                                >
-                                                                    <div
-                                                                        className="progress-bar"
-                                                                        role="progressbar"
-                                                                        style={{
-                                                                            width: '20%',
-                                                                            backgroundColor:
-                                                                                '#FFD118',
-                                                                        }}
-                                                                    ></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                    <div className="col-xs-12 col-sm-12 col-lg-6">
+                                                        <StrategyListItem
+                                                            title="Convex Finance"
+                                                            description="ALUSD / FRAXBP"
+                                                            percent={25}
+                                                            color={StrategyListItemColor.blue}
+                                                            amount="500 000"
+                                                            apr={16}
+                                                        />
+                                                    </div>
+                                                    <div className="col-xs-12 col-sm-12 col-lg-6">
+                                                        <StrategyListItem
+                                                            title="Convex Finance"
+                                                            description="ALUSD / FRAXBP"
+                                                            percent={15}
+                                                            color={StrategyListItemColor.yellow}
+                                                            amount="500 000"
+                                                            apr={16}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    <div className="col-xs-12 col-sm-12 col-lg-6">
+                                                        <StrategyListItem
+                                                            title="Convex Finance"
+                                                            description="ALUSD / FRAXBP"
+                                                            percent={10}
+                                                            color={StrategyListItemColor.green}
+                                                            amount="500 000"
+                                                            apr={16}
+                                                        />
+                                                    </div>
+                                                    <div className="col-xs-12 col-sm-12 col-lg-6">
+                                                        <StrategyListItem
+                                                            title="Convex Finance"
+                                                            description="ALUSD / FRAXBP"
+                                                            percent={50}
+                                                            color={StrategyListItemColor.orange}
+                                                            amount="500 000"
+                                                            apr={16}
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>

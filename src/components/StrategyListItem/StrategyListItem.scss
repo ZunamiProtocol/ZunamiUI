@@ -1,0 +1,38 @@
+.strategy-list-item {
+    border-radius: 20px;
+    padding: 15px;
+
+    &:hover {
+        background-color: #eee;
+    }
+
+    .name,
+    .description,
+    .percent-val {
+        font-size: 13px;
+        line-height: 13px;
+        font-weight: 500;
+    }
+
+    .description {
+        color: #626262;
+        margin-top: 2px;
+    }
+}
+
+body.dark {
+    .strategy-list-item {
+        &:hover {
+            background-color: #262626;
+        }
+    }
+
+    .name,
+    .percent-val {
+        color: #fff;
+    }
+
+    .description {
+        color: #c8c8c8;
+    }
+}

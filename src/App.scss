@@ -139,6 +139,10 @@ body {
     }
 }
 
+.flex-even {
+    flex: 1;
+}
+
 nav {
     .Disclaimer {
         @media (min-width: $media375) {
@@ -2657,7 +2661,7 @@ body.overflow {
 }
 
 .gray-block {
-    background: #f0f0f0;
+    background: #e4e4e4;
     border-radius: $border-radius;
     padding: 15px 20px;
     display: flex;

@@ -243,12 +243,17 @@
         right: 40px;
     }
 
-    .strategy {
-        border-radius: 20px;
-        padding: 15px;
+    .PieChart2 {
+        margin: 0;
 
-        &:hover {
-            background-color: #262626;
+        .PieChartWrapper {
+            width: 188px;
+            height: 188px;
+
+            .PieChart__Chart {
+                width: 188px;
+                height: 188px;
+            }
         }
     }
 }
