@@ -1,2 +1,44 @@
+@import 'src/variables';
+
 .microcard {
+    background: #e4e4e4;
+    border-radius: $border-radius;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #000;
+    text-decoration: none;
+
+    img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .subtitle {
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 15px;
+        color: #3a3a3a;
+    }
+
+    .name {
+        font-weight: 600;
+
+        @media (min-width: $media375) {
+            font-size: 13px;
+            line-height: 16px;
+        }
+
+        @media (min-width: $media1024) {
+            font-size: 12px;
+            line-height: 13px;
+        }
+
+        @media (min-width: $media1440) {
+            font-size: 13px;
+            line-height: 16px;
+        }
+    }
 }

@@ -3,6 +3,7 @@ import './Input.scss';
 import BigNumber from 'bignumber.js';
 import { getFullDisplayBalance } from '../../../utils/formatbalance';
 import { CoinSelector } from '../../CoinSelector/CoinSelector';
+import { sepolia } from 'wagmi';
 
 interface InputProps {
     name: string;
@@ -46,6 +47,12 @@ export const Input = (props: InputProps): JSX.Element => {
 
         if (props.max && !props.max.toNumber()) {
             decimalPlaces = 0;
+        }
+
+        if (props.chainId === sepolia.id) {
+            if (props.action === 'deposit') {
+                decimals = 6;
+            }
         }
 
         return getFullDisplayBalance(props.max, decimals, decimalPlaces);

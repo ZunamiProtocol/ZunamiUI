@@ -15,9 +15,12 @@ $box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
 $on-hover-color: #de4300;
 $on-hover-secondary-color: #e6e6e6;
 
-$primary-color: #FB7501;
-$primary-bg-gradient: linear-gradient(78.51deg, #F7F7F7 12.17%, #F6F6F6 65.32%);
+$primary-color: #fb7501;
+$primary-bg-gradient: linear-gradient(78.51deg, #f7f7f7 12.17%, #f6f6f6 65.32%);
 $muted-color: #767676;
+
+$primary-panel-bg: #e4e4e4;
+$secondary-panel-bg: #e4e4e4;
 
 /* Black theme */
 
@@ -29,4 +32,4 @@ $dark-muted-text-color: #a1a1a1;
 
 $--bs-body-bg: #fffcf5;
 
-$btn-secondary-color: #F1F1F1;
+$btn-secondary-color: #f1f1f1;

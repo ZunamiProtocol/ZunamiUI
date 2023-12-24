@@ -30,6 +30,8 @@
         font-size: 20px;
         line-height: 26px;
         font-family: 'Space Grotesk';
+        border-radius: 30px 30px 0 0;
+        border-bottom: none !important;
 
         .modal-title {
             margin-left: 50px;
@@ -38,6 +40,10 @@
         .btn-close {
             transform: none;
         }
+    }
+
+    .modal-content {
+        border-radius: 30px;
     }
 }
 .WalletsModal {
@@ -74,26 +80,26 @@
         }
 
         &.metamask {
-            background: linear-gradient(255.16deg, #FFB800 3.65%, #FFA800 94.22%);
+            background: linear-gradient(255.16deg, #ffb800 3.65%, #ffa800 94.22%);
             color: #fff;
         }
 
         &.walletconnect {
-            background: linear-gradient(80.97deg, #0E75FE 6.89%, #4C95F7 138.91%);
+            background: linear-gradient(80.97deg, #0e75fe 6.89%, #4c95f7 138.91%);
             color: #fff;
         }
 
         &.coinbase {
-            background: linear-gradient(78.23deg, #F9F9F9 6.99%, #FBFBFB 98.23%);
-            
+            background: linear-gradient(78.23deg, #f9f9f9 6.99%, #fbfbfb 98.23%);
+
             span {
                 color: #000 !important;
             }
         }
 
         &.zerion {
-            background: linear-gradient(80.97deg, #DCE6FF 6.89%, #E9EFFF 138.91%);
-            
+            background: linear-gradient(80.97deg, #dce6ff 6.89%, #e9efff 138.91%);
+
             span {
                 color: #000 !important;
             }

@@ -16,6 +16,7 @@ export const ActionSelector = (props: ActionSelectorProps): JSX.Element => {
         <div className="ActionSelector">
             {actions.map((item) => (
                 <div
+                    id={`action-selector-${item.name}`}
                     key={item.name}
                     className={`ActionSelector__Action ${
                         action === item.name ? 'ActionSelector__Action__Active' : ''

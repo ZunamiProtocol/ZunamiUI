@@ -91,6 +91,7 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
             keyboard={false}
             centered
             className="WalletsModalWrapper"
+            id="select-wallets-modal"
         >
             <Modal.Header closeButton>
                 <Modal.Title>Connect a wallet</Modal.Title>

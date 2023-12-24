@@ -72,6 +72,7 @@ export const WalletButton = (
     return (
         <React.Fragment>
             <button
+                id="connect-wallet-btn"
                 className={`WalletButton WalletButton-${
                     account ? 'connected' : 'disconnected'
                 } btn btn-light`}

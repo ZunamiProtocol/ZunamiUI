@@ -332,6 +332,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                             {
                                 name: 'claim',
                                 title: 'Claim',
+                                disabled: true,
                             },
                         ]}
                         onChange={(action: string) => {

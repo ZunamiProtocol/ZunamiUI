@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import './StakingSummary.scss';
 
 interface StakingSummaryProps {
@@ -7,6 +8,7 @@ interface StakingSummaryProps {
     tvl?: string;
     deposit: string;
     onSelect?: Function;
+    comingSoon?: boolean;
 }
 
 function logoNameToSvg(name: string, selected: boolean) {
@@ -363,10 +365,21 @@ export const StakingSummary: React.FC<StakingSummaryProps & React.HTMLProps<HTML
     selected,
     logo,
     onSelect,
+    comingSoon,
 }) => {
+    let label = useMemo(() => {
+        if (comingSoon) {
+            return 'soon';
+        }
+
+        return selected ? 'Selected' : 'Select';
+    }, [comingSoon, selected]);
+
     return (
         <div
-            className={`StakingSummary ${className} ${selected ? 'StakingSummary__Selected' : ''}`}
+            className={`StakingSummary ${className} ${selected ? 'StakingSummary__Selected' : ''} ${
+                comingSoon ? 'disabled' : ''
+            }`}
             onClick={() => {
                 if (onSelect) {
                     // @ts-ignore
@@ -377,7 +390,7 @@ export const StakingSummary: React.FC<StakingSummaryProps & React.HTMLProps<HTML
             <div className="d-flex justify-content-between">
                 {logoNameToSvg(logo, selected)}
                 <button
-                    className={`btn-secondary ${selected ? 'disabled' : ''}`}
+                    className={`btn-secondary ${selected || comingSoon ? 'disabled' : ''}`}
                     onClick={() => {
                         if (onSelect) {
                             // @ts-ignore
@@ -385,7 +398,7 @@ export const StakingSummary: React.FC<StakingSummaryProps & React.HTMLProps<HTML
                         }
                     }}
                 >
-                    {selected ? 'Selected' : 'Select'}
+                    {label}
                 </button>
             </div>
             <div className="d-flex values">

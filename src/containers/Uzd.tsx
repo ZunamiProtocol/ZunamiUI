@@ -410,7 +410,7 @@ export const Uzd = (): JSX.Element => {
                     </SideBar>
                     <div className="col content-col dashboard-col">
                         <Header section="uzd" />
-                        <div className="row ms-md-4">
+                        <div className="row ms-0 ms-lg-4">
                             <div className="col-xxl-5 col-xs-12">
                                 <div className="card m-xxl-3 mt-xxl-0 h-100">
                                     <div className="card-body p-3">
@@ -484,7 +484,7 @@ export const Uzd = (): JSX.Element => {
                                         </div>
                                         <div className="row mt-3">
                                             <div className="col-12 col-md-5">
-                                                <div className="gray-block small-block align-items-start stablecoin ps-3 me-0 me-lg-2">
+                                                <div className="gray-block small-block align-items-start stablecoin ps-3 me-0 me-md-2">
                                                     <div>
                                                         <span className="name">
                                                             Already claimed
@@ -517,7 +517,7 @@ export const Uzd = (): JSX.Element => {
                                         </div>
                                         <div className="row mt-3">
                                             <div className="col-12 col-md-3">
-                                                <div className="h-100 gray-block small-block align-items-start stablecoin ps-3 me-0 me-lg-2">
+                                                <div className="h-100 gray-block small-block align-items-start stablecoin ps-3 me-0 me-md-2">
                                                     <div>
                                                         <span className="name">
                                                             Current vote weight

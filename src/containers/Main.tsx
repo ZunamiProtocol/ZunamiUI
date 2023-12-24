@@ -2,8 +2,6 @@ import React, { useEffect, useState, Suspense, lazy, useRef, useMemo } from 'rea
 import './Main.scss';
 import { BIG_ZERO, getBalanceNumber } from '../utils/formatbalance';
 import useLpPrice from '../hooks/useLpPrice';
-import useBalanceOf from '../hooks/useBalanceOf';
-import useCrossChainBalances from '../hooks/useCrossChainBalances';
 import useFetch from 'react-fetch-hook';
 import {
     getZunEthStratsUrl,
@@ -13,13 +11,11 @@ import {
     getZunEthHistoricalApyUrl,
 } from '../api/api';
 import { BigNumber } from 'bignumber.js';
-import usePendingOperations from '../hooks/usePendingOperations';
 import { formatPoolApy, poolDataToChartData } from '../functions/pools';
 import { Preloader } from '../components/Preloader/Preloader';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
 import { log, copyLogs } from '../utils/logger';
 import usePausedContract from '../hooks/usePausedContract';
-import { isBSC, isPLG } from '../utils/zunami';
 import { FastDepositForm } from '../components/FastDepositForm/FastDepositForm';
 import { OverlayTrigger, Popover, Tooltip } from 'react-bootstrap';
 import { networks } from '../components/NetworkSelector/NetworkSelector';
@@ -716,6 +712,7 @@ export const Main = (): JSX.Element => {
                                 onSelect={() => {
                                     setStakingMode('ZETH');
                                 }}
+                                comingSoon={true}
                             />
                         </SideBar>
                         <div className="col content-col dashboard-col">
@@ -766,7 +763,7 @@ export const Main = (): JSX.Element => {
                                                                     auto-compounded yet. Current
                                                                     accumulated rewards:"
                                                 value="0%"
-                                                className="align-items-start stablecoin"
+                                                className="align-items-start stablecoin ApyBar__Counter"
                                             />
                                             <div className="ApyBar__Counter">
                                                 <div className="ApyBar__Counter__Title d-flex align-items-start gap-2">

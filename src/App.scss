@@ -488,6 +488,10 @@ body.dark {
         }
     }
 
+    .modal-content {
+        border: 1px solid #484848;
+    }
+
     .ApyDetailsModal {
         .modal-content {
             border: 1px solid #484848;
@@ -2207,7 +2211,7 @@ body.overflow {
         }
 
         .ApyBar__Counter {
-            background: #f0f0f0;
+            background: #e4e4e4;
             border-radius: $border-radius;
 
             @media (min-width: $media375) {
@@ -2217,7 +2221,7 @@ body.overflow {
             }
 
             @media (min-width: $media1024) {
-                width: 127px;
+                width: 130px;
                 height: 53px;
                 margin-bottom: 12px;
             }
@@ -2685,11 +2689,21 @@ body.overflow {
 
     .name {
         font-weight: 600;
-        font-size: 13px;
-        line-height: 16px;
-        // text-overflow: ellipsis;
-        // white-space: nowrap;
-        // overflow: hidden;
+
+        @media (min-width: $media375) {
+            font-size: 13px;
+            line-height: 16px;
+        }
+
+        @media (min-width: $media1024) {
+            font-size: 12px;
+            line-height: 13px;
+        }
+
+        @media (min-width: $media1440) {
+            font-size: 13px;
+            line-height: 16px;
+        }
     }
 
     &.small-block {
@@ -2710,8 +2724,8 @@ body.overflow {
             }
 
             .name {
-                font-size: 13px;
-                line-height: 17px;
+                // font-size: 13px;
+                // line-height: 17px;
                 color: #3a3a3a;
                 // margin-left: 5px;
             }

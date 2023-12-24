@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { ReactComponent as HintIcon } from '../../assets/info.svg';
+import './MicroCard.scss';
 
 interface MicroCardProps {
     title: string;

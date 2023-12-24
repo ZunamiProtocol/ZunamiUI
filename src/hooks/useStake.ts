@@ -22,9 +22,9 @@ const useStake = (coinIndex: number, depositSum: string, receiver: Address) => {
     }, [chainId]);
 
     const preparedAmounts = [
+        new BigNumber(0).toString(),
         new BigNumber(1000).toString(),
-        new BigNumber(1000).toString(),
-        new BigNumber(1000).toString(),
+        new BigNumber(0).toString(),
         new BigNumber(0).toString(),
         new BigNumber(0).toString(),
     ];

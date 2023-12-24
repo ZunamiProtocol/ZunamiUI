@@ -162,7 +162,7 @@ nav #nav-menu {
     .dropdown-menu.show {
         width: 249px;
         height: 130px;
-        background: #fffaf3;
+        background: $primary-panel-bg;
         border: 1px solid #f4efe1;
         border-radius: 5px;
         padding: 17px 20px;
@@ -174,7 +174,7 @@ nav #nav-menu {
         span {
             font-size: 11px;
             line-height: 15px;
-            color: #636363;
+            color: #000000;
         }
 
         a {
