@@ -56,11 +56,11 @@ window.Buffer = window.Buffer || require('buffer').Buffer;
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
-    <React.StrictMode>
-        <WagmiConfig config={config}>
-            <App />
-        </WagmiConfig>
-    </React.StrictMode>
+    // <React.StrictMode>
+    <WagmiConfig config={config}>
+        <App />
+    </WagmiConfig>
+    // </React.StrictMode>
 );
 
 reportWebVitals();

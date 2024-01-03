@@ -15,7 +15,6 @@ import { formatPoolApy, poolDataToChartData } from '../functions/pools';
 import { Preloader } from '../components/Preloader/Preloader';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
 import { log, copyLogs } from '../utils/logger';
-import usePausedContract from '../hooks/usePausedContract';
 import { FastDepositForm } from '../components/FastDepositForm/FastDepositForm';
 import { OverlayTrigger, Popover, Tooltip } from 'react-bootstrap';
 import { networks } from '../components/NetworkSelector/NetworkSelector';
@@ -24,16 +23,13 @@ import { SupportersBar } from '../components/SupportersBar/SupportersBar';
 import { StakingSummary } from '../components/StakingSummary/StakingSummary';
 import { DashboardCarousel } from '../components/DashboardCarousel/DashboardCarousel';
 import { ZunamiInfoFetch, PoolsStats, Balance } from './Main.types';
-import useZapsLpBalance from '../hooks/useZapsLpBalance';
-import useUzdBalance from '../hooks/useUzdBalance';
-import useApsLpPrice from '../hooks/useApsLpPrice';
-import { contractAddresses } from '../sushi/lib/constants';
 import { ApyDetailsModal } from '../components/ApyDetailsModal/ApyDetailsModal';
 import { useConnect, useAccount, useNetwork } from 'wagmi';
-import type { Chain } from 'wagmi';
 import type { DataItem } from '../components/Chart/Chart';
-import { ReactComponent as HintIcon } from '../assets/info.svg';
 import { MicroCard } from '../components/MicroCard/MicroCard';
+import useBalanceOf from '../hooks/useBalanceOf';
+import { getZunUsdAddress } from '../utils/zunami';
+import { erc20ABI } from 'wagmi';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -148,7 +144,7 @@ export const Main = (): JSX.Element => {
     const { connect, connectors } = useConnect();
     const { address: account, isConnected } = useAccount();
     const { chain } = useNetwork();
-    const chainId = chain ? parseInt(window.ethereum?.chainId, 16) : 1;
+    const chainId: number = chain ? chain.id : 1;
 
     // const isContractPaused = usePausedContract();
     const [supportedChain, setSupportedChain] = useState(true);
@@ -161,13 +157,7 @@ export const Main = (): JSX.Element => {
     const [showHint, setShowHint] = useState(false);
 
     // const lpPrice = useLpPrice();
-    // const balance = useBalanceOf();
-    // const balances = useCrossChainBalances(lpPrice);
-    // const apsBalance = useZapsLpBalance();
-    // const apsLpPrice = useApsLpPrice();
-    // const uzdBalance = useUzdBalance();
-    // const zethBalance = useZapsLpBalance(contractAddresses.zethAPS[1]);
-
+    const balance = useBalanceOf(getZunUsdAddress(chainId), erc20ABI);
     const [stakingMode, setStakingMode] = useState('UZD');
     // // total tvl (aps/zunami)
     const [tvl, setTvl] = useState('0');
@@ -635,8 +625,8 @@ export const Main = (): JSX.Element => {
                                         <div className="value">
                                             {!account && 'n/a'}
                                             {account &&
-                                                totalBalance.toNumber() !== -1 &&
-                                                `$ ${getBalanceNumber(totalBalance)
+                                                balance.toNumber() !== -1 &&
+                                                `$ ${getBalanceNumber(balance)
                                                     .toNumber()
                                                     .toLocaleString('en')}`}
                                         </div>

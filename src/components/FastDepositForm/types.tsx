@@ -1,14 +1,19 @@
+import { bsc, polygon } from '@wagmi/chains';
 import { ToastContainer, Toast } from 'react-bootstrap';
+import { sepolia } from 'wagmi';
 
 export function getScanAddressByChainId(chainId: number) {
     let address = 'etherscan.io';
 
     switch (chainId) {
-        case 56:
+        case bsc.id:
             address = 'bscscan.com';
             break;
-        case 137:
+        case polygon.id:
             address = 'polygonscan.com';
+            break;
+        case sepolia.id:
+            address = 'sepolia.etherscan.io';
             break;
     }
 

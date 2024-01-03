@@ -15,7 +15,7 @@ import {
 } from '../utils/formatbalance';
 import { log } from '../utils/logger';
 import { getAbiByChainId, getChainClient, isBSC, isETH, isPLG } from '../utils/zunami';
-import { contractAddresses } from '../sushi/lib/constants';
+import { zunUsdSepoliaAddress } from '../sushi/lib/constants';
 import { Address } from 'viem';
 import { erc20ABI, mainnet, sepolia } from 'wagmi';
 
@@ -28,7 +28,7 @@ function getCoinBalance(coinAddress: Address, account: Address, chainId: number 
     });
 }
 
-export const coins = ['zunUSD', 'zunETH', 'DAI', 'USDC', 'USDT', 'FRAX', 'ZUN'];
+export const coins = ['DAI', 'USDC', 'USDT', 'FRAX', 'zunUSD', 'zunETH', 'ZUN'];
 
 export function getCoinAddressByIndex(index: number, chainId: number): Address {
     let result: Address = NULL_ADDRESS;
@@ -39,19 +39,19 @@ export function getCoinAddressByIndex(index: number, chainId: number): Address {
         case sepolia.id:
             switch (index) {
                 case 0:
-                    result = NULL_ADDRESS;
-                    break;
-                case 1:
-                    result = NULL_ADDRESS;
-                    break;
-                case 2:
                     result = sepDaiAddress;
                     break;
-                case 3:
+                case 1:
                     result = sepUsdcAddress;
                     break;
-                case 4:
+                case 2:
                     result = sepUsdtAddress;
+                    break;
+                case 3:
+                    result = NULL_ADDRESS;
+                    break;
+                case 4:
+                    result = NULL_ADDRESS;
                     break;
             }
             break;
@@ -80,12 +80,12 @@ export function coinAddressToHumanName(address: Address): string {
 
 export const useUserBalances = (account: Address = NULL_ADDRESS, chainId: number | undefined) => {
     const [balance, setBalance] = useState([
-        BIG_ZERO, // zunUSD
-        BIG_ZERO, // zunETH
         BIG_ZERO, // DAI
         BIG_ZERO, // USDC
         BIG_ZERO, // USDT
         BIG_ZERO, // FRAX
+        BIG_ZERO, // zunUSD
+        BIG_ZERO, // zunETH
         BIG_ZERO, // ZUN
     ]);
 
@@ -100,11 +100,11 @@ export const useUserBalances = (account: Address = NULL_ADDRESS, chainId: number
                     break;
                 case sepolia.id:
                     const result = [
-                        BigInt('0'),
-                        BigInt('0'),
                         await getCoinBalance(sepDaiAddress, account, chainId),
                         await getCoinBalance(sepUsdcAddress, account, chainId),
                         await getCoinBalance(sepUsdtAddress, account, chainId),
+                        BigInt('0'),
+                        await getCoinBalance(zunUsdSepoliaAddress, account, chainId),
                         BigInt('0'),
                         BigInt('0'),
                     ].map((balance: BigInt) => new BigNumber(balance.toString()));

@@ -8,14 +8,21 @@ const zethAddress: Address = '0xe47f1CD2A37c6FE69e3501AE45ECA263c5A87b2b';
 export const SUBTRACT_GAS_LIMIT = 100000;
 
 const zunamiMainnetAddress: Address = NULL_ADDRESS;
-const zunamiSepoliaAddress: Address = '0x83287Da602f0C32f6C9B09E2F1b2951767ebF239';
+export const zunamiSepoliaAddress: Address = '0x3694Db838a8cAf3b1c234529bB1b447bd849F357';
 
-export const contractAddresses = {
+const zunUsdMainnetAddress: Address = NULL_ADDRESS;
+export const zunUsdSepoliaAddress: Address = '0x83287Da602f0C32f6C9B09E2F1b2951767ebF239';
+
+export const contractAddresses: { [index: string]: any } = {
     zunami: {
         // ETH
         1: zunamiMainnetAddress,
         // Sepolia
         11155111: zunamiSepoliaAddress,
+    },
+    zunUSD: {
+        1: zunUsdMainnetAddress,
+        11155111: zunUsdSepoliaAddress,
     },
     usdc: {
         1: '0xdac17f958d2ee523a2206206994597c13d831ec7',

@@ -3,14 +3,14 @@ import { useEffect, useState, useMemo } from 'react';
 import { BIG_ZERO } from '../utils/formatbalance';
 import { getMasterChefContract } from '../sushi/utils';
 import { log } from '../utils/logger';
-import { Address, useContractRead } from 'wagmi';
+import { Address, useAccount, useContractRead, useNetwork, sepolia } from 'wagmi';
+import sepControllerAbi from '../actions/abi/sepolia/controller.json';
+import { Abi } from 'viem';
 
-const useBalanceOf = (
-    contractAddress: Address,
-    account: Address,
-    abi: any,
-    autoRefresh = false
-) => {
+const useBalanceOf = (contractAddress: Address, abi?: Abi, autoRefresh = false) => {
+    const { chain } = useNetwork();
+    const chainId = chain ? chain.id : undefined;
+    const { address: account } = useAccount();
     const [balance, setBalance] = useState(new BigNumber(BIG_ZERO));
     const { refetch, isRefetching } = useContractRead({
         address: contractAddress,

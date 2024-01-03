@@ -532,12 +532,12 @@ body.dark {
         color: #c8c8c8;
     }
 
-    .buttons {
-        > div,
-        > a {
-            background: #555555 !important;
-        }
-    }
+    // .buttons {
+    //     > div:not(.Preloader),
+    //     > a {
+    //         background: #555555 !important;
+    //     }
+    // }
 
     .contract-buttons {
         svg {

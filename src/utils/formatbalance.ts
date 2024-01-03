@@ -43,4 +43,5 @@ export const fraxAddress: Address = '0x853d955acef822db058eb8505911ed77f175b99e'
 export const sepDaiAddress: Address = '0xdC30b3bdE2734A0Bc55AF01B38943ef04aaCB423';
 export const sepUsdcAddress: Address = '0x2d691C2492e056ADCAE7cA317569af25910fC4cb';
 export const sepUsdtAddress: Address = '0x8aaB454dFD2d3b483791698367fFEa8Cf3352Ee2';
+// export const sepZunAddress: Address = '0x8aaB454dFD2d3b483791698367fFEa8Cf3352Ee2';
 // export const sepFraxAddress = '0x853d955acef822db058eb8505911ed77f175b99e';

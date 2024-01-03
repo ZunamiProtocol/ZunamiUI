@@ -1,7 +1,7 @@
 import { Contract } from 'web3-eth-contract';
 import { contractAddresses } from '../sushi/lib/constants';
 import sepoliaAbi from '../actions/abi/sepolia/controller.json';
-import { createPublicClient, http } from 'viem';
+import { Address, createPublicClient, http } from 'viem';
 import { mainnet, sepolia } from 'wagmi';
 
 export const getTotalHoldings = async (masterChefContract: Contract): Promise<string> => {
@@ -13,8 +13,13 @@ export const getTotalHoldings = async (masterChefContract: Contract): Promise<st
     }
 };
 
-export const getZunamiAddress = (chainId: number | undefined): string => {
-    let address = contractAddresses.zunami[1];
+export const getZunamiAddress = (chainId: number): Address => {
+    let address: Address = contractAddresses.zunami[chainId];
+    return address;
+};
+
+export const getZunUsdAddress = (chainId: number): Address => {
+    let address: Address = contractAddresses.zunUSD[chainId];
     return address;
 };
 
@@ -32,6 +37,9 @@ export const getScanAddressByChainId = (chainId: number) => {
             break;
         case 137:
             address = 'polygonscan.com';
+            break;
+        case sepolia.id:
+            address = 'sepolia.etherscan.io';
             break;
     }
 

@@ -16,9 +16,10 @@ import {
     sepUsdtAddress,
 } from '../utils/formatbalance';
 import { log } from '../utils/logger';
-import { contractAddresses } from '../sushi/lib/constants';
+
 import { Address, sepolia, mainnet, useContractRead, erc20ABI } from 'wagmi';
 import { getChainClient } from '../utils/zunami';
+import { zunUsdSepoliaAddress } from '../sushi/lib/constants';
 
 const useAllowance = (contractAddress: Address, abi: any, owner: Address, spender: Address) => {
     const [allowance, setAllowance] = useState(BIG_ZERO);
@@ -71,20 +72,14 @@ const useAllowance = (contractAddress: Address, abi: any, owner: Address, spende
 
 export default useAllowance;
 
-//             const allowanceUzd = await getAllowance(
-//                 ethereum,
-//                 contractAddresses.uzd[1],
-//                 sushi.getApsContract(account),
-//                 // @ts-ignore
-//                 account
-//             );
-
 function getCoinAllowance(
     coinAddress: Address,
     account: Address,
     spender: Address,
     chainId: number = 1
 ) {
+    // log(`Coin (${coinAddress}).allowance('${account}', '${spender}')`);
+
     return getChainClient(chainId).readContract({
         address: coinAddress,
         abi: erc20ABI,
@@ -102,12 +97,12 @@ export const useAllowanceStables = (
     chainId: number = 1
 ) => {
     const [allowance, setAllowance] = useState([
-        BIG_ZERO, // zunUSD
-        BIG_ZERO, // zunETH
         BIG_ZERO, // DAI
         BIG_ZERO, // USDC
         BIG_ZERO, // USDT
         BIG_ZERO, // FRAX
+        BIG_ZERO, // zunUSD
+        BIG_ZERO, // zunETH
         BIG_ZERO, // ZUN
     ]);
 
@@ -118,11 +113,11 @@ export const useAllowanceStables = (
                     break;
                 case sepolia.id:
                     const result = [
-                        BigInt('0'),
-                        BigInt('0'),
                         await getCoinAllowance(sepDaiAddress, account, spender, chainId),
                         await getCoinAllowance(sepUsdcAddress, account, spender, chainId),
                         await getCoinAllowance(sepUsdtAddress, account, spender, chainId),
+                        BigInt('0'),
+                        await getCoinAllowance(zunUsdSepoliaAddress, account, spender, chainId),
                         BigInt('0'),
                         BigInt('0'),
                     ].map(
@@ -130,7 +125,7 @@ export const useAllowanceStables = (
                     );
 
                     log(
-                        `Allowance (sepolia): DAI - ${result[2].toString()}, USDC - ${result[3].toString()}, USDT - ${result[4].toString()}`
+                        `Allowance (sepolia): DAI - ${result[0].toString()}, USDC - ${result[1].toString()}, USDT - ${result[2].toString()}`
                     );
 
                     setAllowance(result);
@@ -143,7 +138,7 @@ export const useAllowanceStables = (
             fetchAllowance();
         }
 
-        let refreshInterval = setInterval(fetchAllowance, 60000);
+        let refreshInterval = setInterval(fetchAllowance, 10000);
         return () => clearInterval(refreshInterval);
     }, [account, spender, chainId]);
 

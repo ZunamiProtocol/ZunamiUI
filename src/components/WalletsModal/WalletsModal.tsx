@@ -5,7 +5,7 @@ import './WalletsModal.scss';
 import { log } from '../../utils/logger';
 
 export const LS_ACCOUNT_KEY = 'WALLET_ACCOUNT';
-export const LS_WALLET_TYPE_KEY = 'WALLET_TYPE';
+export const LS_WALLET_TYPE_KEY = 'wagmi.wallet';
 
 export const NO_METAMASK_WARNING =
     'Please, install either Metamask browser extension or Metamask mobile app';

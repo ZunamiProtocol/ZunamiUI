@@ -1,6 +1,9 @@
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
+import { createPublicClient, createWalletClient, custom, http } from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
+import { mainnet } from 'viem/chains';
 
-dotenv.config();
+// dotenv.config();
 
 type NETWORK = 'mainnet';
 
@@ -49,3 +52,13 @@ export const getNetworkConfig = (NETWORK: string): Config => {
 };
 
 export default getNetworkConfig(NETWORK);
+
+export const publicClient = createPublicClient({
+    chain: mainnet,
+    transport: http(),
+});
+
+export const walletClient = createWalletClient({
+    chain: mainnet,
+    transport: custom(window.ethereum),
+});

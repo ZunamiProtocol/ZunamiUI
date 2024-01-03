@@ -27,8 +27,9 @@
     "scripts": {
         "start": "react-scripts start",
         "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "test": "cypress run --env type=actual",
+        "cynpress": "env-cmd -f .env.e2e synpress open --configFile synpress.config.js"
     },
     "eslintConfig": {
         "extends": [
@@ -50,8 +51,14 @@
             "last 1 safari version"
         ]
     },
+    "browser": {
+        "fs": false,
+        "path": false,
+        "os": false
+    },
     "devDependencies": {
         "@babel/preset-react": "7.23.3",
+        "@synthetixio/synpress": "^3.7.2-beta.9",
         "@testing-library/jest-dom": "^5.14.1",
         "@testing-library/react": "^11.2.7",
         "@testing-library/user-event": "^12.8.3",
@@ -63,8 +70,10 @@
         "chai": "^4.3.6",
         "cypress": "^13.6.1",
         "cypress-visual-regression": "^3.0.0",
+        "env-cmd": "^10.1.0",
         "eslint-config-google": "^0.14.0",
         "eslint-plugin-react-hooks": "^4.3.0",
+        "hardhat": "^2.19.3",
         "identity-obj-proxy": "^3.0.0",
         "typescript": "5.2.2",
         "web-vitals": "2.1.4"

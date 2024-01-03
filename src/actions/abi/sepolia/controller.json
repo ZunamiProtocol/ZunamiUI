@@ -90,7 +90,13 @@
         "type": "error"
     },
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "contract IERC20[]",
+                "name": "rewardTokens",
+                "type": "address[]"
+            }
+        ],
         "name": "WrongRewardTokens",
         "type": "error"
     },
@@ -102,6 +108,17 @@
     {
         "inputs": [],
         "name": "ZeroAddress",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "index",
+                "type": "uint256"
+            }
+        ],
+        "name": "ZeroTokenAddress",
         "type": "error"
     },
     {
@@ -123,13 +140,13 @@
             {
                 "indexed": false,
                 "internalType": "address",
-                "name": "oldFeeCollector",
+                "name": "oldRewardCollector",
                 "type": "address"
             },
             {
                 "indexed": false,
                 "internalType": "address",
-                "name": "newFeeCollector",
+                "name": "newRewardCollector",
                 "type": "address"
             }
         ],

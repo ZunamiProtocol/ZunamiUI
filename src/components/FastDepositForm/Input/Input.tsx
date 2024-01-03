@@ -35,16 +35,6 @@ export const Input = (props: InputProps): JSX.Element => {
             decimals = 18;
         }
 
-        if (
-            props.name === 'FRAX' ||
-            props.name === 'UZD' ||
-            props.name === 'ZETH' ||
-            props.name === 'ethZAPSLP' ||
-            props.name === 'ZAPSLP'
-        ) {
-            decimals = 18;
-        }
-
         if (props.max && !props.max.toNumber()) {
             decimalPlaces = 0;
         }
@@ -52,6 +42,10 @@ export const Input = (props: InputProps): JSX.Element => {
         if (props.chainId === sepolia.id) {
             if (props.action === 'deposit') {
                 decimals = 6;
+            }
+
+            if (props.name === 'DAI') {
+                decimals = 18;
             }
         }
 
