@@ -116,7 +116,8 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         if (action === 'deposit') {
             return allowance[coinIndex].toNumber() > 0;
         } else {
-            return allowance[coinIndex].toNumber() > 0;
+            return true;
+            // return allowance[coinIndex].toNumber() > 0;
         }
     }, [allowance, coinIndex, action]);
 
@@ -351,7 +352,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                         setPendingTx(true);
 
                                         try {
-                                            if (stakingMode === 'zunUSD') {
+                                            if (stakingMode === 'UZD') {
                                                 const txHash: string = await withdraw();
                                                 setTransactionId(txHash);
                                             }
