@@ -1,8 +1,8 @@
 // synpress.config.js
 const { defineConfig } = require('cypress');
 // import synpress node events
-const setupNodeEvents2 = require('@synthetixio/synpress/plugins/index');
 const getCompareSnapshotsPlugin = require('cypress-visual-regression/dist/plugin');
+const synpressPlugins = require('@synthetixio/synpress/plugins');
 
 // Set timeout (in milliseconds) for Cypress & Synpress to wait before failing.
 // Note: big timeout can slow the tests down. Slow timeouts can cause the test to fail.
@@ -33,13 +33,16 @@ module.exports = defineConfig({
         // Url for the test dApp
         baseUrl: 'http://localhost:3000/',
         // Where all tests can be found.
-        specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}',
+        specPattern: 'cypress/e2e/wallet/*.{js,jsx,ts,tsx}',
         // Path for your support file your setup early
-        supportFile: 'cypress/support/e2e.ts',
+        supportFile: 'cypress/support/index.js',
         setupNodeEvents(on, config) {
-            // implement node event listeners here
-            getCompareSnapshotsPlugin(on, config);
-            // return setupNodeEvents2(on, config);
+            synpressPlugins(on, config);
+            return config;
         },
+        // setupNodeEvents(on, config) {
+        //     // implement node event listeners here
+        //     getCompareSnapshotsPlugin(on, config);
+        // },
     },
 });

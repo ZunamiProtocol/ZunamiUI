@@ -24,7 +24,7 @@ export const ApyDetailsModal = (props: ApyDetailsModalProps): JSX.Element => {
             }}
             className="ApyDetailsModal"
         >
-            <Modal.Header closeButton>
+            <Modal.Header closeButton className="ps-4 pe-4 pt-4">
                 <Modal.Title>APY Bar</Modal.Title>
             </Modal.Header>
             <Modal.Body className="d-flex gap-3 flex-column justify-content-center align-items-center">

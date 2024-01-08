@@ -223,7 +223,7 @@ export const Header: React.FC<HeaderProps> = ({ section }) => {
                         show={showNotifications}
                     >
                         <button
-                            className="btn btn-light btn-sm d-flex align-items-center"
+                            className="btn btn-light btn-sm d-flex align-items-center d-none"
                             ref={notificationsTarget}
                             onClick={() => setNotificationsState(!showNotifications)}
                         >

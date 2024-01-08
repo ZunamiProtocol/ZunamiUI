@@ -36,7 +36,9 @@ function displayCoinName(coinCode: string) {
 function renderCoinItem(props: CoinProps & React.HTMLProps<HTMLButtonElement>) {
     return (
         <div
-            className={`coin-item ${props.className}`}
+            className={`coin-item ${props.className} ${
+                props.coinName === 'FRAX' ? 'disabled' : ''
+            }`}
             onClick={() => props.onCoinSelect(props.coinName)}
         >
             <img src={`${props.coinName.toLowerCase()}.svg`} alt="" />

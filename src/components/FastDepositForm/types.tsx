@@ -30,7 +30,7 @@ export function renderToasts(
     return (
         <ToastContainer position={'top-end'} className={'toasts mt-3 me-3'}>
             {transactionError && (
-                <Toast onClose={() => setTransactionError(false)} delay={5000} autohide>
+                <Toast onClose={() => setTransactionError(false)} delay={10000} autohide>
                     <Toast.Body>Sorry, we couldn't complete the transaction</Toast.Body>
                 </Toast>
             )}

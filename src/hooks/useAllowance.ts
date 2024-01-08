@@ -21,63 +21,44 @@ import { Address, sepolia, mainnet, useContractRead, erc20ABI } from 'wagmi';
 import { getChainClient } from '../utils/zunami';
 import { zunUsdSepoliaAddress } from '../sushi/lib/constants';
 
-const useAllowance = (contractAddress: Address, abi: any, owner: Address, spender: Address) => {
+export const useAllowance = (
+    coinAddress: Address,
+    account: Address | undefined,
+    spender: Address,
+    chainId: number = 1
+) => {
     const [allowance, setAllowance] = useState(BIG_ZERO);
-    const { refetch, isRefetching } = useContractRead({
-        address: contractAddress,
-        abi: abi,
-        functionName: 'allowance',
-        args: [owner, spender],
-        onError(error) {
-            log(`[${contractAddress}]->allowance('${owner}', '${spender}') - ERROR: ${error}`);
-            log(JSON.stringify(error));
-            setAllowance(BIG_ZERO);
-        },
-        onSuccess(value: BigInt) {
-            log(`[${contractAddress}]->allowance('${owner}', '${spender}'). Result: ${value})`);
 
-            setAllowance(new BigNumber(value.toString()));
+    useEffect(() => {
+        if (account === NULL_ADDRESS || !account) {
+            return;
+        }
 
-            // setTimeout(() => {
-            //     refetch();
-            //     log(`[SMART] balanceOf (contract ${contractAddress}) for address ${account}`);
-            // }, 5000);
-        },
-    });
-    // const { account, ethereum } = useWallet();
-    // const sushi = useSushi();
-    // const masterChefContract = contract ? contract : getMasterChefContract(sushi);
+        const fetchAllowance = async () => {
+            const val = await getCoinAllowance(coinAddress, account, spender, chainId);
+            console.log(`${coinAddress}.allowance('${account}', '${spender}') - ${val}`);
+            setAllowance(new BigNumber(val.toString()));
+        };
 
-    // useEffect(() => {
-    //     const fetchAllowance = async () => {
-    //         const allowance = await getAllowance(
-    //             ethereum,
-    //             tokenAddress,
-    //             masterChefContract,
-    //             // @ts-ignore
-    //             account
-    //         );
-    //         setAllowance(new BigNumber(allowance));
-    //     };
+        if (account) {
+            fetchAllowance();
+        }
 
-    //     if (account && masterChefContract) {
-    //         fetchAllowance();
-    //     }
-    //     let refreshInterval = setInterval(fetchAllowance, 10000);
-    //     return () => clearInterval(refreshInterval);
-    // }, [account, ethereum, tokenAddress, masterChefContract]);
+        let refreshInterval = setInterval(fetchAllowance, 10000);
+        return () => clearInterval(refreshInterval);
+    }, [account, chainId, coinAddress, spender]);
 
     return allowance;
 };
 
 export default useAllowance;
 
-function getCoinAllowance(
+export const getCoinAllowance = (
     coinAddress: Address,
     account: Address,
     spender: Address,
     chainId: number = 1
-) {
+) => {
     // log(`Coin (${coinAddress}).allowance('${account}', '${spender}')`);
 
     return getChainClient(chainId).readContract({
@@ -89,7 +70,7 @@ function getCoinAllowance(
             spender, // spender
         ],
     });
-}
+};
 
 export const useAllowanceStables = (
     account: Address = NULL_ADDRESS,

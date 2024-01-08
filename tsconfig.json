@@ -14,7 +14,13 @@
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": true,
-        "jsx": "react-jsx"
+        "jsx": "react-jsx",
+        "types": [
+            "cypress",
+            "@synthetixio/synpress/support",
+            "cypress-wait-until",
+            "@testing-library/cypress"
+        ]
     },
     "include": ["src"]
 }

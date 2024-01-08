@@ -126,7 +126,11 @@ export const WalletButton = (
                         />
                     </svg>
                 )}
-                {account && <span className="address">{shortAddress}</span>}
+                {account && (
+                    <span id="address" className="address">
+                        {shortAddress}
+                    </span>
+                )}
             </button>
             <WalletsModal
                 show={show}

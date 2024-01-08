@@ -98,6 +98,7 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
             </Modal.Header>
             <Modal.Body className="d-flex gap-3 flex-row flex-wrap WalletsModal  justify-content-center align-items-center">
                 <button
+                    id="connect-metamask-btn"
                     onClick={() => onConnect('injected')}
                     className="d-inline-flex flex-column bg-transparent metamask"
                 >

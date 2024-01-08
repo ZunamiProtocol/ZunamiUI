@@ -1,13 +1,13 @@
 import './FastDepositForm.scss';
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Input } from './Input/Input';
 import { Preloader } from '../Preloader/Preloader';
 import { useUserBalances, coins, getCoinAddressByIndex } from '../../hooks/useUserBalances';
-import { useAllowanceStables } from '../../hooks/useAllowance';
+import { useAllowanceStables, useAllowance } from '../../hooks/useAllowance';
 import useStake from '../../hooks/useStake';
 import useUnstake from '../../hooks/useUnstake';
 import { getActiveWalletName } from '../WalletsModal/WalletsModal';
-import { BIG_TEN, BIG_ZERO, NULL_ADDRESS, UZD_DECIMALS } from '../../utils/formatbalance';
+import { BIG_ZERO, NULL_ADDRESS } from '../../utils/formatbalance';
 import { getFullDisplayBalance } from '../../utils/formatbalance';
 import { log } from '../../utils/logger';
 import { isETH, isSEP } from '../../utils/zunami';
@@ -18,10 +18,9 @@ import { ReactComponent as StakingUzdLogo } from './assets/zun-usd-logo.svg';
 import { ReactComponent as StakingZethLogo } from './assets/zun-eth-logo.svg';
 import { ReactComponent as MobileToggleIcon } from './assets/mobile-toggle-icon.svg';
 import { renderToasts, FastDepositFormProps } from './types';
-import { zunamiSepoliaAddress } from '../../sushi/lib/constants';
+import { zunUsdSepoliaAddress, zunamiSepoliaAddress } from '../../sushi/lib/constants';
 import useApprove from '../../hooks/useApprove';
 import { APPROVE_SUM } from '../../sushi/utils';
-import BigNumber from 'bignumber.js';
 
 export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HTMLDivElement>> = ({
     stakingMode,
@@ -44,7 +43,10 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     // Current contract address
     const contractAddress: Address = zunamiSepoliaAddress;
 
+    // deposit allowance
     const allowance = useAllowanceStables(account, contractAddress, chainId);
+    // withdraw allowance
+    const withdrawAllowance = useAllowance(zunUsdSepoliaAddress, account, contractAddress, chainId);
 
     // APS balance
     const apsBalance = BIG_ZERO;
@@ -116,10 +118,10 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         if (action === 'deposit') {
             return allowance[coinIndex].toNumber() > 0;
         } else {
-            return true;
+            return withdrawAllowance.toNumber() > 0;
             // return allowance[coinIndex].toNumber() > 0;
         }
-    }, [allowance, coinIndex, action]);
+    }, [allowance, coinIndex, action, withdrawAllowance]);
 
     // show approve btn or not
     const showApproveBtn = useMemo(() => {
@@ -156,16 +158,16 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const withdrawEnabled = useMemo(() => {
         let result = true;
 
-        // if (coin === 'UZD' && !apsBalance.toNumber()) {
-        //     result = false;
-        // }
+        if (!account || account === NULL_ADDRESS) {
+            return false;
+        }
 
         if (!Number(withdrawSum)) {
             result = false;
         }
 
         return result;
-    }, [withdrawSum]);
+    }, [withdrawSum, account]);
 
     const depositValidationError = useMemo(() => {
         let message = '';
@@ -226,13 +228,22 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         account || NULL_ADDRESS
     );
 
+    // spender for approve
+    const addressForApprove = useMemo(() => {
+        if (action === 'deposit') {
+            return getCoinAddressByIndex(coinIndex, chainId ?? 1);
+        } else {
+            return zunUsdSepoliaAddress;
+        }
+    }, [action, chainId, coinIndex]);
+
     // approve
     const {
         data: approveResult,
         isLoading: isApproving,
         isSuccess: approveSuccessful,
         write: approve,
-    } = useApprove(getCoinAddressByIndex(coinIndex, chainId ?? 1), contractAddress, APPROVE_SUM);
+    } = useApprove(addressForApprove, contractAddress, APPROVE_SUM);
 
     return (
         <div className={`FastDepositForm ${className} mode-${stakingMode}`}>
@@ -347,6 +358,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                         <div className="buttons">
                             {action === 'withdraw' && coinApproved && (
                                 <button
+                                    id="withdraw-btn"
                                     className={`zun-button ${withdrawEnabled ? '' : 'disabled'}`}
                                     onClick={async () => {
                                         setPendingTx(true);
@@ -369,9 +381,9 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                             )}
                             {showApproveBtn && (
                                 <button
-                                    className={`zun-button approve-usd ${
-                                        !approveEnabled ? 'disabled' : ''
-                                    }`}
+                                    id="approve-btn"
+                                    disabled={!approveEnabled}
+                                    className={`zun-button approve-usd`}
                                     onClick={() => {
                                         setPendingTx(true);
                                         if (approve) {
@@ -385,6 +397,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                             )}
                             {action === 'deposit' && coinApproved && (
                                 <button
+                                    id="deposit-btn"
                                     className={`zun-button ${depositEnabled ? '' : 'disabled'}`}
                                     onClick={async () => {
                                         // if (deposit) {
