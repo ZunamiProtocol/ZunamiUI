@@ -44,6 +44,10 @@ export const Input = (props: InputProps): JSX.Element => {
                 decimals = 6;
             }
 
+            if (props.name === 'zunUSD') {
+                decimals = 18;
+            }
+
             if (props.name === 'DAI') {
                 decimals = 18;
             }

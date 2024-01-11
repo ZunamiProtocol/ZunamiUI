@@ -680,7 +680,7 @@ export const Main = (): JSX.Element => {
                                     setStakingMode('UZD');
                                 }}
                             />
-                            <StakingSummary
+                            {/* <StakingSummary
                                 logo="ZETH"
                                 selected={stakingMode === 'ZETH'}
                                 baseApy={
@@ -703,7 +703,7 @@ export const Main = (): JSX.Element => {
                                     setStakingMode('ZETH');
                                 }}
                                 comingSoon={true}
-                            />
+                            /> */}
                         </SideBar>
                         <div className="col content-col dashboard-col">
                             <Header section="dashboard" />

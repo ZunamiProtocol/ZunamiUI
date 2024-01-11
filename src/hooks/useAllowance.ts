@@ -78,12 +78,12 @@ export const useAllowanceStables = (
     chainId: number = 1
 ) => {
     const [allowance, setAllowance] = useState([
-        BIG_ZERO, // DAI
-        BIG_ZERO, // USDC
-        BIG_ZERO, // USDT
-        BIG_ZERO, // FRAX
-        BIG_ZERO, // zunUSD
-        BIG_ZERO, // zunETH
+        BIG_ZERO, // DAI to APS
+        BIG_ZERO, // USDC to APS
+        BIG_ZERO, // USDT to APS
+        BIG_ZERO, // FRAX to APS
+        BIG_ZERO, // zunUSD to APS
+        BIG_ZERO, // zunETH to APS
         BIG_ZERO, // ZUN
     ]);
 
@@ -106,7 +106,7 @@ export const useAllowanceStables = (
                     );
 
                     log(
-                        `Allowance (sepolia): DAI - ${result[0].toString()}, USDC - ${result[1].toString()}, USDT - ${result[2].toString()}`
+                        `Allowance (sepolia): DAI - ${result[0].toString()}, USDC - ${result[1].toString()}, USDT - ${result[2].toString()}, zunUSD - ${result[4].toString()}`
                     );
 
                     setAllowance(result);

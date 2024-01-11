@@ -18,7 +18,7 @@ import { ReactComponent as StakingUzdLogo } from './assets/zun-usd-logo.svg';
 import { ReactComponent as StakingZethLogo } from './assets/zun-eth-logo.svg';
 import { ReactComponent as MobileToggleIcon } from './assets/mobile-toggle-icon.svg';
 import { renderToasts, FastDepositFormProps } from './types';
-import { zunUsdSepoliaAddress, zunamiSepoliaAddress } from '../../sushi/lib/constants';
+import { zunUsdSepoliaAddress, zunUsdApsSepoliaAddress } from '../../sushi/lib/constants';
 import useApprove from '../../hooks/useApprove';
 import { APPROVE_SUM } from '../../sushi/utils';
 
@@ -38,10 +38,11 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const [transactionId, setTransactionId] = useState<string | undefined>(undefined);
     const [pendingTx, setPendingTx] = useState(false);
     const [transactionError, setTransactionError] = useState(false);
-    const [coinIndex, setCoinIndex] = useState(2);
+    const [coinIndex, setCoinIndex] = useState(4);
 
-    // Current contract address
-    const contractAddress: Address = zunamiSepoliaAddress;
+    // Current APS contract address
+    const contractAddress: Address = zunUsdApsSepoliaAddress;
+    const zunUsdAddress: Address = zunUsdSepoliaAddress;
 
     // deposit allowance
     const allowance = useAllowanceStables(account, contractAddress, chainId);
@@ -63,7 +64,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     }, [stakingMode, action, userBalanceList]);
 
     useEffect(() => {
-        let preselectedCoin = stakingMode === 'UZD' ? 'USDT' : 'zunETH';
+        let preselectedCoin = stakingMode === 'UZD' ? 'zunUSD' : 'zunETH';
 
         if (action === 'withdraw' && stakingMode === 'ZETH') {
             preselectedCoin = 'ethZAPSLP';
@@ -95,7 +96,8 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
 
         if (chainId === sepolia.id) {
             const isDaiOrFrax = coinIndex === 0 || coinIndex === 5;
-            decimalPlaces = isDaiOrFrax ? 18 : 6;
+            // decimalPlaces = isDaiOrFrax ? 18 : 6;
+            decimalPlaces = 18;
         }
 
         if (!userBalanceList[coinIndex].toNumber()) {
@@ -268,11 +270,11 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                     name: 'withdraw',
                                     title: 'Withdraw',
                                 },
-                                {
-                                    name: 'claim',
-                                    title: 'Claim',
-                                    disabled: true,
-                                },
+                                // {
+                                //     name: 'claim',
+                                //     title: 'Claim',
+                                //     disabled: true,
+                                // },
                             ]}
                             onChange={(action: string) => {
                                 setAction(action);
@@ -299,11 +301,11 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                 name: 'withdraw',
                                 title: 'Withdraw',
                             },
-                            {
-                                name: 'claim',
-                                title: 'Claim',
-                                disabled: true,
-                            },
+                            // {
+                            //     name: 'claim',
+                            //     title: 'Claim',
+                            //     disabled: true,
+                            // },
                         ]}
                         onChange={(action: string) => {
                             setAction(action);
@@ -336,25 +338,6 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             <div>
                 <div>
                     <div className="">
-                        {action === 'deposit' && (
-                            <div className="checkboxes">
-                                <div className="d-flex gap-4 mb-3 flex-column flex-md-row">
-                                    <DirectAction
-                                        actionName="deposit"
-                                        checked={lockAndBoost}
-                                        title={'Lock and boost APY to 25%'}
-                                        disabled={!coinApproved || !isETH(chainId)}
-                                        hint={
-                                            'You can lock your deposit for 4 months to receive additional rewards in ZUN tokens.'
-                                        }
-                                        onChange={(state: boolean) => {
-                                            setLockAndBoost(state);
-                                        }}
-                                        chainId={chainId ?? 1}
-                                    />
-                                </div>
-                            </div>
-                        )}
                         <div className="buttons">
                             {action === 'withdraw' && coinApproved && (
                                 <button

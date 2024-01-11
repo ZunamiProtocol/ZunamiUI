@@ -51,7 +51,7 @@ export function getCoinAddressByIndex(index: number, chainId: number): Address {
                     result = NULL_ADDRESS;
                     break;
                 case 4:
-                    result = NULL_ADDRESS;
+                    result = zunUsdSepoliaAddress;
                     break;
             }
             break;

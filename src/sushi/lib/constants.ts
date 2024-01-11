@@ -7,8 +7,13 @@ const zethAddress: Address = '0xe47f1CD2A37c6FE69e3501AE45ECA263c5A87b2b';
 
 export const SUBTRACT_GAS_LIMIT = 100000;
 
-const zunamiMainnetAddress: Address = NULL_ADDRESS;
+// Main Omnipool controller
+export const zunamiMainnetAddress: Address = NULL_ADDRESS;
 export const zunamiSepoliaAddress: Address = '0x3694Db838a8cAf3b1c234529bB1b447bd849F357';
+
+// zunUSD APS controller
+export const zunUsdApsAddress: Address = NULL_ADDRESS;
+export const zunUsdApsSepoliaAddress: Address = '0x1C4e36edBa364406f181fe9B3a4E6FC023DED0bc';
 
 const zunUsdMainnetAddress: Address = NULL_ADDRESS;
 export const zunUsdSepoliaAddress: Address = '0x83287Da602f0C32f6C9B09E2F1b2951767ebF239';
