@@ -36,7 +36,7 @@ export const useAllowance = (
 
         const fetchAllowance = async () => {
             const val = await getCoinAllowance(coinAddress, account, spender, chainId);
-            console.log(`${coinAddress}.allowance('${account}', '${spender}') - ${val}`);
+            log(`${coinAddress}.allowance('${account}', '${spender}') - ${val}`);
             setAllowance(new BigNumber(val.toString()));
         };
 
@@ -105,9 +105,9 @@ export const useAllowanceStables = (
                         (allowance: BigInt, index: number) => new BigNumber(allowance.toString())
                     );
 
-                    log(
-                        `Allowance (sepolia): DAI - ${result[0].toString()}, USDC - ${result[1].toString()}, USDT - ${result[2].toString()}, zunUSD - ${result[4].toString()}`
-                    );
+                    // log(
+                    //     `Allowance (sepolia): DAI - ${result[0].toString()}, USDC - ${result[1].toString()}, USDT - ${result[2].toString()}, zunUSD - ${result[4].toString()}`
+                    // );
 
                     setAllowance(result);
 

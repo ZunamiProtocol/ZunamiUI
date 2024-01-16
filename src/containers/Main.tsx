@@ -28,7 +28,7 @@ import { useConnect, useAccount, useNetwork } from 'wagmi';
 import type { DataItem } from '../components/Chart/Chart';
 import { MicroCard } from '../components/MicroCard/MicroCard';
 import useBalanceOf from '../hooks/useBalanceOf';
-import { getZunUsdAddress } from '../utils/zunami';
+import { getZunUsdAddress, getZunUsdApsAddress } from '../utils/zunami';
 import { erc20ABI } from 'wagmi';
 
 const Header = lazy(() =>
@@ -149,7 +149,7 @@ export const Main = (): JSX.Element => {
     // const isContractPaused = usePausedContract();
     const [supportedChain, setSupportedChain] = useState(true);
 
-    const apsBalance = BIG_ZERO;
+    const apsBalance = useBalanceOf(getZunUsdApsAddress(chainId), erc20ABI);
     const apsLpPrice = BIG_ZERO;
     const zethBalance = BIG_ZERO;
 
@@ -161,26 +161,6 @@ export const Main = (): JSX.Element => {
     const [stakingMode, setStakingMode] = useState('UZD');
     // // total tvl (aps/zunami)
     const [tvl, setTvl] = useState('0');
-
-    // const activeBalance = useMemo(() => {
-    //     let result = balances[0];
-
-    //     if (isBSC(chainId)) {
-    //         result = balances[1];
-    //     }
-
-    //     if (isPLG(chainId)) {
-    //         result = balances[2];
-    //     }
-
-    //     return result.value;
-    // }, [chainId, balances]);
-
-    // const userMaxWithdraw = useMemo(() => {
-    //     return lpPrice.toNumber() > 0 && balance.toNumber() !== -1
-    //         ? lpPrice.multipliedBy(activeBalance)
-    //         : new BigNumber(-1);
-    // }, [lpPrice, balance, activeBalance]);
 
     const { isLoading: uzdStatLoading, data: uzdStatData } = useFetch(
         uzdStakingInfoUrl
@@ -288,51 +268,19 @@ export const Main = (): JSX.Element => {
             });
     }, [histApyPeriod, stakingMode]);
 
-    // const pendingOperations = usePendingOperations();
-
-    // const pendingWithdraw =
-    //     lpPrice.toNumber() > 0 && pendingOperations.withdraw.toNumber() !== -1
-    //         ? lpPrice.multipliedBy(pendingOperations.withdraw)
-    //         : new BigNumber(0);
-
-    // // ETH merge modal
-    // const [showMergeModal, setShowMergeModal] = useState(false);
-    // // LP to UZD migration modal
-    // const [showLpMigrationModal, setShowLpMigrationModal] = useState(false);
     // // APY details modal
     const [showApyDetailsModal, setShowApyDetailsModal] = useState(false);
-
-    // useEffect(() => {
-    //     setShowMergeModal(isContractPaused);
-    // }, [isContractPaused]);
-
-    // useEffect(() => {
-    //     setShowLpMigrationModal(balance.toNumber() > 0);
-    // }, [balance]);
 
     const apyHintTarget = useRef(null);
     const [showApyHint, setShowApyHint] = useState(false);
 
-    // useEffect(() => {
-    //     log(`${new Date().toLocaleTimeString()} TVL - ${uzdStatLoading ? 'loading...' : 'loaded'}`);
-
-    //     if (!uzdStatLoading && uzdStatData.tvl) {
-    //         setTvl(uzdStatData.tvl);
-    //     }
-    // }, [uzdStatLoading, uzdStatData?.tvl]);
-
     const totalBalance = useMemo(() => {
-        let val = BIG_ZERO;
-
-        // balances.forEach((bItem: Balance) => (val = val.plus(bItem.value.multipliedBy(lpPrice))));
-        // val = val.plus(apsBalance.multipliedBy(apsLpPrice));
-        // val = val.plus(uzdBalance);
+        let val = apsBalance;
 
         log(`Total balance is: ${val.toString()}`);
 
         return val;
-    }, []);
-    // }, [apsBalance, balances, uzdBalance, lpPrice, apsLpPrice]);
+    }, [apsBalance]);
 
     const apyPopover = useMemo(() => {
         let apy30 = '0';
@@ -384,24 +332,6 @@ export const Main = (): JSX.Element => {
     const balanceTarget = useRef(null);
     const [showBalanceHint, setShowBalanceHint] = useState(false);
     const [clickCounter, setClickCounter] = useState(0);
-
-    const balancePopover = (
-        <Popover
-            onMouseEnter={() => setShowBalanceHint(true)}
-            onMouseLeave={() => setShowBalanceHint(false)}
-        >
-            <Popover.Body>
-                {/* {renderBalances(
-                    [
-                        ...balances,
-                        { chainId: '1', key: 'APS', value: apsBalance.multipliedBy(apsLpPrice) },
-                        { chainId: '1', key: 'UZD', value: uzdBalance },
-                    ],
-                    lpPrice
-                )} */}
-            </Popover.Body>
-        </Popover>
-    );
 
     const apyBarApy = useMemo(() => {
         // incorrect server response handler
@@ -588,45 +518,12 @@ export const Main = (): JSX.Element => {
                                     >
                                         <div className="title d-flex gap-2 justify-content-between">
                                             <span>Balance</span>
-                                            <div
-                                                ref={balanceTarget}
-                                                onClick={() => setShowBalanceHint(!showApyHint)}
-                                                className={'hint'}
-                                            >
-                                                <OverlayTrigger
-                                                    trigger={['hover', 'focus']}
-                                                    placement="right"
-                                                    overlay={balancePopover}
-                                                    show={showBalanceHint}
-                                                >
-                                                    <svg
-                                                        width="13"
-                                                        height="13"
-                                                        viewBox="0 0 13 13"
-                                                        fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        onMouseEnter={() =>
-                                                            setShowBalanceHint(true)
-                                                        }
-                                                        onMouseLeave={() =>
-                                                            setShowBalanceHint(false)
-                                                        }
-                                                    >
-                                                        <path
-                                                            fillRule="evenodd"
-                                                            clipRule="evenodd"
-                                                            d="M6.5 13C10.0899 13 13 10.0899 13 6.5C13 2.91015 10.0899 0 6.5 0C2.91015 0 0 2.91015 0 6.5C0 10.0899 2.91015 13 6.5 13ZM6.23296 9.97261H4.98638L5.79002 7.12336H3.02741V5.87679H6.14162L6.94529 3.02741H8.19186L7.38819 5.87679L9.97261 5.87679V7.12336H7.03659L6.23296 9.97261Z"
-                                                            fill="000000"
-                                                        />
-                                                    </svg>
-                                                </OverlayTrigger>
-                                            </div>
                                         </div>
                                         <div className="value">
                                             {!account && 'n/a'}
                                             {account &&
-                                                balance.toNumber() !== -1 &&
-                                                `$ ${getBalanceNumber(balance)
+                                                totalBalance.toNumber() !== -1 &&
+                                                `$ ${getBalanceNumber(totalBalance)
                                                     .toNumber()
                                                     .toLocaleString('en')}`}
                                         </div>
@@ -663,7 +560,7 @@ export const Main = (): JSX.Element => {
                                         ? 0
                                         : uzdStatData.info.zunUSD.apy.toFixed(2)
                                 }
-                                deposit={`$${getBalanceNumber(apsBalance.multipliedBy(apsLpPrice))
+                                deposit={`$${getBalanceNumber(apsBalance)
                                     .toNumber()
                                     .toLocaleString('en')}`}
                                 tvl={

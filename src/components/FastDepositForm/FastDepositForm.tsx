@@ -10,7 +10,7 @@ import { getActiveWalletName } from '../WalletsModal/WalletsModal';
 import { BIG_ZERO, NULL_ADDRESS } from '../../utils/formatbalance';
 import { getFullDisplayBalance } from '../../utils/formatbalance';
 import { log } from '../../utils/logger';
-import { isETH, isSEP } from '../../utils/zunami';
+import { getZunUsdApsAddress, isETH, isSEP } from '../../utils/zunami';
 import { ActionSelector } from '../Form/ActionSelector/ActionSelector';
 import { DirectAction } from '../Form/DirectAction/DirectAction';
 import { useAccount, useNetwork, Address, sepolia } from 'wagmi';
@@ -21,6 +21,7 @@ import { renderToasts, FastDepositFormProps } from './types';
 import { zunUsdSepoliaAddress, zunUsdApsSepoliaAddress } from '../../sushi/lib/constants';
 import useApprove from '../../hooks/useApprove';
 import { APPROVE_SUM } from '../../sushi/utils';
+import useBalanceOf from '../../hooks/useBalanceOf';
 
 export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HTMLDivElement>> = ({
     stakingMode,
@@ -41,27 +42,33 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const [coinIndex, setCoinIndex] = useState(4);
 
     // Current APS contract address
-    const contractAddress: Address = zunUsdApsSepoliaAddress;
+    const contractAddress: Address = getZunUsdApsAddress(chainId);
     const zunUsdAddress: Address = zunUsdSepoliaAddress;
 
     // deposit allowance
     const allowance = useAllowanceStables(account, contractAddress, chainId);
     // withdraw allowance
-    const withdrawAllowance = useAllowance(zunUsdSepoliaAddress, account, contractAddress, chainId);
+    const withdrawAllowance = useAllowance(
+        getZunUsdApsAddress(chainId),
+        account,
+        contractAddress,
+        chainId
+    );
 
     // APS balance
-    const apsBalance = BIG_ZERO;
+    const apsBalance = useBalanceOf(getZunUsdApsAddress(chainId));
     // ZETH APS balance
     const zethApsBalance = BIG_ZERO;
 
     // set withdraw sum to maximum
-    useEffect(() => {
-        if (action === 'withdraw') {
-            const withdrawMaxBalance =
-                stakingMode === 'UZD' ? userBalanceList[4] : userBalanceList[5];
-            setWithdrawSum(getFullDisplayBalance(withdrawMaxBalance));
-        }
-    }, [stakingMode, action, userBalanceList]);
+    // useEffect(() => {
+    //     if (action === 'withdraw') {
+    //         if (stakingMode === 'UZD' && withdrawSum === '') {
+    //             let withdrawMaxBalance = apsBalance;
+    //             setWithdrawSum(getFullDisplayBalance(withdrawMaxBalance));
+    //         }
+    //     }
+    // }, [stakingMode, action, apsBalance, withdrawSum]);
 
     useEffect(() => {
         let preselectedCoin = stakingMode === 'UZD' ? 'zunUSD' : 'zunETH';
@@ -85,6 +92,10 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const fullBalance = useMemo(() => {
         let decimalPlaces = 18;
         let digits = 18;
+
+        if (action === 'withdraw') {
+            return getFullDisplayBalance(apsBalance, decimalPlaces, digits);
+        }
 
         if (userBalanceList[coinIndex] && !userBalanceList[coinIndex].toNumber()) {
             decimalPlaces = 0;
@@ -113,7 +124,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         }
 
         return getFullDisplayBalance(userBalanceList[coinIndex], decimalPlaces);
-    }, [userBalanceList, coinIndex, chainId]);
+    }, [userBalanceList, coinIndex, chainId, action, apsBalance]);
 
     // selected coin approved
     const coinApproved = useMemo(() => {
@@ -174,7 +185,8 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const depositValidationError = useMemo(() => {
         let message = '';
 
-        if (Number(depositSum) >= Number(fullBalance)) {
+        if (Number(depositSum) > Number(fullBalance)) {
+            console.log(`Input val: ${Number(depositSum)} vs raw val: ${Number(fullBalance)}`);
             message = "You're trying to deposit more than you have";
         }
 
@@ -206,7 +218,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             if (action === 'deposit') {
                 result = userBalanceList[coinIndex];
             } else {
-                result = userBalanceList[4];
+                result = apsBalance;
             }
         }
 
@@ -219,7 +231,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         }
 
         return result;
-    }, [action, stakingMode, coinIndex, userBalanceList, chainId]);
+    }, [action, stakingMode, coinIndex, userBalanceList, chainId, apsBalance]);
 
     // deposit
     const { deposit } = useStake(coinIndex, depositSum, account || NULL_ADDRESS);
@@ -235,7 +247,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         if (action === 'deposit') {
             return getCoinAddressByIndex(coinIndex, chainId ?? 1);
         } else {
-            return zunUsdSepoliaAddress;
+            return getZunUsdApsAddress(chainId);
         }
     }, [action, chainId, coinIndex]);
 

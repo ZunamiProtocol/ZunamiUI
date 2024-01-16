@@ -18,6 +18,10 @@ export const zunUsdApsSepoliaAddress: Address = '0x1C4e36edBa364406f181fe9B3a4E6
 const zunUsdMainnetAddress: Address = NULL_ADDRESS;
 export const zunUsdSepoliaAddress: Address = '0x83287Da602f0C32f6C9B09E2F1b2951767ebF239';
 
+// ZUN token
+export const zunTokenAddress: Address = NULL_ADDRESS;
+export const zunTokenSepoliaAddress: Address = '0xAc4d9e15910701a10329040bDC71a484C9Ba3860';
+
 export const contractAddresses: { [index: string]: any } = {
     zunami: {
         // ETH
@@ -39,7 +43,12 @@ export const contractAddresses: { [index: string]: any } = {
         1: '0x3D8aBC464D5313a576e78706aC97F79fe1EB0b61',
     },
     aps: {
-        1: apsAddress,
+        1: zunUsdMainnetAddress,
+        11155111: zunUsdApsSepoliaAddress,
+    },
+    zun: {
+        1: zunTokenAddress,
+        11155111: zunTokenSepoliaAddress,
     },
     zethAPS: {
         1: zethApsAddress,

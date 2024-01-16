@@ -3,13 +3,23 @@ import { Modal } from 'react-bootstrap';
 import './ApyDetailsModal.scss';
 import { BigNumber } from 'bignumber.js';
 import Accordion from 'react-bootstrap/Accordion';
+import { sepolia, useNetwork } from 'wagmi';
+import { getZunUsdApsAddress } from '../../utils/zunami';
 
 interface ApyDetailsModalProps {
     show: boolean;
     onHide?: Function;
 }
 
+function getApsContractUrl(chainId: number | undefined): string {
+    return `https://${
+        chainId === sepolia.id ? 'sepolia.' : ''
+    }etherscan.io/address/${getZunUsdApsAddress(chainId)}`;
+}
+
 export const ApyDetailsModal = (props: ApyDetailsModalProps): JSX.Element => {
+    const { chain } = useNetwork();
+
     return (
         <Modal
             show={props.show}
@@ -36,26 +46,26 @@ export const ApyDetailsModal = (props: ApyDetailsModalProps): JSX.Element => {
                                 <div className="col-xs-12 col-md-5">
                                     <div className="row">
                                         <div className="col-8">Current APY</div>
-                                        <div className="col-4">25%</div>
+                                        <div className="col-4">0%</div>
                                     </div>
                                     <div className="row">
                                         <div className="col-8">UZD</div>
-                                        <div className="col-4">15%</div>
+                                        <div className="col-4">0%</div>
                                     </div>
                                     <div className="row">
                                         <div className="col-8">ZUN</div>
-                                        <div className="col-4">10%</div>
+                                        <div className="col-4">0%</div>
                                     </div>
                                 </div>
                                 <div className="col-xs-12 col-md-7">
                                     <div className="row">
                                         <div className="col-8">Latest auto-compound</div>
-                                        <div className="col-4">August, 19 2023</div>
+                                        <div className="col-4">$LATEST_AC_DATE</div>
                                     </div>
                                     <div className="row">
                                         <div className="col-8">Collected rewards</div>
                                         <div className="col-4">
-                                            <div>$225,435</div>
+                                            <div>$REWARDS_AMOUNT</div>
                                         </div>
                                     </div>
                                 </div>
@@ -89,7 +99,10 @@ export const ApyDetailsModal = (props: ApyDetailsModalProps): JSX.Element => {
                     <Accordion.Item eventKey="5">
                         <Accordion.Header>Contracts</Accordion.Header>
                         <Accordion.Body>
-                            APS:
+                            APS:{' '}
+                            <a href={getApsContractUrl(chain?.id)} target="_blank" rel="noreferrer">
+                                go to Etherscan
+                            </a>
                             <br />
                             Reward Manager:
                         </Accordion.Body>

@@ -48,6 +48,8 @@ import { useConnect, useAccount, useNetwork } from 'wagmi';
 import { LockHistory } from '../components/LockHistory/LockHistory';
 import { SidebarTopButtons } from '../components/SidebarTopButtons/SidebarTopButtons';
 import { AddressButtons } from '../components/AddressButtons/AddressButtons';
+import useBalanceOf from '../hooks/useBalanceOf';
+import { getZunTokenAddress } from '../utils/zunami';
 
 export interface CurveInfoFetch {
     data: any;
@@ -114,6 +116,9 @@ export const Uzd = (): JSX.Element => {
     const { address: account, isConnected } = useAccount();
     const { chain } = useNetwork();
     const chainId = chain ? parseInt(window.ethereum?.chainId, 16) : 1;
+
+    const zunBalance = useBalanceOf(getZunTokenAddress(chainId));
+
     const zethBalance = useUzdBalance(contractAddresses.zeth[1]);
     const uzdTotalSupply = useTotalSupply(contractAddresses.uzd[1]);
     const zethTotalSupply = useTotalSupply(contractAddresses.zeth[1]);
@@ -313,12 +318,6 @@ export const Uzd = (): JSX.Element => {
             <AllServicesPanel />
             <div className="container">
                 <div className="row main-row h-100 UzdContainer">
-                    {!supportedChain && (
-                        <UnsupportedChain
-                            text="You're using unsupported chain. Please, switch to Ethereum network."
-                            customNetworksList={[networks[0]]}
-                        />
-                    )}
                     <SideBar isMainPage={false} tvl={tvl}>
                         <SidebarTopButtons />
                         <div className="mobile-menu-title d-block d-xxl-none">Menu</div>

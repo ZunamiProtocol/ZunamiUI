@@ -1,5 +1,5 @@
 import { Address, sepolia, useAccount, useNetwork } from 'wagmi';
-import sepControllerAbi from '../actions/abi/sepolia/controller.json';
+import apsAbi from '../actions/abi/sepolia/aps.json';
 import { useMemo } from 'react';
 import { contractAddresses } from '../sushi/lib/constants';
 import BigNumber from 'bignumber.js';
@@ -22,24 +22,16 @@ const useUnstake = (
     const chainId = chain ? chain.id : undefined;
     const { address: account } = useAccount();
 
-    const abi = useMemo(() => {
-        if (chainId === sepolia.id) {
-            return sepControllerAbi;
-        } else {
-            return sepControllerAbi;
-        }
-    }, [chainId]);
-
     const contractAddress = useMemo(() => {
-        if (chainId === sepolia.id) {
-            return contractAddresses.zunami[sepolia.id];
+        if (!chainId) {
+            return contractAddresses.aps[1];
         }
 
-        return NULL_ADDRESS;
+        return contractAddresses.aps[chainId] ?? contractAddresses.aps[1];
     }, [chainId]);
 
     async function onUnstake() {
-        log(`Withdraw ${contractAddress} - (${shares}, ${minTokenAmounts}, '${receiver}')`);
+        log(`${contractAddress}.withdraw(${shares}, [${minTokenAmounts}], '${receiver}')`);
 
         const sumToWithdraw = new BigNumber(shares)
             .multipliedBy(BIG_TEN.pow(UZD_DECIMALS))
@@ -48,7 +40,7 @@ const useUnstake = (
         return await walletClient.writeContract({
             address: contractAddress,
             chain: chain,
-            abi: abi,
+            abi: apsAbi,
             functionName: 'withdraw',
             args: [sumToWithdraw, minTokenAmounts, receiver],
             account: account || NULL_ADDRESS,

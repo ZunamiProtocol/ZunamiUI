@@ -19,7 +19,25 @@ export const getZunamiAddress = (chainId: number): Address => {
 };
 
 export const getZunUsdAddress = (chainId: number): Address => {
-    let address: Address = contractAddresses.zunUSD[chainId];
+    let address: Address = contractAddresses.zunUSD[chainId] ?? contractAddresses.zunUSD[1];
+    return address;
+};
+
+export const getZunUsdApsAddress = (chainId: number | undefined): Address => {
+    if (!chainId) {
+        return contractAddresses.aps[1];
+    }
+
+    let address: Address = contractAddresses.aps[chainId] ?? contractAddresses.aps[1];
+    return address;
+};
+
+export const getZunTokenAddress = (chainId: number | undefined): Address => {
+    if (!chainId) {
+        return contractAddresses.zun[1];
+    }
+
+    let address: Address = contractAddresses.zun[chainId] ?? contractAddresses.zun[1];
     return address;
 };
 

@@ -18,7 +18,7 @@ export const getBalanceNumber = (balance: BigNumber, decimals = 18): BigNumber =
 
 export const getFullDisplayBalance = (balance: BigNumber, decimals = 18, decimalPlaces = 2) => {
     const newNumber = new BigNumber(balance);
-    return newNumber.dividedBy(BIG_TEN.pow(decimals)).toFixed(decimalPlaces, BigNumber.ROUND_DOWN);
+    return newNumber.dividedBy(BIG_TEN.pow(decimals)).toFixed(decimalPlaces);
 };
 
 /**

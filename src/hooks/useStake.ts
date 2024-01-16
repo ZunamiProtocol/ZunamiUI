@@ -3,7 +3,12 @@ import sepControllerAbi from '../actions/abi/sepolia/controller.json';
 import { useMemo } from 'react';
 import { contractAddresses } from '../sushi/lib/constants';
 import BigNumber from 'bignumber.js';
-import { DAI_TOKEN_DECIMAL, NULL_ADDRESS, USDT_TOKEN_DECIMAL } from '../utils/formatbalance';
+import {
+    DAI_TOKEN_DECIMAL,
+    DEFAULT_TOKEN_DECIMAL,
+    NULL_ADDRESS,
+    USDT_TOKEN_DECIMAL,
+} from '../utils/formatbalance';
 import { walletClient } from '../config';
 import { log } from '../utils/logger';
 
@@ -22,7 +27,7 @@ const useStake = (coinIndex: number, depositSum: string, receiver: Address) => {
 
     const contractAddress = useMemo(() => {
         if (chainId === sepolia.id) {
-            return contractAddresses.zunami[sepolia.id];
+            return contractAddresses.aps[chainId] ?? 1;
         }
 
         return NULL_ADDRESS;
@@ -37,6 +42,10 @@ const useStake = (coinIndex: number, depositSum: string, receiver: Address) => {
     ];
 
     const tokenDecimals = useMemo(() => {
+        if (!chainId || contractAddress === contractAddresses.aps[chainId]) {
+            return DEFAULT_TOKEN_DECIMAL;
+        }
+
         if (chainId === sepolia.id) {
             switch (coinIndex) {
                 case 0:
@@ -60,12 +69,18 @@ const useStake = (coinIndex: number, depositSum: string, receiver: Address) => {
                     return USDT_TOKEN_DECIMAL;
             }
         }
-    }, [coinIndex, chainId]);
+    }, [coinIndex, chainId, contractAddress]);
 
-    preparedAmounts[coinIndex] = new BigNumber(depositSum).times(tokenDecimals).toString();
+    if (coinIndex !== 4) {
+        // everything else
+        preparedAmounts[coinIndex] = new BigNumber(depositSum).times(tokenDecimals).toString();
+    } else {
+        // zunUSD APS staking
+        preparedAmounts[0] = new BigNumber(depositSum).times(tokenDecimals).toString();
+    }
 
     async function onStake() {
-        log(`Deposit ${contractAddress} - (${preparedAmounts}, '${receiver}')`);
+        log(`${contractAddress}.deposit([${preparedAmounts}], '${receiver}')`);
         return await walletClient.writeContract({
             address: contractAddress,
             chain: chain,
