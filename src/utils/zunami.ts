@@ -32,6 +32,15 @@ export const getZunUsdApsAddress = (chainId: number | undefined): Address => {
     return address;
 };
 
+export const getZunStakingAddress = (chainId: number | undefined): Address => {
+    if (!chainId) {
+        return contractAddresses.staking[1];
+    }
+
+    let address: Address = contractAddresses.staking[chainId] ?? contractAddresses.staking[1];
+    return address;
+};
+
 export const getZunTokenAddress = (chainId: number | undefined): Address => {
     if (!chainId) {
         return contractAddresses.zun[1];

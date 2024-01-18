@@ -10,7 +10,7 @@ import { getActiveWalletName } from '../WalletsModal/WalletsModal';
 import { BIG_ZERO, NULL_ADDRESS } from '../../utils/formatbalance';
 import { getFullDisplayBalance } from '../../utils/formatbalance';
 import { log } from '../../utils/logger';
-import { getZunUsdApsAddress, isETH, isSEP } from '../../utils/zunami';
+import { getZunStakingAddress, getZunUsdApsAddress, isETH, isSEP } from '../../utils/zunami';
 import { ActionSelector } from '../Form/ActionSelector/ActionSelector';
 import { DirectAction } from '../Form/DirectAction/DirectAction';
 import { useAccount, useNetwork, Address, sepolia } from 'wagmi';
@@ -32,7 +32,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const { address: account } = useAccount();
     const userBalanceList = useUserBalances(account, chainId);
 
-    const [lockAndBoost, setLockAndBoost] = useState(true);
+    const [lockAndBoost, setLockAndBoost] = useState(false);
     const [action, setAction] = useState('deposit');
     const [depositSum, setDepositSum] = useState('0');
     const [withdrawSum, setWithdrawSum] = useState('');
@@ -52,6 +52,13 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         getZunUsdApsAddress(chainId),
         account,
         contractAddress,
+        chainId
+    );
+    // Staking allowance
+    const stakingAllowance = useAllowance(
+        contractAddress,
+        account,
+        getZunStakingAddress(chainId),
         chainId
     );
 
@@ -129,12 +136,18 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     // selected coin approved
     const coinApproved = useMemo(() => {
         if (action === 'deposit') {
-            return allowance[coinIndex].toNumber() > 0;
+            if (lockAndBoost) {
+                // Staking
+                return stakingAllowance.toNumber() > 0;
+            } else {
+                // regular deposit
+                return allowance[coinIndex].toNumber() > 0;
+            }
         } else {
             return withdrawAllowance.toNumber() > 0;
             // return allowance[coinIndex].toNumber() > 0;
         }
-    }, [allowance, coinIndex, action, withdrawAllowance]);
+    }, [allowance, coinIndex, action, withdrawAllowance, lockAndBoost, stakingAllowance]);
 
     // show approve btn or not
     const showApproveBtn = useMemo(() => {
@@ -234,7 +247,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     }, [action, stakingMode, coinIndex, userBalanceList, chainId, apsBalance]);
 
     // deposit
-    const { deposit } = useStake(coinIndex, depositSum, account || NULL_ADDRESS);
+    const { deposit, stakingDeposit } = useStake(coinIndex, depositSum, account || NULL_ADDRESS);
     // withdraw
     const { withdraw } = useUnstake(
         withdrawSum,
@@ -242,14 +255,27 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         account || NULL_ADDRESS
     );
 
-    // spender for approve
+    // target for approve
     const addressForApprove = useMemo(() => {
         if (action === 'deposit') {
-            return getCoinAddressByIndex(coinIndex, chainId ?? 1);
+            if (lockAndBoost) {
+                return getZunUsdApsAddress(chainId);
+            } else {
+                return getCoinAddressByIndex(coinIndex, chainId ?? 1);
+            }
         } else {
             return getZunUsdApsAddress(chainId);
         }
-    }, [action, chainId, coinIndex]);
+    }, [action, chainId, coinIndex, lockAndBoost]);
+
+    // spender for approve
+    const approveSpender = useMemo(() => {
+        if (lockAndBoost) {
+            return getZunStakingAddress(chainId);
+        } else {
+            return contractAddress;
+        }
+    }, [chainId, lockAndBoost, contractAddress]);
 
     // approve
     const {
@@ -257,7 +283,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         isLoading: isApproving,
         isSuccess: approveSuccessful,
         write: approve,
-    } = useApprove(addressForApprove, contractAddress, APPROVE_SUM);
+    } = useApprove(addressForApprove, approveSpender, APPROVE_SUM);
 
     return (
         <div className={`FastDepositForm ${className} mode-${stakingMode}`}>
@@ -350,6 +376,38 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             <div>
                 <div>
                     <div className="">
+                        {action === 'deposit' && (
+                            <div className="checkboxes">
+                                <div className="d-flex gap-4 mb-3 flex-column flex-md-row">
+                                    {!pendingTx && (
+                                        <DirectAction
+                                            actionName="deposit"
+                                            checked={lockAndBoost}
+                                            title={'Lock and boost APY to 25%'}
+                                            disabled={false}
+                                            hint={'Example tooltip text'}
+                                            onChange={(state: boolean) => {
+                                                setLockAndBoost(state);
+                                            }}
+                                            chainId={chainId ?? 1}
+                                        />
+                                    )}
+                                    {/* {!pendingTx && (
+                                        <DirectAction
+                                            actionName="deposit"
+                                            checked={autoRelock}
+                                            title={'Auto-relock'}
+                                            disabled={!coinApproved || !isETH(chainId)}
+                                            hint={'Example tooltip text'}
+                                            onChange={(state: boolean) => {
+                                                setAutoRelock(state);
+                                            }}
+                                            chainId={chainId}
+                                        />
+                                    )} */}
+                                </div>
+                            </div>
+                        )}
                         <div className="buttons">
                             {action === 'withdraw' && coinApproved && (
                                 <button
@@ -398,7 +456,14 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                         // if (deposit) {
                                         setPendingTx(true);
                                         try {
-                                            const tx = await deposit();
+                                            let tx = null;
+
+                                            if (lockAndBoost) {
+                                                tx = await stakingDeposit();
+                                            } else {
+                                                tx = await deposit();
+                                            }
+
                                             log(`Deposit executed. Tx ID: ${tx}`);
                                             setTransactionId(tx);
                                             setDepositSum('0');

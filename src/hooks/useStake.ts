@@ -11,6 +11,8 @@ import {
 } from '../utils/formatbalance';
 import { walletClient } from '../config';
 import { log } from '../utils/logger';
+import { getZunStakingAddress } from '../utils/zunami';
+import stakingAbi from '../actions/abi/sepolia/staking.json';
 
 const useStake = (coinIndex: number, depositSum: string, receiver: Address) => {
     const { chain } = useNetwork();
@@ -79,6 +81,7 @@ const useStake = (coinIndex: number, depositSum: string, receiver: Address) => {
         preparedAmounts[0] = new BigNumber(depositSum).times(tokenDecimals).toString();
     }
 
+    // APS deposit
     async function onStake() {
         log(`${contractAddress}.deposit([${preparedAmounts}], '${receiver}')`);
         return await walletClient.writeContract({
@@ -91,8 +94,24 @@ const useStake = (coinIndex: number, depositSum: string, receiver: Address) => {
         });
     }
 
+    // Staking #1
+    async function stakingDeposit() {
+        const amount = new BigNumber(depositSum).times(tokenDecimals).toString();
+        log(`Staking.deposit(0, ${amount}`);
+
+        return await walletClient.writeContract({
+            address: getZunStakingAddress(chainId),
+            chain: chain,
+            abi: stakingAbi,
+            functionName: 'deposit',
+            args: [0, amount],
+            account: account || NULL_ADDRESS,
+        });
+    }
+
     return {
         deposit: onStake,
+        stakingDeposit,
     };
 };
 
