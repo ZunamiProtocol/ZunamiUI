@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './App.scss';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Preloader } from './components/Preloader/Preloader';
+import { Earn } from './containers/Earn';
 
 const router = createBrowserRouter([
     {
@@ -21,10 +22,10 @@ const router = createBrowserRouter([
         path: '/zun-stables',
         element: <ZunStables />,
     },
-    // {
-    //     path: '/analytics',
-    //     element: <Analytics />,
-    // },
+    {
+        path: '/earn',
+        element: <Earn />,
+    },
 ]);
 
 function App() {

@@ -1,0 +1,349 @@
+.earn-container {
+    .accordion-item {
+        border: none;
+        border-radius: 15px;
+
+        .accordion-header {
+            background: #f4f4f4;
+            border-radius: 15px 15px 0 0;
+
+            .accordion-button {
+                border-radius: 15px;
+                background: #e6e6e6;
+                overflow: hidden;
+                box-shadow: none;
+
+                &:not(.collapsed)::after {
+                    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAxOCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik05IDE4QzEzLjk3MDYgMTggMTggMTMuOTcwNiAxOCA5QzE4IDQuMDI5NDQgMTMuOTcwNiAwIDkgMEM0LjAyOTQ0IDAgMCA0LjAyOTQ0IDAgOUMwIDEzLjk3MDYgNC4wMjk0NCAxOCA5IDE4Wk00LjE5MTg2IDguMTM5NTZWOS44NjU1OUwxMy44MDgzIDkuODY1NTlWOC4xMzk1Nkg0LjE5MTg2WiIgZmlsbD0iYmxhY2siLz4KPC9zdmc+IA==');
+                }
+
+                &::after {
+                    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAxOCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik05IDE4QzEzLjk3MDYgMTggMTggMTMuOTcwNiAxOCA5QzE4IDQuMDI5NDQgMTMuOTcwNiAwIDkgMEM0LjAyOTQ0IDAgMCA0LjAyOTQ0IDAgOUMwIDEzLjk3MDYgNC4wMjk0NCAxOCA5IDE4Wk04LjYzMDM3IDEzLjgwODNINi45MDQzNUw4LjAxNjQgOS44NjU1N0g0LjE5MTc1VjguMTM5NTRIOC41MDMyM0w5LjYxNjY4IDQuMTkxODZIMTEuMzQyN0wxMC4yMjkzIDguMTM5NTRIMTMuODA4MlY5Ljg2NTU3SDkuNzQyNDNMOC42MzAzNyAxMy44MDgzWiIgZmlsbD0iYmxhY2siLz4KPC9zdmc+IA==');
+                }
+            }
+        }
+
+        .accordion-collapse {
+            border-radius: 0 0 15px 15px;
+            background: #f4f4f4;
+        }
+    }
+
+    .pool-row {
+        display: flex;
+        // flex-direction: column;
+        width: calc(100% - 40px);
+        justify-content: space-between;
+        align-items: center;
+
+        .primary-icon,
+        .coins img {
+            width: 22px;
+            height: 22px;
+        }
+
+        .divider {
+            width: 1px;
+            height: 13.5px;
+            flex-shrink: 0;
+            background: #c5c5c5;
+            margin: 0;
+        }
+
+        .coins {
+            img {
+                &:last-child {
+                    transform: translateX(-50%);
+                }
+            }
+        }
+
+        .titles {
+            .primary {
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 500;
+                color: #000;
+                font-family: 'Space Grotesk';
+            }
+
+            .secondary {
+                color: #626262;
+                font-size: 12px;
+                font-style: normal;
+                font-weight: 500;
+                font-family: 'Space Grotesk';
+            }
+        }
+
+        .tvl,
+        .apr,
+        .deposit-val,
+        .claimed,
+        .unclaimed {
+            font-size: 13px;
+            line-height: 13px;
+            color: #000;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+
+            img {
+                width: 22px;
+                height: 22px;
+            }
+        }
+    }
+
+    .action-tabs {
+        border-radius: 8px;
+        background: #e8e8e8;
+        width: 208px;
+        height: 47px;
+        display: flex;
+        align-items: center;
+        justify-content: stretch;
+        padding: 5px;
+
+        li {
+            width: calc(50%);
+
+            button {
+                border-radius: 7px;
+                background: transparent;
+                color: #626262;
+                font-size: 13px;
+                width: 100%;
+
+                &.active {
+                    background: #fe9402;
+                    color: #fff;
+                }
+            }
+        }
+    }
+
+    .input {
+        // padding: 8px;
+        display: flex;
+        max-width: 252px;
+        overflow: hidden;
+        position: relative;
+
+        .coins {
+            position: absolute;
+            left: 10px;
+            top: 5px;
+
+            img {
+                width: 22px;
+                height: 22px;
+
+                &:last-child {
+                    transform: translateX(-50%);
+                }
+            }
+        }
+
+        input {
+            background: #e4e4e4;
+            border: none;
+            color: #fe9402;
+            font-family: 'Vela Sans';
+            font-size: 16px;
+            font-weight: 600;
+            width: 185px;
+            border-radius: 20px;
+            padding-left: 50px;
+
+            &:active,
+            &:focus-visible {
+                border: none;
+                outline: none;
+            }
+        }
+
+        .max {
+            width: 57px;
+            height: 38px;
+            border-radius: 20px;
+            border: 1px solid #ff7a00;
+            background: #e4e4e4;
+            color: #ff7a00;
+            text-align: center;
+            font-family: 'Space Grotesk';
+            font-size: 12px;
+            margin-left: 10px;
+        }
+    }
+
+    .steps {
+        width: 220px;
+
+        .digits {
+            display: flex;
+            justify-content: space-between;
+            width: 143px;
+            position: relative;
+            margin: 0 auto;
+
+            &::after {
+                position: absolute;
+                height: 2px;
+                background-color: #ddd;
+                content: '';
+                left: 0;
+                right: 0;
+                top: 50%;
+            }
+
+            .digit {
+                background-color: #ddd;
+                border-radius: 100%;
+                width: 20px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: 'Space Grotesk';
+                font-size: 12px;
+                font-style: normal;
+                font-weight: 500;
+                color: #9d9d9d;
+                z-index: 2;
+            }
+        }
+    }
+
+    .action-hint {
+        color: #626262;
+        font-family: 'Space Grotesk';
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .btn-secondary {
+        background: #ededed;
+        color: #626262;
+        border-color: transparent;
+
+        &:hover {
+            border: 1px solid #ff7a00;
+        }
+    }
+}
+
+body.dark {
+    .earn-container {
+        .accordion-item {
+            background-color: #2e2e2e;
+
+            .accordion-header {
+                background: #434343;
+
+                .accordion-button {
+                    background: #434343;
+
+                    &:not(.collapsed)::after {
+                        background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAxOCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik05IDE4QzEzLjk3MDYgMTggMTggMTMuOTcwNiAxOCA5QzE4IDQuMDI5NDQgMTMuOTcwNiAwIDkgMEM0LjAyOTQ0IDAgMCA0LjAyOTQ0IDAgOUMwIDEzLjk3MDYgNC4wMjk0NCAxOCA5IDE4Wk00LjE5MTg2IDguMTM5NTZWOS44NjU1OUwxMy44MDgzIDkuODY1NTlWOC4xMzk1Nkg0LjE5MTg2WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+IA==');
+                    }
+
+                    &::after {
+                        background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAxOCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik05IDE4QzEzLjk3MDYgMTggMTggMTMuOTcwNiAxOCA5QzE4IDQuMDI5NDQgMTMuOTcwNiAwIDkgMEM0LjAyOTQ0IDAgMCA0LjAyOTQ0IDAgOUMwIDEzLjk3MDYgNC4wMjk0NCAxOCA5IDE4Wk04LjYzMDM3IDEzLjgwODNINi45MDQzNUw4LjAxNjQgOS44NjU1N0g0LjE5MTc1VjguMTM5NTRIOC41MDMyM0w5LjYxNjY4IDQuMTkxODZIMTEuMzQyN0wxMC4yMjkzIDguMTM5NTRIMTMuODA4MlY5Ljg2NTU3SDkuNzQyNDNMOC42MzAzNyAxMy44MDgzWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+IA==');
+                    }
+                }
+            }
+
+            .accordion-collapse {
+                background: #2e2e2e;
+            }
+        }
+
+        .pool-row {
+            .divider {
+                background: #c5c5c5;
+            }
+            .titles {
+                .primary {
+                    color: #fff;
+                }
+
+                .secondary {
+                    color: #bbb;
+                }
+            }
+
+            .tvl,
+            .apr,
+            .deposit-val,
+            .claimed,
+            .unclaimed {
+                color: #fff;
+                background-color: transparent;
+            }
+        }
+
+        .action-tabs {
+            background: #444343;
+            box-shadow: none;
+            border: none;
+
+            li {
+                button {
+                    color: #fff;
+                    border: none;
+
+                    &.active {
+                        background: #fe9402;
+                        color: #fff;
+                    }
+                }
+            }
+        }
+
+        .input {
+            input {
+                background: #444343;
+                color: #fe9402;
+                font-family: 'Vela Sans';
+            }
+
+            .max {
+                border: 1px solid #ff7a00;
+                background: transparent;
+                color: #ff7a00;
+            }
+        }
+
+        .steps {
+            .digits {
+                &::after {
+                    background-color: #494949;
+                }
+
+                .digit {
+                    background-color: #494949;
+                    color: #9d9d9d;
+                }
+            }
+        }
+
+        .action-hint {
+            color: #626262;
+        }
+
+        .btn-secondary {
+            background: #222;
+            color: #fff;
+
+            &:hover {
+                border: 1px solid #ff7a00;
+            }
+        }
+
+        .search-filter {
+            background: #161616;
+            border-color: transparent;
+        }
+    }
+}
