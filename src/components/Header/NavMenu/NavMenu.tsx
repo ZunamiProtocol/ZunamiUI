@@ -104,7 +104,7 @@ export const NavMenu = (props: NavMenuProps): JSX.Element => {
                 <NavDropdown
                     title={
                         <div>
-                            {activeElement.icon}
+                            {/* {activeElement.icon} */}
                             <span>&nbsp;{activeElement.title}</span>
                         </div>
                     }

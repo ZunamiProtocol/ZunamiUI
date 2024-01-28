@@ -4,33 +4,41 @@ import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar
 import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
 import { SideBar, ZunamiInfoFetch } from '../components/SideBar/SideBar';
 import { Header } from '../components/Header/Header';
-import { SidebarTopButtons } from '../components/SidebarTopButtons/SidebarTopButtons';
-import { StakingSummary } from '../components/StakingSummary/StakingSummary';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { ReactComponent as HintIcon } from '../assets/info.svg';
 
-import { ApyChart } from '../components/ApyChart/ApyChart';
 import { MicroCard } from '../components/MicroCard/MicroCard';
-import { AddressButtons } from '../components/AddressButtons/AddressButtons';
 import { BIG_ZERO, NULL_ADDRESS } from '../utils/formatbalance';
-import {
-    StrategyListItem,
-    StrategyListItemColor,
-} from '../components/StrategyListItem/StrategyListItem';
-import { Chart, DataItem } from '../components/Chart/Chart';
-import { PieChart2 } from '../components/PieChart/PieChart';
 import { Preloader } from '../components/Preloader/Preloader';
 import { SupportersBar } from '../components/SupportersBar/SupportersBar';
 import Accordion from 'react-bootstrap/Accordion';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import { Input } from '../components/Form/Input/Input';
+import useBalanceOf from '../hooks/useBalanceOf';
+import { getZunStakingAddress, getZunUsdApsAddress } from '../utils/zunami';
+import { useNetwork } from 'wagmi';
+import { APPROVE_SUM } from '../sushi/utils';
+import useApprove from '../hooks/useApprove';
+import useStakingPools from '../hooks/useStakingPools';
 
 export const Earn = (): JSX.Element => {
     const [tvl, setTvl] = useState('0');
     const dailyProfit = Number(0);
     const monthlyProfit = Number(0);
     const yearlyProfit = Number(0);
+    const [pendingTx, setPendingTx] = useState(false);
+
+    const { chain } = useNetwork();
+    const chainId = chain ? chain.id : undefined;
+    const apsBalance = useBalanceOf(getZunUsdApsAddress(chainId));
+
+    // approve
+    const {
+        data: approveResult,
+        isLoading: isApproving,
+        isSuccess: approveSuccessful,
+        write: approve,
+    } = useApprove(getZunUsdApsAddress(chainId), getZunStakingAddress(chainId), APPROVE_SUM);
+
+    const pools = useStakingPools();
 
     return (
         <Suspense fallback={<Preloader onlyIcon={true} />}>
@@ -93,7 +101,6 @@ export const Earn = (): JSX.Element => {
                                                 </linearGradient>
                                             </defs>
                                         </svg>
-
                                         <span>All services</span>
                                     </button>
                                     <a
@@ -128,7 +135,7 @@ export const Earn = (): JSX.Element => {
                             >
                                 <a
                                     href="/"
-                                    className="text-center d-flex flex-column text-decoration-none selected"
+                                    className="text-center d-flex flex-column text-decoration-none"
                                 >
                                     <img src="/dashboard.png" alt="" />
                                     <span className="text-muted mt-2">Dashboard</span>
@@ -148,6 +155,13 @@ export const Earn = (): JSX.Element => {
                                     <span className="text-muted mt-2">zunStables</span>
                                 </a>
                                 <a
+                                    href="/earn"
+                                    className="text-center d-flex flex-column text-decoration-none selected"
+                                >
+                                    <img src="/earn.png" alt="" />
+                                    <span className="text-muted mt-2">Earn</span>
+                                </a>
+                                <a
                                     href="https://snapshot.org/#/zunamidao.eth"
                                     className="text-center d-flex flex-column text-decoration-none"
                                 >
@@ -164,7 +178,12 @@ export const Earn = (): JSX.Element => {
                                         </div>
                                         <div className="value">0</div>
                                     </div>
-                                    <div className="total-income col-6"></div>
+                                    <div className="total-income col-6">
+                                        <div className="title d-flex gap-2 justify-content-between">
+                                            <span>Already claimed</span>
+                                        </div>
+                                        <div className="value">$20,040</div>
+                                    </div>
                                 </div>
                                 <div className="divider"></div>
                                 <div className="profits">
@@ -200,7 +219,7 @@ export const Earn = (): JSX.Element => {
                                     />
                                 </div>
                                 <div className="col-sm-12 col-md-8">
-                                    <div className="d-flex gap-2 ms-0 ms-md-3">
+                                    <div className="d-flex flex-wrap gap-2 ms-0 ms-md-3 mt-3 mt-md-0">
                                         <button className={`btn btn-secondary rounded-pill px-3`}>
                                             My pools
                                         </button>
@@ -223,16 +242,17 @@ export const Earn = (): JSX.Element => {
                                 </div>
                             </div>
                             <div className="row ms-lg-5">
-                                <div className="col">
+                                <div className="col mt-2">
                                     <Accordion
                                         id="strats-accordion"
-                                        className="w-100 gap-3 mt-3"
+                                        className="w-100 gap-3 mt-5"
                                         defaultActiveKey="0"
                                     >
                                         <Accordion.Item eventKey="0">
                                             <Accordion.Header>
                                                 <div className="d-flex pool-row">
-                                                    <div className="d-flex align-items-center">
+                                                    <div className="d-flex align-items-center pool">
+                                                        <div className="header">Pool name</div>
                                                         <img
                                                             src="/stake-dao.svg"
                                                             alt=""
@@ -255,19 +275,45 @@ export const Earn = (): JSX.Element => {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="tvl vela-sans">$6.6m</div>
-                                                    <div className="apr vela-sans">$6.6m</div>
+                                                    <div className="tvl vela-sans">
+                                                        <div className="header">TVL</div>
+                                                        <div>$6.6m</div>
+                                                    </div>
+                                                    <div className="apr vela-sans">
+                                                        <div className="header">APR</div>
+                                                        <div>$6.6m</div>
+                                                    </div>
                                                     <div className="deposit-val vela-sans">
-                                                        $1,300
+                                                        <div className="header">Your deposit</div>
+                                                        <div>$1,300</div>
                                                     </div>
                                                     <div className="claimed vela-sans">
-                                                        <img src="/zun.svg" alt="" />
-                                                        <div>100 ZUN</div>
+                                                        <div className="header">Claimed</div>
+                                                        <div className="d-flex align-items-center gap-2">
+                                                            <img src="/zun.svg" alt="" />
+                                                            <div>100 ZUN</div>
+                                                        </div>
                                                     </div>
                                                     <div className="unclaimed vela-sans">
-                                                        <img src="/zun.svg" alt="" />
-                                                        <div>100 ZUN</div>
+                                                        <div className="header">Unclaimed</div>
+                                                        <div className="d-flex align-items-center gap-2">
+                                                            <img src="/zun.svg" alt="" />
+                                                            <div>100 ZUN</div>
+                                                        </div>
                                                     </div>
+                                                </div>
+                                                <div className="d-flex d-lg-none gap-2 w-100 first-row-counters mt-3">
+                                                    <MicroCard title="TVL" value="$6.6m" />
+                                                    <MicroCard
+                                                        title="APR"
+                                                        value="16%"
+                                                        hint="Some tooltip content"
+                                                    />
+                                                    <MicroCard title="Deposit" value="$1,300" />
+                                                </div>
+                                                <div className="d-flex d-lg-none gap-2 w-100 second-row-counters mt-3">
+                                                    <MicroCard title="Already claimed" value="0" />
+                                                    <MicroCard title="Unclaimed" value="0" />
                                                 </div>
                                             </Accordion.Header>
                                             <Accordion.Body>
@@ -281,7 +327,7 @@ export const Earn = (): JSX.Element => {
                                                         >
                                                             <Tab eventKey="stake" title="Stake">
                                                                 <div className="row">
-                                                                    <div className="col-xs-12 col-md-6">
+                                                                    <div className="action-col col-xs-12 col-md-6">
                                                                         <div className="action-hint mt-3">
                                                                             Deposit your LP tokens
                                                                             to earn ZUN on top of
@@ -301,13 +347,213 @@ export const Earn = (): JSX.Element => {
                                                                             <input
                                                                                 type="text"
                                                                                 value={'0.00'}
+                                                                                readOnly
                                                                             />
                                                                             <button className="max">
                                                                                 MAX
                                                                             </button>
                                                                         </div>
                                                                     </div>
-                                                                    <div className="col-xs-12 col-md-6">
+                                                                    <div className="action-col col-xs-12 col-md-6">
+                                                                        <div className="steps mt-3">
+                                                                            <div className="digits">
+                                                                                <div className="digit">
+                                                                                    1
+                                                                                </div>
+                                                                                <div className="digit">
+                                                                                    2
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="d-flex gap-2 mt-3">
+                                                                                <button
+                                                                                    className="zun-button"
+                                                                                    onClick={async () => {
+                                                                                        setPendingTx(
+                                                                                            true
+                                                                                        );
+                                                                                        if (
+                                                                                            approve
+                                                                                        ) {
+                                                                                            approve();
+                                                                                        }
+                                                                                        setPendingTx(
+                                                                                            false
+                                                                                        );
+                                                                                    }}
+                                                                                >
+                                                                                    Approve
+                                                                                </button>
+                                                                                <button className="zun-button disabled">
+                                                                                    Stake
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </Tab>
+                                                            <Tab eventKey="unstake" title="Unstake">
+                                                                <div className="row">
+                                                                    <div className="action-col col-xs-12 col-md-6">
+                                                                        <div className="action-hint mt-3">
+                                                                            Deposit your LP tokens
+                                                                            to earn ZUN on top of
+                                                                            native rewards
+                                                                        </div>
+                                                                        <div className="input mt-3">
+                                                                            <div className="coins">
+                                                                                <img
+                                                                                    src="/uzd.svg"
+                                                                                    alt=""
+                                                                                />
+                                                                                <img
+                                                                                    src="/0xf939e0a03fb07f59a73314e73794be0e57ac1b4e.png"
+                                                                                    alt=""
+                                                                                />
+                                                                            </div>
+                                                                            <input
+                                                                                type="text"
+                                                                                value={'0.00'}
+                                                                                readOnly
+                                                                            />
+                                                                            <button className="max">
+                                                                                MAX
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="action-col col-xs-12 col-md-6">
+                                                                        <div className="steps mt-3">
+                                                                            <div className="digits">
+                                                                                <div className="digit">
+                                                                                    1
+                                                                                </div>
+                                                                                <div className="digit">
+                                                                                    2
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="d-flex gap-2 mt-3">
+                                                                                <button className="zun-button">
+                                                                                    Approve
+                                                                                </button>
+                                                                                <button className="zun-button disabled">
+                                                                                    Unstake
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </Tab>
+                                                        </Tabs>
+                                                    </div>
+                                                </div>
+                                            </Accordion.Body>
+                                        </Accordion.Item>
+                                        <Accordion.Item eventKey="1">
+                                            <Accordion.Header>
+                                                <div className="d-flex pool-row">
+                                                    <div className="d-flex align-items-center pool">
+                                                        <div className="header">Pool name</div>
+                                                        <img
+                                                            src="/stake-dao.svg"
+                                                            alt=""
+                                                            className="primary-icon"
+                                                        />
+                                                        <div className="divider ms-2 me-2"></div>
+                                                        <div className="coins">
+                                                            <img src="/uzd.svg" alt="" />
+                                                            <img
+                                                                src="/0xf939e0a03fb07f59a73314e73794be0e57ac1b4e.png"
+                                                                alt=""
+                                                            />
+                                                        </div>
+                                                        <div className="titles">
+                                                            <div className="primary">
+                                                                zunUSD / crvUSD
+                                                            </div>
+                                                            <div className="secondary">
+                                                                Stake DAO
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="tvl vela-sans">
+                                                        <div className="header">TVL</div>
+                                                        <div>$6.6m</div>
+                                                    </div>
+                                                    <div className="apr vela-sans">
+                                                        <div className="header">APR</div>
+                                                        <div>$6.6m</div>
+                                                    </div>
+                                                    <div className="deposit-val vela-sans">
+                                                        <div className="header">Your deposit</div>
+                                                        <div>$1,300</div>
+                                                    </div>
+                                                    <div className="claimed vela-sans">
+                                                        <div className="header">Claimed</div>
+                                                        <div className="d-flex align-items-center gap-2">
+                                                            <img src="/zun.svg" alt="" />
+                                                            <div>100 ZUN</div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="unclaimed vela-sans">
+                                                        <div className="header">Unclaimed</div>
+                                                        <div className="d-flex align-items-center gap-2">
+                                                            <img src="/zun.svg" alt="" />
+                                                            <div>100 ZUN</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="d-flex d-lg-none gap-2 w-100 first-row-counters mt-3">
+                                                    <MicroCard title="TVL" value="$6.6m" />
+                                                    <MicroCard
+                                                        title="APR"
+                                                        value="16%"
+                                                        hint="Some tooltip content"
+                                                    />
+                                                    <MicroCard title="Deposit" value="$1,300" />
+                                                </div>
+                                                <div className="d-flex d-lg-none gap-2 w-100 second-row-counters mt-3">
+                                                    <MicroCard title="Already claimed" value="0" />
+                                                    <MicroCard title="Unclaimed" value="0" />
+                                                </div>
+                                            </Accordion.Header>
+                                            <Accordion.Body>
+                                                <div className="row">
+                                                    <div className="col-xs-12 col-md-12">
+                                                        <Tabs
+                                                            defaultActiveKey="stake"
+                                                            transition={false}
+                                                            id="noanim-tab-example"
+                                                            className="action-tabs"
+                                                        >
+                                                            <Tab eventKey="stake" title="Stake">
+                                                                <div className="row">
+                                                                    <div className="action-col col-xs-12 col-md-6">
+                                                                        <div className="action-hint mt-3">
+                                                                            Deposit your LP tokens
+                                                                            to earn ZUN on top of
+                                                                            native rewards
+                                                                        </div>
+                                                                        <div className="input mt-3">
+                                                                            <div className="coins">
+                                                                                <img
+                                                                                    src="/uzd.svg"
+                                                                                    alt=""
+                                                                                />
+                                                                                <img
+                                                                                    src="/0xf939e0a03fb07f59a73314e73794be0e57ac1b4e.png"
+                                                                                    alt=""
+                                                                                />
+                                                                            </div>
+                                                                            <input
+                                                                                type="text"
+                                                                                value={'0.00'}
+                                                                                readOnly
+                                                                            />
+                                                                            <button className="max">
+                                                                                MAX
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="action-col col-xs-12 col-md-6">
                                                                         <div className="steps mt-3">
                                                                             <div className="digits">
                                                                                 <div className="digit">
@@ -331,7 +577,7 @@ export const Earn = (): JSX.Element => {
                                                             </Tab>
                                                             <Tab eventKey="unstake" title="Unstake">
                                                                 <div className="row">
-                                                                    <div className="col-xs-12 col-md-6">
+                                                                    <div className="action-col col-xs-12 col-md-6">
                                                                         <div className="action-hint mt-3">
                                                                             Deposit your LP tokens
                                                                             to earn ZUN on top of
@@ -351,13 +597,14 @@ export const Earn = (): JSX.Element => {
                                                                             <input
                                                                                 type="text"
                                                                                 value={'0.00'}
+                                                                                readOnly
                                                                             />
                                                                             <button className="max">
                                                                                 MAX
                                                                             </button>
                                                                         </div>
                                                                     </div>
-                                                                    <div className="col-xs-12 col-md-6">
+                                                                    <div className="action-col col-xs-12 col-md-6">
                                                                         <div className="steps mt-3">
                                                                             <div className="digits">
                                                                                 <div className="digit">
