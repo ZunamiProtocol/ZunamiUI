@@ -239,7 +239,6 @@ export class Sushi {
     }
 
     getDefaultAccount() {
-        console.log(`Default account: ${this.web3.eth.defaultAccount}`);
         return this.web3.eth.defaultAccount;
     }
 

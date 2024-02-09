@@ -1,21 +1,22 @@
 import { Address } from 'wagmi';
 import { NULL_ADDRESS } from '../../utils/formatbalance';
 
-const apsAddress: Address = '0xCaB49182aAdCd843b037bBF885AD56A3162698Bd';
-const zethApsAddress: Address = '0xe47f1CD2A37c6FE69e3501AE45ECA263c5A87b2b';
-const zethAddress: Address = '0xe47f1CD2A37c6FE69e3501AE45ECA263c5A87b2b';
+// const apsAddress: Address = '0xCaB49182aAdCd843b037bBF885AD56A3162698Bd';
+// const zethApsAddress: Address = '0xe47f1CD2A37c6FE69e3501AE45ECA263c5A87b2b';
+// const zethAddress: Address = '0xe47f1CD2A37c6FE69e3501AE45ECA263c5A87b2b';
 
 export const SUBTRACT_GAS_LIMIT = 100000;
 
 // Main Omnipool controller
-export const zunamiMainnetAddress: Address = NULL_ADDRESS;
+export const zunamiMainnetAddress: Address = '0x9df40870830d24c0506F7Cf5042f14C04590F8e5';
 export const zunamiSepoliaAddress: Address = '0x3694Db838a8cAf3b1c234529bB1b447bd849F357';
 
 // zunUSD APS controller
 export const zunUsdApsAddress: Address = NULL_ADDRESS;
 export const zunUsdApsSepoliaAddress: Address = '0x1C4e36edBa364406f181fe9B3a4E6FC023DED0bc';
 
-const zunUsdMainnetAddress: Address = NULL_ADDRESS;
+// ZunUSD
+export const zunUsdMainnetAddress: Address = '0x1Ecc4A2EE46e50327ADc4AB41fEc750075D30b0a';
 export const zunUsdSepoliaAddress: Address = '0x83287Da602f0C32f6C9B09E2F1b2951767ebF239';
 
 // ZUN token
@@ -57,12 +58,6 @@ export const contractAddresses: { [index: string]: any } = {
     staking: {
         1: zunStakingAddress,
         11155111: zunStakingSepoliaAddress,
-    },
-    zethAPS: {
-        1: zethApsAddress,
-    },
-    zeth: {
-        1: zethAddress,
     },
     deprecated: {},
 };

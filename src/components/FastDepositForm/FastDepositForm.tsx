@@ -42,8 +42,9 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const [coinIndex, setCoinIndex] = useState(4);
 
     // Current APS contract address
-    const contractAddress: Address = getZunUsdApsAddress(chainId);
-    const zunUsdAddress: Address = zunUsdSepoliaAddress;
+    const contractAddress: Address = useMemo(() => {
+        return getZunUsdApsAddress(chainId);
+    }, [chainId]);
 
     // deposit allowance
     const allowance = useAllowanceStables(account, contractAddress, chainId);
@@ -64,18 +65,6 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
 
     // APS balance
     const apsBalance = useBalanceOf(getZunUsdApsAddress(chainId));
-    // ZETH APS balance
-    const zethApsBalance = BIG_ZERO;
-
-    // set withdraw sum to maximum
-    // useEffect(() => {
-    //     if (action === 'withdraw') {
-    //         if (stakingMode === 'UZD' && withdrawSum === '') {
-    //             let withdrawMaxBalance = apsBalance;
-    //             setWithdrawSum(getFullDisplayBalance(withdrawMaxBalance));
-    //         }
-    //     }
-    // }, [stakingMode, action, apsBalance, withdrawSum]);
 
     useEffect(() => {
         let preselectedCoin = stakingMode === 'UZD' ? 'zunUSD' : 'zunETH';
@@ -199,7 +188,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         let message = '';
 
         if (Number(depositSum) > Number(fullBalance)) {
-            console.log(`Input val: ${Number(depositSum)} vs raw val: ${Number(fullBalance)}`);
+            log(`Input val: ${Number(depositSum)} vs raw val: ${Number(fullBalance)}`);
             message = "You're trying to deposit more than you have";
         }
 
@@ -281,7 +270,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const {
         data: approveResult,
         isLoading: isApproving,
-        isSuccess: approveSuccessful,
+        // isSuccess: approveSuccessful,
         write: approve,
     } = useApprove(addressForApprove, approveSpender, APPROVE_SUM);
 
@@ -360,10 +349,10 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                 handler={(sum) => {
                     if (action === 'deposit') {
                         setDepositSum(sum);
-                        console.log(`Deposit sum set to ${sum}`);
+                        log(`Deposit sum set to ${sum}`);
                     } else {
                         setWithdrawSum(sum);
-                        console.log(`Withdraw sum set to ${sum}`);
+                        log(`Withdraw sum set to ${sum}`);
                     }
                 }}
                 max={maxInputSum}

@@ -20,6 +20,7 @@ import useApprove from '../hooks/useApprove';
 import useStakingPools from '../hooks/useStakingPools';
 import { StakingPool } from '../components/StakingPool/StakingPool';
 import useAllowance from '../hooks/useAllowance';
+import { renderMobileMenu } from '../components/Header/NavMenu/NavMenu';
 
 const FILTERS = ['My pools', 'USD', 'ETH', 'Convex', 'Stake DAO', 'Zunami'];
 
@@ -150,41 +151,7 @@ export const Earn = (): JSX.Element => {
                                     overflowX: 'scroll',
                                 }}
                             >
-                                <a
-                                    href="/"
-                                    className="text-center d-flex flex-column text-decoration-none"
-                                >
-                                    <img src="/dashboard.png" alt="" />
-                                    <span className="text-muted mt-2">Dashboard</span>
-                                </a>
-                                <a
-                                    href="/zun"
-                                    className="text-center d-flex flex-column text-decoration-none"
-                                >
-                                    <img src="/zun-staking.png" alt="" />
-                                    <span className="text-muted mt-2">ZUN Staking</span>
-                                </a>
-                                <a
-                                    href="/zun-stables"
-                                    className="text-center d-flex flex-column text-decoration-none"
-                                >
-                                    <img src="/uzd.png" alt="" />
-                                    <span className="text-muted mt-2">zunStables</span>
-                                </a>
-                                <a
-                                    href="/earn"
-                                    className="text-center d-flex flex-column text-decoration-none selected"
-                                >
-                                    <img src="/earn.png" alt="" />
-                                    <span className="text-muted mt-2">Earn</span>
-                                </a>
-                                <a
-                                    href="https://snapshot.org/#/zunamidao.eth"
-                                    className="text-center d-flex flex-column text-decoration-none"
-                                >
-                                    <img src="/dao.png" alt="" />
-                                    <span className="text-muted mt-2">DAO</span>
-                                </a>
+                                {renderMobileMenu()}
                             </div>
                             <div className="Sidebar__Content__Data">
                                 <div className="title">Your data</div>

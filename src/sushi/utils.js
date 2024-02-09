@@ -97,54 +97,6 @@ const MaxUint256 = new BigNumber(
     '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
 );
 
-// export const approve = async (
-//     provider,
-//     tokenAddress,
-//     masterChefContract,
-//     account,
-//     apprSum = MaxUint256,
-//     spenderAddress = false
-// ) => {
-//     debugger;
-//     const lpContract = getContract(provider, tokenAddress);
-//     let sum = APPROVE_SUM;
-//     const isZerionWallet = window.ethereum?.walletMeta?.name === 'Zerion';
-
-//     const funcParams = {
-//         from: account,
-//         maxPriorityFeePerGas: null,
-//         maxFeePerGas: null,
-//     };
-
-//     if (isZerionWallet) {
-//         const estimate = await lpContract.methods
-//             .approve(masterChefContract.options.address, sum)
-//             .estimateGas();
-//         funcParams.gas = Math.floor(estimate + estimate * GAS_LIMIT_THRESHOLD);
-//     }
-
-//     let spender = masterChefContract.options.address;
-
-//     if (tokenAddress === busdAddress) {
-//         spender = contractAddresses.busd[56];
-//     }
-
-//     if (spenderAddress) {
-//         spender = spenderAddress;
-//     }
-
-//     log(
-//         `Executing approve() for address ${lpContract.options.address}. Params: ${spender}, ${sum}`
-//     );
-
-//     return lpContract.methods
-//         .approve(spender, sum)
-//         .send(funcParams)
-//         .on('transactionHash', (tx) => {
-//             return tx.transactionHash;
-//         });
-// };
-
 /**
  * Deposit function
  * @param Contract contract zunamiContract

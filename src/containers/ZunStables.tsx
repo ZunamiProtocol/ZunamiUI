@@ -19,6 +19,7 @@ import {
 } from '../components/StrategyListItem/StrategyListItem';
 import { Chart, DataItem } from '../components/Chart/Chart';
 import { PieChart2 } from '../components/PieChart/PieChart';
+import { renderMobileMenu } from '../components/Header/NavMenu/NavMenu';
 
 function getRandomArbitrary(min: number, max: number) {
     return Math.random() * (max - min) + min;
@@ -99,41 +100,7 @@ export const ZunStables = (): JSX.Element => {
                                 overflowX: 'scroll',
                             }}
                         >
-                            <a
-                                href="/"
-                                className="text-center d-flex flex-column text-decoration-none"
-                            >
-                                <img src="/dashboard.png" alt="" />
-                                <span className="text-muted mt-2">Dashboard</span>
-                            </a>
-                            <a
-                                href="/zun"
-                                className="text-center d-flex flex-column text-decoration-none"
-                            >
-                                <img src="/zun-staking.png" alt="" />
-                                <span className="text-muted mt-2">ZUN Staking</span>
-                            </a>
-                            <a
-                                href="/zun-stables"
-                                className="text-center d-flex flex-column text-decoration-none selected"
-                            >
-                                <img src="/uzd.png" alt="" />
-                                <span className="text-muted mt-2">zunStables</span>
-                            </a>
-                            {/* <a
-                                href="/analytics"
-                                className="text-center d-flex flex-column text-decoration-none"
-                            >
-                                <img src="/analytics.png" alt="" />
-                                <span className="text-muted mt-2">Analytics</span>
-                            </a> */}
-                            <a
-                                href="https://snapshot.org/#/zunamidao.eth"
-                                className="text-center d-flex flex-column text-decoration-none"
-                            >
-                                <img src="/dao.png" alt="" />
-                                <span className="text-muted mt-2">DAO</span>
-                            </a>
+                            {renderMobileMenu()}
                         </div>
                         <div className="card mt-3 zun-token-card">
                             <div className="card-body p-3">
@@ -164,9 +131,9 @@ export const ZunStables = (): JSX.Element => {
                         <StakingSummary
                             logo="ZETH"
                             selected={false}
-                            baseApy={'16%'}
-                            deposit={`$0`}
-                            className="mt-3"
+                            baseApy={'0'}
+                            deposit={`0`}
+                            className="mt-3 disabled"
                         />
                     </SideBar>
                     <div className="col content-col dashboard-col">
@@ -254,7 +221,7 @@ export const ZunStables = (): JSX.Element => {
                                                         </defs>
                                                     </svg>
 
-                                                    <div className="text-white d-flex align-items-center">
+                                                    <div className="text-white d-flex align-items-center disabled">
                                                         <div className="col-6">
                                                             <div className="d-flex align-items-center gap-2">
                                                                 <span className="name2">
@@ -284,7 +251,7 @@ export const ZunStables = (): JSX.Element => {
                                                         <div className="col-6 d-flex align-items-center pe-3 ps-3 justify-content-end">
                                                             <Link to="/zun">
                                                                 <button className="zun-button w-100">
-                                                                    Stake
+                                                                    Soon
                                                                 </button>
                                                             </Link>
                                                         </div>

@@ -11,41 +11,62 @@ interface NavMenuProps {
     onSelect?: Function;
 }
 
+export const MenuItems = [
+    {
+        title: 'Dashboard',
+        urls: ['/'],
+        icon: <DashboardIcon />,
+        mobileIcon: '/dashboard.png',
+        disabled: false,
+    },
+    {
+        title: 'zunStables',
+        urls: ['/zun-stables'],
+        icon: <UzdIcon />,
+        mobileIcon: '/uzd.png',
+        disabled: false,
+    },
+    {
+        title: 'ZUN Staking',
+        urls: ['/zun'],
+        icon: <UzdIcon />,
+        mobileIcon: '/zun-staking.png',
+        disabled: true,
+    },
+
+    {
+        title: 'Earn',
+        urls: ['/earn'],
+        icon: <EarnIcon />,
+        mobileIcon: '/earn.png',
+        disabled: true,
+    },
+    {
+        title: 'DAO',
+        urls: ['https://snapshot.org/#/zunamidao.eth'],
+        icon: <DaoIcon />,
+        mobileIcon: '/dao.png',
+        disabled: false,
+    },
+];
+
+export function renderMobileMenu() {
+    return MenuItems.map((item) => (
+        <a
+            href={item.urls[0]}
+            key={item.title}
+            className={`text-center d-flex flex-column text-decoration-none ${
+                window.location.pathname === item.urls[0] ? 'selected' : ''
+            } ${item.disabled ? 'disabled' : ''}`}
+        >
+            <img src={item.mobileIcon} alt="" />
+            <span className="text-muted mt-2">{item.title}</span>
+        </a>
+    ));
+}
+
 export const NavMenu = (props: NavMenuProps): JSX.Element => {
     const navigate = useNavigate();
-    const items = [
-        {
-            title: 'Dashboard',
-            urls: ['/'],
-            icon: <DashboardIcon />,
-            disabled: false,
-        },
-        {
-            title: 'zunStables',
-            urls: ['/zun-stables'],
-            icon: <UzdIcon />,
-            disabled: false,
-        },
-        {
-            title: 'ZUN Staking',
-            urls: ['/zun'],
-            icon: <UzdIcon />,
-            disabled: false,
-        },
-
-        {
-            title: 'Earn',
-            urls: ['/earn'],
-            icon: <EarnIcon />,
-            disabled: false,
-        },
-        {
-            title: 'DAO',
-            urls: ['https://snapshot.org/#/zunamidao.eth'],
-            icon: <DaoIcon />,
-            disabled: false,
-        },
-    ];
 
     const onClick = (e: any) => {
         const url = e.currentTarget.href;
@@ -63,14 +84,16 @@ export const NavMenu = (props: NavMenuProps): JSX.Element => {
         navigate(new URL(url).pathname);
     };
 
-    const activeElement = items.filter((el) => el.urls.indexOf(window.location.pathname) !== -1)[0];
+    const activeElement = MenuItems.filter(
+        (el) => el.urls.indexOf(window.location.pathname) !== -1
+    )[0];
 
     const activeElementTitle = activeElement.title;
 
     return (
         <Navbar.Collapse id="nav-menu">
             <Nav defaultActiveKey="/home" as="ul" className="NavMenu">
-                {items.map((item) => (
+                {MenuItems.map((item) => (
                     <Nav.Item
                         as="li"
                         key={item.title}
@@ -110,19 +133,17 @@ export const NavMenu = (props: NavMenuProps): JSX.Element => {
                     }
                     id="collapsed-nav-menu"
                 >
-                    {items
-                        .filter((el) => el.title !== activeElementTitle)
-                        .map((item) => (
-                            <NavDropdown.Item
-                                href={item.urls[0]}
-                                onClick={onClick}
-                                key={item.title}
-                                className={`${item.disabled ? 'disabled' : ''}`}
-                            >
-                                {item.icon}
-                                <span>{item.title}</span>
-                            </NavDropdown.Item>
-                        ))}
+                    {MenuItems.filter((el) => el.title !== activeElementTitle).map((item) => (
+                        <NavDropdown.Item
+                            href={item.urls[0]}
+                            onClick={onClick}
+                            key={item.title}
+                            className={`${item.disabled ? 'disabled' : ''}`}
+                        >
+                            {item.icon}
+                            <span>{item.title}</span>
+                        </NavDropdown.Item>
+                    ))}
                 </NavDropdown>
             </Nav>
         </Navbar.Collapse>

@@ -50,6 +50,7 @@ import { SidebarTopButtons } from '../components/SidebarTopButtons/SidebarTopBut
 import { AddressButtons } from '../components/AddressButtons/AddressButtons';
 import useBalanceOf from '../hooks/useBalanceOf';
 import { getZunTokenAddress } from '../utils/zunami';
+import { renderMobileMenu } from '../components/Header/NavMenu/NavMenu';
 
 export interface CurveInfoFetch {
     data: any;
@@ -100,12 +101,6 @@ const addToken = async (
                 },
             },
         });
-
-        if (wasAdded) {
-            console.log('Thanks for your interest!');
-        } else {
-            console.log('Your loss!');
-        }
     } catch (error: any) {
         log(`❗️ Error while adding ${tokenSymbol} token: ${error.message}`);
     }
@@ -119,14 +114,14 @@ export const Uzd = (): JSX.Element => {
 
     const zunBalance = useBalanceOf(getZunTokenAddress(chainId));
 
-    const zethBalance = useUzdBalance(contractAddresses.zeth[1]);
-    const uzdTotalSupply = useTotalSupply(contractAddresses.uzd[1]);
-    const zethTotalSupply = useTotalSupply(contractAddresses.zeth[1]);
+    const zethBalance = BIG_ZERO;
+    const uzdTotalSupply = BIG_ZERO;
+    const zethTotalSupply = BIG_ZERO;
     const lpPrice = useUzdLpPrice();
     const [supportedChain, setSupportedChain] = useState(true);
     const [hideMigrationModal, setHideMigrationModal] = useState(false);
     const apsBalance = useZapsLpBalance();
-    const uzdBalance = useUzdBalance();
+    const uzdBalance = BIG_ZERO;
     const balances = useMemo(() => {
         return [
             {
@@ -328,34 +323,7 @@ export const Uzd = (): JSX.Element => {
                                 overflowX: 'scroll',
                             }}
                         >
-                            <a
-                                href="/"
-                                className="text-center d-flex flex-column text-decoration-none"
-                            >
-                                <img src="/dashboard.png" alt="" />
-                                <span className="text-muted mt-2">Dashboard</span>
-                            </a>
-                            <a
-                                href="/zun"
-                                className="text-center d-flex flex-column text-decoration-none selected"
-                            >
-                                <img src="/zun-staking.png" alt="" />
-                                <span className="text-muted mt-2">ZUN Staking</span>
-                            </a>
-                            <a
-                                href="/zun-stables"
-                                className="text-center d-flex flex-column text-decoration-none "
-                            >
-                                <img src="/uzd.png" alt="" />
-                                <span className="text-muted mt-2">zunStables</span>
-                            </a>
-                            <a
-                                href="https://snapshot.org/#/zunamidao.eth"
-                                className="text-center d-flex flex-column text-decoration-none"
-                            >
-                                <img src="/dao.png" alt="" />
-                                <span className="text-muted mt-2">DAO</span>
-                            </a>
+                            {renderMobileMenu()}
                         </div>
                         <div className="card mt-3 zun-token-card">
                             <div className="card-body p-3">

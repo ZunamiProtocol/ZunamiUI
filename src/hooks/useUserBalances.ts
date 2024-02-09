@@ -15,7 +15,7 @@ import {
 } from '../utils/formatbalance';
 import { log } from '../utils/logger';
 import { getAbiByChainId, getChainClient, isBSC, isETH, isPLG } from '../utils/zunami';
-import { zunUsdSepoliaAddress } from '../sushi/lib/constants';
+import { zunUsdSepoliaAddress, zunUsdMainnetAddress } from '../sushi/lib/constants';
 import { Address } from 'viem';
 import { erc20ABI, mainnet, sepolia } from 'wagmi';
 
@@ -35,6 +35,23 @@ export function getCoinAddressByIndex(index: number, chainId: number): Address {
 
     switch (chainId) {
         case mainnet.id:
+            switch (index) {
+                case 0: // DAI
+                    result = daiAddress;
+                    break;
+                case 1: // USDC
+                    result = usdcAddress;
+                    break;
+                case 2: // USDT
+                    result = usdtAddress;
+                    break;
+                case 3: // FRAX
+                    result = NULL_ADDRESS;
+                    break;
+                case 4: // ZunUSD
+                    result = zunUsdMainnetAddress;
+                    break;
+            }
             break;
         case sepolia.id:
             switch (index) {
@@ -95,11 +112,28 @@ export const useUserBalances = (account: Address = NULL_ADDRESS, chainId: number
                 return;
             }
 
+            let result = [BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO];
+
             switch (chainId) {
                 case mainnet.id:
+                    result = [
+                        await getCoinBalance(daiAddress, account, chainId),
+                        await getCoinBalance(usdcAddress, account, chainId),
+                        await getCoinBalance(usdtAddress, account, chainId),
+                        BigInt('0'),
+                        await getCoinBalance(zunUsdMainnetAddress, account, chainId),
+                        BigInt('0'),
+                        BigInt('0'),
+                    ].map((balance: BigInt) => new BigNumber(balance.toString()));
+
+                    log(
+                        `Balance (mainnet): DAI - ${result[2].toString()}, USDC - ${result[3].toString()}, USDT - ${result[4].toString()}`
+                    );
+
+                    setBalance(result);
                     break;
                 case sepolia.id:
-                    const result = [
+                    result = [
                         await getCoinBalance(sepDaiAddress, account, chainId),
                         await getCoinBalance(sepUsdcAddress, account, chainId),
                         await getCoinBalance(sepUsdtAddress, account, chainId),

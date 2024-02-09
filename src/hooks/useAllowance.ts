@@ -36,7 +36,7 @@ export const useAllowance = (
 
         const fetchAllowance = async () => {
             const val = await getCoinAllowance(coinAddress, account, spender, chainId);
-            log(`${coinAddress}.allowance('${account}', '${spender}') - ${val}`);
+            // log(`${coinAddress}.allowance('${account}', '${spender}') - ${val}`);
             setAllowance(new BigNumber(val.toString()));
         };
 

@@ -124,7 +124,7 @@ export const CoinSelector = (
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xs-12 col-md-6 disabled">
+                        <div className="col-xs-12 col-md-6">
                             <div className="d-flex gap-1 align-items-center mt-4 mt-md-0">
                                 <span className="title me-1">ZAP (Swap + Deposit)</span>
                                 <div ref={target} onClick={() => setShowHint(!showHint)}>

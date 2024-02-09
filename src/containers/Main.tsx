@@ -1,7 +1,6 @@
 import React, { useEffect, useState, Suspense, lazy, useRef, useMemo } from 'react';
 import './Main.scss';
 import { BIG_ZERO, getBalanceNumber } from '../utils/formatbalance';
-import useLpPrice from '../hooks/useLpPrice';
 import useFetch from 'react-fetch-hook';
 import {
     getZunEthStratsUrl,
@@ -10,26 +9,27 @@ import {
     getZunUsdHistoricalApyUrl,
     getZunEthHistoricalApyUrl,
 } from '../api/api';
-import { BigNumber } from 'bignumber.js';
 import { formatPoolApy, poolDataToChartData } from '../functions/pools';
 import { Preloader } from '../components/Preloader/Preloader';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
 import { log, copyLogs } from '../utils/logger';
 import { FastDepositForm } from '../components/FastDepositForm/FastDepositForm';
-import { OverlayTrigger, Popover, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { networks } from '../components/NetworkSelector/NetworkSelector';
 import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
 import { SupportersBar } from '../components/SupportersBar/SupportersBar';
 import { StakingSummary } from '../components/StakingSummary/StakingSummary';
 import { DashboardCarousel } from '../components/DashboardCarousel/DashboardCarousel';
-import { ZunamiInfoFetch, PoolsStats, Balance } from './Main.types';
+import { ZunamiInfoFetch, PoolsStats } from './Main.types';
 import { ApyDetailsModal } from '../components/ApyDetailsModal/ApyDetailsModal';
-import { useConnect, useAccount, useNetwork } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import type { DataItem } from '../components/Chart/Chart';
 import { MicroCard } from '../components/MicroCard/MicroCard';
 import useBalanceOf from '../hooks/useBalanceOf';
 import { getZunUsdAddress, getZunUsdApsAddress } from '../utils/zunami';
 import { erc20ABI } from 'wagmi';
+import { renderMobileMenu } from '../components/Header/NavMenu/NavMenu';
+import { SidebarTopButtons } from '../components/SidebarTopButtons/SidebarTopButtons';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -53,114 +53,29 @@ const Chart = lazy(() =>
     import('../components/Chart/Chart').then((module) => ({ default: module.Chart }))
 );
 
-function getNetworkByKey(key: string) {
-    if (key === 'UZD' || key === 'APS') {
-        return {
-            icon: (
-                <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                        d="M4.82662 0.656319C3.37418 1.28395 2.14047 2.32819 1.2815 3.65699C0.422534 4.98578 -0.02311 6.53945 0.000923282 8.12151C0.0249566 9.70358 0.517587 11.243 1.41652 12.5451C2.31545 13.8472 3.58031 14.8535 5.05115 15.4367C6.52199 16.0199 8.13274 16.1539 9.67972 15.8217C11.2267 15.4894 12.6404 14.706 13.7421 13.5703C14.8438 12.4346 15.584 10.9977 15.8691 9.44136C16.1542 7.885 15.9713 6.27906 15.3437 4.82662C14.9269 3.86223 14.3243 2.98937 13.5703 2.25787C12.8162 1.52637 11.9254 0.950564 10.9488 0.563315C9.97225 0.176067 8.92894 -0.0150347 7.87848 0.000922995C6.82803 0.0168807 5.79101 0.239585 4.82662 0.656319Z"
-                        fill="url(#paint0_linear_74_125856)"
-                    />
-                    <path
-                        d="M12.4766 9.36382L12.2323 8.90048C12.1887 8.81839 12.1144 8.75689 12.0256 8.72942C11.9368 8.70194 11.8407 8.71072 11.7584 8.75384L9.42325 9.98528L8.29203 7.84016L10.0062 3.70569C10.025 3.65319 10.0333 3.59749 10.0305 3.54178C10.0278 3.48607 10.014 3.43146 9.99008 3.38109L9.74574 2.91774C9.70215 2.83566 9.62784 2.77416 9.53905 2.74668C9.45025 2.7192 9.35419 2.72798 9.27185 2.7711L6.41372 4.27835L5.81859 3.14982C5.775 3.06774 5.70069 3.00624 5.6119 2.97876C5.52311 2.95129 5.42706 2.96006 5.34472 3.00317L4.88136 3.24752C4.79928 3.29112 4.73779 3.36543 4.71032 3.45421C4.68284 3.543 4.69162 3.63905 4.73472 3.72139L5.32985 4.84992L3.66994 5.72526C3.58786 5.76886 3.52636 5.84317 3.49888 5.93196C3.4714 6.02075 3.48018 6.1168 3.52328 6.19915L3.76763 6.66249C3.81123 6.74457 3.88554 6.80606 3.97433 6.83354C4.06312 6.86102 4.15917 6.85224 4.24151 6.80913L5.90142 5.93379L6.93966 7.90259L5.13615 12.2527C5.116 12.3034 5.1072 12.358 5.11036 12.4125C5.11351 12.467 5.12856 12.5201 5.15443 12.5682C5.16486 12.5874 5.1713 12.6008 5.18089 12.619L5.42523 13.0824C5.46883 13.1644 5.54314 13.2259 5.63193 13.2534C5.72072 13.2809 5.81678 13.2721 5.89912 13.229L8.91096 11.6407L9.28312 12.3464C9.32672 12.4285 9.40103 12.49 9.48982 12.5175C9.57861 12.545 9.67467 12.5362 9.75701 12.4931L10.2203 12.2487C10.3024 12.2051 10.3639 12.1308 10.3914 12.042C10.4189 11.9532 10.4101 11.8572 10.367 11.7748L9.99483 11.0691L12.33 9.8377C12.4121 9.79411 12.4736 9.7198 12.501 9.63101C12.5285 9.54222 12.5197 9.44616 12.4766 9.36382V9.36382ZM6.98529 5.3622L8.27485 4.68217L7.5494 6.43192L6.98529 5.3622ZM6.83729 11.349L7.6823 9.31083L8.33939 10.5568L6.83729 11.349Z"
-                        fill="white"
-                    />
-                    <defs>
-                        <linearGradient
-                            id="paint0_linear_74_125856"
-                            x1="9.2459"
-                            y1="1.27816"
-                            x2="6.66481"
-                            y2="15.2224"
-                            gradientUnits="userSpaceOnUse"
-                        >
-                            <stop stopColor="#FFB515" />
-                            <stop offset="0.19046" stopColor="#FF931C" />
-                            <stop offset="0.41364" stopColor="#FF7322" />
-                            <stop offset="0.62821" stopColor="#FF5B26" />
-                            <stop offset="0.82823" stopColor="#FF4D29" />
-                            <stop offset="0.99932" stopColor="#FF482A" />
-                        </linearGradient>
-                    </defs>
-                </svg>
-            ),
-            value: key,
-        };
-    }
-    return networks.filter((network) => network.key === key)[0];
-}
-
-function renderBalances(balances: Array<Balance>, lpPrice: BigNumber) {
-    return (
-        <div className="">
-            <div className="mb-3">Another balances</div>
-            <div className="balances">
-                {balances
-                    .filter((item) => item.value.toNumber() > 0)
-                    .map((balance) => {
-                        return (
-                            balance.key && (
-                                <div className="balance" key={balance.key}>
-                                    {getNetworkByKey(balance.key).icon}
-                                    <div className="meta">
-                                        <div className="chain">
-                                            {getNetworkByKey(balance.key).value}
-                                        </div>
-                                        <div className="sum">
-                                            {balance.key !== 'UZD' &&
-                                                balance.key !== 'APS' &&
-                                                `$ ${getBalanceNumber(
-                                                    balance.value.multipliedBy(lpPrice)
-                                                )
-                                                    .toNumber()
-                                                    .toLocaleString('en')}`}
-                                            {['UZD', 'APS'].indexOf(balance.key) !== -1 &&
-                                                `$ ${getBalanceNumber(balance.value)
-                                                    .toNumber()
-                                                    .toLocaleString('en')}`}
-                                        </div>
-                                    </div>
-                                </div>
-                            )
-                        );
-                    })}
-            </div>
-        </div>
-    );
-}
-
 export const Main = (): JSX.Element => {
     useEffect(() => {
         log(`🏁 Session started ${new Date().toString()}`);
     }, []);
 
-    const { connect, connectors } = useConnect();
-    const { address: account, isConnected } = useAccount();
+    const { address: account } = useAccount();
     const { chain } = useNetwork();
     const chainId: number = chain ? chain.id : 1;
-
-    // const isContractPaused = usePausedContract();
-    const [supportedChain, setSupportedChain] = useState(true);
-
-    const apsBalance = useBalanceOf(getZunUsdApsAddress(chainId), erc20ABI);
-    const apsLpPrice = BIG_ZERO;
-    const zethBalance = BIG_ZERO;
-
-    const target = useRef(null);
-    const [showHint, setShowHint] = useState(false);
-
-    // const lpPrice = useLpPrice();
-    const balance = useBalanceOf(getZunUsdAddress(chainId), erc20ABI);
+    const [showApyDetailsModal, setShowApyDetailsModal] = useState(false);
+    const apyHintTarget = useRef(null);
+    const [showApyHint, setShowApyHint] = useState(false);
     const [stakingMode, setStakingMode] = useState('UZD');
-    // // total tvl (aps/zunami)
     const [tvl, setTvl] = useState('0');
+    const [histApyPeriod, setHistApyPeriod] = useState('week');
+    const [histApyData, setHistApyData] = useState([]);
+    const [clickCounter, setClickCounter] = useState(0);
+
+    const dailyProfit = Number(0);
+    const monthlyProfit = Number(0);
+    const yearlyProfit = Number(0);
+
+    // APS balance
+    const apsBalance = useBalanceOf(getZunUsdApsAddress(chainId), erc20ABI);
 
     const { isLoading: uzdStatLoading, data: uzdStatData } = useFetch(
         uzdStakingInfoUrl
@@ -171,60 +86,7 @@ export const Main = (): JSX.Element => {
     );
     const poolStats = activeStratsStat as PoolsStats;
 
-    // const poolBestAprDaily =
-    //     !uzdStatLoading && uzdStatData ? uzdStatData.info.omnipool.apr / 100 / 365 : 0;
-    // const poolBestAprMonthly =
-    //     !uzdStatLoading && uzdStatData ? (uzdStatData.info.omnipool.apr / 100 / 365) * 30 : 0;
-    // const poolBestApyYearly =
-    //     !uzdStatLoading && uzdStatData ? (uzdStatData.info.omnipool.apy / 100 / 365) * 30 * 12 : 0;
-
-    // const apsPoolBestAprDaily = uzdStatData ? uzdStatData.info.aps.apr / 100 / 365 : 0;
-    // const apsPoolBestAprMonthly = uzdStatData ? (uzdStatData.info.aps.apr / 100 / 365) * 30 : 0;
-    // const apsPoolBestApyYearly = uzdStatData ? (uzdStatData.info.aps.apr / 100 / 365) * 30 * 12 : 0;
-
-    const dailyProfit = Number(0);
-    const monthlyProfit = Number(0);
-    const yearlyProfit = Number(0);
-
-    // const dailyProfit = useMemo(() => {
-    //     let profitVal =
-    //         userMaxWithdraw.toNumber() === -1
-    //             ? 0
-    //             : getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprDaily;
-
-    //     if (apsBalance.toNumber()) {
-    //         profitVal += getBalanceNumber(apsBalance).toNumber() * apsPoolBestAprDaily;
-    //     }
-
-    //     return profitVal;
-    // }, [userMaxWithdraw, poolBestAprDaily, apsPoolBestAprDaily, apsBalance]);
-
-    // const monthlyProfit = useMemo(() => {
-    //     let profitVal =
-    //         userMaxWithdraw.toNumber() === -1
-    //             ? 0
-    //             : getBalanceNumber(userMaxWithdraw).toNumber() * poolBestAprMonthly;
-
-    //     if (apsBalance.toNumber()) {
-    //         profitVal += getBalanceNumber(apsBalance).toNumber() * apsPoolBestAprMonthly;
-    //     }
-
-    //     return profitVal;
-    // }, [userMaxWithdraw, poolBestAprMonthly, apsPoolBestAprMonthly, apsBalance]);
-
-    // const yearlyProfit = useMemo(() => {
-    //     let profitVal =
-    //         userMaxWithdraw.toNumber() === -1
-    //             ? 0
-    //             : getBalanceNumber(userMaxWithdraw).toNumber() * poolBestApyYearly;
-
-    //     if (apsBalance.toNumber()) {
-    //         profitVal += getBalanceNumber(apsBalance).toNumber() * apsPoolBestApyYearly;
-    //     }
-
-    //     return profitVal;
-    // }, [userMaxWithdraw, poolBestApyYearly, apsPoolBestApyYearly, apsBalance]);
-
+    // APY pools list
     const chartData: Array<DataItem> = useMemo(() => {
         if (!poolStats || !uzdStatData) {
             return [];
@@ -238,10 +100,7 @@ export const Main = (): JSX.Element => {
         );
     }, [stakingMode, uzdStatData, poolStats]);
 
-    const [histApyPeriod, setHistApyPeriod] = useState('week');
-    const [histApyData, setHistApyData] = useState([]);
-
-    // // historical APY chart data
+    // APY chart data
     useEffect(() => {
         const url =
             stakingMode === 'ZETH'
@@ -268,12 +127,7 @@ export const Main = (): JSX.Element => {
             });
     }, [histApyPeriod, stakingMode]);
 
-    // // APY details modal
-    const [showApyDetailsModal, setShowApyDetailsModal] = useState(false);
-
-    const apyHintTarget = useRef(null);
-    const [showApyHint, setShowApyHint] = useState(false);
-
+    // Total balance
     const totalBalance = useMemo(() => {
         let val = apsBalance;
 
@@ -329,10 +183,6 @@ export const Main = (): JSX.Element => {
         );
     }, [stakingMode, uzdStatData]);
 
-    const balanceTarget = useRef(null);
-    const [showBalanceHint, setShowBalanceHint] = useState(false);
-    const [clickCounter, setClickCounter] = useState(0);
-
     const apyBarApy = useMemo(() => {
         // incorrect server response handler
         if (!uzdStatLoading && !uzdStatData) {
@@ -360,30 +210,20 @@ export const Main = (): JSX.Element => {
                 ? uzdStatData.info.zunETH.monthlyAvgApy
                 : uzdStatData.info.zunUSD.monthlyAvgApy;
 
-        if (Number(result) > 500) {
-            result = '500+%';
-        } else {
-            result = `${Number(result).toFixed(2)}%`;
-        }
+        result = `${Number(result).toFixed(2)}%`;
 
         return result;
     }, [stakingMode, uzdStatData]);
-
-    useEffect(() => {
-        setSupportedChain(chainId === 1);
-    }, [chainId]);
 
     return (
         <Suspense fallback={<Preloader onlyIcon={true} />}>
             <React.Fragment>
                 <MobileSidebar />
                 <AllServicesPanel />
-                {/* {!supportedChain && (
-                    <UnsupportedChain
-                        text="You're using unsupported chain. Please, switch to Ethereum network."
-                        customNetworksList={[networks[0]]}
-                    />
-                )} */}
+                <UnsupportedChain
+                    text="You're using unsupported chain. Please, switch to Ethereum network."
+                    customNetworksList={[networks[0]]}
+                />
                 <div className="container">
                     <ApyDetailsModal
                         show={showApyDetailsModal}
@@ -393,78 +233,7 @@ export const Main = (): JSX.Element => {
                     />
                     <div className="row main-row h-100">
                         <SideBar isMainPage={true} tvl={tvl}>
-                            <div className="row">
-                                <div className="col sidebar-links mt-3 d-none d-lg-flex">
-                                    <button
-                                        className="btn btn-secondary"
-                                        onClick={() => {
-                                            document
-                                                .getElementById('all-services')
-                                                ?.classList.toggle('active');
-                                            document
-                                                .getElementById('sidebar-col')
-                                                ?.classList.toggle('transparent');
-                                            document
-                                                .getElementById('nav-menu')
-                                                ?.classList.toggle('hidden');
-                                        }}
-                                    >
-                                        <svg
-                                            width="22"
-                                            height="23"
-                                            viewBox="0 0 22 23"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                fillRule="evenodd"
-                                                clipRule="evenodd"
-                                                d="M14.6599 0.7805C13.0264 0.694891 11.6327 1.94972 11.5471 3.58324L11.3875 6.62912C11.3019 8.26264 12.5567 9.65627 14.1902 9.74188L17.2361 9.90151C18.8696 9.98712 20.2633 8.73228 20.3489 7.09876L20.5085 4.05289C20.5941 2.41937 19.3393 1.02574 17.7057 0.940127L14.6599 0.7805ZM0.155378 15.6116C0.0697685 13.978 1.3246 12.5844 2.95812 12.4988L6.00399 12.3392C7.63752 12.2536 9.03115 13.5084 9.11676 15.1419L9.27638 18.1878C9.36199 19.8213 8.10716 21.215 6.47364 21.3006L3.42777 21.4602C1.79425 21.5458 0.400614 20.291 0.315005 18.6574L0.155378 15.6116ZM13.04 13.4357C11.5486 14.1076 10.8844 15.8614 11.5563 17.3527L13.0413 20.6485C13.7133 22.1399 15.467 22.8041 16.9584 22.1322L20.2542 20.6472C21.7455 19.9752 22.4098 18.2215 21.7378 16.7301L20.2528 13.4343C19.5809 11.943 17.8271 11.2787 16.3358 11.9507L13.04 13.4357Z"
-                                                fill="url(#paint0_linear_18_112667)"
-                                            />
-                                            <path
-                                                d="M0.155009 4.05394C0.0694001 2.42042 1.32423 1.02679 2.95775 0.941182L6.00363 0.781555C7.63715 0.695945 9.03078 1.95078 9.11639 3.5843L9.27602 6.63017C9.36163 8.26369 8.10679 9.65732 6.47327 9.74293L3.4274 9.90256C1.79388 9.98817 0.400246 8.73334 0.314637 7.09982L0.155009 4.05394Z"
-                                                fill="#CDCDCD"
-                                            />
-                                            <defs>
-                                                <linearGradient
-                                                    id="paint0_linear_18_112667"
-                                                    x1="14.254"
-                                                    y1="21.9757"
-                                                    x2="19.1462"
-                                                    y2="12.1914"
-                                                    gradientUnits="userSpaceOnUse"
-                                                >
-                                                    <stop stopColor="#ADADAD" />
-                                                    <stop offset="1" stopColor="#CCCCCC" />
-                                                </linearGradient>
-                                            </defs>
-                                        </svg>
-
-                                        <span>All services</span>
-                                    </button>
-                                    <a
-                                        href="https://zunamilab.gitbook.io/product-docs/"
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="btn btn-secondary"
-                                    >
-                                        <svg
-                                            width="28"
-                                            height="21"
-                                            viewBox="0 0 28 21"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M12.6032 17.5019C13.0406 17.5019 13.4342 17.8653 13.4342 18.3651C13.4342 18.8194 13.0843 19.2282 12.6032 19.2282C12.1658 19.2282 11.7721 18.8648 11.7721 18.3651C11.7721 17.8653 12.1658 17.5019 12.6032 17.5019ZM25.463 12.232C25.0256 12.232 24.6319 11.8686 24.6319 11.3688C24.6319 10.9145 24.9819 10.5056 25.463 10.5056C25.9004 10.5056 26.2941 10.8691 26.2941 11.3688C26.2941 11.8231 25.9004 12.232 25.463 12.232ZM25.463 8.73387C24.0633 8.73387 22.926 9.91506 22.926 11.3688C22.926 11.6414 22.9698 11.914 23.0573 12.1866L14.7027 16.8204C14.2216 16.0936 13.4342 15.6847 12.6032 15.6847C11.6409 15.6847 10.766 16.2753 10.3286 17.1384L2.80518 13.0497C2.01784 12.5954 1.40547 11.278 1.49295 10.0059C1.53669 9.3699 1.7554 8.87016 2.06158 8.68844C2.28029 8.55215 2.49899 8.59758 2.80518 8.73387L2.84892 8.7793C4.86101 9.86963 11.3784 13.4132 11.6409 13.5495C12.0783 13.7312 12.297 13.822 13.0406 13.4586L26.5128 6.18979C26.7315 6.09893 26.9502 5.91721 26.9502 5.5992C26.9502 5.19033 26.5565 5.0086 26.5565 5.0086C25.7692 4.64516 24.5882 4.05457 23.4509 3.50941C21.0014 2.32822 18.202 0.96532 16.9773 0.283868C15.9275 -0.306724 15.0527 0.193008 14.9214 0.283868L14.6153 0.420158C9.06014 3.32769 1.71166 7.09839 1.27425 7.37097C0.530649 7.82527 0.0494977 8.77931 0.00575671 9.96048C-0.0817253 11.8231 0.836836 13.7766 2.14907 14.4581L10.1099 18.7285C10.2849 20.0005 11.3784 21 12.6032 21C14.0029 21 15.0964 19.8642 15.1401 18.4105L23.8883 13.504C24.3258 13.8675 24.8944 14.0492 25.463 14.0492C26.8627 14.0492 28 12.868 28 11.4142C28 9.91505 26.8627 8.73387 25.463 8.73387Z"
-                                                fill="#ADADAD"
-                                            />
-                                        </svg>
-                                        <span>Docs</span>
-                                    </a>
-                                </div>
-                            </div>
+                            <SidebarTopButtons />
                             <div className="mobile-menu-title d-block d-lg-none">Menu</div>
                             <div
                                 className="d-flex d-lg-none gap-3 mt-4 pb-3 mobile-menu"
@@ -473,34 +242,7 @@ export const Main = (): JSX.Element => {
                                     overflowX: 'scroll',
                                 }}
                             >
-                                <a
-                                    href="/"
-                                    className="text-center d-flex flex-column text-decoration-none selected"
-                                >
-                                    <img src="/dashboard.png" alt="" />
-                                    <span className="text-muted mt-2">Dashboard</span>
-                                </a>
-                                <a
-                                    href="/zun"
-                                    className="text-center d-flex flex-column text-decoration-none"
-                                >
-                                    <img src="/zun-staking.png" alt="" />
-                                    <span className="text-muted mt-2">ZUN Staking</span>
-                                </a>
-                                <a
-                                    href="/zun-stables"
-                                    className="text-center d-flex flex-column text-decoration-none"
-                                >
-                                    <img src="/uzd.png" alt="" />
-                                    <span className="text-muted mt-2">zunStables</span>
-                                </a>
-                                <a
-                                    href="https://snapshot.org/#/zunamidao.eth"
-                                    className="text-center d-flex flex-column text-decoration-none"
-                                >
-                                    <img src="/dao.png" alt="" />
-                                    <span className="text-muted mt-2">DAO</span>
-                                </a>
+                                {renderMobileMenu()}
                             </div>
                             <div className="Sidebar__Content__Data">
                                 <div className="title">Your data</div>

@@ -200,7 +200,6 @@ export const StakingPool: React.FC<StakingPoolProps & React.HTMLProps<HTMLDivEle
                                                 minLength={1}
                                                 maxLength={8}
                                                 onChange={(e) => {
-                                                    // console.log(e.target.value);
                                                     setDepositSum(e.target.value);
                                                 }}
                                             />

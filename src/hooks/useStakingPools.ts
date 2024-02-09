@@ -4,6 +4,7 @@ import { useNetwork, sepolia, mainnet, Address, erc20ABI, useAccount } from 'wag
 import stakingABI from '../actions/abi/sepolia/staking.json';
 import { getChainClient, getZunStakingAddress } from '../utils/zunami';
 import { BIG_ZERO } from '../utils/formatbalance';
+import { log } from '../utils/logger';
 
 function getPoolInfo(pool: PoolInfo): StakingPoolInfo {
     let result: StakingPoolInfo = {
@@ -80,7 +81,7 @@ const useStakingPools = () => {
                 functionName: 'getAllPools',
             })) as PoolInfo[];
 
-            console.log(result);
+            log(`Staking pools fetched: ${JSON.stringify(result)}`);
 
             // remove dummy data
             result = result.map((pool: PoolInfo) => getPoolInfo(pool));

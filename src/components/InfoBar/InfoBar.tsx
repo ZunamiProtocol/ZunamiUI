@@ -56,40 +56,9 @@ export const InfoBar = (props: InfoBarProps): JSX.Element => {
     const poolStat = activeStratsStat as PoolsStats;
     const [defaultPool, setDefautPool] = useState<PoolInfo>();
 
-    // const { data, isError, isLoading }: any = useContractRead({
-    //     address: contractAddresses.zunami[1],
-    //     abi: zunAbi,
-    //     functionName: props.section === 'withdraw' ? 'defaultWithdrawPid' : 'defaultDepositPid',
-    //     args: [],
-    //     onError(error) {
-    //         console.log('Error while retrieving default strategy ID:');
-    //         console.log(error);
-    //     },
-    // });
-
     const poolInfo = poolsChartdata[poolStat.pools[0].type];
     setDefautPool(poolInfo);
 
-    // useEffect(() => {
-    //     if (!account || !chainId || !poolStat) {
-    //         return;
-    //     }
-
-    //     const getDefaultPool = async () => {
-    //         const defaultPoolId =
-    //             props.section === 'withdraw'
-    //                 ? await contract.methods.defaultWithdrawPid().call()
-    //                 : await contract.methods.defaultDepositPid().call();
-    //         const pool = poolStat.pools.filter((item) => item.pid === parseInt(defaultPoolId, 10));
-
-    //         if (pool.length) {
-    //             const poolInfo = poolsChartdata[pool[0].type];
-    //             setDefautPool(poolInfo);
-    //         }
-    //     };
-
-    //     getDefaultPool();
-    // }, [chainId, account, poolStat, props.section]);
     return (
         <div className="card InfoBar">
             <div className="card-body">
