@@ -41,9 +41,9 @@ const useBalanceOf = (contractAddress: Address, abi?: Abi, autoRefresh = false) 
                         ],
                     });
 
-                    log(
-                        `[${contractAddress}]->balanceOf(${account}). Result: ${result.toString()})`
-                    );
+                    // log(
+                    //     `[${contractAddress}]->balanceOf(${account}). Result: ${result.toString()})`
+                    // );
                     setBalance(new BigNumber(result.toString()));
 
                     break;

@@ -94,13 +94,25 @@ const useStake = (coinIndex: number, depositSum: string, receiver: Address) => {
         });
     }
 
+    // https://github.com/ZunamiProtocol/ZunamiProtocolV2/commit/2e33ac81ed81fe303b6427d085020eaa6694b85d
+    // Там сейчас один пул с APS LP токеном
+
+    // Тебе важно юзать следующие методы:
+    // 1/ function deposit(uint256 _pid, uint256 _amount)
+    // депонием токен в нашем случа это первй пул ( 0 pid ) и указывает количество
+    // Перед исполнение депозита естесвенно апрувим APS LP токен на стейкинг
+
+    // 2/ function withdraw(uint256 _pid, uint256 _amount) - аналогично указывает пул ID ( 0 ) и количество APS LP которые хотим забрать
+    // 3/ function claimAll() - забираем реворды
+
     // Staking #1
     async function stakingDeposit() {
-        const amount = new BigNumber(depositSum).times(tokenDecimals).toString();
-        log(`Staking.deposit(0, ${amount}`);
+        const stakingAddress = getZunStakingAddress(chainId);
+        const amount = '100000'; //new BigNumber(depositSum).times(tokenDecimals).toString();
+        log(`Staking(${stakingAddress}).deposit(0, ${amount})`);
 
         return await walletClient.writeContract({
-            address: getZunStakingAddress(chainId),
+            address: stakingAddress,
             chain: chain,
             abi: stakingAbi,
             functionName: 'deposit',

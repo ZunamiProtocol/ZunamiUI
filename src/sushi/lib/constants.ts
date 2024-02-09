@@ -23,7 +23,7 @@ export const zunTokenAddress: Address = NULL_ADDRESS;
 export const zunTokenSepoliaAddress: Address = '0xAc4d9e15910701a10329040bDC71a484C9Ba3860';
 
 // Staking
-export const zunStakingAddress: Address = NULL_ADDRESS;
+export const zunStakingAddress: Address = '0x748C4D2b68DA2ad9F20Dc021700589FC18D8BA75';
 export const zunStakingSepoliaAddress: Address = '0x748C4D2b68DA2ad9F20Dc021700589FC18D8BA75';
 
 export const contractAddresses: { [index: string]: any } = {

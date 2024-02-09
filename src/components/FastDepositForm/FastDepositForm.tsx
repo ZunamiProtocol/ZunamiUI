@@ -247,7 +247,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     }, [action, stakingMode, coinIndex, userBalanceList, chainId, apsBalance]);
 
     // deposit
-    const { deposit, stakingDeposit } = useStake(coinIndex, depositSum, account || NULL_ADDRESS);
+    const { deposit } = useStake(coinIndex, depositSum, account || NULL_ADDRESS);
     // withdraw
     const { withdraw } = useUnstake(
         withdrawSum,
@@ -376,38 +376,6 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
             <div>
                 <div>
                     <div className="">
-                        {action === 'deposit' && (
-                            <div className="checkboxes">
-                                <div className="d-flex gap-4 mb-3 flex-column flex-md-row">
-                                    {!pendingTx && (
-                                        <DirectAction
-                                            actionName="deposit"
-                                            checked={lockAndBoost}
-                                            title={'Lock and boost APY to 25%'}
-                                            disabled={false}
-                                            hint={'Example tooltip text'}
-                                            onChange={(state: boolean) => {
-                                                setLockAndBoost(state);
-                                            }}
-                                            chainId={chainId ?? 1}
-                                        />
-                                    )}
-                                    {/* {!pendingTx && (
-                                        <DirectAction
-                                            actionName="deposit"
-                                            checked={autoRelock}
-                                            title={'Auto-relock'}
-                                            disabled={!coinApproved || !isETH(chainId)}
-                                            hint={'Example tooltip text'}
-                                            onChange={(state: boolean) => {
-                                                setAutoRelock(state);
-                                            }}
-                                            chainId={chainId}
-                                        />
-                                    )} */}
-                                </div>
-                            </div>
-                        )}
                         <div className="buttons">
                             {action === 'withdraw' && coinApproved && (
                                 <button
@@ -456,13 +424,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                         // if (deposit) {
                                         setPendingTx(true);
                                         try {
-                                            let tx = null;
-
-                                            if (lockAndBoost) {
-                                                tx = await stakingDeposit();
-                                            } else {
-                                                tx = await deposit();
-                                            }
+                                            let tx = await deposit();
 
                                             log(`Deposit executed. Tx ID: ${tx}`);
                                             setTransactionId(tx);

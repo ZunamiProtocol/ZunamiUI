@@ -482,6 +482,11 @@ input[type='checkbox'] {
 body.dark {
     background-color: #000 !important;
 
+    input,
+    .form-control:focus {
+        color: #fff;
+    }
+
     .Preloader {
         &.blocker {
             background-color: rgba(0, 0, 0, 0.3);

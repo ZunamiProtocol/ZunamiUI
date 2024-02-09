@@ -3,32 +3,37 @@ import { useEffect, useState } from 'react';
 import { useNetwork, sepolia, mainnet, Address, erc20ABI, useAccount } from 'wagmi';
 import stakingABI from '../actions/abi/sepolia/staking.json';
 import { getChainClient, getZunStakingAddress } from '../utils/zunami';
+import { BIG_ZERO } from '../utils/formatbalance';
 
-function getPoolInfo(poolIndex: string): StakingPoolInfo {
+function getPoolInfo(pool: PoolInfo): StakingPoolInfo {
     let result: StakingPoolInfo = {
         title: '???',
         platform: '???',
         primaryIcon: '/zunusd.svg',
-        tvl: '0',
+        tvl: BIG_ZERO,
         apr: 0,
-        deposit: 0,
+        balance: BIG_ZERO,
+        // allowance: BIG_ZERO,
         claimed: 0,
         unclaimed: 0,
         address: '0x0000000000000000000000000000000000000000',
+        maxStakingSum: BIG_ZERO,
     };
 
-    switch (poolIndex) {
+    switch (pool.token) {
         case '0x24Df9D9BB4CDD19F0Fb99c8C08631778e4DC18F0':
             result = {
+                ...pool,
                 title: 'zunUSD / crvUSD',
                 platform: 'Stake DAO',
                 primaryIcon: '/stake-dao.svg',
-                tvl: '6.6m',
-                apr: 16,
-                deposit: 0,
+                tvl: BIG_ZERO,
+                apr: 0,
+                balance: BIG_ZERO,
                 claimed: 0,
                 unclaimed: 0,
                 address: '0x24Df9D9BB4CDD19F0Fb99c8C08631778e4DC18F0',
+                maxStakingSum: BIG_ZERO,
             };
             break;
     }
@@ -36,19 +41,28 @@ function getPoolInfo(poolIndex: string): StakingPoolInfo {
     return result;
 }
 
-const IGNORED_POOLS = ['0x0000000000000000000000000000000000000000', '100'];
-
 export interface StakingPoolInfo {
     title: string;
     platform: string;
     primaryIcon: string;
-    tvl: string;
+    tvl: BigNumber;
     apr: number;
-    deposit: number;
+    balance: BigNumber;
+    // allowance: BigNumber;
     claimed: number;
     unclaimed: number;
     address: Address;
+    maxStakingSum: BigNumber;
 }
+
+type PoolInfo = {
+    token: string; // Address of token contract.
+    stakingToken: string; // Address of staking token contract.
+    allocPoint: number; // How many allocation points assigned to this pool.
+    accRewardsPerShare: number[]; // Accumulated reward token per share, times ACC_REWARD_PRECISION. See below.
+    lastRewardBlocks: number[]; // Last block number that reward tokens distribution occurs.
+    balance: BigNumber;
+};
 
 const useStakingPools = () => {
     const { chain } = useNetwork();
@@ -58,40 +72,58 @@ const useStakingPools = () => {
 
     useEffect(() => {
         const fetchPools = async () => {
-            let result: any = await getChainClient(chainId).readContract({
+            let result: PoolInfo[] | StakingPoolInfo[] = (await getChainClient(
+                chainId
+            ).readContract({
                 address: getZunStakingAddress(chainId),
                 abi: stakingABI,
-                functionName: 'poolInfo',
-                args: [0],
-                // functionName: 'getAllPools',
-            });
+                functionName: 'getAllPools',
+            })) as PoolInfo[];
+
+            console.log(result);
 
             // remove dummy data
-            result = result
-                .filter((address: string) => IGNORED_POOLS.indexOf(address.toString()) === -1)
-                .map((poolAddress: string) => getPoolInfo(poolAddress));
+            result = result.map((pool: PoolInfo) => getPoolInfo(pool));
+
+            const tvls: BigInt[] = (await Promise.all(
+                result.map(async (pool: StakingPoolInfo, index: number) => {
+                    return getChainClient(chainId).readContract({
+                        address: getZunStakingAddress(chainId),
+                        abi: stakingABI,
+                        functionName: 'totalAmounts',
+                        args: [index],
+                    });
+                })
+            )) as BigInt[];
+
+            tvls.forEach((tvl: BigInt, index: number) => {
+                // @ts-ignore
+                result[index].tvl = new BigNumber(tvl.toString());
+            });
 
             if (account) {
-                result = await result.map(async (pool: StakingPoolInfo) => {
-                    const balance = await getChainClient(chainId).readContract({
-                        address: pool.address,
-                        abi: erc20ABI,
-                        functionName: 'balanceOf',
-                        args: [account],
-                    });
+                const balances = await Promise.all(
+                    result.map(async (pool: StakingPoolInfo) => {
+                        return getChainClient(chainId).readContract({
+                            address: pool.address as Address,
+                            abi: erc20ABI,
+                            functionName: 'balanceOf',
+                            args: [account],
+                        });
+                    })
+                );
 
-                    console.log(balance);
+                balances.forEach((balance: BigInt, index: number) => {
+                    result[index].balance = new BigNumber(balance.toString());
                 });
             }
-
-            // console.log(result);
 
             // @ts-ignore
             setPools(result);
         };
 
         fetchPools();
-    }, [chainId]);
+    }, [chainId, account]);
 
     return pools;
 };

@@ -14,32 +14,48 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import useBalanceOf from '../hooks/useBalanceOf';
 import { getZunStakingAddress, getZunUsdApsAddress } from '../utils/zunami';
-import { useNetwork } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import { APPROVE_SUM } from '../sushi/utils';
 import useApprove from '../hooks/useApprove';
 import useStakingPools from '../hooks/useStakingPools';
 import { StakingPool } from '../components/StakingPool/StakingPool';
+import useAllowance from '../hooks/useAllowance';
+
+const FILTERS = ['My pools', 'USD', 'ETH', 'Convex', 'Stake DAO', 'Zunami'];
 
 export const Earn = (): JSX.Element => {
+    const { address: account } = useAccount();
     const [tvl, setTvl] = useState('0');
     const dailyProfit = Number(0);
     const monthlyProfit = Number(0);
     const yearlyProfit = Number(0);
     const [pendingTx, setPendingTx] = useState(false);
-
     const { chain } = useNetwork();
     const chainId = chain ? chain.id : undefined;
     const apsBalance = useBalanceOf(getZunUsdApsAddress(chainId));
-
-    // approve
-    const {
-        data: approveResult,
-        isLoading: isApproving,
-        isSuccess: approveSuccessful,
-        write: approve,
-    } = useApprove(getZunUsdApsAddress(chainId), getZunStakingAddress(chainId), APPROVE_SUM);
-
     const pools = useStakingPools();
+    const [searchText, setSearchText] = useState('');
+    const [category, setCategory] = useState<string | null>(null);
+    const filterActive = category !== null || searchText !== '';
+    const poolsFiltered = useMemo(() => {
+        return pools.filter((pool) => {
+            if (searchText) {
+                return pool.title.indexOf(searchText) !== -1;
+            }
+
+            if (category === 'My pools') {
+                return pool.balance.toNumber() > 0;
+            }
+
+            if (category) {
+                return (
+                    pool.title.indexOf(category) !== -1 || pool.platform.indexOf(category) !== -1
+                );
+            }
+
+            return pool;
+        });
+    }, [category, searchText, pools]);
 
     return (
         <Suspense fallback={<Preloader onlyIcon={true} />}>
@@ -217,28 +233,31 @@ export const Earn = (): JSX.Element => {
                                         type="search"
                                         className="form-control rounded-pill search-filter"
                                         placeholder="Search..."
+                                        value={searchText}
+                                        onChange={(e) => {
+                                            setSearchText(e.currentTarget.value);
+                                            setCategory(null);
+                                        }}
                                     />
                                 </div>
                                 <div className="col-sm-12 col-md-8">
                                     <div className="d-flex flex-wrap gap-2 ms-0 ms-md-3 mt-3 mt-md-0">
-                                        <button className={`btn btn-secondary rounded-pill px-3`}>
-                                            My pools
-                                        </button>
-                                        <button className={`btn btn-secondary rounded-pill px-3`}>
-                                            USD
-                                        </button>
-                                        <button className={`btn btn-secondary rounded-pill px-3`}>
-                                            ETH
-                                        </button>
-                                        <button className={`btn btn-secondary rounded-pill px-3`}>
-                                            Convex
-                                        </button>
-                                        <button className={`btn btn-secondary rounded-pill px-3`}>
-                                            Stake DAO
-                                        </button>
-                                        <button className={`btn btn-secondary rounded-pill px-3`}>
-                                            Zunami
-                                        </button>
+                                        {FILTERS.map((key: string) => (
+                                            <button
+                                                className={`btn btn-secondary rounded-pill filter px-3 ${
+                                                    key === category ? 'active' : ''
+                                                }`}
+                                                onClick={(e) => {
+                                                    if (key === category) {
+                                                        setCategory(null);
+                                                    } else {
+                                                        setCategory(key);
+                                                    }
+                                                }}
+                                            >
+                                                {key}
+                                            </button>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
@@ -249,12 +268,19 @@ export const Earn = (): JSX.Element => {
                                         className="w-100 gap-3 mt-5"
                                         defaultActiveKey="0"
                                     >
-                                        {pools &&
-                                            pools.map((pool, index) => (
+                                        {!pools.length && <Preloader />}
+                                        {!poolsFiltered.length && filterActive && (
+                                            <p className="text-muted">
+                                                No pools with these criterias
+                                            </p>
+                                        )}
+                                        {poolsFiltered &&
+                                            poolsFiltered.map((pool, index) => (
                                                 <StakingPool
                                                     index={index.toString()}
                                                     key={index}
                                                     {...pool}
+                                                    maxStakingSum={apsBalance}
                                                 />
                                             ))}
                                     </Accordion>

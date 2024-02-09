@@ -10,6 +10,16 @@
         display: none;
     }
 
+    .filter {
+        &.active {
+            border-color: #ff7a00;
+        }
+
+        &:focus {
+            box-shadow: none;
+        }
+    }
+
     .accordion-item {
         margin-bottom: 20px;
     }
@@ -210,6 +220,7 @@
         max-width: 252px;
         overflow: hidden;
         position: relative;
+        color: #000;
 
         .coins {
             position: absolute;
