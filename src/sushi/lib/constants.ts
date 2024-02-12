@@ -12,7 +12,8 @@ export const zunamiMainnetAddress: Address = '0x9df40870830d24c0506F7Cf5042f14C0
 export const zunamiSepoliaAddress: Address = '0x3694Db838a8cAf3b1c234529bB1b447bd849F357';
 
 // zunUSD APS controller
-export const zunUsdApsAddress: Address = NULL_ADDRESS;
+
+export const zunUsdApsAddress: Address = '0xd5deE282790a73297efF143f2466A253E5191266';
 export const zunUsdApsSepoliaAddress: Address = '0x1C4e36edBa364406f181fe9B3a4E6FC023DED0bc';
 
 // ZunUSD
@@ -38,9 +39,6 @@ export const contractAddresses: { [index: string]: any } = {
         1: zunUsdMainnetAddress,
         11155111: zunUsdSepoliaAddress,
     },
-    usdc: {
-        1: '0xdac17f958d2ee523a2206206994597c13d831ec7',
-    },
     uzd: {
         1: '0xb40b6608B2743E691C9B54DdBDEe7bf03cd79f1c',
     },
@@ -48,7 +46,7 @@ export const contractAddresses: { [index: string]: any } = {
         1: '0x3D8aBC464D5313a576e78706aC97F79fe1EB0b61',
     },
     aps: {
-        1: zunUsdMainnetAddress,
+        1: zunUsdApsAddress,
         11155111: zunUsdApsSepoliaAddress,
     },
     zun: {

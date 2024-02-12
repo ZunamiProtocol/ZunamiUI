@@ -1,18 +1,7 @@
 import BigNumber from 'bignumber.js';
-import { useEffect, useState, useMemo } from 'react';
-import { BIG_ZERO, NULL_ADDRESS } from '../utils/formatbalance';
-import { getMasterChefContract } from '../sushi/utils';
-import { log } from '../utils/logger';
-import {
-    Address,
-    useAccount,
-    useContractRead,
-    useNetwork,
-    sepolia,
-    mainnet,
-    erc20ABI,
-} from 'wagmi';
-import sepControllerAbi from '../actions/abi/sepolia/controller.json';
+import { useEffect, useState } from 'react';
+import { BIG_ZERO } from '../utils/formatbalance';
+import { Address, useAccount, useNetwork, sepolia, mainnet, erc20ABI } from 'wagmi';
 import { Abi } from 'viem';
 import { getChainClient } from '../utils/zunami';
 

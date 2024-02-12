@@ -1,14 +1,24 @@
-import { Address, erc20ABI, useContractWrite, usePrepareContractWrite } from 'wagmi';
-import sepoliaApsControllerABI from '../actions/abi/sepolia/aps.json';
+import {
+    Address,
+    erc20ABI,
+    useContractWrite,
+    usePrepareContractWrite,
+    erc721ABI,
+    erc4626ABI,
+} from 'wagmi';
 import { log } from '../utils/logger';
-import { NULL_ADDRESS } from '../utils/formatbalance';
+import { usdtAddress } from '../utils/formatbalance';
 
 const useApprove = (coinAddress: Address, spender: Address, amount: string) => {
     const typedAmount: bigint = BigInt(amount);
+    const abi = coinAddress === usdtAddress ? erc721ABI : erc20ABI;
+
+    // log(`${coinAddress}.approve(${spender}, ${typedAmount})`);
 
     const { config } = usePrepareContractWrite({
         address: coinAddress,
-        abi: erc20ABI,
+        // @ts-ignore
+        abi: abi,
         functionName: 'approve',
         args: [spender, typedAmount],
     });

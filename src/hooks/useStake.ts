@@ -19,20 +19,12 @@ const useStake = (coinIndex: number, depositSum: string, receiver: Address) => {
     const chainId = chain ? chain.id : undefined;
     const { address: account } = useAccount();
 
-    const abi = useMemo(() => {
-        if (chainId === sepolia.id) {
-            return sepControllerAbi;
-        } else {
-            return sepControllerAbi;
-        }
-    }, [chainId]);
-
     const contractAddress = useMemo(() => {
-        if (chainId === sepolia.id) {
-            return contractAddresses.aps[chainId] ?? 1;
+        if (!chainId) {
+            return contractAddresses.aps[1];
         }
 
-        return NULL_ADDRESS;
+        return contractAddresses.aps[chainId];
     }, [chainId]);
 
     let preparedAmounts = [
@@ -87,7 +79,7 @@ const useStake = (coinIndex: number, depositSum: string, receiver: Address) => {
         return await walletClient.writeContract({
             address: contractAddress,
             chain: chain,
-            abi: abi,
+            abi: sepControllerAbi,
             functionName: 'deposit',
             args: [preparedAmounts, receiver],
             account: account || NULL_ADDRESS,

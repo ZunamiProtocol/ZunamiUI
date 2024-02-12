@@ -1,9 +1,5 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
-// import { useWallet } from 'use-wallet';
-import { getMasterChefContract } from '../sushi/utils';
-// import useSushi from './useSushi';
-import { getAllowance, getContract } from '../utils/erc20';
 import {
     BIG_ZERO,
     daiAddress,
@@ -19,7 +15,7 @@ import { log } from '../utils/logger';
 
 import { Address, sepolia, mainnet, useContractRead, erc20ABI } from 'wagmi';
 import { getChainClient } from '../utils/zunami';
-import { zunUsdSepoliaAddress } from '../sushi/lib/constants';
+import { zunUsdMainnetAddress, zunUsdSepoliaAddress } from '../sushi/lib/constants';
 
 export const useAllowance = (
     coinAddress: Address,
@@ -89,11 +85,30 @@ export const useAllowanceStables = (
 
     useEffect(() => {
         const fetchAllowance = async () => {
+            let result = [BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO];
+
             switch (chainId) {
                 case mainnet.id:
+                    result = [
+                        await getCoinAllowance(daiAddress, account, spender, chainId),
+                        await getCoinAllowance(usdcAddress, account, spender, chainId),
+                        await getCoinAllowance(usdtAddress, account, spender, chainId),
+                        BigInt('0'),
+                        await getCoinAllowance(zunUsdMainnetAddress, account, spender, chainId),
+                        BigInt('0'),
+                        BigInt('0'),
+                    ].map(
+                        (allowance: BigInt, index: number) => new BigNumber(allowance.toString())
+                    );
+
+                    log(
+                        `Allowance (spender ${spender}): DAI - ${result[0].toString()}, USDC - ${result[1].toString()}, USDT - ${result[2].toString()}, zunUSD - ${result[4].toString()}`
+                    );
+
+                    setAllowance(result);
                     break;
                 case sepolia.id:
-                    const result = [
+                    result = [
                         await getCoinAllowance(sepDaiAddress, account, spender, chainId),
                         await getCoinAllowance(sepUsdcAddress, account, spender, chainId),
                         await getCoinAllowance(sepUsdtAddress, account, spender, chainId),
@@ -105,9 +120,9 @@ export const useAllowanceStables = (
                         (allowance: BigInt, index: number) => new BigNumber(allowance.toString())
                     );
 
-                    // log(
-                    //     `Allowance (sepolia): DAI - ${result[0].toString()}, USDC - ${result[1].toString()}, USDT - ${result[2].toString()}, zunUSD - ${result[4].toString()}`
-                    // );
+                    log(
+                        `Allowance (sepolia): DAI - ${result[0].toString()}, USDC - ${result[1].toString()}, USDT - ${result[2].toString()}, zunUSD - ${result[4].toString()}`
+                    );
 
                     setAllowance(result);
 

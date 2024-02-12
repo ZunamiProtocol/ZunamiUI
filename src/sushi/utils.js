@@ -26,38 +26,6 @@ export const getSushiAddress = (sushi) => {
 export const getWethAddress = (sushi) => {
     return contractAddresses.weth['1'];
 };
-export const getUsdcAddress = (chainId = '0x1') => {
-    const chainIdentifier = chainId.split('x')[1];
-    return contractAddresses.usdc[chainIdentifier];
-};
-export const getWethContract = (sushi) => {
-    return sushi && sushi.contracts && sushi.contracts.weth;
-};
-export const getUsdcContract = (sushi) => {
-    return sushi && sushi.contracts && sushi.contracts.usdc;
-};
-export const getMasterChefContract = (sushi, chain = 1) => {
-    const chainId = chain ? chain : window?.ethereum?.chainId;
-    let result = undefined;
-
-    if (sushi && sushi.contracts) {
-        if (chain === 1 || chainId === '0x1') {
-            // sushi.contracts.masterChef.options.address = getZunamiAddress(chainId);
-            result = sushi.contracts.masterChef;
-        } else if (chain === 56 || chainId === '0x38') {
-            sushi.contracts.bscMasterChef.options.address = getZunamiAddress(chainId);
-            result = sushi.contracts.bscMasterChef;
-        } else if (chain === 137 || chainId === '0x89') {
-            sushi.contracts.polygonContract.options.address = getZunamiAddress(chainId);
-            result = sushi.contracts.polygonContract;
-        }
-    }
-
-    return result;
-};
-export const getSushiContract = (sushi) => {
-    return sushi && sushi.contracts && sushi.contracts.sushi;
-};
 
 export const getFarms = (sushi) => {
     return sushi
@@ -91,7 +59,7 @@ export const getFarms = (sushi) => {
 };
 
 // 10M
-export const APPROVE_SUM = '10000000000000000000000000000';
+export const APPROVE_SUM = '10000000000000000000000000';
 
 const MaxUint256 = new BigNumber(
     '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'

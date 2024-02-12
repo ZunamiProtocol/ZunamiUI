@@ -114,7 +114,7 @@ export const ZunStables = (): JSX.Element => {
                                                 <span className="name">ZUN Balance</span>
                                             </div>
                                             <div className="vela-sans value mt-1 d-flex align-items-center">
-                                                <span>$2,000</span>
+                                                <span>$0</span>
                                             </div>
                                         </div>
                                     </div>
@@ -124,7 +124,7 @@ export const ZunStables = (): JSX.Element => {
                         <StakingSummary
                             logo="UZD"
                             selected={true}
-                            baseApy={'16%'}
+                            baseApy={'0%'}
                             deposit={`$0`}
                             className="mt-3"
                         />
@@ -439,7 +439,7 @@ export const ZunStables = (): JSX.Element => {
                                                         <StrategyListItem
                                                             title="Convex Finance"
                                                             description="ALUSD / FRAXBP"
-                                                            percent={15}
+                                                            percent={25}
                                                             color={StrategyListItemColor.yellow}
                                                             amount="500 000"
                                                             apr={16}
@@ -451,7 +451,7 @@ export const ZunStables = (): JSX.Element => {
                                                         <StrategyListItem
                                                             title="Convex Finance"
                                                             description="ALUSD / FRAXBP"
-                                                            percent={10}
+                                                            percent={25}
                                                             color={StrategyListItemColor.green}
                                                             amount="500 000"
                                                             apr={16}
@@ -461,7 +461,7 @@ export const ZunStables = (): JSX.Element => {
                                                         <StrategyListItem
                                                             title="Convex Finance"
                                                             description="ALUSD / FRAXBP"
-                                                            percent={50}
+                                                            percent={25}
                                                             color={StrategyListItemColor.orange}
                                                             amount="500 000"
                                                             apr={16}

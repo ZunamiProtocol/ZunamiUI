@@ -127,7 +127,7 @@ export const useUserBalances = (account: Address = NULL_ADDRESS, chainId: number
                     ].map((balance: BigInt) => new BigNumber(balance.toString()));
 
                     log(
-                        `Balance (mainnet): DAI - ${result[2].toString()}, USDC - ${result[3].toString()}, USDT - ${result[4].toString()}`
+                        `Balance (mainnet): DAI - ${result[0].toString()}, USDC - ${result[1].toString()}, USDT - ${result[2].toString()}, zunUSD - ${result[4].toString()}`
                     );
 
                     setBalance(result);

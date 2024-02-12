@@ -1,17 +1,8 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Header } from '../components/Header/Header';
 import './Uzd.scss';
-import { OverlayTrigger, Popover, Tooltip } from 'react-bootstrap';
-import useUzdBalance from '../hooks/useUzdBalance';
-import useTotalSupply from '../hooks/useTotalSupply';
-import {
-    BIG_TEN,
-    BIG_ZERO,
-    getBalanceNumber,
-    NULL_ADDRESS,
-    UZD_DECIMALS,
-} from '../utils/formatbalance';
-import useUzdLpPrice from '../hooks/useUzdLpPrice';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
+import { BIG_TEN, BIG_ZERO, NULL_ADDRESS, UZD_DECIMALS } from '../utils/formatbalance';
 import BigNumber from 'bignumber.js';
 import { contractAddresses } from '../sushi/lib/constants';
 import { log } from '../utils/logger';
@@ -20,27 +11,16 @@ import {
     getZethHistoricalApyUrl,
     getActiveStratsUrl,
     uzdStakingInfoUrl,
-    getRebaseHistoryUrl,
-    getZethRebaseHistoryUrl,
     getZethStratsUrl,
     getHistoricalApyUrl,
 } from '../api/api';
 import useFetch from 'react-fetch-hook';
-import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
-// import { UzdMigrationModal } from '../components/UzdMigrationModal/UzdMigrationModal';
 import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar';
-import { networks } from '../components/NetworkSelector/NetworkSelector';
 import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
-import { YourData } from '../components/YourData/YourData';
-import { UzdStakingSummary } from '../components/UzdStakingSummary/UzdStakingSummary';
 import { ApyChart } from '../components/ApyChart/ApyChart';
-import { Chart } from '../components/Chart/Chart';
 import { PoolsStats } from './Main.types';
-import { formatPoolApy, poolDataToChartData } from '../functions/pools';
+import { poolDataToChartData } from '../functions/pools';
 import { RebaseHistory } from '../components/RebaseHistory/RebaseHistory';
-import { Link } from 'react-router-dom';
-import useZapsLpBalance from '../hooks/useZapsLpBalance';
-import { SupportersBar } from '../components/SupportersBar/SupportersBar';
 import { Input } from '../components/FastDepositForm/Input/Input';
 import { DirectAction } from '../components/Form/DirectAction/DirectAction';
 import { StakingSummary } from '../components/StakingSummary/StakingSummary';
@@ -117,10 +97,10 @@ export const Uzd = (): JSX.Element => {
     const zethBalance = BIG_ZERO;
     const uzdTotalSupply = BIG_ZERO;
     const zethTotalSupply = BIG_ZERO;
-    const lpPrice = useUzdLpPrice();
+    const lpPrice = BIG_ZERO;
     const [supportedChain, setSupportedChain] = useState(true);
     const [hideMigrationModal, setHideMigrationModal] = useState(false);
-    const apsBalance = useZapsLpBalance();
+    const apsBalance = BIG_ZERO;
     const uzdBalance = BIG_ZERO;
     const balances = useMemo(() => {
         return [
