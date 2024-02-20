@@ -101,7 +101,12 @@ export const StakingPool: React.FC<StakingPoolProps & React.HTMLProps<HTMLDivEle
         isLoading: isApproving,
         isSuccess: approveSuccessful,
         write: approve,
-    } = useApprove(getZunUsdApsAddress(chainId), getZunStakingAddress(chainId), APPROVE_SUM);
+    } = useApprove(
+        getZunUsdApsAddress(chainId),
+        getZunStakingAddress(chainId),
+        APPROVE_SUM,
+        chainId
+    );
 
     return (
         <Accordion.Item eventKey={index}>

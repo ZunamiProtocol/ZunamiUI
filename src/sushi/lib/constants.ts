@@ -8,16 +8,15 @@ import { NULL_ADDRESS } from '../../utils/formatbalance';
 export const SUBTRACT_GAS_LIMIT = 100000;
 
 // Main Omnipool controller
-export const zunamiMainnetAddress: Address = '0x9df40870830d24c0506F7Cf5042f14C04590F8e5';
+export const zunamiMainnetAddress: Address = '0x618eee502CDF6b46A2199C21D1411f3F6065c940';
 export const zunamiSepoliaAddress: Address = '0x3694Db838a8cAf3b1c234529bB1b447bd849F357';
 
-// zunUSD APS controller
-
-export const zunUsdApsAddress: Address = '0xd5deE282790a73297efF143f2466A253E5191266';
+// APS controller
+export const zunUsdApsAddress: Address = '0x28e487bbF6b64867C29e61DccbCD17aB64082889';
 export const zunUsdApsSepoliaAddress: Address = '0x1C4e36edBa364406f181fe9B3a4E6FC023DED0bc';
 
 // ZunUSD
-export const zunUsdMainnetAddress: Address = '0x1Ecc4A2EE46e50327ADc4AB41fEc750075D30b0a';
+export const zunUsdMainnetAddress: Address = '0x8C0D76C9B18779665475F3E212D9Ca1Ed6A1A0e6';
 export const zunUsdSepoliaAddress: Address = '0x83287Da602f0C32f6C9B09E2F1b2951767ebF239';
 
 // ZUN token
@@ -27,6 +26,32 @@ export const zunTokenSepoliaAddress: Address = '0xAc4d9e15910701a10329040bDC71a4
 // Staking
 export const zunStakingAddress: Address = '0x748C4D2b68DA2ad9F20Dc021700589FC18D8BA75';
 export const zunStakingSepoliaAddress: Address = '0x748C4D2b68DA2ad9F20Dc021700589FC18D8BA75';
+
+// ZAP
+export const zunZapAddress: Address = '0x7aecF73B61a8579F7cf2Fe9b2a2d97339e9168Bf';
+export const zunZapSepoliaAddress: Address = '0xB7D1424A4136ee7E13Db0EeB6e85a56f5F13Ef55';
+
+// Stablecoins mainnet
+export const daiAddress: Address = '0x6B175474E89094C44Da98b954EedeAC495271d0F';
+export const usdcAddress: Address = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';
+export const usdtAddress: Address = '0xdac17f958d2ee523a2206206994597c13d831ec7';
+export const fraxAddress: Address = '0x853d955acef822db058eb8505911ed77f175b99e';
+// Stablecoins sepolia
+export const sepDaiAddress: Address = '0xdC30b3bdE2734A0Bc55AF01B38943ef04aaCB423';
+export const sepUsdcAddress: Address = '0x2d691C2492e056ADCAE7cA317569af25910fC4cb';
+export const sepUsdtAddress: Address = '0x8aaB454dFD2d3b483791698367fFEa8Cf3352Ee2';
+
+export const getDaiAddress = (chainId: number | undefined): Address => {
+    return chainId === 1 || !chainId ? daiAddress : sepDaiAddress;
+};
+
+export const getUsdcAddress = (chainId: number | undefined): Address => {
+    return chainId === 1 || !chainId ? usdcAddress : sepUsdcAddress;
+};
+
+export const getUsdtAddress = (chainId: number | undefined): Address => {
+    return chainId === 1 || !chainId ? usdtAddress : sepUsdtAddress;
+};
 
 export const contractAddresses: { [index: string]: any } = {
     zunami: {
@@ -38,6 +63,10 @@ export const contractAddresses: { [index: string]: any } = {
     zunUSD: {
         1: zunUsdMainnetAddress,
         11155111: zunUsdSepoliaAddress,
+    },
+    zap: {
+        1: zunZapAddress,
+        11155111: zunZapSepoliaAddress,
     },
     uzd: {
         1: '0xb40b6608B2743E691C9B54DdBDEe7bf03cd79f1c',

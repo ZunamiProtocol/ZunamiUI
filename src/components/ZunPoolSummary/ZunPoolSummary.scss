@@ -1,0 +1,104 @@
+@import 'src/variables';
+
+.ZunPoolSummary {
+    background: linear-gradient(83.41deg, #e3e3e3 8.37%, #dedede 93.28%);
+    border-radius: $border-radius;
+    padding: 15px;
+    border: solid 1px transparent;
+    cursor: pointer;
+    display: flex;
+    gap: 10px;
+
+    .btn-secondary {
+        color: #fff;
+        background-color: #000;
+        font-size: 12px;
+        line-height: 15px;
+        padding: 4px 14px;
+        border: none;
+        border-radius: $border-radius;
+    }
+
+    &__Selected {
+        border-color: #fe9002;
+
+        .btn-secondary {
+            pointer-events: none;
+            color: #858585;
+            background-color: #d8d8d8;
+        }
+    }
+
+    .values {
+        gap: 10px;
+        margin-top: 14px;
+        width: 100%;
+
+        .block {
+            background: #d4d4d4;
+            border-radius: 15px;
+            padding: 9px 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 66px;
+
+            .title {
+                font-size: 13px;
+                line-height: 17px;
+                color: #626262;
+            }
+
+            .value {
+                font-size: 14px;
+                line-height: 19px;
+                font-size: 14px;
+                line-height: 19px;
+            }
+        }
+    }
+
+    .staking-icon {
+        margin: 0 10px;
+
+        &.usd {
+            path:nth-child(1),
+            path:nth-child(2),
+            path:nth-child(3),
+            path:nth-child(4),
+            path:nth-child(5) {
+                fill: #000;
+            }
+        }
+    }
+}
+
+body.dark {
+    .ZunPoolSummary {
+        background: linear-gradient(83.41deg, #202020 8.37%, #232323 93.28%);
+
+        .staking-icon {
+            &.usd {
+                path:nth-child(1),
+                path:nth-child(2),
+                path:nth-child(3),
+                path:nth-child(4),
+                path:nth-child(5) {
+                    fill: #fff;
+                }
+            }
+        }
+
+        .block {
+            background-color: #333;
+
+            .title {
+                color: #c8c8c8;
+            }
+
+            .value {
+                color: #fff;
+            }
+        }
+    }
+}

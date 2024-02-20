@@ -2,12 +2,9 @@ import useFetch from 'react-fetch-hook';
 import { getActiveStratsUrl, uzdStakingInfoUrl } from '../../api/api';
 import './InfoBar.scss';
 import { BigNumber } from 'bignumber.js';
-import { useEffect, useState } from 'react';
-// import useWallet from '../../hooks/useWallet';
+import { useState } from 'react';
 import { PoolInfo, poolsChartdata } from '../../functions/pools';
-import { contractAddresses } from '../../sushi/lib/constants';
-import zunAbi from '../../actions/abi/Zunami.json';
-import { useConnect, useAccount, useNetwork, useDisconnect } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 
 interface InfoBarProps {
     // onClick: any;

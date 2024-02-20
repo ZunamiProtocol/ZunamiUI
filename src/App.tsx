@@ -1,31 +1,30 @@
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 import { Main } from './containers/Main';
-import { Uzd } from './containers/Uzd';
+// import { Uzd } from './containers/Uzd';
 import { ZunStables } from './containers/ZunStables';
-// import { Analytics } from './containers/Analytics';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './App.scss';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Preloader } from './components/Preloader/Preloader';
-import { Earn } from './containers/Earn';
+// import { Earn } from './containers/Earn';
 
 const router = createBrowserRouter([
     {
         path: '/',
         element: <Main />,
     },
-    {
-        path: '/zun',
-        element: <Uzd />,
-    },
+    // {
+    //     path: '/zun',
+    //     element: <Uzd />,
+    // },
     {
         path: '/zun-stables',
         element: <ZunStables />,
     },
-    {
-        path: '/earn',
-        element: <Earn />,
-    },
+    // {
+    //     path: '/earn',
+    //     element: <Earn />,
+    // },
 ]);
 
 function App() {

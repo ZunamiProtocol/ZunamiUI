@@ -7,6 +7,8 @@ export interface DataItem {
     link: string;
     icon: string;
     type: string;
+    primaryIcon: string;
+    secondaryIcon: string;
 }
 
 interface ChartProps {
@@ -138,17 +140,13 @@ function renderStratList(items: Array<DataItem>, orientation: string) {
         <div key={index} className={'PieChart__StratList__Item'}>
             <div className="d-flex">
                 <div className="wrapper me-2">
-                    <img src={getPrimaryIcon(item)} alt={item.title} />
-                    {item.type !== 'VAULT' && (
-                        <div className="coin">
-                            <img src={getSecondIcon(item)} alt={item.title} />
-                        </div>
-                    )}
-                    {item.type !== 'VAULT' && (
-                        <div className="coin">
-                            <img src="/curve-icon.svg" alt={item.title} />
-                        </div>
-                    )}
+                    <img src={item.icon} alt={item.title} />
+                    <div className="coin">
+                        <img src={item.secondaryIcon} alt={item.title} />
+                    </div>
+                    <div className="coin">
+                        <img src={item.primaryIcon} alt={item.title} />
+                    </div>
                 </div>
                 <a target="blank" href={item.link}>
                     {renderStratName(orientation, item)}

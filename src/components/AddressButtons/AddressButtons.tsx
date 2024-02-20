@@ -1,10 +1,9 @@
-import { useState, useRef } from 'react';
-import { Tooltip, OverlayTrigger } from 'react-bootstrap';
-import { ReactComponent as HintIcon } from '../../assets/info.svg';
 import './AddressButtons.scss';
+import { addToken } from '../../containers/Uzd';
+import { Address } from 'viem';
 
 interface AddressButtonsProps {
-    address: string;
+    address: Address;
     hint?: string;
     value?: string;
     children?: string | JSX.Element | JSX.Element[];
@@ -72,9 +71,19 @@ export const AddressButtons: React.FC<AddressButtonsProps & React.HTMLProps<HTML
                     />
                 </svg>
             </div>
-            <a target="_blank" rel="noreferrer" href={`https://etherscan.io/address/${address}`}>
+            <div
+                onClick={() => {
+                    addToken(
+                        window.ethereum,
+                        'zunUSD',
+                        18,
+                        'https://app.zunami.io/uzd.svg',
+                        address
+                    );
+                }}
+            >
                 <img src="/metamask.svg" alt="" />
-            </a>
+            </div>
         </div>
     );
 };

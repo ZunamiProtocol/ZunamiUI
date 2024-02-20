@@ -11,7 +11,7 @@ import {
 } from '../utils/formatbalance';
 import { walletClient } from '../config';
 import { log } from '../utils/logger';
-import { getZunStakingAddress } from '../utils/zunami';
+import { getZapAddress, getZunStakingAddress } from '../utils/zunami';
 import stakingAbi from '../actions/abi/sepolia/staking.json';
 
 const useStake = (coinIndex: number, depositSum: string, receiver: Address) => {
@@ -20,12 +20,18 @@ const useStake = (coinIndex: number, depositSum: string, receiver: Address) => {
     const { address: account } = useAccount();
 
     const contractAddress = useMemo(() => {
-        if (!chainId) {
-            return contractAddresses.aps[1];
-        }
+        if (coinIndex === 4) {
+            // APS deposit
+            if (!chainId) {
+                return contractAddresses.aps[1];
+            }
 
-        return contractAddresses.aps[chainId];
-    }, [chainId]);
+            return contractAddresses.aps[chainId];
+        } else {
+            // ZAP deposit
+            return getZapAddress(chainId);
+        }
+    }, [chainId, coinIndex]);
 
     let preparedAmounts = [
         new BigNumber(0).toString(),

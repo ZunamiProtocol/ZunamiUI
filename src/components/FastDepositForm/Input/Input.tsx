@@ -35,6 +35,10 @@ export const Input = (props: InputProps): JSX.Element => {
             decimals = 18;
         }
 
+        if (props.name === 'zunUSD') {
+            decimals = 18;
+        }
+
         if (props.max && !props.max.toNumber()) {
             decimalPlaces = 0;
         }
@@ -49,6 +53,10 @@ export const Input = (props: InputProps): JSX.Element => {
             }
 
             if (props.name === 'DAI') {
+                decimals = 18;
+            }
+
+            if (props.action === 'withdraw' && props.name === 'apsZunUSDLP') {
                 decimals = 18;
             }
         }

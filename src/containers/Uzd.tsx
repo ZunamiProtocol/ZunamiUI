@@ -24,7 +24,7 @@ import { RebaseHistory } from '../components/RebaseHistory/RebaseHistory';
 import { Input } from '../components/FastDepositForm/Input/Input';
 import { DirectAction } from '../components/Form/DirectAction/DirectAction';
 import { StakingSummary } from '../components/StakingSummary/StakingSummary';
-import { useConnect, useAccount, useNetwork } from 'wagmi';
+import { useConnect, useAccount, useNetwork, Address } from 'wagmi';
 import { LockHistory } from '../components/LockHistory/LockHistory';
 import { SidebarTopButtons } from '../components/SidebarTopButtons/SidebarTopButtons';
 import { AddressButtons } from '../components/AddressButtons/AddressButtons';
@@ -59,15 +59,13 @@ export const formatBigNumberFull = (balance: BigNumber) => {
     return balance.dividedBy(BIG_TEN.pow(UZD_DECIMALS)).decimalPlaces(18, 1).toString();
 };
 
-const addToken = async (
+export const addToken = async (
     ethereum: any,
     tokenSymbol: string,
     tokenDecimals: Number,
-    tokenImage: string
+    tokenImage: string,
+    tokenAddress: Address
 ) => {
-    const tokenAddress =
-        tokenSymbol === 'UZD' ? contractAddresses.uzd[1] : contractAddresses.zeth[1];
-
     try {
         const wasAdded = await ethereum.request({
             method: 'wallet_watchAsset',

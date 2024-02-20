@@ -1,5 +1,5 @@
 import { Contract } from 'web3-eth-contract';
-import { contractAddresses } from '../sushi/lib/constants';
+import { contractAddresses, zunZapAddress, zunamiSepoliaAddress } from '../sushi/lib/constants';
 import sepoliaAbi from '../actions/abi/sepolia/controller.json';
 import { Address, createPublicClient, http } from 'viem';
 import { mainnet, sepolia } from 'wagmi';
@@ -30,6 +30,14 @@ export const getZunUsdApsAddress = (chainId: number | undefined): Address => {
 
     let address: Address = contractAddresses.aps[chainId] ?? contractAddresses.aps[1];
     return address;
+};
+
+export const getZapAddress = (chainId: number | undefined): Address => {
+    if (!chainId) {
+        return zunZapAddress;
+    }
+
+    return contractAddresses.zap[chainId] ?? contractAddresses.zap[1];
 };
 
 export const getZunStakingAddress = (chainId: number | undefined): Address => {

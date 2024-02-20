@@ -1,23 +1,12 @@
 import { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
-// import { useWallet } from 'use-wallet';
-import { getBalance } from '../utils/erc20';
-import {
-    BIG_ZERO,
-    daiAddress,
-    usdcAddress,
-    usdtAddress,
-    fraxAddress,
-    NULL_ADDRESS,
-    sepDaiAddress,
-    sepUsdcAddress,
-    sepUsdtAddress,
-} from '../utils/formatbalance';
+
+import { BIG_ZERO, NULL_ADDRESS } from '../utils/formatbalance';
 import { log } from '../utils/logger';
-import { getAbiByChainId, getChainClient, isBSC, isETH, isPLG } from '../utils/zunami';
-import { zunUsdSepoliaAddress, zunUsdMainnetAddress } from '../sushi/lib/constants';
+import { getChainClient, getZunUsdAddress, getZunUsdApsAddress } from '../utils/zunami';
+import { getDaiAddress, getUsdcAddress, getUsdtAddress } from '../sushi/lib/constants';
 import { Address } from 'viem';
-import { erc20ABI, mainnet, sepolia } from 'wagmi';
+import { erc20ABI } from 'wagmi';
 
 function getCoinBalance(coinAddress: Address, account: Address, chainId: number = 1) {
     return getChainClient(chainId).readContract({
@@ -28,66 +17,46 @@ function getCoinBalance(coinAddress: Address, account: Address, chainId: number 
     });
 }
 
-export const coins = ['DAI', 'USDC', 'USDT', 'FRAX', 'zunUSD', 'zunETH', 'ZUN'];
+export const coins = ['DAI', 'USDC', 'USDT', 'FRAX', 'zunUSD', 'zunETH', 'apsZunUSDLP', 'ZUN'];
 
 export function getCoinAddressByIndex(index: number, chainId: number): Address {
     let result: Address = NULL_ADDRESS;
 
-    switch (chainId) {
-        case mainnet.id:
-            switch (index) {
-                case 0: // DAI
-                    result = daiAddress;
-                    break;
-                case 1: // USDC
-                    result = usdcAddress;
-                    break;
-                case 2: // USDT
-                    result = usdtAddress;
-                    break;
-                case 3: // FRAX
-                    result = NULL_ADDRESS;
-                    break;
-                case 4: // ZunUSD
-                    result = zunUsdMainnetAddress;
-                    break;
-            }
+    switch (index) {
+        case 0: // DAI
+            result = getDaiAddress(chainId);
             break;
-        case sepolia.id:
-            switch (index) {
-                case 0:
-                    result = sepDaiAddress;
-                    break;
-                case 1:
-                    result = sepUsdcAddress;
-                    break;
-                case 2:
-                    result = sepUsdtAddress;
-                    break;
-                case 3:
-                    result = NULL_ADDRESS;
-                    break;
-                case 4:
-                    result = zunUsdSepoliaAddress;
-                    break;
-            }
+        case 1: // USDC
+            result = getUsdcAddress(chainId);
+            break;
+        case 2: // USDT
+            result = getUsdtAddress(chainId);
+            break;
+        case 3: // FRAX
+            result = NULL_ADDRESS;
+            break;
+        case 4: // ZunUSD
+            result = getZunUsdAddress(chainId);
+            break;
+        case 6: // apsZunUSDLP
+            result = getZunUsdApsAddress(chainId);
             break;
     }
 
     return result;
 }
 
-export function coinAddressToHumanName(address: Address): string {
+export function coinAddressToHumanName(address: Address, chainId: number): string {
     let result = 'UNKNOWN';
 
     switch (address) {
-        case sepDaiAddress:
+        case getDaiAddress(chainId):
             result = 'DAI(sepolia)';
             break;
-        case sepUsdcAddress:
+        case getUsdcAddress(chainId):
             result = 'USDC(sepolia)';
             break;
-        case sepUsdtAddress:
+        case getUsdtAddress(chainId):
             result = 'USDT(sepolia)';
             break;
     }
@@ -103,7 +72,7 @@ export const useUserBalances = (account: Address = NULL_ADDRESS, chainId: number
         BIG_ZERO, // FRAX
         BIG_ZERO, // zunUSD
         BIG_ZERO, // zunETH
-        BIG_ZERO, // ZUN
+        BIG_ZERO, // apsZunUSDLP
     ]);
 
     useEffect(() => {
@@ -114,50 +83,28 @@ export const useUserBalances = (account: Address = NULL_ADDRESS, chainId: number
 
             let result = [BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO];
 
-            switch (chainId) {
-                case mainnet.id:
-                    result = [
-                        await getCoinBalance(daiAddress, account, chainId),
-                        await getCoinBalance(usdcAddress, account, chainId),
-                        await getCoinBalance(usdtAddress, account, chainId),
-                        BigInt('0'),
-                        await getCoinBalance(zunUsdMainnetAddress, account, chainId),
-                        BigInt('0'),
-                        BigInt('0'),
-                    ].map((balance: BigInt) => new BigNumber(balance.toString()));
+            result = [
+                await getCoinBalance(getDaiAddress(chainId), account, chainId),
+                await getCoinBalance(getUsdcAddress(chainId), account, chainId),
+                await getCoinBalance(getUsdtAddress(chainId), account, chainId),
+                BigInt('0'),
+                await getCoinBalance(getZunUsdAddress(chainId), account, chainId), // zunUSD
+                BigInt('0'),
+                await getCoinBalance(getZunUsdApsAddress(chainId), account, chainId), // apsZunUSDLP
+            ].map((balance: BigInt) => new BigNumber(balance.toString()));
 
-                    log(
-                        `Balance (mainnet): DAI - ${result[0].toString()}, USDC - ${result[1].toString()}, USDT - ${result[2].toString()}, zunUSD - ${result[4].toString()}`
-                    );
+            log(
+                `Balance (mainnet): DAI - ${result[0].toString()}, USDC - ${result[1].toString()}, USDT - ${result[2].toString()}, zunUSD - ${result[4].toString()}`
+            );
 
-                    setBalance(result);
-                    break;
-                case sepolia.id:
-                    result = [
-                        await getCoinBalance(sepDaiAddress, account, chainId),
-                        await getCoinBalance(sepUsdcAddress, account, chainId),
-                        await getCoinBalance(sepUsdtAddress, account, chainId),
-                        BigInt('0'),
-                        await getCoinBalance(zunUsdSepoliaAddress, account, chainId),
-                        BigInt('0'),
-                        BigInt('0'),
-                    ].map((balance: BigInt) => new BigNumber(balance.toString()));
-
-                    log(
-                        `Balance (sepolia): DAI - ${result[2].toString()}, USDC - ${result[3].toString()}, USDT - ${result[4].toString()}`
-                    );
-
-                    setBalance(result);
-
-                    break;
-            }
+            setBalance(result);
         };
 
         if (account) {
             fetchbalanceStables();
         }
 
-        let refreshInterval = setInterval(fetchbalanceStables, 60000);
+        let refreshInterval = setInterval(fetchbalanceStables, 5000);
         return () => clearInterval(refreshInterval);
     }, [account, chainId]);
 

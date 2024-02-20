@@ -16,6 +16,19 @@
         padding: 0.5rem 0.75rem 0.5rem 35px !important;
     }
 
+    span {
+        @media screen and (min-width: $media375) {
+            font-size: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        @media screen and (min-width: $media1024) {
+            font-size: 13px;
+        }
+    }
+
     &:active {
         border-color: transparent;
     }

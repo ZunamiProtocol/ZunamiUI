@@ -9,9 +9,11 @@ export interface PoolInfo {
     type: string;
     address: string;
     title?: string;
-    analytics: Object;
     icon: string;
     tvl: string;
+    tvlUsd: number;
+    primaryIcon: string;
+    secondaryIcon: string;
 }
 
 export interface ChartDataElement {
@@ -26,94 +28,23 @@ export interface ChartDataElement {
 const colors = ['#FC6505', '#12A0FE', '#8EEA19', '#2cd5db', '#1C77F2', '#323232', '#5856d6'];
 
 export const poolsChartdata: { [key: string]: any } = {
-    XAI_FRAXBP: {
-        title: 'Convex Frax Booster - XAI/FRAXBP',
-        value: 0,
-        icon: '/convex.svg',
-    },
-    ALUSD_FRAXBP: {
-        title: 'Convex Frax Booster - ALUSD/FRAXBP pool',
-        value: 0,
-        icon: '/convex.svg',
-    },
-    PUSD: {
-        title: 'Convex finance - PUSD pool',
-        value: 0,
-        icon: '/convex.svg',
-    },
-    STAKE_DAO_MIM: {
-        title: 'Stake DAO - MIM pool',
+    USDT_CRVUSD: {
+        title: 'StakeDAO - crvUSD/USDC',
         value: 0,
         icon: '/stake-dao.svg',
+        primaryIcon: 'curve-icon.svg',
+        secondaryIcon: 'usdt.svg',
     },
-    STAKE_DAO_MIM_V2: {
-        title: 'Stake DAO - MIM pool',
+    USDC_CRVUSD: {
+        title: 'StakeDAO - crvUSD/USDT',
         value: 0,
         icon: '/stake-dao.svg',
-    },
-    CLEVUSD_FRAXBP: {
-        title: 'Convex Frax Booster - clevUSD/FRAXBP',
-        value: 0,
-        icon: '/convex.svg',
-    },
-    EUSD_FRAXBP: {
-        title: 'Convex Frax Booster - eUSD/FRAXBP',
-        value: 0,
-        icon: '/eusd.svg',
+        primaryIcon: 'curve-icon.svg',
+        secondaryIcon: 'usdc.svg',
     },
     // UZD strats
-    VAULT: {
-        title: 'UZD Vault',
-        value: 0,
-        icon: '/uzd.svg',
-    },
-    ZETH_VAULT: {
-        title: 'Vault',
-        value: 0,
-        icon: '/zeth_vault.svg',
-    },
-    FRAXETH: {
-        title: 'Convex Finance - zETH/frxETH',
-        value: 0,
-        icon: '/frx_eth.svg',
-    },
-    STETH_FRAXETH: {
-        title: 'Convex Finance - stETH/frxETH pool',
-        value: 0,
-        icon: '/frx_eth.svg',
-    },
-    CONCENTRATOR_FRAX: {
-        title: 'Concentrator UZD/FRAXBP pool',
-        value: 0,
-        icon: '/uzd.svg',
-    },
-    FRAX_STAKEDAO: {
-        title: 'Stake DAO - UZD / FRAXBP pool',
-        value: 0,
-        icon: '/uzd.svg',
-    },
-    STAKEDAO_CRVUSD_USDT: {
-        title: 'Stake DAO - crvUSD / USDT pool',
-        value: 0,
-        icon: '/stake-dao.svg',
-    },
-    CONVEX_FRAX: {
-        title: 'Convex Finance - UZD/FRAXBP pool',
-        value: 0,
-        icon: '/uzd.svg',
-    },
-    ALETH_FRAXETH: {
-        title: 'Convex Finance - alETHfrxETH pool',
-        value: 0,
-        icon: '/convex.svg',
-    },
-    SETH_FRAXETH: {
-        title: 'Convex Finance - sETH/frxETH pool',
-        value: 0,
-        icon: '/convex.svg',
-    },
-    CONVEX_FRAX_STAKING: {
-        title: 'Convex Frax Booster - UZD/FRAXBP',
+    ZUN_USD_VAULT: {
+        title: 'zunUSD Vault',
         value: 0,
         icon: '/uzd.svg',
     },
@@ -121,37 +52,42 @@ export const poolsChartdata: { [key: string]: any } = {
 
 export function poolInfoToChartElement(pool: PoolInfo, percent: BigNumber): ChartDataElement {
     const strategyTvl = pool.tvlInZunami ? pool.tvlInZunami : pool.tvl;
-    const percentFromTVL = new BigNumber(strategyTvl).dividedBy(percent).toNumber() * 100;
-    const tvlInUsd = Number(
-        (getBalanceNumber(new BigNumber(percent)).toNumber() / 100) * percentFromTVL
-    ).toFixed(0);
+    let percentFromTVL = new BigNumber(strategyTvl).dividedBy(percent).toNumber() * 100;
 
+    if (percentFromTVL === Infinity) {
+        percentFromTVL = 100;
+    }
     return {
         ...poolsChartdata[pool.type],
         tvlInZunami: strategyTvl,
         value: percentFromTVL,
-        tvlInUsd,
+        tvlInUsd: pool.tvlUsd,
         link: `https://etherscan.io/address/${pool.address}`,
     };
 }
 
 export function poolDataToChartData(poolData: Array<PoolInfo>, TVL: BigNumber) {
-    return poolData
+    const result = poolData
         .map((pool, index) => {
             const result = {
                 ...poolInfoToChartElement(pool, TVL),
-                // type: pool.type,
-                // address: pool.address,
                 color: colors[index],
                 ...pool,
                 // @ts-ignore
-                analytics: pool.analytics?.data,
             };
+
+            if (!result.address && result.type === '') {
+                result.address = '0x0Bcf22e3d86595FFaFbA49947280C0b802843550';
+            }
 
             return result;
         })
         .filter((el) => el.value > 0)
         .sort((a, b) => (a.tvlInZunami > b.tvlInZunami ? -1 : 1));
+
+    console.log(result);
+
+    return result;
 }
 
 export function formatPoolApy(rawValue: number) {

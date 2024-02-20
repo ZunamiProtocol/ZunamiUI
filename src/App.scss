@@ -469,8 +469,16 @@ input[type='checkbox'] {
     }
 }
 
+.chameleon-svg {
+    fill: #000;
+}
+
 body.dark {
     background-color: #000 !important;
+
+    .chameleon-svg {
+        fill: #fff;
+    }
 
     input,
     .form-control:focus {

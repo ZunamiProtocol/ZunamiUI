@@ -12,7 +12,7 @@ export const zethStratsUrl = `${root}/zeth-omnipool/strategy/active-strategies-s
 export const uzdStakingInfoUrl = `${root}/pool/aggregated-info`;
 
 export const historicalApyUrl = `${root}/zunami/apy-chart`;
-export const zunUsdHistoricalApyUrl = `${root}/pool/zun-usd/apy-chart`;
+export const zunUsdHistoricalApyUrl = `${root}/pool/zun-usd/apr-chart`;
 
 export const testnetUrl = `${root}/feature`;
 export const totalIncomeUrl = `${root}/transfers/total-income`;

@@ -5,7 +5,6 @@ import { AbiItem } from 'web3-utils';
 import ERC20 from '../actions/abi/erc20.abi.json';
 import { contractAddresses } from '../sushi/lib/constants';
 import { log } from '../utils/logger';
-import { daiAddress, fraxAddress, usdcAddress, usdtAddress } from './formatbalance';
 
 export const getContract = (provider: Provider, address: string) => {
     const web3 = new Web3(provider);
@@ -30,58 +29,6 @@ export const getUzdAllowance = async (
         );
         return allowance;
     } catch (e) {
-        return '0';
-    }
-};
-
-export const getAllowance = async (
-    provider: Provider,
-    tokenAddress: string,
-    masterChefContract: Contract,
-    account: string
-): Promise<string> => {
-    const lpContract = getContract(provider, tokenAddress);
-    try {
-        // debugger;
-        const allowance: string = await lpContract.methods
-            .allowance(account, masterChefContract.options.address)
-            .call();
-
-        let debugName = lpContract.options.address;
-
-        switch (debugName.toLowerCase()) {
-            case daiAddress.toLowerCase():
-                debugName = '(DAI)';
-                break;
-            case usdcAddress:
-                debugName = '(USDC)';
-                break;
-            case usdtAddress:
-                debugName = '(USDT)';
-                break;
-            case fraxAddress.toLowerCase():
-                debugName = '(FRAX)';
-                break;
-            case contractAddresses.uzd[1].toLowerCase():
-                debugName = '(UZD)';
-                break;
-            case contractAddresses.zeth[1].toLowerCase():
-                debugName = '(ZETH)';
-                break;
-            case contractAddresses.zethAPS[1].toLowerCase():
-                debugName = '(ethZAPSLP)';
-                break;
-            case contractAddresses.aps[1].toLowerCase():
-                debugName = '(ZAPSLP)';
-                break;
-        }
-
-        log(
-            `Executing of contract ${debugName} - allowance(${account}, ${masterChefContract.options.address}). Result: ${allowance}`
-        );
-        return allowance;
-    } catch (e) {
-        // debugger;
         return '0';
     }
 };

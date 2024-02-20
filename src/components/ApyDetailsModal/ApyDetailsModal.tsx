@@ -9,6 +9,7 @@ import { getZunUsdApsAddress } from '../../utils/zunami';
 interface ApyDetailsModalProps {
     show: boolean;
     onHide?: Function;
+    currentApy: number | string;
 }
 
 function getApsContractUrl(chainId: number | undefined): string {
@@ -46,15 +47,17 @@ export const ApyDetailsModal = (props: ApyDetailsModalProps): JSX.Element => {
                                 <div className="col-xs-12 col-md-5">
                                     <div className="row">
                                         <div className="col-8">Current APY</div>
-                                        <div className="col-4">0%</div>
+                                        <div className="col-4">{props.currentApy}</div>
                                     </div>
                                     <div className="row">
-                                        <div className="col-8">UZD</div>
-                                        <div className="col-4">0%</div>
+                                        <div className="col-8">zunUSD</div>
+                                        <div className="col-4">0.00%</div>
                                     </div>
                                     <div className="row">
                                         <div className="col-8">ZUN</div>
-                                        <div className="col-4">0%</div>
+                                        <div className="col-4">
+                                            <span>soon</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="col-xs-12 col-md-7">
@@ -66,6 +69,7 @@ export const ApyDetailsModal = (props: ApyDetailsModalProps): JSX.Element => {
                                         <div className="col-8">Collected rewards</div>
                                         <div className="col-4">
                                             <div>$REWARDS_AMOUNT</div>
+                                            <button className="zun-button mt-2">Harvest</button>
                                         </div>
                                     </div>
                                 </div>

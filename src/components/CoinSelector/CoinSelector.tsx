@@ -58,8 +58,8 @@ function getCoinName(name: string, mode: string) {
         result = 'zunETH';
     }
 
-    if (name === 'ethZAPSLP') {
-        result = 'zunUSD';
+    if (name === 'apsZunUSDLP') {
+        result = 'APS zunUSD LP';
     }
 
     if (name === 'ZAPSLP') {
@@ -124,7 +124,7 @@ export const CoinSelector = (
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xs-12 col-md-6 disabled">
+                        <div className="col-xs-12 col-md-6">
                             <div className="d-flex gap-1 align-items-center mt-4 mt-md-0">
                                 <span className="title me-1">ZAP (Swap + Deposit)</span>
                                 <div ref={target} onClick={() => setShowHint(!showHint)}>
@@ -160,7 +160,6 @@ export const CoinSelector = (
                                         onCoinSelect,
                                         className: 'mt-2 mb-3',
                                     })}
-                                    {renderCoinItem({ coinName: 'FRAX', onCoinSelect })}
                                 </div>
                             </div>
                         </div>

@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 import { ApyChart } from '../components/ApyChart/ApyChart';
 import { MicroCard } from '../components/MicroCard/MicroCard';
 import { AddressButtons } from '../components/AddressButtons/AddressButtons';
-import { NULL_ADDRESS } from '../utils/formatbalance';
+import { NULL_ADDRESS, getFullDisplayBalance } from '../utils/formatbalance';
 import {
     StrategyListItem,
     StrategyListItemColor,
@@ -20,19 +20,31 @@ import {
 import { Chart, DataItem } from '../components/Chart/Chart';
 import { PieChart2 } from '../components/PieChart/PieChart';
 import { renderMobileMenu } from '../components/Header/NavMenu/NavMenu';
+import { ZunPoolSummary } from '../components/ZunPoolSummary/ZunPoolSummary';
+import { getZunUsdAddress } from '../utils/zunami';
+import { useNetwork } from 'wagmi';
+import {
+    getZunEthHistoricalApyUrl,
+    getZunUsdHistoricalApyUrl,
+    uzdStakingInfoUrl,
+} from '../api/api';
+import useFetch from 'react-fetch-hook';
+import useTotalSupply from '../hooks/useTotalSupply';
 
 function getRandomArbitrary(min: number, max: number) {
     return Math.random() * (max - min) + min;
 }
 
 export const ZunStables = (): JSX.Element => {
+    const { chain } = useNetwork();
+    const chainId: number = chain ? chain.id : 1;
     const apyHintTarget = useRef(null);
     const target = useRef(null);
     const [showHint, setShowHint] = useState(false);
     const [showApyHint, setShowApyHint] = useState(false);
     const [tvl, setTvl] = useState('0');
     const [histApyPeriod, setHistApyPeriod] = useState('week');
-    const [apyChartData, setApyChartData] = useState<any>([]);
+    const [histApyData, setHistApyData] = useState([]);
     const stratChartData: Array<DataItem> = [
         {
             title: 'Convex Finance',
@@ -41,6 +53,8 @@ export const ZunStables = (): JSX.Element => {
             icon: '/convex.svg',
             value: 25,
             color: '#FFD118',
+            primaryIcon: '/convex.svg',
+            secondaryIcon: '/convex.svg',
         },
         {
             title: 'Convex Finance',
@@ -49,6 +63,8 @@ export const ZunStables = (): JSX.Element => {
             icon: '/convex.svg',
             value: 25,
             color: '#12A0FE',
+            primaryIcon: '/convex.svg',
+            secondaryIcon: '/convex.svg',
         },
         {
             title: 'Convex Finance',
@@ -57,6 +73,8 @@ export const ZunStables = (): JSX.Element => {
             icon: '/convex.svg',
             value: 25,
             color: '#B2FE12',
+            primaryIcon: '/convex.svg',
+            secondaryIcon: '/convex.svg',
         },
         {
             title: 'Convex Finance',
@@ -65,24 +83,34 @@ export const ZunStables = (): JSX.Element => {
             icon: '/convex.svg',
             value: 25,
             color: '#FC6505',
+            primaryIcon: '/convex.svg',
+            secondaryIcon: '/convex.svg',
         },
     ];
+    const [stakingMode, setStakingMode] = useState('zunUSD');
+    const totalSupply = useTotalSupply(getZunUsdAddress(chainId));
 
+    // APY chart data
     useEffect(() => {
-        const items = [];
-        const dt = new Date();
+        const url =
+            stakingMode === 'zunETH'
+                ? getZunEthHistoricalApyUrl(histApyPeriod)
+                : getZunUsdHistoricalApyUrl(histApyPeriod);
 
-        for (let i = 0; i < 10; i++) {
-            items.push({
-                timestamp: dt.getTime(),
-                apy: getRandomArbitrary(5, 21),
+        fetch(url)
+            .then((response) => {
+                return response.json();
+            })
+            .then((items) => {
+                setHistApyData(items.data);
+            })
+            .catch((error) => {
+                setHistApyData([]);
             });
+    }, [histApyPeriod, stakingMode]);
 
-            dt.setDate(dt.getDate() - 1);
-        }
-
-        setApyChartData(items);
-    }, []);
+    // aggregated info
+    const { isLoading, data } = useFetch(uzdStakingInfoUrl) as ZunamiInfoFetch;
 
     return (
         <React.Fragment>
@@ -121,19 +149,12 @@ export const ZunStables = (): JSX.Element => {
                                 </div>
                             </div>
                         </div>
-                        <StakingSummary
-                            logo="UZD"
+                        <ZunPoolSummary
+                            logo="USD"
                             selected={true}
-                            baseApy={'0%'}
-                            deposit={`$0`}
-                            className="mt-3"
-                        />
-                        <StakingSummary
-                            logo="ZETH"
-                            selected={false}
                             baseApy={'0'}
-                            deposit={`0`}
-                            className="mt-3 disabled"
+                            tvl={`0`}
+                            className="mt-3"
                         />
                     </SideBar>
                     <div className="col content-col dashboard-col">
@@ -150,7 +171,7 @@ export const ZunStables = (): JSX.Element => {
                                                 <MicroCard
                                                     title="Total circulating"
                                                     hint="Circulation demo text"
-                                                    value="500 000"
+                                                    value={getFullDisplayBalance(totalSupply)}
                                                     className="align-items-start stablecoin mb-3 ps-3 me-3 me-lg-2"
                                                 />
                                             </div>
@@ -158,7 +179,15 @@ export const ZunStables = (): JSX.Element => {
                                                 <MicroCard
                                                     title="Collateral"
                                                     hint="Collateral demo text"
-                                                    value="500 000"
+                                                    value={
+                                                        isLoading
+                                                            ? 'loading'
+                                                            : Number(
+                                                                  data.info.zunUSD.tvlUsd
+                                                              ).toLocaleString('en', {
+                                                                  maximumFractionDigits: 0,
+                                                              })
+                                                    }
                                                     className="align-items-start stablecoin mb-3 ps-3 me-0 me-lg-2"
                                                 />
                                             </div>
@@ -168,7 +197,7 @@ export const ZunStables = (): JSX.Element => {
                                                     className="align-items-start stablecoin mb-3 ps-3 me-3 me-lg-2"
                                                 >
                                                     <AddressButtons
-                                                        address={NULL_ADDRESS}
+                                                        address={getZunUsdAddress(chainId)}
                                                         link={true}
                                                     />
                                                 </MicroCard>
@@ -329,40 +358,7 @@ export const ZunStables = (): JSX.Element => {
                                                     />
                                                     <span className="name">Curve</span>
                                                 </div>
-                                                <div className="value mt-1">zunUSD / FRAXBP</div>
-                                                <svg
-                                                    width="8"
-                                                    height="8"
-                                                    viewBox="0 0 8 8"
-                                                    fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    className="external-icon"
-                                                >
-                                                    <path
-                                                        d="M0.799805 1H6.7998V7"
-                                                        stroke="#959595"
-                                                    />
-                                                    <path
-                                                        d="M6.79901 1L1.00488 6.79545"
-                                                        stroke="#959595"
-                                                    />
-                                                </svg>
-                                            </a>
-                                            <a
-                                                className="gray-block small-block align-items-start stablecoin mb-2 mb-md-0 col-6 bg-white"
-                                                href="https://app.balancer.fi/#/ethereum/pool/0xec3626fee40ef95e7c0cbb1d495c8b67b34d398300000000000000000000053d"
-                                                target="_"
-                                                rel="noreferrer"
-                                            >
-                                                <div>
-                                                    <img
-                                                        src="/balancer.svg"
-                                                        alt=""
-                                                        className="me-2"
-                                                    />
-                                                    <span className="name">Balancer</span>
-                                                </div>
-                                                <div className="value mt-1">zunUSD/bb-a-USD</div>
+                                                <div className="value mt-1">zunUSD / crvUSD</div>
                                                 <svg
                                                     width="8"
                                                     height="8"
@@ -396,7 +392,15 @@ export const ZunStables = (): JSX.Element => {
                                             <div className="col-xs-12 col-md-4">
                                                 <MicroCard
                                                     title="Collateral APR now"
-                                                    value="16%"
+                                                    value={
+                                                        isLoading
+                                                            ? 'loading'
+                                                            : `${Number(
+                                                                  data.info.zunUSD.apr
+                                                              ).toLocaleString('en', {
+                                                                  maximumFractionDigits: 0,
+                                                              })}%`
+                                                    }
                                                     className="align-items-start stablecoin mb-3 ps-3 me-0 me-lg-2"
                                                 />
                                                 <MicroCard
@@ -408,7 +412,7 @@ export const ZunStables = (): JSX.Element => {
                                             </div>
                                             <div className="col-xs-12 col-md-8">
                                                 <ApyChart
-                                                    data={apyChartData}
+                                                    data={histApyData}
                                                     onRangeChange={(range: string) => {
                                                         setHistApyPeriod(range);
                                                     }}

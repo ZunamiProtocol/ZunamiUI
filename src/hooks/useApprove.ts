@@ -7,11 +7,16 @@ import {
     erc4626ABI,
 } from 'wagmi';
 import { log } from '../utils/logger';
-import { usdtAddress } from '../utils/formatbalance';
+import { getUsdtAddress } from '../sushi/lib/constants';
 
-const useApprove = (coinAddress: Address, spender: Address, amount: string) => {
+const useApprove = (
+    coinAddress: Address,
+    spender: Address,
+    amount: string,
+    chainId: number | undefined
+) => {
     const typedAmount: bigint = BigInt(amount);
-    const abi = coinAddress === usdtAddress ? erc721ABI : erc20ABI;
+    const abi = coinAddress === getUsdtAddress(chainId) ? erc721ABI : erc20ABI;
 
     // log(`${coinAddress}.approve(${spender}, ${typedAmount})`);
 

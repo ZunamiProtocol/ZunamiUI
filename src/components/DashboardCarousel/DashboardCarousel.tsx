@@ -13,15 +13,15 @@ export const DashboardCarousel: React.FC<
 > = ({ className, style }) => {
     return (
         <Carousel className={className} fade indicators={true} style={style} interval={1000000}>
-            <Carousel.Item className="zun">
+            {/* <Carousel.Item className="zun">
                 <ZunStakingIcon />
-            </Carousel.Item>
+            </Carousel.Item> */}
             <Carousel.Item className="usd">
                 <UsdStakingIcon />
             </Carousel.Item>
-            <Carousel.Item className="eth">
+            {/* <Carousel.Item className="eth">
                 <EthstakingIcon />
-            </Carousel.Item>
+            </Carousel.Item> */}
             <Carousel.Item className="audits">
                 <AuditsIcon />
             </Carousel.Item>

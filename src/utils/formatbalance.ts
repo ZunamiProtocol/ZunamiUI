@@ -33,15 +33,3 @@ export function toFixed(number: number, digits: number = 2) {
 
     return Math.trunc(number * Math.pow(10, digits)) / Math.pow(10, digits);
 }
-
-// mainnet
-export const daiAddress: Address = '0x6B175474E89094C44Da98b954EedeAC495271d0F';
-export const usdcAddress: Address = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';
-export const usdtAddress: Address = '0xdac17f958d2ee523a2206206994597c13d831ec7';
-export const fraxAddress: Address = '0x853d955acef822db058eb8505911ed77f175b99e';
-// sepolia
-export const sepDaiAddress: Address = '0xdC30b3bdE2734A0Bc55AF01B38943ef04aaCB423';
-export const sepUsdcAddress: Address = '0x2d691C2492e056ADCAE7cA317569af25910fC4cb';
-export const sepUsdtAddress: Address = '0x8aaB454dFD2d3b483791698367fFEa8Cf3352Ee2';
-// export const sepZunAddress: Address = '0x8aaB454dFD2d3b483791698367fFEa8Cf3352Ee2';
-// export const sepFraxAddress = '0x853d955acef822db058eb8505911ed77f175b99e';

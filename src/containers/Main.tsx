@@ -30,6 +30,8 @@ import { getZunUsdAddress, getZunUsdApsAddress } from '../utils/zunami';
 import { erc20ABI } from 'wagmi';
 import { renderMobileMenu } from '../components/Header/NavMenu/NavMenu';
 import { SidebarTopButtons } from '../components/SidebarTopButtons/SidebarTopButtons';
+import { WalletStatus } from '../components/WalletStatus/WalletStatus';
+import BigNumber from 'bignumber.js';
 
 const Header = lazy(() =>
     import('../components/Header/Header').then((module) => ({ default: module.Header }))
@@ -52,6 +54,62 @@ const ApyChart = lazy(() =>
 const Chart = lazy(() =>
     import('../components/Chart/Chart').then((module) => ({ default: module.Chart }))
 );
+
+interface ZunAggInfo {
+    info: {
+        zunUSD: {
+            monthlyAvgApr: number;
+            threeMonthAvgApr: number;
+            apr: number;
+            tvl: BigNumber;
+            tvlUsd: number;
+        };
+        zunUSDAps: {
+            monthlyAvgApy: number;
+            threeMonthAvgApy: number;
+            apr: number;
+            apy: number;
+            tvl: BigNumber;
+            tvlUsd: number;
+        };
+        zunETH: {
+            monthlyAvgApr: number;
+            threeMonthAvgApr: number;
+            apr: number;
+            tvl: BigNumber;
+            tvlUsd: number;
+        };
+    };
+    totalTvlUsd: number;
+}
+
+const fallbackData = {
+    info: {
+        zunUSD: {
+            monthlyAvgApr: 0,
+            threeMonthAvgApr: 0,
+            apr: 0,
+            tvl: BIG_ZERO,
+            tvlUsd: 0,
+        },
+        zunUSDAps: {
+            monthlyAvgApy: 0,
+            threeMonthAvgApy: 0,
+            apr: 0,
+            apy: 0,
+            tvl: BIG_ZERO,
+            tvlUsd: 0,
+        },
+        zunETH: {
+            monthlyAvgApr: 0,
+            threeMonthAvgApr: 0,
+            apr: 0,
+            tvl: BIG_ZERO,
+            tvlUsd: 0,
+        },
+    },
+    totalTvlUsd: 0,
+};
 
 export const Main = (): JSX.Element => {
     useEffect(() => {
@@ -77,13 +135,58 @@ export const Main = (): JSX.Element => {
     // APS balance
     const apsBalance = useBalanceOf(getZunUsdApsAddress(chainId), erc20ABI);
 
-    const { isLoading: uzdStatLoading, data: uzdStatData } = useFetch(
-        uzdStakingInfoUrl
-    ) as ZunamiInfoFetch;
+    const [uzdStatLoading, setUzdStatLoading] = useState(true);
+    const [uzdStatData, setUzdStatData] = useState<ZunAggInfo>(fallbackData);
+
+    // Load aggregated info
+    useEffect(() => {
+        fetch(uzdStakingInfoUrl)
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                setUzdStatLoading(false);
+
+                // if some item is NULL, then use fallback data
+                Object.keys(data.info).forEach((index) => {
+                    if (!data.info[index]) {
+                        data.info[index] = {
+                            monthlyAvgApr: 0,
+                            threeMonthAvgApr: 0,
+                            apr: 0,
+                            apy: 0,
+                            tvl: BIG_ZERO,
+                            tvlUsd: 0,
+                        };
+                    }
+                });
+
+                setUzdStatData(data);
+            })
+            .catch((error) => {
+                setUzdStatData(fallbackData);
+                setUzdStatLoading(false);
+            });
+    }, []);
+
+    // aggregated info
+    // const { isLoading: uzdStatLoading, data: uzdStatData } = useFetch(
+    //     uzdStakingInfoUrl
+    // ) as ZunamiInfoFetch;
+
+    // TVL
+    useEffect(() => {
+        if (!uzdStatData) {
+            return;
+        }
+
+        setTvl(uzdStatData.totalTvlUsd.toString());
+    }, [uzdStatData]);
 
     const { data: activeStratsStat } = useFetch(
         stakingMode === 'ZETH' ? getZunEthStratsUrl() : getZunUsdStratsUrl()
     );
+
     const poolStats = activeStratsStat as PoolsStats;
 
     // APY pools list
@@ -112,15 +215,7 @@ export const Main = (): JSX.Element => {
                 return response.json();
             })
             .then((items) => {
-                setHistApyData(
-                    items.data.map((item: any) => {
-                        if (item.apy > 500) {
-                            item.apy = 500;
-                        }
-
-                        return item;
-                    })
-                );
+                setHistApyData(items.data);
             })
             .catch((error) => {
                 setHistApyData([]);
@@ -137,31 +232,19 @@ export const Main = (): JSX.Element => {
     }, [apsBalance]);
 
     const apyPopover = useMemo(() => {
-        let apy30 = '0';
-        let apy90 = '0';
+        let apy30 = 0;
+        let apy90 = 0;
 
         if (uzdStatData) {
             apy30 =
                 stakingMode === 'ZETH'
-                    ? uzdStatData.info.zunETH.monthlyAvgApy
-                    : uzdStatData.info.zunUSD.monthlyAvgApy;
+                    ? uzdStatData.info.zunETH.monthlyAvgApr
+                    : uzdStatData.info.zunUSDAps.monthlyAvgApy;
 
             apy90 =
                 stakingMode === 'ZETH'
-                    ? uzdStatData.info.zunETH.threeMonthAvgApy
-                    : uzdStatData.info.zunUSD.threeMonthAvgApy;
-        }
-
-        if (Number(apy30) > 500) {
-            apy30 = '500+';
-        } else {
-            apy30 = Number(apy30).toFixed(2);
-        }
-
-        if (Number(apy90) > 500) {
-            apy90 = '500+';
-        } else {
-            apy90 = Number(apy90).toFixed(2);
+                    ? uzdStatData.info.zunETH.threeMonthAvgApr
+                    : uzdStatData.info.zunUSDAps.threeMonthAvgApy;
         }
 
         return (
@@ -192,28 +275,11 @@ export const Main = (): JSX.Element => {
         if (stakingMode === 'ZETH') {
             return uzdStatLoading || !uzdStatData
                 ? 'n/a'
-                : `${uzdStatData.info.zunETH.apy.toFixed(2)}%`;
+                : `${uzdStatData.info.zunETH.apr.toFixed(2)}%`;
         } else {
-            return uzdStatLoading ? 0 : `${uzdStatData.info.zunUSD.apy.toFixed(2)}%`;
+            return uzdStatLoading ? 0 : `${uzdStatData.info.zunUSDAps.apy.toFixed(2)}%`;
         }
     }, [stakingMode, uzdStatData, uzdStatLoading]);
-
-    const apyBarMonthlyApy = useMemo(() => {
-        let result = '0%';
-
-        if (!uzdStatData) {
-            return result;
-        }
-
-        result =
-            stakingMode === 'ZETH'
-                ? uzdStatData.info.zunETH.monthlyAvgApy
-                : uzdStatData.info.zunUSD.monthlyAvgApy;
-
-        result = `${Number(result).toFixed(2)}%`;
-
-        return result;
-    }, [stakingMode, uzdStatData]);
 
     return (
         <Suspense fallback={<Preloader onlyIcon={true} />}>
@@ -226,6 +292,7 @@ export const Main = (): JSX.Element => {
                 />
                 <div className="container">
                     <ApyDetailsModal
+                        currentApy={apyBarApy}
                         show={showApyDetailsModal}
                         onHide={() => {
                             setShowApyDetailsModal(false);
@@ -234,6 +301,7 @@ export const Main = (): JSX.Element => {
                     <div className="row main-row h-100">
                         <SideBar isMainPage={true} tvl={tvl}>
                             <SidebarTopButtons />
+                            {/* <WalletStatus /> */}
                             <div className="mobile-menu-title d-block d-lg-none">Menu</div>
                             <div
                                 className="d-flex d-lg-none gap-3 mt-4 pb-3 mobile-menu"
@@ -300,16 +368,31 @@ export const Main = (): JSX.Element => {
                                 baseApy={
                                     uzdStatLoading || !uzdStatData
                                         ? 0
-                                        : uzdStatData.info.zunUSD.apy.toFixed(2)
+                                        : uzdStatData.info.zunUSDAps.apy.toFixed(2)
                                 }
                                 deposit={`$${getBalanceNumber(apsBalance)
                                     .toNumber()
                                     .toLocaleString('en')}`}
+                                depositTooltipContent={
+                                    <div style={{ maxWidth: '300px' }}>
+                                        <p>
+                                            At present, there's a total of $XXX in rewards
+                                            accumulated but not yet allocated, including your share
+                                            of $XXX. You have the option to initiate the harvest on
+                                            your own.
+                                        </p>
+                                        <p>
+                                            However, please be aware that doing so would be an act
+                                            of altruism, as it involves bearing the cost of gas fees
+                                        </p>
+                                        <button className="zun-button">Harvest</button>
+                                    </div>
+                                }
                                 tvl={
                                     uzdStatLoading || !uzdStatData
                                         ? '0'
                                         : `$${Number(
-                                              getBalanceNumber(uzdStatData.info.zunUSD.tvlUsd)
+                                              uzdStatData.info.zunUSDAps.tvlUsd
                                           ).toLocaleString('en', {
                                               maximumFractionDigits: 0,
                                           })}`
@@ -359,7 +442,7 @@ export const Main = (): JSX.Element => {
                                         <div className="ApyBar__counters">
                                             <div className="ApyBar__Counter">
                                                 <div className="ApyBar__Counter__Title d-flex align-items-start gap-2">
-                                                    <span>Base APY</span>
+                                                    <span>Current APY</span>
                                                     <div className="hint">
                                                         <svg
                                                             width="13"
@@ -431,8 +514,8 @@ export const Main = (): JSX.Element => {
                                                         </OverlayTrigger>
                                                     </div>
                                                 </div>
-                                                <div className="ApyBar__Counter__Value vela-sans">
-                                                    {apyBarMonthlyApy}
+                                                <div className="ApyBar__Counter__Value">
+                                                    <div className="text-muted">in 30, 90 days</div>
                                                 </div>
                                             </div>
                                         </div>
