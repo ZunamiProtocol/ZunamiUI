@@ -8,6 +8,24 @@
     text-align: center;
     padding: 0.5rem 0.75rem 0.5rem 35px !important;
 
+    &::after {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 30px;
+        height: 100%;
+        background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, #f1f1f1 80%);
+        content: '';
+
+        @media screen and (min-width: $media375) {
+            display: block;
+        }
+
+        @media screen and (min-width: $media1024) {
+            display: none;
+        }
+    }
+
     @media screen and (min-width: $media1024) {
         padding: 0.35rem 0.75rem 0.35rem 35px !important;
     }

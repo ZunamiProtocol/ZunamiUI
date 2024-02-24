@@ -310,7 +310,7 @@ export const ZunPoolSummary: React.FC<ZunPoolSummaryProps & React.HTMLProps<HTML
                     </div>
                 )}
                 <div className="block flex-fill">
-                    <div className="title">APY</div>
+                    <div className="title">APR</div>
                     <div className="value vela-sans">{`${baseApy}%`}</div>
                 </div>
             </div>

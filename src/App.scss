@@ -480,6 +480,12 @@ body.dark {
         fill: #fff;
     }
 
+    .WalletButton {
+        &::after {
+            background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, #1d1d1d 80%);
+        }
+    }
+
     input,
     .form-control:focus {
         color: #fff;
@@ -2014,9 +2020,13 @@ body.overflow {
             }
 
             @media (min-width: $media1440) {
-                width: 148px;
+                width: 144px;
                 height: 64px;
                 margin-bottom: 0;
+
+                &:nth-child(1) {
+                    width: 168px;
+                }
             }
 
             @media (min-width: $media1920) {
@@ -2077,6 +2087,41 @@ body.overflow {
                     svg {
                         vertical-align: top;
                         // margin-top: 2px;
+                    }
+                }
+
+                .btn-xs {
+                    @media (min-width: $media375) {
+                        transform: translate(10px, -20%);
+                    }
+
+                    @media (min-width: $media1440) {
+                        transform: translate(0, -20%);
+                    }
+
+                    .mobile,
+                    .desktop {
+                        margin: 0;
+                    }
+
+                    .mobile {
+                        @media (min-width: $media375) {
+                            display: inline;
+                        }
+
+                        @media (min-width: $media1440) {
+                            display: none;
+                        }
+                    }
+
+                    .desktop {
+                        @media (min-width: $media375) {
+                            display: none;
+                        }
+
+                        @media (min-width: $media1440) {
+                            display: inline;
+                        }
                     }
                 }
             }
@@ -2451,6 +2496,18 @@ body.overflow {
     }
 }
 
+.btn-xs {
+    @media screen and (min-width: $media375) {
+        padding: 0px 6px !important;
+        font-size: 12px !important;
+    }
+
+    @media screen and (min-width: $media1440) {
+        padding: 2px 8px !important;
+        font-size: 12px !important;
+    }
+}
+
 .gray-block {
     background: #e4e4e4;
     border-radius: $border-radius;
@@ -2476,6 +2533,9 @@ body.overflow {
 
     .name {
         font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
         @media (min-width: $media375) {
             font-size: 13px;
@@ -2483,7 +2543,7 @@ body.overflow {
         }
 
         @media (min-width: $media1024) {
-            font-size: 12px;
+            font-size: 11px;
             line-height: 13px;
         }
 
@@ -2499,10 +2559,9 @@ body.overflow {
         font-size: 13px;
         line-height: 18px;
         padding: 10px 20px;
-        min-height: 59px;
+        // min-height: 59px;
 
         &.stablecoin {
-            // max-width: 225px;
             position: relative;
 
             img {
@@ -2511,15 +2570,25 @@ body.overflow {
             }
 
             .name {
-                // font-size: 13px;
-                // line-height: 17px;
                 color: #3a3a3a;
-                // margin-left: 5px;
             }
 
             .value {
                 font-size: 13px;
                 line-height: 18px;
+
+                // @media (min-width: $media1024) {
+                //     font-size: 11px;
+                //     line-height: 11px;
+                //     margin-top: 0;
+                // }
+
+                // @media (min-width: $media1440) {
+                //     font-size: 13px;
+                //     line-height: 18px;
+                //     margin-top: 5px;
+                // }
+
                 color: #000000;
             }
 

@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
 
 import { contractAddresses } from './lib/constants';
-import { getContract } from '../utils/erc20';
 import {
     DEFAULT_TOKEN_DECIMAL,
     USDT_TOKEN_DECIMAL,

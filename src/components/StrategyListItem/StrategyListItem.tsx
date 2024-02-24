@@ -1,6 +1,3 @@
-import { useState, useRef } from 'react';
-import { Tooltip, OverlayTrigger } from 'react-bootstrap';
-import { ReactComponent as HintIcon } from '../../assets/info.svg';
 import './StrategyListItem.scss';
 import { MicroCard } from '../MicroCard/MicroCard';
 
@@ -10,67 +7,56 @@ interface StrategyListItemProps {
     percent: number;
     value?: string;
     children?: string | JSX.Element | JSX.Element[];
-    color: keyof typeof StrategyListItemColor;
-    amount: string;
+    color: string;
+    amount: number;
     apr: number;
-}
-
-export const StrategyListItemColor = {
-    yellow: 'yellow',
-    blue: 'blue',
-    green: 'green',
-    orange: 'orange',
-} as const;
-
-function colorToHex(color: string) {
-    let result = '';
-
-    switch (color) {
-        case StrategyListItemColor.yellow:
-            result = '#FFD118';
-            break;
-        case StrategyListItemColor.blue:
-            result = '#12A0FE';
-            break;
-        case StrategyListItemColor.green:
-            result = '#B2FE12';
-            break;
-        case StrategyListItemColor.orange:
-            result = '#FC6505';
-            break;
-    }
-
-    return result;
+    icon: string;
+    primaryIcon: string;
+    secondaryIcon: string;
 }
 
 export const StrategyListItem: React.FC<
     StrategyListItemProps & React.HTMLProps<HTMLDivElement>
-> = ({ className, title, description, percent, color, amount, apr }): JSX.Element => {
-    const target = useRef(null);
-    const [showHint, setShowHint] = useState(false);
-
+> = ({
+    className,
+    title,
+    description,
+    percent,
+    color,
+    amount,
+    apr,
+    icon,
+    primaryIcon,
+    secondaryIcon,
+}): JSX.Element => {
     return (
         <div className={`strategy-list-item ${className ?? ''}`}>
             <div className="">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <div className="wrapper me-3">
-                        <img src="frax.svg" alt="" />
+                        <img src={icon} alt="" />
                         <div className="coin">
-                            <img src="/convex.svg" alt="" />
+                            <img src={primaryIcon} alt="" />
                         </div>
                         <div className="coin">
-                            <img src="/curve-icon.svg" alt="" />
+                            <img src={secondaryIcon} alt="" />
                         </div>
                     </div>
                     <div className="flex-grow-1">
                         <div className="name">{title}</div>
                         <div className="description">{description}</div>
                     </div>
-                    <div className="percent-val">{percent}%</div>
+                    <div className="percent-val">{percent.toFixed(2)}%</div>
                 </div>
             </div>
             <div className="d-flex gap-2">
-                <MicroCard title="Amount" value={amount} className="align-items-start flex-even" />
+                <MicroCard
+                    title="Amount"
+                    value={amount.toLocaleString('en', {
+                        maximumFractionDigits: 0,
+                    })}
+                    className="align-items-start flex-even"
+                />
                 <MicroCard title="APR" value={`${apr}%`} className="align-items-start flex-even" />
             </div>
             <div className="t2hird-row mt-3">
@@ -86,7 +72,7 @@ export const StrategyListItem: React.FC<
                         role="progressbar"
                         style={{
                             width: `${percent}%`,
-                            backgroundColor: colorToHex(color),
+                            backgroundColor: color,
                         }}
                     ></div>
                 </div>

@@ -226,6 +226,18 @@
         }
     }
 
+    .ApyChart {
+        canvas {
+            @media screen and (min-width: $media375) {
+                height: 150px !important;
+            }
+
+            @media screen and (min-width: $media1024) {
+                height: 180px !important;
+            }
+        }
+    }
+
     .ApyChart__Header {
         margin-top: 0;
     }
@@ -241,6 +253,14 @@
     .ApyChart__Header {
         position: absolute;
         right: 40px;
+
+        @media screen and (min-width: $media375) {
+            transform: translateY(-50px);
+        }
+
+        @media screen and (min-width: $media1200) {
+            transform: translateY(0);
+        }
     }
 
     .PieChart2 {

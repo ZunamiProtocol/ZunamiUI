@@ -133,11 +133,11 @@ export const CoinSelector = (
                                         overlay={
                                             <Tooltip>
                                                 You can use the ZAP function to make a deposit in
-                                                USDT/USDC/DAI/FRAX. Utilizing the ZAP function
-                                                involves the automatic conversion of
-                                                USDT/USDC/DAI/FRAX into zunStable, followed by the
-                                                deposit. Please note that the gas cost for this
-                                                operation will be higher than a native deposit.
+                                                USDT/USDC/DAI. Utilizing the ZAP function involves
+                                                the automatic conversion of USDT/USDC/DAI into
+                                                zunStable, followed by the deposit. Please note that
+                                                the gas cost for this operation will be higher than
+                                                a native deposit.
                                             </Tooltip>
                                         }
                                     >

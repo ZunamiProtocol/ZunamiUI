@@ -133,7 +133,9 @@
         }
 
         svg {
-            margin-right: 10px;
+            @media (min-width: $media1024) {
+                margin-right: 10px;
+            }
         }
     }
 }

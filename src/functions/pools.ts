@@ -30,6 +30,7 @@ const colors = ['#FC6505', '#12A0FE', '#8EEA19', '#2cd5db', '#1C77F2', '#323232'
 export const poolsChartdata: { [key: string]: any } = {
     USDT_CRVUSD: {
         title: 'StakeDAO - crvUSD/USDC',
+        description: '',
         value: 0,
         icon: '/stake-dao.svg',
         primaryIcon: 'curve-icon.svg',
@@ -37,6 +38,7 @@ export const poolsChartdata: { [key: string]: any } = {
     },
     USDC_CRVUSD: {
         title: 'StakeDAO - crvUSD/USDT',
+        description: '',
         value: 0,
         icon: '/stake-dao.svg',
         primaryIcon: 'curve-icon.svg',
@@ -44,9 +46,21 @@ export const poolsChartdata: { [key: string]: any } = {
     },
     // UZD strats
     ZUN_USD_VAULT: {
-        title: 'zunUSD Vault',
+        title: 'Zunami',
+        description: 'Vault',
         value: 0,
         icon: '/uzd.svg',
+        primaryIcon: 'uzd.svg',
+        secondaryIcon: 'uzd.svg',
+    },
+    // zunUSD APS Vault
+    APS_ZUN_USD_VAULT: {
+        title: 'Vault',
+        description: '',
+        value: 0,
+        icon: '/uzd.svg',
+        primaryIcon: '',
+        secondaryIcon: '',
     },
 };
 
@@ -84,8 +98,6 @@ export function poolDataToChartData(poolData: Array<PoolInfo>, TVL: BigNumber) {
         })
         .filter((el) => el.value > 0)
         .sort((a, b) => (a.tvlInZunami > b.tvlInZunami ? -1 : 1));
-
-    console.log(result);
 
     return result;
 }

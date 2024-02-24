@@ -73,7 +73,7 @@ if (document.body.clientWidth > 1024) {
 
 const chartOptions = {
     responsive: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: document.body.clientWidth > 1024 ? false : true,
     layout: {
         padding: paddings,
     },
@@ -111,6 +111,7 @@ const chartOptions = {
                 display: false,
             },
             min: 0,
+            // max: 60,
             ticks: {
                 //@ts-ignore
                 callback: function (val) {

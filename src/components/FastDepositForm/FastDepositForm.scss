@@ -250,8 +250,19 @@
         display: flex;
         justify-content: center;
 
+        @media screen and (min-width: $media375) {
+            flex-direction: column;
+            padding: 10px;
+            align-items: center;
+            gap: 10px;
+        }
+
         @media screen and (min-width: $media1024) {
+            gap: 0;
+            align-items: center;
             justify-content: flex-start;
+            flex-direction: row;
+            padding: 0;
         }
     }
 }

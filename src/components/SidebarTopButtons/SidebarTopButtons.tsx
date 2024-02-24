@@ -51,7 +51,7 @@ export const SidebarTopButtons: React.FC<
                     <span>All services</span>
                 </button>
                 <a
-                    href="https://zunamilab.gitbook.io/product-docs/"
+                    href="https://zunamilab.gitbook.io/zunami-docs/"
                     target="_blank"
                     rel="noreferrer"
                     className="btn btn-secondary"

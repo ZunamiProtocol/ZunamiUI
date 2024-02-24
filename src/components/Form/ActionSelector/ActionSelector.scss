@@ -2,15 +2,17 @@
 
 .ActionSelector {
     display: flex;
-
+    align-items: center;
     @media screen and (min-width: $media375) {
         gap: 20px;
         margin-bottom: 30px;
+        justify-content: center;
     }
 
     @media screen and (min-width: $media1024) {
         gap: 20px;
         margin-bottom: 30px;
+        justify-content: flex-start;
     }
 
     @media screen and (min-width: $media1440) {

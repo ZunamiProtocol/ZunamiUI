@@ -63,13 +63,15 @@ export const ApyDetailsModal = (props: ApyDetailsModalProps): JSX.Element => {
                                 <div className="col-xs-12 col-md-7">
                                     <div className="row">
                                         <div className="col-8">Latest auto-compound</div>
-                                        <div className="col-4">$LATEST_AC_DATE</div>
+                                        <div className="col-4">soon</div>
                                     </div>
                                     <div className="row">
                                         <div className="col-8">Collected rewards</div>
                                         <div className="col-4">
-                                            <div>$REWARDS_AMOUNT</div>
-                                            <button className="zun-button mt-2">Harvest</button>
+                                            <div>soon</div>
+                                            <button className="zun-button mt-2 disabled">
+                                                Harvest
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

@@ -12,7 +12,7 @@ export const zunamiMainnetAddress: Address = '0x618eee502CDF6b46A2199C21D1411f3F
 export const zunamiSepoliaAddress: Address = '0x3694Db838a8cAf3b1c234529bB1b447bd849F357';
 
 // APS controller
-export const zunUsdApsAddress: Address = '0x28e487bbF6b64867C29e61DccbCD17aB64082889';
+export const zunUsdApsAddress: Address = '0xd9F559280c9d308549e84946C0d668a817fcCFB5';
 export const zunUsdApsSepoliaAddress: Address = '0x1C4e36edBa364406f181fe9B3a4E6FC023DED0bc';
 
 // ZunUSD

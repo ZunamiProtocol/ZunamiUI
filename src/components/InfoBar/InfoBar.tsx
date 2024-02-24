@@ -1,5 +1,5 @@
 import useFetch from 'react-fetch-hook';
-import { getActiveStratsUrl, uzdStakingInfoUrl } from '../../api/api';
+import { getZunUsdApsStratsUrl, uzdStakingInfoUrl } from '../../api/api';
 import './InfoBar.scss';
 import { BigNumber } from 'bignumber.js';
 import { useState } from 'react';
@@ -49,7 +49,7 @@ export const InfoBar = (props: InfoBarProps): JSX.Element => {
     ) as ZunamiInfoFetch;
     const zunamiInfo = zunData as ZunamiInfo;
 
-    const { data: activeStratsStat } = useFetch(getActiveStratsUrl());
+    const { data: activeStratsStat } = useFetch(getZunUsdApsStratsUrl());
     const poolStat = activeStratsStat as PoolsStats;
     const [defaultPool, setDefautPool] = useState<PoolInfo>();
 

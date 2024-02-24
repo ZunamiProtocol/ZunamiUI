@@ -12,6 +12,16 @@ export const DAI_DECIMALS = 12;
 export const UZD_DECIMALS = 18;
 export const NULL_ADDRESS: Address = '0x0000000000000000000000000000000000000000';
 
+export const getDecimalsByTokenIndex = (index: number) => {
+    let result = USDT_TOKEN_DECIMAL;
+
+    if (index === 0) {
+        result = DAI_TOKEN_DECIMAL;
+    }
+
+    return result;
+};
+
 export const getBalanceNumber = (balance: BigNumber, decimals = 18): BigNumber => {
     return new BigNumber(balance).dividedBy(BIG_TEN.pow(decimals));
 };

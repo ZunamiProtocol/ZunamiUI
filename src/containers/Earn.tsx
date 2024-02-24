@@ -122,7 +122,7 @@ export const Earn = (): JSX.Element => {
                                         <span>All services</span>
                                     </button>
                                     <a
-                                        href="https://zunamilab.gitbook.io/product-docs/"
+                                        href="https://zunamilab.gitbook.io/zunami-docs/"
                                         target="_blank"
                                         rel="noreferrer"
                                         className="btn btn-secondary"
@@ -273,7 +273,7 @@ export const Earn = (): JSX.Element => {
                     </p>
                     <div className="d-flex gap-2 mt-3">
                         <a
-                            href="https://zunamilab.gitbook.io/product-docs/"
+                            href="https://zunamilab.gitbook.io/zunami-docs/"
                             className="badge rounded-pill text-bg-secondary bg-secondary"
                         >
                             Documentation
