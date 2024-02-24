@@ -3,11 +3,11 @@ import './Main.scss';
 import { BIG_ZERO, getBalanceNumber } from '../utils/formatbalance';
 import useFetch from 'react-fetch-hook';
 import {
-    getZunEthStratsUrl,
     uzdStakingInfoUrl,
-    getZunUsdStratsUrl,
     getZunUsdHistoricalApyUrl,
     getZunEthHistoricalApyUrl,
+    getZunUsdApsStratsUrl,
+    getZunEthApsStratsUrl,
 } from '../api/api';
 import { formatPoolApy, poolDataToChartData } from '../functions/pools';
 import { Preloader } from '../components/Preloader/Preloader';
@@ -55,7 +55,7 @@ const Chart = lazy(() =>
     import('../components/Chart/Chart').then((module) => ({ default: module.Chart }))
 );
 
-interface ZunAggInfo {
+export interface ZunAggInfo {
     info: {
         zunUSD: {
             monthlyAvgApr: number;
@@ -83,7 +83,7 @@ interface ZunAggInfo {
     totalTvlUsd: number;
 }
 
-const fallbackData = {
+export const fallbackData = {
     info: {
         zunUSD: {
             monthlyAvgApr: 0,
@@ -184,7 +184,7 @@ export const Main = (): JSX.Element => {
     }, [uzdStatData]);
 
     const { data: activeStratsStat } = useFetch(
-        stakingMode === 'ZETH' ? getZunEthStratsUrl() : getZunUsdStratsUrl()
+        stakingMode === 'ZETH' ? getZunEthApsStratsUrl() : getZunUsdApsStratsUrl()
     );
 
     const poolStats = activeStratsStat as PoolsStats;
@@ -199,7 +199,7 @@ export const Main = (): JSX.Element => {
 
         return poolDataToChartData(
             stratsData,
-            stakingMode === 'ZETH' ? uzdStatData.info.zunETH.tvl : uzdStatData.info.zunUSD.tvl
+            stakingMode === 'ZETH' ? uzdStatData.info.zunETH.tvl : uzdStatData.info.zunUSDAps.tvl
         );
     }, [stakingMode, uzdStatData, poolStats]);
 
@@ -376,16 +376,15 @@ export const Main = (): JSX.Element => {
                                 depositTooltipContent={
                                     <div style={{ maxWidth: '300px' }}>
                                         <p>
-                                            At present, there's a total of $XXX in rewards
-                                            accumulated but not yet allocated, including your share
-                                            of $XXX. You have the option to initiate the harvest on
-                                            your own.
+                                            At present, there's a total of $0 in rewards accumulated
+                                            but not yet allocated, including your share of $0. You
+                                            have the option to initiate the harvest on your own.
                                         </p>
                                         <p>
                                             However, please be aware that doing so would be an act
                                             of altruism, as it involves bearing the cost of gas fees
                                         </p>
-                                        <button className="zun-button">Harvest</button>
+                                        <button className="zun-button disabled">Harvest</button>
                                     </div>
                                 }
                                 tvl={
@@ -444,23 +443,15 @@ export const Main = (): JSX.Element => {
                                                 <div className="ApyBar__Counter__Title d-flex align-items-start gap-2">
                                                     <span>Current APY</span>
                                                     <div className="hint">
-                                                        <svg
-                                                            width="13"
-                                                            height="13"
-                                                            viewBox="0 0 13 13"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
+                                                        <button
+                                                            className="btn btn-secondary btn-xs text-center"
                                                             onClick={() =>
                                                                 setShowApyDetailsModal(true)
                                                             }
                                                         >
-                                                            <path
-                                                                fillRule="evenodd"
-                                                                clipRule="evenodd"
-                                                                d="M6.5 13C10.0899 13 13 10.0899 13 6.5C13 2.91015 10.0899 0 6.5 0C2.91015 0 0 2.91015 0 6.5C0 10.0899 2.91015 13 6.5 13ZM6.23296 9.97261H4.98638L5.79002 7.12336H3.02741V5.87679H6.14162L6.94529 3.02741H8.19186L7.38819 5.87679L9.97261 5.87679V7.12336H7.03659L6.23296 9.97261Z"
-                                                                fill="black"
-                                                            />
-                                                        </svg>
+                                                            <span className="desktop">Details</span>
+                                                            <span className="mobile">?</span>
+                                                        </button>
                                                     </div>
                                                 </div>
                                                 <div className="ApyBar__Counter__Value ApyBar__Counter__Value--primary vela-sans">
@@ -474,7 +465,7 @@ export const Main = (): JSX.Element => {
                                                                     not been harvested and
                                                                     auto-compounded yet. Current
                                                                     accumulated rewards:"
-                                                value="0%"
+                                                value="soon"
                                                 className="align-items-start stablecoin ApyBar__Counter"
                                             />
                                             <div className="ApyBar__Counter">
@@ -542,8 +533,8 @@ export const Main = (): JSX.Element => {
                                         className="p-4 flex-grow-1 mt-3 mt-lg-0"
                                         title={
                                             stakingMode === 'ZETH'
-                                                ? 'APS diversification strategies'
-                                                : 'APS diversification strategies'
+                                                ? 'APS strategies'
+                                                : 'APS strategies'
                                         }
                                     />
                                 </div>
@@ -568,7 +559,7 @@ export const Main = (): JSX.Element => {
                     </p>
                     <div className="d-flex gap-2 mt-3">
                         <a
-                            href="https://zunamilab.gitbook.io/product-docs/"
+                            href="https://zunamilab.gitbook.io/zunami-docs/"
                             className="badge rounded-pill text-bg-secondary bg-secondary"
                         >
                             Documentation

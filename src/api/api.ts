@@ -2,7 +2,7 @@ import { log } from '../utils/logger';
 
 const root = 'https://zunami-reward-api.herokuapp.com/api';
 export const poolStatsUrl = `${root}/pool/stats`;
-export const activeStratsUrl = `${root}/strategy/zunUSD/active-stats`;
+export const activeStratsUrl = `${root}/strategy/zunUSD/aps/active-stats`;
 
 export const zunUsdStratsUrl = `${root}/strategy/zunUSD/active-stats`;
 export const zunEthHistoryUrl = `${root}/strategy/zunETH/active-stats`;
@@ -29,8 +29,12 @@ export const curvePoolsApyUrl = 'https://api.curve.fi/api/getFactoryAPYs?version
 const BSC_NETWORK_ID = 56;
 const POLYGON_NETWORK_ID = 137;
 
-export const getActiveStratsUrl = (): string => {
+export const getZunUsdApsStratsUrl = (): string => {
     return activeStratsUrl;
+};
+
+export const getZunEthApsStratsUrl = (): string => {
+    return '';
 };
 
 export const getZunEthStratsUrl = (): string => {

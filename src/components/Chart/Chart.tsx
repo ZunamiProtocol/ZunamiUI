@@ -141,12 +141,16 @@ function renderStratList(items: Array<DataItem>, orientation: string) {
             <div className="d-flex">
                 <div className="wrapper me-2">
                     <img src={item.icon} alt={item.title} />
-                    <div className="coin">
-                        <img src={item.secondaryIcon} alt={item.title} />
-                    </div>
-                    <div className="coin">
-                        <img src={item.primaryIcon} alt={item.title} />
-                    </div>
+                    {item.secondaryIcon && (
+                        <div className="coin">
+                            <img src={item.secondaryIcon} alt={item.title} />
+                        </div>
+                    )}
+                    {item.primaryIcon && (
+                        <div className="coin">
+                            <img src={item.primaryIcon} alt={item.title} />
+                        </div>
+                    )}
                 </div>
                 <a target="blank" href={item.link}>
                     {renderStratName(orientation, item)}

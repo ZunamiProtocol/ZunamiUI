@@ -2,22 +2,17 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import './ZunStables.scss';
 import { MobileSidebar } from '../components/SideBar/MobileSidebar/MobileSidebar';
 import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPanel';
-import { SideBar, ZunamiInfoFetch } from '../components/SideBar/SideBar';
+import { SideBar } from '../components/SideBar/SideBar';
 import { Header } from '../components/Header/Header';
 import { SidebarTopButtons } from '../components/SidebarTopButtons/SidebarTopButtons';
-import { StakingSummary } from '../components/StakingSummary/StakingSummary';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { ReactComponent as HintIcon } from '../assets/info.svg';
+import { Popover } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { ApyChart } from '../components/ApyChart/ApyChart';
 import { MicroCard } from '../components/MicroCard/MicroCard';
 import { AddressButtons } from '../components/AddressButtons/AddressButtons';
-import { NULL_ADDRESS, getFullDisplayBalance } from '../utils/formatbalance';
-import {
-    StrategyListItem,
-    StrategyListItemColor,
-} from '../components/StrategyListItem/StrategyListItem';
-import { Chart, DataItem } from '../components/Chart/Chart';
+import { BIG_ZERO, getFullDisplayBalance } from '../utils/formatbalance';
+import { StrategyListItem } from '../components/StrategyListItem/StrategyListItem';
+import { DataItem } from '../components/Chart/Chart';
 import { PieChart2 } from '../components/PieChart/PieChart';
 import { renderMobileMenu } from '../components/Header/NavMenu/NavMenu';
 import { ZunPoolSummary } from '../components/ZunPoolSummary/ZunPoolSummary';
@@ -25,68 +20,23 @@ import { getZunUsdAddress } from '../utils/zunami';
 import { useNetwork } from 'wagmi';
 import {
     getZunEthHistoricalApyUrl,
+    getZunEthStratsUrl,
     getZunUsdHistoricalApyUrl,
+    getZunUsdStratsUrl,
     uzdStakingInfoUrl,
 } from '../api/api';
-import useFetch from 'react-fetch-hook';
 import useTotalSupply from '../hooks/useTotalSupply';
-
-function getRandomArbitrary(min: number, max: number) {
-    return Math.random() * (max - min) + min;
-}
+import { ZunAggInfo, fallbackData } from './Main';
+import useFetch from 'react-fetch-hook';
+import { poolDataToChartData } from '../functions/pools';
+import useBalanceOf from '../hooks/useBalanceOf';
 
 export const ZunStables = (): JSX.Element => {
     const { chain } = useNetwork();
     const chainId: number = chain ? chain.id : 1;
-    const apyHintTarget = useRef(null);
-    const target = useRef(null);
-    const [showHint, setShowHint] = useState(false);
-    const [showApyHint, setShowApyHint] = useState(false);
     const [tvl, setTvl] = useState('0');
     const [histApyPeriod, setHistApyPeriod] = useState('week');
     const [histApyData, setHistApyData] = useState([]);
-    const stratChartData: Array<DataItem> = [
-        {
-            title: 'Convex Finance',
-            type: 'FRAX_STAKEDAO',
-            link: '',
-            icon: '/convex.svg',
-            value: 25,
-            color: '#FFD118',
-            primaryIcon: '/convex.svg',
-            secondaryIcon: '/convex.svg',
-        },
-        {
-            title: 'Convex Finance',
-            type: 'FRAX_STAKEDAO',
-            link: '',
-            icon: '/convex.svg',
-            value: 25,
-            color: '#12A0FE',
-            primaryIcon: '/convex.svg',
-            secondaryIcon: '/convex.svg',
-        },
-        {
-            title: 'Convex Finance',
-            type: 'FRAX_STAKEDAO',
-            link: '',
-            icon: '/convex.svg',
-            value: 25,
-            color: '#B2FE12',
-            primaryIcon: '/convex.svg',
-            secondaryIcon: '/convex.svg',
-        },
-        {
-            title: 'Convex Finance',
-            type: 'FRAX_STAKEDAO',
-            link: '',
-            icon: '/convex.svg',
-            value: 25,
-            color: '#FC6505',
-            primaryIcon: '/convex.svg',
-            secondaryIcon: '/convex.svg',
-        },
-    ];
     const [stakingMode, setStakingMode] = useState('zunUSD');
     const totalSupply = useTotalSupply(getZunUsdAddress(chainId));
 
@@ -109,8 +59,111 @@ export const ZunStables = (): JSX.Element => {
             });
     }, [histApyPeriod, stakingMode]);
 
-    // aggregated info
-    const { isLoading, data } = useFetch(uzdStakingInfoUrl) as ZunamiInfoFetch;
+    const [uzdStatLoading, setUzdStatLoading] = useState(true);
+    const [uzdStatData, setUzdStatData] = useState<ZunAggInfo>(fallbackData);
+
+    // Load aggregated info
+    useEffect(() => {
+        fetch(uzdStakingInfoUrl)
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                setUzdStatLoading(false);
+
+                // if some item is NULL, then use fallback data
+                Object.keys(data.info).forEach((index) => {
+                    if (!data.info[index]) {
+                        data.info[index] = {
+                            monthlyAvgApr: 0,
+                            threeMonthAvgApr: 0,
+                            apr: 0,
+                            apy: 0,
+                            tvl: BIG_ZERO,
+                            tvlUsd: 0,
+                        };
+                    }
+                });
+
+                setUzdStatData(data);
+            })
+            .catch((error) => {
+                setUzdStatData(fallbackData);
+                setUzdStatLoading(false);
+            });
+    }, []);
+
+    // TVL
+    useEffect(() => {
+        if (!uzdStatData) {
+            return;
+        }
+
+        setTvl(uzdStatData.totalTvlUsd.toString());
+    }, [uzdStatData]);
+
+    // APY 30,90 days popover
+    const apyPopover = useMemo(() => {
+        let apy30 = 0;
+        let apy90 = 0;
+
+        if (uzdStatData) {
+            apy30 =
+                stakingMode === 'ZETH'
+                    ? uzdStatData.info.zunETH.monthlyAvgApr
+                    : uzdStatData.info.zunUSDAps.monthlyAvgApy;
+
+            apy90 =
+                stakingMode === 'ZETH'
+                    ? uzdStatData.info.zunETH.threeMonthAvgApr
+                    : uzdStatData.info.zunUSDAps.threeMonthAvgApy;
+        }
+
+        return (
+            <Popover>
+                <Popover.Body>
+                    <div className="">
+                        <span>Average APR in 30 days: </span>
+                        <span className="text-primary">{apy30.toFixed(2)}%</span>
+                    </div>
+                    <div className="">
+                        <span>Average APR in 90 days: </span>
+                        <span className="text-primary">{apy90.toFixed(2)}%</span>
+                    </div>
+                </Popover.Body>
+            </Popover>
+        );
+    }, [stakingMode, uzdStatData]);
+
+    // Pool strategies
+    const { data: rawPoolList } = useFetch(
+        stakingMode === 'ZETH' ? getZunEthStratsUrl() : getZunUsdStratsUrl()
+    );
+
+    const poolList = useMemo(() => {
+        // @ts-ignore
+        if (rawPoolList && rawPoolList.strategies.length) {
+            return poolDataToChartData(
+                // @ts-ignore
+                rawPoolList.strategies,
+                stakingMode === 'ZETH' ? uzdStatData.info.zunETH.tvl : uzdStatData.info.zunUSD.tvl
+            );
+        } else {
+            return [];
+        }
+    }, [rawPoolList, stakingMode, uzdStatData]);
+
+    const zunUsdBalance = useBalanceOf(getZunUsdAddress(chainId));
+
+    // zunUSD price
+    const { data: curveData, isLoading: curveDataLoading } = useFetch(
+        'https://api.curve.fi/api/getAllGauges'
+    );
+
+    const zunUsdPool = !curveDataLoading
+        ? // @ts-ignore
+          curveData.data['crvUSD+zunUSD (0x8C24…a745)']
+        : null;
 
     return (
         <React.Fragment>
@@ -139,10 +192,10 @@ export const ZunStables = (): JSX.Element => {
                                     <div className="d-flex flex-row small-block align-items-center stablecoin mb-3 ps-3 me-3 me-lg-2 mt-3 justify-content-between">
                                         <div>
                                             <div>
-                                                <span className="name">ZUN Balance</span>
+                                                <span className="name">Balance</span>
                                             </div>
                                             <div className="vela-sans value mt-1 d-flex align-items-center">
-                                                <span>$0</span>
+                                                <span>${getFullDisplayBalance(zunUsdBalance)}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -152,8 +205,12 @@ export const ZunStables = (): JSX.Element => {
                         <ZunPoolSummary
                             logo="USD"
                             selected={true}
-                            baseApy={'0'}
-                            tvl={`0`}
+                            baseApy={uzdStatData.info.zunUSD.apr.toFixed(2)}
+                            tvl={`$${Math.round(
+                                Number(getFullDisplayBalance(uzdStatData.info.zunUSD.tvl))
+                            ).toLocaleString('en', {
+                                maximumFractionDigits: 0,
+                            })}`}
                             className="mt-3"
                         />
                     </SideBar>
@@ -170,20 +227,26 @@ export const ZunStables = (): JSX.Element => {
                                             <div className="col-6 col-md-6 col-xxl-4">
                                                 <MicroCard
                                                     title="Total circulating"
-                                                    hint="Circulation demo text"
-                                                    value={getFullDisplayBalance(totalSupply)}
+                                                    hint="The amount of coins that have already been created and circulating in the market."
+                                                    value={Math.round(
+                                                        Number(getFullDisplayBalance(totalSupply))
+                                                    ).toLocaleString('en', {
+                                                        maximumFractionDigits: 0,
+                                                    })}
                                                     className="align-items-start stablecoin mb-3 ps-3 me-3 me-lg-2"
                                                 />
                                             </div>
                                             <div className="col-6 col-md-6 col-xxl-4">
                                                 <MicroCard
                                                     title="Collateral"
-                                                    hint="Collateral demo text"
+                                                    hint="Value of the Omnipool reserves."
                                                     value={
-                                                        isLoading
+                                                        uzdStatLoading
                                                             ? 'loading'
                                                             : Number(
-                                                                  data.info.zunUSD.tvlUsd
+                                                                  Math.round(
+                                                                      uzdStatData.info.zunUSD.tvlUsd
+                                                                  )
                                                               ).toLocaleString('en', {
                                                                   maximumFractionDigits: 0,
                                                               })
@@ -205,8 +268,14 @@ export const ZunStables = (): JSX.Element => {
                                             <div className="col-6 col-md-6 col-xxl-4">
                                                 <MicroCard
                                                     title="zunUSD price"
-                                                    hint="zunUSD demo text"
-                                                    value="$ 10,000,000"
+                                                    hint="Current market price on Curve Finance."
+                                                    value={
+                                                        !curveDataLoading
+                                                            ? `$${zunUsdPool.lpTokenPrice.toFixed(
+                                                                  2
+                                                              )}`
+                                                            : 0
+                                                    }
                                                     className="align-items-start stablecoin mb-3 ps-3 me-0 me-lg-2"
                                                 />
                                             </div>
@@ -250,37 +319,23 @@ export const ZunStables = (): JSX.Element => {
                                                         </defs>
                                                     </svg>
 
-                                                    <div className="text-white d-flex align-items-center disabled">
+                                                    <div className="text-white d-flex align-items-center">
                                                         <div className="col-6">
                                                             <div className="d-flex align-items-center gap-2">
                                                                 <span className="name2">
-                                                                    Stake and boost up to 24% in
-                                                                    APS!
+                                                                    Stake and boost up to{' '}
+                                                                    {Math.trunc(
+                                                                        uzdStatData.info.zunUSDAps
+                                                                            .apy
+                                                                    )}
+                                                                    % in APS!
                                                                 </span>
-                                                                <div
-                                                                    ref={target}
-                                                                    onClick={() =>
-                                                                        setShowHint(!showHint)
-                                                                    }
-                                                                    className="hint gap-2"
-                                                                >
-                                                                    <OverlayTrigger
-                                                                        placement="right"
-                                                                        overlay={
-                                                                            <Tooltip>
-                                                                                Some demo text
-                                                                            </Tooltip>
-                                                                        }
-                                                                    >
-                                                                        <HintIcon />
-                                                                    </OverlayTrigger>
-                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div className="col-6 d-flex align-items-center pe-3 ps-3 justify-content-end">
-                                                            <Link to="/zun">
+                                                            <Link to="/">
                                                                 <button className="zun-button w-100">
-                                                                    Soon
+                                                                    Stake
                                                                 </button>
                                                             </Link>
                                                         </div>
@@ -346,7 +401,7 @@ export const ZunStables = (): JSX.Element => {
                                         <div className="d-flex flex-column mt-3 gap-3 me-3">
                                             <a
                                                 className="gray-block small-block align-items-start stablecoin mb-2 mb-md-0 col-6 bg-white"
-                                                href="https://curve.fi/#/ethereum/pools/factory-v2-284/deposit"
+                                                href="https://curve.fi/#/ethereum/pools/factory-stable-ng-104/deposit"
                                                 target="_blank"
                                                 rel="noreferrer"
                                             >
@@ -393,10 +448,10 @@ export const ZunStables = (): JSX.Element => {
                                                 <MicroCard
                                                     title="Collateral APR now"
                                                     value={
-                                                        isLoading
+                                                        uzdStatLoading
                                                             ? 'loading'
                                                             : `${Number(
-                                                                  data.info.zunUSD.apr
+                                                                  uzdStatData.info.zunUSD.apr
                                                               ).toLocaleString('en', {
                                                                   maximumFractionDigits: 0,
                                                               })}%`
@@ -404,9 +459,9 @@ export const ZunStables = (): JSX.Element => {
                                                     className="align-items-start stablecoin mb-3 ps-3 me-0 me-lg-2"
                                                 />
                                                 <MicroCard
-                                                    title="Average APY"
-                                                    hint="Average APY demo text"
-                                                    value="16%"
+                                                    title="Average APR"
+                                                    popover={apyPopover}
+                                                    value="in 30, 90 days"
                                                     className="align-items-start stablecoin mb-3 ps-3 me-0 me-lg-2"
                                                 />
                                             </div>
@@ -421,56 +476,28 @@ export const ZunStables = (): JSX.Element => {
                                         </div>
                                         <div className="row mt-3">
                                             <div className="col col-xs-12 col-lg-5">
-                                                <PieChart2
-                                                    data={stratChartData}
-                                                    hideList
-                                                    hideSummary
-                                                />
+                                                <PieChart2 data={poolList} hideList hideSummary />
                                             </div>
                                             <div className="col col-xs-12 col-lg-7">
                                                 <div className="row">
-                                                    <div className="col-xs-12 col-sm-12 col-lg-6">
-                                                        <StrategyListItem
-                                                            title="Convex Finance"
-                                                            description="ALUSD / FRAXBP"
-                                                            percent={25}
-                                                            color={StrategyListItemColor.blue}
-                                                            amount="500 000"
-                                                            apr={16}
-                                                        />
-                                                    </div>
-                                                    <div className="col-xs-12 col-sm-12 col-lg-6">
-                                                        <StrategyListItem
-                                                            title="Convex Finance"
-                                                            description="ALUSD / FRAXBP"
-                                                            percent={25}
-                                                            color={StrategyListItemColor.yellow}
-                                                            amount="500 000"
-                                                            apr={16}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="row">
-                                                    <div className="col-xs-12 col-sm-12 col-lg-6">
-                                                        <StrategyListItem
-                                                            title="Convex Finance"
-                                                            description="ALUSD / FRAXBP"
-                                                            percent={25}
-                                                            color={StrategyListItemColor.green}
-                                                            amount="500 000"
-                                                            apr={16}
-                                                        />
-                                                    </div>
-                                                    <div className="col-xs-12 col-sm-12 col-lg-6">
-                                                        <StrategyListItem
-                                                            title="Convex Finance"
-                                                            description="ALUSD / FRAXBP"
-                                                            percent={25}
-                                                            color={StrategyListItemColor.orange}
-                                                            amount="500 000"
-                                                            apr={16}
-                                                        />
-                                                    </div>
+                                                    {poolList.map((pool: any) => (
+                                                        <div
+                                                            key={pool.address}
+                                                            className="col-xs-12 col-sm-12 col-lg-6"
+                                                        >
+                                                            <StrategyListItem
+                                                                title={pool.title}
+                                                                description={pool.description}
+                                                                percent={pool.value}
+                                                                color={pool.color}
+                                                                amount={Math.trunc(pool.tvlUsd)}
+                                                                apr={pool.apr.toFixed(2)}
+                                                                icon={pool.icon}
+                                                                primaryIcon={pool.primaryIcon}
+                                                                secondaryIcon={pool.secondaryIcon}
+                                                            />
+                                                        </div>
+                                                    ))}
                                                 </div>
                                             </div>
                                         </div>

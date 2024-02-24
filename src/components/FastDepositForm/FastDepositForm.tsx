@@ -11,7 +11,12 @@ import {
 import useStake from '../../hooks/useStake';
 import useUnstake from '../../hooks/useUnstake';
 import { getActiveWalletName } from '../WalletsModal/WalletsModal';
-import { BIG_ZERO, NULL_ADDRESS } from '../../utils/formatbalance';
+import {
+    BIG_ZERO,
+    NULL_ADDRESS,
+    USDT_TOKEN_DECIMAL,
+    getDecimalsByTokenIndex,
+} from '../../utils/formatbalance';
 import { getFullDisplayBalance } from '../../utils/formatbalance';
 import { log } from '../../utils/logger';
 import { getZapAddress, getZunUsdApsAddress, isETH, isSEP } from '../../utils/zunami';
@@ -26,6 +31,7 @@ import { APPROVE_SUM } from '../../sushi/utils';
 import useBalanceOf from '../../hooks/useBalanceOf';
 import { waitForTransaction } from '@wagmi/core';
 import { debug } from 'console';
+import BigNumber from 'bignumber.js';
 
 export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HTMLDivElement>> = ({
     stakingMode,
@@ -119,14 +125,16 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
 
         if (action === 'deposit') {
             // APS deposit
-            result = allowance[coinIndex].toNumber() > 0;
+            result =
+                allowance[coinIndex].toNumber() >=
+                new BigNumber(depositSum).times(getDecimalsByTokenIndex(coinIndex)).toNumber();
         } else {
             result = withdrawAllowance.toNumber() > 0;
         }
 
         log(`[APS] Coin approved: ${result}`);
         return result;
-    }, [allowance, coinIndex, action, withdrawAllowance]);
+    }, [allowance, coinIndex, action, withdrawAllowance, depositSum]);
 
     // show approve btn or not
     const showApproveBtn = useMemo(() => {

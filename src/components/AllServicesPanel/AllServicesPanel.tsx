@@ -57,7 +57,11 @@ export const AllServicesPanel = (props: AllServicesPanelProps): JSX.Element => {
                     </div>
                     <div className="title mb-4 mt-4">Audited by</div>
                     <div className="d-flex gap-4 audits">
-                        <a href="#" rel="noreferrer" target="_blank">
+                        <a
+                            href="https://zunamilab.gitbook.io/zunami-docs/risks-and-security/audits"
+                            rel="noreferrer"
+                            target="_blank"
+                        >
                             <svg
                                 width="134"
                                 height="29"
@@ -127,7 +131,11 @@ export const AllServicesPanel = (props: AllServicesPanelProps): JSX.Element => {
                                 />
                             </svg>
                         </a>
-                        <a href="#" rel="noreferrer" target="_blank">
+                        <a
+                            href="https://zunamilab.gitbook.io/zunami-docs/risks-and-security/audits"
+                            rel="noreferrer"
+                            target="_blank"
+                        >
                             <svg
                                 width="92"
                                 height="22"
@@ -194,7 +202,11 @@ export const AllServicesPanel = (props: AllServicesPanelProps): JSX.Element => {
                                 </defs>
                             </svg>
                         </a>
-                        <a href="#" rel="noreferrer" target="_blank">
+                        <a
+                            href="https://zunamilab.gitbook.io/zunami-docs/risks-and-security/audits"
+                            rel="noreferrer"
+                            target="_blank"
+                        >
                             <svg
                                 width="104"
                                 height="17"
@@ -266,7 +278,11 @@ export const AllServicesPanel = (props: AllServicesPanelProps): JSX.Element => {
                                 </defs>
                             </svg>
                         </a>
-                        <a href="#" rel="noreferrer" target="_blank">
+                        <a
+                            href="https://zunamilab.gitbook.io/zunami-docs/risks-and-security/audits"
+                            rel="noreferrer"
+                            target="_blank"
+                        >
                             <svg
                                 width="167"
                                 height="23"
@@ -332,7 +348,7 @@ export const AllServicesPanel = (props: AllServicesPanelProps): JSX.Element => {
                     <div className="title mb-4">Zunami Media</div>
                     <div className="media-links d-flex gap-3 flex-wrap">
                         <a
-                            href="https://zunamilab.gitbook.io/product-docs/"
+                            href="https://zunamilab.gitbook.io/zunami-docs/"
                             rel="noreferrer"
                             target="blank"
                         >

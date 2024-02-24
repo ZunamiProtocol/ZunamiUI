@@ -9,7 +9,7 @@ import { log } from '../utils/logger';
 import { SideBar, ZunamiInfoFetch } from '../components/SideBar/SideBar';
 import {
     getZethHistoricalApyUrl,
-    getActiveStratsUrl,
+    getZunUsdApsStratsUrl,
     uzdStakingInfoUrl,
     getZethStratsUrl,
     getHistoricalApyUrl,
@@ -156,7 +156,7 @@ export const Uzd = (): JSX.Element => {
     ) as ZunamiInfoFetch;
 
     const { data: activeStratsStat } = useFetch(
-        stakingMode === 'UZD' ? getActiveStratsUrl() : getZethStratsUrl()
+        stakingMode === 'UZD' ? getZunUsdApsStratsUrl() : getZethStratsUrl()
     );
     const poolStats = activeStratsStat as PoolsStats;
 
