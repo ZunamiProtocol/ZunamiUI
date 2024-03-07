@@ -13,6 +13,7 @@ export const uzdStakingInfoUrl = `${root}/pool/aggregated-info`;
 
 export const historicalApyUrl = `${root}/zunami/apy-chart`;
 export const zunUsdHistoricalApyUrl = `${root}/pool/zun-usd/apr-chart`;
+export const zunUsdApsHistoricalApyUrl = `${root}/pool/zun-usd/aps/apy-chart`;
 
 export const testnetUrl = `${root}/feature`;
 export const totalIncomeUrl = `${root}/transfers/total-income`;
@@ -55,6 +56,10 @@ export const getPoolStatsUrl = (poolTypes: string): string => {
 
 export const getHistoricalApyUrl = (period: string): string => {
     return `${historicalApyUrl}?period=${period.toUpperCase()}`;
+};
+
+export const getZunUsdApsHistoricalApyUrl = (period: string): string => {
+    return `${zunUsdApsHistoricalApyUrl}?period=${period.toUpperCase()}`;
 };
 
 export const getZunUsdHistoricalApyUrl = (period: string): string => {

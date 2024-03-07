@@ -1,27 +1,85 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import './WalletButton.scss';
-import { useConnect, useAccount, useNetwork, useDisconnect } from 'wagmi';
+import { useAccount, useNetwork, useDisconnect } from 'wagmi';
 import { networks, Network } from '../NetworkSelector/NetworkSelector';
 import { WalletsModal } from '../WalletsModal/WalletsModal';
+import { getChainClient } from '../../utils/zunami';
+import { Address, GetEnsNameReturnType } from 'viem';
+import llamasAbi from '../../actions/abi/llama/llamas_factory.json';
 
 interface WalletButtonProps {}
+
+export const TheLlamas: Address = '0xe127ce638293fa123be79c25782a5652581db234';
 
 export const WalletButton = (
     props: WalletButtonProps & React.HTMLProps<HTMLButtonElement>
 ): JSX.Element => {
-    const { connect, connectors } = useConnect();
     const { disconnect } = useDisconnect();
-    const { address: account, isConnected } = useAccount();
+    const { address: account } = useAccount();
     const [activeNetwork, setActiveNetwork] = useState<Network>(networks[0]);
-    const [open, setOpen] = useState(false);
-    const eth = window.ethereum;
     const [chainSupported, setChainSupported] = useState(false);
-    const networksList = networks;
-    const availableNetworks = networksList.filter(
-        (item) => [1, 56, 137].indexOf(parseInt(item.key, 16)) !== -1
-    );
     const { chain } = useNetwork();
     const chainId = chain ? chain.id : 1;
+
+    const [nftUrl, setNftUrl] = useState<string>('');
+
+    useEffect(() => {
+        async function getNFT() {
+            if (!account) {
+                setNftUrl('');
+                return '';
+            }
+
+            const tokens = await getChainClient(chainId).readContract({
+                address: TheLlamas,
+                abi: llamasAbi,
+                functionName: 'tokensForOwner',
+                args: [account],
+                // args: ['0x62c8aCc91b488F5749D8e43C7711eDf76841b206'],
+            });
+
+            // @ts-ignore
+            if (tokens.length === 0) {
+                setNftUrl('');
+                return;
+            }
+
+            const tokenUri = await getChainClient(chainId).readContract({
+                address: TheLlamas,
+                abi: llamasAbi,
+                functionName: 'tokenURI',
+                // @ts-ignore
+                args: [tokens[0]],
+            });
+
+            // @ts-ignore
+            const tokenResp = await fetch(tokenUri);
+            const token = (await tokenResp.json()) as { image: string };
+
+            // @ts-ignore
+            setNftUrl(token.image);
+        }
+
+        getNFT();
+    }, [account, chainId]);
+
+    const [ensName, setEnsName] = useState<GetEnsNameReturnType>('');
+
+    useEffect(() => {
+        async function getName() {
+            if (!account) {
+                return '';
+            }
+
+            setEnsName(
+                await getChainClient().getEnsName({
+                    address: account,
+                })
+            );
+        }
+
+        getName();
+    }, [account]);
 
     useEffect(() => {
         if (!chainId) {
@@ -66,7 +124,7 @@ export const WalletButton = (
     }, [chainId, activeNetwork]);
 
     const shortAddress = account
-        ? `${account.substring(0, 6)}...${account.substring(account.length - 4)}`
+        ? `${account.substring(0, 4)}...${account.substring(account.length - 4)}`
         : '';
 
     return (
@@ -84,30 +142,31 @@ export const WalletButton = (
                     }
                 }}
             >
-                {!account && <span>Add wallet</span>}
-                <svg
-                    width="31"
-                    height="34"
-                    viewBox="0 0 31 34"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="icon"
-                >
-                    <rect
-                        width="29.4764"
-                        height="15.1826"
-                        rx="7.59128"
-                        transform="matrix(0.906468 -0.422275 0.460417 0.887703 -7.16284 12.9512)"
-                        fill="#B8B8B8"
-                    />
-                    <rect
-                        width="32.9484"
-                        height="23.8058"
-                        rx="9"
-                        transform="matrix(0.981346 -0.192248 0.213865 0.976863 -7 11.3916)"
-                        fill="#D5D5D5"
-                    />
-                </svg>
+                {!nftUrl && account && (
+                    <svg
+                        width="31"
+                        height="34"
+                        viewBox="0 0 31 34"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="icon"
+                    >
+                        <rect
+                            width="29.4764"
+                            height="15.1826"
+                            rx="7.59128"
+                            transform="matrix(0.906468 -0.422275 0.460417 0.887703 -7.16284 12.9512)"
+                            fill="#B8B8B8"
+                        />
+                        <rect
+                            width="32.9484"
+                            height="23.8058"
+                            rx="9"
+                            transform="matrix(0.981346 -0.192248 0.213865 0.976863 -7 11.3916)"
+                            fill="#D5D5D5"
+                        />
+                    </svg>
+                )}
 
                 {!account && (
                     <svg
@@ -126,9 +185,13 @@ export const WalletButton = (
                         />
                     </svg>
                 )}
+                {!account && <span>Add wallet</span>}
+
+                {account && nftUrl && <img src={nftUrl} alt="TheLLAMAS" className="nft" />}
+
                 {account && (
                     <span id="address" className="address">
-                        {shortAddress}
+                        {ensName ? ensName : shortAddress}
                     </span>
                 )}
             </button>

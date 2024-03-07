@@ -4,12 +4,12 @@ import { BIG_ZERO, getBalanceNumber } from '../utils/formatbalance';
 import useFetch from 'react-fetch-hook';
 import {
     uzdStakingInfoUrl,
-    getZunUsdHistoricalApyUrl,
     getZunEthHistoricalApyUrl,
     getZunUsdApsStratsUrl,
     getZunEthApsStratsUrl,
+    getZunUsdApsHistoricalApyUrl,
 } from '../api/api';
-import { formatPoolApy, poolDataToChartData } from '../functions/pools';
+import { poolDataToChartData } from '../functions/pools';
 import { Preloader } from '../components/Preloader/Preloader';
 import { UnsupportedChain } from '../components/UnsupportedChain/UnsupportedChain';
 import { log, copyLogs } from '../utils/logger';
@@ -20,17 +20,16 @@ import { AllServicesPanel } from '../components/AllServicesPanel/AllServicesPane
 import { SupportersBar } from '../components/SupportersBar/SupportersBar';
 import { StakingSummary } from '../components/StakingSummary/StakingSummary';
 import { DashboardCarousel } from '../components/DashboardCarousel/DashboardCarousel';
-import { ZunamiInfoFetch, PoolsStats } from './Main.types';
+import { PoolsStats } from './Main.types';
 import { ApyDetailsModal } from '../components/ApyDetailsModal/ApyDetailsModal';
 import { useAccount, useNetwork } from 'wagmi';
 import type { DataItem } from '../components/Chart/Chart';
 import { MicroCard } from '../components/MicroCard/MicroCard';
 import useBalanceOf from '../hooks/useBalanceOf';
-import { getZunUsdAddress, getZunUsdApsAddress } from '../utils/zunami';
+import { getZunUsdApsAddress } from '../utils/zunami';
 import { erc20ABI } from 'wagmi';
 import { renderMobileMenu } from '../components/Header/NavMenu/NavMenu';
 import { SidebarTopButtons } from '../components/SidebarTopButtons/SidebarTopButtons';
-import { WalletStatus } from '../components/WalletStatus/WalletStatus';
 import BigNumber from 'bignumber.js';
 
 const Header = lazy(() =>
@@ -208,7 +207,7 @@ export const Main = (): JSX.Element => {
         const url =
             stakingMode === 'ZETH'
                 ? getZunEthHistoricalApyUrl(histApyPeriod)
-                : getZunUsdHistoricalApyUrl(histApyPeriod);
+                : getZunUsdApsHistoricalApyUrl(histApyPeriod);
 
         fetch(url)
             .then((response) => {
@@ -255,11 +254,11 @@ export const Main = (): JSX.Element => {
                 <Popover.Body>
                     <div className="">
                         <span>Average APY in 30 days: </span>
-                        <span className="text-primary">{apy30}%</span>
+                        <span className="text-primary">{apy30.toFixed(2)}%</span>
                     </div>
                     <div className="">
                         <span>Average APY in 90 days: </span>
-                        <span className="text-primary">{apy90}%</span>
+                        <span className="text-primary">{apy90.toFixed(2)}%</span>
                     </div>
                 </Popover.Body>
             </Popover>

@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { getTheme } from './functions/theme';
@@ -10,6 +9,7 @@ import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import { WagmiConfig, createConfig, configureChains, mainnet, sepolia } from 'wagmi';
 import reportWebVitals from './reportWebVitals';
+import { createModal } from '@rabby-wallet/rabbykit';
 
 const theme = getTheme();
 
@@ -21,6 +21,8 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
     [mainnet, sepolia],
     [alchemyProvider({ apiKey: 'Yh5zNTgJkqrOIqLtfkZBGIPecNPDQ1ON' }), publicProvider()]
 );
+
+const wcProjectId = '5f63b90a6296d5f62024322d7b337912';
 
 // Set up wagmi config
 const config = createConfig({
@@ -36,7 +38,7 @@ const config = createConfig({
         new WalletConnectConnector({
             chains,
             options: {
-                projectId: '5f63b90a6296d5f62024322d7b337912',
+                projectId: wcProjectId,
             },
         }),
         new InjectedConnector({
@@ -49,6 +51,14 @@ const config = createConfig({
     ],
     publicClient,
     webSocketPublicClient,
+});
+
+export const rabbyKit = createModal({
+    chains,
+    wagmi: config,
+    projectId: wcProjectId,
+    appName: 'RabbyKit',
+    theme: 'dark',
 });
 
 window.Buffer = window.Buffer || require('buffer').Buffer;

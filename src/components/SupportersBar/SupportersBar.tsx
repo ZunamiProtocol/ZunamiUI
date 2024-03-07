@@ -17,7 +17,7 @@ export const SupportersBar: React.FC<SupporterBarProps & React.HTMLProps<HTMLDiv
                     <span className="text-muted">Supported by</span>
                     <div className="supporters-links">
                         <a
-                            href="https://dao.curve.fi/vote/ownership/299"
+                            href="https://dao.curve.fi/vote/ownership/629"
                             target="_blank"
                             rel="noreferrer"
                         >
@@ -39,7 +39,7 @@ export const SupportersBar: React.FC<SupporterBarProps & React.HTMLProps<HTMLDiv
                             </svg>
                         </a>
                         <a
-                            href="https://vote.convexfinance.com/#/proposal/0x43be12c3bbfc187e94b1f112f54c5fb1622ad7ef1ddfe055b7d01bd8405d0454"
+                            href="https://vote.convexfinance.com/#/proposal/0xccc4bcbe3dbbafa47bd81c6c0381c4b0fecbda25e6451807a693ceadc0418aad"
                             target="_blank"
                             rel="noreferrer"
                         >
@@ -61,7 +61,7 @@ export const SupportersBar: React.FC<SupporterBarProps & React.HTMLProps<HTMLDiv
                             </svg>
                         </a>
                         <a
-                            href="https://lockers.stakedao.org/governance/0x3e32abc0270d57cac7cac8b0001b41b88f8615ed6b8c29825c2dadaadd4af707"
+                            href="https://www.stakedao.org/governance/protocols/0x783f95fd0e82b32de1c1ef24e5de47a9521748c5544fe4120bdc482eb16f7be4"
                             target="_blank"
                             rel="noreferrer"
                         >

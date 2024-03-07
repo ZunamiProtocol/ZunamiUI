@@ -16,6 +16,7 @@ interface CoinSelectorProps {
 interface CoinProps {
     coinName: string;
     onCoinSelect: Function;
+    selected: boolean;
 }
 
 function displayCoinName(coinCode: string) {
@@ -38,7 +39,7 @@ function renderCoinItem(props: CoinProps & React.HTMLProps<HTMLButtonElement>) {
         <div
             className={`coin-item ${props.className} ${
                 props.coinName === 'FRAX' ? 'disabled' : ''
-            }`}
+            } ${props.selected ? 'selected' : ''}`}
             onClick={() => props.onCoinSelect(props.coinName)}
         >
             <img src={`${props.coinName.toLowerCase()}.svg`} alt="" />
@@ -119,7 +120,8 @@ export const CoinSelector = (
                                     {renderCoinItem({
                                         coinName: props.stakingMode === 'UZD' ? 'zunUSD' : 'zunETH',
                                         onCoinSelect,
-                                        className: 'mt-4',
+                                        className: 'mt-0',
+                                        selected: props.name === 'uzd',
                                     })}
                                 </div>
                             </div>
@@ -150,15 +152,22 @@ export const CoinSelector = (
                                     {renderCoinItem({
                                         coinName: 'USDC',
                                         onCoinSelect,
-                                        className: 'mt-2 mb-3',
+                                        className: 'mt-2 mb-2',
+                                        selected: props.name === 'USDC',
                                     })}
-                                    {renderCoinItem({ coinName: 'DAI', onCoinSelect })}
+                                    {renderCoinItem({
+                                        coinName: 'DAI',
+                                        onCoinSelect,
+                                        className: 'mt-0',
+                                        selected: props.name === 'DAI',
+                                    })}
                                 </div>
                                 <div className="col-6">
                                     {renderCoinItem({
                                         coinName: 'USDT',
                                         onCoinSelect,
                                         className: 'mt-2 mb-3',
+                                        selected: props.name === 'USDT',
                                     })}
                                 </div>
                             </div>

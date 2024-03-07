@@ -1,0 +1,51 @@
+@import 'src/variables';
+
+.verification-info-panel {
+    background-color: #eaeaea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border-radius: 15px;
+    padding: 10px 15px;
+    font-size: 13px;
+    color: #000;
+    position: absolute;
+    bottom: 20px;
+
+    @media (min-width: $media375) {
+        left: 20px;
+        right: 20px;
+    }
+
+    @media (min-width: $media1440) {
+        left: 35px;
+        right: 35px;
+    }
+
+    @media (min-width: $media1440) {
+        font-size: 13px;
+    }
+
+    a {
+        color: #000;
+        text-decoration: none;
+    }
+}
+
+body.dark {
+    .verification-info-panel {
+        background-color: #222222;
+        color: #fff;
+
+        a {
+            color: #fff;
+        }
+
+        svg {
+            path {
+                fill: #fff;
+            }
+        }
+    }
+}

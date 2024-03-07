@@ -6,7 +6,15 @@
     font-size: 13px !important;
     line-height: 17px !important;
     text-align: center;
-    padding: 0.5rem 0.75rem 0.5rem 35px !important;
+    padding: 0.5rem 0.75rem 0.5rem 0 !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    // min-height: 33px;
+
+    @media screen and (min-width: $media1024) {
+        max-width: 120px;
+    }
 
     &::after {
         position: absolute;
@@ -27,23 +35,28 @@
     }
 
     @media screen and (min-width: $media1024) {
-        padding: 0.35rem 0.75rem 0.35rem 35px !important;
+        padding: 0.35rem 0.75rem 0.35rem 0 !important;
     }
 
     @media screen and (min-width: $media1440) {
-        padding: 0.5rem 0.75rem 0.5rem 35px !important;
+        padding: 0.5rem 0.75rem 0.5rem 0 !important;
     }
 
     span {
+        display: block;
+
         @media screen and (min-width: $media375) {
             font-size: 10px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            margin-left: 0;
         }
 
         @media screen and (min-width: $media1024) {
             font-size: 13px;
+            line-height: 13px;
+            margin-left: 5px;
         }
     }
 
@@ -63,17 +76,29 @@
     }
 
     .icon {
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translate(0, -50%);
-        height: calc(100% - 5px);
+        // position: absolute;
+        // left: 0;
+        // top: 50%;
+        // transform: translate(0, -50%);
+        // height: calc(100% - 5px);
+        height: 16px;
+        transform: scale(1.8);
     }
 
     .plus {
-        position: absolute;
-        left: 8px;
-        top: 50%;
-        transform: translate(0, -50%);
+        // position: absolute;
+        // left: 8px;
+        // top: 50%;
+        // transform: translate(0, -50%);
+        margin: 0 5px 0 10px;
+    }
+
+    .nft {
+        width: 18px;
+        height: 18px;
+        border-radius: 50px;
+        margin-left: 10px;
+        margin-right: 5px;
+        transform: scale(1.4);
     }
 }

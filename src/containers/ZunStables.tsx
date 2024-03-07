@@ -111,12 +111,12 @@ export const ZunStables = (): JSX.Element => {
             apy30 =
                 stakingMode === 'ZETH'
                     ? uzdStatData.info.zunETH.monthlyAvgApr
-                    : uzdStatData.info.zunUSDAps.monthlyAvgApy;
+                    : uzdStatData.info.zunUSD.monthlyAvgApr;
 
             apy90 =
                 stakingMode === 'ZETH'
                     ? uzdStatData.info.zunETH.threeMonthAvgApr
-                    : uzdStatData.info.zunUSDAps.threeMonthAvgApy;
+                    : uzdStatData.info.zunUSD.threeMonthAvgApr;
         }
 
         return (

@@ -3,6 +3,7 @@ import config from '../../config';
 import { useConnect, useAccount, useNetwork } from 'wagmi';
 import './WalletsModal.scss';
 import { log } from '../../utils/logger';
+import { rabbyKit } from '../..';
 
 export const LS_ACCOUNT_KEY = 'WALLET_ACCOUNT';
 export const LS_WALLET_TYPE_KEY = 'wagmi.wallet';
@@ -134,6 +135,40 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
                     <img src="/zerion-wallet.svg" alt="" />
                     <span className="name">Zerion Wallet</span>
                     {/* {isEth && <span className="badge bg-secondary">only ETH</span>} */}
+                    {isEth && <span className="connect">Connect</span>}
+                </button>
+                <button
+                    onClick={() => {
+                        rabbyKit.subscribeModalState((open) => {
+                            if (!open) {
+                                props.onHide();
+                            }
+                        });
+                        rabbyKit.open();
+                    }}
+                    className={`d-inline-flex flex-column bg-transparent rabby ${
+                        !isEth ? 'disabled' : ''
+                    }`}
+                >
+                    <img src="/rabby.svg" alt="" />
+                    <span className="name">Rabby Wallet</span>
+                    {isEth && <span className="connect">Connect</span>}
+                </button>
+                <button
+                    onClick={() => {
+                        rabbyKit.subscribeModalState((open) => {
+                            if (!open) {
+                                props.onHide();
+                            }
+                        });
+                        rabbyKit.open();
+                    }}
+                    className={`d-inline-flex flex-column bg-transparent frame ${
+                        !isEth ? 'disabled' : ''
+                    }`}
+                >
+                    <img src="/frame.png" alt="" />
+                    <span className="name">Frame Wallet</span>
                     {isEth && <span className="connect">Connect</span>}
                 </button>
             </Modal.Body>

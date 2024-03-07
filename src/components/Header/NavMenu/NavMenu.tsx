@@ -23,7 +23,7 @@ export const MenuItems = [
         title: 'zunStables',
         urls: ['/zun-stables'],
         icon: <UzdIcon />,
-        mobileIcon: '/uzd.png',
+        mobileIcon: '/zun-stables.png',
         disabled: false,
     },
     {

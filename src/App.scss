@@ -480,6 +480,12 @@ body.dark {
         fill: #fff;
     }
 
+    .coin-item {
+        &:hover {
+            background-color: #474747 !important;
+        }
+    }
+
     .WalletButton {
         &::after {
             background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, #1d1d1d 80%);

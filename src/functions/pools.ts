@@ -29,7 +29,7 @@ const colors = ['#FC6505', '#12A0FE', '#8EEA19', '#2cd5db', '#1C77F2', '#323232'
 
 export const poolsChartdata: { [key: string]: any } = {
     USDT_CRVUSD: {
-        title: 'StakeDAO - crvUSD/USDC',
+        title: 'StakeDAO - crvUSD/USDT',
         description: '',
         value: 0,
         icon: '/stake-dao.svg',
@@ -37,7 +37,7 @@ export const poolsChartdata: { [key: string]: any } = {
         secondaryIcon: 'usdt.svg',
     },
     USDC_CRVUSD: {
-        title: 'StakeDAO - crvUSD/USDT',
+        title: 'StakeDAO - crvUSD/USDC',
         description: '',
         value: 0,
         icon: '/stake-dao.svg',

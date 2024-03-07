@@ -4,6 +4,7 @@ import './SideBar.scss';
 import { BigNumber } from 'bignumber.js';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 import { WalletButton } from '../WalletButton/WalletButton';
+import { VerificationInfoPanel } from '../VerificationInfoPanel/VerificationInfoPanel';
 
 export interface ZunamiInfo {
     tvl: BigNumber;
@@ -232,6 +233,7 @@ export const SideBar = (props: SideBarProps): JSX.Element => {
                     {props.children}
                 </div>
             </div>
+            <VerificationInfoPanel />
         </Col>
     );
 };

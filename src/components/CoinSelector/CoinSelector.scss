@@ -112,6 +112,17 @@
         .coin-item {
             display: flex;
             cursor: pointer;
+            border-radius: 9px;
+            // min-width: 86px;
+            height: 33px;
+            align-items: center;
+            padding-left: 10px;
+            padding-right: 5px;
+
+            &:hover,
+            &.selected {
+                background-color: #d4d4d4;
+            }
         }
 
         &.big {

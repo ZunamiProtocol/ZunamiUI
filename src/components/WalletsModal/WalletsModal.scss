@@ -98,7 +98,23 @@
         }
 
         &.zerion {
+            background: linear-gradient(80.97deg, #c5e0f6 6.89%, #e9efff 138.91%);
+
+            span {
+                color: #000 !important;
+            }
+        }
+
+        &.rabby {
             background: linear-gradient(80.97deg, #dce6ff 6.89%, #e9efff 138.91%);
+
+            span {
+                color: #000 !important;
+            }
+        }
+
+        &.frame {
+            background: linear-gradient(80.97deg, #d3d7e0 6.89%, #b9beca 138.91%);
 
             span {
                 color: #000 !important;
