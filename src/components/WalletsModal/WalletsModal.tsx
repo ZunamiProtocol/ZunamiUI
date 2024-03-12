@@ -1,9 +1,10 @@
 import { Modal } from 'react-bootstrap';
 import config from '../../config';
-import { useConnect, useAccount, useNetwork } from 'wagmi';
+import { useConnect, useAccount, useNetwork, Connector } from 'wagmi';
 import './WalletsModal.scss';
 import { log } from '../../utils/logger';
-import { rabbyKit } from '../..';
+import { rabbyKit } from '../../index';
+import { MetaMaskConnector } from '@wagmi/core/connectors/metaMask';
 
 export const LS_ACCOUNT_KEY = 'WALLET_ACCOUNT';
 export const LS_WALLET_TYPE_KEY = 'wagmi.wallet';
@@ -36,30 +37,43 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
 
     const onConnect = async (providerId = 'injected') => {
         let walletAddress = '';
+        let connector: Array<Connector<any, any>> = [];
 
         switch (providerId) {
             case 'injected':
-                connect({ connector: connectors[3] });
+                connector = connectors.filter((item) => item.id === 'metaMask');
                 break;
             case 'walletconnect':
-                connect({ connector: connectors[2] });
+                connector = connectors.filter((item) => item.id === 'walletConnect');
                 break;
             case 'coinbase':
-                connect({ connector: connectors[1] });
+                connector = connectors.filter((item) => item.id === 'coinbaseWallet');
                 break;
             case 'zerion':
-                connect({ connector: connectors[2] });
+                connector = connectors.filter((item) => item.id === 'walletConnect');
                 break;
+        }
+
+        // @ts-ignore
+        const eth = window.ethereum;
+
+        if (!eth && providerId === 'injected') {
+            connector = [new MetaMaskConnector()];
+        }
+
+        if (connector.length) {
+            connect({ connector: connector[0] });
+        } else {
+            alert(
+                `No suitable connector for ${providerId} was found. Make sure you wallet extension connected.`
+            );
         }
 
         window.localStorage.setItem(LS_ACCOUNT_KEY, walletAddress);
 
-        // @ts-ignore
-        const eth = window.ethereum || ethereum;
-
-        if (!eth && providerId === 'injected') {
-            alert(NO_METAMASK_WARNING);
-        }
+        // if (!eth && providerId === 'injected') {
+        //     alert(NO_METAMASK_WARNING);
+        // }
 
         // @ts-ignore
         if (window.dataLayer) {
@@ -98,15 +112,17 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
                 <Modal.Title>Connect a wallet</Modal.Title>
             </Modal.Header>
             <Modal.Body className="d-flex gap-3 flex-row flex-wrap WalletsModal  justify-content-center align-items-center">
-                <button
-                    id="connect-metamask-btn"
-                    onClick={() => onConnect('injected')}
-                    className="d-inline-flex flex-column bg-transparent metamask"
-                >
-                    <img src="/metamask.svg" alt="" />
-                    <span className="name">Metamask Wallet</span>
-                    <span className="connect">Connect</span>
-                </button>
+                {window.ethereum && (
+                    <button
+                        id="connect-metamask-btn"
+                        onClick={() => onConnect('injected')}
+                        className="d-inline-flex flex-column bg-transparent metamask"
+                    >
+                        <img src="/metamask.svg" alt="" />
+                        <span className="name">Metamask Wallet</span>
+                        <span className="connect">Connect</span>
+                    </button>
+                )}
                 <button
                     onClick={() => onConnect('walletconnect')}
                     className="d-inline-flex flex-column bg-transparent walletconnect"
@@ -127,7 +143,7 @@ export const WalletsModal = (props: WalletModalProps): JSX.Element => {
                     {isEth && <span className="connect">Connect</span>}
                 </button>
                 <button
-                    onClick={() => onConnect('zerion')}
+                    onClick={() => onConnect('walletconnect')}
                     className={`d-inline-flex flex-column bg-transparent zerion ${
                         !isEth ? 'disabled' : ''
                     }`}

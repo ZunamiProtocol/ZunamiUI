@@ -75,6 +75,16 @@
     &-disconnected {
     }
 
+    .add-wallet-label {
+        @media screen and (min-width: $media375) {
+            display: none;
+        }
+
+        @media screen and (min-width: $media1024) {
+            display: block;
+        }
+    }
+
     .icon {
         // position: absolute;
         // left: 0;
@@ -90,7 +100,9 @@
         // left: 8px;
         // top: 50%;
         // transform: translate(0, -50%);
-        margin: 0 5px 0 10px;
+        margin: 0 5px 0 15px;
+        width: 16px;
+        height: 16px;
     }
 
     .nft {

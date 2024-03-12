@@ -626,6 +626,18 @@ body.dark {
                 fill: #646464;
             }
         }
+
+        .plus {
+            rect,
+            path {
+                fill: none;
+                stroke: #fff;
+            }
+
+            path:last-child {
+                fill: #fff;
+            }
+        }
     }
 
     .pending-icon,
@@ -1539,11 +1551,10 @@ body.dark {
     }
 
     .divider {
-        background-color: #242424;
+        background-color: #303030 !important;
     }
 
     .CoinSelector,
-    .Coin-Selector__Items,
     #networks-selector .network-item .choose-btn,
     .ApyBar__Counter,
     .Counter__Title__Buttons > div {

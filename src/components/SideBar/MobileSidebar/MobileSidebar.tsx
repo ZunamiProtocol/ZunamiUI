@@ -65,20 +65,20 @@ export const MobileSidebar = (): JSX.Element => {
                     >
                         DefiLlama
                     </a>
-                    <a
+                    {/* <a
                         href="https://www.dapp.com/app/zunami-protocol"
                         target="_blank"
                         rel="noreferrer"
                     >
                         Dapp
-                    </a>
-                    <a
+                    </a> */}
+                    {/* <a
                         href="https://dappradar.com/ethereum/defi/zunami-protocol"
                         target="_blank"
                         rel="noreferrer"
                     >
                         DappRadar
-                    </a>
+                    </a> */}
                 </div>
                 <div className="title mb-4 mt-5">Audited by</div>
                 <div className="d-flex gap-4 flex-wrap audits">
@@ -442,7 +442,7 @@ export const MobileSidebar = (): JSX.Element => {
                         </div>
                     </a>
                 </div>
-                <p className="copyright mt-5">© 2023 Zunami Protocol. Version 4.0</p>
+                <p className="copyright mt-5">© 2024 Zunami Protocol. Version 2.0</p>
             </div>
         </div>
     );

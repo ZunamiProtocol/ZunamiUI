@@ -23,7 +23,7 @@
 
     @media screen and (min-width: $media1024) {
         .modal-dialog {
-            min-width: 725px;
+            min-width: 581px;
         }
     }
     .modal-header {
@@ -53,6 +53,7 @@
         border-radius: 20px !important;
         border: none;
         padding: 15px;
+        align-items: flex-start;
 
         .name {
             font-family: 'Space Grotesk';

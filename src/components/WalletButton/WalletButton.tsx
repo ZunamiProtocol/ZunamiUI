@@ -170,22 +170,35 @@ export const WalletButton = (
 
                 {!account && (
                     <svg
-                        width="13"
-                        height="13"
-                        viewBox="0 0 13 13"
-                        fill="none"
+                        height="512"
+                        viewBox="0 0 512 512"
+                        width="512"
                         xmlns="http://www.w3.org/2000/svg"
                         className="plus"
                     >
-                        <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M13 6.5C13 10.0899 10.0899 13 6.5 13C2.91015 13 0 10.0899 0 6.5C0 2.91015 2.91015 0 6.5 0C10.0899 0 13 2.91015 13 6.5ZM3.02632 7.125V5.87842H5.87228V3.02869H7.11885V5.87842H9.97153V7.125H7.11885V9.97389H5.87228V7.125H3.02632Z"
-                            fill="black"
+                        <rect
+                            height="288"
+                            rx="48"
+                            ry="48"
+                            fill="none"
+                            stroke="#000"
+                            strokeWidth={36}
+                            // style="fill:none;stroke:#000;stroke-linejoin:round;stroke-width:32px"
+                            width="416"
+                            x="48"
+                            y="144"
                         />
+                        <path
+                            d="M411.36,144V114A50,50,0,0,0,352,64.9L88.64,109.85A50,50,0,0,0,48,159v49"
+                            fill="none"
+                            stroke="#000"
+                            strokeWidth={36}
+                            // style="fill:none;stroke:#000;stroke-linejoin:round;stroke-width:32px"
+                        />
+                        <path d="M368,320a32,32,0,1,1,32-32A32,32,0,0,1,368,320Z" />
                     </svg>
                 )}
-                {!account && <span>Add wallet</span>}
+                {!account && <span className="add-wallet-label">Add wallet</span>}
 
                 {account && nftUrl && <img src={nftUrl} alt="TheLLAMAS" className="nft" />}
 

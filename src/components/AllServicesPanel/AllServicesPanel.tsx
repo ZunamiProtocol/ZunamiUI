@@ -28,10 +28,9 @@ export const AllServicesPanel = (props: AllServicesPanelProps): JSX.Element => {
                 <div className="col">
                     <div className="title">About Zunami Protocol</div>
                     <p className="mt-3 about">
-                        Zunami is the DAO that works with stablecoins and solves the main issues of
-                        current yield-farming protocols by streamlining interaction with DeFi,
-                        making it easier and cheaper while increasing profitability by
-                        differentiating and rebalancing users’ funds.
+                        Zunami is a decentralized protocol that issues aggregated stablecoins, whose
+                        collateral is utilized in omnipools and differentiated among various
+                        profit-generating strategies.
                     </p>
                     <div className="title mt-4 mb-2">Official website</div>
                     <div className="official-links d-flex gap-3">
@@ -328,7 +327,7 @@ export const AllServicesPanel = (props: AllServicesPanelProps): JSX.Element => {
                         >
                             <span>DefiLlama</span>
                         </a>
-                        <a
+                        {/* <a
                             href="https://www.dapp.com/app/zunami-protocol"
                             target="_blank"
                             rel="noreferrer"
@@ -341,7 +340,7 @@ export const AllServicesPanel = (props: AllServicesPanelProps): JSX.Element => {
                             rel="noreferrer"
                         >
                             <span>DappRadar</span>
-                        </a>
+                        </a> */}
                     </div>
                 </div>
                 <div className="col">

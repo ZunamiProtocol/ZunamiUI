@@ -114,15 +114,22 @@ export const CoinSelector = (
                 <div className="Coin-Selector__Items big">
                     <div className="row">
                         <div className="col-xs-12 col-md-6">
-                            <div className="h-100 d-flex flex-column">
+                            <div className="h-100 d-flex flex-column l-col">
                                 <div className="title">Native</div>
-                                <div className="flex-grow-1 d-flex align-items-center">
-                                    {renderCoinItem({
-                                        coinName: props.stakingMode === 'UZD' ? 'zunUSD' : 'zunETH',
-                                        onCoinSelect,
-                                        className: 'mt-0',
-                                        selected: props.name === 'uzd',
-                                    })}
+                                <div className="row mt-3 mt-md-2">
+                                    <div className="col-7">
+                                        <div className="flex-grow-1 d-flex align-items-start">
+                                            {renderCoinItem({
+                                                coinName:
+                                                    props.stakingMode === 'UZD'
+                                                        ? 'zunUSD'
+                                                        : 'zunETH',
+                                                onCoinSelect,
+                                                className: 'mt-2 mt-lg-3',
+                                                selected: props.name === 'uzd',
+                                            })}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -148,7 +155,7 @@ export const CoinSelector = (
                                 </div>
                             </div>
                             <div className="row mt-3 mt-md-2">
-                                <div className="col-6">
+                                <div className="col-12 col-xl-6">
                                     {renderCoinItem({
                                         coinName: 'USDC',
                                         onCoinSelect,
@@ -162,7 +169,7 @@ export const CoinSelector = (
                                         selected: props.name === 'DAI',
                                     })}
                                 </div>
-                                <div className="col-6">
+                                <div className="col-12 col-xl-6">
                                     {renderCoinItem({
                                         coinName: 'USDT',
                                         onCoinSelect,
