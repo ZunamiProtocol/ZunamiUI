@@ -10,6 +10,28 @@
     position: relative;
     cursor: pointer;
 
+    .l-col {
+        position: relative;
+
+        &::after {
+            background-color: #e3e3e3;
+            position: absolute;
+            right: 40px;
+            top: 0;
+            bottom: 0;
+            content: '';
+            width: 2px;
+
+            @media screen and (min-width: $media375) {
+                display: none;
+            }
+
+            @media screen and (min-width: $media1024) {
+                display: block;
+            }
+        }
+    }
+
     @media screen and (min-width: $media375) {
         width: 200px;
         height: 55px;
@@ -18,7 +40,7 @@
 
     @media screen and (min-width: $media1024) {
         width: 116px;
-        height: 30px;
+        height: 34px;
         margin-bottom: 0;
     }
 
@@ -116,8 +138,15 @@
             // min-width: 86px;
             height: 33px;
             align-items: center;
-            padding-left: 10px;
-            padding-right: 5px;
+            padding: 0 10px;
+
+            @media screen and (min-width: $media1024) {
+                width: 90px;
+            }
+
+            @media screen and (min-width: $media1440) {
+                width: auto;
+            }
 
             &:hover,
             &.selected {
@@ -134,6 +163,12 @@
                 padding: 37px 40px 40px 40px;
             }
 
+            @media screen and (min-width: $media1024) {
+                width: 426px;
+                height: 152px;
+                padding: 20px 15px;
+            }
+
             @media screen and (min-width: $media1440) {
                 width: 426px;
                 height: 152px;
@@ -144,6 +179,27 @@
                 font-size: 13px;
                 font-weight: 500;
                 line-height: 17px;
+            }
+        }
+    }
+}
+
+body.dark {
+    .Coin-Selector {
+        &__Items {
+            background-color: #282828 !important;
+
+            .coin-item {
+                &:hover,
+                &.selected {
+                    background-color: #474747 !important;
+                }
+            }
+
+            .l-col {
+                &::after {
+                    background-color: #353535;
+                }
             }
         }
     }

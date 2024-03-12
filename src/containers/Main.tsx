@@ -464,7 +464,7 @@ export const Main = (): JSX.Element => {
                                                                     not been harvested and
                                                                     auto-compounded yet. Current
                                                                     accumulated rewards:"
-                                                value="soon"
+                                                value={'100%+ (soon)'}
                                                 className="align-items-start stablecoin ApyBar__Counter"
                                             />
                                             <div className="ApyBar__Counter">
@@ -551,12 +551,11 @@ export const Main = (): JSX.Element => {
                     ></div>
                     <div className="text-center">About Zunami Protocol</div>
                     <p style={{ fontSize: '14px', marginTop: '20px', color: '#B3B3B3' }}>
-                        Zunami is the DAO that works with stablecoins and solves the main issues of
-                        current yield-farming protocols by streamlining interaction with DeFi,
-                        making it easier and cheaper while increasing profitability by
-                        differentiating and rebalancing users’ funds.
+                        Zunami is a decentralized protocol that issues aggregated stablecoins, whose
+                        collateral is utilized in omnipools and differentiated among various
+                        profit-generating strategies.
                     </p>
-                    <div className="d-flex gap-2 mt-3">
+                    <div className="d-flex gap-2 mt-3 bottom-links">
                         <a
                             href="https://zunamilab.gitbook.io/zunami-docs/"
                             className="badge rounded-pill text-bg-secondary bg-secondary"
@@ -583,7 +582,7 @@ export const Main = (): JSX.Element => {
                             margin: '50px 0 20px 0',
                         }}
                     ></div>
-                    <p style={{ color: '#B3B3B3' }}>© 2023 Zunami Protocol. Version 4.0</p>
+                    <p style={{ color: '#B3B3B3' }}>© 2024 Zunami Protocol. Version 2.0</p>
                     <div
                         style={{
                             height: '2px',

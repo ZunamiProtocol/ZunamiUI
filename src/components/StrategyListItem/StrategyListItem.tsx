@@ -34,7 +34,6 @@ export const StrategyListItem: React.FC<
             <div className="">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <div className="wrapper me-3">
-                        <img src={icon} alt="" />
                         <div className="coin">
                             <img src={primaryIcon} alt="" />
                         </div>

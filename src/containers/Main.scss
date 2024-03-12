@@ -200,6 +200,7 @@
 .dashboard-col .wrapper {
     margin: 0 0 0 0;
     position: relative;
+    display: flex;
 
     > img {
         width: 20px;
@@ -208,27 +209,25 @@
     }
 
     .coin {
-        width: 13px;
-        height: 13px;
-        top: 13px;
-        left: -4px;
-        background: #d7d7d7;
-        position: absolute;
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 7px;
 
-        &:nth-child(2) {
-            left: 9px;
-        }
-
         > img,
         > svg {
-            width: 8px;
-            height: 8px;
+            width: 22px;
+            height: 22px;
+        }
+
+        &:last-child {
+            transform: translateX(-10px);
         }
     }
+}
+
+.bottom-links {
+    justify-content: center;
 }
 
 .dashboard-col .strats-chart-col,

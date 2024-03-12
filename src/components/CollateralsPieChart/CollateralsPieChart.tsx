@@ -33,7 +33,7 @@ function renderStratList(items: Array<DataItem>, expanded: boolean) {
             <div className={'PieChart__StratList__Item__Name d-flex align-items-center'}>
                 {item.icon && <img src={item.icon} alt={item.title} className="me-2" />}
                 <a target="blank" href={item.link}>
-                    <div>{item.title.split(' - ')[0]}</div>
+                    <div>{item?.title?.split(' - ')[0]}</div>
                     <div>{`(${item.value.toFixed(2)}%)`}</div>
                 </a>
             </div>

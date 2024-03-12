@@ -4,15 +4,6 @@ import sepoliaAbi from '../actions/abi/sepolia/controller.json';
 import { Address, createPublicClient, http } from 'viem';
 import { mainnet, sepolia } from 'wagmi';
 
-export const getTotalHoldings = async (masterChefContract: Contract): Promise<string> => {
-    try {
-        const totalHoldings: string = await masterChefContract.methods.totalHoldings().call();
-        return totalHoldings;
-    } catch (e) {
-        return '0';
-    }
-};
-
 export const getZunamiAddress = (chainId: number): Address => {
     let address: Address = contractAddresses.zunami[chainId];
     return address;

@@ -39,8 +39,8 @@ function renderStratList(items: Array<DataItem>) {
                     </div>
                 )}
                 <a target="blank" href={item.link}>
-                    <div>{item.title.split(' - ')[0]}</div>
-                    <div>{item.title.split(' - ')[1]}</div>
+                    <div>{item?.title?.split(' - ')[0]}</div>
+                    <div>{item?.title?.split(' - ')[1]}</div>
                 </a>
             </div>
         </div>

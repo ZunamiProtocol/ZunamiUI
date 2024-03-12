@@ -95,7 +95,7 @@ function getPrimaryIcon(item: any): string {
 function renderStratName(orientation: string, item: any) {
     let result = item.title;
     const isZethVault = item.address === '0xDc0B52c04CdC0099aeFcCa8B0675A00cF8f6d7dC';
-    const titleParts = item.title.split('-');
+    const titleParts = item?.title?.split('-') ?? [];
 
     if (titleParts.length >= 2) {
         titleParts[1].replace(' pool', '');
@@ -136,19 +136,19 @@ function renderStratName(orientation: string, item: any) {
 }
 
 function renderStratList(items: Array<DataItem>, orientation: string) {
+    console.log(items);
     return items.map((item, index) => (
         <div key={index} className={'PieChart__StratList__Item'}>
             <div className="d-flex">
-                <div className="wrapper me-2">
-                    <img src={item.icon} alt={item.title} />
-                    {item.secondaryIcon && (
-                        <div className="coin">
-                            <img src={item.secondaryIcon} alt={item.title} />
-                        </div>
-                    )}
+                <div className="wrapper">
                     {item.primaryIcon && (
                         <div className="coin">
                             <img src={item.primaryIcon} alt={item.title} />
+                        </div>
+                    )}
+                    {item.secondaryIcon && (
+                        <div className="coin">
+                            <img src={item.secondaryIcon} alt={item.title} />
                         </div>
                     )}
                 </div>

@@ -33,7 +33,7 @@ export const poolsChartdata: { [key: string]: any } = {
         description: '',
         value: 0,
         icon: '/stake-dao.svg',
-        primaryIcon: 'curve-icon.svg',
+        primaryIcon: 'crv.svg',
         secondaryIcon: 'usdt.svg',
     },
     USDC_CRVUSD: {
@@ -41,7 +41,7 @@ export const poolsChartdata: { [key: string]: any } = {
         description: '',
         value: 0,
         icon: '/stake-dao.svg',
-        primaryIcon: 'curve-icon.svg',
+        primaryIcon: 'crv.svg',
         secondaryIcon: 'usdc.svg',
     },
     // UZD strats
@@ -59,8 +59,16 @@ export const poolsChartdata: { [key: string]: any } = {
         description: '',
         value: 0,
         icon: '/uzd.svg',
-        primaryIcon: '',
-        secondaryIcon: '',
+        primaryIcon: '/zunusd.svg',
+        secondaryIcon: '/1x1.png',
+    },
+    ZUNUSD_CRVUSD: {
+        title: 'Convex Finance - crvUSD/zunUSD',
+        description: 'Convex finance',
+        value: 0,
+        icon: '/uzd.svg',
+        primaryIcon: 'crv.svg',
+        secondaryIcon: 'zunusd.svg',
     },
 };
 
