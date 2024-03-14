@@ -7,6 +7,12 @@
     border: solid 1px transparent;
     cursor: pointer;
 
+    .staking-icon {
+        &.uzd {
+            transform: translateX(-30px);
+        }
+    }
+
     .btn-secondary {
         color: #fff;
         background-color: #000;

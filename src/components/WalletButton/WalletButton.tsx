@@ -25,7 +25,7 @@ export const WalletButton = (
 
     useEffect(() => {
         async function getNFT() {
-            if (!account) {
+            if (!account || chainId !== 1) {
                 setNftUrl('');
                 return '';
             }

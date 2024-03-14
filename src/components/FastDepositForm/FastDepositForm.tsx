@@ -40,6 +40,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const { chain } = useNetwork();
     const chainId = chain ? chain.id : undefined;
     const { address: account } = useAccount();
+    // const account = '0xF9605D8c4c987d7Cb32D0d11FbCb8EeeB1B22D5d';
     const userBalanceList = useUserBalances(account, chainId);
     const [action, setAction] = useState('deposit');
     const [depositSum, setDepositSum] = useState('0');
@@ -139,8 +140,13 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     // show approve btn or not
     const showApproveBtn = useMemo(() => {
         let result = !coinApproved;
+
+        if (action === 'withdraw') {
+            result = false;
+        }
+
         return result;
-    }, [coinApproved]);
+    }, [coinApproved, action]);
 
     log(`[APS] Approve button visible: ${showApproveBtn}`);
 
@@ -390,7 +396,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                 <div>
                     <div className="">
                         <div className="buttons">
-                            {action === 'withdraw' && coinApproved && (
+                            {action === 'withdraw' && (
                                 <button
                                     id="withdraw-btn"
                                     className={`zun-button ${withdrawEnabled ? '' : 'disabled'}`}
@@ -448,7 +454,9 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
                                             log(JSON.stringify(`Transaction ID: ${tx}`));
 
                                             waitForTransaction({ hash: tx }).then(() => {
-                                                setPendingTx(false);
+                                                setTimeout(() => {
+                                                    setPendingTx(false);
+                                                }, 5000);
                                             });
 
                                             // @ts-ignore
