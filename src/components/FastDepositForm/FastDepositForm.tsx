@@ -11,15 +11,16 @@ import {
 import useStake from '../../hooks/useStake';
 import useUnstake from '../../hooks/useUnstake';
 import { getActiveWalletName } from '../WalletsModal/WalletsModal';
-import {
-    BIG_ZERO,
-    NULL_ADDRESS,
-    USDT_TOKEN_DECIMAL,
-    getDecimalsByTokenIndex,
-} from '../../utils/formatbalance';
+import { BIG_ZERO, NULL_ADDRESS, getDecimalsByTokenIndex } from '../../utils/formatbalance';
 import { getFullDisplayBalance } from '../../utils/formatbalance';
 import { log } from '../../utils/logger';
-import { getZapAddress, getZunUsdApsAddress, isETH, isSEP } from '../../utils/zunami';
+import {
+    getZapAddress,
+    getZunEthApsAddress,
+    getZunUsdApsAddress,
+    isETH,
+    isSEP,
+} from '../../utils/zunami';
 import { ActionSelector } from '../Form/ActionSelector/ActionSelector';
 import { useAccount, useNetwork, Address, sepolia } from 'wagmi';
 import { ReactComponent as StakingUzdLogo } from './assets/zun-usd-logo.svg';
@@ -30,7 +31,6 @@ import useApprove from '../../hooks/useApprove';
 import { APPROVE_SUM } from '../../sushi/utils';
 import useBalanceOf from '../../hooks/useBalanceOf';
 import { waitForTransaction } from '@wagmi/core';
-import { debug } from 'console';
 import BigNumber from 'bignumber.js';
 
 export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HTMLDivElement>> = ({
@@ -48,13 +48,24 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const [transactionId, setTransactionId] = useState<string | undefined>(undefined);
     const [pendingTx, setPendingTx] = useState(false);
     const [transactionError, setTransactionError] = useState(false);
-    // selected coin index (0 - DAI, 1 - USDC, 2 - USDT, 3 - FRAX, 4 - zunUSD)
+
+    // selected coin index (0 - DAI, 1 - USDC, 2 - USDT, 3 - FRAX, 4 - zunUSD, 5 - zunETH)
     const [coinIndex, setCoinIndex] = useState(2);
 
-    // If zunUSD, then main contract is APS, else ZAP
+    // If zunUSD/zunETH, then main contract is APS, else ZAP
     const contractAddress: Address = useMemo(() => {
-        return coinIndex === 4 ? getZunUsdApsAddress(chainId) : getZapAddress(chainId);
-    }, [chainId, coinIndex]);
+        let result = getZapAddress(chainId, stakingMode);
+
+        if (coinIndex === 4) {
+            return getZunUsdApsAddress(chainId);
+        }
+
+        if (coinIndex === 5) {
+            return getZunEthApsAddress(chainId);
+        }
+
+        return result;
+    }, [chainId, coinIndex, stakingMode]);
 
     // deposit allowance. Check whether it's required to make approve
     const allowance = useAllowanceStables(account, contractAddress, chainId);
@@ -70,6 +81,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
 
     // APS balance
     const apsBalance = useBalanceOf(getZunUsdApsAddress(chainId));
+    const apsEthBalance = useBalanceOf(getZunEthApsAddress(chainId));
 
     log(`[APS] Balance ${apsBalance.toFixed()}`);
 
@@ -77,7 +89,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         let preselectedCoin = stakingMode === 'UZD' ? 'USDT' : 'zunETH';
 
         if (action === 'withdraw' && stakingMode === 'ZETH') {
-            preselectedCoin = 'ethZAPSLP';
+            preselectedCoin = 'apsZunETHLP';
         }
 
         if (action === 'withdraw') {
@@ -245,7 +257,7 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     }, [action, stakingMode, coinIndex, userBalanceList, chainId, apsBalance]);
 
     // deposit
-    const { deposit } = useStake(coinIndex, depositSum, account || NULL_ADDRESS);
+    const { deposit } = useStake(coinIndex, depositSum, account || NULL_ADDRESS, stakingMode);
     // withdraw
     const { withdraw } = useUnstake(
         withdrawSum,
@@ -253,12 +265,9 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
         account || NULL_ADDRESS
     );
 
-    // target for approve
+    // target for approve (which coin we ask for allowance)
     const addressForApprove = useMemo(() => {
         if (action === 'deposit') {
-            // if (lockAndBoost) {
-            //     return getZunUsdApsAddress(chainId);
-            // } else {
             return getCoinAddressByIndex(coinIndex, chainId ?? 1);
             // }
         } else {
@@ -299,6 +308,10 @@ export const FastDepositForm: React.FC<FastDepositFormProps & React.HTMLProps<HT
     const coinName = useMemo(() => {
         if (action === 'withdraw' && coinIndex === 4) {
             return 'apsZunUSDLP';
+        }
+
+        if (action === 'withdraw' && coinIndex === 5) {
+            return 'apsZunETHLP';
         }
 
         return coins[coinIndex];

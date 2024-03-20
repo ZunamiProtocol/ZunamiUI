@@ -70,6 +70,23 @@ export const poolsChartdata: { [key: string]: any } = {
         primaryIcon: 'crv.svg',
         secondaryIcon: 'zunusd.svg',
     },
+    // ZETH strats
+    ZUN_ETH_VAULT: {
+        title: 'Vault',
+        description: '',
+        value: 0,
+        icon: '/zuneth.svg',
+        primaryIcon: 'zuneth.svg',
+        secondaryIcon: '/1x1.png',
+    },
+    APS_ZUN_ETH_VAULT: {
+        title: 'APS Vault',
+        description: '',
+        value: 0,
+        icon: '/zuneth.svg',
+        primaryIcon: '/zuneth.svg',
+        secondaryIcon: '/1x1.png',
+    },
 };
 
 export function poolInfoToChartElement(pool: PoolInfo, percent: BigNumber): ChartDataElement {

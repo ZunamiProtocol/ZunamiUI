@@ -15,9 +15,16 @@ export const zunamiSepoliaAddress: Address = '0x3694Db838a8cAf3b1c234529bB1b447b
 export const zunUsdApsAddress: Address = '0xd9F559280c9d308549e84946C0d668a817fcCFB5';
 export const zunUsdApsSepoliaAddress: Address = '0x1C4e36edBa364406f181fe9B3a4E6FC023DED0bc';
 
+export const zunEthApsAddress: Address = '0x0bEB2B070d73A678a27ba044FEC11Ae9d116De60';
+export const zunEthApsSepoliaAddress: Address = NULL_ADDRESS;
+
 // ZunUSD
 export const zunUsdMainnetAddress: Address = '0x8C0D76C9B18779665475F3E212D9Ca1Ed6A1A0e6';
 export const zunUsdSepoliaAddress: Address = '0x83287Da602f0C32f6C9B09E2F1b2951767ebF239';
+
+// ZunETH
+export const zunEthMainnetAddress: Address = '0xc2e660C62F72c2ad35AcE6DB78a616215E2F2222';
+export const zunEthSepoliaAddress: Address = NULL_ADDRESS;
 
 // ZUN token
 export const zunTokenAddress: Address = NULL_ADDRESS;
@@ -27,15 +34,19 @@ export const zunTokenSepoliaAddress: Address = '0xAc4d9e15910701a10329040bDC71a4
 export const zunStakingAddress: Address = '0x748C4D2b68DA2ad9F20Dc021700589FC18D8BA75';
 export const zunStakingSepoliaAddress: Address = '0x748C4D2b68DA2ad9F20Dc021700589FC18D8BA75';
 
-// ZAP
-export const zunZapAddress: Address = '0x7aecF73B61a8579F7cf2Fe9b2a2d97339e9168Bf';
-export const zunZapSepoliaAddress: Address = '0xB7D1424A4136ee7E13Db0EeB6e85a56f5F13Ef55';
+// ZAP zunUSD
+export const zunUsdZapAddress: Address = '0x7aecF73B61a8579F7cf2Fe9b2a2d97339e9168Bf';
+export const zunUsdZapSepoliaAddress: Address = '0xB7D1424A4136ee7E13Db0EeB6e85a56f5F13Ef55';
+
+export const zunEthZapAddress: Address = '0x96a8d8D36E1781d95a1a1262498E02486AA3c047';
+export const zunEthZapSepoliaAddress: Address = NULL_ADDRESS;
 
 // Stablecoins mainnet
 export const daiAddress: Address = '0x6B175474E89094C44Da98b954EedeAC495271d0F';
 export const usdcAddress: Address = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';
 export const usdtAddress: Address = '0xdac17f958d2ee523a2206206994597c13d831ec7';
 export const fraxAddress: Address = '0x853d955acef822db058eb8505911ed77f175b99e';
+
 // Stablecoins sepolia
 export const sepDaiAddress: Address = '0xdC30b3bdE2734A0Bc55AF01B38943ef04aaCB423';
 export const sepUsdcAddress: Address = '0x2d691C2492e056ADCAE7cA317569af25910fC4cb';
@@ -64,9 +75,13 @@ export const contractAddresses: { [index: string]: any } = {
         1: zunUsdMainnetAddress,
         11155111: zunUsdSepoliaAddress,
     },
+    zunEth: {
+        1: zunEthMainnetAddress,
+        11155111: zunEthSepoliaAddress,
+    },
     zap: {
-        1: zunZapAddress,
-        11155111: zunZapSepoliaAddress,
+        1: zunUsdZapAddress,
+        11155111: zunUsdZapSepoliaAddress,
     },
     uzd: {
         1: '0xb40b6608B2743E691C9B54DdBDEe7bf03cd79f1c',
@@ -77,6 +92,10 @@ export const contractAddresses: { [index: string]: any } = {
     aps: {
         1: zunUsdApsAddress,
         11155111: zunUsdApsSepoliaAddress,
+    },
+    ethAps: {
+        1: zunEthApsAddress,
+        11155111: zunEthApsSepoliaAddress,
     },
     zun: {
         1: zunTokenAddress,

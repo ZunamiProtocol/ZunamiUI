@@ -7,13 +7,14 @@ export const activeStratsUrl = `${root}/strategy/zunUSD/aps/active-stats`;
 export const zunUsdStratsUrl = `${root}/strategy/zunUSD/active-stats`;
 export const zunEthHistoryUrl = `${root}/strategy/zunETH/active-stats`;
 
-export const zethStratsUrl = `${root}/zeth-omnipool/strategy/active-strategies-stats`;
+export const zethStratsUrl = `${root}/strategy/zunETH/active-stats`;
 
 export const uzdStakingInfoUrl = `${root}/pool/aggregated-info`;
 
 export const historicalApyUrl = `${root}/zunami/apy-chart`;
 export const zunUsdHistoricalApyUrl = `${root}/pool/zun-usd/apr-chart`;
 export const zunUsdApsHistoricalApyUrl = `${root}/pool/zun-usd/aps/apy-chart`;
+export const zunEthApsHistoricalApyUrl = `${root}/pool/zun-eth/aps/apy-chart`;
 
 export const testnetUrl = `${root}/feature`;
 export const totalIncomeUrl = `${root}/transfers/total-income`;
@@ -39,7 +40,7 @@ export const getZunEthApsStratsUrl = (): string => {
 };
 
 export const getZunEthStratsUrl = (): string => {
-    return zethApsHistoryUrl;
+    return zethStratsUrl;
 };
 
 export const getZunUsdStratsUrl = (): string => {
@@ -62,6 +63,10 @@ export const getZunUsdApsHistoricalApyUrl = (period: string): string => {
     return `${zunUsdApsHistoricalApyUrl}?period=${period.toUpperCase()}`;
 };
 
+export const getZunEthApsHistoricalApyUrl = (period: string): string => {
+    return `${zunEthApsHistoricalApyUrl}?period=${period.toUpperCase()}`;
+};
+
 export const getZunUsdHistoricalApyUrl = (period: string): string => {
     return `${zunUsdHistoricalApyUrl}?period=${period.toUpperCase()}`;
 };
@@ -71,7 +76,7 @@ export const getZethHistoricalApyUrl = (period: string): string => {
 };
 
 export const getZunEthHistoricalApyUrl = (period: string): string => {
-    return `${root}/pool/zun-eth/apy-chart?period=${period.toUpperCase()}`;
+    return `${root}/pool/zun-eth/apr-chart?period=${period.toUpperCase()}`;
 };
 
 export const getTestnetStatusUrl = (address: string): string => {

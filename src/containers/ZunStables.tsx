@@ -16,7 +16,7 @@ import { DataItem } from '../components/Chart/Chart';
 import { PieChart2 } from '../components/PieChart/PieChart';
 import { renderMobileMenu } from '../components/Header/NavMenu/NavMenu';
 import { ZunPoolSummary } from '../components/ZunPoolSummary/ZunPoolSummary';
-import { getZunUsdAddress } from '../utils/zunami';
+import { getZunEthAddress, getZunUsdAddress } from '../utils/zunami';
 import { useNetwork } from 'wagmi';
 import {
     getZunEthHistoricalApyUrl,
@@ -31,6 +31,44 @@ import useFetch from 'react-fetch-hook';
 import { poolDataToChartData } from '../functions/pools';
 import useBalanceOf from '../hooks/useBalanceOf';
 
+interface CurvePool {
+    address: string;
+    coins: Array<any>;
+}
+
+interface CurveFactoryDataResponse {
+    data: {
+        poolData: Array<CurvePool>;
+    };
+}
+
+interface CurveLink {
+    url: string;
+    title: string;
+}
+
+function getSelectedCoinAddress(chainId: number, stakingMode: string) {
+    if (stakingMode === 'ZETH') {
+        return getZunEthAddress(chainId);
+    }
+
+    return getZunUsdAddress(chainId);
+}
+
+function getCurveLink(stakingMode: string = 'zunUSD'): CurveLink {
+    if (stakingMode === 'ZETH') {
+        return {
+            url: 'https://curve.fi/#/ethereum/pools/factory-stable-ng-121/deposit',
+            title: 'zunETH / frxETH',
+        };
+    }
+
+    return {
+        url: 'https://curve.fi/#/ethereum/pools/factory-stable-ng-104/deposit',
+        title: 'zunUSD / crvUSD',
+    };
+}
+
 export const ZunStables = (): JSX.Element => {
     const { chain } = useNetwork();
     const chainId: number = chain ? chain.id : 1;
@@ -38,12 +76,14 @@ export const ZunStables = (): JSX.Element => {
     const [histApyPeriod, setHistApyPeriod] = useState('week');
     const [histApyData, setHistApyData] = useState([]);
     const [stakingMode, setStakingMode] = useState('zunUSD');
-    const totalSupply = useTotalSupply(getZunUsdAddress(chainId));
+    const totalSupply = useTotalSupply(
+        stakingMode === 'zunUSD' ? getZunUsdAddress(chainId) : getZunEthAddress(chainId)
+    );
 
     // APY chart data
     useEffect(() => {
         const url =
-            stakingMode === 'zunETH'
+            stakingMode === 'ZETH'
                 ? getZunEthHistoricalApyUrl(histApyPeriod)
                 : getZunUsdHistoricalApyUrl(histApyPeriod);
 
@@ -156,14 +196,34 @@ export const ZunStables = (): JSX.Element => {
     const zunUsdBalance = useBalanceOf(getZunUsdAddress(chainId));
 
     // zunUSD price
-    const { data: curveData, isLoading: curveDataLoading } = useFetch(
-        'https://api.curve.fi/api/getAllGauges'
+    const { data: curveData, isLoading: curveDataLoading } = useFetch<CurveFactoryDataResponse>(
+        'https://api.curve.fi/api/getPools/ethereum/factory-stable-ng'
     );
 
-    const zunUsdPool = !curveDataLoading
-        ? // @ts-ignore
-          curveData.data['crvUSD+zunUSD (0x8C24…a745)']
-        : null;
+    const zunCoinPool = useMemo(() => {
+        let result = 0;
+
+        if (curveDataLoading) {
+            return null;
+        }
+
+        try {
+            result =
+                stakingMode === 'zunUSD'
+                    ? // @ts-ignore
+                      curveData.data.poolData.filter(
+                          (pool: any) =>
+                              pool.address === '0x8C24b3213FD851db80245FCCc42c40B94Ac9a745'
+                      )[0].coins[1].usdPrice
+                    : // @ts-ignore
+                      curveData.data.poolData.filter(
+                          (pool: any) =>
+                              pool.address === '0x3a65cbaebbfecbea5d0cb523ab56fdbda7ff9aaa'
+                      )[0].coins[0].usdPrice;
+        } catch (e) {}
+
+        return result;
+    }, [curveDataLoading, curveData?.data?.poolData, stakingMode]);
 
     return (
         <React.Fragment>
@@ -204,7 +264,7 @@ export const ZunStables = (): JSX.Element => {
                         </div>
                         <ZunPoolSummary
                             logo="USD"
-                            selected={true}
+                            selected={stakingMode === 'zunUSD'}
                             baseApy={uzdStatData.info.zunUSD.apr.toFixed(2)}
                             tvl={`$${Math.round(
                                 Number(getFullDisplayBalance(uzdStatData.info.zunUSD.tvl))
@@ -212,6 +272,23 @@ export const ZunStables = (): JSX.Element => {
                                 maximumFractionDigits: 0,
                             })}`}
                             className="mt-3"
+                            onSelect={() => {
+                                setStakingMode('zunUSD');
+                            }}
+                        />
+                        <ZunPoolSummary
+                            logo="ETH"
+                            selected={stakingMode === 'ZETH'}
+                            baseApy={uzdStatData.info.zunETH.apr.toFixed(2)}
+                            tvl={Math.round(
+                                Number(getFullDisplayBalance(uzdStatData.info.zunETH.tvl))
+                            ).toLocaleString('en', {
+                                maximumFractionDigits: 0,
+                            })}
+                            className="mt-3"
+                            onSelect={() => {
+                                setStakingMode('ZETH');
+                            }}
                         />
                     </SideBar>
                     <div className="col content-col dashboard-col">
@@ -245,7 +322,11 @@ export const ZunStables = (): JSX.Element => {
                                                             ? 'loading'
                                                             : Number(
                                                                   Math.round(
-                                                                      uzdStatData.info.zunUSD.tvlUsd
+                                                                      stakingMode === 'zunUSD'
+                                                                          ? uzdStatData.info.zunUSD
+                                                                                .tvlUsd
+                                                                          : uzdStatData.info.zunETH
+                                                                                .tvlUsd
                                                                   )
                                                               ).toLocaleString('en', {
                                                                   maximumFractionDigits: 0,
@@ -260,19 +341,26 @@ export const ZunStables = (): JSX.Element => {
                                                     className="align-items-start stablecoin mb-3 ps-3 me-3 me-lg-2"
                                                 >
                                                     <AddressButtons
-                                                        address={getZunUsdAddress(chainId)}
+                                                        address={getSelectedCoinAddress(
+                                                            chainId,
+                                                            stakingMode
+                                                        )}
                                                         link={true}
                                                     />
                                                 </MicroCard>
                                             </div>
                                             <div className="col-6 col-md-6 col-xxl-4">
                                                 <MicroCard
-                                                    title="zunUSD price"
+                                                    title={`zun${
+                                                        stakingMode === 'zunUSD' ? 'USD' : 'ETH'
+                                                    } price`}
                                                     hint="Current market price on Curve Finance."
                                                     value={
                                                         !curveDataLoading
-                                                            ? `$${zunUsdPool.lpTokenPrice.toFixed(
-                                                                  2
+                                                            ? `$${String(zunCoinPool).substring(
+                                                                  0,
+                                                                  String(zunCoinPool).indexOf('.') +
+                                                                      6
                                                               )}`
                                                             : 0
                                                     }
@@ -325,8 +413,11 @@ export const ZunStables = (): JSX.Element => {
                                                                 <span className="name2">
                                                                     Stake and boost up to{' '}
                                                                     {Math.trunc(
-                                                                        uzdStatData.info.zunUSDAps
-                                                                            .apy
+                                                                        stakingMode === 'zunUSD'
+                                                                            ? uzdStatData.info
+                                                                                  .zunUSDAps.apy
+                                                                            : uzdStatData.info
+                                                                                  .zunETHAps.apy
                                                                     )}
                                                                     % in APS!
                                                                 </span>
@@ -401,7 +492,7 @@ export const ZunStables = (): JSX.Element => {
                                         <div className="d-flex flex-column mt-3 gap-3 me-3">
                                             <a
                                                 className="gray-block small-block align-items-start stablecoin mb-2 mb-md-0 col-6 bg-white"
-                                                href="https://curve.fi/#/ethereum/pools/factory-stable-ng-104/deposit"
+                                                href={getCurveLink(stakingMode).url}
                                                 target="_blank"
                                                 rel="noreferrer"
                                             >
@@ -413,7 +504,9 @@ export const ZunStables = (): JSX.Element => {
                                                     />
                                                     <span className="name">Curve</span>
                                                 </div>
-                                                <div className="value mt-1">zunUSD / crvUSD</div>
+                                                <div className="value mt-1">
+                                                    {getCurveLink(stakingMode).title}
+                                                </div>
                                                 <svg
                                                     width="8"
                                                     height="8"
@@ -451,7 +544,9 @@ export const ZunStables = (): JSX.Element => {
                                                         uzdStatLoading
                                                             ? 'loading'
                                                             : `${Number(
-                                                                  uzdStatData.info.zunUSD.apr
+                                                                  stakingMode === 'zunUSD'
+                                                                      ? uzdStatData.info.zunUSD.apr
+                                                                      : uzdStatData.info.zunETH.apr
                                                               ).toLocaleString('en', {
                                                                   maximumFractionDigits: 0,
                                                               })}%`

@@ -14,24 +14,36 @@ import { log } from '../utils/logger';
 import { getZapAddress, getZunStakingAddress } from '../utils/zunami';
 import stakingAbi from '../actions/abi/sepolia/staking.json';
 
-const useStake = (coinIndex: number, depositSum: string, receiver: Address) => {
+const useStake = (
+    coinIndex: number,
+    depositSum: string,
+    receiver: Address,
+    stakingMode: string
+) => {
     const { chain } = useNetwork();
     const chainId = chain ? chain.id : undefined;
     const { address: account } = useAccount();
 
     const contractAddress = useMemo(() => {
         if (coinIndex === 4) {
-            // APS deposit
+            // APS zunUSD deposit
             if (!chainId) {
                 return contractAddresses.aps[1];
             }
 
             return contractAddresses.aps[chainId];
+        } else if (coinIndex === 5) {
+            // APS zunETH deposit
+            if (!chainId) {
+                return contractAddresses.ethAps[1];
+            }
+
+            return contractAddresses.ethAps[chainId];
         } else {
             // ZAP deposit
-            return getZapAddress(chainId);
+            return getZapAddress(chainId, stakingMode);
         }
-    }, [chainId, coinIndex]);
+    }, [chainId, coinIndex, stakingMode]);
 
     let preparedAmounts = [
         new BigNumber(0).toString(),

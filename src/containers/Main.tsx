@@ -8,6 +8,7 @@ import {
     getZunUsdApsStratsUrl,
     getZunEthApsStratsUrl,
     getZunUsdApsHistoricalApyUrl,
+    getZunEthApsHistoricalApyUrl,
 } from '../api/api';
 import { poolDataToChartData } from '../functions/pools';
 import { Preloader } from '../components/Preloader/Preloader';
@@ -26,7 +27,7 @@ import { useAccount, useNetwork } from 'wagmi';
 import type { DataItem } from '../components/Chart/Chart';
 import { MicroCard } from '../components/MicroCard/MicroCard';
 import useBalanceOf from '../hooks/useBalanceOf';
-import { getZunUsdApsAddress } from '../utils/zunami';
+import { getZunEthApsAddress, getZunUsdApsAddress } from '../utils/zunami';
 import { erc20ABI } from 'wagmi';
 import { renderMobileMenu } from '../components/Header/NavMenu/NavMenu';
 import { SidebarTopButtons } from '../components/SidebarTopButtons/SidebarTopButtons';
@@ -78,6 +79,14 @@ export interface ZunAggInfo {
             tvl: BigNumber;
             tvlUsd: number;
         };
+        zunETHAps: {
+            monthlyAvgApy: number;
+            threeMonthAvgApy: number;
+            apr: number;
+            apy: number;
+            tvl: BigNumber;
+            tvlUsd: number;
+        };
     };
     totalTvlUsd: number;
 }
@@ -106,6 +115,14 @@ export const fallbackData = {
             tvl: BIG_ZERO,
             tvlUsd: 0,
         },
+        zunETHAps: {
+            monthlyAvgApy: 0,
+            threeMonthAvgApy: 0,
+            apr: 0,
+            apy: 0,
+            tvl: BIG_ZERO,
+            tvlUsd: 0,
+        },
     },
     totalTvlUsd: 0,
 };
@@ -131,8 +148,9 @@ export const Main = (): JSX.Element => {
     const monthlyProfit = Number(0);
     const yearlyProfit = Number(0);
 
-    // APS balance
+    // APS balances
     const apsBalance = useBalanceOf(getZunUsdApsAddress(chainId), erc20ABI);
+    const apsEthBalance = useBalanceOf(getZunEthApsAddress(chainId), erc20ABI);
 
     const [uzdStatLoading, setUzdStatLoading] = useState(true);
     const [uzdStatData, setUzdStatData] = useState<ZunAggInfo>(fallbackData);
@@ -168,11 +186,6 @@ export const Main = (): JSX.Element => {
             });
     }, []);
 
-    // aggregated info
-    // const { isLoading: uzdStatLoading, data: uzdStatData } = useFetch(
-    //     uzdStakingInfoUrl
-    // ) as ZunamiInfoFetch;
-
     // TVL
     useEffect(() => {
         if (!uzdStatData) {
@@ -198,7 +211,7 @@ export const Main = (): JSX.Element => {
 
         return poolDataToChartData(
             stratsData,
-            stakingMode === 'ZETH' ? uzdStatData.info.zunETH.tvl : uzdStatData.info.zunUSDAps.tvl
+            stakingMode === 'ZETH' ? uzdStatData.info.zunETHAps.tvl : uzdStatData.info.zunUSDAps.tvl
         );
     }, [stakingMode, uzdStatData, poolStats]);
 
@@ -206,7 +219,7 @@ export const Main = (): JSX.Element => {
     useEffect(() => {
         const url =
             stakingMode === 'ZETH'
-                ? getZunEthHistoricalApyUrl(histApyPeriod)
+                ? getZunEthApsHistoricalApyUrl(histApyPeriod)
                 : getZunUsdApsHistoricalApyUrl(histApyPeriod);
 
         fetch(url)
@@ -223,12 +236,12 @@ export const Main = (): JSX.Element => {
 
     // Total balance
     const totalBalance = useMemo(() => {
-        let val = apsBalance;
+        let val = apsBalance.plus(apsEthBalance);
 
         log(`Total balance is: ${val.toString()}`);
 
         return val;
-    }, [apsBalance]);
+    }, [apsBalance, apsEthBalance]);
 
     const apyPopover = useMemo(() => {
         let apy30 = 0;
@@ -237,12 +250,12 @@ export const Main = (): JSX.Element => {
         if (uzdStatData) {
             apy30 =
                 stakingMode === 'ZETH'
-                    ? uzdStatData.info.zunETH.monthlyAvgApr
+                    ? uzdStatData.info.zunETHAps.monthlyAvgApy
                     : uzdStatData.info.zunUSDAps.monthlyAvgApy;
 
             apy90 =
                 stakingMode === 'ZETH'
-                    ? uzdStatData.info.zunETH.threeMonthAvgApr
+                    ? uzdStatData.info.zunETHAps.threeMonthAvgApy
                     : uzdStatData.info.zunUSDAps.threeMonthAvgApy;
         }
 
@@ -274,7 +287,7 @@ export const Main = (): JSX.Element => {
         if (stakingMode === 'ZETH') {
             return uzdStatLoading || !uzdStatData
                 ? 'n/a'
-                : `${uzdStatData.info.zunETH.apr.toFixed(2)}%`;
+                : `${uzdStatData.info.zunETHAps.apy.toFixed(2)}%`;
         } else {
             return uzdStatLoading ? 0 : `${uzdStatData.info.zunUSDAps.apy.toFixed(2)}%`;
         }
@@ -400,30 +413,45 @@ export const Main = (): JSX.Element => {
                                     setStakingMode('UZD');
                                 }}
                             />
-                            {/* <StakingSummary
+                            <StakingSummary
                                 logo="ZETH"
                                 selected={stakingMode === 'ZETH'}
                                 baseApy={
                                     uzdStatLoading || !uzdStatData
                                         ? 0
-                                        : formatPoolApy(uzdStatData.info.zunETH.apy)
+                                        : uzdStatData.info.zunETHAps.apy.toFixed(2)
                                 }
-                                deposit={`${getBalanceNumber(zethBalance)
+                                deposit={`$${getBalanceNumber(apsEthBalance)
                                     .toNumber()
-                                    .toLocaleString('en')} ZETH`}
+                                    .toLocaleString('en')}`}
+                                depositTooltipContent={
+                                    <div style={{ maxWidth: '300px' }}>
+                                        <p>
+                                            At present, there's a total of $0 in rewards accumulated
+                                            but not yet allocated, including your share of $0. You
+                                            have the option to initiate the harvest on your own.
+                                        </p>
+                                        <p>
+                                            However, please be aware that doing so would be an act
+                                            of altruism, as it involves bearing the cost of gas fees
+                                        </p>
+                                        <button className="zun-button disabled">Harvest</button>
+                                    </div>
+                                }
                                 tvl={
                                     uzdStatLoading || !uzdStatData
                                         ? '0'
-                                        : `${getBalanceNumber(uzdStatData.info.zunETH.tvl)
-                                              .toNumber()
-                                              .toLocaleString('en')} ZETH`
+                                        : `$${Number(
+                                              uzdStatData.info.zunETHAps.tvlUsd
+                                          ).toLocaleString('en', {
+                                              maximumFractionDigits: 0,
+                                          })}`
                                 }
                                 className="mt-3"
                                 onSelect={() => {
                                     setStakingMode('ZETH');
                                 }}
-                                comingSoon={true}
-                            /> */}
+                            />
                         </SideBar>
                         <div className="col content-col dashboard-col">
                             <Header section="dashboard" />

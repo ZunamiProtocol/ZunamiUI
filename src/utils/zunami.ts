@@ -1,5 +1,9 @@
-import { Contract } from 'web3-eth-contract';
-import { contractAddresses, zunZapAddress, zunamiSepoliaAddress } from '../sushi/lib/constants';
+import {
+    contractAddresses,
+    zunUsdZapAddress,
+    zunEthZapAddress,
+    zunEthApsAddress,
+} from '../sushi/lib/constants';
 import sepoliaAbi from '../actions/abi/sepolia/controller.json';
 import { Address, createPublicClient, http } from 'viem';
 import { mainnet, sepolia } from 'wagmi';
@@ -14,6 +18,19 @@ export const getZunUsdAddress = (chainId: number): Address => {
     return address;
 };
 
+export const getZunEthAddress = (chainId: number): Address => {
+    let address: Address = contractAddresses.zunEth[chainId] ?? contractAddresses.zunEth[1];
+    return address;
+};
+
+export const getZunEthApsAddress = (chainId: number | undefined): Address => {
+    if (!chainId) {
+        return zunEthApsAddress;
+    }
+
+    return contractAddresses.ethAps[chainId] ?? contractAddresses.ethAps[1];
+};
+
 export const getZunUsdApsAddress = (chainId: number | undefined): Address => {
     if (!chainId) {
         return contractAddresses.aps[1];
@@ -23,9 +40,16 @@ export const getZunUsdApsAddress = (chainId: number | undefined): Address => {
     return address;
 };
 
-export const getZapAddress = (chainId: number | undefined): Address => {
+export const getZapAddress = (
+    chainId: number | undefined,
+    stakingMode: string = 'UZD'
+): Address => {
+    if (stakingMode === 'ZETH') {
+        return zunEthZapAddress;
+    }
+
     if (!chainId) {
-        return zunZapAddress;
+        return zunUsdZapAddress;
     }
 
     return contractAddresses.zap[chainId] ?? contractAddresses.zap[1];

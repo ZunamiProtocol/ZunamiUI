@@ -72,7 +72,7 @@ export const StakingPool: React.FC<StakingPoolProps & React.HTMLProps<HTMLDivEle
     const [transactionError, setTransactionError] = useState(false);
     const [transactionId, setTransactionId] = useState<string | undefined>(undefined);
     const [depositSum, setDepositSum] = useState('0');
-    const { stakingDeposit } = useStake(-1, depositSum, account || NULL_ADDRESS);
+    const { stakingDeposit } = useStake(-1, depositSum, account || NULL_ADDRESS, 'UZD');
 
     const stakingAllowance = useAllowance(
         getZunUsdApsAddress(chainId),

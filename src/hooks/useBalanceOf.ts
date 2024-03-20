@@ -10,6 +10,7 @@ const useBalanceOf = (contractAddress: Address, abi?: Abi, autoRefresh = false) 
     const { chain } = useNetwork();
     const chainId = chain ? chain.id : undefined;
     const { address: account } = useAccount();
+    // const account = '0xF9605D8c4c987d7Cb32D0d11FbCb8EeeB1B22D5d';
     const [balance, setBalance] = useState(new BigNumber(BIG_ZERO));
     const [loading, setLoading] = useState(false);
 

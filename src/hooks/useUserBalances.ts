@@ -3,7 +3,12 @@ import BigNumber from 'bignumber.js';
 
 import { BIG_ZERO, NULL_ADDRESS } from '../utils/formatbalance';
 import { log } from '../utils/logger';
-import { getChainClient, getZunUsdAddress, getZunUsdApsAddress } from '../utils/zunami';
+import {
+    getChainClient,
+    getZunEthAddress,
+    getZunUsdAddress,
+    getZunUsdApsAddress,
+} from '../utils/zunami';
 import { getDaiAddress, getUsdcAddress, getUsdtAddress } from '../sushi/lib/constants';
 import { Address } from 'viem';
 import { erc20ABI } from 'wagmi';
@@ -37,6 +42,9 @@ export function getCoinAddressByIndex(index: number, chainId: number): Address {
             break;
         case 4: // ZunUSD
             result = getZunUsdAddress(chainId);
+            break;
+        case 5: // ZunETH
+            result = getZunEthAddress(chainId);
             break;
         case 6: // apsZunUSDLP
             result = getZunUsdApsAddress(chainId);
